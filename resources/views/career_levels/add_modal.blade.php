@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">{{ __('messages.career_level.new_career_level') }}</h3>
+                <h3 class="modal-title">{{ __('career_level.new_career_level') }}</h3>
                 <button type="button" aria-label="Close" class="btn-close"
                         data-bs-dismiss="modal">
                 </button>
@@ -15,16 +15,16 @@
                     <i class="fa-solid fa-face-frown me-5"></i>
                 </div>
                 <div class="mb-5">
-                    {{ Form::label('level_name',__('messages.career_level.level_name').':', ['class' => 'form-label']) }}
+                    {{ Form::label('level_name',__('career_level.level_name').':', ['class' => 'form-label']) }}
                     <span
                             class="required"></span>
-                    {{ Form::text('level_name', null, ['class' => 'form-control','required','placeholder' => __('messages.career_level.level_name')]) }}
+                    {{ Form::text('level_name', null, ['class' => 'form-control','required','placeholder' => __('career_level.level_name')]) }}
                 </div>
             </div>
             <div class="modal-footer pt-0">
-                {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary m-0','id'=>'careerBtnSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
+                {{ Form::button(__('common.save'), ['type'=>'submit','class' => 'btn btn-primary m-0','id'=>'careerBtnSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> ".__('common.process')]) }}
                 <button type="button" id="careerBtnCancel" class="btn btn-secondary my-0 ms-5 me-0"
-                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
+                        data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
             </div>
             {{ Form::close() }}
         </div>

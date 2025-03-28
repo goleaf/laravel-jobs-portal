@@ -16,3 +16,25 @@
     @include('career_levels.edit_modal')
     {{Form::hidden('careerLevelData',true,['id'=>'indexCareerLevelData'])}}
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        // Listening for the event to fill form when editing
+        Livewire.on('fillCareerLevelForm', data => {
+            document.getElementById('careerLevelId').value = data.id;
+            document.getElementById('editCareerLevel').value = data.levelName;
+        });
+        
+        // Success toast message
+        Livewire.on('showSuccessToast', ({message}) => {
+            displaySuccessMessage(message);
+        });
+        
+        // Error toast message
+        Livewire.on('showErrorToast', ({message}) => {
+            displayErrorMessage(message);
+        });
+    });
+</script>
+@endpush

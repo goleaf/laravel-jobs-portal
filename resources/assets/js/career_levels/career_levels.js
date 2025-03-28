@@ -11,88 +11,80 @@ function loadCareerLevelData() {
 
     listenClick('.career-level-edit-btn', function (event) {
         let careerLevelId = $(event.currentTarget).attr('data-id');
-        $.ajax({
-            url: route('careerLevel.edit', careerLevelId),
-            type: 'GET',
-            success: function (result) {
-                if (result.success) {
-                    let element = document.createElement('textarea');
-                    element.innerHTML = result.data.level_name;
-                    $('#careerLevelId').val(result.data.id);
-                    $('#editCareerLevel').val(element.value);
-                    $('#editCareerLevelModal').appendTo('body').modal('show');
-                }
-            },
-            error: function (result) {
-                displayErrorMessage(result.responseJSON.message);
-            },
-        });
-    })
+        Livewire.dispatch('editCareerLevel', { id: careerLevelId });
+        $('#editCareerLevelModal').appendTo('body').modal('show');
+    });
 
     listenClick('.career-level-delete-btn', function (event) {
         let careerLevelId = $(event.currentTarget).attr('data-id');
-        deleteItem(route('careerLevel.destroy', careerLevelId),
-            Lang.get('js.career_level'));
-    })
+        Swal.fire({
+            title: Lang.get('js.delete_confirm_title'),
+            text: Lang.get('js.delete_confirm_text', {'name': Lang.get('js.career_level')}),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: Lang.get('js.yes'),
+            cancelButtonText: Lang.get('js.no')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('deleteCareerLevel', { id: careerLevelId });
+            }
+        });
+    });
 
     listenHiddenBsModal('#addCareerModal', function () {
-        $('#careerBtnSave, #editCareerLevelBtnSave').attr('disabled', false);
         resetModalForm('#addCareerForm', '#careerValidationErrorsBox');
-    })
+    });
 
     listenHiddenBsModal('#editCareerLevelModal', function () {
-        $('#careerBtnSave, #editCareerLevelBtnSave').attr('disabled', false);
         resetModalForm('#editCareerLevelForm', '#editValidationErrorsBox');
-    })
+    });
 }
 
 listenSubmit('#addCareerForm', function (e) {
     e.preventDefault();
-    processingBtn('#addCareerForm', '#careerBtnSave', 'loading');
-    $('#careerBtnSave').attr('disabled', true);
-    $.ajax({
-        url: route('careerLevel.store'),
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function (result) {
-            if (result.success) {
-                displaySuccessMessage(result.message);
-                $('#addCareerModal').modal('hide');
-                Livewire.dispatch('refreshDatatable');
-            }
-        },
-        error: function (result) {
-            displayErrorMessage(result.responseJSON.message);
-            $('#careerBtnSave').attr('disabled', false);
-        },
-        complete: function () {
-            processingBtn('#addCareerForm', '#careerBtnSave');
-        },
+    
+    const saveBtn = document.querySelector('#careerBtnSave');
+    const loadingText = "<span class='spinner-border spinner-border-sm'></span> " + Lang.get('js.processing');
+    saveBtn.innerHTML = loadingText;
+    saveBtn.disabled = true;
+    
+    const formData = new FormData(this);
+    
+    Livewire.dispatch('createCareerLevel', {
+        levelName: formData.get('level_name')
+    }).then(() => {
+        $('#addCareerModal').modal('hide');
+        this.reset();
+    }).catch(error => {
+        displayErrorMessage(error);
+    }).finally(() => {
+        saveBtn.innerHTML = Lang.get('js.save');
+        saveBtn.disabled = false;
     });
-})
+});
 
 listenSubmit('#editCareerLevelForm', function (event) {
     event.preventDefault();
-    processingBtn('#editCareerLevelForm', '#editCareerLevelBtnSave', 'loading');
-    $('#editCareerLevelBtnSave').attr('disabled', true);
-    const editCareerLevelId = $('#careerLevelId').val();
-    $.ajax({
-        url: route('careerLevel.update', editCareerLevelId),
-        type: 'put',
-        data: $(this).serialize(),
-        success: function (result) {
-            if (result.success) {
-                displaySuccessMessage(result.message);
-                $('#editCareerLevelModal').modal('hide');
-                Livewire.dispatch('refreshDatatable');
-            }
-        },
-        error: function (result) {
-            $('#editCareerLevelBtnSave').attr('disabled', false);
-            displayErrorMessage(result.responseJSON.message);
-        },
-        complete: function () {
-            processingBtn('#editCareerLevelForm', '#editCareerLevelBtnSave');
-        },
+    
+    const saveBtn = document.querySelector('#editCareerLevelBtnSave');
+    const loadingText = "<span class='spinner-border spinner-border-sm'></span> " + Lang.get('js.processing');
+    saveBtn.innerHTML = loadingText;
+    saveBtn.disabled = true;
+    
+    const formData = new FormData(this);
+    const editCareerLevelId = formData.get('careerLevelId');
+    
+    Livewire.dispatch('updateCareerLevel', {
+        id: editCareerLevelId,
+        levelName: formData.get('level_name')
+    }).then(() => {
+        $('#editCareerLevelModal').modal('hide');
+    }).catch(error => {
+        displayErrorMessage(error);
+    }).finally(() => {
+        saveBtn.innerHTML = Lang.get('js.save');
+        saveBtn.disabled = false;
     });
-})
+});

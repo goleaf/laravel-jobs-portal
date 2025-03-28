@@ -1,0 +1,34 @@
+// Backend custom js modules
+import '../assets/js/turbo';
+import '../assets/js/custom/helpers';
+import '../assets/js/custom/custom';
+import '../assets/js/job_categories/job_categories';
+import '../assets/js/settings/settings';
+import '../assets/js/company_sizes/company_sizes';
+import '../assets/js/marital_status/marital_status';
+import '../assets/js/salary_periods/salary_periods';
+import '../assets/js/job_shifts/job_shifts';
+import '../assets/js/industries/industries';
+import '../assets/js/job_tags/job_tags';
+import '../assets/js/job_types/job_types';
+import '../assets/js/ownership_types/ownership_types';
+import '../assets/js/companies/companies';
+import '../assets/js/companies/create-edit';
+import '../assets/js/languages/languages';
+import '../assets/js/required_degree_levels/required_degree_levels';
+import '../assets/js/functional_areas/functional_areas';
+import '../assets/js/career_levels/career_levels';
+import '../assets/js/user_profile/user_profile';
+import '../assets/js/employer_profile/employer_profile';
+import '../assets/js/salary_currencies/salary_currencies';
+import '../assets/js/jobs/create-edit';
+import '../assets/js/jobs/jobs';
+import '../assets/js/jobs/job_datatable_admin';
+import '../assets/js/candidate/create-edit';
+import '../assets/js/custom/input_price_format';
+import '../assets/js/custom/state_country';
+import '../assets/js/candidates/candidate-profile/candidate-resume';
+import '../assets/js/candidates/candidate-profile/candidate-education-experience';
+import '../assets/js/candidates/candidate-profile/cv-builder';
+import '../assets/js/candidate/candidate-list';
+// ... Add all other imports from webpack.mix.js 

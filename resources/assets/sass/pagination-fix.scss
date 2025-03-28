@@ -1,0 +1,99 @@
+// Improved pagination styling
+.pagination {
+    display: flex;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 0;
+    
+    .page-item {
+        margin: 0 2px;
+        
+        &:first-child .page-link {
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+        
+        &:last-child .page-link {
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+        .page-link {
+            padding: 0.5rem 0.85rem;
+            color: #5e6278;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+            min-width: 36px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            
+            &:hover {
+                z-index: 2;
+                color: #009ef7;
+                background-color: #ebedf3;
+                border-color: #e9ecef;
+                box-shadow: 0 0 0 0.15rem rgba(0, 158, 247, 0.1);
+            }
+            
+            &:focus {
+                z-index: 3;
+                outline: 0;
+                box-shadow: 0 0 0 0.15rem rgba(0, 158, 247, 0.1);
+            }
+        }
+        
+        &.active .page-link {
+            z-index: 3;
+            color: #ffffff;
+            background-color: #009ef7;
+            border-color: #009ef7;
+            font-weight: 600;
+        }
+        
+        &.disabled .page-link {
+            color: #b5b5c3;
+            pointer-events: none;
+            background-color: #f5f8fa;
+            border-color: #ebedf3;
+        }
+    }
+}
+
+// Adjust pagination container
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    
+    .pagination {
+        margin-left: auto;
+    }
+}
+
+// Add spacing on mobile devices
+@media (max-width: 767px) {
+    .pagination {
+        justify-content: center !important;
+        flex-wrap: wrap;
+        
+        .page-item {
+            margin-bottom: 0.25rem;
+        }
+    }
+    
+    .d-flex.justify-content-between.align-items-center.mt-3 {
+        flex-direction: column;
+        gap: 1rem;
+        
+        > div:first-child {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .pagination-container {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+} 

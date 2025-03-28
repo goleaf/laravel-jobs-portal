@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Releases | InfyJobs</title>
+    <meta name="generator" content="VuePress 1.6.0">
+    <link rel="icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/fontawesome.css">
+    <link rel="stylesheet" href="../css/circular-std-font-face.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.12/css/lightgallery.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/js/lightgallery.js"></script>
+    <meta name="description"
+          content="InfyJobs comes with 3 different login panel each for Admin, Job Seeker and Employer with a different set of features and controls.">
+    <link rel="preload" href="../assets/css/0.styles.50d39c84.css" as="style">
+    <link rel="preload" href="../js/styles.js" as="script">
+    <link rel="preload" href="../js/1.js" as="script">
+    <link rel="preload" href="../js/2.js" as="script">
+    <link rel="preload" href="../js/11.js" as="script">
+    <link rel="prefetch" href="../js/10.js">
+    <link rel="prefetch" href="../js/12.js">
+    <link rel="prefetch" href="../js/3.js">
+    <link rel="prefetch" href="../js/4.js">
+    <link rel="prefetch" href="../js/5.js">
+    <link rel="prefetch" href="../js/6.js">
+    <link rel="prefetch" href="../js/7.js">
+    <link rel="prefetch" href="../js/8.js">
+    <link rel="prefetch" href="../js/9.js">
+    <link rel="stylesheet" href="../assets/css/0.styles.50d39c84.css">
+</head>
+<body>
+<div id="app" data-server-rendered="true">
+    <div class="theme-container">
+        <header class="navbar">
+            <div class="sidebar-button">
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"
+                     class="icon">
+                    <path fill="currentColor"
+                          d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path>
+                </svg>
+            </div>
+            <a href="../index.html" class="home-link router-link-active"><img src="../images/logo.png" alt="InfyJobs"
+                                                                              class="logo">
+                <span class="site-name can-hide">InfyJobs</span></a>
+            <div class="links"><!---->
+                <nav class="nav-links can-hide">
+                    <div class="nav-item"><a href="../index.html" class="nav-link">Home</a></div>
+                    <div class="nav-item"><a href="../docs/index.html" class="nav-link">Docs</a></div>
+                    <div class="nav-item"><a href="index.html"
+                                             class="nav-link router-link-exact-active router-link-active">Releases</a>
+                    </div>
+                    <div class="nav-item"><a href="../upgrade/index.html" class="nav-link">Upgrade Guide</a></div>
+                    <!----></nav>
+            </div>
+        </header>
+        <div class="sidebar-mask"></div>
+        <!-- <aside class="sidebar">
+            <nav class="nav-links">
+                <div class="nav-item"><a href="../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../docs/index.html" class="nav-link">Docs</a></div>
+                <div class="nav-item"><a href="index.html" class="nav-link router-link-exact-active router-link-active">Releases</a>
+                </div>
+                <div class="nav-item"><a href="../upgrade/index.html" class="nav-link">Upgrade Guide</a></div>
+            </nav>
+            <ul class="sidebar-links">
+                <li>
+                    <section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Releases</span>
+                    </p>
+                        <ul class="sidebar-links sidebar-group-items">
+                            <li><a href="#release-notes" class="sidebar-link">Release Notes</a>
+                                <ul class="sidebar-sub-headers">
+                                    <li class="sidebar-sub-header"><a href="#v13-0-0" class="sidebar-link">v13.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-5-0" class="sidebar-link">v12.5.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-4-0" class="sidebar-link">v12.4.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-3-0" class="sidebar-link">v12.3.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-2-0" class="sidebar-link">v12.2.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-1-0" class="sidebar-link">v12.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v12-0-0" class="sidebar-link">v12.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v11-0-0" class="sidebar-link">v11.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v10-0-1" class="sidebar-link">v10.0.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v10-0-0" class="sidebar-link">v10.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v9-0-1" class="sidebar-link">v9.0.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v9-0-0" class="sidebar-link">v9.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v8-2-0" class="sidebar-link">v8.2.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v8-1-1" class="sidebar-link">v8.1.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v8-1-0" class="sidebar-link">v8.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v8-0-0" class="sidebar-link">v8.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v7-1-1" class="sidebar-link">v7.1.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v7-1-0" class="sidebar-link">v7.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v7-0-0" class="sidebar-link">v7.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v6-1-0" class="sidebar-link">v6.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v6-0-0" class="sidebar-link">v6.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v5-1-0" class="sidebar-link">v5.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v5-0-1" class="sidebar-link">v5.0.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v5-0-0" class="sidebar-link">v5.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-5-1" class="sidebar-link">v4.5.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-5-0" class="sidebar-link">v4.5.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-4-0" class="sidebar-link">v4.4.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-3-0" class="sidebar-link">v4.3.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-2-0" class="sidebar-link">v4.2.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-1-0" class="sidebar-link">v4.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-0-1" class="sidebar-link">v4.0.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v4-0-0" class="sidebar-link">v4.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v3-1-0" class="sidebar-link">v3.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v3-0-0" class="sidebar-link">v3.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v2-2-0" class="sidebar-link">v2.2.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v2-1-0" class="sidebar-link">v2.1.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v2-0-0" class="sidebar-link">v2.0.0</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v1-0-2" class="sidebar-link">v1.0.2</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v1-0-1" class="sidebar-link">v1.0.1</a>
+                                    </li>
+                                    <li class="sidebar-sub-header"><a href="#v1-0-0" class="sidebar-link">v1.0.0</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                </li>
+            </ul>
+        </aside> -->
+        <main class="page">
+            <div class="theme-default-content content__default" style="margin-left:30%;margin-top:9%;"><h1 id="releases">
+                Releases</h1>
+                <!-- <p>You can find what changes, features and bug fixed into some specific version here. we are also
+                    providing guide to upgrade from an old version to newer version.</p>
+                <h2 id="release-notes"><a href="#release-notes" class="header-anchor">#</a>Release Notes</h2> -->
+
+                <!--v13-0-0-->
+                <!-- <h3 id="v13-0-0"><a href="#v13-0-0" class="header-anchor">#</a> v13.0.0</h3>
+                <h5 id="fixes-v13-0-0"><a href="#fixes-v12-3-0" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Laravel 9</li>
+                </ul> -->
+                
+                <!--v12-5-0-->
+                <!-- <h3 id="v12-5-0"><a href="#v12-5-0" class="header-anchor">#</a> v12.5.0</h3>
+                <h5 id="fixes-v12-5-0"><a href="#fixes-v12-3-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Image security issue fixes.</li>
+                    <li>Security issue fixes.</li>
+                </ul> -->
+                
+                <!--v12-4-0-->
+                <!-- <h3 id="v12-4-0"><a href="#v12-4-0" class="header-anchor">#</a> v12.4.0</h3>
+                <h5 id="fixes-v12-4-0"><a href="#fixes-v12-3-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Column shorting issue fixes.</li>
+                    <li>Bugs and Responsiveness fixes.</li>
+                </ul> -->
+
+                <!--v12-3-0-->
+                <!-- <h3 id="v12-3-0"><a href="#v12-3-0" class="header-anchor">#</a> v12.3.0</h3>
+                <h5 id="enhancements-v12-3-0"><a
+                        href="#enhancements-v12-3-0" class="header-anchor">#</a>Enhancements</h5>
+                <ul>
+                    <li>Admin module added (Admin can add multiple admins).
+                    </li>
+                </ul>
+                <h5 id="fixes-v12-3-0"><a href="#fixes-v12-3-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Bugs and Responsiveness fixes.</li>
+                </ul> -->
+
+                <!--v12-2-0-->
+                <!-- <h3 id="v12-2-0"><a href="#v12-2-0" class="header-anchor">#</a> v12.2.0</h3>
+                <h5 id="enhancements-v12-2-0"><a
+                        href="#enhancements-v12-2-0" class="header-anchor">#</a>Enhancements</h5>
+                <ul>
+                    <li>Manual payment added (Admin can approve or deny manual payment).
+                    </li>
+                    <li>Better Phone Input with default county setting
+                    </li>
+                </ul>
+                <h5 id="fixes-v12-2-0"><a href="#fixes-v12-2-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Bugs and Responsiveness fixes.</li>
+                    <li>Localization issues on date pickers.</li>
+                </ul> -->
+                
+                <!--v12-1-0-->
+                <!-- <h3 id="v12-1-0"><a href="#v12-1-0" class="header-anchor">#</a> v12.1.0</h3>
+                <h5 id="features-v12-1-0"><a
+                        href="#features-v12-1-0" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Add turbo Js in Front Side.</li>
+                </ul>
+                <h5 id="fixes-v12-1-0"><a href="#fixes-v12-1-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Bugs and Responsiveness fixes.</li>
+                </ul> -->
+
+                <!--v12-0-0-->
+                <!-- <h3 id="v12-0-0"><a href="#v12-0-0" class="header-anchor">#</a> v12.0.0</h3>
+                <h5 id="features-v12-0-0"><a
+                        href="#features-v12-0-0" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Brand New Theme Integrated.</li>
+                    <li>Major updates on UI / Layouts.</li>
+                </ul>
+                <h5 id="fixes-v12-0-0"><a href="#fixes-v12-0-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Bugs and Responsiveness fixes.</li>
+                </ul> -->
+
+                <!--v11-0-0-->
+                <!-- <h3 id="v11-0-0"><a href="#v11-0-0" class="header-anchor">#</a> v11.0.0</h3>
+                <h5 id="features-v11-0-0"><a
+                        href="#features-v11-0-0" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Livewire data-table support added.</li>
+                </ul>
+                <h5 id="fixes-v11-0-0"><a href="#fixes-v11-0-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul> -->
+                                
+                <!--v10-0-1-->
+                <!-- <h3 id="v10-0-1"><a href="#v10-0-1" class="header-anchor">#</a> v10.0.1</h3>
+                <h5 id="fixes-v10-0-1"><a href="#fixes-v10-0-1" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li> Cancel notes issue fixed.</li>
+                    <li> Responsive fixes.</li>
+                </ul> -->
+                
+                <!--v10-0-0-->
+                <!-- <h3 id="v10-0-0"><a href="#v10-0-0" class="header-anchor">#</a> v10.0.0</h3>
+                <h5 id="features-v10-0-0"><a
+                        href="#features-v10-0-0" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Admin Side Brand New Theme Integrated.</li>
+                    <li>Employee Side Brand New Theme Integrated.</li>
+                    <li>Candidate Side Brand New Theme Integrated.</li>
+                    <li>Major updates on UI / Layouts</li>
+                </ul>
+                <h5 id="fixes-v10-0-0"><a href="#fixes-v10-0-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul> -->
+
+                <!--v9-0-1-->
+                <!-- <h3 id="v9-0-1"><a href="#v9-0-1" class="header-anchor">#</a> v9.0.1</h3>
+                <h5 id="fixes-v9-0-1"><a href="#fixes-v9-0-1" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+
+                <h3 id="v9-0-0"><a href="#v9-0-0" class="header-anchor">#</a> v9.0.0</h3>
+                <h5 id="features-v9-0-0"><a
+                        href="#features-v9-0-0" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Brand New Theme Integrated.</li>
+                    <li>Major updates on UI / Layouts</li>
+                </ul>
+                <h5 id="fixes-v9-0-0"><a href="#fixes-v9-0-0" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v8-2-0"><a href="#v8-2-0" class="header-anchor">#</a> v8.2.0</h3>
+                <h5 id="fixes-22"><a href="#fixes-22" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+
+                <h3 id="v8-1-1"><a href="#v8-1-1" class="header-anchor">#</a> v8.1.1</h3> <h5 id="enhancements"><a
+                        href="#enhancements" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Converted to CMS Notice board and Inquiries livewire card to data table
+                    </li>
+                </ul>
+                <h5 id="fixes"><a href="#fixes" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v8-1-0"><a href="#v8-1-0" class="header-anchor">#</a> v8.1.0</h3> <h5 id="features"><a
+                        href="#features" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Schedule slots for interview.</li>
+                </ul>
+                <h5 id="enhancements-2"><a href="#enhancements-2" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Added Blog comments on landing page blog details.</li>
+                    <li>Added selected candidate module on admin side.</li>
+                    <li>Added footer image on setting menu.</li>
+                </ul>
+                <h5 id="fixes-2"><a href="#fixes-2" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v8-0-0"><a href="#v8-0-0" class="header-anchor">#</a> v8.0.0</h3> <h5 id="features-2"><a
+                        href="#features-2" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Laravel version upgraded to v8.</li>
+                </ul>
+                <h5 id="fixes-3"><a href="#fixes-3" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v7-1-1"><a href="#v7-1-1" class="header-anchor">#</a> v7.1.1</h3> <h5 id="enhancements-3"><a
+                        href="#enhancements-3" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Added Posts Statistics line chart on admin dashboard.</li>
+                </ul>
+                <h5 id="fixes-4"><a href="#fixes-4" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Fix Salary Currency issue.</li>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v7-1-0"><a href="#v7-1-0" class="header-anchor">#</a> v7.1.0</h3> <h5 id="features-3"><a
+                        href="#features-3" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Email Templates Module added for Admin.</li>
+                </ul>
+                <h5 id="enhancements-4"><a href="#enhancements-4" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Captcha added in Contact us form.</li>
+                    <li>Display Jobs Count for each Job Type on Job Search Page.</li>
+                    <li>Blogs count added for Blog Category sidebar.</li>
+                    <li>Home page Blog, Testimonial, and NoticeBoard UI improved.</li>
+                    <li>Added Weekly Users bar chart on admin dashboard.</li>
+                    <li>Change the UI for the following screens at Admin side.
+                        <ul>
+                            <li>Marital Status</li>
+                            <li>Skills</li>
+                            <li>Salary Periods</li>
+                            <li>Industries</li>
+                            <li>Company Sizes</li>
+                            <li>Functional Areas</li>
+                            <li>Career Levels</li>
+                            <li>Salary Currencies</li>
+                            <li>Ownership Types</li>
+                            <li>Language</li>
+                            <li>Testimonials</li>
+                            <li>Branding Slider</li>
+                            <li>Header Slider</li>
+                            <li>Image Slider</li>
+                            <li>Noticeboards</li>
+                            <li>Faqs</li>
+                            <li>Inquires</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h5 id="fixes-5"><a href="#fixes-5" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and other Bugs fixes.</li>
+                    <li>Performance improvements.</li>
+                </ul>
+                <h3 id="v7-0-0"><a href="#v7-0-0" class="header-anchor">#</a> v7.0.0</h3> <h5 id="enhancements-5"><a
+                        href="#enhancements-5" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Change the UI for the following screens at Admin side.
+                        <ul>
+                            <li>Subscribers</li>
+                            <li>Countries</li>
+                            <li>States</li>
+                            <li>Cities</li>
+                            <li>Reported Jobs</li>
+                            <li>Degree Level</li>
+                            <li>Job Category</li>
+                            <li>Job Types</li>
+                            <li>Job Tags</li>
+                            <li>Job Shifts</li>
+                            <li>Skills</li>
+                            <li>Salary Periods</li>
+                            <li>All Resumes</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h5 id="fixes-6"><a href="#fixes-6" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v6-1-0"><a href="#v6-1-0" class="header-anchor">#</a> v6.1.0</h3> <h5 id="features-4"><a
+                        href="#features-4" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Added Laravel Cookie Consent for cookie storage.</li>
+                    <li>Update the .env configuration file from the web panel (find in CMS under Settings menu).</li>
+                    <li>Admin can view all the resumes that the candidate has uploaded (find under Candidates at All
+                        Resumes menu).
+                    </li>
+                </ul>
+                <h5 id="enhancements-6"><a href="#enhancements-6" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>You can now create the subscriptions plans with having different currencies.</li>
+                    <li>New currencies added in Salary Currencies module.</li>
+                    <li>Subscription amount can now accept float values.</li>
+                    <li>Improve the UI of Candidate, Reported Candidates, Employer and Reported Employers screens at
+                        Admin side.
+                    </li>
+                    <li>Add Freelancer and Expiry jobs filters on jobs screen at Admin side.</li>
+                </ul>
+                <h5 id="fixes-7"><a href="#fixes-7" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v6-0-0"><a href="#v6-0-0" class="header-anchor">#</a> v6.0.0</h3> <h5 id="features-5"><a
+                        href="#features-5" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Added language translation support to Admin side.</li>
+                </ul>
+                <h5 id="enhancements-7"><a href="#enhancements-7" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Update composer and npm dependencies.</li>
+                    <li>Admin can upload advertise image dynamically (find in Front Settings under CMS menu).</li>
+                </ul>
+                <h5 id="fixes-8"><a href="#fixes-8" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v5-1-0"><a href="#v5-1-0" class="header-anchor">#</a> v5.1.0</h3> <h5 id="features-6"><a
+                        href="#features-6" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Added PayPal payment gateway when upgrading the subscription in order to create more jobs by
+                        Employer.
+                    </li>
+                </ul>
+                <h5 id="enhancements-8"><a href="#enhancements-8" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Add job skill filter to Candidate screen at Admin side.</li>
+                    <li>Add job skill column into candidate data table listing at Admin side.</li>
+                    <li>Add job status filter on jobs screen at Employer side.</li>
+                </ul>
+                <h5 id="fixes-9"><a href="#fixes-9" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v5-0-1"><a href="#v5-0-1" class="header-anchor">#</a> v5.0.1</h3> <h5 id="enhancements-9"><a
+                        href="#enhancements-9" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Make Apply Now button visible when there is no login.</li>
+                </ul>
+                <h5 id="fixes-10"><a href="#fixes-10" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v5-0-0"><a href="#v5-0-0" class="header-anchor">#</a> v5.0.0</h3> <h5 id="features-7"><a
+                        href="#features-7" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Social login support added for LinkedIn.</li>
+                    <li>Countries, States and Cities CRUD added.</li>
+                    <li>Admin can send job notifications to employers.</li>
+                </ul>
+                <h5 id="enhancements-10"><a href="#enhancements-10" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Redirect user to his respective login screen after verifying email.</li>
+                    <li>Add Summernote editor at AboutUs screen at Admin side.</li>
+                    <li>Export Candidate list as Excel file at Admin side.</li>
+                    <li>Can able to search jobs by experience (at Front side under Jobs link).</li>
+                </ul>
+                <h5 id="fixes-11"><a href="#fixes-11" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-5-1"><a href="#v4-5-1" class="header-anchor">#</a> v4.5.1</h3> <h5 id="fixes-12"><a
+                        href="#fixes-12" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Database SQL file fix.</li>
+                </ul>
+                <h3 id="v4-5-0"><a href="#v4-5-0" class="header-anchor">#</a> v4.5.0</h3> <h5 id="enhancements-11"><a
+                        href="#enhancements-11" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Implement autocomplete search for jobs.</li>
+                    <li>On employer dashboard add bar chart for specific job application.</li>
+                </ul>
+                <h5 id="fixes-13"><a href="#fixes-13" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-4-0"><a href="#v4-4-0" class="header-anchor">#</a> v4.4.0</h3> <h5 id="enhancements-12"><a
+                        href="#enhancements-12" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>When candidate apply for the job, then employer will be notified via email.</li>
+                    <li>On landing page search field under Job Title search box, add company wise search support.</li>
+                    <li>Add Google reCaptcha at Candidate and Employer registration screens.</li>
+                    <li>Add enable Google reCaptcha enable/disable option at Admin side under settings menu inside
+                        General tab.
+                    </li>
+                    <li>Enhance Job Search page UI.</li>
+                </ul>
+                <h5 id="fixes-14"><a href="#fixes-14" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-3-0"><a href="#v4-3-0" class="header-anchor">#</a> v4.3.0</h3> <h5 id="enhancements-13"><a
+                        href="#enhancements-13" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Enhance brand slider on home page.</li>
+                    <li>Allow salary to allow decimal places.</li>
+                    <li>Add validation for profile image to allow only square image (Aspect Ration 1:1)</li>
+                    <li>Enhance candidate profile to add date when he/she get available. (if candidate is not available
+                        immediately.)
+                    </li>
+                </ul>
+                <h5 id="fixes-15"><a href="#fixes-15" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-2-0"><a href="#v4-2-0" class="header-anchor">#</a> v4.2.0</h3> <h5 id="enhancements-14"><a
+                        href="#enhancements-14" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Add Brands section on landing page.</li>
+                    <li>Add Recent posts section on landing page.</li>
+                    <li>Ability for admin to disable notification for specific role.</li>
+                    <li>Separate login page for employer and candidate.</li>
+                </ul>
+                <h5 id="fixes-16"><a href="#fixes-16" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-1-0"><a href="#v4-1-0" class="header-anchor">#</a> v4.1.0</h3> <h5 id="enhancements-15"><a
+                        href="#enhancements-15" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Add Slider on job search section on landing page</li>
+                    <li>Add setting to disable job search section slider</li>
+                    <li>Add all possible menu on navbar of landing page for candidates and employers</li>
+                    <li>Add country code with mobile number in landing page footer</li>
+                    <li>Add currency symbol to salary section on job details page</li>
+                    <li>Separate sign up page for employers and candidates</li>
+                    <li>Add <code>Terms and conditions</code> and <code>Privacy Policy</code> settings for admin</li>
+                    <li>Add <code>Terms and conditions</code> and <code>Privacy Policy</code> links to signup pages</li>
+                </ul>
+                <h5 id="fixes-17"><a href="#fixes-17" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-0-1"><a href="#v4-0-1" class="header-anchor">#</a> v4.0.1</h3> <h5 id="enhancements-16"><a
+                        href="#enhancements-16" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Add support for admin to verify employers and candidates manually.</li>
+                    <li>Add support for admin to resend email verification mail to employers and candidates.</li>
+                    <li>Add supoort for admin to show slider in fullscreen from slider settings.</li>
+                </ul>
+                <h5 id="fixes-18"><a href="#fixes-18" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v4-0-0"><a href="#v4-0-0" class="header-anchor">#</a> v4.0.0</h3> <h5 id="features-8"><a
+                        href="#features-8" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Header Notification Added</li>
+                    <li>Admin Can manage Notifications (Which Notifications should be arrived or which not)</li>
+                </ul>
+                <h5 id="enhancements-17"><a href="#enhancements-17" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Blog UI Refactored at Admin Side.</li>
+                    <li>Favourite Jobs, Applied Jobs, Following and Favourite Companies UI Refactored at candidate side
+                        refactored.
+                    </li>
+                    <li>Followers UI Refactored at candidate side refactored.</li>
+                    <li>Select languages button UI refactored on landing page.</li>
+                </ul>
+                <h5 id="fixes-19"><a href="#fixes-19" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v3-1-0"><a href="#v3-1-0" class="header-anchor">#</a> v3.1.0</h3> <h5 id="features-9"><a
+                        href="#features-9" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Slider added into landing page (front side).</li>
+                    <li>Admin can manage a slider images.</li>
+                    <li>Pricing page added into home page</li>
+                </ul>
+                <h5 id="enhancements-18"><a href="#enhancements-18" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>When candidate/employers are logged in, it will be showing his country job first. (If admin
+                        allowed)
+                    </li>
+                    <li>Job listing enhanced at employer side</li>
+                </ul>
+                <h5 id="fixes-20"><a href="#fixes-20" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive and Bugs fixes.</li>
+                </ul>
+                <h3 id="v3-0-0"><a href="#v3-0-0" class="header-anchor">#</a> v3.0.0</h3> <h5 id="features-10"><a
+                        href="#features-10" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Social login support added for google and facebook</li>
+                    <li>Localization into landing page (front side) added</li>
+                    <li>Transaction history added into employer side</li>
+                    <li>Job alert at candidate side added</li>
+                    <li>Region code support added for phone number field</li>
+                </ul>
+                <h5 id="fixes-21"><a href="#fixes-21" class="header-anchor">#</a> Fixes</h5>
+                <ul>
+                    <li>Responsive fixes</li>
+                </ul>
+                <h3 id="v2-2-0"><a href="#v2-2-0" class="header-anchor">#</a> v2.2.0</h3> <h5 id="features-11"><a
+                        href="#features-11" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Candidate: CV Builder support added
+                        <ul>
+                            <li>You can add your skills, education details and experience details here</li>
+                            <li>You can export and print the resume also.</li>
+                        </ul>
+                    </li>
+                    <li>Share jobs to social profiles support added
+                        <ul>
+                            <li>You can now share your job link direct on facebook, gmail, twitter, linkedin and
+                                pinterest.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>New setting <code>company url</code> added</li>
+                </ul>
+                <h5 id="enhancements-19"><a href="#enhancements-19" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Menu at admin side refactored</li>
+                    <li>Validations on social profile links added</li>
+                </ul>
+                <h3 id="v2-1-0"><a href="#v2-1-0" class="header-anchor">#</a> v2.1.0</h3> <h5 id="features-12"><a
+                        href="#features-12" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Admin: mark job as featured without any stripe payment</li>
+                    <li>Admin: mark company as featured without any stripe payment</li>
+                    <li>Admin: remove job or company from featured</li>
+                    <li>Admin: can create new job post on behalf of employer</li>
+                </ul>
+                <h5 id="enhancements-20"><a href="#enhancements-20" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Laravel version updated to from <code>7.16.1</code> to <code>7.28.4</code></li>
+                    <li>Support for MySQL 5.6 added</li>
+                </ul>
+                <h3 id="v2-0-0"><a href="#v2-0-0" class="header-anchor">#</a> v2.0.0</h3> <h5 id="features-13"><a
+                        href="#features-13" class="header-anchor">#</a> Features</h5>
+                <ul>
+                    <li>Employer : Purchase Subscription Support added
+                        <ul>
+                            <li>Employer have to purchase subscription</li>
+                            <li>Employer can mark job as featured or mark company as featured by paying charge to
+                                admin
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Admin: Can define the subscription plan
+                        <ul>
+                            <li>Admin can manage the subscription plan with its allowed jobs count</li>
+                        </ul>
+                    </li>
+                    <li>Admin: Manage settings for featured job charges and feature company charges
+                        <ul>
+                            <li>Admin can add featured job/company price.</li>
+                            <li>Admin can enabled/disable the featured jobs/companies support.</li>
+                            <li>Admin can manage the maximum limit for features jobs and companies.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h5 id="enhancements-21"><a href="#enhancements-21" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Laravel version updated to from <code>7.16.1</code> to <code>7.28.3</code></li>
+                </ul>
+                <h3 id="v1-0-2"><a href="#v1-0-2" class="header-anchor">#</a> v1.0.2</h3> <h5 id="enhancements-22"><a
+                        href="#enhancements-22" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>.htaccess file added into root</li>
+                </ul>
+                <h3 id="v1-0-1"><a href="#v1-0-1" class="header-anchor">#</a> v1.0.1</h3> <h5 id="enhancements-23"><a
+                        href="#enhancements-23" class="header-anchor">#</a> Enhancements</h5>
+                <ul>
+                    <li>Laravel flash message added</li>
+                </ul>
+                <h3 id="v1-0-0"><a href="#v1-0-0" class="header-anchor">#</a> v1.0.0</h3> <h5 id="features-14"><a
+                        href="#features-14" class="header-anchor">#</a> Features</h5>
+                <p>Super Admin Features ::</p>
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Candidate Management</li>
+                    <li>Employer/Companies Management</li>
+                    <li>Reported Jobs Management</li>
+                    <li>Reported Companies Management</li>
+                    <li>Jobs listing</li>
+                    <li>Job Categories Management</li>
+                    <li>Job Experiences Management</li>
+                    <li>Job Skills Management</li>
+                    <li>Job Tags Management</li>
+                    <li>Job Types Management</li>
+                    <li>Job Shifts Management</li>
+                    <li>Job Positions Management</li>
+                    <li>Company Sizes Management</li>
+                    <li>Salary Period Management</li>
+                    <li>Marital status Management</li>
+                    <li>Industries Management</li>
+                    <li>Degree Level Management</li>
+                    <li>Functional Area Management</li>
+                    <li>Career Level Management</li>
+                    <li>Salary Currencies Management</li>
+                    <li>Ownership Types Management</li>
+                    <li>Blog Categories</li>
+                    <li>Blog Management</li>
+                    <li>Noticeboard</li>
+                    <li>FAQs</li>
+                    <li>Inquires</li>
+                    <li>Settings
+                        <ul>
+                            <li>Front CMS
+                                <ul>
+                                    <li>Testimonials</li>
+                                </ul>
+                            </li>
+                            <li>General Settings
+                                <ul>
+                                    <li>Company Name, Logo, Favicon..</li>
+                                </ul>
+                            </li>
+                            <li>Front Settings
+                                <ul>
+                                    <li>Front footer settings. Phone, Email, Address</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>Employer ::</p>
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Profile Updates</li>
+                    <li>Company details Updates</li>
+                    <li>Can Post a Job</li>
+                    <li>Can see job applications of specific job</li>
+                    <li>Can see his followers who have added company to favourite list</li>
+                    <li>Can Change job status to shortlist/reject/..</li>
+                </ul>
+                <p>Candidate ::</p>
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Profile Updates</li>
+                    <li>Can Apply for Job</li>
+                    <li>Can see list of applied jobs</li>
+                    <li>Can mark company as favourite</li>
+                    <li>Can mark job as favourite</li>
+                    <li>Can report the job</li>
+                    <li>Can report the company</li>
+                    <li>Can share the job with other friends</li>
+                </ul> -->
+            </div>
+            <div class="row">
+                <div class="col">
+                  <a class="btn btn-primary" style="margin-left: 37%;" href="https://infyom.com/infyjobs/docs/releases"     role="button">Click Here</a>
+                    <p class="py-1" style="margin-left: 25%;">You can go with our new upgrade guideline by clicking the above button.</p>
+                </div>
+            </div>
+            <!-- <footer class="page-edit"></footer> -->
+        </main>
+    </div>
+    <div class="global-ui"></div>
+</div>
+<script src="../js/styles.js" defer></script>
+<script src="../js/2.js" defer></script>
+<script src="../js/11.js" defer></script>
+</body>
+</html>

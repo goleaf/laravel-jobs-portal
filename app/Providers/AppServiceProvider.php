@@ -102,7 +102,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Register Livewire components
-        Livewire::component('language-table', LanguageTable::class);
+        // Comment out for testing
+        // Livewire::component('language-table', LanguageTable::class);
         // Add other Livewire components here
     }
 

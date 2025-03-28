@@ -28,3 +28,39 @@ Follow the given rules while committing :
     - docs (use this when docs related changes are made)
     - chore (use this when composer/package or any other libraries are installed)
     
+## Translation System
+
+The application now uses a consolidated translation system that:
+
+1. **Consolidates translations** - All translations are stored in a single PHP file per language (e.g., `lang/en.php`)
+2. **Standardizes access** - Use the TranslationHelper class constants or the `@t()` Blade directive
+3. **Supports multiple languages** - Currently English and Lithuanian are supported
+4. **Detects missing translations** - Missing translations are automatically flagged
+
+### Translation Commands
+
+- `php artisan translations:consolidate` - Merge all translation files into a single file per language
+- `php artisan translations:create-lithuanian` - Generate Lithuanian translations from English
+- `php artisan translations:sync` - Find and add missing translations between languages
+
+### Translation Usage in Blade Templates
+
+Use the new custom Blade directives for translations:
+
+```blade
+{{-- Using the @t directive --}}
+<h1>@t('messages.common.title')</h1>
+
+{{-- Using the @hasTranslation directive --}}
+@hasTranslation('messages.common.subtitle')
+    <h2>@t('messages.common.subtitle')</h2>
+@endhasTranslation
+```
+
+Or use the TranslationHelper class constants in PHP:
+
+```php
+use App\Helpers\TranslationHelper;
+
+echo TranslationHelper::getTranslation(TranslationHelper::COMMON_TITLE);
+```

@@ -198,6 +198,7 @@ return [
         App\Providers\LivewireServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TranslationServiceProvider::class,
     ])->toArray(),
 
     /*

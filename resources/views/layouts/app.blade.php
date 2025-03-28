@@ -108,6 +108,14 @@
 
     <!-- Notification Component -->
     <x-notification />
+
+    <x-responsive-nav-link :href="route('components.icon-documentation')" :active="request()->routeIs('components.icon-documentation')">
+        {{ __('Component Documentation') }}
+    </x-responsive-nav-link>
+
+    <x-responsive-nav-link :href="route('icons.documentation')" :active="request()->routeIs('icons.documentation')">
+        {{ __('Icon System') }}
+    </x-responsive-nav-link>
 </body>
 <!--end::Body-->
 

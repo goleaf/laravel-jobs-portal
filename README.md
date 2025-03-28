@@ -187,3 +187,40 @@ To extract SVGs from templates into components:
 ```bash
 php -d memory_limit=-1 artisan svg:extract
 ```
+
+## SVG Icon System
+
+We've implemented a comprehensive SVG icon system for consistent, maintainable, and accessible icons throughout the application.
+
+### Key Features
+
+- **Blade Components**: All icons are implemented as Blade components
+- **Centralized Management**: Icons are stored in `resources/views/components/icons/`
+- **Customizable**: Icons accept attributes for customization (size, color, etc.)
+- **Developer Tools**: Icon viewer available at `/icons` in local environment
+- **Documentation**: See `ICONS.md` for detailed documentation
+
+### Using Icons
+
+```blade
+<!-- Basic usage -->
+<x-icons.home />
+
+<!-- Custom size and color -->
+<x-icons.user class="w-8 h-8 text-blue-500" />
+
+<!-- With additional attributes -->
+<x-icons.bell id="notification-icon" data-count="5" />
+```
+
+### Available Icons
+
+The library includes over 20 icons for common UI elements including:
+
+- Navigation icons (arrows, chevrons)
+- Action icons (edit, trash, plus)
+- Interface icons (search, filter, spinner)
+- Content icons (user, document, calendar)
+- And more...
+
+To see all available icons, visit `/icons` in your local environment.

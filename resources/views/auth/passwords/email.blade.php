@@ -23,21 +23,19 @@
                 @lang('web.reset_password.email_to_reset_your_password')
             </div>
         </div>
-        <form method="POST" action="{{ route('password.email') }}">
+        @formOpen(['url' => route('password.email'), 'method' => 'POST'])
             @csrf
             <div class="mb-sm-7 mb-4">
-                <label for="formInputEmail" class="form-label">
-                    @lang('web.common.email'):<span class="required"></span>
-                </label>
-                <input class="form-control" type="email"
-                       placeholder="@lang('web.reset_password.your_email')" name="email" autocomplete="off" value="{{ old('email') }}" required/>
+                {{ Form::label('email', __('web.common.email').':', ['class' => 'form-label']) }}
+                <span class="required"></span>
+                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => __('web.reset_password.your_email'), 'required', 'autocomplete' => 'off']) }}
             </div>
 
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">@lang('web.reset_password.email_password_reset_link')</button>
+                {{ Form::submit(__('web.reset_password.email_password_reset_link'), ['class' => 'btn btn-primary']) }}
                 <a href="{{ route('front.home') }}" class="btn btn-secondary ms-3" data-turbo="false">@lang('web.reset_password.cancel')</a>
             </div>
-        </form>
+        @formClose()
     </div>
 </div>
 

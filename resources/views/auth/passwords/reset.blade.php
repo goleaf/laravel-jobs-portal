@@ -15,56 +15,65 @@
         </div>
         <div class="bg-white rounded-15 shadow-md width-540 px-5 px-sm-7 py-10 mx-auto">
             <h1 class="text-center mb-7">@lang('web.new_password.new_password')</h1>
-            <form method="POST" action="{{ url('/password/reset') }}" id="">
+            @formOpen(['url' => url('/password/reset'), 'method' => 'POST'])
                 @csrf
                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
-                <!--Email-->
+                
+                <!-- Email -->
                 <div class="mb-sm-7 mb-4">
-                    <label for="email" class="form-label">
-                        @lang('web.common.email')<span class="required"></span>
-                    </label>
-                    <input id="email" class="form-control form-control-solid {{ $errors->has('email') ? ' is-invalid' : '' }}" type="email"
-                           value="{{ old('email') }}"
-                           required autofocus name="email" autocomplete="off"
-                           placeholder="@lang('web.common.email')"/>
-                    <div class="invalid-feedback">
-                        {{ $errors->first('email') }}
-                    </div>
+                    {{ Form::label('email', __('web.common.email'), ['class' => 'form-label']) }}
+                    <span class="required"></span>
+                    {{ Form::email('email', old('email'), [
+                        'class' => 'form-control form-control-solid '.($errors->has('email') ? 'is-invalid' : ''),
+                        'required',
+                        'autofocus',
+                        'autocomplete' => 'off',
+                        'placeholder' => __('web.common.email')
+                    ]) }}
+                    @if ($errors->has('email'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('email') }}
+                        </div>
+                    @endif
                 </div>
 
-                {{--Password--}}
+                <!-- Password -->
                 <div class="mb-sm-7 mb-4">
-                    <label class="form-label"
-                           for="password">@lang('web.common.password')</label>
+                    {{ Form::label('password', __('web.common.password'), ['class' => 'form-label']) }}
                     <div class="mb-3 position-relative">
-                        <input id="password" class="form-control form-control-solid {{ $errors->has('password') ? ' is-invalid': '' }}"
-                               type="password"
-                               name="password"
-                               required autocomplete="off"
-                               placeholder="@lang('web.common.password')"/>
+                        {{ Form::password('password', [
+                            'class' => 'form-control form-control-solid '.($errors->has('password') ? 'is-invalid' : ''),
+                            'required',
+                            'autocomplete' => 'off',
+                            'placeholder' => __('web.common.password')
+                        ]) }}
                     </div>
-                    <div class="invalid-feedback">
-                        {{ $errors->first('password') }}
-                    </div>
+                    @if ($errors->has('password'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('password') }}
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Confirm Password -->
                 <div class="fv-row mb-5">
-                    <label class="form-label "
-                           for="password_confirmation">@lang('web.common.confirm_password')</label>
-                    <input class="form-control  form-control-solid {{ $errors->has('password_confirmation') ? ' is-invalid': '' }}" type="password" id="password_confirmation" name="password_confirmation" placeholder="@lang('web.common.confirm_password')" autocomplete="off"/>
-                    <div class="invalid-feedback">
-                        {{ $errors->first('password_confirmation') }}
-                    </div>
+                    {{ Form::label('password_confirmation', __('web.common.confirm_password'), ['class' => 'form-label']) }}
+                    {{ Form::password('password_confirmation', [
+                        'class' => 'form-control form-control-solid '.($errors->has('password_confirmation') ? 'is-invalid' : ''),
+                        'autocomplete' => 'off',
+                        'placeholder' => __('web.common.confirm_password')
+                    ]) }}
+                    @if ($errors->has('password_confirmation'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('password_confirmation') }}
+                        </div>
+                    @endif
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">
-                        <span class="indicator-label">@lang('web.new_password.set_new_password')</span>
-                        {{--                        <span class="indicator-progress">{{__('messages.common.please_wait')}}--}}
-                        {{--									<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>--}}
-                    </button>
+                    {{ Form::submit(__('web.new_password.set_new_password'), ['class' => 'btn btn-primary']) }}
                 </div>
-            </form>
+            @formClose()
         </div>
+    </div>
 @endsection

@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Job;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class JobExpiredTable extends LivewireTableComponent
 {

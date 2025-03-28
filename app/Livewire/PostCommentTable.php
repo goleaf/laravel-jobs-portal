@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Post;
 use App\Models\PostComment;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class PostCommentTable extends LivewireTableComponent
 {

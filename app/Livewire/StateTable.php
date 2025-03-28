@@ -5,8 +5,8 @@ namespace App\Livewire;
 use App\Models\Country;
 use App\Models\State;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 
 class StateTable extends LivewireTableComponent
 {

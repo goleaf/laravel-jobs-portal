@@ -72,6 +72,9 @@ return array (
       'no_records_found' => 'No records found',
       'no_data' => 'No data available',
       'process' => 'Process',
+      'description' => 'Description',
+      'skill' => 'Skill',
+      'n/a' => 'N/A',
     ),
     'flash' => 
     array (
@@ -118,7 +121,6 @@ return array (
       'new_job' => 'New Job',
       'edit_job' => 'Edit Job',
       'key_responsibilities' => 'Key Responsibilities',
-      'description' => 'Description',
       'salary_from' => 'Salary From',
       'salary_to' => 'Salary To',
       'currency' => 'Currency',
@@ -219,6 +221,44 @@ return array (
     'user' => 
     array (
       'change_password' => 'Change Password',
+    ),
+    'language' => 
+    array (
+      'language' => 'Language',
+      'languages' => 'Languages',
+      'add_language' => 'Add Language',
+      'edit_language' => 'Edit Language',
+      'iso_code' => 'ISO Code',
+      'is_default' => 'Is Default',
+      'native_name' => 'Native Name',
+      'is_rtl' => 'Is RTL',
+    ),
+    'table' => 
+    array (
+      'search' => 'Search in table',
+      'columns' => 'Columns',
+      'export_to_excel' => 'Export to Excel',
+      'export_to_csv' => 'Export to CSV',
+      'export_to_pdf' => 'Export to PDF',
+      'print' => 'Print',
+      'reset' => 'Reset',
+      'reload' => 'Reload',
+      'per_page' => 'Per page',
+      'showing' => 'Showing',
+      'to' => 'to',
+      'of' => 'of',
+      'results' => 'results',
+      'no_records' => 'No records found',
+    ),
+    'job_tag' => 
+    array (
+      'job_tag' => 'Job Tag',
+      'job_tags' => 'Job Tags',
+      'add_job_tag' => 'Add Job Tag',
+      'edit_job_tag' => 'Edit Job Tag',
+      'show_job_tag' => 'Show Job Tag',
+      'name' => 'Name',
+      'description' => 'Description',
     ),
   ),
 );

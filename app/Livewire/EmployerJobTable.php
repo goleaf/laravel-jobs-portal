@@ -6,8 +6,8 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 
 class EmployerJobTable extends LivewireTableComponent
 {

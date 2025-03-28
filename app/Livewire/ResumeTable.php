@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Candidate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ResumeTable extends LivewireTableComponent

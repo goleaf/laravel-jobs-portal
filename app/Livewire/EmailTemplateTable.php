@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\EmailTemplate;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class EmailTemplateTable extends LivewireTableComponent
 {

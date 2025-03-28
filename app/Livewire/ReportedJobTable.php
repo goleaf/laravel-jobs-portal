@@ -6,7 +6,7 @@ use App\Models\Job;
 use App\Models\ReportedJob;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class ReportedJobTable extends LivewireTableComponent
 {

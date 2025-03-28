@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class MigrateJsonTranslations extends Command
 {
@@ -13,14 +12,14 @@ class MigrateJsonTranslations extends Command
      *
      * @var string
      */
-    protected $signature = 'translations:migrate {--json= : JSON file to import} {--locale=en : Locale to migrate to}';
+    protected $signature = 'translations:migrate-json {--locale=all} {--backup}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Migrate JSON translations to Laravel standard format';
+    protected $description = 'Migrate JSON translations to PHP files';
 
     /**
      * Execute the console command.
@@ -28,95 +27,100 @@ class MigrateJsonTranslations extends Command
     public function handle()
     {
         $locale = $this->option('locale');
-        $jsonFile = $this->option('json');
-
-        if ($jsonFile && !File::exists($jsonFile)) {
-            $this->error("JSON file {$jsonFile} does not exist!");
-            return Command::FAILURE;
-        }
-
-        $this->info("Migrating translations for locale: {$locale}");
-
-        // Path to the standard language file
-        $langFile = resource_path("lang/{$locale}.php");
-
-        // Load existing translations
-        $existingTranslations = [];
-        if (File::exists($langFile)) {
-            $existingTranslations = include $langFile;
-            $this->info("Loaded existing translations from {$langFile}");
+        $backup = $this->option('backup');
+        
+        // Determine which locales to process
+        $locales = [];
+        if ($locale === 'all') {
+            $jsonFiles = File::glob(resource_path('lang') . '/*.json');
+            foreach ($jsonFiles as $file) {
+                $locales[] = pathinfo($file, PATHINFO_FILENAME);
+            }
         } else {
-            $this->warn("No existing translations found in {$langFile}, creating new file");
+            $locales = [$locale];
         }
-
-        // If JSON file is provided, load and merge it
-        if ($jsonFile) {
-            $this->info("Loading JSON translations from {$jsonFile}");
+        
+        if (empty($locales)) {
+            $this->info('No JSON translation files found.');
+            return 0;
+        }
+        
+        $this->info('Migrating JSON translations for: ' . implode(', ', $locales));
+        
+        $totalCount = 0;
+        
+        foreach ($locales as $locale) {
+            $jsonFile = resource_path("lang/{$locale}.json");
+            
+            if (!File::exists($jsonFile)) {
+                $this->warn("No JSON file found for locale '{$locale}'");
+                continue;
+            }
+            
+            // Load JSON translations
             $jsonContent = File::get($jsonFile);
-            $jsonTranslations = json_decode($jsonContent, true);
-
+            $translations = json_decode($jsonContent, true);
+            
             if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error("Error parsing JSON file: " . json_last_error_msg());
-                return Command::FAILURE;
+                $this->error("Error parsing JSON file for locale '{$locale}': " . json_last_error_msg());
+                continue;
             }
-
-            // Convert flat JSON to nested array
-            $nestedTranslations = $this->convertToNested($jsonTranslations);
             
-            // Merge the translations
-            $existingTranslations = $this->mergeTranslations($existingTranslations, $nestedTranslations);
+            $count = count($translations);
+            $this->info("Found {$count} translations in JSON file for locale '{$locale}'");
             
-            $this->info("Merged JSON translations with existing translations");
-        }
-
-        // Save the updated translations
-        $content = "<?php\n\nreturn " . var_export($existingTranslations, true) . ";\n";
-        File::put($langFile, $content);
-
-        $this->info("Translations migrated successfully to {$langFile}");
-
-        return Command::SUCCESS;
-    }
-
-    /**
-     * Convert flat JSON translations to nested array
-     */
-    protected function convertToNested(array $flatArray): array
-    {
-        $result = [];
-
-        foreach ($flatArray as $key => $value) {
-            $parts = explode('.', $key);
-            $current = &$result;
-
-            foreach ($parts as $i => $part) {
-                if ($i === count($parts) - 1) {
-                    $current[$part] = $value;
-                } else {
-                    if (!isset($current[$part]) || !is_array($current[$part])) {
-                        $current[$part] = [];
-                    }
-                    $current = &$current[$part];
+            // Load existing PHP translations
+            $phpFile = resource_path("lang/{$locale}.php");
+            $existingTranslations = [];
+            
+            if (File::exists($phpFile)) {
+                $existingTranslations = require $phpFile;
+                $this->info("Found existing PHP translations file with " . count($existingTranslations) . " entries");
+            }
+            
+            // Merge translations
+            $mergedTranslations = array_merge($existingTranslations, $translations);
+            
+            // Backup original file if requested
+            if ($backup && File::exists($phpFile)) {
+                $backupPath = resource_path("lang/backup");
+                
+                if (!File::isDirectory($backupPath)) {
+                    File::makeDirectory($backupPath, 0755, true);
                 }
+                
+                $backupFile = "{$backupPath}/{$locale}.php.bak";
+                File::copy($phpFile, $backupFile);
+                $this->info("Backed up existing PHP translations to {$backupFile}");
             }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Merge two translations arrays
-     */
-    protected function mergeTranslations(array $existingTranslations, array $newTranslations): array
-    {
-        foreach ($newTranslations as $key => $value) {
-            if (is_array($value) && isset($existingTranslations[$key]) && is_array($existingTranslations[$key])) {
-                $existingTranslations[$key] = $this->mergeTranslations($existingTranslations[$key], $value);
-            } else {
-                $existingTranslations[$key] = $value;
+            
+            // Write to PHP file
+            $phpContent = "<?php\n\nreturn " . var_export($mergedTranslations, true) . ";\n";
+            File::put($phpFile, $phpContent);
+            
+            $this->info("Successfully migrated {$count} JSON translations to PHP file for locale '{$locale}'");
+            $totalCount += $count;
+            
+            // Backup JSON file if requested
+            if ($backup) {
+                $backupPath = resource_path("lang/backup");
+                
+                if (!File::isDirectory($backupPath)) {
+                    File::makeDirectory($backupPath, 0755, true);
+                }
+                
+                $backupFile = "{$backupPath}/{$locale}.json.bak";
+                File::copy($jsonFile, $backupFile);
+                $this->info("Backed up JSON translations to {$backupFile}");
             }
+            
+            // Delete JSON file
+            File::delete($jsonFile);
+            $this->info("Deleted original JSON file");
         }
-
-        return $existingTranslations;
+        
+        $this->info("Migration completed! Total {$totalCount} translations migrated.");
+        
+        return 0;
     }
 } 

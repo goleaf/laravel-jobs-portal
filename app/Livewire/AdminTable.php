@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 use Illuminate\Database\Eloquent\Builder;
 
 class AdminTable extends LivewireTableComponent

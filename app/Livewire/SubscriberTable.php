@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\NewsLetter;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class SubscriberTable extends LivewireTableComponent
 {

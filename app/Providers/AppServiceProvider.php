@@ -9,6 +9,11 @@ use Mariuzzo\LaravelJsLocalization\Commands\LangJsCommand;
 use Mariuzzo\LaravelJsLocalization\Generators\LangJsGenerator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Blade;
+use App\Helpers\TranslationHelper;
+use App\Console\Commands\MigrateJsonTranslations;
+use App\Console\Commands\SynchronizeTranslations;
+use App\Console\Commands\ConsolidateTranslations;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +47,13 @@ class AppServiceProvider extends ServiceProvider
 //            // my custom class
 //            'app/DotenvEditor.php'
 //        );
+
+        // Register commands
+        $this->commands([
+            MigrateJsonTranslations::class,
+            SynchronizeTranslations::class,
+            ConsolidateTranslations::class,
+        ]);
     }
 
     /**
@@ -71,6 +83,19 @@ class AppServiceProvider extends ServiceProvider
                 \App\Console\Commands\CreateLithuanianTranslations::class,
             ]);
         }
+
+        // Add custom Blade directives for translation
+        Blade::directive('t', function ($expression) {
+            return "<?php echo \\App\\Helpers\\TranslationHelper::get($expression); ?>";
+        });
+        
+        Blade::directive('hasTranslation', function ($expression) {
+            return "<?php if (\\App\\Helpers\\TranslationHelper::has($expression)): ?>";
+        });
+        
+        Blade::directive('endHasTranslation', function () {
+            return "<?php endif; ?>";
+        });
     }
 
     /**

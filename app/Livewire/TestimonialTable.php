@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Testimonial;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class TestimonialTable extends LivewireTableComponent
 {

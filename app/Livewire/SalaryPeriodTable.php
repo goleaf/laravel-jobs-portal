@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\SalaryPeriod;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class SalaryPeriodTable extends LivewireTableComponent
 {

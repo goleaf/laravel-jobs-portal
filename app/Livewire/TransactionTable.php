@@ -6,7 +6,7 @@ use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class TransactionTable extends LivewireTableComponent
 {

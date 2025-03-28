@@ -6,7 +6,7 @@ use App\Models\Candidate;
 use App\Models\CustomMedia;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class AllResumeTable extends LivewireTableComponent
 {

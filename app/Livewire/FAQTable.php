@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\FAQ;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class FAQTable extends LivewireTableComponent
 {

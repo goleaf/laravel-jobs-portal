@@ -16,4 +16,4 @@
             <x-icons.delete class="w-5 h-5" />
         </button>
     @endif
-</div>
+</div> 

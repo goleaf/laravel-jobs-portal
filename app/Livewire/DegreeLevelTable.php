@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\RequiredDegreeLevel;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class DegreeLevelTable extends LivewireTableComponent
 {

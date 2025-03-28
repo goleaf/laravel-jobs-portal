@@ -6,7 +6,7 @@ use App\Models\FavouriteCompany;
 use App\Models\Industry;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class FavouriteCompanyTable extends LivewireTableComponent
 {

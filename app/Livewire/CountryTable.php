@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Country;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Livewire\Components\Column;
 
 class CountryTable extends LivewireTableComponent
 {

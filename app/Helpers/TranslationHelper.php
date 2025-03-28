@@ -14,6 +14,42 @@ use Illuminate\Support\Arr;
  */
 class TranslationHelper
 {
+    /**
+     * Common translation keys that are consistently used across the application
+     */
+    // Common action translations
+    public const COMMON_ADD = 'common.add';
+    public const COMMON_EDIT = 'common.edit';
+    public const COMMON_DELETE = 'common.delete';
+    public const COMMON_SAVE = 'common.save';
+    public const COMMON_CANCEL = 'common.cancel';
+    public const COMMON_SEARCH = 'common.search';
+    public const COMMON_RESET = 'common.reset';
+    public const COMMON_APPLY = 'common.apply';
+    public const COMMON_VIEW = 'common.view';
+    public const COMMON_BACK = 'common.back';
+    public const COMMON_NEXT = 'common.next';
+    public const COMMON_PREVIOUS = 'common.previous';
+    
+    // Common status translations
+    public const COMMON_YES = 'common.yes';
+    public const COMMON_NO = 'common.no';
+    public const COMMON_ACTIVE = 'common.active';
+    public const COMMON_INACTIVE = 'common.inactive';
+    public const COMMON_ENABLED = 'common.enabled';
+    public const COMMON_DISABLED = 'common.disabled';
+    
+    // Common form/table translations
+    public const COMMON_ACTIONS = 'common.actions';
+    public const COMMON_NAME = 'common.name';
+    public const COMMON_TITLE = 'common.title';
+    public const COMMON_DESCRIPTION = 'common.description';
+    public const COMMON_DATE = 'common.date';
+    public const COMMON_NO_RECORDS = 'common.no_records_found';
+    public const COMMON_PER_PAGE = 'common.per_page';
+    public const COMMON_FILTERS = 'common.filters';
+    public const COMMON_SELECT = 'common.select';
+    
     // Common translations
     const COMMON_SEARCH = 'messages.common.search';
     const COMMON_RESET = 'messages.common.reset';
@@ -38,7 +74,6 @@ class TranslationHelper
     const COMMON_OF = 'messages.common.of';
     const COMMON_RESULTS = 'messages.common.results';
     const COMMON_NO_RESULTS = 'messages.common.no_results';
-    const COMMON_PER_PAGE = 'messages.common.per_page';
     const COMMON_CREATED_ON = 'messages.common.created_on';
     const COMMON_UPDATED_ON = 'messages.common.updated_on';
     const COMMON_EXPIRE = 'messages.common.expire';
@@ -49,12 +84,10 @@ class TranslationHelper
     const COMMON_SHOW = 'messages.common.show';
     const COMMON_ADD = 'messages.common.add';
     const COMMON_MANAGE = 'messages.common.manage';
-    const COMMON_SELECT = 'messages.common.select';
     const COMMON_SELECT_ALL = 'messages.common.select_all';
     const COMMON_DESELECT_ALL = 'messages.common.deselect_all';
     const COMMON_CREATED_DATE = 'messages.common.created_date';
     const COMMON_UPDATED_DATE = 'messages.common.updated_date';
-    const COMMON_APPLY = 'messages.common.apply';
     const COMMON_FILTER = 'messages.common.filter';
     const COMMON_FILTERS = 'messages.common.filters';
     const COMMON_CLEAR_FILTERS = 'messages.common.clear_filters';
@@ -75,8 +108,6 @@ class TranslationHelper
     const COMMON_COPIED = 'messages.common.copied';
     const COMMON_SHARE = 'messages.common.share';
     const COMMON_DETAILS = 'messages.common.details';
-    const COMMON_NEXT = 'messages.common.next';
-    const COMMON_PREVIOUS = 'messages.common.previous';
     const COMMON_FIRST = 'messages.common.first';
     const COMMON_LAST = 'messages.common.last';
     const COMMON_NO_RECORDS_FOUND = 'messages.common.no_records_found';
@@ -125,7 +156,6 @@ class TranslationHelper
     const JOB_NEW_JOB = 'messages.job.new_job';
     const JOB_EDIT_JOB = 'messages.job.edit_job';
     const JOB_KEY_RESPONSIBILITIES = 'messages.job.key_responsibilities';
-    const JOB_DESCRIPTION = 'messages.job.description';
     const JOB_SALARY_FROM = 'messages.job.salary_from';
     const JOB_SALARY_TO = 'messages.job.salary_to';
     const JOB_CURRENCY = 'messages.job.currency';
@@ -351,5 +381,139 @@ class TranslationHelper
         }
         
         return $result;
+    }
+
+    /**
+     * Get a translation from the standardized format
+     *
+     * @param string $key The translation key
+     * @param array $replace The replacement parameters
+     * @param string|null $locale The locale to use
+     * @return string The translated string
+     */
+    public static function get(string $key, array $replace = [], ?string $locale = null): string
+    {
+        $locale = $locale ?: App::getLocale();
+        
+        // Use Laravel's translation function
+        $translation = __($key, $replace, $locale);
+        
+        // If the translation wasn't found (returns the key), try to get it from the consolidated file
+        if ($translation === $key) {
+            $translation = static::getFromConsolidated($key, $locale);
+            
+            // Apply replacements if needed
+            if ($translation !== $key && !empty($replace)) {
+                foreach ($replace as $k => $v) {
+                    $translation = str_replace(':' . $k, $v, $translation);
+                }
+            }
+        }
+        
+        return $translation;
+    }
+    
+    /**
+     * Get translation from consolidated file
+     *
+     * @param string $key The translation key
+     * @param string $locale The locale to use
+     * @return string The translated string or the original key if not found
+     */
+    protected static function getFromConsolidated(string $key, string $locale): string
+    {
+        $path = resource_path("lang/{$locale}.php");
+        
+        if (!File::exists($path)) {
+            return $key;
+        }
+        
+        static $translations = [];
+        
+        if (!isset($translations[$locale])) {
+            $translations[$locale] = require $path;
+        }
+        
+        return Arr::get($translations[$locale], $key, $key);
+    }
+    
+    /**
+     * Check if a translation exists
+     *
+     * @param string $key The translation key
+     * @param string|null $locale The locale to check
+     * @return bool Whether the translation exists
+     */
+    public static function has(string $key, ?string $locale = null): bool
+    {
+        $locale = $locale ?: App::getLocale();
+        $path = resource_path("lang/{$locale}.php");
+        
+        if (!File::exists($path)) {
+            return false;
+        }
+        
+        static $translations = [];
+        
+        if (!isset($translations[$locale])) {
+            $translations[$locale] = require $path;
+        }
+        
+        return Arr::has($translations[$locale], $key);
+    }
+    
+    /**
+     * Get all available locales
+     *
+     * @return array Array of available locales
+     */
+    public static function getAvailableLocales(): array
+    {
+        $locales = [];
+        
+        // Check for consolidated translation files
+        $files = File::files(resource_path('lang'));
+        
+        foreach ($files as $file) {
+            if ($file->getExtension() === 'php') {
+                $locales[] = $file->getFilenameWithoutExtension();
+            }
+        }
+        
+        // Check for locale directories
+        $directories = File::directories(resource_path('lang'));
+        
+        foreach ($directories as $directory) {
+            $locale = basename($directory);
+            if ($locale !== 'vendor' && !in_array($locale, $locales)) {
+                $locales[] = $locale;
+            }
+        }
+        
+        return $locales;
+    }
+    
+    /**
+     * Get locale display name
+     *
+     * @param string $locale The locale code
+     * @return string The display name
+     */
+    public static function getLocaleDisplayName(string $locale): string
+    {
+        $localeNames = [
+            'en' => 'English',
+            'lt' => 'Lithuanian (Lietuvių)',
+            'ar' => 'Arabic (العربية)',
+            'zh' => 'Chinese (中文)',
+            'fr' => 'French (Français)',
+            'de' => 'German (Deutsch)',
+            'pt' => 'Portuguese (Português)',
+            'ru' => 'Russian (Русский)',
+            'es' => 'Spanish (Español)',
+            'tr' => 'Turkish (Türkçe)',
+        ];
+        
+        return $localeNames[$locale] ?? $locale;
     }
 } 

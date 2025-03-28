@@ -4,8 +4,8 @@ namespace App\Livewire;
 
 use App\Models\HeaderSlider;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 
 class HeaderSliderTable extends LivewireTableComponent
 {

@@ -6,8 +6,8 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 
 class CompanyTable extends LivewireTableComponent
 {

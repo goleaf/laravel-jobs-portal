@@ -72,27 +72,27 @@
             <div class="col-xl-3 col-lg-5">
                 <h3 class="mb-3 text-secondary fs-18">{{ __('web.contact_us') }}</h3>
                 <div class="footer-info">
-                    <div class="d-flex footer-info__block mb-3">
-                        <div class="me-3">
-                            <img src="{{ asset('img_template/contact.svg') }}" class="w-100" />
+                    <div class="desc d-flex mb-3">
+                        <div class="me-3 w-20">
+                            <x-icons.phone class="w-100" />
                         </div>
-                        <a href="tel: +91 7096336561" class="text-decoration-none text-gray fs-13">
-                            {{ $settings['region_code'] . ' ' . $settings['phone'] }}
+                        <a href="tel:{{ $settings['phone'] }}" class="fs-14 text-gray">
+                            {{ $settings['phone'] }}
                         </a>
                     </div>
-                    <div class="d-flex footer-info__block mb-3">
-                        <div class="me-3">
-                            <img src="{{ asset('img_template/address.svg') }}" />
+                    <div class="desc d-flex mb-3">
+                        <div class="me-3 w-20">
+                            <x-icons.location class="w-100" />
                         </div>
-                        <p class="text-gray mb-0 fs-14">
+                        <p class="fs-14 text-gray mb-0">
                             {{ $settings['address'] }}
                         </p>
                     </div>
-                    <div class="d-flex footer-info__block mb-3">
-                        <div class="me-3">
-                            <img src="{{ asset('img_template/email.svg') }}" class="w-100" />
+                    <div class="desc d-flex mb-5">
+                        <div class="me-3 w-20">
+                            <x-icons.mail class="w-100" />
                         </div>
-                        <a href="mailto:contact@infyom.com" class="text-decoration-none text-gray">
+                        <a href="mailto:{{ $settings['email'] }}" class="fs-14 text-gray">
                             {{ $settings['email'] }}
                         </a>
                     </div>

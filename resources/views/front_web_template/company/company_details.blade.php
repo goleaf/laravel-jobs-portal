@@ -25,35 +25,35 @@
                                     <h4 class="text-secondary lh-base mb-2">
                                         {{ html_entity_decode($companyDetail->user->full_name) }}</h4>
                                     <div class="hero-desc d-md-flex flex-wrap">
-                                        <div class="desc d-flex mb-1 me-5">
+                                        <div class="desc d-flex mb-4">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/briefcase.svg') }}" class="w-100" />
+                                                <x-icons.briefcase class="w-100" />
                                             </div>
-                                            <p class="text-gray mb-0">
-                                                {{ !empty($companyDetail->industry->name) ? $companyDetail->industry->name : __('messages.common.n/a') }}
+                                            <p class="fs-14 text-gray mb-0">
+                                                {{ !empty($companyDetail->industry->name) ? html_entity_decode($companyDetail->industry->name) : __('messages.common.n/a') }}
                                             </p>
                                         </div>
-                                        <div class="desc d-flex mb-1 me-5">
+                                        <div class="desc d-flex mb-4">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/location.svg') }}" class="w-100" />
+                                                <x-icons.location class="w-100" />
                                             </div>
-                                            <p class="text-gray mb-0">
+                                            <p class="fs-14 text-gray mb-0">
                                                 {{ $companyDetail->user->city_name . ', ' . $companyDetail->user->country_name }}
                                             </p>
                                         </div>
                                         @isset($companyDetail->user->phone)
-                                            <div class="desc d-flex mb-1 me-5">
+                                            <div class="desc d-flex mb-4">
                                                 <div class="me-3 w-20">
-                                                    <img src="{{ asset('img_template/contact.svg') }}" class="w-100" />
+                                                    <x-icons.phone class="w-100" />
                                                 </div>
-                                                <p class="text-gray mb-0">
+                                                <p class="fs-14 text-gray mb-0">
                                                     {{ $companyDetail->user->phone }}
                                                 </p>
                                             </div>
                                         @endisset
-                                        <div class="desc d-flex mb-1">
+                                        <div class="desc d-flex">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/email.svg') }}" class="w-100" />
+                                                <x-icons.mail class="w-100" />
                                             </div>
                                             <a href="#"
                                                 class="text-gray text-break">{{ $companyDetail->user->email }}</p></a>
@@ -125,21 +125,19 @@
                                                         </h5>
                                                         <div class="">
                                                             <div class="card-desc d-flex flex-wrap mt-2">
-                                                                <div class="desc d-flex me-4">
+                                                                <div class="desc d-flex mb-4">
                                                                     <div class="me-3 w-20">
-                                                                        <img src="{{ asset('img_template/briefcase.svg') }}"
-                                                                            class="w-100" />
+                                                                        <x-icons.briefcase class="w-100" />
                                                                     </div>
-                                                                    <p class="fs-14 text-gray mb-2">
-                                                                        {{ $job->jobCategory->name }}
+                                                                    <p class="fs-14 text-gray mb-0">
+                                                                        {{ !empty($job->jobCategory->name) ? $job->jobCategory->name : '' }}
                                                                     </p>
                                                                 </div>
-                                                                <div class="desc d-flex">
+                                                                <div class="desc d-flex mb-2">
                                                                     <div class="me-3 w-20">
-                                                                        <img src="{{ asset('img_template/location.svg') }}"
-                                                                            class="w-100" />
+                                                                        <x-icons.location class="w-100" />
                                                                     </div>
-                                                                    <p class="fs-14 text-gray mb-2">
+                                                                    <p class="fs-14 text-gray mb-0">
                                                                         {{ !empty($job->full_location) ? $job->full_location : 'Location Info. not available.' }}
                                                                     </p>
                                                                 </div>

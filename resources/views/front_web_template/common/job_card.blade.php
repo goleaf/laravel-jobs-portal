@@ -226,7 +226,7 @@
             <div class="desc">
                 <div class="d-flex mb-1">
                     <div class="me-3 w-20">
-                        <img src="{{ asset('img_template/briefcase.svg') }}" class="w-100" />
+                        <x-icons.briefcase class="w-100" />
                     </div>
                     <p class="fs-14 text-gray mb-0">
                         {{ !empty($job->jobCategory->name) ? $job->jobCategory->name : '' }}
@@ -234,7 +234,7 @@
                 </div>
                 <div class="d-flex mb-2">
                     <div class="me-3 w-20">
-                        <img src=" {{ asset('img_template/location.svg') }} " class="w-100" />
+                        <x-icons.location class="w-100" />
                     </div>
 
                     <p class="fs-14 text-gray mb-0">

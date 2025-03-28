@@ -153,18 +153,18 @@
                                 <h4 class="text-secondary lh-base mb-2">
                                     {{ html_entity_decode($candidateDetails->user->full_name) }}</h4>
                                 <div class="hero-desc d-md-flex">
-                                    <div class="desc d-flex me-4 pe-2">
+                                    <div class="d-flex mb-1">
                                         <div class="me-3 w-20">
-                                            <img src="{{ asset('img_template/briefcase.svg') }}" class="w-100" />
+                                            <x-icons.briefcase class="w-100" />
                                         </div>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ !empty($candidateDetails->functionalArea->name) ? $candidateDetails->functionalArea->name : __('messages.common.n/a') }}
                                         </p>
                                     </div>
                                     @if (!empty($candidateDetails->user->country_name))
-                                        <div class="desc d-flex me-4 pe-2">
+                                        <div class="d-flex mb-2">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/location.svg') }}" class="w-100">
+                                                <x-icons.location class="w-100" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">
                                                 @if (!empty($candidateDetails->user->state_name))

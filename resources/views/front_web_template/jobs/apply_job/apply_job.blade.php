@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="col-xl-8 col-md-10 mx-auto">
-                    <form id="applyJobForm" class="py-40 px-40 bg-gray">
+                    @formOpen(['id' => 'applyJobForm', 'class' => 'py-40 px-40 bg-gray'])
                         @csrf
                         @include('front_web.layouts.errors')
                         @include('flash::message')
@@ -72,38 +72,38 @@
                             </div>
 
                             <div class="col-lg-6 col-md-12 col-sm-12 form-group mb-md-4 mb-3 ">
-                                <label for=""
-                                    class="fs-16 text-secondary mb-3">{{ __('messages.apply_job.resume') . ':' }}<span
-                                        class="text-danger">*</span></label>
-                                <select class="chosen-search-select form-select fs-14 text-gray bg-white br-10 p-3"
-                                    aria-label="None" data-live-search="true" data-size="5" name="resume_id" id="resumeId"
-                                    data-control="select2">
-                                    <option value="">{{ __('web.job_menu.none') }}</option>
-                                    @foreach ($resumes as $key => $value)
-                                        <option value="{{ $key }}"
-                                            {{ $isJobDrafted ? ($key == $draftJobDetails->resume_id ? 'selected' : '') : '' }}>
-                                            {{ html_entity_decode($value) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3']) }}
+                                <span class="text-danger">*</span>
+                                {{ Form::select('resume_id', $resumes, ($isJobDrafted ? $draftJobDetails->resume_id : ''), [
+                                    'class' => 'chosen-search-select form-select fs-14 text-gray bg-white br-10 p-3',
+                                    'id' => 'resumeId',
+                                    'placeholder' => __('web.job_menu.none'),
+                                    'data-live-search' => 'true',
+                                    'data-size' => '5',
+                                    'data-control' => 'select2'
+                                ]) }}
                             </div>
 
                             <div class="col-lg-6 col-md-12 col-sm-12 form-group mb-md-4 mb-3 ">
-                                <label for=""
-                                    class="fs-16 text-secondary mb-3">{{ __('messages.candidate.expected_salary') . ':' }}<span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control fs-14 text-gray bg-white  br-10 p-3"
-                                    id="expected_salary" name="expected_salary" min="0" max="9999999999"
-                                    value="{{ $isJobDrafted ? $draftJobDetails->expected_salary : '' }}" required>
+                                {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3']) }}
+                                <span class="text-danger">*</span>
+                                {{ Form::text('expected_salary', ($isJobDrafted ? $draftJobDetails->expected_salary : ''), [
+                                    'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                    'id' => 'expected_salary',
+                                    'min' => '0',
+                                    'max' => '9999999999',
+                                    'required'
+                                ]) }}
                             </div>
 
                             <div class="col-md-12 mb-4">
                                 <div class="form-group">
-                                    <label for=""
-                                        class="fs-16 text-secondary mb-2">{{ __('messages.apply_job.notes') . ':' }}
-                                    </label>
-                                    <textarea class="form-control fs-14 text-gray br-10" rows="5" id="notes" name="notes"
-                                        >{{ $isJobDrafted ? $draftJobDetails->notes : '' }}</textarea>
+                                    {{ Form::label('notes', __('messages.apply_job.notes').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                    {{ Form::textarea('notes', ($isJobDrafted ? $draftJobDetails->notes : ''), [
+                                        'class' => 'form-control fs-14 text-gray br-10',
+                                        'rows' => '5',
+                                        'id' => 'notes'
+                                    ]) }}
                                 </div>
                             </div>
                             @if (getSettingValue('enable_google_recaptcha'))
@@ -117,23 +117,27 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
                                 @if (!$isApplied)
                                     @if (!$isJobDrafted)
-                                        <button class="btn btn-primary btn-primary-register mx-2 save-draft"
-                                            data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{ __('messages.common.process') }}"
-                                            id="draftJobSave">{{ __('web.common.save_as_draft') }}
-                                        </button>
+                                        {{ Form::button(__('web.common.save_as_draft'), [
+                                            'class' => 'btn btn-primary btn-primary-register mx-2 save-draft',
+                                            'id' => 'draftJobSave',
+                                            'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                        ]) }}
                                     @endif
                                     @if ($isActive && !$job->is_suspended)
-                                        <button class="btn btn-secondary mx-2 apply-job"
-                                            data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{ __('messages.common.process') }}"
-                                            id="applyJobSave">{{ __('web.common.apply') }}</button>
+                                        {{ Form::button(__('web.common.apply'), [
+                                            'class' => 'btn btn-secondary mx-2 apply-job',
+                                            'id' => 'applyJobSave',
+                                            'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                        ]) }}
                                     @endif
                                 @else
-                                    <button
-                                        class="theme-btn btn-style-eight">{{ __('web.apply_for_job.already_applied') }}</button>
+                                    {{ Form::button(__('web.apply_for_job.already_applied'), [
+                                        'class' => 'theme-btn btn-style-eight'
+                                    ]) }}
                                 @endif
                             </div>
                         </div>
-                    </form>
+                    @formClose()
                     {{--                @endif --}}
                 </div>
             </div>

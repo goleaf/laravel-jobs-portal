@@ -224,3 +224,103 @@ The library includes over 20 icons for common UI elements including:
 - And more...
 
 To see all available icons, visit `/icons` in your local environment.
+
+# Aire Forms Integration
+
+This project uses [Aire](https://airephp.com/) - a modern Laravel form builder with a focus on expressive and beautiful code. Aire generates form markup that is styled with Tailwind CSS.
+
+## Available Form Examples
+
+The following form examples demonstrate different capabilities of Aire:
+
+- **Contact Form** (`/contact`) - Basic form with Aire styling
+- **Validation Example** (`/forms/validation`) - Client-side validation with Aire
+- **Alpine.js Integration** (`/forms/alpine`) - Dynamic forms with Alpine.js
+- **Binding Example** (`/forms/binding`) - Data binding capabilities
+- **Error Handling** (`/forms/errors`) - Server-side validation and error summaries
+
+## Basic Usage
+
+Aire is available through the `Aire` facade. Here's a basic example of a form:
+
+```php
+{{ Aire::open()->route('contact.submit') }}
+
+    {{ Aire::input('name', 'Your Name')
+        ->required()
+        ->placeholder('Enter your name') }}
+    
+    {{ Aire::email('email', 'Email Address')
+        ->required() }}
+    
+    {{ Aire::textarea('message', 'Your Message')
+        ->rows(5) }}
+    
+    {{ Aire::submit('Send Message') }}
+
+{{ Aire::close() }}
+```
+
+## Key Features
+
+1. **Fluent API** - All method calls are fluent, allowing for easy configuration
+2. **Data Binding** - Binds data from Eloquent models, arrays, or objects
+3. **Validation** - Client-side and server-side validation with error display
+4. **Method Spoofing** - Automatically adds Laravel's `_method` field for non-GET/POST forms
+5. **CSRF Protection** - Automatic CSRF token for non-GET forms
+6. **Error Display** - Automatically displays validation errors
+7. **Tailwind CSS** - Styled with Tailwind CSS by default
+
+## Implementation Details
+
+Our implementation includes:
+
+1. **Custom Styled Forms** - All forms use Tailwind CSS for consistent styling
+2. **Integration with Alpine.js** - Dynamic form behavior powered by Alpine.js
+3. **Validation Examples** - Both client-side and server-side validation 
+4. **Custom Configuration** - Tailwind-specific styling in `config/aire.php`
+5. **Error Handling** - Comprehensive error display and summaries
+
+## Form Examples Explained
+
+### Contact Form
+A basic contact form implementation with name, email, subject and message fields.
+
+### Validation Example
+Demonstrates client-side validation with immediate feedback to users as they type.
+
+### Alpine.js Integration
+Shows how to create dynamic forms that change based on user input, using Alpine.js for reactivity.
+
+### Binding Example
+Demonstrates how Aire can bind data from various sources (arrays, objects, models) to pre-fill form fields.
+
+### Error Handling
+Shows how Aire automatically displays validation errors from Laravel's validation system.
+
+## Data Binding
+
+Aire will automatically bind old input and model data:
+
+```php
+// Bind an Eloquent model
+{{ Aire::bind($user) }}
+
+// Bind an array
+{{ Aire::bind(['name' => 'John Doe']) }}
+
+// Bind an object
+{{ Aire::bind((object) ['name' => 'John Doe']) }}
+```
+
+## Customization
+
+The default Tailwind classes can be customized in `config/aire.php`. For more complete control, you can publish the view files with:
+
+```bash
+php artisan vendor:publish --tag=aire-views
+```
+
+## Documentation
+
+For more detailed information, visit the [Aire Documentation](https://airephp.com/). For project-specific implementation details, see the form examples at the routes mentioned above.

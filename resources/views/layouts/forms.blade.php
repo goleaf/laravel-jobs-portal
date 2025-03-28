@@ -28,6 +28,9 @@
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-blue-600">Contact</a>
                     <a href="{{ url('forms/validation') }}" class="text-gray-600 hover:text-blue-600">Validation Example</a>
                     <a href="{{ url('forms/alpine') }}" class="text-gray-600 hover:text-blue-600">Alpine.js Example</a>
+                    <a href="{{ url('forms/binding') }}" class="text-gray-600 hover:text-blue-600">Binding Example</a>
+                    <a href="{{ url('forms/errors') }}" class="text-gray-600 hover:text-blue-600">Error Handling</a>
+                    <a href="{{ url('forms/methods') }}" class="text-gray-600 hover:text-blue-600">Method Spoofing</a>
                 </nav>
             </div>
         </div>

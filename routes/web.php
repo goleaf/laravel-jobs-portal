@@ -74,6 +74,9 @@ Route::get('contact', [\App\Http\Controllers\ContactController::class, 'index'])
 Route::post('contact', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
 Route::get('forms/validation', [\App\Http\Controllers\ContactController::class, 'validationExample'])->name('forms.validation');
 Route::get('forms/alpine', [\App\Http\Controllers\ContactController::class, 'alpineExample'])->name('forms.alpine');
+Route::get('forms/binding', [\App\Http\Controllers\ContactController::class, 'bindingExample'])->name('forms.binding');
+Route::get('forms/errors', [\App\Http\Controllers\ContactController::class, 'errorExample'])->name('forms.errors');
+Route::get('forms/methods', [\App\Http\Controllers\ContactController::class, 'methodExample'])->name('forms.methods');
 
 Route::get(
     '/',
@@ -914,3 +917,12 @@ Route::get('components/icon-documentation', function () {
 Route::get('icons', function () {
     return view('components.icon-documentation');
 })->name('icons.documentation');
+
+// Example routes for method spoofing demonstration
+Route::put('example/resource/{id}', function() {
+    return redirect()->back()->with('success', 'Resource updated successfully!');
+})->name('resource.update');
+
+Route::delete('example/resource/{id}', function() {
+    return redirect()->back()->with('success', 'Resource deleted successfully!');
+})->name('resource.delete');

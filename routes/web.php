@@ -892,3 +892,10 @@ Route::get('lang-js', function () {
 
 // Add language switch route
 Route::get('language/{locale}', [App\Http\Controllers\LanguageController::class, 'changeLanguage'])->name('language.change');
+
+// Icon viewer route for developers - only available in local environment
+if (app()->environment('local')) {
+    Route::get('/icons', function () {
+        return view('icons');
+    })->name('icons.view');
+}

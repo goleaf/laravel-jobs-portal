@@ -72,6 +72,8 @@ use App\Http\Controllers\ContactController;
 
 Route::get('contact', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('contact', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
+Route::get('forms/validation', [\App\Http\Controllers\ContactController::class, 'validationExample'])->name('forms.validation');
+Route::get('forms/alpine', [\App\Http\Controllers\ContactController::class, 'alpineExample'])->name('forms.alpine');
 
 Route::get(
     '/',

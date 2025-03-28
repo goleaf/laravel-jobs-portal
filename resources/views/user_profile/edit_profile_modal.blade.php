@@ -8,7 +8,7 @@
                         data-bs-dismiss="modal">
                 </button>
             </div>
-            {{ Form::open(['id'=>'editAdminProfileForm','files'=>true]) }}
+            @formOpen(['id'=>'editAdminProfileForm','files'=>true])
             <div class="modal-body">
                 {{--            <div class="alert alert-danger  hide d-none" id="profileErrorMsg"></div>--}}
                 {{ Form::hidden('user_id',null,['id'=>'editUserId']) }}
@@ -70,7 +70,7 @@
                 <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>
-        {{ Form::close() }}
+        @formClose()
     </div>
 </div>
 </div>
@@ -85,7 +85,7 @@
                         data-bs-dismiss="modal">
                 </button>
             </div>
-            {{ Form::open(['id'=>'changeAdminLanguageForm']) }}
+            @formOpen(['id'=>'changeAdminLanguageForm'])
             <div class="modal-body">
                 <div class="alert alert-danger  hide d-none" id="editProfileValidationErrorsBox"></div>
                 {{csrf_field()}}
@@ -100,10 +100,11 @@
                             id="btnEditCancel"
                             data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
                 </div>
-                {{ Form::close() }}
+            @formClose()
             </div>
         </div>
     </div>
+</div>
 
 
 

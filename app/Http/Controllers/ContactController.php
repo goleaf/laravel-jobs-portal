@@ -32,4 +32,20 @@ class ContactController extends Controller
         
         return redirect()->route('contact')->with('success', 'Your message has been sent. We will get back to you soon!');
     }
+
+    /**
+     * Display the validation example form
+     */
+    public function validationExample()
+    {
+        return view('forms.validation');
+    }
+
+    /**
+     * Display the Alpine.js integration example form
+     */
+    public function alpineExample()
+    {
+        return view('forms.alpine');
+    }
 } 

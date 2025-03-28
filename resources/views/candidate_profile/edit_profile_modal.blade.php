@@ -76,7 +76,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
-            {{ Form::open(['id'=>'changeCandidateLanguageForm']) }}
+            @formOpen(['id'=>'changeCandidateLanguageForm'])
                 <div class="modal-body">
                     <div class="alert alert-danger  hide d-none" id="editProfileValidationErrorsBox"></div>
                     {{csrf_field()}}
@@ -86,12 +86,12 @@
                     </div>
                 </div>
                 <div class="modal-footer pt-0">
-                    <button type="submit" class="btn btn-primary m-0" id="btnLanguageChange">{{__('messages.common.save')}}</button>
+                    {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0', 'id'=>'btnLanguageChange']) }}
                     <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
                             data-bs-dismiss="modal">{{ __('messages.common.cancel') }}
                     </button>
                 </div>
-            {{ Form::close() }}
+            @formClose()
         </div>
     </div>
 </div>

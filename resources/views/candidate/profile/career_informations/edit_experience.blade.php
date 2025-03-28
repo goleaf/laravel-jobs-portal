@@ -36,15 +36,13 @@
     </div>
     <div class="col-sm-6 mb-5">
         {{ Form::label('end_date', __('messages.candidate_profile.end_date').':', ['class' => 'form-label']) }}
-        <span
-            class="required d-none" id="editRequiredText"></span>
+        <span class="required d-none" id="editRequiredText"></span>
         <input type="text" name="available_at" id="editEndDate"
                class="form-control {{(getLoggedInUser()->theme_mode) ? 'bg-light' : 'bg-white'}}" autocomplete="off"
-               placeholder="{{__('messages.candidate_profile.end_date')}}}">
+               placeholder="{{__('messages.candidate_profile.end_date')}}">
     </div>
     <div class="col-sm-6 mb-0">
-        <label
-            class='form-label'>{{ __('messages.candidate_profile.currently_working') }}</label>
+        <label class='form-label'>{{ __('messages.candidate_profile.currently_working') }}</label>
         <label class="form-check form-switch form-switch-sm">
             <input type="checkbox" name="currently_working" class="form-check-input"
                    value="1" id="editWorking">

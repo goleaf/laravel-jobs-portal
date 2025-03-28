@@ -26,6 +26,8 @@
                 <nav class="space-x-4">
                     <a href="{{ route('front') }}" class="text-gray-600 hover:text-blue-600">Home</a>
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-blue-600">Contact</a>
+                    <a href="{{ url('forms/validation') }}" class="text-gray-600 hover:text-blue-600">Validation Example</a>
+                    <a href="{{ url('forms/alpine') }}" class="text-gray-600 hover:text-blue-600">Alpine.js Example</a>
                 </nav>
             </div>
         </div>
@@ -56,5 +58,7 @@
             </div>
         </div>
     </footer>
+
+    @stack('scripts')
 </body>
 </html> 

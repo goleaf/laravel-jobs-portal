@@ -25,7 +25,8 @@
         "spatie/laravel-cookie-consent": "^3.2",
         "spatie/laravel-permission": "^6.0",
         "spatie/laravel-translatable": "^6.5",
-        "ramsey/uuid": "^4.2.2"
+        "ramsey/uuid": "^4.2.2",
+        "glhd/aire": "^2.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

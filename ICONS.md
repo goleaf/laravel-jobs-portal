@@ -1,106 +1,99 @@
-# Icon System Documentation
+# SVG Icon Components
 
-## Overview
+This document catalogs all available SVG icon components for use throughout the application.
 
-This project implements a comprehensive SVG icon system using Laravel Blade components. Icons are centralized in the `resources/views/components/icons` directory, making them easy to maintain, update, and reuse throughout the application.
+## Basic Usage
 
-## Benefits
+```blade
+<x-icons.user class="w-5 h-5 text-gray-500" />
+```
 
-- **Centralized Management**: All icons are defined in a single location, making updates easy
-- **Reusability**: The same icon can be used throughout the application with consistent styling
-- **Customization**: Icons can be easily customized with classes or attributes
-- **Improved Readability**: Template code becomes more readable, using semantic component names
-- **Reduced Duplication**: No need to copy/paste SVG code in multiple places
+All icon components accept any HTML attributes, which will be merged with default attributes.
+The default size for all icons is 24x24 pixels (w-6 h-6), but you can override this by passing a different size class.
 
 ## Available Icons
 
-A variety of icons are available for use in the application. To see the complete list, visit `/icons` in your local development environment.
+### People & Entities
 
-Common categories include:
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| User | `x-icons.user` | `<x-icons.user />` |
+| Company | `x-icons.company` | `<x-icons.company />` |
 
-- **Navigation**: home, arrow-left, arrow-right, chevron-left, chevron-right, chevron-up, chevron-down
-- **User Interface**: plus, close, edit, trash, search, filter, spinner, refresh
-- **Common Elements**: user, calendar, clock, location, mail, phone, document, cog, bell, globe
-- **Theme**: sun, moon
-- **Job-Related**: experience, salary, freelance, gender, briefcase
+### Objects
 
-## Usage Examples
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Job/Briefcase | `x-icons.job` | `<x-icons.job />` |
 
-### Basic Usage
+### Actions
 
-```blade
-<x-icons.home />
-```
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Search | `x-icons.search` | `<x-icons.search />` |
 
-### With Custom Size and Color
+### Communication
+
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Email | `x-icons.email` | `<x-icons.email />` |
+| Phone | `x-icons.phone` | `<x-icons.phone />` |
+
+### Location
+
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Location | `x-icons.location` | `<x-icons.location />` |
+
+## Customization
+
+All icon components accept standard HTML attributes and class modifiers. You can customize the appearance of icons by passing Tailwind CSS classes:
 
 ```blade
 <x-icons.user class="w-8 h-8 text-blue-500" />
 ```
 
-### With Additional Attributes
+## Sizing
 
+The default size for all icons is 24x24 pixels (w-6 h-6), but you can override this using Tailwind's sizing utilities:
+
+| Size | Classes | Description |
+|------|---------|-------------|
+| XS | `w-4 h-4` | Extra small (16px) |
+| SM | `w-5 h-5` | Small (20px) |
+| MD | `w-6 h-6` | Medium (24px) - Default |
+| LG | `w-8 h-8` | Large (32px) |
+| XL | `w-10 h-10` | Extra large (40px) |
+
+Example:
 ```blade
-<x-icons.bell class="text-red-500" id="notification-icon" data-count="5" />
+<x-icons.email class="w-10 h-10" /> <!-- Extra large email icon -->
 ```
 
-### Modifying the Icon's Appearance
+## Colors
 
-Icons inherit the current text color, so you can use Tailwind's text color utilities:
-
-```blade
-<x-icons.search class="text-gray-400 hover:text-gray-600" />
-```
-
-### Animating Icons
-
-Apply Tailwind's animation classes:
+Icons inherit text color by default. Use Tailwind's text color utilities to change the color:
 
 ```blade
-<x-icons.spinner class="animate-spin" />
+<x-icons.user class="text-blue-500" /> <!-- Blue icon -->
+<x-icons.search class="text-red-500" /> <!-- Red icon -->
+<x-icons.location class="text-green-500" /> <!-- Green icon -->
 ```
 
-### Responsive Icons
+## Future Icons to Create
 
-Adjust size based on viewport:
-
-```blade
-<x-icons.home class="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8" />
-```
-
-## Creating New Icons
-
-To add a new icon to the system:
-
-1. Create a new Blade file in `resources/views/components/icons/`
-2. Use this template:
-
-```blade
-@props(['class' => 'w-5 h-5'])
-
-<svg {{ $attributes->merge(['class' => $class]) }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-    <!-- SVG path data goes here -->
-</svg>
-```
-
-3. Add the SVG path data inside the `<svg>` tag
-4. Use the new icon in your templates with `<x-icons.your-icon-name />`
-
-## Best Practices
-
-1. **Consistent Sizing**: The default size for icons is 20x20 (w-5 h-5). Maintain this consistency when creating new icons.
-2. **Semantic Names**: Use descriptive, semantic names for icons that reflect their purpose.
-3. **Color Inheritance**: Icons should inherit colors from their parent by using `currentColor`.
-4. **Clean SVGs**: Remove unnecessary attributes from SVG source files.
-5. **Responsive Design**: Consider how icons will appear at different screen sizes.
-6. **Accessibility**: Add `aria-hidden="true"` for decorative icons or provide appropriate labels.
-
-## Icon Viewer
-
-The application includes an icon viewer for easy reference during development:
-
-- Visit `/icons` in your local environment to view all available icons
-- Browse the complete library with usage examples
-- Copy example code snippets to use in your templates
-
-This icon system is designed to grow with the application, providing a consistent and maintainable approach to using SVG icons throughout the project. 
+- Calendar
+- Clock
+- Money/Currency
+- Document/Resume
+- Edit/Pencil
+- Delete/Trash
+- View/Eye
+- Settings/Gear
+- Notification/Bell
+- Dashboard/Home
+- List/Menu
+- Arrow (up, down, left, right)
+- Check/Success
+- X/Close/Error
+- Social media icons (Facebook, Twitter, LinkedIn, etc.) 

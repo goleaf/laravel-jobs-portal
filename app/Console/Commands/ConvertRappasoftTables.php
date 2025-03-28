@@ -8,26 +8,99 @@ use Illuminate\Support\Str;
 
 class ConvertRappasoftTables extends Command
 {
-    protected $signature = 'tables:convert';
-    protected $description = 'Convert Rappasoft data tables to custom implementation';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'tables:convert {--path=app : Path to search for Rappasoft table files}';
 
-    protected $baseNamespace = 'App\\Livewire\\';
-    protected $livewirePath = 'app/Livewire/';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Convert Rappasoft datatable files to custom BaseTable';
 
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
     public function handle()
     {
-        $this->info('Starting conversion of Rappasoft tables...');
-
-        $files = File::glob($this->livewirePath . '*Table.php');
-        $this->info('Found ' . count($files) . ' table files to convert.');
-
-        foreach ($files as $file) {
-            $this->convertTable($file);
+        $path = $this->option('path');
+        $this->info("Searching for Rappasoft datatable files in: $path");
+        
+        // Search for all PHP files that extend LivewireDatatables
+        $phpFiles = File::glob("{$path}/**/*.php");
+        $count = 0;
+        
+        foreach ($phpFiles as $file) {
+            $content = File::get($file);
+            
+            // Check if file is a Rappasoft livewire datatable
+            if (strpos($content, 'Rappasoft\LaravelLivewireTables') !== false) {
+                $this->info("Found Rappasoft datatable: $file");
+                
+                // Replace the namespace and base class
+                $content = preg_replace(
+                    '/use Rappasoft\\\\LaravelLivewireTables\\\\.*?;/m',
+                    'use App\Http\Livewire\BaseTable;',
+                    $content
+                );
+                
+                // Replace class extension
+                $content = preg_replace(
+                    '/extends .*?Component/m', 
+                    'extends BaseTable',
+                    $content
+                );
+                
+                // Remove Rappasoft specific traits and methods
+                $content = preg_replace(
+                    '/use .*?WithSearch.*?;/m', 
+                    '',
+                    $content
+                );
+                
+                $content = preg_replace(
+                    '/use .*?WithPagination.*?;/m', 
+                    '',
+                    $content
+                );
+                
+                $content = preg_replace(
+                    '/use .*?WithSorting.*?;/m', 
+                    '',
+                    $content
+                );
+                
+                // Update methods to match our BaseTable
+                $content = preg_replace(
+                    '/public function columns\(\).*?return \[/s', 
+                    'public function getColumns(): array
+    {
+        return [',
+                    $content
+                );
+                
+                // Update query method
+                $content = preg_replace(
+                    '/public function query\(\).*?{/s', 
+                    'public function getQuery(): \Illuminate\Database\Eloquent\Builder
+    {',
+                    $content
+                );
+                
+                // Save the updated file
+                File::put($file, $content);
+                $this->info("Updated file: $file");
+                $count++;
+            }
         }
-
-        $this->info('All tables converted successfully!');
-        $this->info('Please check each table file to ensure proper conversion.');
-        $this->info('You can now remove Rappasoft package from composer.json');
+        
+        $this->info("Converted $count Rappasoft datatable files to BaseTable");
         
         return Command::SUCCESS;
     }

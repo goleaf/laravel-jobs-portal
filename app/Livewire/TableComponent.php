@@ -26,8 +26,8 @@ abstract class TableComponent extends Component
     public $searchDebounce = 300; // ms
 
     // Sorting
-    public $sortField = 'created_at';
-    public $sortDirection = 'desc';
+    public $sortField = '';
+    public $sortDirection = 'asc';
 
     // Filters
     public $filters = [];
@@ -36,7 +36,7 @@ abstract class TableComponent extends Component
     // UI control
     public $showButtonOnHeader = false;
     public $buttonComponent = null;
-    public $showFilterOnHeader = false;
+    public $showFilterOnHeader = true;
 
     // Event listeners
     protected $listeners = ['refresh' => '$refresh'];

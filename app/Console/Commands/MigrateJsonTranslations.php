@@ -12,120 +12,222 @@ class MigrateJsonTranslations extends Command
      *
      * @var string
      */
-    protected $signature = 'translations:migrate-json {--locale=all} {--backup}';
+    protected $signature = 'translations:migrate 
+                            {--from=resources/lang : Path to JSON translation files}
+                            {--to=resources/lang : Path to store PHP translation files}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Migrate JSON translations to PHP files with lower memory usage';
+    protected $description = 'Migrate JSON translations to Laravel\'s PHP-based translation system';
 
     /**
      * Execute the console command.
+     *
+     * @return int
      */
     public function handle()
     {
-        $locale = $this->option('locale');
-        $shouldBackup = $this->option('backup');
+        $fromPath = $this->option('from');
+        $toPath = $this->option('to');
         
-        // Determine which locales to process
-        $locales = [];
-        if ($locale === 'all') {
-            $langPath = resource_path('lang');
-            if (File::exists($langPath)) {
-                foreach (File::directories($langPath) as $directory) {
-                    $locales[] = basename($directory);
-                }
+        $this->info("Migrating translations from {$fromPath} to {$toPath}");
+        
+        // Get all JSON translation files
+        $jsonFiles = File::glob("{$fromPath}/*.json");
+        
+        if (empty($jsonFiles)) {
+            $this->error("No JSON translation files found in {$fromPath}");
+            return Command::FAILURE;
+        }
+        
+        $this->info("Found " . count($jsonFiles) . " JSON translation files");
+        
+        foreach ($jsonFiles as $jsonFile) {
+            $locale = pathinfo($jsonFile, PATHINFO_FILENAME);
+            $this->info("Processing translations for locale: {$locale}");
+            
+            // Skip if locale is already a directory (has PHP translations)
+            if (File::isDirectory("{$toPath}/{$locale}")) {
+                $this->comment("Locale {$locale} already has PHP translations, will merge");
+            } else {
+                // Create directory for locale
+                File::makeDirectory("{$toPath}/{$locale}", 0755, true, true);
+                $this->info("Created directory for locale: {$locale}");
             }
             
-            // Also check for JSON files
-            foreach (File::files($langPath) as $file) {
-                if ($file->getExtension() === 'json') {
-                    $locales[] = $file->getFilenameWithoutExtension();
-                }
-            }
-            
-            $locales = array_unique($locales);
-        } else {
-            $locales = [$locale];
-        }
-        
-        foreach ($locales as $currentLocale) {
-            $this->migrateLocale($currentLocale, $shouldBackup);
-        }
-        
-        $this->info('JSON translations migration completed.');
-    }
-    
-    protected function migrateLocale($locale, $shouldBackup)
-    {
-        $jsonFile = resource_path("lang/{$locale}.json");
-        $phpFile = resource_path("lang/{$locale}.php");
-        
-        if (!File::exists($jsonFile)) {
-            $this->warn("No JSON translations found for locale: {$locale}");
-            return;
-        }
-        
-        $this->info("Processing {$locale} locale...");
-        
-        try {
-            // Read JSON file in chunks to reduce memory usage
+            // Read JSON translations
             $jsonContent = File::get($jsonFile);
             $translations = json_decode($jsonContent, true);
             
             if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error("Error parsing JSON file for locale {$locale}: " . json_last_error_msg());
-                return;
+                $this->error("Error parsing JSON file {$jsonFile}: " . json_last_error_msg());
+                continue;
             }
             
-            // Create backup if requested
-            if ($shouldBackup && File::exists($phpFile)) {
-                $backupDir = resource_path('lang/backup');
+            // Organize translations by category
+            $categorized = $this->categorizeTranslations($translations);
+            
+            // Create or update PHP files for each category
+            foreach ($categorized as $category => $items) {
+                $phpFile = "{$toPath}/{$locale}/{$category}.php";
                 
-                if (!File::exists($backupDir)) {
-                    File::makeDirectory($backupDir, 0755, true);
+                // If file exists, merge with existing translations
+                if (File::exists($phpFile)) {
+                    $existingCode = File::get($phpFile);
+                    $existingTranslations = $this->evaluatePhpArray($existingCode);
+                    
+                    if (is_array($existingTranslations)) {
+                        $items = array_merge($existingTranslations, $items);
+                    }
                 }
                 
-                $backupFile = $backupDir . "/{$locale}_" . date('Y-m-d_His') . '.php';
-                File::copy($phpFile, $backupFile);
-                $this->info("Backup created: {$backupFile}");
+                // Create PHP file content
+                $content = "<?php\n\nreturn " . $this->arrayToPhpCode($items, 1) . ";\n";
+                
+                // Save PHP file
+                File::put($phpFile, $content);
+                $this->info("Created/updated PHP translation file: {$phpFile}");
             }
             
-            // Create or merge with the PHP file
-            $phpTranslations = [];
-            if (File::exists($phpFile)) {
-                $phpTranslations = require $phpFile;
-            }
-            
-            // Merge translations
-            $merged = array_merge($phpTranslations, $translations);
-            
-            // Sort translations to help with memory usage
-            ksort($merged);
-            
-            // Create PHP file
-            $phpContent = "<?php\n\nreturn " . var_export($merged, true) . ";\n";
-            
-            // Clean up to reduce memory usage
-            unset($translations);
-            unset($phpTranslations);
-            unset($merged);
-            
-            // Write to file in a memory-efficient way
-            File::put($phpFile, $phpContent);
-            
-            // Clean up
-            unset($phpContent);
-            
-            $this->info("Translations migrated successfully for locale: {$locale}");
-            
-            // Optional: Remove JSON file after successful migration
-            // File::delete($jsonFile);
-            
-        } catch (\Exception $e) {
-            $this->error("Error processing locale {$locale}: " . $e->getMessage());
+            // Backup the JSON file by renaming it
+            $backupFile = $jsonFile . '.bak';
+            File::move($jsonFile, $backupFile);
+            $this->info("Backed up JSON file to: {$backupFile}");
         }
+        
+        $this->info("Translation migration completed successfully!");
+        
+        return Command::SUCCESS;
+    }
+    
+    /**
+     * Categorize translations by prefix (e.g., "auth.failed" goes to "auth" category)
+     *
+     * @param array $translations
+     * @return array
+     */
+    protected function categorizeTranslations(array $translations): array
+    {
+        $result = [];
+        
+        foreach ($translations as $key => $value) {
+            $parts = explode('.', $key, 2);
+            
+            if (count($parts) === 2) {
+                // Has category prefix
+                $category = $parts[0];
+                $itemKey = $parts[1];
+                
+                if (!isset($result[$category])) {
+                    $result[$category] = [];
+                }
+                
+                // Handle nested keys
+                $this->setNestedValue($result[$category], $itemKey, $value);
+            } else {
+                // No category prefix, put in "messages"
+                if (!isset($result['messages'])) {
+                    $result['messages'] = [];
+                }
+                
+                $result['messages'][$key] = $value;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Set a nested value in an array using dot notation
+     *
+     * @param array &$array
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    protected function setNestedValue(array &$array, string $key, $value): void
+    {
+        $parts = explode('.', $key);
+        
+        // If it's a simple key, just set it
+        if (count($parts) === 1) {
+            $array[$key] = $value;
+            return;
+        }
+        
+        // Handle nested keys
+        $current = &$array;
+        foreach ($parts as $i => $part) {
+            if ($i === count($parts) - 1) {
+                // Last part, set the value
+                $current[$part] = $value;
+            } else {
+                // Not the last part, navigate deeper
+                if (!isset($current[$part]) || !is_array($current[$part])) {
+                    $current[$part] = [];
+                }
+                $current = &$current[$part];
+            }
+        }
+    }
+    
+    /**
+     * Convert a PHP array to formatted PHP code
+     *
+     * @param array $array
+     * @param int $indentLevel
+     * @return string
+     */
+    protected function arrayToPhpCode(array $array, int $indentLevel = 0): string
+    {
+        $indent = str_repeat('    ', $indentLevel);
+        $result = "[\n";
+        
+        foreach ($array as $key => $value) {
+            $result .= $indent . '    ' . var_export($key, true) . ' => ';
+            
+            if (is_array($value)) {
+                $result .= $this->arrayToPhpCode($value, $indentLevel + 1);
+            } else {
+                $result .= var_export($value, true);
+            }
+            
+            $result .= ",\n";
+        }
+        
+        $result .= $indent . ']';
+        
+        return $result;
+    }
+    
+    /**
+     * Evaluate a PHP array from code string (for merging with existing translations)
+     *
+     * @param string $code
+     * @return array|null
+     */
+    protected function evaluatePhpArray(string $code): ?array
+    {
+        // Extract the array part from PHP code
+        if (preg_match('/return\s+(\[.+\]);/s', $code, $matches)) {
+            $arrayCode = $matches[1];
+            
+            // Make it a valid PHP expression
+            $evalCode = "return {$arrayCode};";
+            
+            // Evaluate the code in a safe context
+            try {
+                $result = eval($evalCode);
+                return is_array($result) ? $result : null;
+            } catch (\Throwable $e) {
+                $this->error("Error evaluating PHP code: " . $e->getMessage());
+                return null;
+            }
+        }
+        
+        return null;
     }
 } 

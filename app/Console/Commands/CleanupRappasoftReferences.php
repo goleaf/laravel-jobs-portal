@@ -7,44 +7,94 @@ use Illuminate\Support\Facades\File;
 
 class CleanupRappasoftReferences extends Command
 {
-    protected $signature = 'cleanup:rappasoft';
-    protected $description = 'Clean up Rappasoft references in the project';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'rappasoft:cleanup {--path=resources/views : Path to search for Rappasoft references}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Clean up remaining Rappasoft references in blade files';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
     public function handle()
     {
-        $this->info('Cleaning up Rappasoft references in the project...');
-
-        // 1. Remove rappasoft vendor directory
-        if (File::exists(public_path('vendor/rappasoft'))) {
-            $this->info('Removing Rappasoft public vendor directory...');
-            File::deleteDirectory(public_path('vendor/rappasoft'));
-            $this->info('Rappasoft public vendor directory removed.');
-        }
-
-        // 2. Check and remove livewire-tables.php config file
-        if (File::exists(config_path('livewire-tables.php'))) {
-            $this->info('Removing livewire-tables.php config file...');
-            File::delete(config_path('livewire-tables.php'));
-            $this->info('livewire-tables.php config file removed.');
-        }
-
-        // 3. Check imports in Livewire components
-        $this->info('Checking Livewire components for Rappasoft imports...');
-        $livewireFiles = File::glob(app_path('Livewire') . '/*.php');
-        $rappaImports = 0;
+        $path = $this->option('path');
+        $this->info("Searching for Rappasoft references in: $path");
         
-        foreach ($livewireFiles as $file) {
+        // Search for all Blade files
+        $bladeFiles = File::glob("{$path}/**/*.blade.php");
+        $count = 0;
+        
+        foreach ($bladeFiles as $file) {
             $content = File::get($file);
+            $modified = false;
             
-            if (strpos($content, 'Rappasoft\\') !== false) {
-                $rappaImports++;
-                $this->info('Found Rappasoft import in ' . basename($file));
+            // Check if file contains Rappasoft references
+            if (strpos($content, 'rappasoft') !== false || 
+                strpos($content, 'Rappasoft') !== false ||
+                strpos($content, 'wire:sortable') !== false ||
+                strpos($content, 'livewire-tables') !== false) {
+                
+                $this->info("Found Rappasoft references in: $file");
+                
+                // Replace common Rappasoft classes with Tailwind equivalents
+                $mappings = [
+                    'table-responsive' => 'overflow-x-auto',
+                    'table-striped' => 'table-striped',
+                    'table-hover' => 'hover:bg-gray-50',
+                    'table-bordered' => 'border',
+                    'table-sm' => 'text-sm',
+                    'table-primary' => 'bg-primary-50',
+                    'table-secondary' => 'bg-gray-50',
+                    'table-success' => 'bg-green-50',
+                    'table-danger' => 'bg-red-50',
+                    'table-warning' => 'bg-yellow-50',
+                    'table-info' => 'bg-blue-50',
+                    'table-light' => 'bg-gray-50',
+                    'table-dark' => 'bg-gray-800 text-white',
+                    'thead-light' => 'bg-gray-50',
+                    'thead-dark' => 'bg-gray-800 text-white',
+                    'livewire-datatable' => 'w-full text-sm text-left text-gray-500',
+                    'wire:sortable' => '',
+                    'wire:sortable.item' => '',
+                    'livewire-tables-no-results' => 'text-center p-4',
+                ];
+                
+                // Apply replacements
+                foreach ($mappings as $old => $new) {
+                    if (strpos($content, $old) !== false) {
+                        $content = str_replace($old, $new, $content);
+                        $modified = true;
+                    }
+                }
+                
+                // Remove Rappasoft specific attributes
+                $content = preg_replace('/wire:sortable(?:\.[\w-]+)?="[^"]*"/m', '', $content);
+                $content = preg_replace('/wire:key="table-row-[^"]*"/m', '', $content);
+                
+                // Remove Rappasoft component references
+                $content = preg_replace('/@include\([\'"]livewire-tables::bs[^\)]*\)/m', '', $content);
+                
+                if ($modified) {
+                    // Save the updated file
+                    File::put($file, $content);
+                    $this->info("Cleaned up file: $file");
+                    $count++;
+                }
             }
         }
         
-        $this->info("Found {$rappaImports} files with Rappasoft imports. Use the 'tables:convert' command to convert them.");
-
-        $this->info('Clean up completed successfully!');
+        $this->info("Cleaned up Rappasoft references in $count files");
         
         return Command::SUCCESS;
     }

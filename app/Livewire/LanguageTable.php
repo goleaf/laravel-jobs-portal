@@ -11,7 +11,7 @@ class LanguageTable extends TableComponent
     // UI Options
     public $showButtonOnHeader = true;
     public $showFilterOnHeader = false;
-    public $buttonComponent = 'languages.add_button';
+    public $buttonComponent = 'languages.table-components.add_button';
     
     public function query(): Builder
     {
@@ -21,17 +21,20 @@ class LanguageTable extends TableComponent
     public function columns(): array
     {
         return [
-            Column::make(__('messages.language.language'), 'language')
+            Column::make('language')
+                ->title(__('messages.language.language'))
                 ->sortable()
                 ->searchable(),
                 
-            Column::make(__('messages.language.iso_code'), 'iso_code')
+            Column::make('iso_code')
+                ->title(__('messages.language.iso_code'))
                 ->sortable()
                 ->searchable()
                 ->view('languages.table-components.iso_code'),
                 
-            Column::make(__('messages.common.action'), 'id')
-                ->view('languages.table-components.action_buttons')
+            Column::make('id')
+                ->title(__('messages.common.action'))
+                ->view('languages.table-components.action_button')
                 ->class('text-center'),
         ];
     }

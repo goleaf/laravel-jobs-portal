@@ -14,6 +14,10 @@ use App\Helpers\TranslationHelper;
 use App\Console\Commands\MigrateJsonTranslations;
 use App\Console\Commands\SynchronizeTranslations;
 use App\Console\Commands\ConsolidateTranslations;
+use Illuminate\Pagination\Paginator;
+use Livewire\Livewire;
+use App\Livewire\TableComponent;
+use App\Livewire\LanguageTable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -79,8 +83,8 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        \Illuminate\Pagination\Paginator::useBootstrap();
         Schema::defaultStringLength(191);
+        Paginator::useTailwind();
         app()->useLangPath(base_path('lang'));
 
         // Register class aliases
@@ -114,6 +118,10 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endHasTranslation', function () {
             return "<?php endif; ?>";
         });
+
+        // Register Livewire components
+        Livewire::component('language-table', LanguageTable::class);
+        // Add other Livewire components here
     }
 
     /**

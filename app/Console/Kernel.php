@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command(DeleteExpiredFeaturedCompany::class)->daily();
+        $schedule->command('cache:prune-stale-tags')->hourly();
+        $schedule->command('delete:expired-featured-company')->daily();
     }
 
     /**

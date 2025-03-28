@@ -34,6 +34,8 @@ The default size for all icons is 24x24 pixels (w-6 h-6), but you can override t
 | Search | `x-icons.search` | `<x-icons.search />` |
 | Edit/Pencil | `x-icons.edit` | `<x-icons.edit />` |
 | Delete/Trash | `x-icons.trash` | `<x-icons.trash />` |
+| View/Eye | `x-icons.eye` | `<x-icons.eye />` |
+| Close/X | `x-icons.x` | `<x-icons.x />` |
 
 ### Communication
 
@@ -98,12 +100,10 @@ Icons inherit text color by default. Use Tailwind's text color utilities to chan
 
 ## Future Icons to Create
 
-- View/Eye
 - Settings/Gear
 - Notification/Bell
 - Dashboard/Home
 - List/Menu
 - Arrow (up, down, left, right)
 - Check/Success
-- X/Close/Error
 - Social media icons (Facebook, Twitter, LinkedIn, etc.) 

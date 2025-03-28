@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -9,131 +10,119 @@ abstract class BaseTable extends Component
 {
     use WithPagination;
 
-    public $perPage = 10;
-    public $sortField = 'created_at';
-    public $sortDirection = 'desc';
+    // UI properties
+    public $showButtonOnHeader = true;
+    public $showFilterOnHeader = true;
+    public $paginationTheme = 'tailwind';
+    public $buttonComponent = null;
     public $search = '';
-    public $selected = [];
-    public $selectAll = false;
-    public $selectPage = false;
-    public $filters = [];
-    public $activeFilters = [];
-    public $showFilters = false;
-
-    protected $paginationTheme = 'tailwind';
-    protected $queryString = ['search', 'sortField', 'sortDirection', 'perPage', 'activeFilters'];
+    public $perPage = 10;
+    public $perPageOptions = [10, 25, 50, 100];
+    
+    // Sorting
+    public $sortField = 'id';
+    public $sortDirection = 'desc';
+    
+    // Events
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function updatedSelectPage($value)
+    // Abstract methods that must be implemented by child classes
+    abstract public function getQuery(): Builder;
+    abstract public function getColumns(): array;
+    
+    public function getTableClass(): string
     {
-        $this->selected = $value 
-            ? $this->getQuery()->pluck('id')->map(fn($id) => (string) $id)->toArray()
-            : [];
+        return 'w-full table-fixed';
     }
-
-    public function updatedSelected()
+    
+    public function getTheadClass(): string
     {
-        $this->selectAll = false;
-        $this->selectPage = false;
+        return 'text-left bg-gray-100';
     }
-
+    
+    public function getThClass(): string
+    {
+        return 'p-3 text-sm font-semibold tracking-wide';
+    }
+    
+    public function getTrClass($row, $index): string
+    {
+        return $index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+    }
+    
+    public function getTdClass(): string
+    {
+        return 'p-3 text-sm';
+    }
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    
+    public function updatingPerPage()
+    {
+        $this->resetPage();
+    }
+    
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
+            $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        
-        $this->sortField = $field;
     }
-
-    public function clearSearch()
-    {
-        $this->search = '';
-    }
-
-    public function toggleFilters()
-    {
-        $this->showFilters = !$this->showFilters;
-    }
-
-    public function applyFilter($field, $value)
-    {
-        $this->activeFilters[$field] = $value;
-        $this->resetPage();
-    }
-
-    public function removeFilter($field)
-    {
-        unset($this->activeFilters[$field]);
-        $this->resetPage();
-    }
-
-    public function clearFilters()
-    {
-        $this->activeFilters = [];
-        $this->resetPage();
-    }
-
-    public function resetPage()
-    {
-        $this->resetPage(pageName: 'page');
-    }
-
-    public function updatedSearch()
-    {
-        $this->resetPage();
-    }
-
-    public function updatedPerPage()
-    {
-        $this->resetPage();
-    }
-
-    public function getSelectedCountProperty()
-    {
-        return count($this->selected);
-    }
-
-    abstract public function getQuery();
     
-    abstract public function getColumns();
-
-    public function hasSearchableColumns()
-    {
-        return collect($this->getColumns())->contains(fn($column) => isset($column['searchable']) && $column['searchable']);
-    }
-
-    public function hasFilterableColumns()
-    {
-        return collect($this->getColumns())->contains(fn($column) => isset($column['filterable']) && $column['filterable']);
-    }
-
-    public function getFilterableColumns()
-    {
-        return collect($this->getColumns())->filter(fn($column) => isset($column['filterable']) && $column['filterable']);
-    }
-
-    public function render()
+    public function getFilteredQuery()
     {
         $query = $this->getQuery();
         
-        // Apply active filters
-        foreach ($this->activeFilters as $field => $value) {
-            if (!empty($value)) {
-                $query->where($field, $value);
+        // Apply search if provided
+        if ($this->search) {
+            $columns = $this->getSearchColumns();
+            if (!empty($columns)) {
+                $query->where(function(Builder $q) use ($columns) {
+                    foreach ($columns as $column) {
+                        $q->orWhere($column, 'like', '%'.$this->search.'%');
+                    }
+                });
             }
         }
         
-        $items = $query
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage, pageName: 'page');
-
+        // Apply sorting
+        if ($this->sortField) {
+            $query->orderBy($this->sortField, $this->sortDirection);
+        }
+        
+        return $query;
+    }
+    
+    public function getSearchColumns()
+    {
+        $columns = $this->getColumns();
+        $searchableColumns = [];
+        
+        foreach ($columns as $column) {
+            if (isset($column['searchable']) && $column['searchable'] && isset($column['field'])) {
+                $searchableColumns[] = $column['field'];
+            }
+        }
+        
+        return $searchableColumns;
+    }
+    
+    public function render()
+    {
+        $data = $this->getFilteredQuery()->paginate($this->perPage);
+        
         return view('livewire.base-table', [
-            'items' => $items,
+            'data' => $data,
             'columns' => $this->getColumns(),
-            'filterableColumns' => $this->getFilterableColumns(),
+            'showButtonOnHeader' => $this->showButtonOnHeader,
+            'showFilterOnHeader' => $this->showFilterOnHeader,
+            'buttonComponent' => $this->buttonComponent,
         ]);
     }
 } 

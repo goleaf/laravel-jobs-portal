@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
 
 class SynchronizeTranslations extends Command
 {
@@ -20,7 +19,7 @@ class SynchronizeTranslations extends Command
      *
      * @var string
      */
-    protected $description = 'Find and add missing translations between languages';
+    protected $description = 'Find and add missing translations between languages with memory optimization';
 
     /**
      * Execute the console command.
@@ -28,109 +27,144 @@ class SynchronizeTranslations extends Command
     public function handle()
     {
         $referenceLocale = $this->option('reference') ?: 'en';
-        $specificLocales = $this->option('locales');
+        $localesOption = $this->option('locales');
         
-        $localesToProcess = $specificLocales ? explode(',', $specificLocales) : $this->getAvailableLocales();
+        // Get available locales
+        $locales = $this->getAvailableLocales($localesOption, $referenceLocale);
         
-        // Remove reference locale from the list to process
-        $localesToProcess = array_filter($localesToProcess, function ($locale) use ($referenceLocale) {
-            return $locale !== $referenceLocale;
-        });
-        
-        if (empty($localesToProcess)) {
-            $this->error('No locales to process!');
-            return 1;
+        if (empty($locales)) {
+            $this->info('No locales to synchronize.');
+            return;
         }
+        
+        $this->info('Synchronizing translations for locales: ' . implode(', ', $locales));
+        $this->info("Using reference locale: {$referenceLocale}");
         
         // Get reference translations
         $referenceTranslations = $this->getLocaleTranslations($referenceLocale);
+        
         if (empty($referenceTranslations)) {
-            $this->error("Reference locale '{$referenceLocale}' has no translations!");
-            return 1;
+            $this->error("Reference locale '{$referenceLocale}' has no translations.");
+            return;
         }
         
-        $this->info("Using '{$referenceLocale}' as reference locale.");
-        $this->info("Processing locales: " . implode(', ', $localesToProcess));
+        $this->info("Loaded " . $this->countTranslations($referenceTranslations) . " keys from reference locale");
         
-        $statsAdded = 0;
-        
-        foreach ($localesToProcess as $locale) {
-            $this->info("Processing locale: {$locale}");
+        // Process each locale
+        foreach ($locales as $locale) {
+            $this->syncLocale($locale, $referenceTranslations);
             
-            // Get current translations for this locale
-            $currentTranslations = $this->getLocaleTranslations($locale);
-            
-            // Find missing keys
-            $missingTranslations = $this->findMissingTranslations($referenceTranslations, $currentTranslations);
-            
-            if (empty($missingTranslations)) {
-                $this->info("  No missing translations found.");
-                continue;
-            }
-            
-            $this->info("  Found " . count($missingTranslations) . " missing translations.");
-            
-            // Add missing translations with placeholder values
-            $updatedTranslations = $this->addMissingTranslations($currentTranslations, $missingTranslations, $referenceTranslations);
-            
-            // Save the updated translations
-            $this->saveTranslations($locale, $updatedTranslations);
-            
-            $statsAdded += count($missingTranslations);
-            $this->info("  Updated {$locale} translations file.");
+            // Free memory
+            gc_collect_cycles();
         }
         
-        $this->info("Synchronization complete! Added {$statsAdded} missing translations.");
-        
-        return 0;
+        $this->info('Translation synchronization completed successfully.');
     }
     
-    /**
-     * Get all available locales in the project.
-     */
-    protected function getAvailableLocales()
+    protected function syncLocale($locale, $referenceTranslations)
     {
-        $path = resource_path('lang');
-        $locales = [];
+        $this->info("Processing locale: {$locale}");
         
-        // Get all .php files directly in the lang directory
-        foreach (File::files($path) as $file) {
-            if ($file->getExtension() === 'php') {
-                $locales[] = $file->getFilenameWithoutExtension();
-            }
+        // Get current translations for the locale
+        $localeTranslations = $this->getLocaleTranslations($locale);
+        
+        if (empty($localeTranslations)) {
+            $this->warn("Locale '{$locale}' has no translations yet. Creating from reference.");
+            $localeTranslations = $this->createEmptyTranslations($referenceTranslations);
         }
         
-        // Get all directories in the lang directory
-        foreach (File::directories($path) as $directory) {
-            $localeName = basename($directory);
-            if ($localeName !== 'vendor') {
-                $locales[] = $localeName;
-            }
+        // Find missing translations
+        $missingCount = 0;
+        $missingTranslations = $this->findMissingTranslations(
+            $referenceTranslations, 
+            $localeTranslations, 
+            '', 
+            $missingCount
+        );
+        
+        $this->info("Found {$missingCount} missing translations for locale '{$locale}'");
+        
+        if ($missingCount > 0) {
+            // Add missing translations
+            $updatedTranslations = $this->addMissingTranslations(
+                $localeTranslations, 
+                $missingTranslations
+            );
+            
+            // Save updated translations
+            $this->saveTranslations($locale, $updatedTranslations);
+            $this->info("Added {$missingCount} missing translations to locale '{$locale}'");
+            
+            // Free memory
+            unset($updatedTranslations);
         }
         
-        return array_unique($locales);
+        // Free memory
+        unset($localeTranslations);
+        unset($missingTranslations);
+        gc_collect_cycles();
     }
     
-    /**
-     * Get all translations for a locale.
-     */
+    protected function getAvailableLocales($localesOption, $referenceLocale)
+    {
+        $locales = [];
+        $langPath = resource_path('lang');
+        
+        if (!empty($localesOption)) {
+            $locales = explode(',', $localesOption);
+        } else {
+            // Get all locale directories and files
+            if (File::exists($langPath)) {
+                // Get directories (old structure)
+                foreach (File::directories($langPath) as $directory) {
+                    if (basename($directory) !== 'backup') {
+                        $locales[] = basename($directory);
+                    }
+                }
+                
+                // Get PHP files (new consolidated structure)
+                foreach (File::files($langPath) as $file) {
+                    if ($file->getExtension() === 'php') {
+                        $locales[] = $file->getFilenameWithoutExtension();
+                    }
+                }
+            }
+            
+            $locales = array_unique($locales);
+        }
+        
+        // Remove reference locale from the list
+        return array_filter($locales, function($locale) use ($referenceLocale) {
+            return $locale !== $referenceLocale;
+        });
+    }
+    
     protected function getLocaleTranslations($locale)
     {
+        $langPath = resource_path('lang');
+        $localePath = "{$langPath}/{$locale}";
+        $localeFile = "{$langPath}/{$locale}.php";
+        
         $translations = [];
         
-        // Check if we have a single file format (langname.php)
-        $singleFilePath = resource_path("lang/{$locale}.php");
-        if (File::exists($singleFilePath)) {
-            $translations = require $singleFilePath;
-        } else {
-            // Check if we have a directory with multiple files
-            $localeDir = resource_path("lang/{$locale}");
-            if (File::isDirectory($localeDir)) {
-                foreach (File::files($localeDir) as $file) {
-                    if ($file->getExtension() === 'php') {
-                        $group = $file->getFilenameWithoutExtension();
-                        $groupTranslations = require $file->getPathname();
-                        $translations[$group] = $groupTranslations;
+        // Try to load from consolidated file first
+        if (File::exists($localeFile)) {
+            try {
+                $translations = require $localeFile;
+            } catch (\Exception $e) {
+                $this->error("Error loading translations from {$localeFile}: " . $e->getMessage());
+            }
+        }
+        // Then try to load from directory structure
+        elseif (File::isDirectory($localePath)) {
+            foreach (File::files($localePath) as $file) {
+                if ($file->getExtension() === 'php') {
+                    try {
+                        $domain = $file->getFilenameWithoutExtension();
+                        $domainTranslations = require $file->getPathname();
+                        $translations[$domain] = $domainTranslations;
+                    } catch (\Exception $e) {
+                        $this->error("Error loading translations from {$file->getPathname()}: " . $e->getMessage());
                     }
                 }
             }
@@ -139,63 +173,149 @@ class SynchronizeTranslations extends Command
         return $translations;
     }
     
-    /**
-     * Find missing translations by comparing reference with current translations.
-     */
-    protected function findMissingTranslations($reference, $current)
+    protected function createEmptyTranslations($referenceTranslations)
+    {
+        $emptyTranslations = [];
+        
+        foreach ($referenceTranslations as $key => $value) {
+            if (is_array($value)) {
+                $emptyTranslations[$key] = $this->createEmptyTranslations($value);
+            } else {
+                // For new empty translations, we'll use the reference as a placeholder
+                // prefixed with [MISSING] to make it easy to identify
+                $emptyTranslations[$key] = "[MISSING] {$value}";
+            }
+        }
+        
+        return $emptyTranslations;
+    }
+    
+    protected function findMissingTranslations($reference, $translations, $prefix = '', &$count = 0)
     {
         $missing = [];
         
-        // Flatten arrays for easier comparison
-        $flatReference = Arr::dot($reference);
-        $flatCurrent = Arr::dot($current);
-        
-        // Find keys in reference that don't exist in current
-        foreach ($flatReference as $key => $value) {
-            if (!isset($flatCurrent[$key])) {
-                $missing[$key] = $value;
+        foreach ($reference as $key => $value) {
+            $currentKey = $prefix ? "{$prefix}.{$key}" : $key;
+            
+            if (is_array($value)) {
+                // For nested arrays, recurse
+                if (!isset($translations[$key]) || !is_array($translations[$key])) {
+                    // The entire section is missing
+                    $missing[$key] = $this->createEmptyTranslations($value);
+                    $count += $this->countTranslations($value);
+                } else {
+                    // Check each item in the section
+                    $sectionMissing = $this->findMissingTranslations(
+                        $value, 
+                        $translations[$key], 
+                        $currentKey,
+                        $count
+                    );
+                    
+                    if (!empty($sectionMissing)) {
+                        $missing[$key] = $sectionMissing;
+                    }
+                }
+            } else {
+                // For scalar values, check if the key exists
+                if (!isset($translations[$key])) {
+                    $missing[$key] = "[MISSING] {$value}";
+                    $count++;
+                }
             }
         }
         
         return $missing;
     }
     
-    /**
-     * Add missing translations to the current translations array.
-     */
-    protected function addMissingTranslations($current, $missing, $reference)
+    protected function addMissingTranslations($translations, $missing)
     {
         foreach ($missing as $key => $value) {
-            Arr::set($current, $key, $value . ' [MISSING]');
+            if (!isset($translations[$key])) {
+                $translations[$key] = $value;
+            } elseif (is_array($value) && is_array($translations[$key])) {
+                $translations[$key] = $this->addMissingTranslations($translations[$key], $value);
+            }
         }
         
-        return $current;
+        return $translations;
+    }
+    
+    protected function saveTranslations($locale, $translations)
+    {
+        $langPath = resource_path('lang');
+        $localeFile = "{$langPath}/{$locale}.php";
+        
+        // Create backup
+        if (File::exists($localeFile)) {
+            $backupDir = "{$langPath}/backup";
+            if (!File::exists($backupDir)) {
+                File::makeDirectory($backupDir, 0755, true);
+            }
+            
+            $backupFile = "{$backupDir}/{$locale}_" . date('Y-m-d_His') . '.php';
+            File::copy($localeFile, $backupFile);
+            $this->info("Created backup at {$backupFile}");
+        }
+        
+        // Sort translations to help with diffs
+        if (is_array($translations)) {
+            ksort($translations);
+            foreach ($translations as $key => $value) {
+                if (is_array($value)) {
+                    ksort($translations[$key]);
+                }
+            }
+        }
+        
+        // Save to file using the memory-optimized export function
+        $content = "<?php\n\nreturn " . $this->varExportOptimized($translations) . ";\n";
+        File::put($localeFile, $content);
+        
+        $this->info("Saved synchronized translations to {$localeFile}");
+    }
+    
+    protected function countTranslations($array, $count = 0)
+    {
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $count = $this->countTranslations($value, $count);
+            } else {
+                $count++;
+            }
+        }
+        
+        return $count;
     }
     
     /**
-     * Save the updated translations back to the appropriate file.
+     * Memory-optimized version of var_export for large arrays
      */
-    protected function saveTranslations($locale, $translations)
+    protected function varExportOptimized($var)
     {
-        $singleFilePath = resource_path("lang/{$locale}.php");
-        
-        if (File::exists($singleFilePath)) {
-            // Single file format
-            $content = "<?php\n\nreturn " . var_export($translations, true) . ";\n";
-            File::put($singleFilePath, $content);
+        if (is_array($var)) {
+            $output = "[";
+            $first = true;
+            
+            foreach ($var as $key => $value) {
+                if (!$first) {
+                    $output .= ",";
+                }
+                $first = false;
+                
+                $output .= PHP_EOL . "    " . var_export($key, true) . " => ";
+                
+                if (is_array($value)) {
+                    $output .= $this->varExportOptimized($value);
+                } else {
+                    $output .= var_export($value, true);
+                }
+            }
+            
+            $output .= PHP_EOL . "]";
+            return $output;
         } else {
-            // Directory format with multiple files
-            $localeDir = resource_path("lang/{$locale}");
-            
-            if (!File::isDirectory($localeDir)) {
-                File::makeDirectory($localeDir, 0755, true);
-            }
-            
-            foreach ($translations as $group => $groupTranslations) {
-                $filePath = "{$localeDir}/{$group}.php";
-                $content = "<?php\n\nreturn " . var_export($groupTranslations, true) . ";\n";
-                File::put($filePath, $content);
-            }
+            return var_export($var, true);
         }
     }
 } 

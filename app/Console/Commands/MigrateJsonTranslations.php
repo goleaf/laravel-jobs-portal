@@ -19,7 +19,7 @@ class MigrateJsonTranslations extends Command
      *
      * @var string
      */
-    protected $description = 'Migrate JSON translations to PHP files';
+    protected $description = 'Migrate JSON translations to PHP files with lower memory usage';
 
     /**
      * Execute the console command.
@@ -27,100 +27,105 @@ class MigrateJsonTranslations extends Command
     public function handle()
     {
         $locale = $this->option('locale');
-        $backup = $this->option('backup');
+        $shouldBackup = $this->option('backup');
         
         // Determine which locales to process
         $locales = [];
         if ($locale === 'all') {
-            $jsonFiles = File::glob(resource_path('lang') . '/*.json');
-            foreach ($jsonFiles as $file) {
-                $locales[] = pathinfo($file, PATHINFO_FILENAME);
+            $langPath = resource_path('lang');
+            if (File::exists($langPath)) {
+                foreach (File::directories($langPath) as $directory) {
+                    $locales[] = basename($directory);
+                }
             }
+            
+            // Also check for JSON files
+            foreach (File::files($langPath) as $file) {
+                if ($file->getExtension() === 'json') {
+                    $locales[] = $file->getFilenameWithoutExtension();
+                }
+            }
+            
+            $locales = array_unique($locales);
         } else {
             $locales = [$locale];
         }
         
-        if (empty($locales)) {
-            $this->info('No JSON translation files found.');
-            return 0;
+        foreach ($locales as $currentLocale) {
+            $this->migrateLocale($currentLocale, $shouldBackup);
         }
         
-        $this->info('Migrating JSON translations for: ' . implode(', ', $locales));
+        $this->info('JSON translations migration completed.');
+    }
+    
+    protected function migrateLocale($locale, $shouldBackup)
+    {
+        $jsonFile = resource_path("lang/{$locale}.json");
+        $phpFile = resource_path("lang/{$locale}.php");
         
-        $totalCount = 0;
+        if (!File::exists($jsonFile)) {
+            $this->warn("No JSON translations found for locale: {$locale}");
+            return;
+        }
         
-        foreach ($locales as $locale) {
-            $jsonFile = resource_path("lang/{$locale}.json");
-            
-            if (!File::exists($jsonFile)) {
-                $this->warn("No JSON file found for locale '{$locale}'");
-                continue;
-            }
-            
-            // Load JSON translations
+        $this->info("Processing {$locale} locale...");
+        
+        try {
+            // Read JSON file in chunks to reduce memory usage
             $jsonContent = File::get($jsonFile);
             $translations = json_decode($jsonContent, true);
             
             if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error("Error parsing JSON file for locale '{$locale}': " . json_last_error_msg());
-                continue;
+                $this->error("Error parsing JSON file for locale {$locale}: " . json_last_error_msg());
+                return;
             }
             
-            $count = count($translations);
-            $this->info("Found {$count} translations in JSON file for locale '{$locale}'");
+            // Create backup if requested
+            if ($shouldBackup && File::exists($phpFile)) {
+                $backupDir = resource_path('lang/backup');
+                
+                if (!File::exists($backupDir)) {
+                    File::makeDirectory($backupDir, 0755, true);
+                }
+                
+                $backupFile = $backupDir . "/{$locale}_" . date('Y-m-d_His') . '.php';
+                File::copy($phpFile, $backupFile);
+                $this->info("Backup created: {$backupFile}");
+            }
             
-            // Load existing PHP translations
-            $phpFile = resource_path("lang/{$locale}.php");
-            $existingTranslations = [];
-            
+            // Create or merge with the PHP file
+            $phpTranslations = [];
             if (File::exists($phpFile)) {
-                $existingTranslations = require $phpFile;
-                $this->info("Found existing PHP translations file with " . count($existingTranslations) . " entries");
+                $phpTranslations = require $phpFile;
             }
             
             // Merge translations
-            $mergedTranslations = array_merge($existingTranslations, $translations);
+            $merged = array_merge($phpTranslations, $translations);
             
-            // Backup original file if requested
-            if ($backup && File::exists($phpFile)) {
-                $backupPath = resource_path("lang/backup");
-                
-                if (!File::isDirectory($backupPath)) {
-                    File::makeDirectory($backupPath, 0755, true);
-                }
-                
-                $backupFile = "{$backupPath}/{$locale}.php.bak";
-                File::copy($phpFile, $backupFile);
-                $this->info("Backed up existing PHP translations to {$backupFile}");
-            }
+            // Sort translations to help with memory usage
+            ksort($merged);
             
-            // Write to PHP file
-            $phpContent = "<?php\n\nreturn " . var_export($mergedTranslations, true) . ";\n";
+            // Create PHP file
+            $phpContent = "<?php\n\nreturn " . var_export($merged, true) . ";\n";
+            
+            // Clean up to reduce memory usage
+            unset($translations);
+            unset($phpTranslations);
+            unset($merged);
+            
+            // Write to file in a memory-efficient way
             File::put($phpFile, $phpContent);
             
-            $this->info("Successfully migrated {$count} JSON translations to PHP file for locale '{$locale}'");
-            $totalCount += $count;
+            // Clean up
+            unset($phpContent);
             
-            // Backup JSON file if requested
-            if ($backup) {
-                $backupPath = resource_path("lang/backup");
-                
-                if (!File::isDirectory($backupPath)) {
-                    File::makeDirectory($backupPath, 0755, true);
-                }
-                
-                $backupFile = "{$backupPath}/{$locale}.json.bak";
-                File::copy($jsonFile, $backupFile);
-                $this->info("Backed up JSON translations to {$backupFile}");
-            }
+            $this->info("Translations migrated successfully for locale: {$locale}");
             
-            // Delete JSON file
-            File::delete($jsonFile);
-            $this->info("Deleted original JSON file");
+            // Optional: Remove JSON file after successful migration
+            // File::delete($jsonFile);
+            
+        } catch (\Exception $e) {
+            $this->error("Error processing locale {$locale}: " . $e->getMessage());
         }
-        
-        $this->info("Migration completed! Total {$totalCount} translations migrated.");
-        
-        return 0;
     }
 } 

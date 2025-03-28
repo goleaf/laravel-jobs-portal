@@ -28,6 +28,10 @@ class Kernel extends ConsoleKernel
             \App\Console\Commands\ConsolidateTranslations::class,
             \App\Console\Commands\CreateLithuanianTranslations::class,
             \App\Console\Commands\ExtractSvgComponents::class,
+            \App\Console\Commands\ConvertRappasoftTables::class,
+            \App\Console\Commands\CleanupRappasoftReferences::class,
+            \App\Console\Commands\MigrateJsonTranslations::class,
+            \App\Console\Commands\ConvertSvgToComponents::class,
         ]);
 
         require base_path('routes/console.php');

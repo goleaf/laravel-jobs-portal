@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use DOMDocument;
+use DOMXPath;
 
 class ExtractSvgComponents extends Command
 {
@@ -13,123 +15,116 @@ class ExtractSvgComponents extends Command
      *
      * @var string
      */
-    protected $signature = 'svg:extract';
+    protected $signature = 'svg:extract {--dir=resources/views : Directory to search for blade files}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Extract SVG code from blade files into separate components';
+    protected $description = 'Extract inline SVG elements from blade files into SVG components';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('Starting SVG extraction...');
+        $searchDir = $this->option('dir');
+        $this->info("Searching for inline SVGs in $searchDir...");
         
-        // Create components directory if it doesn't exist
-        $componentsDir = resource_path('views/components/icons');
-        if (!File::exists($componentsDir)) {
+        $componentsDir = 'resources/views/components/icons';
+        if (!File::isDirectory($componentsDir)) {
             File::makeDirectory($componentsDir, 0755, true);
-            $this->info("Created components directory: {$componentsDir}");
+            $this->info("Created SVG components directory: $componentsDir");
         }
         
         // Get all blade files
-        $bladeFiles = $this->getAllBladeFiles(resource_path('views'));
-        $this->info('Found ' . count($bladeFiles) . ' blade files to process');
-        
-        // Patterns to match SVG code
-        $svgPattern = '/<svg\b[^>]*>(.*?)<\/svg>/is';
+        $bladeFiles = File::glob("$searchDir/**/*.blade.php");
+        $this->info("Found " . count($bladeFiles) . " blade files.");
         
         $extractedCount = 0;
-        $replacedCount = 0;
+        $svgComponents = [];
         
         foreach ($bladeFiles as $file) {
             $content = File::get($file);
+            $matches = [];
+            preg_match_all('/<svg[^>]*>.*?<\/svg>/s', $content, $matches);
             
-            // Extract SVG code
-            if (preg_match_all($svgPattern, $content, $matches, PREG_SET_ORDER)) {
-                foreach ($matches as $match) {
-                    $svgCode = $match[0];
-                    $extractedCount++;
-                    
-                    // Generate a unique name for the SVG component
-                    $name = $this->generateComponentName($file, $extractedCount);
-                    
-                    // Create component file
-                    $componentPath = "{$componentsDir}/{$name}.blade.php";
-                    File::put($componentPath, $svgCode);
-                    $this->info("Created SVG component: {$name}.blade.php");
-                    
-                    // Replace SVG code with component include
-                    $componentInclude = "<x-icons.{$name} />";
-                    $content = str_replace($svgCode, $componentInclude, $content);
-                    $replacedCount++;
-                }
+            if (count($matches[0]) > 0) {
+                $this->info("Found " . count($matches[0]) . " SVGs in $file");
                 
-                // Save modified content
-                File::put($file, $content);
+                foreach ($matches[0] as $svgIndex => $svg) {
+                    // Generate a component name based on the file and index
+                    $fileBaseName = basename($file, '.blade.php');
+                    $componentName = Str::kebab($fileBaseName) . '-' . ($svgIndex + 1);
+                    
+                    // Try to extract a more meaningful name from path attribute or id
+                    $doc = new DOMDocument();
+                    @$doc->loadHTML($svg);
+                    $xpath = new DOMXPath($doc);
+                    
+                    // Look for path with a descriptive d attribute
+                    $paths = $xpath->query('//path');
+                    foreach ($paths as $path) {
+                        if ($path->hasAttribute('d')) {
+                            $d = $path->getAttribute('d');
+                            
+                            // Try to extract a name based on common SVG paths
+                            if (Str::contains(strtolower($d), ['m18 6h-14v-1.5', 'h14v-1.5'])) {
+                                $componentName = 'building';
+                            } elseif (Str::contains(strtolower($d), ['10 0c4.48', '10 17.2c7.5'])) {
+                                $componentName = 'company';
+                            } elseif (Str::contains(strtolower($d), ['8.99955 19.0002c', 'm8.99955 19.0002'])) {
+                                $componentName = 'location';
+                            } elseif (Str::contains(strtolower($d), ['m15 8h-1v-2'])) {
+                                $componentName = 'calendar';
+                            } elseif (Str::contains(strtolower($d), ['m10 12v-5'])) {
+                                $componentName = 'clock';
+                            } elseif (Str::contains(strtolower($d), ['m13 8v-6'])) {
+                                $componentName = 'currency';
+                            }
+                        }
+                    }
+                    
+                    // Also try to find a descriptive id or class
+                    $svgNode = $xpath->query('//svg')[0];
+                    if ($svgNode && $svgNode->hasAttribute('id')) {
+                        $id = $svgNode->getAttribute('id');
+                        if (preg_match('/icon-(\w+)/', $id, $idMatches)) {
+                            $componentName = $idMatches[1];
+                        }
+                    }
+                    
+                    // Clean the SVG: remove hardcoded classes, widths, etc.
+                    $svg = preg_replace('/(class|id|stroke|fill)="[^"]*"/', '', $svg);
+                    $svg = preg_replace('/<svg\s+/', '<svg {{ $attributes->merge([\'class\' => \'\']) }} ', $svg);
+                    
+                    // Replace fixed colors with currentColor
+                    $svg = preg_replace('/#[0-9A-Fa-f]{3,6}/', 'currentColor', $svg);
+                    
+                    // Store in the array
+                    $svgComponents[$componentName] = $svg;
+                }
             }
         }
         
-        $this->info("Extraction complete. Extracted {$extractedCount} SVGs and replaced {$replacedCount} instances.");
-        
-        return Command::SUCCESS;
-    }
-    
-    /**
-     * Get all blade files in a directory recursively.
-     *
-     * @param string $directory
-     * @return array
-     */
-    private function getAllBladeFiles(string $directory): array
-    {
-        $files = [];
-        
-        foreach (File::allFiles($directory) as $file) {
-            if ($file->getExtension() === 'php' && Str::endsWith($file->getRelativePathname(), '.blade.php')) {
-                $files[] = $file->getPathname();
+        // Now save all components
+        foreach ($svgComponents as $name => $svg) {
+            $filename = Str::kebab($name) . '.blade.php';
+            $componentPath = "$componentsDir/$filename";
+            
+            // Check if component already exists
+            if (File::exists($componentPath)) {
+                if (!$this->confirm("Component $filename already exists. Overwrite?", false)) {
+                    continue;
+                }
             }
+            
+            File::put($componentPath, $svg);
+            $this->info("Created SVG component: $filename");
+            $extractedCount++;
         }
         
-        return $files;
-    }
-    
-    /**
-     * Generate a unique name for the SVG component.
-     *
-     * @param string $file
-     * @param int $count
-     * @return string
-     */
-    private function generateComponentName(string $file, int $count): string
-    {
-        $baseFilename = pathinfo($file, PATHINFO_FILENAME);
-        $directory = pathinfo($file, PATHINFO_DIRNAME);
-        $dirName = basename($directory);
-        
-        // Remove common prefixes and suffixes
-        $baseFilename = Str::replaceFirst('index', '', $baseFilename);
-        $baseFilename = Str::replaceFirst('show', '', $baseFilename);
-        $baseFilename = Str::replaceFirst('edit', '', $baseFilename);
-        $baseFilename = Str::replaceFirst('create', '', $baseFilename);
-        
-        // Create a name based on directory and filename
-        $name = Str::slug("{$dirName}-{$baseFilename}-{$count}", '-');
-        
-        // Ensure the name is unique
-        $componentsDir = resource_path('views/components/icons');
-        $i = 1;
-        $originalName = $name;
-        
-        while (File::exists("{$componentsDir}/{$name}.blade.php")) {
-            $name = "{$originalName}-{$i}";
-            $i++;
-        }
-        
-        return $name;
+        $this->info("Extracted $extractedCount SVG components into $componentsDir");
     }
 } 

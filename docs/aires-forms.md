@@ -12,6 +12,7 @@ Our implementation offers:
 - Comprehensive error handling
 - Data binding from multiple sources
 - HTTP method spoofing for RESTful applications
+- Accessibility considerations built-in
 
 ## Available Examples
 
@@ -168,6 +169,26 @@ Radio:
 ```php
 {{ Aire::submit('Send Message')
     ->class('primary-button') }}
+```
+
+### File Uploads
+
+Aire supports file upload fields with custom styling:
+
+```php
+{{ Aire::file('document', 'Upload Document')
+    ->accept('.pdf,.doc,.docx')
+    ->helpText('Max file size: 5MB. Accepted formats: PDF, DOC, DOCX')
+    ->required() }}
+```
+
+For multiple file uploads:
+
+```php
+{{ Aire::file('photos[]', 'Upload Photos')
+    ->multiple()
+    ->accept('image/*')
+    ->helpText('Upload up to 5 images') }}
 ```
 
 ## Validation Implementation
@@ -344,6 +365,245 @@ Our custom configuration in `config/aire.php` includes Tailwind-specific default
 ],
 ```
 
+## Accessibility
+
+Aire forms are built with accessibility in mind, but there are several ways to enhance accessibility further:
+
+### ARIA Attributes
+
+Add ARIA attributes to form elements for improved screen reader support:
+
+```php
+{{ Aire::input('search', 'Search')
+    ->attribute('aria-label', 'Search products')
+    ->attribute('aria-describedby', 'search-description') }}
+
+<div id="search-description" class="sr-only">
+    Enter product name or keywords to search our catalog
+</div>
+```
+
+### Accessible Labels
+
+Always use labels with form controls. When visual labels aren't desired, use `aria-label` or `aria-labelledby`:
+
+```php
+// With visible label
+{{ Aire::input('name', 'Your Name') }}
+
+// With visually hidden label
+<div class="sr-only">Your Name</div>
+{{ Aire::input('name')
+    ->attribute('aria-labelledby', 'name-label') }}
+```
+
+### Focus Management
+
+Ensure proper focus management for dynamic forms:
+
+```php
+<div x-data="{ showExtraFields: false }">
+    {{ Aire::checkbox('show_extra')
+        ->label('Show additional fields')
+        ->attribute('x-model', 'showExtraFields')
+        ->attribute('@change', 'showExtraFields ? $nextTick(() => $refs.firstExtra.focus()) : null') }}
+    
+    <div x-show="showExtraFields">
+        {{ Aire::input('extra_field')
+            ->attribute('x-ref', 'firstExtra') }}
+    </div>
+</div>
+```
+
+### Color Contrast
+
+Ensure proper color contrast in form elements, especially for error states:
+
+```php
+// In config/aire.php
+'default_classes' => [
+    'error_text' => 'mt-2 text-red-800', // Darker red for better contrast
+]
+```
+
+## Internationalization
+
+### Translating Form Labels and Messages
+
+For multi-language applications, you can use Laravel's localization features with Aire:
+
+```php
+{{ Aire::input('name', __('forms.name'))
+    ->placeholder(__('forms.name_placeholder'))
+    ->helpText(__('forms.name_help')) }}
+```
+
+### Translating Validation Messages
+
+Laravel's validation messages are automatically translated. For custom client-side validation messages:
+
+```php
+{{ Aire::input('name', __('forms.name'))
+    ->rules('required|min:3')
+    ->validationMessages([
+        'required' => __('validation.custom.name.required'),
+        'min' => __('validation.custom.name.min')
+    ]) }}
+```
+
+### Right-to-Left (RTL) Support
+
+For RTL languages, add the appropriate attributes to your form:
+
+```php
+{{ Aire::open()
+    ->route('contact.submit')
+    ->attribute('dir', 'rtl')
+    ->attribute('lang', 'ar') }}
+```
+
+## Complex Form Layouts
+
+### Multi-Column Forms
+
+Create multi-column layouts with Tailwind's grid system:
+
+```php
+{{ Aire::open()->route('user.store') }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            {{ Aire::input('first_name', 'First Name')->required() }}
+        </div>
+        <div>
+            {{ Aire::input('last_name', 'Last Name')->required() }}
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        {{ Aire::textarea('bio', 'Biography') }}
+    </div>
+    
+    <div class="mt-4">
+        {{ Aire::submit('Save') }}
+    </div>
+{{ Aire::close() }}
+```
+
+### Form Sections
+
+Organize complex forms into logical sections:
+
+```php
+{{ Aire::open()->route('checkout.process') }}
+    <div class="space-y-8">
+        <section>
+            <h3 class="text-lg font-medium text-gray-900">Personal Information</h3>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{ Aire::input('name', 'Full Name')->required() }}
+                {{ Aire::email('email', 'Email Address')->required() }}
+            </div>
+        </section>
+        
+        <section>
+            <h3 class="text-lg font-medium text-gray-900">Shipping Address</h3>
+            <div class="mt-4 space-y-4">
+                {{ Aire::input('address', 'Street Address')->required() }}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {{ Aire::input('city', 'City')->required() }}
+                    {{ Aire::input('state', 'State/Province')->required() }}
+                    {{ Aire::input('zip', 'Postal Code')->required() }}
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h3 class="text-lg font-medium text-gray-900">Payment Information</h3>
+            <div class="mt-4 space-y-4">
+                {{ Aire::input('card_number', 'Card Number')
+                    ->required()
+                    ->placeholder('0000 0000 0000 0000') }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {{ Aire::input('expiry', 'Expiry Date')
+                        ->required()
+                        ->placeholder('MM/YY') }}
+                    {{ Aire::input('cvv', 'CVV')
+                        ->required()
+                        ->placeholder('123') }}
+                </div>
+            </div>
+        </section>
+        
+        <div class="pt-4">
+            {{ Aire::submit('Complete Purchase')
+                ->class('w-full md:w-auto') }}
+        </div>
+    </div>
+{{ Aire::close() }}
+```
+
+### Wizard-Style Forms
+
+For multi-step forms, combine Aire with Alpine.js:
+
+```php
+<div x-data="{ step: 1, maxStep: 3 }" class="space-y-8">
+    {{ Aire::open()->route('multi-step.submit') }}
+        <div class="mb-6">
+            <div class="flex items-center">
+                <template x-for="i in maxStep" :key="i">
+                    <div class="flex items-center">
+                        <div :class="{'bg-blue-500': step >= i, 'bg-gray-300': step < i}" 
+                             class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                            <span x-text="i"></span>
+                        </div>
+                        <div x-show="i < maxStep" class="h-1 w-10" :class="{'bg-blue-500': step > i, 'bg-gray-300': step <= i}"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+        
+        <div x-show="step === 1">
+            <h3 class="text-lg font-medium mb-4">Personal Information</h3>
+            {{ Aire::input('name', 'Name')->required() }}
+            {{ Aire::email('email', 'Email')->required() }}
+            <div class="mt-4 flex justify-end">
+                <button type="button" @click="step++" class="px-4 py-2 bg-blue-500 text-white rounded">
+                    Next Step
+                </button>
+            </div>
+        </div>
+        
+        <div x-show="step === 2" x-cloak>
+            <h3 class="text-lg font-medium mb-4">Profile Details</h3>
+            {{ Aire::textarea('bio', 'Biography') }}
+            {{ Aire::input('occupation', 'Occupation') }}
+            <div class="mt-4 flex justify-between">
+                <button type="button" @click="step--" class="px-4 py-2 bg-gray-300 text-gray-800 rounded">
+                    Previous Step
+                </button>
+                <button type="button" @click="step++" class="px-4 py-2 bg-blue-500 text-white rounded">
+                    Next Step
+                </button>
+            </div>
+        </div>
+        
+        <div x-show="step === 3" x-cloak>
+            <h3 class="text-lg font-medium mb-4">Confirmation</h3>
+            <p class="mb-4">Please review your information before submitting.</p>
+            {{ Aire::checkbox('terms', 'I agree to the terms and conditions')
+                ->required() }}
+            <div class="mt-4 flex justify-between">
+                <button type="button" @click="step--" class="px-4 py-2 bg-gray-300 text-gray-800 rounded">
+                    Previous Step
+                </button>
+                {{ Aire::submit('Complete Registration')
+                    ->class('px-4 py-2 bg-blue-500 text-white rounded') }}
+            </div>
+        </div>
+    {{ Aire::close() }}
+</div>
+```
+
 ## Best Practices
 
 1. **Keep Forms Organized**: Group related fields together using divs or fieldsets
@@ -354,6 +614,8 @@ Our custom configuration in `config/aire.php` includes Tailwind-specific default
 6. **Accessibility**: Use proper labels and ARIA attributes
 7. **Field IDs**: Explicitly set IDs for custom JavaScript interaction
 8. **RESTful Methods**: Use appropriate HTTP verbs (GET, POST, PUT, DELETE) to match your application's RESTful design
+9. **Error Handling**: Always display validation errors clearly
+10. **Internationalization**: Design forms with translation in mind
 
 ## Troubleshooting
 
@@ -364,6 +626,8 @@ Our custom configuration in `config/aire.php` includes Tailwind-specific default
 3. **Data Not Binding**: Verify the data structure matches field names
 4. **Alpine.js Issues**: Make sure Alpine.js is properly loaded before form initialization
 5. **Method Spoofing**: If you're having issues with PUT/DELETE routes, verify your Laravel routes are properly configured
+6. **File Upload Problems**: Check enctype attribute is set correctly (Aire handles this automatically)
+7. **Layout Issues**: Use Tailwind's responsive utilities to ensure forms look good at all screen sizes
 
 ### Memory Usage
 
@@ -387,10 +651,14 @@ For large forms or applications with many forms, consider these performance opti
 2. **Lazy Loading**: Only load form-specific JavaScript when needed
 3. **Minimize DOM Manipulations**: Avoid excessive changes to the DOM in Alpine.js components
 4. **Cache Configuration**: Consider caching Aire configuration in production
+5. **Optimize Validation**: Use server-side validation for complex rules
+6. **Reduce DOM Size**: Break extremely large forms into steps or sections
 
 ## Additional Resources
 
 - [Aire Official Documentation](https://airephp.com/)
 - [Laravel Validation Documentation](https://laravel.com/docs/validation)
 - [Alpine.js Documentation](https://alpinejs.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs) 
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- [MDN Forms Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) 

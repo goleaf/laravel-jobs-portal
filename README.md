@@ -271,6 +271,9 @@ Aire is available through the `Aire` facade. Here's a basic example of a form:
 5. **CSRF Protection** - Automatic CSRF token for non-GET forms
 6. **Error Display** - Automatically displays validation errors
 7. **Tailwind CSS** - Styled with Tailwind CSS by default
+8. **Accessibility** - Built with accessibility in mind, with support for ARIA attributes
+9. **File Uploads** - Support for single and multiple file uploads
+10. **Internationalization** - Integration with Laravel's translation system
 
 ## Implementation Details
 
@@ -281,6 +284,9 @@ Our implementation includes:
 3. **Validation Examples** - Both client-side and server-side validation 
 4. **Custom Configuration** - Tailwind-specific styling in `config/aire.php`
 5. **Error Handling** - Comprehensive error display and summaries
+6. **Complex Layouts** - Support for multi-column, sectioned, and wizard-style forms
+7. **Accessibility Features** - ARIA attributes, focus management, and screen reader support
+8. **Internationalization** - Translation support for multi-language applications
 
 ## Form Examples Explained
 
@@ -301,6 +307,47 @@ Shows how Aire automatically displays validation errors from Laravel's validatio
 
 ### Method Spoofing
 Demonstrates how Aire handles HTTP method spoofing for PUT, PATCH and DELETE requests, automatically adding the necessary hidden fields.
+
+## Advanced Usage
+
+### File Uploads
+
+Aire supports file upload fields with custom styling:
+
+```php
+{{ Aire::file('document', 'Upload Document')
+    ->accept('.pdf,.doc,.docx')
+    ->helpText('Max file size: 5MB') }}
+```
+
+### Multi-Column Forms
+
+Create responsive layouts with Tailwind's grid system:
+
+```php
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {{ Aire::input('first_name', 'First Name') }}
+    {{ Aire::input('last_name', 'Last Name') }}
+</div>
+```
+
+### Wizard Forms
+
+Combine Aire with Alpine.js for multi-step forms:
+
+```php
+<div x-data="{ step: 1 }">
+    <div x-show="step === 1">
+        <!-- Step 1 fields -->
+        <button @click="step++">Next</button>
+    </div>
+    <div x-show="step === 2">
+        <!-- Step 2 fields -->
+        <button @click="step--">Back</button>
+        {{ Aire::submit('Submit') }}
+    </div>
+</div>
+```
 
 ## Data Binding
 

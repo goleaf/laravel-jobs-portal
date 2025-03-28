@@ -12,9 +12,7 @@
                 placeholder="{{ __('messages.table.search') }}">
             @if($search)
                 <button wire:click="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3">
-                    <svg class="w-5 h-5 text-gray-500 hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+                    <x-icons.close class="w-5 h-5 text-gray-500 hover:text-gray-900" />
                 </button>
             @endif
         </div>
@@ -145,9 +143,7 @@
                         {{ $label }}: {{ $displayValue }}
                         <button wire:click="removeFilter('{{ $field }}')" class="ml-1.5 inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
                             <span class="sr-only">{{ __('messages.common.remove') }}</span>
-                            <svg class="h-3 w-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
+                            <x-icons.close class="h-3 w-3 text-gray-500" />
                         </button>
                     </span>
                 @endif

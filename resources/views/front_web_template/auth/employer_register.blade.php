@@ -58,54 +58,73 @@
                 <div class="row">
                     <div class="col-xl-6 col-lg-8 mx-auto">
                         @include('flash::message')
-                        <form method="POST" action="{{ route('front.login') }}" id="addEmployerNewForm"
-                            class="py-40 px-40 bg-gray">
+                        @formOpen(['id' => 'addEmployerNewForm', 'class' => 'py-40 px-40 bg-gray', 'method' => 'POST'])
                             <div class="row">
                                 <div class="col-12 mb-4">
                                     <div class="form-group row">
                                         <div class="col-sm-6 col-12 mb-3 mb-sm-0">
-                                            <a href="{{ route('candidate.register') }}"
-                                                class="btn btn-light-primary d-block">
+                                            <a href="{{ route('candidate.register') }}" class="btn btn-light-primary d-block">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
                                         <div class="col-sm-6 col-12">
-                                            <a href="{{ route('employer.register') }}" class="btn btn-primary btn-primary-register d-block">
+                                            <a href="{{ route('employer.register') }}"
+                                                class="btn btn-primary btn-primary-register d-block">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
                                     </div>
                                 </div>
                                 @csrf
-                                <div id="candidateValidationErrBox">
+                                <div id="employerValidationErrBox">
                                     @include('layouts.errors')
                                 </div>
-                                <input type="hidden" name="type" value="2" />
+                                {{ Form::hidden('type', '2') }}
                                 <div class="col-md-6">
                                     <div class="form-group mb-md-4 mb-3 ">
-                                        <label for="" class="fs-16 text-secondary mb-3">{{ __('web.common.name') }}
-                                            <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control fs-14 text-gray bg-white  br-10 p-3"
-                                            name="first_name" id="employerFirstName" placeholder="{{ __('web.register_menu.enter_first_name') }}"
-                                            required>
+                                        {{ Form::label('employerFirstName', __('web.common.first_name'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <span class="text-danger">*</span>
+                                        {{ Form::text('first_name', null, [
+                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'id' => 'employerFirstName',
+                                            'placeholder' => __('web.register_menu.enter_first_name'),
+                                            'required'
+                                        ]) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="" class="fs-16 text-secondary mb-3">{{ __('web.common.email') }}
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="email" class="form-control fs-14 text-gray bg-white  br-10 p-3" name="email"
-                                               id="employerEmail" placeholder="@lang('web.register_menu.enter_email_address')"
-                                               required>
+                                    <div class="form-group mb-md-4 mb-3 ">
+                                        {{ Form::label('employerLastName', __('web.common.last_name'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <span class="text-danger">*</span>
+                                        {{ Form::text('last_name', null, [
+                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'id' => 'employerLastName',
+                                            'placeholder' => __('web.register_menu.enter_last_name'),
+                                            'required'
+                                        ]) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-md-4 mb-3 ">
+                                        {{ Form::label('employerEmail', __('web.common.email'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <span class="text-danger">*</span>
+                                        {{ Form::email('email', null, [
+                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'id' => 'employerEmail',
+                                            'placeholder' => __('web.register_menu.enter_email_address'),
+                                            'required'
+                                        ]) }}
                                     </div>
                                 </div>
                                 <div class="col-md-6 position-relative">
                                     <div class="form-group mb-md-4 mb-3 ">
-                                        <label for=""
-                                            class="fs-16 text-secondary mb-3">{{ __('web.common.password') }}
-                                            <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control fs-14 text-gray bg-white  br-10 p-3"
-                                            name="password" placeholder="{{ __('web.register_menu.enter_password') }}" id="employerPassword" required
-                                            onkeypress="return avoidSpace(event)">
+                                        {{ Form::label('employerPassword', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <span class="text-danger">*</span>
+                                        {{ Form::password('password', [
+                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'id' => 'employerPassword',
+                                            'placeholder' => __('web.register_menu.enter_password'),
+                                            'required',
+                                            'onkeypress' => 'return avoidSpace(event)'
+                                        ]) }}
                                         <span class="position-absolute d-flex align-items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register ">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
@@ -113,22 +132,25 @@
                                 </div>
                                 <div class="col-md-6 position-relative">
                                     <div class="form-group mb-md-4 mb-3 ">
-                                        <label for="" class="fs-16 text-secondary mb-3">{{ __('web.common.confirm_password') }}
-                                            <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control fs-14 text-gray bg-white  br-10 p-3"
-                                            name="password_confirmation" id="searchByLocation" placeholder="{{ __('web.register_menu.confirm_password') }}" id="employerConfirmPassword" required
-                                            onkeypress="return avoidSpace(event)">
+                                        {{ Form::label('employerConfirmPassword', __('web.common.confirm_password'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <span class="text-danger">*</span>
+                                        {{ Form::password('password_confirmation', [
+                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'id' => 'employerConfirmPassword',
+                                            'placeholder' => __('web.register_menu.confirm_password'),
+                                            'required',
+                                            'onkeypress' => 'return avoidSpace(event)'
+                                        ]) }}
                                         <span class="position-absolute d-flex align-items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register ">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="col-12 mb-4">
                                 <div class="form-check">
-                                    <input type="checkbox" name="privacyPolicy" class="form-check-input" id="remember">
-                                    <label class="form-check-label" for="remember">
+                                    {{ Form::checkbox('privacyPolicy', '1', null, ['class' => 'form-check-input', 'id' => 'employerRemember']) }}
+                                    <label class="form-check-label" for="employerRemember">
                                         @lang('messages.by_signing_up_you_agree_to_our')
                                         <a href="{{ route('terms.conditions.list') }}" target="_blank"
                                             class="text-primary">{{ __('messages.setting.terms_conditions') }}</a>
@@ -149,9 +171,12 @@
                                 </div>
                             @endif
                             <div class="col-12 d-grid my-4">
-                                <button type="submit" class="btn btn-secondary btn-secondary-login" id="btnEmployerSave"
-                                    data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{ __('messages.common.process') }}">
-                                    {{ __('web.register_menu.create_account') }}</button>
+                                {{ Form::button(__('web.register_menu.create_account'), [
+                                    'type' => 'submit',
+                                    'class' => 'btn btn-secondary btn-secondary-login',
+                                    'id' => 'btnEmployerSave',
+                                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                ]) }}
                             </div>
                             @php
                                 $envSetting = getEnvSetting();
@@ -187,7 +212,7 @@
                                     @endif
                                 </div>
                             </div>
-                        </form>
+                        @formClose()
                     </div>
                 </div>
             </div>

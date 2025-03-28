@@ -25,21 +25,27 @@
                 Enter your email to reset your password.
             </div>
         </div>
-        <form method="POST" action="{{ route('password.email') }}">
+        @formOpen(['route' => 'password.email', 'method' => 'POST'])
             @csrf
             <div class="mb-sm-7 mb-4">
-                <label for="formInputEmail" class="form-label">
-                    Email:<span class="required"></span>
-                </label>
-                <input class="form-control" type="email"
-                       placeholder="Your Email" name="email" autocomplete="off" value="{{ old('email') }}" required/>
+                {{ Form::label('formInputEmail', 'Email:', ['class' => 'form-label']) }}
+                <span class="required"></span>
+                {{ Form::email('email', old('email'), [
+                    'class' => 'form-control',
+                    'placeholder' => 'Your Email',
+                    'autocomplete' => 'off',
+                    'required' => true
+                ]) }}
             </div>
 
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">{{ __('Email Password Reset Link') }}</button>
+                {{ Form::button(__('Email Password Reset Link'), [
+                    'type' => 'submit',
+                    'class' => 'btn btn-primary'
+                ]) }}
                 <a href="{{ route('admin.login') }}" class="btn btn-secondary ms-3">Cancel</a>
             </div>
-        </form>
+        @formClose()
     </div>
 </div>
 

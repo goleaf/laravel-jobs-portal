@@ -25,14 +25,22 @@
     <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
         {{ Form::label('password',__('messages.candidate.password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <input class="form-control  form-control-solid" id="password" type="password"
-               name="password" required placeholder="{{__('messages.candidate.password')}}">
+        {{ Form::password('password', [
+            'class' => 'form-control form-control-solid',
+            'id' => 'password',
+            'required' => true,
+            'placeholder' => __('messages.candidate.password')
+        ]) }}
     </div>
     <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
         {{ Form::label('cpassword',__('messages.candidate.conform_password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <input class="form-control  form-control-solid" id="cpassword" type="password"
-               name="cpassword" required placeholder="{{__('messages.candidate.conform_password')}}">
+        {{ Form::password('cpassword', [
+            'class' => 'form-control form-control-solid',
+            'id' => 'cpassword',
+            'required' => true,
+            'placeholder' => __('messages.candidate.conform_password')
+        ]) }}
     </div>
     {{ Form::label('Profile',__('messages.profile').':', ['class' => 'form-label']) }}
     <div class="d-block">

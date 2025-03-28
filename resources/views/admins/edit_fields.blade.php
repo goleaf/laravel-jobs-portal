@@ -24,13 +24,19 @@
     </div>
     <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
         {{ Form::label('password',__('messages.candidate.password').':', ['class' => 'form-label']) }}
-        <input class="form-control  form-control-solid" id="update_password" type="password"
-               name="update_password" placeholder="{{__('messages.candidate.password')}}">
+        {{ Form::password('update_password', [
+            'class' => 'form-control form-control-solid',
+            'id' => 'update_password',
+            'placeholder' => __('messages.candidate.password')
+        ]) }}
     </div>
     <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
         {{ Form::label('cpassword',__('messages.candidate.conform_password').':', ['class' => 'form-label']) }}
-        <input class="form-control  form-control-solid" id="cpassword" type="password"
-               name="cpassword" placeholder="{{__('messages.candidate.conform_password')}}">
+        {{ Form::password('cpassword', [
+            'class' => 'form-control form-control-solid',
+            'id' => 'cpassword',
+            'placeholder' => __('messages.candidate.conform_password')
+        ]) }}
     </div>
     {{ Form::label('Profile',__('messages.profile').':', ['class' => 'form-label']) }}
     <div class="d-block">

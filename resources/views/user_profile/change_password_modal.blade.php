@@ -28,36 +28,38 @@
                     {{ Form::password('password_current', [
                         'class' => 'form-control form-control-solid',
                         'id' => 'pfCurrentPassword',
-                        'required'
+                        'required' => true
                     ]) }}
                 </div>
                 <div class="mb-5">
-                    {{ Form::label('pfNewPassword', __('messages.company.new_password').':', ['class' => 'required form-label']) }}
+                    {{ Form::label('pfNewPassword', __('messages.company.new_password').':', ['class' => 'form-label required']) }}
                     {{ Form::password('password', [
                         'class' => 'form-control form-control-solid',
                         'id' => 'pfNewPassword',
-                        'required'
+                        'required' => true
                     ]) }}
                 </div>
-                <div class="">
-                    {{ Form::label('pfNewConfirmPassword', __('messages.company.confirm_password').':', ['class' => 'required form-label']) }}
+                <div class="mb-5">
+                    {{ Form::label('pfNewConfirmPassword', __('messages.company.confirm_password').':', ['class' => 'form-label required']) }}
                     {{ Form::password('password_confirmation', [
                         'class' => 'form-control form-control-solid',
                         'id' => 'pfNewConfirmPassword',
-                        'required'
+                        'required' => true
                     ]) }}
                 </div>
             </div>
             <div class="modal-footer pt-0">
                 {{ Form::button(__('messages.common.save'), [
                     'type' => 'submit',
-                    'class' => 'btn btn-primary m-0',
+                    'class' => 'btn btn-primary me-3',
                     'id' => 'btnPrPasswordEditSave',
-                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> " . __('messages.common.processing')
                 ]) }}
-                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
-                        id="btnEditCancel"
-                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
+                {{ Form::button(__('messages.common.discard'), [
+                    'type' => 'button',
+                    'class' => 'btn btn-secondary btn-active-light-primary me-2',
+                    'data-bs-dismiss' => 'modal'
+                ]) }}
             </div>
             @formClose()
         </div>

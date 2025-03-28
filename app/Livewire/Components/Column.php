@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Components;
 
+use Closure;
+
 class Column
 {
-    protected $field;
-    protected $title;
-    protected $sortable = false;
-    protected $searchable = false;
-    protected $hidden = false;
-    protected $viewComponent = null;
-    protected $formatCallback = null;
-    protected $class = null;
+    protected string $field;
+    protected string $title;
+    protected bool $sortable = false;
+    protected bool $searchable = false;
+    protected bool $hidden = false;
+    protected ?string $viewComponent = null;
+    protected ?Closure $formatCallback = null;
+    protected ?string $class = null;
 
     /**
      * Create a new Column instance.
@@ -101,7 +103,7 @@ class Column
      */
     public function format(callable $callback): self
     {
-        $this->formatCallback = $callback;
+        $this->formatCallback = $callback instanceof Closure ? $callback : Closure::fromCallable($callback);
         
         return $this;
     }

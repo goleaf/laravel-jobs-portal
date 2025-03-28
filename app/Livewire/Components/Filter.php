@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Components;
 
+use Closure;
+
 class Filter
 {
-    protected $key;
-    protected $label;
-    protected $type = 'select';
-    protected $options = [];
-    protected $callback = null;
+    protected string $key;
+    protected string $label;
+    protected string $type = 'select';
+    protected array $options = [];
+    protected ?Closure $callback = null;
 
     /**
      * Create a new Filter instance.
@@ -98,7 +100,7 @@ class Filter
      */
     public function callback(callable $callback): self
     {
-        $this->callback = $callback;
+        $this->callback = $callback instanceof Closure ? $callback : Closure::fromCallable($callback);
         
         return $this;
     }

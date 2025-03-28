@@ -3,7 +3,7 @@
 @section('add-button')
     <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
         <x-icons.add class="w-5 h-5 mr-2" />
-        {{ __('messages.language.add_language') }}
+        {{ __('language.add_language') }}
     </button>
 @endsection
 
@@ -17,12 +17,10 @@
             <input type="text" 
                 wire:model.debounce.300ms="search" 
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" 
-                placeholder="{{ __('messages.table.search') }}">
+                placeholder="{{ __('common.search') }}">
             @if($search)
                 <button wire:click="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3">
-                    <svg class="w-5 h-5 text-gray-500 hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+                    <x-icons.close class="w-5 h-5 text-gray-500 hover:text-gray-900" />
                 </button>
             @endif
         </div>
@@ -31,7 +29,7 @@
         <div class="flex flex-wrap items-center justify-end gap-2">
             <div class="flex items-center space-x-2">
                 <label for="perPage" class="text-sm font-medium text-gray-700">
-                    {{ __('messages.table.per_page') }}:
+                    {{ __('common.per_page') }}:
                 </label>
                 <select id="perPage" 
                     wire:model="perPage"
@@ -63,13 +61,9 @@
                                     @if($sortField === $column['field'])
                                         <span class="ml-1">
                                             @if($sortDirection === 'asc')
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                                                </svg>
+                                                <x-icons.chevron-up class="w-4 h-4" />
                                             @else
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
+                                                <x-icons.chevron-down class="w-4 h-4" />
                                             @endif
                                         </span>
                                     @endif
@@ -101,7 +95,7 @@
                 @else
                     <tr>
                         <td colspan="{{ count($columns) }}" class="px-6 py-4 text-center">
-                            {{ __('messages.table.no_records') }}
+                            {{ __('common.no_records') }}
                         </td>
                     </tr>
                 @endif

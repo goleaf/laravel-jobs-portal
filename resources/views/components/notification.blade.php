@@ -35,10 +35,8 @@
                 <button 
                     @click="remove(notification.id)" 
                     class="ml-4 inline-flex text-gray-400 hover:text-gray-500">
-                    <span class="sr-only">{{ __('messages.common.close') }}</span>
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <span class="sr-only">{{ __('common.close') }}</span>
+                    <x-icons.close class="h-5 w-5" />
                 </button>
             </div>
         </div>

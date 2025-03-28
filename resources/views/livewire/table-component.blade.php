@@ -12,9 +12,7 @@
                             class="form-input w-64"
                         >
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
+                            <x-icons.search />
                         </div>
                     </div>
                     
@@ -33,21 +31,10 @@
                 <div class="flex items-center space-x-2">
                     @if(count($filters) > 0)
                     <div class="relative" x-data="{ open: false }">
-                        <button
-                            @click="open = !open"
-                            type="button"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                            </svg>
-                            {{ __('Filters') }}
-                            @if(count($this->getSelectedFilters()) > 0)
-                                <span class="ml-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary-100 text-primary-800">
-                                    {{ count($this->getSelectedFilters()) }}
-                                </span>
-                            @endif
-                        </button>
+                        <div x-on:click="filtersOpen = !filtersOpen" class="flex items-center cursor-pointer">
+                            <span class="mr-1 text-sm text-gray-700 dark:text-gray-300 tracking-wider">{{ __('messages.common.filter') }}</span>
+                            <x-icons.chevron-down />
+                        </div>
                         
                         <!-- Filter dropdown -->
                         <div 
@@ -134,16 +121,10 @@
                     
                     @if(count($bulkActions) > 0 && count($selected) > 0)
                     <div class="relative" x-data="{ open: false }">
-                        <button
-                            @click="open = !open"
-                            type="button"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                            {{ __('Actions') }}
-                            <span class="ml-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary-100 text-primary-800">
-                                {{ count($selected) }}
-                            </span>
-                        </button>
+                        <div x-on:click="open = !open" class="flex items-center cursor-pointer">
+                            <span class="mr-1 text-sm text-gray-700 dark:text-gray-300 tracking-wider">{{ __('messages.common.action') }}</span>
+                            <x-icons.chevron-down class="h-5 w-5 mr-2 text-gray-400" />
+                        </div>
                         
                         <!-- Actions dropdown -->
                         <div 
@@ -180,9 +161,7 @@
                         class="flex-shrink-0 ml-0.5 h-5 w-5 rounded-full inline-flex items-center justify-center text-primary-600 hover:bg-primary-200 hover:text-primary-800 focus:outline-none"
                     >
                         <span class="sr-only">{{ __('Remove filter') }}</span>
-                        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
+                        <x-icons.close />
                     </button>
                 </span>
                 @endforeach
@@ -217,17 +196,16 @@
                                     <span>{{ $column['label'] }}</span>
                                     
                                     @if(($column['sortable'] ?? false) && $sortField === $column['key'])
-                                    <span>
-                                        @if($sortDirection === 'asc')
-                                        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                        @else
-                                        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                        @endif
-                                    </span>
+                                    <div class="p-2">
+                                        <div class="flex items-center cursor-pointer text-gray-700" wire:click="sortBy('{{ $column['key'] }}', 'asc')">
+                                            <span class="mr-1">{{ __('messages.common.asc') }}</span>
+                                            <x-icons.chevron-down class="h-4 w-4 text-gray-400" />
+                                        </div>
+                                        <div class="flex items-center cursor-pointer text-gray-700 dark:text-gray-300" wire:click="sortBy('{{ $column['key'] }}', 'desc')">
+                                            <span class="mr-1">{{ __('messages.common.desc') }}</span>
+                                            <x-icons.chevron-down class="h-4 w-4 text-gray-400" transform="rotate-180" />
+                                        </div>
+                                    </div>
                                     @endif
                                 </div>
                             </th>

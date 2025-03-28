@@ -56,6 +56,15 @@
                     {{ $tableActions }}
                 </div>
             @endif
+
+            <div class="flex items-center">
+                <button wire:click="refresh" class="flex items-center text-blue-500 hover:text-blue-700">
+                    <x-icons.refresh class="w-5 h-5 text-gray-500 hover:text-gray-900" />
+                </button>
+                <div wire:loading class="ml-2">
+                    <x-icons.spinner class="h-3 w-3 text-gray-500" />
+                </div>
+            </div>
         </div>
     </div>
 

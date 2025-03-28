@@ -183,36 +183,40 @@
                                             <h5 class="card-title text-secondary fs-18 mb-0">{!! $candidate->user->full_name !!}
                                             </h5>
                                         </a>
-                                        <div class="">
-                                            <div class="card-desc d-flex flex-wrap mt-2 ">
-                                                {{-- <div class="desc d-flex  me-4">
-                                                    <div class="me-3 w-20">
-                                                        <img src="{{ asset('img_template/briefcase.svg') }}"
-                                                            class="w-100">
-                                                    </div>
-                                                    <p class="fs-14 text-gray mb-2">Agricultural Inspectors</p>
-                                                </div> --}}
-                                                @if (!empty($candidate->full_location) || !empty($candidate->location2))
-                                                    <div class="desc d-flex me-4">
-                                                        <div class="me-3 w-20">
-                                                            <img src="{{ asset('img_template/location.svg') }}"
-                                                                class="w-100">
+                                        <div class="candidate-info position-relative mt-4">
+                                            <div class="row align-items-center mt-sm-0 ct">
+                                                <div class="col-xl-6 col-md-6 col-sm-6">
+                                                    <div class="candidate-info-desc d-flex">
+                                                        <div class="me-3 icon-box">
+                                                            <x-icons.briefcase class="w-100" />
                                                         </div>
-                                                        <p class="fs-14 text-gray mb-2">
-                                                            {{ isset($candidate->full_location) ? html_entity_decode(Str::limit($candidate->full_location, 10, '...')) : __('messages.common.n/a') }}{{ isset($candidate->location2) ? ',' . html_entity_decode(Str::limit($candidate->location2, 10, '...')) : '' }}
+                                                        <p class="fs-14 text-gray mb-0">
+                                                            {{ !empty($candidate->industry) ? $candidate->industry->name : '' }}
                                                         </p>
                                                     </div>
-                                                @endif
-                                                @if (!empty($candidate->expected_salary))
-                                                    <div class="desc d-flex">
-                                                        <div class="me-3 w-20">
-                                                            <img src="{{ asset('img_template/money.svg') }}"
-                                                                class="w-100" />
+                                                </div>
+                                                <div class="col-xl-6 col-md-6 col-sm-6 mt-3 mt-sm-0">
+                                                    <div class="candidate-info-desc d-flex">
+                                                        <div class="me-3 icon-box">
+                                                            <x-icons.location class="w-100" />
                                                         </div>
-                                                        <p class="fs-14 text-gray mb-2">
-                                                            {{ $candidate->expected_salary }}</p>
+                                                        <p class="fs-14 text-gray mb-0">
+                                                            {{ !empty($candidate->full_location) ? $candidate->full_location : '' }}
+                                                        </p>
                                                     </div>
-                                                @endif
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mt-3">
+                                                <div class="col-xl-6 col-md-6 col-sm-6 mt-3 mt-sm-0">
+                                                    <div class="candidate-info-desc d-flex">
+                                                        <div class="me-3 icon-box">
+                                                            <x-icons.money class="w-100" />
+                                                        </div>
+                                                        <p class="fs-14 text-gray mb-0">
+                                                            {{ !empty($candidate->expected_salary) ? $candidate->currency->currency_icon . ' ' . $candidate->expected_salary : '' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="desc d-flex flex-wrap pt-2">

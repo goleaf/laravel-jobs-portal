@@ -199,34 +199,38 @@
                                 isset($companyDetail->user->linkedin_url))
                             <div class="about-company-right company-details-social-media mt-5 br-10 px-40 bg-light">
                                 <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
-                                <div class="mt-3">
-                                    @if (isset($companyDetail->user->facebook_url))
-                                        <a href="{{ isset($companyDetail->user->facebook_url) ? addLinkHttpUrl($companyDetail->user->facebook_url) : 'javascript:void(0)' }}"
-                                            class="ms-2" target="_blank">
-                                            <i class="fa-brands fa-facebook-f fs-3 mx-2"></i></a>
+                                <div class="social-media mt-4">
+                                    @if(!empty($companyDetail->user->facebook_url))
+                                        <a href="{{ (isset($companyDetail->user->facebook_url)) ? addLinkHttpUrl($companyDetail->user->facebook_url) : 'javascript:void(0)' }}"
+                                           target="_blank" class="me-2">
+                                            <x-icons.facebook class="w-6 h-6 text-primary" />
+                                        </a>
                                     @endif
-                                    @if (isset($companyDetail->user->linkedin_url))
-                                        <a href="{{ isset($companyDetail->user->linkedin_url) ? addLinkHttpUrl($companyDetail->user->linkedin_url) : 'javascript:void(0)' }}"
-                                            class="ms-2" target="_blank">
-                                            <i class="fa-brands fa-linkedin-in fs-3 mx-2"></i></a>
+                                    @if(!empty($companyDetail->user->linkedin_url))
+                                        <a href="{{ (isset($companyDetail->user->linkedin_url)) ? addLinkHttpUrl($companyDetail->user->linkedin_url) : 'javascript:void(0)' }}"
+                                           target="_blank" class="me-2">
+                                            <x-icons.linkedin class="w-6 h-6 text-primary" />
+                                        </a>
                                     @endif
-                                    @if (isset($companyDetail->user->twitter_url))
-                                        <a href="{{ isset($companyDetail->user->twitter_url) ? addLinkHttpUrl($companyDetail->user->twitter_url) : 'javascript:void(0)' }}"
-                                            class="ms-2" target="_blank">
-                                            <i class="fa-brands fa-twitter fs-3 mx-2"></i></a>
+                                    @if(!empty($companyDetail->user->twitter_url))
+                                        <a href="{{ (isset($companyDetail->user->twitter_url)) ? addLinkHttpUrl($companyDetail->user->twitter_url) : 'javascript:void(0)' }}"
+                                           target="_blank" class="me-2">
+                                            <x-icons.twitter class="w-6 h-6 text-primary" />
+                                        </a>
                                     @endif
-                                    @if (isset($companyDetail->user->google_plus_url))
-                                        <a href="{{ isset($companyDetail->user->google_plus_url) ? addLinkHttpUrl($companyDetail->user->google_plus_url) : 'javascript:void(0)' }}"
-                                            class="ms-2" target="_blank">
-                                            <i class="fa-brands fa-google-plus-g fs-3 mx-2"></i></a>
+                                    @if(!empty($companyDetail->user->google_plus_url))
+                                        <a href="{{ (isset($companyDetail->user->google_plus_url)) ? addLinkHttpUrl($companyDetail->user->google_plus_url) : 'javascript:void(0)' }}"
+                                           target="_blank" class="me-2">
+                                            <x-icons.google-plus class="w-6 h-6 text-primary" />
+                                        </a>
                                     @endif
-                                    @if (isset($companyDetail->user->pinterest_url))
-                                        <a href="{{ isset($companyDetail->user->pinterest_url) ? addLinkHttpUrl($companyDetail->user->pinterest_url) : 'javascript:void(0)' }}"
-                                            class="ms-2" target="_blank">
-                                            <i class="fa-brands fa-pinterest-p fs-3 mx-2"></i></a>
+                                    @if(!empty($companyDetail->user->pinterest_url))
+                                        <a href="{{ (isset($companyDetail->user->pinterest_url)) ? addLinkHttpUrl($companyDetail->user->pinterest_url) : 'javascript:void(0)' }}"
+                                           target="_blank" class="me-2">
+                                            <x-icons.pinterest class="w-6 h-6 text-primary" />
+                                        </a>
                                     @endif
                                 </div>
-
                             </div>
                         @endif
                     </div>

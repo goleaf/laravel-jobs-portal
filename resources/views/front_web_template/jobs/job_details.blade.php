@@ -203,49 +203,54 @@
                                     <p class="fs-16 text-gray mb-5 pb-lg-4">{{ __('messages.common.n/a') }}</p>
                                 @endif
                             </div>
+                            <div class="share-job-btn">
+                                <p class="fs-14 text-secondary mb-2">@lang('web.web_jobs.share_this_job')</p>
+                                <div class="social-media d-flex">
+                                    <div class="social-media-experiment d-flex">
+                                        <div>
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode(url()->current()) }}"
+                                               target="_blank" class="me-2 d-flex justify-content-center align-items-center">
+                                                <x-icons.facebook class="w-5 h-5 text-white" />
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="https://www.linkedin.com/shareArticle/?mini=true&url={{ rawurlencode(url()->current()) }}"
+                                               target="_blank" class="me-2 d-flex justify-content-center align-items-center">
+                                                <x-icons.linkedin class="w-5 h-5 text-white" />
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="https://www.twitter.com/share?url={{ rawurlencode(url()->current()) }}"
+                                               target="_blank" class="me-2 d-flex justify-content-center align-items-center">
+                                                <x-icons.twitter class="w-5 h-5 text-white" />
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="https://plus.google.com/share?url={{ rawurlencode(url()->current()) }}"
+                                               target="_blank" class="me-2 d-flex justify-content-center align-items-center">
                             <div class="share-this-job mb-lg-0 mb-40">
                                 <h5 class="fs-18 text-secondary mb-4">@lang('web.apply_for_job.share_this_job'):</h5>
-                                <div class="icon-box d-flex">
-                                    <div class="social-icon me-sm-4 me-3 d-flex align-items-center justify-content-center">
-                                        <a href="{{ $url['facebook'] }}" target="_blank" class="facebook d-flex"
-                                            title="@lang('web.web_jobs.facebook')">
-                                            <div class="icon d-flex">
-                                                <i class="fa-brands fa-facebook-f text-white"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="social-icon me-sm-4 me-3 d-flex align-items-center justify-content-center">
-                                        <a href="https://www.linkedin.com/shareArticle/?url={{ rawurlencode(URL::to('/job-details/' . $job->job_id)) }}"
-                                            title="@lang('web.web_jobs.linkedin')" target="_blank" class="linkedin d-flex">
-                                            <div class="icon d-flex">
-                                                <i class="fa-brands fa-linkedin-in text-white"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="social-icon me-sm-4 me-3 d-flex align-items-center justify-content-center">
-                                        <a href="{{ $url['twitter'] }}" target="_blank" class="twitter d-flex"
-                                            title="@lang('web.web_jobs.twitter')">
-                                            <div class="icon d-flex">
-                                                <i class="fa-brands fa-twitter text-white"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="social-icon me-sm-4 me-3 d-flex align-items-center justify-content-center">
-                                        <a href="{{ $url['gmail'] }}" target="_blank" class="google d-flex"
-                                            title="@lang('web.web_jobs.google')">
-                                            <div class="icon d-flex">
-                                                <i class="fa-brands fa-google-plus-g text-white"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="social-icon me-sm-4 me-3 d-flex align-items-center justify-content-center">
-                                        <a href="{{ $url['pinterest'] }}" target="_blank" class="pinterest d-flex"
-                                            title="@lang('web.web_jobs.pinterest')">
-                                            <div class="icon d-flex">
-                                                <i class="fa-brands fa-pinterest-p text-white"></i>
-                                            </div>
-                                        </a>
-                                    </div>
+                                <div class="social-media d-flex flex-wrap">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode(url()->current()) }}"
+                                        target="_blank" class="social-media-item bg-primary text-decoration-none me-2 mb-2">
+                                        <x-icons.facebook class="w-5 h-5 text-white" />
+                                    </a>
+                                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ rawurlencode(url()->current()) }}&title={{ rawurlencode($job->job_title) }}"
+                                        target="_blank" class="social-media-item bg-primary text-decoration-none me-2 mb-2">
+                                        <x-icons.linkedin class="w-5 h-5 text-white" />
+                                    </a>
+                                    <a href="https://www.twitter.com/share?url={{ rawurlencode(url()->current()) }}&text={{ rawurlencode($job->job_title) }}"
+                                        target="_blank" class="social-media-item bg-primary text-decoration-none me-2 mb-2">
+                                        <x-icons.twitter class="w-5 h-5 text-white" />
+                                    </a>
+                                    <a href="https://plus.google.com/share?url={{ rawurlencode(url()->current()) }}"
+                                        target="_blank" class="social-media-item bg-primary text-decoration-none me-2 mb-2">
+                                        <x-icons.google-plus class="w-5 h-5 text-white" />
+                                    </a>
+                                    <a href="https://pinterest.com/pin/create/button/?url={{ rawurlencode(url()->current()) }}"
+                                        target="_blank" class="social-media-item bg-primary text-decoration-none me-2 mb-2">
+                                        <x-icons.pinterest class="w-5 h-5 text-white" />
+                                    </a>
                                 </div>
                             </div>
                         </div>

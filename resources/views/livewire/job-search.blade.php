@@ -23,19 +23,19 @@
                                         <div class="card-desc d-flex flex-wrap mt-2 ">
                                             <div class="desc d-flex  me-4">
                                               <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/briefcase.svg') }}" class="w-100">
+                                                <x-icons.briefcase class="w-100" />
                                               </div>
                                               <p class="fs-14 text-gray mb-2">{{ $job->jobCategory->name }}</p>
                                             </div>
                                             <div class="desc d-flex me-4">
                                               <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/location.svg') }}" class="w-100">
+                                                <x-icons.location class="w-100" />
                                               </div>
                                               <p class="fs-14 text-gray mb-2">{{ !empty($job->full_location) ? $job->full_location : 'Location Info. not available.' }}</p>
                                             </div>
                                             <div class="desc d-flex">
                                               <div class="me-3 w-20">
-                                                <img src=" {{ asset('img_template/clock.svg') }}" class="w-100">
+                                                <x-icons.clock class="w-100" />
                                               </div>
                                               <p class="fs-14 text-gray mb-2">{{ $job->created_at->diffForHumans() }}</p>
                                             </div>

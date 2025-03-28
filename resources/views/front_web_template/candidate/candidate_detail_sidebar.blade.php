@@ -388,3 +388,65 @@
         </div>
     @endif
 </div>
+
+<div class="row desc-box mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="d-flex">
+            <div class="me-3 w-20">
+                <x-icons.calendar-days class="w-full h-full text-primary" />
+            </div>
+            <div>
+                <span class="text-secondary fs-14">{{ __('messages.candidate.marital_status') }}:</span>
+                <p class="fs-14 mb-0">{{ $candidateDetails->maritalStatus->status }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="d-flex">
+            <div class="me-3 w-20">
+                <x-icons.calendar-days class="w-full h-full text-primary" />
+            </div>
+            <div>
+                <span class="text-secondary fs-14">{{ __('messages.candidate.birth_date') }}:</span>
+                <p class="fs-14 mb-0">{{ \Carbon\Carbon::parse($candidateDetails->user->dob)->format('jS M, Y') }}</p>
+            </div>
+        </div>
+    </div>
+    @if (isset($candidateDetails->expected_salary) && ($candidateDetails->expected_salary != 0))
+        <div class="col-md-6 mb-4">
+            <div class="d-flex">
+                <div class="me-3 w-20">
+                    <x-icons.money class="w-full h-full text-primary" />
+                </div>
+                <div>
+                    <span class="text-secondary fs-14">{{ __('messages.candidate.expected_salary') }}:</span>
+                    <p class="fs-14 mb-0">{{ $candidateDetails->currency->currency_icon }}{{ $candidateDetails->expected_salary }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (isset($candidateDetails->experience) && $candidateDetails->experience != 0)
+        <div class="col-md-6 mb-4">
+            <div class="d-flex">
+                <div class="me-3 w-20">
+                    <x-icons.experience class="w-full h-full text-primary" />
+                </div>
+                <div>
+                    <span class="text-secondary fs-14">{{ __('messages.candidate.experience') }}:</span>
+                    <p class="fs-14 mb-0">{{ $candidateDetails->experience }}
+                        {{ $candidateDetails->experience > 1 ? __('messages.candidate.years') : __('messages.candidate.year') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (isset($candidateDetails->gender) && $candidateDetails->gender !== \App\Models\Candidate::DEFAULT)
+        <div class="col-md-6 mb-4">
+            <div class="d-flex">
+                <div class="me-3 w-20">
+                    <x-icons.gender class="w-full h-full text-primary" />
+                </div>
+                <div>
+                    <span class="text-secondary fs-14">{{ __('messages.candidate.gender') }}:</span>
+                    <p class="fs-14 mb-0">{{ $candidateDetails->gender == 0 ? __('messages.common.male') : __('messages.common.female') }}</p>
+                </div>
+            </div>

@@ -375,3 +375,42 @@ php artisan vendor:publish --tag=aire-views
 ## Documentation
 
 For more detailed information, visit the [Aire Documentation](https://airephp.com/). For project-specific implementation details, see the comprehensive documentation in `docs/aires-forms.md` or view the example forms at the routes mentioned above.
+
+## Testing
+
+The application includes comprehensive test coverage for all major functionality:
+
+### Test Types
+
+1. **Unit Tests** - Located in `tests/Unit` directory
+   - Model tests for User, Job, Candidate, Company models
+   - These test the core logic of the application's models
+
+2. **Feature Tests** - Located in `tests/Feature` directory
+   - Form submission tests (including Aire Forms examples)
+   - Job application flow tests
+   - Job search functionality tests
+   - Candidate profile tests
+   - Company profile tests
+   - User authentication tests
+
+3. **Browser Tests** - Located in `tests/Browser` directory
+   - Form UI interaction tests using Laravel Dusk
+
+### Running Tests
+
+To run all tests:
+
+```bash
+php -d memory_limit=-1 artisan test
+```
+
+To run specific test groups:
+
+```bash
+php artisan test --testsuite=Unit
+php artisan test --testsuite=Feature
+php artisan test --filter=FormsAireTest
+```
+
+Note: Due to memory requirements for some tests, you may need to increase PHP memory limits.

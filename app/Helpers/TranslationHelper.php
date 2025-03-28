@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Arr;
 
@@ -230,6 +231,25 @@ class TranslationHelper
     const MARITAL_STATUS_MARITAL_STATUS = 'messages.marital_status.marital_status';
     const USER_CHANGE_PASSWORD = 'messages.user.change_password';
 
+    // Common translation keys used throughout the application
+    // Add more constants as needed for better IDE support and consistency
+    public const HOME = 'app.home';
+    public const DASHBOARD = 'app.dashboard';
+    public const JOBS = 'app.jobs';
+    public const COMPANIES = 'app.companies';
+    public const CANDIDATES = 'app.candidates';
+    public const PROFILE = 'app.profile';
+    public const SETTINGS = 'app.settings';
+    public const LOGIN = 'app.login';
+    public const REGISTER = 'app.register';
+    public const LOGOUT = 'app.logout';
+    public const SEARCH = 'app.search';
+    public const SAVE = 'app.save';
+    public const EDIT = 'app.edit';
+    public const DELETE = 'app.delete';
+    public const CREATE = 'app.create';
+    public const UPDATE = 'app.update';
+
     /**
      * Get all translations for the current locale
      *
@@ -384,136 +404,190 @@ class TranslationHelper
     }
 
     /**
-     * Get a translation from the standardized format
+     * Get a translation value.
+     * First tries Laravel's standard trans() function, then falls back to direct file access if needed
      *
      * @param string $key The translation key
-     * @param array $replace The replacement parameters
-     * @param string|null $locale The locale to use
+     * @param array $replace Replace placeholders in the translation string
+     * @param string|null $locale Locale to use (defaults to current locale)
      * @return string The translated string
      */
     public static function get(string $key, array $replace = [], ?string $locale = null): string
     {
         $locale = $locale ?: App::getLocale();
         
-        // Use Laravel's translation function
-        $translation = __($key, $replace, $locale);
+        // Try Laravel's built-in translation function first
+        $translation = trans($key, $replace, $locale);
         
-        // If the translation wasn't found (returns the key), try to get it from the consolidated file
+        // If the key wasn't found (Laravel returns the key itself), try our direct file access
         if ($translation === $key) {
-            $translation = static::getFromConsolidated($key, $locale);
+            // Memory efficient way to access translations - we only load what's needed
+            $cacheKey = "translation:{$locale}:{$key}";
             
-            // Apply replacements if needed
-            if ($translation !== $key && !empty($replace)) {
-                foreach ($replace as $k => $v) {
-                    $translation = str_replace(':' . $k, $v, $translation);
+            return Cache::remember($cacheKey, now()->addDay(), function () use ($key, $locale, $replace) {
+                // Parse the key (e.g., 'app.home' becomes ['app', 'home'])
+                $parts = explode('.', $key);
+                
+                if (count($parts) < 2) {
+                    return $key; // Not a valid key format
                 }
-            }
+                
+                $file = resource_path("lang/{$locale}.php");
+                
+                if (File::exists($file)) {
+                    $translations = require $file;
+                    
+                    // Navigate through the nested array
+                    $segment = $translations;
+                    
+                    foreach ($parts as $part) {
+                        if (isset($segment[$part])) {
+                            $segment = $segment[$part];
+                        } else {
+                            return $key; // Key not found
+                        }
+                    }
+                    
+                    // If we reached a string value, return it with replacements
+                    if (is_string($segment)) {
+                        return static::applyReplacements($segment, $replace);
+                    }
+                }
+                
+                return $key; // Fallback to key if not found
+            });
         }
         
         return $translation;
     }
     
     /**
-     * Get translation from consolidated file
+     * Check if a translation exists.
      *
      * @param string $key The translation key
-     * @param string $locale The locale to use
-     * @return string The translated string or the original key if not found
-     */
-    protected static function getFromConsolidated(string $key, string $locale): string
-    {
-        $path = resource_path("lang/{$locale}.php");
-        
-        if (!File::exists($path)) {
-            return $key;
-        }
-        
-        static $translations = [];
-        
-        if (!isset($translations[$locale])) {
-            $translations[$locale] = require $path;
-        }
-        
-        return Arr::get($translations[$locale], $key, $key);
-    }
-    
-    /**
-     * Check if a translation exists
-     *
-     * @param string $key The translation key
-     * @param string|null $locale The locale to check
+     * @param string|null $locale Locale to check
      * @return bool Whether the translation exists
      */
     public static function has(string $key, ?string $locale = null): bool
     {
         $locale = $locale ?: App::getLocale();
-        $path = resource_path("lang/{$locale}.php");
         
-        if (!File::exists($path)) {
+        // Try Laravel's built-in translation function first
+        if (trans()->has($key, $locale)) {
+            return true;
+        }
+        
+        // Memory efficient way to check translations
+        $cacheKey = "translation_exists:{$locale}:{$key}";
+        
+        return Cache::remember($cacheKey, now()->addDay(), function () use ($key, $locale) {
+            // Parse the key (e.g., 'app.home' becomes ['app', 'home'])
+            $parts = explode('.', $key);
+            
+            if (count($parts) < 2) {
+                return false; // Not a valid key format
+            }
+            
+            $file = resource_path("lang/{$locale}.php");
+            
+            if (File::exists($file)) {
+                $translations = require $file;
+                
+                // Navigate through the nested array
+                $segment = $translations;
+                
+                foreach ($parts as $part) {
+                    if (isset($segment[$part])) {
+                        $segment = $segment[$part];
+                    } else {
+                        return false; // Key not found
+                    }
+                }
+                
+                return is_string($segment); // Must be a string to be a valid translation
+            }
+            
             return false;
-        }
-        
-        static $translations = [];
-        
-        if (!isset($translations[$locale])) {
-            $translations[$locale] = require $path;
-        }
-        
-        return Arr::has($translations[$locale], $key);
+        });
     }
     
     /**
-     * Get all available locales
+     * Get all available locales from the lang directory.
      *
-     * @return array Array of available locales
+     * @return array Array of available locale codes
      */
     public static function getAvailableLocales(): array
     {
-        $locales = [];
-        
-        // Check for consolidated translation files
-        $files = File::files(resource_path('lang'));
-        
-        foreach ($files as $file) {
-            if ($file->getExtension() === 'php') {
-                $locales[] = $file->getFilenameWithoutExtension();
+        return Cache::remember('available_locales', now()->addDay(), function () {
+            $locales = [];
+            $langPath = resource_path('lang');
+            
+            // Get PHP files (consolidated structure)
+            if (File::exists($langPath)) {
+                foreach (File::files($langPath) as $file) {
+                    if ($file->getExtension() === 'php') {
+                        $locales[] = $file->getFilenameWithoutExtension();
+                    }
+                }
             }
-        }
-        
-        // Check for locale directories
-        $directories = File::directories(resource_path('lang'));
-        
-        foreach ($directories as $directory) {
-            $locale = basename($directory);
-            if ($locale !== 'vendor' && !in_array($locale, $locales)) {
-                $locales[] = $locale;
-            }
-        }
-        
-        return $locales;
+            
+            return $locales;
+        });
     }
     
     /**
-     * Get locale display name
+     * Get locale display names for the available locales.
      *
-     * @param string $locale The locale code
-     * @return string The display name
+     * @param string|null $locale The locale to get names in
+     * @return array Associative array of locale codes => display names
      */
-    public static function getLocaleDisplayName(string $locale): string
+    public static function getLocaleDisplayNames(?string $locale = null): array
     {
-        $localeNames = [
+        $locale = $locale ?: App::getLocale();
+        
+        $names = [
             'en' => 'English',
-            'lt' => 'Lithuanian (Lietuvių)',
-            'ar' => 'Arabic (العربية)',
-            'zh' => 'Chinese (中文)',
-            'fr' => 'French (Français)',
-            'de' => 'German (Deutsch)',
-            'pt' => 'Portuguese (Português)',
-            'ru' => 'Russian (Русский)',
-            'es' => 'Spanish (Español)',
-            'tr' => 'Turkish (Türkçe)',
+            'lt' => 'Lietuvių',
+            // Add more as needed
         ];
         
-        return $localeNames[$locale] ?? $locale;
+        // Translate the names to the requested locale if possible
+        if ($locale !== 'en') {
+            $translatedNames = [];
+            
+            foreach ($names as $code => $name) {
+                $translationKey = "languages.{$code}";
+                $translated = static::get($translationKey, [], $locale);
+                
+                // If translation doesn't exist, use the original name
+                $translatedNames[$code] = ($translated !== $translationKey) 
+                    ? $translated 
+                    : $name;
+            }
+            
+            return $translatedNames;
+        }
+        
+        return $names;
+    }
+    
+    /**
+     * Apply replacements to a translation string.
+     *
+     * @param string $line The translation string
+     * @param array $replace Replacements
+     * @return string The string with replacements applied
+     */
+    protected static function applyReplacements(string $line, array $replace): string
+    {
+        if (empty($replace)) {
+            return $line;
+        }
+        
+        foreach ($replace as $key => $value) {
+            $line = str_replace(":{$key}", $value, $line);
+        }
+        
+        return $line;
     }
 } 

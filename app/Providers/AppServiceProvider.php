@@ -54,6 +54,20 @@ class AppServiceProvider extends ServiceProvider
             SynchronizeTranslations::class,
             ConsolidateTranslations::class,
         ]);
+
+        $this->app->singleton(\App\Services\ProfileService::class);
+        $this->app->singleton(\App\Services\BookmarkService::class);
+        $this->app->singleton(\App\Services\SettingService::class);
+        $this->app->singleton(\App\Services\NotificationService::class);
+        $this->app->singleton(\App\Services\TwoFaService::class);
+        $this->app->singleton(\App\Services\JobService::class);
+        $this->app->singleton(\App\Services\EducationService::class);
+        $this->app->singleton(\App\Services\ExperienceService::class);
+        $this->app->singleton(\App\Services\SkillService::class);
+        $this->app->singleton(\App\Services\CompanyService::class);
+        $this->app->singleton(\App\Services\AuthService::class);
+        $this->app->singleton(\App\Services\JobCategoryService::class);
+        $this->app->singleton(\App\Services\SeoService::class);
     }
 
     /**
@@ -84,15 +98,19 @@ class AppServiceProvider extends ServiceProvider
             ]);
         }
 
-        // Add custom Blade directives for translation
+        // Register Blade directives for translations
+        
+        // Directive for translation: @t('app.welcome')
         Blade::directive('t', function ($expression) {
-            return "<?php echo \\App\\Helpers\\TranslationHelper::get($expression); ?>";
+            return "<?php echo App\\Helpers\\TranslationHelper::get($expression); ?>";
         });
         
+        // Directive to check if a translation exists: @hasTranslation('app.welcome')
         Blade::directive('hasTranslation', function ($expression) {
-            return "<?php if (\\App\\Helpers\\TranslationHelper::has($expression)): ?>";
+            return "<?php if(App\\Helpers\\TranslationHelper::has($expression)): ?>";
         });
         
+        // Closing directive for @hasTranslation
         Blade::directive('endHasTranslation', function () {
             return "<?php endif; ?>";
         });

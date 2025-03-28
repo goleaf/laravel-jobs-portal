@@ -8,7 +8,7 @@
                         data-bs-dismiss="modal">
                 </button>
             </div>
-            {{ Form::open(['id'=>'changeCandidatePasswordForm']) }}
+            @formOpen(['id' => 'changeCandidatePasswordForm'])
             <div class="modal-body">
                 @if($errors->any())
                     <div class="alert alert-danger">
@@ -43,7 +43,7 @@
                         id="btnEditCancel"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>
-            {{ Form::close() }}
+            @formClose()
         </div>
     </div>
 </div>

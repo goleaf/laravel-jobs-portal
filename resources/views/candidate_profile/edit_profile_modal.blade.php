@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
-            {{ Form::open(['id'=>'editCandidateProfileForm','files'=>true]) }}
+            @formOpen(['id' => 'editCandidateProfileForm', 'files' => true])
             <div class="modal-body">
                 <div class="alert alert-danger d-none" id="validationErrorsBoxCandidate"></div>
                 {{ Form::hidden('user_id',null,['id'=>'editUserId']) }}
@@ -38,30 +38,28 @@
                         </span>
                     <div class="d-block">
                         <div class="image-picker">
-                            <div class="image previewImage" id='profilePicturePreview'
-                                 style="background-image: url({{ asset('assets/img/infyom-logo.png') }})"></div>
-                            <span class="picker-edit rounded-circle text-gray-500 fs-small"
-                                  data-bs-toggle="tooltip"
-                                  data-placement="top" data-bs-original-title="{{ __('messages.tooltip.change_profile') }}">
-                                    <label>
-                                    <i class="fa-solid fa-pen" id="profileImageIcon"></i>
-                                        <input type="file" id="profilePicture" name="image"
-                                               class="image-upload d-none" accept="image/*"/>
-                                    </label>
-                                </span>
+                            <div class="image previewImage" id="profilePicturePreview"></div>
+                            <span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
+                                  data-placement="top" data-bs-original-title="{{ __('messages.tooltip.upload_profile') }}">
+                        <label>
+                            <i class="fa-solid fa-pen" id="profileImageIcon"></i>
+                            <input type="file" name="image" id="profilePicture" class="image-upload d-none" accept="image/*"/>
+                        </label>
+                    </span>
                         </div>
                     </div>
+                    <div class="form-text">{{ __('messages.settings.allowed_file_types') }}</div>
                 </div>
-                    </div>
+                </div>
                 </div>
             </div>
             <div class="modal-footer pt-0">
-                <button type="submit" class="btn btn-primary m-0"  id="btnEditSave">{{__('messages.common.save')}}</button>
+                {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary m-0','id'=>'btnPrEditSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
                 <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
-                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}
-                </button>
+                        id="btnEditCancel"
+                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>
-            {{ Form::close() }}
+            @formClose()
         </div>
     </div>
 </div>

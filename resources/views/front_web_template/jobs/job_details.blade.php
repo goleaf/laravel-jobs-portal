@@ -39,7 +39,7 @@
                                     <div class="hero-desc d-md-flex">
                                         <div class="desc d-flex me-4 pe-2">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/briefcase.svg') }}" class="w-100" />
+                                                <x-icons.briefcase class="w-100" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">
                                                 {{ html_entity_decode($job->jobCategory->name) }}
@@ -47,14 +47,14 @@
                                         </div>
                                         <div class="desc d-flex me-4 pe-2">
                                             <div class="me-3 w-20">
-                                                <img src="{{ asset('img_template/clock.svg') }}" class="w-100" />
+                                                <x-icons.clock class="w-100" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">{{ $job->created_at->diffForHumans() }}</p>
                                         </div>
                                         @if ($job->hide_salary == '0')
                                             <div class="desc d-flex">
                                                 <div class="me-3 w-20">
-                                                    <img src="{{ asset('img_template/money.svg') }}" class="w-100" />
+                                                    <x-icons.money class="w-100" />
                                                 </div>
                                                 <a href="#"
                                                     class="fs-14 text-gray">{{ $job->currency->currency_icon }}
@@ -63,15 +63,6 @@
                                         @endif
                                     </div>
                                     @if (count($job->jobsTag) > 0)
-                                        {{-- <div class="hero-desc d-md-flex flex-wrap">
-                                            @foreach ($job->jobsTag->pluck('name') as $value)
-                                                <div class="desc d-flex {{ $loop->last ? '' : 'me-2 pe-2' }}">
-                                                    <span class="tag-badge"
-                                                        style="background: rgba(25,103,210,.15);color: #1967d2!important;font-size: 12px!important;line-height: 15px;padding: 5px 20px;border-radius: 50px;margin-top: 10px;">
-                                                        {{ $value }}</span>
-                                                </div>
-                                            @endforeach
-                                        </div> --}}
                                         <div class="hero-desc d-flex flex-wrap">
                                             @foreach ($job->jobsTag->pluck('name') as $value)
                                             <div class="desc d-flex {{ $loop->last ? '' : 'me-2 pe-2' }}">

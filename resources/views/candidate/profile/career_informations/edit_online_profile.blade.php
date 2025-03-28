@@ -1,4 +1,4 @@
-{{ Form::open(['id'=>'editOnlineProfileForm']) }}
+@formOpen(['id' => 'editOnlineProfileForm'])
 <div class="row">
     <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
         {{ Form::label(__('messages.company.facebook_url'), __('messages.company.facebook_url').':', ['class' => 'form-label']) }}
@@ -51,4 +51,4 @@
     <button type="button" id="btnOnlineProfileCancel"
             class="btn btn-secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
-{{ Form::close() }}
+@formClose()

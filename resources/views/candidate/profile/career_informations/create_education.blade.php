@@ -1,4 +1,4 @@
-{{ Form::open(['id'=>'addCVEducationForm']) }}
+@formOpen(['id' => 'addCVEducationForm'])
 <div class="alert alert-danger d-none" id="validationErrorsBox">
     <i class='fa-solid fa-face-frown me-4'></i>
 </div>
@@ -47,4 +47,4 @@
     <button type="button" id="btnEducationCancel"
             class="btn btn-secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
-{{ Form::close() }}
+@formClose()

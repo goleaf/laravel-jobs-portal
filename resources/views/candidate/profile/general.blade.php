@@ -6,7 +6,7 @@
 @section('section')
     <div class="card">
         <div class="card-body">
-            {{ Form::model($user,['route' => 'candidate-profile.update', 'files' => true,'id'=>'candidateProfileUpdate', 'method' => 'put']) }}
+            @formOpen(['route' => 'candidate-profile.update', 'files' => true, 'id' => 'candidateProfileUpdate', 'method' => 'put'])
             <div class="mt-5">
                 <div class="alert alert-danger d-none" id="validationErrors">
                     <i class='fa-solid fa-face-frown me-4'></i>
@@ -234,7 +234,7 @@
 </div>
     </div>
 </div>
-    {{ Form::close() }}
+    @formClose()
 @endsection
 @push('scripts')
     <script>

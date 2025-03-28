@@ -1,4 +1,4 @@
-{{ Form::open(['id'=>'addCVExperienceForm']) }}
+@formOpen(['id' => 'addCVExperienceForm'])
 <div class="alert alert-danger d-none" id="validationErrorsBox">
     <i class='fa-solid fa-face-frown me-4'></i>
 </div>
@@ -56,7 +56,7 @@
 </div>
 <div class="d-flex justify-content-end">
     {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnExperienceSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) }}
-    <button type="button" id="btnCancel"
+    <button type="button" id="btnExperienceCancel"
             class="btn btn-secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
-{{ Form::close() }}
+@formClose()

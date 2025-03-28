@@ -1,4 +1,4 @@
-{{ Form::open(['id'=>'editCVEducationForm']) }}
+@formOpen(['id' => 'editCVEducationForm'])
 <div class="alert alert-danger d-none" id="editValidationErrorsBox">
     <i class='fa-solid fa-face-frown me-4'></i>
 </div>
@@ -7,7 +7,7 @@
     <div class="col-sm-6 mb-5">
         {{ Form::label('degree_level_id', __('messages.candidate_profile.degree_level').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
-        {{ Form::select('degree_level_id', $data['degreeLevels'], null, ['class' => 'form-select','required','id' => 'degreeLevelId','placeholder'=> __('messages.company.select_degree_level'),'id' => 'editDegreeLevel']) }}
+        {{ Form::select('degree_level_id', $data['degreeLevels'], null, ['class' => 'form-select','required','placeholder'=> __('messages.company.select_degree_level'),'id' => 'editDegreeLevel']) }}
     </div>
     <div class="col-sm-6 mb-5">
         {{ Form::label('degree_title', __('messages.candidate_profile.degree_title').':', ['class' => 'form-label ']) }}
@@ -48,4 +48,4 @@
     <button type="button" id="btnEditEducationCancel"
             class="btn btn-secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
-{{ Form::close() }}
+@formClose()

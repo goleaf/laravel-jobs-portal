@@ -212,7 +212,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 <div class="job-desc-right br-10 px-40 bg-light mb-40">
     <div class="pb-2">
@@ -225,7 +225,6 @@
                             fill="#1967D2" />
                     </svg>
                 </div>
-
                 <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate_profile.education') }}:</p>
             </div>
             <p class="fs-14 text-gray text-end mb-0">

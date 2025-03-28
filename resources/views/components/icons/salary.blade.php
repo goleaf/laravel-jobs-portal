@@ -1,4 +1,4 @@
-@props(['class' => 'w-6 h-6'])
+@props(['class' => 'w-20 h-20'])
 
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {{ $attributes->merge(['class' => $class]) }}>
     <g clip-path="url(#clip0_1043_525)">

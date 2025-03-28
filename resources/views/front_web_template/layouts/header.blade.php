@@ -217,10 +217,9 @@
                                                     onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
                                                     {{ __('web.logout') }}
                                                 </a>
-                                                <form id="logout-form" action="{{ url('/logout') }}" method="POST"
-                                                    class="d-none">
+                                                @formOpen(['id' => 'logout-form', 'url' => url('/logout'), 'class' => 'd-none'])
                                                     {{ csrf_field() }}
-                                                </form>
+                                                @formClose()
                                             </li>
                                         </ul>
                                     </li>

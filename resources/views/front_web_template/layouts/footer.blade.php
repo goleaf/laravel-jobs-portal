@@ -11,19 +11,21 @@
                 <p class="d-block text-gray my-4">
                     {{ __('web.footer.newsletter_text') }}
                 </p>
-                <form id="newsLetterForm">
+                @formOpen(['id' => 'newsLetterForm'])
                     <div class="email d-flex">
-                        <input type="email" id="mc-email" name="email"
-                            placeholder="{{ __('web.enter_your_mail') }}" class="text-gray" />
+                        {{ Form::email('email', null, [
+                            'id' => 'mc-email',
+                            'placeholder' => __('web.enter_your_mail'),
+                            'class' => 'text-gray'
+                        ]) }}
                         <div class="icon d-flex justify-content-center align-items-center bg-primary">
-                            <button
-                                class="icon d-flex justify-content-center align-items-center bg-primary border-0 btnLetterSave"
-                                title="Subscribe">
-                                <i class="fa-solid fa-paper-plane text-white"></i>
-                            </button>
+                            {{ Form::button('<i class="fa-solid fa-paper-plane text-white"></i>', [
+                                'class' => 'icon d-flex justify-content-center align-items-center bg-primary border-0 btnLetterSave',
+                                'title' => 'Subscribe'
+                            ]) }}
                         </div>
                     </div>
-                </form>
+                @formClose()
             </div>
             <div class="col-xl-2 col-lg-5 col-md-6 mb-3 ps-xl-5">
                 <h3 class="mb-3 text-secondary fs-18">{{ __('web.footer.useful_links') }}</h3>

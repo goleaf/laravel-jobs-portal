@@ -259,6 +259,48 @@
     @role('Employer')
         @include('front_web_template.candidate.report_to_candidate_modal')
     @endrole
+    @if (!empty($candidateDetails->user->facebook_url) || !empty($candidateDetails->user->twitter_url) || !empty($candidateDetails->user->google_plus_url) || !empty($candidateDetails->user->pinterest_url) || !empty($candidateDetails->user->linkedin_url))
+    <div class="col-12">
+        <div class="col-12 mb-40">
+            <div class="job-card card py-30">
+                <div class="row d-flex justify-content-lg-between">
+                    <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
+                    <div class="mt-3">
+                        @if (!empty($candidateDetails->user->facebook_url))
+                            <a href="{{ (isset($candidateDetails->user->facebook_url)) ? addLinkHttpUrl($candidateDetails->user->facebook_url) : 'javascript:void(0)' }}" target="_blank" class="mx-2">
+                                <x-icons.facebook class="w-6 h-6" />
+                            </a>
+                        @endif
+                        @if (!empty($candidateDetails->user->twitter_url))
+                            <a href="{{ (isset($candidateDetails->user->twitter_url)) ? addLinkHttpUrl($candidateDetails->user->twitter_url) : 'javascript:void(0)' }}"
+                               target="_blank" class="mx-2">
+                                <x-icons.twitter class="w-6 h-6" />
+                            </a>
+                        @endif
+                        @if (!empty($candidateDetails->user->google_plus_url))
+                            <a href="{{ (isset($candidateDetails->user->google_plus_url)) ? addLinkHttpUrl($candidateDetails->user->google_plus_url) : 'javascript:void(0)' }}"
+                               target="_blank" class="mx-2">
+                                <x-icons.google-plus class="w-6 h-6" />
+                            </a>
+                        @endif
+                        @if (!empty($candidateDetails->user->pinterest_url))
+                            <a href="{{ (isset($candidateDetails->user->pinterest_url)) ? addLinkHttpUrl($candidateDetails->user->pinterest_url) : 'javascript:void(0)' }}"
+                               target="_blank" class="mx-2">
+                                <x-icons.pinterest class="w-6 h-6" />
+                            </a>
+                        @endif
+                        @if (!empty($candidateDetails->user->linkedin_url))
+                            <a href="{{ (isset($candidateDetails->user->linkedin_url)) ? addLinkHttpUrl($candidateDetails->user->linkedin_url) : 'javascript:void(0)' }}"
+                               target="_blank" class="mx-2">
+                                <x-icons.linkedin class="w-6 h-6" />
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 @endsection
 {{-- @section('scripts') --}}
 {{--    <script> --}}

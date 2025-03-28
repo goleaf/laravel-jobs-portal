@@ -1,16 +1,26 @@
 @props(['id' => 'theme-switch'])
 
 <!-- Theme Switch Toggle Button -->
-<button 
-    id="theme-switch" 
-    class="rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
->
-    <!-- Sun icon (visible in light mode) -->
-    <x-icons.sun class="w-5 h-5 transform transition-transform dark:scale-0 dark:opacity-0 scale-100 opacity-100" />
-    
-    <!-- Moon icon (visible in dark mode) -->
-    <x-icons.moon class="w-5 h-5 ml-[-1.25rem] transform transition-transform dark:scale-100 dark:opacity-100 scale-0 opacity-0" />
-</button>
+<div x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" 
+    x-init="$watch('darkMode', val => { 
+        localStorage.setItem('darkMode', val); 
+        if (val) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    })" 
+    class="flex items-center">
+    <button @click="darkMode = !darkMode" 
+        class="rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+        <span x-show="!darkMode" class="text-yellow-500">
+            <x-icons.sun class="w-5 h-5" />
+        </span>
+        <span x-show="darkMode" class="text-gray-300">
+            <x-icons.moon class="w-5 h-5" />
+        </span>
+    </button>
+</div>
 
 @once
 <script>

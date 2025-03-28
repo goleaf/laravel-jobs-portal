@@ -25,12 +25,15 @@ The default size for all icons is 24x24 pixels (w-6 h-6), but you can override t
 | Icon Name | Component | Usage Example |
 |-----------|-----------|---------------|
 | Job/Briefcase | `x-icons.job` | `<x-icons.job />` |
+| Document/Resume | `x-icons.document` | `<x-icons.document />` |
 
 ### Actions
 
 | Icon Name | Component | Usage Example |
 |-----------|-----------|---------------|
 | Search | `x-icons.search` | `<x-icons.search />` |
+| Edit/Pencil | `x-icons.edit` | `<x-icons.edit />` |
+| Delete/Trash | `x-icons.trash` | `<x-icons.trash />` |
 
 ### Communication
 
@@ -44,6 +47,19 @@ The default size for all icons is 24x24 pixels (w-6 h-6), but you can override t
 | Icon Name | Component | Usage Example |
 |-----------|-----------|---------------|
 | Location | `x-icons.location` | `<x-icons.location />` |
+
+### Time & Date
+
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Calendar | `x-icons.calendar` | `<x-icons.calendar />` |
+| Clock | `x-icons.clock` | `<x-icons.clock />` |
+
+### Finance
+
+| Icon Name | Component | Usage Example |
+|-----------|-----------|---------------|
+| Money/Currency | `x-icons.money` | `<x-icons.money />` |
 
 ## Customization
 
@@ -82,12 +98,6 @@ Icons inherit text color by default. Use Tailwind's text color utilities to chan
 
 ## Future Icons to Create
 
-- Calendar
-- Clock
-- Money/Currency
-- Document/Resume
-- Edit/Pencil
-- Delete/Trash
 - View/Eye
 - Settings/Gear
 - Notification/Bell

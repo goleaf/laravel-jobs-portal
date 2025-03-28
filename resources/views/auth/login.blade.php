@@ -14,41 +14,48 @@
                             <h1 class="h4 text-gray-900 mb-4">{{ __('web.login') }}</h1>
                         </div>
 
-                        @formOpen(['url' => route('login'), 'id' => 'login-form'])
+                        {{ Aire::open()->route('login')->id('login-form') }}
                             @csrf
                             <div class="form-group mb-3">
-                                {{ Form::label('email', __('web.common.email').':') }}
-                                <span class="text-danger">*</span>
-                                {{ Form::email('email', old('email'), ['class' => 'form-control '.($errors->has('email') ? 'is-invalid' : ''), 'placeholder' => __('web.common.email')]) }}
+                                {{ Aire::email('email', __('web.common.email'))
+                                    ->required()
+                                    ->placeholder(__('web.common.email'))
+                                    ->value(old('email'))
+                                    ->groupClass('form-group')
+                                    ->class(['form-control', 'is-invalid' => $errors->has('email')])
+                                }}
                                 @if ($errors->has('email'))
                                     <span class="text-danger">{{ $errors->first('email') }}</span>
                                 @endif
                             </div>
 
                             <div class="form-group mb-3">
-                                {{ Form::label('password', __('web.common.password').':') }}
-                                <span class="text-danger">*</span>
-                                {{ Form::password('password', ['class' => 'form-control '.($errors->has('password') ? 'is-invalid' : ''), 'placeholder' => __('web.common.password')]) }}
+                                {{ Aire::password('password', __('web.common.password'))
+                                    ->required()
+                                    ->placeholder(__('web.common.password'))
+                                    ->groupClass('form-group')
+                                    ->class(['form-control', 'is-invalid' => $errors->has('password')])
+                                }}
                                 @if ($errors->has('password'))
                                     <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
                             </div>
 
                             <div class="checkbox mb-3">
-                                <label>
-                                    {{ Form::checkbox('remember', 1, old('remember') ? true : false) }}
-                                    {{ __('web.remember_me') }}
-                                </label>
+                                {{ Aire::checkbox('remember', __('web.remember_me'))
+                                    ->value(1)
+                                    ->checked(old('remember') ? true : false)
+                                }}
                             </div>
 
-                            {{ Form::submit(__('web.login'), ['class' => 'btn btn-primary btn-block']) }}
+                            {{ Aire::submit(__('web.login'))->class('btn btn-primary btn-block') }}
 
                             <div class="text-center pt-3">
                                 <a class="small" href="{{ route('password.request') }}">
                                     {{ __('web.forgot_your_password') }}
                                 </a>
                             </div>
-                        @formClose()
+                        {{ Aire::close() }}
 
                         <div class="text-center pt-3">
                             <a class="btn btn-outline-primary btn-block" href="{{ route('register') }}">

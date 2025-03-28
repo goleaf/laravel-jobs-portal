@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
-            {{ Form::open(['id'=>'addNewExperienceForm']) }}
+            @formOpen(['id' => 'addNewExperienceForm'])
             <div class="modal-body">
                 <div class="alert alert-danger hide d-none" id="validationErrorsBox">
                     <i class='fa-solid fa-face-frown me-4'></i>
@@ -67,12 +67,19 @@
 
             </div>
             <div class="modal-footer pt-0">
-                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'btnExperienceSave','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
-                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}
-                </button>
+                {{ Form::button(__('messages.common.save'), [
+                    'type' => 'submit',
+                    'class' => 'btn btn-primary me-3',
+                    'id' => 'btnExperienceSave',
+                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                ]) }}
+                {{ Form::button(__('messages.common.cancel'), [
+                    'type' => 'button',
+                    'class' => 'btn btn-secondary',
+                    'data-bs-dismiss' => 'modal'
+                ]) }}
             </div>
-            {{ Form::close() }}
+            @formClose()
         </div>
     </div>
 </div>

@@ -57,6 +57,7 @@ use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\FeaturedJobSubscriptionController;
 use App\Http\Controllers\FeaturedCompanySubscriptionController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,9 @@ use Illuminate\Support\Facades\Artisan;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('contact', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('contact', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get(
     '/',

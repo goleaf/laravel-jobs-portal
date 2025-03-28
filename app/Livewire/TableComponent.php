@@ -8,28 +8,35 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 use Illuminate\Support\Str;
 
 abstract class TableComponent extends Component
 {
     use WithPagination;
 
-    // Set Tailwind theme for pagination (instead of Bootstrap)
+    // Set Tailwind theme for pagination
     protected $paginationTheme = 'tailwind';
 
     // Pagination
+    #[Url(history: true)]
     public $perPage = 10;
     public $perPageOptions = [10, 25, 50, 100];
 
     // Searching
+    #[Url(history: true)]
     public $search = '';
     public $searchDebounce = 300; // ms
 
     // Sorting
+    #[Url(history: true)]
     public $sortField = '';
+    #[Url(history: true)]
     public $sortDirection = 'asc';
 
     // Filters
+    #[Url(history: true)]
     public $filters = [];
     public $showFilters = false;
 
@@ -95,7 +102,7 @@ abstract class TableComponent extends Component
     /**
      * Reset page when search changes
      */
-    public function updatingSearch()
+    public function updatedSearch()
     {
         $this->resetPage();
     }
@@ -103,7 +110,7 @@ abstract class TableComponent extends Component
     /**
      * Reset page when filters change
      */
-    public function updatingFilters()
+    public function updatedFilters()
     {
         $this->resetPage();
     }
@@ -111,7 +118,7 @@ abstract class TableComponent extends Component
     /**
      * Reset page when per page changes
      */
-    public function updatingPerPage()
+    public function updatedPerPage()
     {
         $this->resetPage();
     }
@@ -136,6 +143,7 @@ abstract class TableComponent extends Component
     /**
      * Get formatted columns
      */
+    #[Computed]
     protected function getColumns(): array
     {
         $columns = $this->columns();
@@ -180,7 +188,8 @@ abstract class TableComponent extends Component
     /**
      * Get the results for the table
      */
-    protected function getResults()
+    #[Computed]
+    public function getTableData()
     {
         $query = $this->query();
 
@@ -193,7 +202,9 @@ abstract class TableComponent extends Component
         $query = $this->applyFilters($query);
 
         // Apply sorting
-        $query = $query->orderBy($this->sortField, $this->sortDirection);
+        if (!empty($this->sortField)) {
+            $query = $query->orderBy($this->sortField, $this->sortDirection);
+        }
 
         // Paginate
         return $query->paginate($this->perPage);
@@ -248,13 +259,13 @@ abstract class TableComponent extends Component
     }
 
     /**
-     * Render the component
+     * Render the table
      */
     public function render()
     {
         return view('livewire.table', [
             'columns' => $this->getColumns(),
-            'results' => $this->getResults(),
+            'data' => $this->getTableData(),
             'filters' => $this->filters(),
         ]);
     }

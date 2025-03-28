@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\JobType;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 
-class JobTypeTable extends LivewireTableComponent
+class JobTypeTable extends TableComponent
 {
     protected $model = JobType::class;
 
@@ -30,18 +32,26 @@ class JobTypeTable extends LivewireTableComponent
     public function columns(): array
     {
         return [
-            Column::make(__('messages.job_type.name'), 'name')
+            Column::make('name')
+                ->title(__('messages.job_type.name'))
                 ->sortable()
                 ->searchable()
                 ->view('job_types.table_components.name'),
             
-            Column::make(__('messages.common.created_date'), 'created_at')
+            Column::make('created_at')
+                ->title(__('messages.common.created_date'))
                 ->sortable()
                 ->view('job_types.table_components.created_at'),
             
-            Column::make(__('messages.common.action'), 'id')
+            Column::make('id')
+                ->title(__('messages.common.action'))
                 ->view('job_types.table_components.action_button'),
         ];
+    }
+    
+    public function query(): Builder
+    {
+        return JobType::query()->select('job_types.*');
     }
     
     public function resetFilters()

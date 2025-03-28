@@ -28,7 +28,7 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <x-icons.search class="w-5 h-5 text-gray-400" />
                         </div>
-                        <input wire:model.live.debounce.300ms="search" type="search" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="{{ __('messages.common.search') }}">
+                        <input wire:model.live.debounce.{{ $searchDebounce }}ms="search" type="search" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="{{ __('messages.common.search') }}">
                     </div>
                 </div>
             </div>
@@ -66,15 +66,15 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($results as $result)
+                    @forelse($data as $row)
                         <tr class="hover:bg-gray-50">
                             @foreach($columns as $column)
                                 @if(!$column->isHidden())
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($column->getViewComponent())
-                                            @include($column->getViewComponent(), ['row' => $result])
+                                            @include($column->getViewComponent(), ['row' => $row])
                                         @else
-                                            {{ data_get($result, $column->getField()) }}
+                                            {{ data_get($row, $column->getField()) }}
                                         @endif
                                     </td>
                                 @endif
@@ -95,7 +95,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <span class="text-sm text-gray-700">
-                        {{ __('messages.common.showing') }} {{ $results->firstItem() ?? 0 }} {{ __('messages.common.to') }} {{ $results->lastItem() ?? 0 }} {{ __('messages.common.of') }} {{ $results->total() }} {{ __('messages.common.results') }}
+                        {{ __('messages.common.showing') }} {{ $data->firstItem() ?? 0 }} {{ __('messages.common.to') }} {{ $data->lastItem() ?? 0 }} {{ __('messages.common.of') }} {{ $data->total() }} {{ __('messages.common.results') }}
                     </span>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -108,7 +108,7 @@
                         </select>
                     </div>
                     
-                    {{ $results->links() }}
+                    {{ $data->links() }}
                 </div>
             </div>
         </div>

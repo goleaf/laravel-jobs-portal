@@ -284,3 +284,107 @@
         </div>
     </div>
 </div>
+
+@if (!empty($candidateDetails->available_for_hire))
+    <div class="job-desc-right br-10 px-40 bg-gray">
+        <p class="text text-success fs-18 mb-0">{{ __('messages.candidate.available_for_hire') }}</p>
+    </div>
+@endif
+<div class="job-desc-right br-10 px-40 bg-gray mt-50">
+    @if (isset($candidateDetails->expected_salary) && ($candidateDetails->expected_salary != 0))
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.money class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.expected_salary') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ $candidateDetails->currency->currency_icon }}{{ $candidateDetails->expected_salary }}</p>
+        </div>
+    @endif
+    @if (isset($candidateDetails->experience) && $candidateDetails->experience != 0)
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.experience class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.experience') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ $candidateDetails->experience }}
+                {{ $candidateDetails->experience > 1 ? __('messages.candidate.years') : __('messages.candidate.year') }}</p>
+        </div>
+    @endif
+    @if (!empty($candidateDetails->industry))
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.briefcase class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.industry') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ $candidateDetails->industry->name }}</p>
+        </div>
+    @endif
+    @if (!empty($candidateDetails->functionalArea))
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.functional-area class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.functional_area') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ html_entity_decode($candidateDetails->functionalArea->name) }}
+            </p>
+        </div>
+    @endif
+    @if (!empty($candidateDetails->careerLevel))
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.badge class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.career_level') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ html_entity_decode($candidateDetails->careerLevel->level_name) }}
+            </p>
+        </div>
+    @endif
+    @if (isset($candidateDetails->gender) && $candidateDetails->gender !== \App\Models\Candidate::DEFAULT)
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.gender class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.gender') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ $candidateDetails->gender == 0 ? __('messages.common.male') : __('messages.common.female') }}</p>
+        </div>
+    @endif
+    @if (!empty($candidateDetails->dob))
+        <div class="desc-box d-flex justify-content-between mb-4">
+            <div class="desc d-flex">
+                <div class="me-2 w-20">
+                    <x-icons.calendar-days class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.birth_date') }}:</p>
+            </div>
+            <p class="fs-14 text-gray text-end mb-0">{{ \Carbon\Carbon::parse($candidateDetails->user->dob)->format('jS M, Y') }}</p>
+        </div>
+    @endif
+    @if (!empty($candidateSkills->count()))
+        <div class="desc-box">
+            <div class="desc d-flex mb-2">
+                <div class="me-2 w-20">
+                    <x-icons.chart class="w-full h-full" />
+                </div>
+                <p class="fs-14 text-secondary mb-0">{{ __('messages.candidate.skills') }}:</p>
+            </div>
+            <div class="d-flex flex-wrap">
+                @foreach ($candidateSkills as $candidateSkill)
+                    <div class="fs-14 text-gray bg-white py-2 br-gray px-3 mb-1 me-1">
+                        {{ html_entity_decode($candidateSkill->name) }}</div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+</div>

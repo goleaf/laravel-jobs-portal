@@ -899,3 +899,8 @@ if (app()->environment('local')) {
         return view('icons');
     })->name('icons.view');
 }
+
+// Component Documentation Routes
+Route::get('components/icon-documentation', function () {
+    return view('components.icon-documentation');
+})->name('components.icon-documentation');

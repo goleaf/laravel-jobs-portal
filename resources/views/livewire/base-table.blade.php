@@ -22,6 +22,20 @@
 
         <!-- Per page and buttons -->
         <div class="flex flex-wrap items-center justify-end gap-2">
+            @if($this->hasFilterableColumns())
+                <button 
+                    wire:click="toggleFilters"
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <x-icons.filter class="w-5 h-5 mr-2 text-gray-500" />
+                    {{ __('messages.common.filters') }}
+                    @if(count($activeFilters))
+                        <span class="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                            {{ count($activeFilters) }}
+                        </span>
+                    @endif
+                </button>
+            @endif
+            
             <div class="flex items-center space-x-2">
                 <label for="perPage" class="text-sm font-medium text-gray-700">
                     {{ __('messages.table.per_page') }}:
@@ -45,6 +59,93 @@
         </div>
     </div>
 
+    <!-- Filters section -->
+    @if($this->hasFilterableColumns() && $showFilters)
+        <div class="mb-4 p-4 bg-gray-50 rounded-md shadow-sm">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-medium text-gray-900">{{ __('messages.common.filters') }}</h3>
+                @if(count($activeFilters))
+                    <button 
+                        wire:click="clearFilters"
+                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        {{ __('messages.common.clear_filters') }}
+                    </button>
+                @endif
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($filterableColumns as $column)
+                    <div>
+                        <label for="filter-{{ $column['field'] }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ $column['label'] }}
+                        </label>
+                        
+                        @if(isset($column['filter_type']) && $column['filter_type'] === 'select')
+                            <select 
+                                wire:model="activeFilters.{{ $column['field'] }}" 
+                                id="filter-{{ $column['field'] }}"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2">
+                                <option value="">{{ __('messages.common.select_all') }}</option>
+                                @foreach($column['filter_options'] as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        @elseif(isset($column['filter_type']) && $column['filter_type'] === 'date_range')
+                            <div class="flex space-x-2">
+                                <input 
+                                    wire:model="activeFilters.{{ $column['field'] }}_from" 
+                                    type="date" 
+                                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                    placeholder="{{ __('messages.common.from_date') }}">
+                                <input 
+                                    wire:model="activeFilters.{{ $column['field'] }}_to" 
+                                    type="date" 
+                                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                    placeholder="{{ __('messages.common.to_date') }}">
+                            </div>
+                        @else
+                            <input 
+                                wire:model.debounce.300ms="activeFilters.{{ $column['field'] }}" 
+                                type="text" 
+                                id="filter-{{ $column['field'] }}"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2"
+                                placeholder="{{ __('messages.common.search') }}...">
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <!-- Active Filters -->
+    @if(count($activeFilters))
+        <div class="flex flex-wrap gap-2 mb-4">
+            @foreach($activeFilters as $field => $value)
+                @if(!empty($value))
+                    @php
+                        $column = collect($columns)->firstWhere('field', $field);
+                        $label = $column ? $column['label'] : $field;
+                        
+                        if (isset($column['filter_options'][$value])) {
+                            $displayValue = $column['filter_options'][$value];
+                        } else {
+                            $displayValue = $value;
+                        }
+                    @endphp
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                        {{ $label }}: {{ $displayValue }}
+                        <button wire:click="removeFilter('{{ $field }}')" class="ml-1.5 inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                            <span class="sr-only">{{ __('messages.common.remove') }}</span>
+                            <svg class="h-3 w-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </span>
+                @endif
+            @endforeach
+        </div>
+    @endif
+
     <!-- Table -->
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500">
@@ -59,13 +160,9 @@
                                     @if($sortField === $column['field'])
                                         <span class="ml-1">
                                             @if($sortDirection === 'asc')
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                                                </svg>
+                                                <x-icons.chevron-up class="w-4 h-4" />
                                             @else
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
+                                                <x-icons.chevron-down class="w-4 h-4" />
                                             @endif
                                         </span>
                                     @endif

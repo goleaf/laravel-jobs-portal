@@ -17,9 +17,11 @@ abstract class BaseTable extends Component
     public $selectAll = false;
     public $selectPage = false;
     public $filters = [];
+    public $activeFilters = [];
+    public $showFilters = false;
 
     protected $paginationTheme = 'tailwind';
-    protected $queryString = ['search', 'sortField', 'sortDirection', 'perPage'];
+    protected $queryString = ['search', 'sortField', 'sortDirection', 'perPage', 'activeFilters'];
     protected $listeners = ['refresh' => '$refresh'];
 
     public function updatedSelectPage($value)
@@ -51,9 +53,27 @@ abstract class BaseTable extends Component
         $this->search = '';
     }
 
+    public function toggleFilters()
+    {
+        $this->showFilters = !$this->showFilters;
+    }
+
+    public function applyFilter($field, $value)
+    {
+        $this->activeFilters[$field] = $value;
+        $this->resetPage();
+    }
+
+    public function removeFilter($field)
+    {
+        unset($this->activeFilters[$field]);
+        $this->resetPage();
+    }
+
     public function clearFilters()
     {
-        $this->reset('filters');
+        $this->activeFilters = [];
+        $this->resetPage();
     }
 
     public function resetPage()
@@ -85,15 +105,35 @@ abstract class BaseTable extends Component
         return collect($this->getColumns())->contains(fn($column) => isset($column['searchable']) && $column['searchable']);
     }
 
+    public function hasFilterableColumns()
+    {
+        return collect($this->getColumns())->contains(fn($column) => isset($column['filterable']) && $column['filterable']);
+    }
+
+    public function getFilterableColumns()
+    {
+        return collect($this->getColumns())->filter(fn($column) => isset($column['filterable']) && $column['filterable']);
+    }
+
     public function render()
     {
-        $items = $this->getQuery()
+        $query = $this->getQuery();
+        
+        // Apply active filters
+        foreach ($this->activeFilters as $field => $value) {
+            if (!empty($value)) {
+                $query->where($field, $value);
+            }
+        }
+        
+        $items = $query
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage, pageName: 'page');
 
         return view('livewire.base-table', [
             'items' => $items,
             'columns' => $this->getColumns(),
+            'filterableColumns' => $this->getFilterableColumns(),
         ]);
     }
 } 

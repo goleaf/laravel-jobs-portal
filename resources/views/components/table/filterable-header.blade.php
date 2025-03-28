@@ -24,8 +24,8 @@
     </button>
     
     @if(isset($column['filterable']) && $column['filterable'])
-        <button type="button" class="ml-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-            <x-icons.filter class="w-4 h-4" />
-        </button>
+        <div class="ml-2">
+            <x-table.filter-dropdown :column="$column['field']" />
+        </div>
     @endif
 </div> 

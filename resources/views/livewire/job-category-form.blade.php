@@ -18,22 +18,13 @@
                 
                 <!-- Body -->
                 <div class="p-4">
-                    <form wire:submit.prevent="save">
-                        <div class="mb-4">
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-                                {{ __('messages.job_category.name') }}
-                            </label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                wire:model="name" 
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 @error('name') border-red-500 @enderror"
-                                placeholder="{{ __('messages.job_category.name') }}"
-                            >
-                            @error('name')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <x-form wire:submit.prevent="save">
+                        <x-input 
+                            name="name"
+                            label="{{ __('messages.job_category.name') }}"
+                            wire:model="name"
+                            placeholder="{{ __('messages.job_category.name') }}"
+                        />
                         
                         <div class="mb-4">
                             <label for="image" class="block text-sm font-medium text-gray-700 mb-1">
@@ -68,9 +59,7 @@
                                             class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl"
                                             wire:click="$set('{{ $image ? 'image' : 'existingImage' }}', null)"
                                         >
-                                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
+                                            <x-icons.x class="h-4 w-4" />
                                         </button>
                                     </div>
                                 </div>
@@ -81,39 +70,25 @@
                             @enderror
                         </div>
                         
-                        <div class="mb-4">
-                            <div class="flex items-center">
-                                <input 
-                                    type="checkbox" 
-                                    id="is_featured" 
-                                    wire:model="is_featured" 
-                                    class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                                >
-                                <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                                    {{ __('messages.job_category.is_featured') }}
-                                </label>
-                            </div>
-                            @error('is_featured')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <x-checkbox
+                            name="is_featured"
+                            label="{{ __('messages.job_category.is_featured') }}"
+                            wire:model="is_featured"
+                        />
                         
                         <div class="mt-5 flex justify-end space-x-3">
-                            <button 
-                                type="button" 
+                            <x-button
+                                type="button"
+                                value="{{ __('messages.common.cancel') }}"
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 wire:click="closeModal"
-                            >
-                                {{ __('messages.common.cancel') }}
-                            </button>
-                            <button 
-                                type="submit" 
+                            />
+                            <x-submit-button
+                                value="{{ $isEditing ? __('messages.common.update') : __('messages.common.save') }}"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                                {{ $isEditing ? __('messages.common.update') : __('messages.common.save') }}
-                            </button>
+                            />
                         </div>
-                    </form>
+                    </x-form>
                 </div>
             </div>
         </div>

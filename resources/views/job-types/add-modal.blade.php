@@ -48,49 +48,43 @@
                         @click="show = false" 
                         class="text-gray-400 hover:text-gray-500">
                         <span class="sr-only">{{ __('messages.common.close') }}</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <x-icons.x class="h-6 w-6" />
                     </button>
                 </div>
                 
                 <!-- Body -->
                 <div class="px-6 py-4">
-                    <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.name') }} <span class="text-red-500">*</span></label>
-                        <input 
-                            type="text" 
-                            name="name" 
-                            id="name" 
-                            class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" 
-                            required>
+                    <x-form id="addJobTypeForm" class="bg-white">
+                        <x-input
+                            name="name"
+                            id="name"
+                            label="{{ __('messages.job_type.name') }} <span class='text-red-500'>*</span>"
+                            required="true"
+                        />
                         <div id="nameError" class="text-red-500 text-sm mt-1 hidden"></div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.description') }}</label>
-                        <textarea 
-                            name="description" 
-                            id="description" 
-                            rows="3" 
-                            class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                        
+                        <x-input
+                            type="textarea"
+                            name="description"
+                            id="description"
+                            label="{{ __('messages.job_type.description') }}"
+                        />
                         <div id="descriptionError" class="text-red-500 text-sm mt-1 hidden"></div>
-                    </div>
-                </div>
-                
-                <!-- Footer -->
-                <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
-                    <button 
-                        type="button" 
-                        @click="show = false" 
-                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        {{ __('messages.common.cancel') }}
-                    </button>
-                    <button 
-                        type="submit" 
-                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        {{ __('messages.common.save') }}
-                    </button>
+                        
+                        <!-- Footer -->
+                        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+                            <x-button
+                                type="button"
+                                value="{{ __('messages.common.cancel') }}"
+                                @click="show = false"
+                                class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                            />
+                            <x-submit-button
+                                value="{{ __('messages.common.save') }}"
+                                class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                            />
+                        </div>
+                    </x-form>
                 </div>
             </form>
         </div>

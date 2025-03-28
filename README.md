@@ -1,57 +1,86 @@
-# Laravel Jobs Portal
+# JobPortal
 
-A modern job portal application built with Laravel and Livewire.
+A modern job portal application built with Laravel, Livewire, Alpine.js and Tailwind CSS.
+
+## Modernization Efforts
+
+The application has undergone significant modernization work to improve performance, maintainability, and user experience:
+
+### Front-end Improvements
+
+1. **Alpine.js Integration**
+   - Added Alpine.js for reactive UI components
+   - Created modern modal system using Alpine.js
+   - Implemented dropdown components with Alpine.js
+
+2. **SVG Icon Components**
+   - Converted inline SVGs to reusable Blade components
+   - Created standardized icon system for consistent UI
+   - Added utility to automatically convert inline SVGs to components
+
+3. **Modern JavaScript**
+   - Replaced jQuery with native JavaScript
+   - Implemented modern ES6+ features
+   - Created utility command to standardize JavaScript code
+   - Added proper event handling with native APIs
+
+4. **Tailwind CSS**
+   - Enhanced UI with Tailwind CSS
+   - Created reusable button and UI components
+   - Implemented responsive design patterns
+
+### Back-end Improvements
+
+1. **Custom Table Components**
+   - Replaced Rappasoft's table implementation with custom Livewire components
+   - Added filterable and sortable functionality
+   - Created reusable base table component
+
+2. **Translation Management**
+   - Enhanced translation capabilities
+   - Added Lithuanian language support
+   - Created utilities for standardizing translations
+
+3. **Memory Optimization**
+   - Identified and fixed memory-intensive operations
+   - Optimized large data processing
 
 ## Features
 
-- Responsive job listing and search
-- Candidate and employer profiles
-- Job application tracking
-- Advanced filtering and search
-- Multi-language support (English, Lithuanian)
-- Custom Livewire datatable implementation
-- Tailwind CSS styling
+- Job listings with search and filter capabilities
+- Company profiles and management
+- User authentication and roles
+- Multilingual support
+- Responsive design
 
-## Installation
+## Getting Started
 
-1. Clone the repository:
-```bash
-git clone https://github.com/goleaf/laravel-jobs-portal.git
-cd laravel-jobs-portal
-```
+### Prerequisites
 
-2. Install dependencies:
-```bash
-composer install
-npm install
-```
+- PHP 8.0+
+- Composer
+- Node.js and NPM
+- MySQL or PostgreSQL
 
-3. Copy the environment file:
-```bash
-cp .env.example .env
-```
+### Installation
 
-4. Generate application key:
-```bash
-php artisan key:generate
-```
+1. Clone the repository
+2. Run `composer install`
+3. Copy `.env.example` to `.env` and configure your database
+4. Run `php artisan key:generate`
+5. Run `php artisan migrate --seed`
+6. Run `npm install && npm run dev`
+7. Serve the application with `php artisan serve`
 
-5. Configure your database in `.env`
+## Available Commands
 
-6. Run migrations and seed the database:
-```bash
-php artisan migrate --seed
-```
+- `php artisan svg:convert` - Convert inline SVGs to components
+- `php artisan js:standardize` - Standardize JavaScript code
+- `php artisan standardize:translations` - Standardize translations across languages
 
-7. Build assets:
-```bash
-npm run dev
-```
+## License
 
-8. Start the server:
-```bash
-php artisan serve
-```
+This project is licensed under the MIT License.
 
 ## Translation Management
 

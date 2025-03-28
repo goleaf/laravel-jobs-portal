@@ -83,6 +83,9 @@ return [
             'description' => 'Aprašymas',
             'skill' => 'Įgūdis',
             'n/a' => 'Nėra',
+            'open_filter_menu' => 'Atidaryti filtro meniu',
+            'filter_by' => 'Filtruoti pagal',
+            'enter_value' => 'Įveskite reikšmę',
         ],
         'flash' => [
             'no_record' => 'Įrašas nerastas',

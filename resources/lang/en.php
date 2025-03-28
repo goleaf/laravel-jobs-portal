@@ -75,6 +75,9 @@ return array (
       'description' => 'Description',
       'skill' => 'Skill',
       'n/a' => 'N/A',
+      'open_filter_menu' => 'Open filter menu',
+      'filter_by' => 'Filter by',
+      'enter_value' => 'Enter value',
     ),
     'flash' => 
     array (

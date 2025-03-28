@@ -1,32 +1,27 @@
 @props([
     'method' => 'POST',
     'action' => '',
-    'id' => null,
+    'hasFiles' => false,
     'class' => '',
-    'files' => false,
-    'autocomplete' => 'on'
 ])
 
 @php
+    $spoofedMethods = ['PUT', 'PATCH', 'DELETE'];
     $method = strtoupper($method);
-    $formMethod = in_array($method, ['GET', 'POST']) ? $method : 'POST';
+    $hasMethodField = in_array($method, $spoofedMethods);
 @endphp
 
-{!! Form::open([
-    'url' => $action,
-    'method' => $formMethod,
-    'id' => $id,
-    'class' => $class,
-    'files' => $files,
-    'autocomplete' => $autocomplete,
-]) !!}
-
-@if (!in_array($method, ['GET', 'POST']))
-    @method($method)
-@endif
-
-@csrf
-
-{{ $slot }}
-
-{!! Form::close() !!} 
+<form 
+    method="{{ $hasMethodField ? 'POST' : $method }}" 
+    action="{{ $action }}"
+    @if($hasFiles) enctype="multipart/form-data" @endif
+    {{ $attributes->merge(['class' => $class]) }}
+>
+    @csrf
+    
+    @if($hasMethodField)
+        @method($method)
+    @endif
+    
+    {{ $slot }}
+</form> 

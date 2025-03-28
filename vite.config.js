@@ -2,20 +2,43 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue2 from '@vitejs/plugin-vue2';
 import path from 'path';
+import fs from 'fs';
+
+// Check if files exist before adding to input list
+function fileExists(path) {
+    try {
+        return fs.existsSync(path);
+    } catch (err) {
+        return false;
+    }
+}
+
+// Build list of input files that actually exist
+const inputFiles = [
+    'resources/js/app.js',
+];
+
+// SASS files to check
+const sassFiles = [
+    'resources/sass/app.scss',
+    'resources/sass/custom.scss',
+    'resources/assets/sass/custom.scss',
+    'resources/assets/sass/pagination-fix.scss',
+    'resources/assets/sass/custom-dark.scss',
+    'resources/assets/sass/custom-auth.scss',
+];
+
+// Add existing SASS files to input
+sassFiles.forEach(file => {
+    if (fileExists(file)) {
+        inputFiles.push(file);
+    }
+});
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: [
-                'resources/js/app.js',
-                'resources/sass/new-custom.scss',
-                'resources/sass/new-custom-dark.scss',
-                'resources/sass/custom-auth.scss',
-                'resources/assets/sass/new-custom.scss',
-                'resources/assets/sass/pagination-fix.scss',
-                'resources/assets/sass/new-custom-dark.scss',
-                'resources/assets/sass/custom-auth.scss',
-            ],
+            input: inputFiles,
             refresh: true,
         }),
         vue2(),
@@ -41,17 +64,17 @@ export default defineConfig({
                         'bootstrap',
                         'slick-carousel',
                         'chart.js',
-                        'intl-tel-input',
                         'autonumeric',
                         'quill',
                     ],
                     'front-third-party': [
-                        'intl-tel-input',
                         'ion-rangeslider',
                         'select2',
                         'sweetalert',
                         'toastr',
-                        'slick-carousel',
+                    ],
+                    'tel-input': [
+                        'intl-tel-input',
                     ],
                     pages: [
                         'resources/assets/js/custom/helpers.js',

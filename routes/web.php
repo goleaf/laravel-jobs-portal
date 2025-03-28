@@ -240,12 +240,13 @@ Route::middleware('auth', 'role:Admin', 'xss', 'verified.user')->prefix('admin')
     Route::delete('job-tags/{tag}', [TagController::class, 'destroy'])->name('jobTag.destroy');
 
     // Job Types
-    Route::get('job-types', [JobTypeController::class, 'index'])->name('jobType.index');
-    Route::post('job-types', [JobTypeController::class, 'store'])->name('jobType.store');
-    Route::get('job-types/{jobType}', [JobTypeController::class, 'show'])->name('jobType.show');
-    Route::get('job-types/{jobType}/edit', [JobTypeController::class, 'edit'])->name('jobType.edit');
-    Route::put('job-types/{jobType}', [JobTypeController::class, 'update'])->name('jobType.update');
-    Route::delete('job-types/{jobType}', [JobTypeController::class, 'destroy'])->name('jobType.destroy');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('/job-types', [JobTypeController::class, 'index'])->name('job-types.index');
+        Route::post('/job-types', [JobTypeController::class, 'store'])->name('job-types.store');
+        Route::get('/job-types/{id}/edit', [JobTypeController::class, 'edit'])->name('job-types.edit');
+        Route::put('/job-types/{id}', [JobTypeController::class, 'update'])->name('job-types.update');
+        Route::delete('/job-types/{id}', [JobTypeController::class, 'destroy'])->name('job-types.destroy');
+    });
 
     // OwnerShip Type
     Route::get('ownership-types', [OwnerShipTypeController::class, 'index'])->name('ownerShipType.index');

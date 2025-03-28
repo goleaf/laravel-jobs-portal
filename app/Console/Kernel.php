@@ -33,6 +33,8 @@ class Kernel extends ConsoleKernel
             \App\Console\Commands\CleanupRappasoftReferences::class,
             \App\Console\Commands\MigrateJsonTranslations::class,
             \App\Console\Commands\ConvertSvgToComponents::class,
+            \App\Console\Commands\StandardizeTranslations::class,
+            \App\Console\Commands\StandardizeJavaScript::class,
         ]);
 
         require base_path('routes/console.php');

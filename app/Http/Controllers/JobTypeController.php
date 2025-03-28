@@ -2,34 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateJobTypeRequest;
-use App\Http\Requests\UpdateJobTypeRequest;
-use App\Models\Job;
 use App\Models\JobType;
-use App\Repositories\JobTypeRepository;
-use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
-class JobTypeController extends AppBaseController
+class JobTypeController extends Controller
 {
-    /** @var JobTypeRepository */
-    private $jobTypeRepository;
-
-    public function __construct(JobTypeRepository $jobTypeRepo)
-    {
-        $this->jobTypeRepository = $jobTypeRepo;
-    }
-
     /**
-     * Display a listing of the JobType.
+     * Display the job types page.
      *
-     * @param  Request  $request
-     * @return Factory|View
-     *
-     * @throws Exception
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -37,60 +21,102 @@ class JobTypeController extends AppBaseController
     }
 
     /**
-     * Store a newly created JobType in storage.
-     */
-    public function store(CreateJobTypeRequest $request): JsonResponse
-    {
-        $input = $request->all();
-        $jobType = $this->jobTypeRepository->create($input);
-
-        return $this->sendResponse($jobType, __('messages.flash.job_type_save'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(JobType $jobType): JsonResponse
-    {
-        return $this->sendResponse($jobType, 'Job Type Retrieved Successfully.');
-    }
-
-    /**
-     * Show the form for editing the specified JobType.
-     */
-    public function show(JobType $jobType): JsonResponse
-    {
-        return $this->sendResponse($jobType, __('messages.flash.job_type_retrieve'));
-    }
-
-    /**
-     * Update the specified JobType in storage.
-     */
-    public function update(UpdateJobTypeRequest $request, JobType $jobType): JsonResponse
-    {
-        $input = $request->all();
-        $this->jobTypeRepository->update($input, $jobType->id);
-
-        return $this->sendSuccess(__('messages.flash.job_type_update'));
-    }
-
-    /**
-     * Remove the specified JobType from storage.
+     * Store a newly created job type.
      *
-     *
-     * @throws Exception
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(JobType $jobType): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        $jobModels = [
-            Job::class,
-        ];
-        $result = canDelete($jobModels, 'job_type_id', $jobType->id);
-        if ($result) {
-            return $this->sendError(__('messages.flash.job_type_cant_delete'));
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:job_types',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        $jobType = JobType::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.common.created_successfully', ['model' => __('messages.job_type.job_type')]),
+            'data' => $jobType
+        ]);
+    }
+
+    /**
+     * Get job type details for editing.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit($id): JsonResponse
+    {
+        $jobType = JobType::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $jobType
+        ]);
+    }
+
+    /**
+     * Update the specified job type.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        $jobType = JobType::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:job_types,name,' . $id,
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $jobType->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.common.updated_successfully', ['model' => __('messages.job_type.job_type')]),
+            'data' => $jobType
+        ]);
+    }
+
+    /**
+     * Remove the specified job type.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id): JsonResponse
+    {
+        $jobType = JobType::findOrFail($id);
         $jobType->delete();
 
-        return $this->sendSuccess(__('messages.flash.job_type_delete'));
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.common.deleted_successfully', ['model' => __('messages.job_type.job_type')])
+        ]);
     }
 }

@@ -1,18 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ __('messages.job_type.job_types') }}
+    {{ __('messages.job_types') }}
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <livewire:job-type-table />
-                <livewire:job-type-form />
-                <x-notification />
-            </div>
-        </div>
+    <div class="container mx-auto px-4 py-6">
+        <livewire:job-type-table />
     </div>
 @endsection
 

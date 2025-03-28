@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class JobType
@@ -39,6 +41,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class JobType extends Model
 {
+    use HasFactory;
+
     /**
      * Validation rules
      *
@@ -50,7 +54,12 @@ class JobType extends Model
 
     public $table = 'job_types';
 
-    public $fillable = [
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
         'name',
         'description',
         'company_id',
@@ -74,7 +83,10 @@ class JobType extends Model
         return $this->belongsToMany(Candidate::class, 'jobs_alerts', 'job_type_id', 'candidate_id');
     }
 
-    public function jobs()
+    /**
+     * Get the jobs for this job type.
+     */
+    public function jobs(): HasMany
     {
         return $this->hasMany(Job::class);
     }

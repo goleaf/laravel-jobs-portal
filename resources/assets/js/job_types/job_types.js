@@ -1,136 +1,176 @@
-document.addEventListener('turbo:load', loadJobTypeData);
+'use strict';
 
-function loadJobTypeData() {
-    if (!$('#indexJobTypeData').length) {
-        return;
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize event listeners
+    initEventListeners();
+});
 
-    // Add job type modal - open and close
-    listenClick('#addJobTypeBtn', function () {
-        $('#addJobTypeModal').removeClass('hidden');
-    });
+function initEventListeners() {
+    // Listen for Livewire events
+    window.addEventListener('livewire:load', function() {
+        // Modal events from Livewire
+        Livewire.on('showJobTypeModal', () => {
+            openModal('addJobTypeModal');
+        });
 
-    listenClick('#jobTypeBtnCancel', function () {
-        $('#addJobTypeModal').addClass('hidden');
-        resetForm('#addJobTypeForm', '#jobTypeValidationErrorsBox');
-    });
+        Livewire.on('hideJobTypeModal', () => {
+            closeModal('addJobTypeModal');
+        });
 
-    // Edit job type modal - open and close
-    listenClick('#editJobType', function (event) {
-        let jobTypeId = $(event.currentTarget).data('id');
-        $.ajax({
-            url: route('job-types.edit', jobTypeId),
-            type: 'GET',
-            success: function (result) {
-                if (result.success) {
-                    $('#jobTypeId').val(result.data.id);
-                    $('#editName').val(result.data.name);
-                    $('#editDescription').val(result.data.description);
-                    $('#editJobTypeModal').removeClass('hidden');
-                }
-            },
-            error: function (result) {
-                displayErrorMessage(result.responseJSON.message);
-            },
+        Livewire.on('showEditJobTypeModal', () => {
+            openModal('editJobTypeModal');
+        });
+
+        Livewire.on('hideEditJobTypeModal', () => {
+            closeModal('editJobTypeModal');
+        });
+
+        // Notification events
+        Livewire.on('showNotification', (params) => {
+            displayNotification(params.message, params.type);
+        });
+
+        // Confirmation dialog for delete
+        Livewire.on('showDeleteConfirmation', (id) => {
+            if (confirm(window.translations.common.delete_confirmation)) {
+                Livewire.emit('deleteJobType', id);
+            }
         });
     });
 
-    listenClick('#btnEditCancel', function () {
-        $('#editJobTypeModal').addClass('hidden');
-        resetForm('#editJobTypeForm', '#editValidationErrorsBox');
+    // Add click event listeners for modal triggers
+    document.querySelectorAll('[data-modal-toggle]').forEach(element => {
+        element.addEventListener('click', function() {
+            const target = this.getAttribute('data-modal-toggle');
+            toggleModal(target);
+        });
     });
 
-    // Delete job type
-    listenClick('#deleteJobType', function (event) {
-        let deleteJobTypeId = $(event.currentTarget).data('id');
-        deleteItem(route('job-types.destroy', deleteJobTypeId), Lang.get('messages.job_type.job_type'));
+    // Add click event listeners for modal close buttons
+    document.querySelectorAll('[data-modal-hide]').forEach(element => {
+        element.addEventListener('click', function() {
+            const target = this.getAttribute('data-modal-hide');
+            closeModal(target);
+        });
     });
+}
 
-    // ESC key to close modals
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            $('#addJobTypeModal').addClass('hidden');
-            $('#editJobTypeModal').addClass('hidden');
+/**
+ * Open a modal by ID
+ * @param {string} modalId - The ID of the modal to open
+ */
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        
+        // Add backdrop
+        const backdrop = document.createElement('div');
+        backdrop.id = `${modalId}-backdrop`;
+        backdrop.classList.add('modal-backdrop', 'bg-gray-900', 'bg-opacity-50', 'fixed', 'inset-0', 'z-40');
+        document.body.appendChild(backdrop);
+        
+        // Add click event to backdrop for closing
+        backdrop.addEventListener('click', function() {
+            closeModal(modalId);
+        });
+        
+        // Focus on first input if exists
+        setTimeout(() => {
+            const firstInput = modal.querySelector('input, select, textarea');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        }, 100);
+    }
+}
+
+/**
+ * Close a modal by ID
+ * @param {string} modalId - The ID of the modal to close
+ */
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        
+        // Remove backdrop
+        const backdrop = document.getElementById(`${modalId}-backdrop`);
+        if (backdrop) {
+            backdrop.remove();
         }
-    });
+    }
 }
 
-function resetForm(formId, validationBoxId) {
-    $(formId)[0].reset();
-    $(validationBoxId).addClass('hidden');
+/**
+ * Toggle modal visibility
+ * @param {string} modalId - The ID of the modal to toggle
+ */
+function toggleModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        if (modal.classList.contains('hidden')) {
+            openModal(modalId);
+        } else {
+            closeModal(modalId);
+        }
+    }
 }
 
-listenSubmit('#addJobTypeForm', function (e) {
-    e.preventDefault();
-    showLoadingButton('#jobTypeBtnSave');
+/**
+ * Display notification
+ * @param {string} message - The notification message
+ * @param {string} type - The type of notification (success, error, info, warning)
+ */
+function displayNotification(message, type = 'success') {
+    // Get or create notification container
+    let container = document.getElementById('notification-container');
     
-    $.ajax({
-        url: route('job-types.store'),
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function (result) {
-            if (result.success) {
-                displaySuccessMessage(result.message);
-                $('#addJobTypeModal').addClass('hidden');
-                // Refresh Livewire component
-                Livewire.dispatch('refresh');
-            }
-        },
-        error: function (result) {
-            displayValidationErrors(result.responseJSON.errors, '#jobTypeValidationErrorsBox');
-        },
-        complete: function () {
-            hideLoadingButton('#jobTypeBtnSave');
-        },
-    });
-});
-
-listenSubmit('#editJobTypeForm', function (event) {
-    event.preventDefault();
-    showLoadingButton('#btnEditSave');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'fixed top-4 right-4 z-50 flex flex-col space-y-2';
+        document.body.appendChild(container);
+    }
     
-    const updateJobTypeId = $('#jobTypeId').val();
-    $.ajax({
-        url: route('job-types.update', updateJobTypeId),
-        type: 'put',
-        data: $(this).serialize(),
-        success: function (result) {
-            if (result.success) {
-                displaySuccessMessage(result.message);
-                $('#editJobTypeModal').addClass('hidden');
-                // Refresh Livewire component
-                Livewire.dispatch('refresh');
-            }
-        },
-        error: function (result) {
-            displayValidationErrors(result.responseJSON.errors, '#editValidationErrorsBox');
-        },
-        complete: function () {
-            hideLoadingButton('#btnEditSave');
-        },
-    });
-});
-
-// Helper functions
-function showLoadingButton(buttonId) {
-    $(buttonId).prop('disabled', true);
-    $(buttonId).html('<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Loading...');
-}
-
-function hideLoadingButton(buttonId) {
-    $(buttonId).prop('disabled', false);
-    $(buttonId).html(Lang.get('messages.common.save'));
-}
-
-function displayValidationErrors(errors, boxId) {
-    $(boxId).removeClass('hidden');
-    $(boxId).html('');
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'notification px-4 py-3 rounded shadow-md transform transition-all duration-300 ease-in-out';
     
-    let errorList = '<ul class="mt-1 list-disc list-inside">';
-    $.each(errors, function (key, value) {
-        errorList += '<li>' + value[0] + '</li>';
-    });
-    errorList += '</ul>';
+    // Add type-specific classes
+    switch (type) {
+        case 'success':
+            notification.classList.add('bg-green-500', 'text-white');
+            break;
+        case 'error':
+            notification.classList.add('bg-red-500', 'text-white');
+            break;
+        case 'warning':
+            notification.classList.add('bg-yellow-500', 'text-white');
+            break;
+        case 'info':
+            notification.classList.add('bg-blue-500', 'text-white');
+            break;
+    }
     
-    $(boxId).html(errorList);
+    // Add message
+    notification.textContent = message;
+    
+    // Add to container
+    container.appendChild(notification);
+    
+    // Apply animation
+    setTimeout(() => {
+        notification.classList.add('opacity-100', 'translate-y-0');
+    }, 10);
+    
+    // Auto dismiss after 3 seconds
+    setTimeout(() => {
+        notification.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
 }

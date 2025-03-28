@@ -1,57 +1,46 @@
-<div
+<div 
     x-data="{ 
-        show: false, 
-        message: '', 
-        type: 'success'
+        notifications: [],
+        add(message, type = 'success') {
+            const id = Date.now();
+            this.notifications.push({ id, message, type });
+            setTimeout(() => this.remove(id), 4000);
+        },
+        remove(id) {
+            this.notifications = this.notifications.filter(notification => notification.id !== id);
+        }
     }"
-    x-on:success.window="show = true; message = $event.detail.message; type = 'success'; setTimeout(() => { show = false }, 3000)"
-    x-on:error.window="show = true; message = $event.detail.message; type = 'error'; setTimeout(() => { show = false }, 5000)"
-    x-show="show"
-    x-transition:enter="transition ease-out duration-300"
-    x-transition:enter-start="opacity-0 transform translate-y-2"
-    x-transition:enter-end="opacity-100 transform translate-y-0"
-    x-transition:leave="transition ease-in duration-300"
-    x-transition:leave-start="opacity-100 transform translate-y-0"
-    x-transition:leave-end="opacity-0 transform translate-y-2"
-    class="fixed top-4 right-4 z-50 max-w-md"
->
-    <div 
-        x-show="show"
-        :class="{ 
-            'bg-green-50 border-green-500 text-green-800': type === 'success',
-            'bg-red-50 border-red-500 text-red-800': type === 'error'
-        }"
-        class="rounded-md p-4 border-l-4 shadow-md"
-    >
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg x-show="type === 'success'" class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-                <svg x-show="type === 'error'" class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3">
-                <p class="text-sm font-medium" x-text="message"></p>
-            </div>
-            <div class="ml-auto pl-3">
-                <div class="-mx-1.5 -my-1.5">
-                    <button 
-                        @click="show = false" 
-                        class="inline-flex rounded-md p-1.5"
-                        :class="{ 
-                            'text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500': type === 'success',
-                            'text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500': type === 'error'
-                        }"
-                    >
-                        <span class="sr-only">{{ __('messages.common.close') }}</span>
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
+    @show-notification.window="add($event.detail.message, $event.detail.type)"
+    class="fixed top-5 right-5 z-50 flex flex-col space-y-3 w-80">
+    
+    <template x-for="notification in notifications" :key="notification.id">
+        <div 
+            x-show="true"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform translate-x-8"
+            x-transition:enter-end="opacity-100 transform translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-x-0"
+            x-transition:leave-end="opacity-0 transform translate-x-8"
+            :class="{
+                'bg-green-50 border-green-400 text-green-800': notification.type === 'success',
+                'bg-red-50 border-red-400 text-red-800': notification.type === 'error',
+                'bg-blue-50 border-blue-400 text-blue-800': notification.type === 'info',
+                'bg-yellow-50 border-yellow-400 text-yellow-800': notification.type === 'warning'
+            }"
+            class="relative border-l-4 p-4 rounded-md shadow-md">
+            
+            <div class="flex items-start justify-between">
+                <p class="text-sm" x-text="notification.message"></p>
+                <button 
+                    @click="remove(notification.id)" 
+                    class="ml-4 inline-flex text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">{{ __('messages.common.close') }}</span>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
         </div>
-    </div>
+    </template>
 </div> 

@@ -28,6 +28,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pagination-fix.css') }}">
     @livewireStyles
     @routes
+    <!-- Add Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
         data-turbolinks-eval="false" data-turbo-eval="false"></script>
@@ -103,6 +105,9 @@
     </script>
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
+
+    <!-- Notification Component -->
+    <x-notification />
 </body>
 <!--end::Body-->
 

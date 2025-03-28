@@ -11,6 +11,7 @@ Our implementation offers:
 - Integration with Alpine.js for dynamic forms
 - Comprehensive error handling
 - Data binding from multiple sources
+- HTTP method spoofing for RESTful applications
 
 ## Available Examples
 
@@ -66,6 +67,16 @@ Shows comprehensive error handling capabilities:
 - Field-specific error messages
 - Verbose error listings
 - Error styling consistency
+
+### 6. Method Spoofing
+**Route**: `/forms/methods`
+
+Demonstrates HTTP method spoofing for RESTful applications:
+- PUT method form example
+- DELETE method form example
+- Method inference from routes
+- Automatic CSRF token inclusion
+- Hidden field generation for Laravel compatibility
 
 ## Core Components
 
@@ -240,6 +251,62 @@ return view('form.edit', compact('user'));
 ]) }}
 ```
 
+## Method Spoofing
+
+### Setting HTTP Methods
+
+HTML forms only support GET and POST methods, but Laravel applications often use PUT, PATCH, and DELETE for RESTful operations. Aire automatically adds the necessary `_method` hidden field:
+
+```php
+{{ Aire::open()->method('PUT')->url('/example/resource/1') }}
+    // Form fields
+{{ Aire::close() }}
+```
+
+This generates:
+
+```html
+<form action="/example/resource/1" method="POST">
+    <input type="hidden" name="_method" value="PUT">
+    <input type="hidden" name="_token" value="...">
+    <!-- Form fields -->
+</form>
+```
+
+### Method Inference from Routes
+
+Aire can automatically determine the HTTP method from a named route:
+
+```php
+// In routes file:
+Route::put('/example/{resource}', 'ResourceController@update')
+     ->name('resource.update');
+
+// In your Blade template:
+{{ Aire::open()->route('resource.update', 1) }}
+   // No need to specify method('PUT')
+{{ Aire::close() }}
+```
+
+### CSRF Protection
+
+For non-GET forms, Laravel requires a CSRF token. Aire automatically adds the `_token` hidden field for you:
+
+```php
+{{ Aire::open()->method('POST')->url('/example/contact') }}
+    // Form fields
+{{ Aire::close() }}
+```
+
+This generates:
+
+```html
+<form action="/example/contact" method="POST">
+    <input type="hidden" name="_token" value="...">
+    <!-- Form fields -->
+</form>
+```
+
 ## Alpine.js Integration
 
 To make a form dynamic with Alpine.js:
@@ -286,6 +353,7 @@ Our custom configuration in `config/aire.php` includes Tailwind-specific default
 5. **Progressive Enhancement**: Ensure forms work without JavaScript
 6. **Accessibility**: Use proper labels and ARIA attributes
 7. **Field IDs**: Explicitly set IDs for custom JavaScript interaction
+8. **RESTful Methods**: Use appropriate HTTP verbs (GET, POST, PUT, DELETE) to match your application's RESTful design
 
 ## Troubleshooting
 
@@ -295,6 +363,7 @@ Our custom configuration in `config/aire.php` includes Tailwind-specific default
 2. **Styling Inconsistencies**: Check for conflicting CSS or incorrect Tailwind classes
 3. **Data Not Binding**: Verify the data structure matches field names
 4. **Alpine.js Issues**: Make sure Alpine.js is properly loaded before form initialization
+5. **Method Spoofing**: If you're having issues with PUT/DELETE routes, verify your Laravel routes are properly configured
 
 ### Memory Usage
 
@@ -309,6 +378,15 @@ Increase PHP memory limit when running these commands:
 ```bash
 php -d memory_limit=512M artisan vendor:publish --tag=aire-views
 ```
+
+## Performance Considerations
+
+For large forms or applications with many forms, consider these performance optimizations:
+
+1. **Defer Scripts**: Use `defer` attribute on Alpine.js and other script imports
+2. **Lazy Loading**: Only load form-specific JavaScript when needed
+3. **Minimize DOM Manipulations**: Avoid excessive changes to the DOM in Alpine.js components
+4. **Cache Configuration**: Consider caching Aire configuration in production
 
 ## Additional Resources
 

@@ -238,6 +238,7 @@ The following form examples demonstrate different capabilities of Aire:
 - **Alpine.js Integration** (`/forms/alpine`) - Dynamic forms with Alpine.js
 - **Binding Example** (`/forms/binding`) - Data binding capabilities
 - **Error Handling** (`/forms/errors`) - Server-side validation and error summaries
+- **Method Spoofing** (`/forms/methods`) - HTTP verb spoofing for PUT/PATCH/DELETE
 
 ## Basic Usage
 
@@ -298,6 +299,9 @@ Demonstrates how Aire can bind data from various sources (arrays, objects, model
 ### Error Handling
 Shows how Aire automatically displays validation errors from Laravel's validation system.
 
+### Method Spoofing
+Demonstrates how Aire handles HTTP method spoofing for PUT, PATCH and DELETE requests, automatically adding the necessary hidden fields.
+
 ## Data Binding
 
 Aire will automatically bind old input and model data:
@@ -323,4 +327,4 @@ php artisan vendor:publish --tag=aire-views
 
 ## Documentation
 
-For more detailed information, visit the [Aire Documentation](https://airephp.com/). For project-specific implementation details, see the form examples at the routes mentioned above.
+For more detailed information, visit the [Aire Documentation](https://airephp.com/). For project-specific implementation details, see the comprehensive documentation in `docs/aires-forms.md` or view the example forms at the routes mentioned above.

@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Services\FileService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Company
@@ -73,8 +73,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read mixed $company_url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
  * @property-read int|null $jobs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read int|null $media_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Company whereUserId($value)
  *
@@ -84,10 +82,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read mixed $country_name
  * @property-read mixed $state_name
  */
-class Company extends Model implements HasMedia
+class Company extends Model
 {
-    use InteractsWithMedia;
-
     public $table = 'companies';
 
     public const COMPANY_LOGIN_TYPE = 0;
@@ -134,6 +130,7 @@ class Company extends Model implements HasMedia
         'user_id',
         'unique_id',
         'last_change',
+        'logo_path',
     ];
 
     /**
@@ -157,6 +154,7 @@ class Company extends Model implements HasMedia
         'user_id' => 'integer',
         'unique_id' => 'string',
         'last_change' => 'integer',
+        'logo_path' => 'string',
     ];
 
     /**
@@ -204,14 +202,34 @@ class Company extends Model implements HasMedia
     }
 
     /**
+     * Upload a logo for the company.
+     *
+     * @param UploadedFile $file
+     * @return void
+     */
+    public function uploadLogo(UploadedFile $file): void
+    {
+        // Delete old file if exists
+        if ($this->logo_path) {
+            app(FileService::class)->deleteFile($this->logo_path);
+        }
+
+        $path = app(FileService::class)->uploadFile(
+            $file,
+            'companies/logos',
+            'public'
+        );
+
+        $this->update(['logo_path' => $path]);
+    }
+
+    /**
      * @return mixed
      */
     public function getCompanyUrlAttribute()
     {
-        /** @var Media $media */
-        $media = $this->user->getMedia(User::PROFILE)->first();
-        if (! empty($media)) {
-            return $media->getFullUrl();
+        if (!empty($this->logo_path)) {
+            return app(FileService::class)->getFileUrl($this->logo_path);
         }
 
         return asset('assets/img/employer-image.png');

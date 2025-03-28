@@ -103,7 +103,7 @@
     <br>
     <div class="image image-lg-small">
         <img id='logoPreview' class="testimonial-modal-img"
-             src="{{ (!empty($company->user->media[0])) ? $company->user->media[0]->getFullUrl() : asset('assets/img/infyom-logo.png') }}">
+             src="{{ (!empty($company->logo_path)) ? $company->company_url : asset('assets/img/infyom-logo.png') }}">
     </div>
     </div>
     <div class="form-group col-xl-6 col-md-12 col-sm-12">

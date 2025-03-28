@@ -105,12 +105,19 @@ class CompanyRepository extends BaseRepository
             $company->update(['user_id' => $user->id]);
 
             if ((isset($input['image']))) {
+                // Upload logo directly to the company using our new method
+                $company->uploadLogo($input['image']);
+                
+                // For backward compatibility during transition - still update the user's media as well
                 $user->addMedia($input['image'])
                     ->toMediaCollection(User::PROFILE, config('app.media_disc'));
             }
             if ((isset($input['image_url']))) {
+                // For backward compatibility during transition - still update the user's media
                 $user->addMediaFromUrl($input['image_url'])
                     ->toMediaCollection(User::PROFILE, config('app.media_disc'));
+                
+                // TODO: Implement fetching remote image for company logo path when needed
             }
 
             /** @var SubscriptionRepository $subscriptionRepo */
@@ -164,6 +171,10 @@ class CompanyRepository extends BaseRepository
             $user->update($userInput);
 
             if ((isset($input['image']))) {
+                // Upload logo directly to the company using our new method
+                $company->uploadLogo($input['image']);
+                
+                // For backward compatibility during transition - still update the user's media as well
                 $user->clearMediaCollection(User::PROFILE);
                 $user->addMedia($input['image'])
                     ->toMediaCollection(User::PROFILE, config('app.media_disc'));

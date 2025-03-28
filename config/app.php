@@ -88,17 +88,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Available locales
+    | Available Application Locales
     |--------------------------------------------------------------------------
     |
-    | List of available locales for the application.
+    | This array contains all available locales that the application supports.
+    | These will be used for language selection and switching.
     |
     */
 
     'available_locales' => [
-        'en' => 'English',
-        'lt' => 'Lithuanian',
-        // Add other languages here
+        'en' => [
+            'name' => 'English',
+            'script' => 'Latn',
+            'native' => 'English',
+            'regional' => 'en_US',
+        ],
+        'lt' => [
+            'name' => 'Lithuanian',
+            'script' => 'Latn',
+            'native' => 'Lietuvių',
+            'regional' => 'lt_LT',
+        ],
     ],
 
     /*

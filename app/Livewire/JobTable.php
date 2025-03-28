@@ -2,358 +2,235 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Table;
 use App\Models\Job;
+use App\Models\JobCategory;
+use App\Models\JobType;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use App\Livewire\Components\Filter;
+use Illuminate\Support\Carbon;
 
-class JobTable extends LivewireTableComponent
+class JobTable extends Table
 {
-    public $tableName = 'jobs';
-    
-    // UI settings
-    public $showButtonOnHeader = true;
-    public $showFilterOnHeader = true;
-    public $buttonComponent = 'jobs.table-components.add_button';
-    
-    // Filter properties are now handled through $filters
-    
-    protected $listeners = [
-        'resetPage', 
-        'refresh' => '$refresh'
-    ];
+    protected $listeners = ['refresh' => '$refresh'];
 
     /**
-     * Initialize the table
+     * Define the base query for the table
      */
-    protected function initializeTable()
+    protected function query(): Builder
     {
-        parent::initializeTable();
-        
-        $this->sortField = 'created_at';
-        $this->sortDirection = 'desc';
-        
-        // Set searchable fields
-        $this->searchableFields = ['job_title', 'company.name', 'jobCategory.name'];
-        
-        $this->columns = [
+        return Job::query()
+            ->with(['company', 'jobCategory', 'jobType'])
+            ->select('jobs.*');
+    }
+
+    /**
+     * Define the table columns
+     */
+    protected function columns(): array
+    {
+        return [
             [
-                'title' => __('messages.job.job_title'),
+                'label' => __('messages.job.job_title'),
                 'field' => 'job_title',
                 'sortable' => true,
                 'searchable' => true,
-                'view' => 'jobs.table-components.job_title'
+                'format' => function ($job) {
+                    return view('jobs.table-components.title', ['job' => $job]);
+                }
             ],
             [
-                'title' => __('messages.job.is_featured'),
-                'field' => 'hide_salary',
-                'sortable' => true,
-                'view' => 'jobs.table-components.is_featured'
-            ],
-            [
-                'title' => __('messages.job.is_suspended'),
-                'field' => 'is_suspended',
-                'sortable' => true,
-                'view' => 'jobs.table-components.is_suspended'
-            ],
-            [
-                'title' => __('messages.common.created_on'),
-                'field' => 'created_at',
+                'label' => __('messages.job.job_company'),
+                'field' => 'company.company_name',
                 'sortable' => true,
                 'searchable' => true,
-                'view' => 'jobs.table-components.created_on'
             ],
             [
-                'title' => __('messages.job.job_expiry_date'),
+                'label' => __('messages.job.job_category'),
+                'field' => 'jobCategory.name',
+                'sortable' => true,
+                'searchable' => true,
+            ],
+            [
+                'label' => __('messages.job.job_type'),
+                'field' => 'jobType.name',
+                'sortable' => true,
+                'searchable' => true,
+            ],
+            [
+                'label' => __('messages.job.is_featured'),
+                'field' => 'is_featured',
+                'sortable' => true,
+                'format' => function ($job) {
+                    return view('jobs.table-components.featured', ['job' => $job]);
+                }
+            ],
+            [
+                'label' => __('messages.job.is_suspended'),
+                'field' => 'is_suspended',
+                'sortable' => true,
+                'format' => function ($job) {
+                    return view('jobs.table-components.suspended', ['job' => $job]);
+                }
+            ],
+            [
+                'label' => __('messages.job.job_expiry_date'),
                 'field' => 'job_expiry_date',
                 'sortable' => true,
-                'view' => 'jobs.table-components.expired_at'
-            ],
-            [
-                'title' => __('messages.common.last_change_by'),
-                'field' => 'last_change',
-                'sortable' => true,
-                'view' => 'jobs.table-components.last_change'
-            ],
-            [
-                'title' => __('messages.common.action'),
-                'field' => 'id',
-                'view' => 'jobs.table-components.action_buttons'
-            ],
-        ];
-    }
-
-    /**
-     * Set up filters for the table
-     */
-    protected function getFilters(): array
-    {
-        return [
-            Filter::make('featured', __('messages.filter_name.featured_job'))
-                ->options([
-                    '' => __('messages.filter_name.select_featured_company'),
-                    'yes' => __('messages.common.yes'),
-                    'no' => __('messages.common.no'),
-                ])
-                ->toArray(),
-                
-            Filter::make('suspended', __('messages.filter_name.suspended_job'))
-                ->options([
-                    '' => __('messages.filter_name.select_suspended_job'),
-                    '1' => __('messages.common.yes'),
-                    '0' => __('messages.common.no'),
-                ])
-                ->toArray(),
-                
-            Filter::make('freelance', __('messages.filter_name.select_independent_work'))
-                ->options([
-                    '' => __('messages.filter_name.select_independent_work'),
-                    '1' => __('messages.common.yes'),
-                    '0' => __('messages.common.no'),
-                ])
-                ->toArray(),
-                
-            Filter::make('status', __('messages.filter_name.job_status'))
-                ->options([
-                    '' => __('messages.filter_name.job_status'),
-                    'active' => __('messages.common.active'),
-                    'expire' => __('messages.common.expire'),
-                ])
-                ->toArray(),
-        ];
-    }
-
-    /**
-     * Apply a single filter to the query
-     */
-    protected function applyFilter($builder, $key, $value)
-    {
-        switch ($key) {
-            case 'featured':
-                if ($value === 'yes') {
-                    $builder->has('featured');
-                } else {
-                    $builder->doesntHave('featured');
+                'format' => function ($job) {
+                    return Carbon::parse($job->job_expiry_date)->format('Y-m-d');
                 }
-                break;
-                
-            case 'suspended':
-                $builder->where('is_suspended', $value);
-                break;
-                
-            case 'freelance':
-                $builder->where('is_freelance', $value);
-                break;
-                
-            case 'status':
-                if ($value === 'expire') {
-                    $builder->where('job_expiry_date', '<=', date('Y-m-d'));
-                } else {
-                    $builder->where('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())
-                        ->status(Job::STATUS_OPEN)
-                        ->where('is_suspended', Job::NOT_SUSPENDED);
-                }
-                break;
-                
-            default:
-                parent::applyFilter($builder, $key, $value);
-        }
-        
-        return $builder;
-    }
-
-    /**
-     * Get cell/TD attributes for specific column
-     */
-    public function getTdAttributes($column, $row, $colIndex, $rowIndex)
-    {
-        if ($colIndex == 6) {
-            return [
-                'class' => 'px-6 py-4 text-center w-32',
-            ];
-        }
-
-        return ['class' => 'px-6 py-4 text-center'];
-    }
-    
-    /**
-     * Get data for the table 
-     */
-    protected function getData()
-    {
-        $query = Job::with('company', 'jobCategory', 'jobType', 'jobShift', 'activeFeatured', 'featured', 'admin');
-        
-        // Apply filters
-        $query = $this->applyFilters($query);
-        
-        // Apply search
-        $query = $this->applySearch($query);
-        
-        // Apply sorting
-        $query = $this->applySorting($query);
-        
-        // Get paginated results
-        return $query->paginate($this->perPage);
-    }
-
-    public function query(): Builder
-    {
-        return Job::query()
-            ->with(['company', 'category', 'jobType'])
-            ->when($this->search, function ($query, $search) {
-                return $query->where(function ($query) use ($search) {
-                    $query->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('description', 'like', '%' . $search . '%')
-                        ->orWhereHas('company', function ($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        });
-                });
-            });
-    }
-
-    public function getColumns(): array
-    {
-        return [
-            [
-                'key' => 'id',
-                'label' => __('ID'),
-                'sortable' => true,
-            ],
-            [
-                'key' => 'title',
-                'label' => __('Title'),
-                'sortable' => true,
-            ],
-            [
-                'key' => 'company_id',
-                'label' => __('Company'),
-                'sortable' => true,
-                'format' => function ($row) {
-                    return $row->company ? $row->company->name : '-';
-                },
-            ],
-            [
-                'key' => 'salary',
-                'label' => __('Salary'),
-                'sortable' => true,
-                'format' => function ($row) {
-                    return $row->salary_min . ' - ' . $row->salary_max;
-                },
-            ],
-            [
-                'key' => 'created_at',
-                'label' => __('Posted'),
-                'sortable' => true,
-                'format' => function ($row) {
-                    return $row->created_at->diffForHumans();
-                },
             ],
         ];
     }
 
-    public function getFilters(): array
+    /**
+     * Define the table filters
+     */
+    protected function filters(): array
     {
         return [
             [
-                'key' => 'category_id',
-                'label' => __('Category'),
+                'key' => 'featured',
+                'label' => __('messages.filter_name.featured_job'),
                 'type' => 'select',
-                'options' => \App\Models\Category::pluck('name', 'id')->toArray(),
+                'options' => [
+                    '1' => __('messages.common.yes'),
+                    '0' => __('messages.common.no'),
+                ],
+                'apply' => function (Builder $query, $value) {
+                    return $query->where('is_featured', $value);
+                }
+            ],
+            [
+                'key' => 'suspended',
+                'label' => __('messages.filter_name.suspended_job'),
+                'type' => 'select',
+                'options' => [
+                    '1' => __('messages.common.yes'),
+                    '0' => __('messages.common.no'),
+                ],
+                'apply' => function (Builder $query, $value) {
+                    return $query->where('is_suspended', $value);
+                }
+            ],
+            [
+                'key' => 'job_category_id',
+                'label' => __('messages.job.job_category'),
+                'type' => 'select',
+                'options' => JobCategory::pluck('name', 'id')->toArray(),
             ],
             [
                 'key' => 'job_type_id',
-                'label' => __('Job Type'),
+                'label' => __('messages.job.job_type'),
                 'type' => 'select',
-                'options' => \App\Models\JobType::pluck('name', 'id')->toArray(),
+                'options' => JobType::pluck('name', 'id')->toArray(),
             ],
             [
-                'key' => 'salary_range',
-                'label' => __('Salary Range'),
-                'type' => 'select',
-                'options' => [
-                    '0-30000' => __('Up to 30,000'),
-                    '30000-60000' => __('30,000 - 60,000'),
-                    '60000-90000' => __('60,000 - 90,000'),
-                    '90000-0' => __('90,000+'),
-                ],
-            ],
-        ];
-    }
-
-    public function applyFilters($query): Builder
-    {
-        return $query
-            ->when($this->filters['category_id'] ?? null, function ($query, $categoryId) {
-                return $query->where('category_id', $categoryId);
-            })
-            ->when($this->filters['job_type_id'] ?? null, function ($query, $jobTypeId) {
-                return $query->where('job_type_id', $jobTypeId);
-            })
-            ->when($this->filters['salary_range'] ?? null, function ($query, $salaryRange) {
-                $range = explode('-', $salaryRange);
-                $min = (int) $range[0];
-                $max = (int) $range[1];
-
-                if ($min > 0 && $max > 0) {
-                    return $query->where('salary_min', '>=', $min)
-                        ->where('salary_max', '<=', $max);
-                } elseif ($min > 0 && $max === 0) {
-                    return $query->where('salary_min', '>=', $min);
-                } elseif ($min === 0 && $max > 0) {
-                    return $query->where('salary_max', '<=', $max);
+                'key' => 'expiry_date',
+                'label' => __('messages.job.job_expiry_date'),
+                'type' => 'date',
+                'apply' => function (Builder $query, $value) {
+                    return $query->whereDate('job_expiry_date', $value);
                 }
-
-                return $query;
-            });
-    }
-
-    public function getRowActions($row): array
-    {
-        $actions = [
-            [
-                'label' => __('View'),
-                'method' => 'viewJob',
-                'color' => 'primary',
             ],
         ];
-
-        if (Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $row->company->user_id)) {
-            $actions[] = [
-                'label' => __('Edit'),
-                'method' => 'editJob',
-                'color' => 'primary',
-            ];
-            $actions[] = [
-                'label' => __('Delete'),
-                'method' => 'deleteJob',
-                'color' => 'red',
-            ];
-        }
-
-        return $actions;
     }
 
-    public function viewJob($id)
+    /**
+     * Define the row actions
+     */
+    protected function rowActions(): array
     {
-        return redirect()->route('jobs.show', $id);
+        return [
+            [
+                'label' => __('messages.common.edit'),
+                'action' => 'edit',
+                'icon' => '<i class="fas fa-edit"></i>',
+                'tooltip' => __('messages.common.edit'),
+            ],
+            [
+                'label' => __('messages.common.view'),
+                'action' => 'view',
+                'icon' => '<i class="fas fa-eye"></i>',
+                'tooltip' => __('messages.common.view'),
+            ],
+            [
+                'label' => __('messages.common.delete'),
+                'action' => 'delete',
+                'icon' => '<i class="fas fa-trash"></i>',
+                'tooltip' => __('messages.common.delete'),
+                'visible' => function ($job) {
+                    return !$job->is_default;
+                }
+            ],
+        ];
     }
 
-    public function editJob($id)
+    /**
+     * Define the table actions
+     */
+    protected function actions(): array
     {
-        return redirect()->route('jobs.edit', $id);
+        return [
+            [
+                'label' => __('messages.job.new_job'),
+                'action' => 'createJob',
+                'icon' => '<i class="fas fa-plus"></i>',
+            ],
+        ];
     }
 
-    public function deleteJob($id)
+    /**
+     * Handle view job action
+     */
+    public function view($id)
     {
-        $job = Job::find($id);
+        return redirect()->route('admin.jobs.show', $id);
+    }
 
-        if ($job && (Auth::user()->isAdmin() || Auth::user()->id === $job->company->user_id)) {
-            $job->delete();
-            
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'message' => __('Job deleted successfully.'),
+    /**
+     * Handle edit job action
+     */
+    public function edit($id)
+    {
+        return redirect()->route('admin.jobs.edit', $id);
+    }
+
+    /**
+     * Handle delete job action
+     */
+    public function delete($id)
+    {
+        $job = Job::findOrFail($id);
+        
+        if ($job->is_default) {
+            $this->dispatchBrowserEvent('error', [
+                'message' => __('messages.job.cannot_delete_default'),
             ]);
+            return;
         }
+        
+        $job->delete();
+        
+        $this->dispatchBrowserEvent('success', [
+            'message' => __('messages.flash.delete_success'),
+        ]);
+    }
+
+    /**
+     * Handle create job action
+     */
+    public function createJob()
+    {
+        return redirect()->route('admin.jobs.create');
+    }
+
+    /**
+     * Render the component
+     */
+    public function render(): View
+    {
+        return view('livewire.job-table');
     }
 }

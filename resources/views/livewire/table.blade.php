@@ -1,152 +1,124 @@
 <div>
-    <div class="flex flex-col md:flex-row justify-between items-center mb-4 space-y-2 md:space-y-0">
-        <!-- Search Box -->
-        <div class="w-full md:w-1/3">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input 
-                    type="search" 
-                    wire:model.live.debounce.300ms="search" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2" 
-                    placeholder="{{ __('messages.common.search') }}"
-                >
-            </div>
-        </div>
-
-        <!-- Per Page and Actions -->
-        <div class="flex items-center space-x-2">
-            <!-- Per Page Selector -->
-            <select 
-                wire:model.live="perPage" 
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
-            >
-                @foreach($this->perPageOptions as $option)
-                    <option value="{{ $option }}">{{ $option }}</option>
-                @endforeach
-            </select>
-
-            <!-- Slot for custom actions -->
-            @if(isset($actions))
-                {{ $actions }}
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+            @if(isset($title))
+                <h2 class="text-lg font-medium text-gray-900">{{ $title }}</h2>
             @endif
-        </div>
-    </div>
 
-    <!-- Filters -->
-    @if(count($filters) > 0)
-        <div class="bg-white rounded-lg shadow p-4 mb-4">
-            <div class="mb-2 flex justify-between items-center">
-                <h4 class="text-lg font-semibold">{{ __('messages.common.filters') }}</h4>
-                <button 
-                    type="button"
-                    wire:click="resetFilters"
-                    class="text-sm text-blue-600 hover:underline"
-                >
-                    {{ __('messages.common.reset_filters') }}
-                </button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                @foreach($filters as $filter)
-                    <div>
-                        @if($filter['type'] === 'select')
-                            @include('livewire.filters.select', ['filter' => $filter])
-                        @elseif($filter['type'] === 'multiselect')
-                            @include('livewire.filters.multiselect', ['filter' => $filter])
-                        @elseif($filter['type'] === 'date')
-                            @include('livewire.filters.date', ['filter' => $filter])
-                        @elseif($filter['type'] === 'daterange')
-                            @include('livewire.filters.daterange', ['filter' => $filter])
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    <!-- Main Table -->
-    <div class="overflow-x-auto bg-white rounded-lg shadow">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    @if(count($this->selectedRows) > 0 || $this->selectAll)
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-8">
-                            <input 
-                                type="checkbox" 
-                                wire:model.live="selectAll"
-                                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                            >
-                        </th>
-                    @endif
-                    
-                    @foreach($columns as $column)
-                        <th 
-                            scope="col" 
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            @if($column->isSortable()) 
-                                wire:click="sortBy('{{ $column->getField() }}')" 
-                                style="cursor: pointer;"
+            <div class="flex items-center space-x-4">
+                @if($showFilterOnHeader && !empty($filterComponents))
+                    <div class="flex items-center">
+                        @foreach($filterComponents as $component)
+                            @if(is_string($component))
+                                @include($component)
                             @endif
-                        >
-                            <div class="flex items-center space-x-1">
-                                <span>{{ $column->getLabel() }}</span>
-                                
-                                @if($column->isSortable())
-                                    <span class="flex flex-col">
-                                        @if($sortField === $column->getField())
-                                            @if($sortDirection === 'asc')
-                                                <svg class="h-3 w-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                                                </svg>
-                                            @else
-                                                <svg class="h-3 w-3 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                            @endif
-                                        @endif
-                                    </span>
-                                @endif
-                            </div>
-                        </th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($rows as $row)
-                    <tr class="hover:bg-gray-50">
-                        @if(count($this->selectedRows) > 0 || $this->selectAll)
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <input 
-                                    type="checkbox" 
-                                    value="{{ $row->id }}" 
-                                    wire:model.live="selectedRows"
-                                    class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                                >
-                            </td>
-                        @endif
-                        
+                        @endforeach
+                    </div>
+                @endif
+
+                @if($showButtonOnHeader && !empty($buttonComponent))
+                    <div>
+                        @include($buttonComponent)
+                    </div>
+                @endif
+
+                <div class="flex items-center space-x-2">
+                    <label for="table-search" class="sr-only">{{ __('messages.common.search') }}</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <input wire:model.live.debounce.{{ $searchDebounce }}ms="search" type="search" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="{{ __('messages.common.search') }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
                         @foreach($columns as $column)
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {!! $column->render($row) !!}
-                            </td>
+                            @if(!$column->isHidden())
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider 
+                                    @if($column->isSortable()) cursor-pointer hover:bg-gray-100 @endif
+                                    @if($sortField === $column->getField()) bg-gray-100 @endif"
+                                    @if($column->isSortable()) wire:click="sortBy('{{ $column->getField() }}')" @endif>
+                                    <div class="flex items-center">
+                                        {{ $column->getTitle() }}
+                                        @if($column->isSortable())
+                                            <span class="ml-2">
+                                                @if($sortField === $column->getField())
+                                                    @if($sortDirection === 'asc')
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                        </svg>
+                                                    @else
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                        </svg>
+                                                    @endif
+                                                @else
+                                                    <svg class="w-4 h-4 opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                                    </svg>
+                                                @endif
+                                            </span>
+                                        @endif
+                                    </div>
+                                </th>
+                            @endif
                         @endforeach
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="{{ count($columns) + (count($this->selectedRows) > 0 || $this->selectAll ? 1 : 0) }}" class="px-6 py-4 text-center text-gray-500">
-                            {{ __('messages.common.no_records') }}
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($results as $result)
+                        <tr class="hover:bg-gray-50">
+                            @foreach($columns as $column)
+                                @if(!$column->isHidden())
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($column->getViewComponent())
+                                            @include($column->getViewComponent(), ['row' => $result])
+                                        @else
+                                            {{ data_get($result, $column->getField()) }}
+                                        @endif
+                                    </td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="{{ collect($columns)->reject->isHidden()->count() }}" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                {{ __('messages.common.no_records_found') }}
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-    <!-- Pagination -->
-    <div class="mt-4">
-        {{ $rows->links() }}
+        <div class="p-4 border-t border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-700">
+                        {{ __('messages.common.showing') }} {{ $results->firstItem() ?? 0 }} {{ __('messages.common.to') }} {{ $results->lastItem() ?? 0 }} {{ __('messages.common.of') }} {{ $results->total() }} {{ __('messages.common.results') }}
+                    </span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <label for="perPage" class="sr-only">{{ __('messages.common.per_page') }}</label>
+                        <select id="perPage" wire:model.live="perPage" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            @foreach($perPageOptions as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    {{ $results->links() }}
+                </div>
+            </div>
+        </div>
     </div>
 </div> 

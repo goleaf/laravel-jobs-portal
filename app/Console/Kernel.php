@@ -23,6 +23,13 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
+        // Register custom commands
+        $this->commands([
+            \App\Console\Commands\ConsolidateTranslations::class,
+            \App\Console\Commands\CreateLithuanianTranslations::class,
+            \App\Console\Commands\ExtractSvgComponents::class,
+        ]);
+
         require base_path('routes/console.php');
     }
 }

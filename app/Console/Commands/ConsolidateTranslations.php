@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class ConsolidateTranslations extends Command
 {
@@ -13,74 +13,83 @@ class ConsolidateTranslations extends Command
      *
      * @var string
      */
-    protected $signature = 'translations:consolidate {--locale=all}';
+    protected $signature = 'translations:consolidate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Consolidate all translation files into a single file per language';
+    protected $description = 'Consolidate all translations into a single standardized format';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $localeOption = $this->option('locale');
+        $this->info('Starting translation consolidation...');
         
-        // Determine locales to process
-        if ($localeOption === 'all') {
-            $locales = array_keys(config('app.available_locales', []));
-        } else {
-            $locales = [$localeOption];
-        }
+        // Languages to process
+        $languages = ['en', 'lt'];
         
-        if (empty($locales)) {
-            $this->error('No locales found in config. Please check your app.available_locales configuration.');
-            return Command::FAILURE;
-        }
-        
-        foreach ($locales as $locale) {
-            $this->info("Processing locale: {$locale}");
+        foreach ($languages as $language) {
+            $this->info("Processing {$language} translations...");
             
-            $localePath = resource_path("lang/{$locale}");
-            if (!File::exists($localePath)) {
-                $this->warn("Locale directory not found: {$localePath}. Creating it.");
-                File::makeDirectory($localePath, 0755, true);
-                continue;
-            }
+            // Output path for the consolidated translation file
+            $outputPath = resource_path("lang/{$language}.php");
             
+            // Initialize an empty translations array
             $translations = [];
             
-            // Process each PHP file
-            $files = File::files($localePath);
-            foreach ($files as $file) {
-                if ($file->getExtension() !== 'php') {
-                    continue;
+            // First, process any existing language files in the old format
+            $oldFormatPath = resource_path("lang/{$language}");
+            if (File::isDirectory($oldFormatPath)) {
+                $files = File::files($oldFormatPath);
+                
+                foreach ($files as $file) {
+                    $filename = pathinfo($file, PATHINFO_FILENAME);
+                    $this->info("Processing file: {$filename}.php");
+                    
+                    // Load the translations from the file
+                    $fileTranslations = require $file->getPathname();
+                    
+                    // Add to consolidated translations
+                    $translations[$filename] = $fileTranslations;
                 }
-                
-                $filename = $file->getFilename();
-                $moduleName = str_replace('.php', '', $filename);
-                
-                $this->info("Reading translations from {$filename}");
-                $fileTranslations = require $file->getPathname();
-                
-                if (!isset($translations[$moduleName])) {
-                    $translations[$moduleName] = [];
-                }
-                
-                // Add translations to the consolidated array
-                $translations[$moduleName] = array_merge($translations[$moduleName], $fileTranslations);
             }
             
-            // Process JSON file if it exists
-            $jsonPath = resource_path("lang/{$locale}.json");
+            // Process backup translations if they exist
+            $backupPath = resource_path("lang/backup/{$language}");
+            if (File::isDirectory($backupPath)) {
+                $files = File::files($backupPath);
+                
+                foreach ($files as $file) {
+                    $filename = pathinfo($file, PATHINFO_FILENAME);
+                    $this->info("Processing backup file: {$filename}.php");
+                    
+                    // Load the translations from the file
+                    $fileTranslations = require $file->getPathname();
+                    
+                    // Add to consolidated translations if key doesn't already exist
+                    if (!isset($translations[$filename])) {
+                        $translations[$filename] = $fileTranslations;
+                    } else {
+                        // Merge with existing translations
+                        $translations[$filename] = array_merge($translations[$filename], $fileTranslations);
+                    }
+                }
+            }
+            
+            // Process any JSON translations
+            $jsonPath = resource_path("lang/{$language}.json");
             if (File::exists($jsonPath)) {
-                $this->info("Reading translations from {$locale}.json");
+                $this->info("Processing JSON translations");
+                
+                // Load the JSON translations
                 $jsonTranslations = json_decode(File::get($jsonPath), true);
                 
-                if (json_last_error() === JSON_ERROR_NONE) {
+                if (!empty($jsonTranslations)) {
+                    // Add to consolidated translations under the 'json' key
                     if (!isset($translations['json'])) {
                         $translations['json'] = [];
                     }
@@ -88,51 +97,48 @@ class ConsolidateTranslations extends Command
                     foreach ($jsonTranslations as $key => $value) {
                         $translations['json'][$key] = $value;
                     }
-                } else {
-                    $this->error("Error parsing {$locale}.json: " . json_last_error_msg());
                 }
             }
             
-            // Create consolidated translation file
-            $consolidatedPath = resource_path("lang/{$locale}.php");
+            // Now check if we already have a consolidated file and merge with it
+            if (File::exists($outputPath)) {
+                $this->info("Merging with existing consolidated file");
+                
+                $existingTranslations = require $outputPath;
+                $translations = $this->mergeTranslationsRecursively($existingTranslations, $translations);
+            }
+            
+            // Write the consolidated translations to file
             $content = "<?php\n\nreturn " . var_export($translations, true) . ";\n";
-            File::put($consolidatedPath, $content);
+            File::put($outputPath, $content);
             
-            $this->info("Created consolidated translation file: {$consolidatedPath}");
-            
-            // Backup original files
-            $backupDir = resource_path("lang/backup/{$locale}");
-            if (!File::exists($backupDir)) {
-                File::makeDirectory($backupDir, 0755, true);
-            }
-            
-            foreach ($files as $file) {
-                $backupPath = "{$backupDir}/" . $file->getFilename();
-                File::copy($file->getPathname(), $backupPath);
-            }
-            
-            if (File::exists($jsonPath)) {
-                $backupJsonPath = resource_path("lang/backup/{$locale}.json");
-                File::copy($jsonPath, $backupJsonPath);
-            }
-            
-            $this->info("Backed up original translation files to {$backupDir}");
-            
-            // Remove original files
-            foreach ($files as $file) {
-                File::delete($file->getPathname());
-            }
-            
-            if (File::exists($jsonPath)) {
-                File::delete($jsonPath);
-            }
-            
-            $this->info("Removed original translation files");
-            $this->info("Consolidated translations for {$locale} completed successfully");
+            $this->info("{$language} translations consolidated successfully!");
         }
         
-        $this->info("Translation consolidation completed!");
+        $this->info('All translations consolidated successfully!');
         
         return Command::SUCCESS;
+    }
+    
+    /**
+     * Merge translations recursively.
+     *
+     * @param array $array1
+     * @param array $array2
+     * @return array
+     */
+    private function mergeTranslationsRecursively(array $array1, array $array2): array
+    {
+        $merged = $array1;
+        
+        foreach ($array2 as $key => $value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = $this->mergeTranslationsRecursively($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+        
+        return $merged;
     }
 } 

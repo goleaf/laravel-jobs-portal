@@ -4,76 +4,56 @@ namespace App\Livewire\Components;
 
 class Filter
 {
+    public string $name;
+    public string $key;
+    public string $type;
+    public array $options = [];
+    public $default = null;
+    
     /**
-     * Filter key
-     *
-     * @var string
+     * Create a new filter instance.
      */
-    protected $key;
-
-    /**
-     * Filter title
-     *
-     * @var string
-     */
-    protected $title;
-
-    /**
-     * Filter type (select, multi-select, date-range)
-     *
-     * @var string
-     */
-    protected $type = 'select';
-
-    /**
-     * Filter options (for select and multi-select types)
-     *
-     * @var array
-     */
-    protected $options = [];
-
-    /**
-     * Custom view to render this filter (optional)
-     * @var string|null
-     */
-    protected $customView = null;
-
-    /**
-     * Create a new filter instance
-     *
-     * @param string $key
-     * @param string $title
-     * @param string $type
-     * @return self
-     */
-    public static function make(string $key, string $title, string $type = 'select'): self
+    public function __construct(string $name, string $key, string $type = 'select')
     {
-        $filter = new static();
-        $filter->key = $key;
-        $filter->title = $title;
-        $filter->type = $type;
-
-        return $filter;
-    }
-
-    /**
-     * Set filter type
-     *
-     * @param string $type
-     * @return self
-     */
-    public function type(string $type): self
-    {
+        $this->name = $name;
+        $this->key = $key;
         $this->type = $type;
-        
-        return $this;
     }
-
+    
     /**
-     * Set filter options
-     *
-     * @param array $options
-     * @return self
+     * Create a new select filter.
+     */
+    public static function select(string $name, string $key): self
+    {
+        return new static($name, $key, 'select');
+    }
+    
+    /**
+     * Create a new multiselect filter.
+     */
+    public static function multiSelect(string $name, string $key): self
+    {
+        return new static($name, $key, 'multiselect');
+    }
+    
+    /**
+     * Create a new date range filter.
+     */
+    public static function dateRange(string $name, string $key): self
+    {
+        return new static($name, $key, 'daterange');
+    }
+    
+    /**
+     * Create a new number range filter.
+     */
+    public static function numberRange(string $name, string $key): self
+    {
+        return new static($name, $key, 'numberrange');
+    }
+    
+    /**
+     * Set the options for the filter.
      */
     public function options(array $options): self
     {
@@ -81,94 +61,67 @@ class Filter
         
         return $this;
     }
-
+    
     /**
-     * Set the custom view for the filter
-     *
-     * @param string $view
-     * @return $this
+     * Set the default value for the filter.
      */
-    public function view(string $view): self
+    public function default($default): self
     {
-        $this->customView = $view;
+        $this->default = $default;
+        
         return $this;
     }
-
+    
     /**
-     * Get the key for the filter
-     *
-     * @return string
+     * Get all available filter types.
+     */
+    public static function getTypes(): array
+    {
+        return [
+            'select',
+            'multiselect',
+            'daterange',
+            'numberrange',
+        ];
+    }
+    
+    /**
+     * Get the name of the filter.
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    
+    /**
+     * Get the key of the filter.
      */
     public function getKey(): string
     {
         return $this->key;
     }
-
+    
     /**
-     * Get the title for the filter
-     *
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * Get the type for the filter
-     *
-     * @return string
+     * Get the type of the filter.
      */
     public function getType(): string
     {
         return $this->type;
     }
-
+    
     /**
-     * Get the options for the filter
-     *
-     * @return array
+     * Get the options for the filter.
      */
     public function getOptions(): array
     {
         return $this->options;
     }
-
+    
     /**
-     * Check if the filter has a custom view
-     *
-     * @return bool
+     * Get the default value for the filter.
      */
-    public function hasCustomView(): bool
+    public function getDefault()
     {
-        return $this->customView !== null;
-    }
-
-    /**
-     * Get the custom view for the filter
-     *
-     * @return string|null
-     */
-    public function getCustomView(): ?string
-    {
-        return $this->customView;
-    }
-
-    /**
-     * Convert filter to array
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return [
-            'key' => $this->key,
-            'title' => $this->title,
-            'type' => $this->type,
-            'options' => $this->options,
-            'view' => $this->hasCustomView() 
-                ? $this->getCustomView() 
-                : 'livewire.components.filters.select',
-        ];
+        return $this->default;
     }
 } 

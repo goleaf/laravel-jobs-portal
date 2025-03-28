@@ -3,70 +3,46 @@
 namespace App\Livewire;
 
 use App\Models\Skill;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use Illuminate\Database\Eloquent\Builder;
 
-class SkillTable extends LivewireTableComponent
+class SkillTable extends BaseTable
 {
-    /**
-     * @var string
-     */
-    protected $model = Skill::class;
-
-    /**
-     * @var bool
-     */
+    // UI Options
     public $showButtonOnHeader = true;
     public $showFilterOnHeader = false;
-
-    /**
-     * @var string
-     */
-    public $buttonComponent = 'skills.table-components.add_button';
-
-    public function configure(): void
+    public $buttonComponent = 'skills.add_button';
+    
+    public function query(): Builder
     {
-        $this->setPrimaryKey('id');
-
-        $this->setDefaultSort('created_at', 'desc');
-
-        $this->setTableAttributes([
-            'default' => false,
-            'class' => 'table table-striped',
-        ]);
-
-        $this->setThAttributes(function (Column $column) {
-            return [
-                'class' => 'text-center',
-            ];
-        });
-
-        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
-            if ($columnIndex == '2') {
-                return [
-                    'class' => 'text-center',
-                    'width' => '15%',
-
-                ];
-            }
-
-            return [];
-        });
-
-        $this->setQueryStringStatus(false);
+        return Skill::query();
     }
 
     public function columns(): array
     {
         return [
-            Column::make(__('messages.industry.name'), 'name')
-                ->sortable()
-                ->searchable()
-                ->view('skills.table-components.name'),
-            Column::make(__('messages.common.created_date'), 'created_at')
-                ->sortable()
-                ->view('skills.table-components.created_at'),
-            Column::make(__('messages.common.action'), 'id')
-                ->view('skills.table-components.action_button'),
+            [
+                'field' => 'name',
+                'label' => __('messages.common.name'),
+                'sortable' => true,
+                'searchable' => true,
+            ],
+            [
+                'field' => 'description',
+                'label' => __('messages.common.description'),
+                'sortable' => true,
+                'searchable' => true,
+                'format' => function($row) {
+                    return $row->description ? \Illuminate\Support\Str::limit($row->description, 100) : __('messages.common.n/a');
+                }
+            ],
+            [
+                'field' => 'id',
+                'label' => __('messages.common.action'),
+                'sortable' => false,
+                'searchable' => false,
+                'view' => 'skills.action_buttons',
+                'class' => 'text-center',
+            ],
         ];
     }
 }

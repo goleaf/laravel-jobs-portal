@@ -1,10 +1,26 @@
-## Additions
+# Changelog
 
-### Translation System
-- Added consolidated translation system with single PHP file per language
-- Created TranslationHelper class for standardized translation access
-- Implemented custom Blade directives for translations (@t, @hasTranslation)
-- Added Lithuanian language support
-- Created Artisan commands for translation management (consolidate, sync, create-lithuanian)
-- Added automatic detection of missing translations
-- Migrated all JSON translations to PHP format 
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- Custom Livewire datatable implementation replacing Rappasoft
+- New translation system with standardized format
+- SVG extraction command to create reusable icon components
+- Lithuanian language support
+- New data table filters (select, multiselect, daterange, numberrange)
+- Tailwind CSS pagination
+
+### Changed
+- Refactored all table components to use custom implementation
+- Optimized blade templates for better performance
+- Updated language configuration in config/app.php
+- Improved filter components with live updates
+- Better search functionality in data tables
+
+### Removed
+- Rappasoft/laravel-livewire-tables dependency
+- Unused Vue components
+- Legacy translation files
+- Duplicate SVG code from blade templates 

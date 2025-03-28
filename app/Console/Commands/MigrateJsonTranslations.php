@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class MigrateJsonTranslations extends Command
 {
@@ -13,137 +13,110 @@ class MigrateJsonTranslations extends Command
      *
      * @var string
      */
-    protected $signature = 'translations:migrate-json';
+    protected $signature = 'translations:migrate {--json= : JSON file to import} {--locale=en : Locale to migrate to}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Migrate JSON translations to PHP files and merge with existing translations';
+    protected $description = 'Migrate JSON translations to Laravel standard format';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('Starting JSON translations migration...');
-        
-        // Get available locales
-        $availableLocales = array_keys(config('app.available_locales', []));
-        
-        if (empty($availableLocales)) {
-            $this->error('No locales found in config. Please check your app.available_locales configuration.');
+        $locale = $this->option('locale');
+        $jsonFile = $this->option('json');
+
+        if ($jsonFile && !File::exists($jsonFile)) {
+            $this->error("JSON file {$jsonFile} does not exist!");
             return Command::FAILURE;
         }
-        
-        foreach ($availableLocales as $locale) {
-            $this->info("Processing locale: {$locale}");
-            
-            // Path to JSON translation file
-            $jsonPath = resource_path("lang/{$locale}.json");
-            
-            // Skip if JSON file doesn't exist
-            if (!File::exists($jsonPath)) {
-                $this->warn("No JSON translation file found for {$locale}. Skipping.");
-                continue;
-            }
-            
-            // Load JSON translations
-            $jsonTranslations = json_decode(File::get($jsonPath), true);
-            
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error("Error parsing JSON file for {$locale}: " . json_last_error_msg());
-                continue;
-            }
-            
-            $this->info("Found " . count($jsonTranslations) . " JSON translations for {$locale}");
-            
-            // Organize translations by category
-            $organizedTranslations = $this->organizeTranslations($jsonTranslations);
-            
-            // Ensure the locale directory exists
-            $localePath = resource_path("lang/{$locale}");
-            if (!File::exists($localePath)) {
-                File::makeDirectory($localePath, 0755, true);
-                $this->info("Created directory: {$localePath}");
-            }
-            
-            // Process each category of translations
-            foreach ($organizedTranslations as $category => $translations) {
-                $phpFilePath = "{$localePath}/{$category}.php";
-                
-                // Merge with existing translations if the file exists
-                if (File::exists($phpFilePath)) {
-                    $existingTranslations = require $phpFilePath;
-                    $translations = array_merge($existingTranslations, $translations);
-                    $this->info("Merged with existing translations for {$category}");
-                }
-                
-                // Write the translations to the PHP file
-                $content = "<?php\n\nreturn " . var_export($translations, true) . ";\n";
-                File::put($phpFilePath, $content);
-                
-                $this->info("Saved translations to: {$phpFilePath}");
-            }
-            
-            // Backup and delete the original JSON file
-            File::copy($jsonPath, $jsonPath . '.bak');
-            File::delete($jsonPath);
-            $this->info("Deleted original JSON file: {$jsonPath} (backup created)");
+
+        $this->info("Migrating translations for locale: {$locale}");
+
+        // Path to the standard language file
+        $langFile = resource_path("lang/{$locale}.php");
+
+        // Load existing translations
+        $existingTranslations = [];
+        if (File::exists($langFile)) {
+            $existingTranslations = include $langFile;
+            $this->info("Loaded existing translations from {$langFile}");
+        } else {
+            $this->warn("No existing translations found in {$langFile}, creating new file");
         }
-        
-        $this->info('Migration completed successfully!');
-        
+
+        // If JSON file is provided, load and merge it
+        if ($jsonFile) {
+            $this->info("Loading JSON translations from {$jsonFile}");
+            $jsonContent = File::get($jsonFile);
+            $jsonTranslations = json_decode($jsonContent, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $this->error("Error parsing JSON file: " . json_last_error_msg());
+                return Command::FAILURE;
+            }
+
+            // Convert flat JSON to nested array
+            $nestedTranslations = $this->convertToNested($jsonTranslations);
+            
+            // Merge the translations
+            $existingTranslations = $this->mergeTranslations($existingTranslations, $nestedTranslations);
+            
+            $this->info("Merged JSON translations with existing translations");
+        }
+
+        // Save the updated translations
+        $content = "<?php\n\nreturn " . var_export($existingTranslations, true) . ";\n";
+        File::put($langFile, $content);
+
+        $this->info("Translations migrated successfully to {$langFile}");
+
         return Command::SUCCESS;
     }
-    
+
     /**
-     * Organize flat JSON translations into categories
-     *
-     * @param array $translations
-     * @return array
+     * Convert flat JSON translations to nested array
      */
-    private function organizeTranslations(array $translations): array
+    protected function convertToNested(array $flatArray): array
     {
-        $organized = [
-            'messages' => [], // Default category
-            'validation' => [],
-            'auth' => [],
-            'pagination' => [],
-            'passwords' => [],
-        ];
-        
-        foreach ($translations as $key => $value) {
-            // Try to determine category based on key or content
-            if (strpos($key, 'validation.') === 0 || preg_match('/^The .+ field is required\.$/i', $value)) {
-                $category = 'validation';
-                $newKey = str_replace('validation.', '', $key);
-            } elseif (strpos($key, 'auth.') === 0 || preg_match('/password|login|register|email/i', $key)) {
-                $category = 'auth';
-                $newKey = str_replace('auth.', '', $key);
-            } elseif (strpos($key, 'pagination.') === 0 || in_array($key, ['previous', 'next', 'showing', 'to', 'of', 'results'])) {
-                $category = 'pagination';
-                $newKey = str_replace('pagination.', '', $key);
-            } elseif (strpos($key, 'passwords.') === 0) {
-                $category = 'passwords';
-                $newKey = str_replace('passwords.', '', $key);
+        $result = [];
+
+        foreach ($flatArray as $key => $value) {
+            $parts = explode('.', $key);
+            $current = &$result;
+
+            foreach ($parts as $i => $part) {
+                if ($i === count($parts) - 1) {
+                    $current[$part] = $value;
+                } else {
+                    if (!isset($current[$part]) || !is_array($current[$part])) {
+                        $current[$part] = [];
+                    }
+                    $current = &$current[$part];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Merge two translations arrays
+     */
+    protected function mergeTranslations(array $existingTranslations, array $newTranslations): array
+    {
+        foreach ($newTranslations as $key => $value) {
+            if (is_array($value) && isset($existingTranslations[$key]) && is_array($existingTranslations[$key])) {
+                $existingTranslations[$key] = $this->mergeTranslations($existingTranslations[$key], $value);
             } else {
-                $category = 'messages';
-                $newKey = $key;
-            }
-            
-            // Place into appropriate category, organizing into dot notation
-            Arr::set($organized[$category], $newKey, $value);
-        }
-        
-        // Remove empty categories
-        foreach ($organized as $category => $translations) {
-            if (empty($translations)) {
-                unset($organized[$category]);
+                $existingTranslations[$key] = $value;
             }
         }
-        
-        return $organized;
+
+        return $existingTranslations;
     }
 } 

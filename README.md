@@ -1,66 +1,160 @@
-# InfyJobs
+# Laravel Jobs Portal
 
+A modern job portal application built with Laravel and Livewire.
 
-### Process to setup project : 
-- Clone the repo
-- Set your database information into `.env`
-    - Set DB env variables
-    - Set Mail env variables
-- Run `composer install`
-- Run `npm install`
-- Run `npm run dev`
-- Run `php artisan migrate`
-- And you are ready to go.
+## Features
 
-#### Commit Rules :
-There are some standard commit rules that helps you to underhand what code are committed by reading specific commit. 
-Follow the given rules while committing :  
-- Wrap lines at 72 characters
-- Follow the conversational commit rules e.g (`<type>[module name / scope]: <description>`)
- - You can find commit types and module names into below section.  
- - Commit should be done as : `feat(users): users crud added`
- 
-##### Commit Types
-    - feat (use this when you want to commit new feature) 
-    - refactor (use this when some code refactored)
-    - style (use this when style related changes are made)
-    - fix (use this when you have fixed some bugs/issues)
-    - docs (use this when docs related changes are made)
-    - chore (use this when composer/package or any other libraries are installed)
-    
-## Translation System
+- Responsive job listing and search
+- Candidate and employer profiles
+- Job application tracking
+- Advanced filtering and search
+- Multi-language support (English, Lithuanian)
+- Custom Livewire datatable implementation
+- Tailwind CSS styling
 
-The application now uses a consolidated translation system that:
+## Installation
 
-1. **Consolidates translations** - All translations are stored in a single PHP file per language (e.g., `lang/en.php`)
-2. **Standardizes access** - Use the TranslationHelper class constants or the `@t()` Blade directive
-3. **Supports multiple languages** - Currently English and Lithuanian are supported
-4. **Detects missing translations** - Missing translations are automatically flagged
-
-### Translation Commands
-
-- `php artisan translations:consolidate` - Merge all translation files into a single file per language
-- `php artisan translations:create-lithuanian` - Generate Lithuanian translations from English
-- `php artisan translations:sync` - Find and add missing translations between languages
-
-### Translation Usage in Blade Templates
-
-Use the new custom Blade directives for translations:
-
-```blade
-{{-- Using the @t directive --}}
-<h1>@t('messages.common.title')</h1>
-
-{{-- Using the @hasTranslation directive --}}
-@hasTranslation('messages.common.subtitle')
-    <h2>@t('messages.common.subtitle')</h2>
-@endhasTranslation
+1. Clone the repository:
+```bash
+git clone https://github.com/goleaf/laravel-jobs-portal.git
+cd laravel-jobs-portal
 ```
 
-Or use the TranslationHelper class constants in PHP:
+2. Install dependencies:
+```bash
+composer install
+npm install
+```
 
+3. Copy the environment file:
+```bash
+cp .env.example .env
+```
+
+4. Generate application key:
+```bash
+php artisan key:generate
+```
+
+5. Configure your database in `.env`
+
+6. Run migrations and seed the database:
+```bash
+php artisan migrate --seed
+```
+
+7. Build assets:
+```bash
+npm run dev
+```
+
+8. Start the server:
+```bash
+php artisan serve
+```
+
+## Translation Management
+
+The application supports multiple languages. Translations are managed in a single file per language.
+
+### Adding a New Language
+
+1. Add the language to `config/app.php` in the `available_locales` array:
 ```php
-use App\Helpers\TranslationHelper;
+'available_locales' => [
+    'en' => [
+        'name' => 'English',
+        'script' => 'Latn',
+        'native' => 'English',
+        'regional' => 'en_US',
+    ],
+    'lt' => [
+        'name' => 'Lithuanian',
+        'script' => 'Latn',
+        'native' => 'Lietuvių',
+        'regional' => 'lt_LT',
+    ],
+    // Add your new language here
+],
+```
 
-echo TranslationHelper::getTranslation(TranslationHelper::COMMON_TITLE);
+2. Create a new translation file:
+```bash
+php -d memory_limit=-1 artisan translations:create-lithuanian
+```
+
+3. Update the newly created file with translations.
+
+## Custom Livewire Tables
+
+This project uses custom Livewire tables instead of external packages. The implementation is in:
+
+- `app/Livewire/Components/DataTable.php` - Base component
+- `app/Livewire/Components/Column.php` - Column definition
+- `app/Livewire/Components/Filter.php` - Filter definition
+- `resources/views/livewire/components/data-table.blade.php` - Table layout
+- Various filter components in `resources/views/livewire/components/filters/`
+
+### Creating a New Table Component
+
+1. Create a new Livewire component that extends the DataTable class:
+```php
+php artisan make:livewire TableName
+```
+
+2. Extend the DataTable component:
+```php
+namespace App\Livewire;
+
+use App\Livewire\Components\Column;
+use App\Livewire\Components\DataTable;
+use Illuminate\Database\Eloquent\Builder;
+
+class TableName extends DataTable
+{
+    // Define your properties
+    public string $tableName = 'table-name';
+    public bool $showButtonOnHeader = true;
+    public bool $showFilterOnHeader = true;
+    
+    // Initialize component properties
+    protected function initializeComponent()
+    {
+        $this->filterComponents = ['path.to.filter.component'];
+        $this->sortField = 'created_at';
+        $this->sortDirection = 'desc';
+    }
+    
+    // Define columns
+    public function columns(): array
+    {
+        return [
+            Column::make('Title', 'field')
+                ->sortable()
+                ->searchable()
+                ->view('path.to.view.component'),
+            // More columns...
+        ];
+    }
+    
+    // Define query builder
+    public function builder(): Builder
+    {
+        return Model::query();
+    }
+}
+```
+
+## SVG Components
+
+SVGs are extracted into components in the `resources/views/components/icons` directory. Use them in your Blade templates:
+
+```blade
+<x-icons.icon-name />
+```
+
+To extract SVGs from templates into components:
+
+```bash
+php -d memory_limit=-1 artisan svg:extract
 ```

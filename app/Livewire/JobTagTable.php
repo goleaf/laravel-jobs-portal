@@ -3,71 +3,60 @@
 namespace App\Livewire;
 
 use App\Models\Tag;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use Illuminate\Database\Eloquent\Builder;
 
-class JobTagTable extends LivewireTableComponent
+class JobTagTable extends BaseTable
 {
-    protected $model = Tag::class;
-
+    // UI Options
     public $showButtonOnHeader = true;
     public $showFilterOnHeader = false;
-
     public $buttonComponent = 'job_tags.table_components.add_button';
-
-    public function configure(): void
+    
+    public function query(): Builder
     {
-        $this->setPrimaryKey('id');
-
-        $this->setDefaultSort('created_at', 'desc');
-
-        $this->setThAttributes(function (Column $column) {
-            if ($column->isField('id')) {
-                return [
-                    'class' => 'text-center',
-                ];
-            }
-            if ($column->isField('description')) {
-                return [
-                    'width' => '65%',
-                ];
-            }
-
-            return [];
-        });
-
-        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
-            if ($columnIndex == '2') {
-                return [
-                    'class' => 'text-center',
-                    'width' => '15%',
-
-                ];
-            }
-
-            return [];
-        });
-
-        $this->setTableAttributes([
-            'default' => false,
-            'class' => 'table table-striped',
-        ]);
-
-        $this->setQueryStringStatus(false);
+        return Tag::query();
     }
 
     public function columns(): array
     {
         return [
-            Column::make(__('messages.job_tag.job_tag'), 'name')
-                ->sortable()
-                ->searchable()
-                ->view('job_tags.table_components.name'),
-            Column::make(__('messages.common.description'), 'description')
-                ->sortable()
-                ->searchable()
-                ->view('job_tags.table_components.description'),
-            Column::make(__('messages.common.action'), 'id')
-                ->view('job_tags.table_components.action_button'),
+            [
+                'field' => 'name',
+                'label' => __('messages.job_tag.job_tag'),
+                'sortable' => true,
+                'searchable' => true,
+                'view' => 'job_tags.table_components.name',
+            ],
+            [
+                'field' => 'description',
+                'label' => __('messages.common.description'),
+                'sortable' => true,
+                'searchable' => true,
+                'view' => 'job_tags.table_components.description',
+                'class' => 'w-[65%]',
+            ],
+            [
+                'field' => 'id',
+                'label' => __('messages.common.action'),
+                'sortable' => false,
+                'searchable' => false,
+                'view' => 'job_tags.table_components.action_button',
+                'class' => 'w-[15%] text-center',
+            ],
         ];
+    }
+
+    // Initialize sorting
+    public function mount()
+    {
+        parent::mount();
+        $this->sortField = 'created_at';
+        $this->sortDirection = 'desc';
+    }
+
+    // Custom table classes
+    public function getTableClass(): string
+    {
+        return 'table table-striped';
     }
 }

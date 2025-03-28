@@ -20,7 +20,7 @@ class FavoriteJobs extends Component
 
     public $filterFavouriteJobs = '';
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $listeners = ['removeJob', 'changeFilter', 'resetFilter'];
 
@@ -28,7 +28,7 @@ class FavoriteJobs extends Component
 
     public function paginationView(): string
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

@@ -33,7 +33,7 @@ class JobCategories extends Component
     /**
      * @var string
      */
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     /**
      * @var string[]
@@ -42,7 +42,7 @@ class JobCategories extends Component
 
     public function paginationView(): string
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

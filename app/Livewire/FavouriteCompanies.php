@@ -16,13 +16,13 @@ class FavouriteCompanies extends Component
 
     public $searchByFavouriteCompanies = '';
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $listeners = 'removeFavouriteCompany';
 
     public function paginationView(): string
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

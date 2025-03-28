@@ -21,7 +21,7 @@ class AppliedJobs extends Component
 
     public $jobApplicationStatus = '';
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
     public $value;
 
     protected $listeners = ['removeAppliedJob', 'changeFilter', 'resetFilter'];
@@ -33,7 +33,7 @@ class AppliedJobs extends Component
 
     public function paginationView(): string
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

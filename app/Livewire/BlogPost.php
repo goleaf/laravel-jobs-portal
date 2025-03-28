@@ -26,7 +26,7 @@ class BlogPost extends Component
 
     public function paginationView()
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

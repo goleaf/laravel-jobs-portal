@@ -31,7 +31,7 @@ class Testimonials extends Component
     /**
      * @var string
      */
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     /**
      * @var int
@@ -40,7 +40,7 @@ class Testimonials extends Component
 
     public function paginationView(): string
     {
-        return 'livewire.custom-pagenation-jobs';
+        return 'vendor.livewire.tailwind';
     }
 
     public function nextPage($lastPage)

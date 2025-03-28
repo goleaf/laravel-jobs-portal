@@ -204,6 +204,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TranslationServiceProvider::class,
+        App\Providers\FormServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -222,6 +223,7 @@ return [
         'Flash' => Laracasts\Flash\Flash::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Form' => App\Facades\Form::class,
     ])->toArray(),
 
     'is_version' => env('IS_VERSION', true),

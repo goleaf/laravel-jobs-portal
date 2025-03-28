@@ -56,58 +56,42 @@
         </div> --}}
         <div class="col-lg-4 px-lg-3">
             <div class="latest-job-left br-10 px-40 bg-light mb-40">
-                <form>
+                @formOpen(['method' => 'GET'])
                     <div class="form-group mb-md-4 mb-3 ">
                         <div class="d-flex flex-wrap mb-3 justify-content-between">
-                            <label for=""
-                                class="fs-16 text-secondary mb-3">{{ __('web.web_jobs.search_by_keywords') }}</label>
+                            {{ Form::label('', __('web.web_jobs.search_by_keywords'), ['class' => 'fs-16 text-secondary mb-3']) }}
                             <button wire:click.prevent="resetFilter()" class="btn btn-sm btn-primary btn-primary-register reset-filter text-nowrap mb-2 px-3 py-1"
                             id="btnReset">{{ __('web.reset_filter') }}</button>
                         </div>
-                        <input class="form-control fs-14 text-gray bg-white br-10 p-3"
-                            wire:model.debounce.100ms.live="searchByCandidate" type="search" id="searchByCandidate"
-                            autocomplete="off" placeholder="@lang('web.common.search')">
+                        {{ Form::text('searchByCandidate', null, ['class' => 'form-control fs-14 text-gray bg-white br-10 p-3', 'wire:model.debounce.100ms.live' => 'searchByCandidate', 'autocomplete' => 'off', 'placeholder' => __('web.common.search')]) }}
                     </div>
                     <div class="form-group mb-md-4 mb-3 ">
-                        <label for="" class="fs-16 text-secondary mb-3">
-                            {{ __('web.common.location') }}</label>
-                        <input class="form-control fs-14 text-gray bg-white br-10 p-3 search-by-location" type="search"
-                            autocomplete="off" placeholder="@lang('web.web_jobSeeker.search_by_location')" name="min" wire:model.live="location">
+                        {{ Form::label('', __('web.common.location'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                        {{ Form::text('location', null, ['class' => 'form-control fs-14 text-gray bg-white br-10 p-3 search-by-location', 'wire:model.live' => 'location', 'autocomplete' => 'off', 'placeholder' => __('web.web_jobSeeker.search_by_location')]) }}
                     </div>
                     <div class="form-group mb-md-4 mb-3 ">
-                        <label for="" class="fs-16 text-secondary mb-3">
-                            {{ __('messages.candidate.expected_salary') }}</label>
-                        <input class="form-control fs-14 text-gray bg-white br-10 p-3" type="text" placeholder="@lang('web.home_menu.min')"
-                            name="min" wire:model.live="min" autocomplete="off">
-                        <input class="form-control fs-14 text-gray bg-white br-10 p-3 mt-2" type="text"
-                            placeholder="@lang('web.home_menu.max')" name="max" wire:model.live="max" autocomplete="off">
+                        {{ Form::label('', __('messages.candidate.expected_salary'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                        {{ Form::text('min', null, ['class' => 'form-control fs-14 text-gray bg-white br-10 p-3', 'wire:model.live' => 'min', 'autocomplete' => 'off', 'placeholder' => __('web.home_menu.min')]) }}
+                        {{ Form::text('max', null, ['class' => 'form-control fs-14 text-gray bg-white br-10 p-3 mt-2', 'wire:model.live' => 'max', 'autocomplete' => 'off', 'placeholder' => __('web.home_menu.max')]) }}
                     </div>
                     <div class="form-group mb-md-4 mb-3 ">
-                        <label for="" class="fs-16 text-secondary mb-3">
-                            {{ __('messages.candidate.gender') }}</label>
+                        {{ Form::label('', __('messages.candidate.gender'), ['class' => 'fs-16 text-secondary mb-3']) }}
                         <ul class="p-0">
                             <li>
-                                <input type="radio" name="gender" id="All" value="all"
-                                    wire:click="changeFilter('gender','all')" wire:model="gender">
-                                <label for="All" class="ms-1 my-1"><span
-                                        class=""></span>{{ __('messages.common.all') }}</label>
+                                {{ Form::radio('gender', 'all', ($gender == 'all'), ['id' => 'All', 'wire:click' => "changeFilter('gender','all')", 'wire:model' => 'gender']) }}
+                                {{ Form::label('All', __('messages.common.all'), ['class' => 'ms-1 my-1']) }}
                             </li>
                             <li>
-                                <input type="radio" name="gender" id="Male" value="male"
-                                    wire:click="changeFilter('gender','male')" wire:model="gender">
-                                <label for="Male" class="ms-1 my-1"><span
-                                        class=""></span>{{ __('messages.common.male') }}</label>
+                                {{ Form::radio('gender', 'male', ($gender == 'male'), ['id' => 'Male', 'wire:click' => "changeFilter('gender','male')", 'wire:model' => 'gender']) }}
+                                {{ Form::label('Male', __('messages.common.male'), ['class' => 'ms-1 my-1']) }}
                             </li>
                             <li>
-                                <input type="radio" name="gender" id="Female" value="female"
-                                    wire:click="changeFilter('gender','female')" wire:model="gender">
-                                <label for="Female" class="ms-1 my-1"><span
-                                        class=""></span>{{ __('messages.common.female') }}
-                                </label>
+                                {{ Form::radio('gender', 'female', ($gender == 'female'), ['id' => 'Female', 'wire:click' => "changeFilter('gender','female')", 'wire:model' => 'gender']) }}
+                                {{ Form::label('Female', __('messages.common.female'), ['class' => 'ms-1 my-1']) }}
                             </li>
                         </ul>
                     </div>
-                </form>
+                @formClose()
             </div>
         </div>
         {{-- <div class="content-column col-lg-8 col-md-12 col-sm-12">

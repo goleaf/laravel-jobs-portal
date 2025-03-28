@@ -47,89 +47,59 @@
                             </div>
                         </div>
                         <div class="col-lg-9">
-                            <form id="formContact" name="frm-contact" class="py-40 px-lg-5 px-40" method="post"
-                                action="{{ route('send.contact.email') }}">
-                                @csrf
-                                @include('flash::message')
-                                @include('front_web.layouts.errors')
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for=""
-                                                class="fs-16 text-secondary mb-2">{{ __('web.web_contact.your_name') }}:
+                            <div class="contact-form">
+                                <div class="section-heading mb-40">
+                                    <h2 class="fs-40 text-secondary fw-bold mb-0">
+                                        {{ __('web.home_menu.contact_us') }}
+                                    </h2>
+                                </div>
+                                @formOpen(['url' => route('front.contact.store'), 'id' => 'contactForm'])
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-4">
+                                                {{ Form::label('name', __('web.common.name').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="text" class="form-control fs-14 text-gray br-10" name="name"
-                                                placeholder="@lang('web.web_contact.your_name')" value="{{ old('name') }}"
-                                                autocomplete="off" required>
+                                                {{ Form::text('name', old('name'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.enter_your_name')]) }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for=""
-                                                class="fs-16 text-secondary mb-2">{{ __('web.web_contact.your_email') }}:
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-4">
+                                                {{ Form::label('email', __('web.common.email').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="email" class="form-control fs-14 text-gray br-10" name="email"
-                                                placeholder="@lang('web.web_contact.your_email')" value="{{ old('email') }}"
-                                                autocomplete="off" required>
+                                                {{ Form::email('email', old('email'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.common.email')]) }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for=""
-                                                class="fs-16 text-secondary mb-2">{{ __('web.web_contact.subject') }}:
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-4">
+                                                {{ Form::label('subject', __('web.contact_menu.subject').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-danger">*</span>
-                                            </label>
-                                            <input class="form-control fs-14 text-gray br-10" type="text" name="subject"
-                                                value="{{ old('subject') }}" placeholder="@lang('web.web_contact.subject')"
-                                                autocomplete="off" required>
+                                                {{ Form::text('subject', old('subject'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.subject')]) }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for=""
-                                                class="fs-16 text-secondary mb-2">{{ __('web.web_contact.your_phone_no') }}:</label>
-                                            <input class="form-control fs-14 text-gray br-10 d-block" type="tel"
-                                                name="phone_no" value="{{ old('phone_no') }}"
-                                                placeholder="@lang('web.web_contact.phone_number')" autocomplete="off" id='phoneNumber'>
-                                            <input type="hidden" name="region_code" id="prefix_code">
-                                            <p id="valid-msg" class="text-success d-none fw-400 fs-small mt-2">
-                                                {{ __('messages.phone.valid_number') }}</p>
-                                            <p id="error-msg" class="text-danger d-none fw-400 fs-small mt-2"></p>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-4">
+                                                {{ Form::label('phone_no', __('web.web_contact.phone_number').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                                {{ Form::tel('phone_no', old('phone_no'), ['class' => 'form-control fs-14 text-gray br-10', 'placeholder' => __('web.web_contact.phone_number')]) }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12 mb-4">
-                                        <div class="form-group">
-                                            <label for=""
-                                                class="fs-16 text-secondary mb-2">{{ __('web.web_contact.your_message') }}:
+                                        <div class="col-12">
+                                            <div class="form-group mb-4">
+                                                {{ Form::label('message', __('web.contact_menu.message').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-danger">*</span>
-                                            </label>
-                                            <textarea class="form-control fs-14 text-gray br-10" rows="3" name="message" placeholder="@lang('web.web_contact.type_your_message')"
-                                                required>{{ trim(old('message')) }}</textarea>
+                                                {{ Form::textarea('message', old('message'), ['class' => 'form-control fs-14 text-gray br-10', 'rows' => 5, 'required', 'placeholder' => __('web.contact_menu.type_message')]) }}
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    @if (getSettingValue('enable_google_recaptcha'))
-                                    <div class="col-md-12 mb-4">
-                                        <div class="form-group">
-                                            <div class="g-recaptcha d-flex justify-content-center"
-                                                id="gRecaptchaContainerCompanyRegistration"
-                                                data-sitekey="{{ config('app.google_recaptcha_site_key') }}"
-                                                name="g-recaptcha"></div>
+                                        <div class="col-12 mb-4">
+                                            <div class="g-recaptcha" data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
                                             <div id="g-recaptcha-error"></div>
                                         </div>
+                                        <div class="col-12 text-center">
+                                            {{ Form::submit(__('web.common.send_message'), ['class' => 'btn btn-primary fs-14 py-3 px-5']) }}
+                                        </div>
                                     </div>
-                                    @endif
-
-                                </div>
-                                <div class="row justify-content-center">
-                                    <div class="col-sm-6 text-center">
-                                        <button class="btn btn-primary btn-primary-register" type="submit">
-                                            {{ __('web.contact_us_menu.send_message') }}</button>
-                                    </div>
-                                </div>
-                            </form>
+                                @formClose()
+                            </div>
                         </div>
                     </div>
                 </div>

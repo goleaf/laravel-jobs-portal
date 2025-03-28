@@ -4,9 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Cashier\Cashier;
-use Mariuzzo\LaravelJsLocalization\Commands\LangJsCommand;
-use Mariuzzo\LaravelJsLocalization\Generators\LangJsGenerator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
@@ -26,25 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Cashier::ignoreMigrations();
-        $this->app->singleton('localization.js', function ($app) {
-            $app = $this->app;
-            $laravelMajorVersion = (int) $app::VERSION;
-
-            $files = $app['files'];
-
-            if ($laravelMajorVersion === 4) {
-                $langs = $app['path.base'].'/app/lang';
-            } elseif ($laravelMajorVersion >= 5 && $laravelMajorVersion < 9) {
-                $langs = $app['path.base'].'/resources/lang';
-            } elseif ($laravelMajorVersion >= 9) {
-                $langs = app()->langPath();
-            }
-            $messages = $app['config']->get('localization-js.messages');
-            $generator = new LangJsGenerator($files, $langs, $messages);
-
-            return new LangJsCommand($generator);
-        });
+        // Cashier::ignoreMigrations(); - Removed for Laravel 12 compatibility
+        
+        // Removed localization.js singleton for Laravel 12 compatibility
+        
 //        $this->app->singleton(
 //        // the original class
 //            'vendor/brotzka/laravel-dotenv-editor/src/DotenvEditor.php',

@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use Eloquent;
+use App\Services\FileService;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+use Spatie\Translatable\HasTranslations;
 
 /**
  * Class Candidate
@@ -22,33 +25,31 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $user_id
  * @property string $unique_id
  * @property string|null $father_name
- * @property int $marital_status_id
+ * @property int|null $marital_status_id
  * @property string|null $nationality
  * @property string|null $national_id_card
- * @property int|null $experience
+ * @property string|null $experience
  * @property int|null $career_level_id
  * @property int|null $industry_id
  * @property int|null $functional_area_id
- * @property float|null $current_salary
- * @property float|null $expected_salary
- * @property string|null $salary_currency
- * @property string|null $address
- * @property int $immediate_available
+ * @property string|null $current_salary
+ * @property string|null $expected_salary
+ * @property string|null $image_path
+ * @property string|null $resume_path
+ * @property Carbon|null $available_at
+ * @property int|null $immediate_available
+ * @property int|null $is_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read CareerLevel|null $careerLevel
- * @property-read FunctionalArea|null $functionalArea
- * @property-read Industry|null $industry
- * @property-read MaritalStatus $maritalStatus
- * @property-read Collection|Media[] $media
- * @property-read int|null $media_count
+ * @property-read Collection|CandidateEducation[] $candidateEducation
+ * @property-read Collection|CandidateExperience[] $candidateExperience
  * @property-read User $user
  * @property-read mixed $candidate_url
  *
  * @method static Builder|Candidate newModelQuery()
  * @method static Builder|Candidate newQuery()
  * @method static Builder|Candidate query()
- * @method static Builder|Candidate whereAddress($value)
+ * @method static Builder|Candidate whereAvailableAt($value)
  * @method static Builder|Candidate whereCareerLevelId($value)
  * @method static Builder|Candidate whereCreatedAt($value)
  * @method static Builder|Candidate whereCurrentSalary($value)
@@ -57,17 +58,19 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Candidate whereFatherName($value)
  * @method static Builder|Candidate whereFunctionalAreaId($value)
  * @method static Builder|Candidate whereId($value)
+ * @method static Builder|Candidate whereImagePath($value)
  * @method static Builder|Candidate whereImmediateAvailable($value)
  * @method static Builder|Candidate whereIndustryId($value)
+ * @method static Builder|Candidate whereIsActive($value)
  * @method static Builder|Candidate whereMaritalStatusId($value)
  * @method static Builder|Candidate whereNationalIdCard($value)
  * @method static Builder|Candidate whereNationality($value)
- * @method static Builder|Candidate whereSalaryCurrency($value)
+ * @method static Builder|Candidate whereResumePath($value)
  * @method static Builder|Candidate whereUpdatedAt($value)
  * @method static Builder|Candidate whereUserId($value)
  * @method static Builder|Candidate whereUniqueId($value)
  *
- * @mixin Eloquent
+ * @mixin \Eloquent
  *
  * @property int $job_alert
  * @property-read mixed $city_name
@@ -82,18 +85,15 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read int|null $pendding_job_applications_count
  *
  * @method static Builder|Candidate whereJobAlert($value)
- *
- * @property string|null $available_at
- *
- * @method static Builder|Candidate whereAvailableAt($value)
  */
-class Candidate extends Model implements HasMedia
+class Candidate extends Model
 {
-    use InteractsWithMedia;
+    use HasSlug, HasTranslations;
 
     public $table = 'candidates';
 
-    const RESUME_PATH = 'resumes';
+    const RESUME_PATH = 'candidates/resumes';
+    const IMAGE_PATH = 'candidates/images';
 
     public const CANDIDATE_LOGIN_TYPE = 1;
 
@@ -130,11 +130,11 @@ class Candidate extends Model implements HasMedia
         'functional_area_id',
         'current_salary',
         'expected_salary',
-        'salary_currency',
-        'address',
-        'immediate_available',
+        'image_path',
+        'resume_path',
         'available_at',
-        'last_change',
+        'immediate_available',
+        'is_active',
     ];
 
     /**
@@ -150,17 +150,16 @@ class Candidate extends Model implements HasMedia
         'marital_status_id' => 'integer',
         'nationality' => 'string',
         'national_id_card' => 'string',
-        'experience' => 'integer',
+        'experience' => 'string',
         'career_level_id' => 'integer',
         'industry_id' => 'integer',
         'functional_area_id' => 'integer',
-        'current_salary' => 'double',
-        'expected_salary' => 'double',
-        'salary_currency' => 'string',
-        'address' => 'string',
-        'immediate_available' => 'boolean',
-        'available_at' => 'date',
-        'last_change' => 'integer',
+        'current_salary' => 'string',
+        'expected_salary' => 'string',
+        'image_path' => 'string',
+        'resume_path' => 'string',
+        'immediate_available' => 'integer',
+        'is_active' => 'integer',
     ];
 
     /**
@@ -169,17 +168,28 @@ class Candidate extends Model implements HasMedia
      * @var array
      */
     public static $rules = [
-        'first_name' => 'required|max:180',
-        'last_name' => 'required|max:180',
+        'first_name' => 'required|string',
+        'last_name' => 'required|string',
         'email' => 'required|email:filter|unique:users,email',
         'password' => 'nullable|same:password_confirmation|min:6',
-        'gender' => 'required',
-        'dob' => 'nullable|date',
-        'current_salary' => 'nullable|numeric|min:0|max:999999999',
-        'expected_salary' => 'nullable|numeric|min:0|max:999999999',
-        'phone' => 'nullable',
-        'marital_status_id' => 'required',
+        'marital_status_id' => 'nullable',
+        'nationality' => 'nullable',
+        'country_id' => 'required',
+        'state_id' => 'required',
+        'city_id' => 'required',
+        'phone' => 'required|numeric',
+        'experience' => 'nullable',
+        'career_level_id' => 'nullable',
+        'industry_id' => 'nullable',
+        'functional_area_id' => 'nullable',
+        'current_salary' => 'nullable|numeric',
+        'expected_salary' => 'nullable|numeric',
     ];
+
+    /**
+     * @var array
+     */
+    public $translatable = ['father_name', 'nationality', 'national_id_card', 'experience', 'current_salary', 'expected_salary'];
 
     protected $appends = ['country_name', 'state_name', 'city_name', 'full_location', 'candidate_url'];
 
@@ -227,57 +237,116 @@ class Candidate extends Model implements HasMedia
      */
     public function getCandidateUrlAttribute()
     {
-        /** @var Media $media */
-        $media = $this->user->getMedia(User::PROFILE)->first();
-        if (! empty($media)) {
-            return $media->getFullUrl();
+        $fileService = new FileService();
+        
+        if (!empty($this->image_path)) {
+            return $fileService->getFileUrl($this->image_path);
         }
-
-        return asset('assets/img/employer-image.png');
+        
+        return asset('assets/img/candidate-default-profile.png');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function admin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    /**
+     * @return HasMany
+     */
+    public function candidateEducation(): HasMany
     {
-        return $this->hasOne(User::class, 'id', 'last_change');
+        return $this->hasMany(CandidateEducation::class, 'candidate_id');
     }
 
-    public function industry(): BelongsTo
+    /**
+     * @return HasMany
+     */
+    public function candidateExperience(): HasMany
     {
-        return $this->belongsTo(Industry::class, 'industry_id');
+        return $this->hasMany(CandidateExperience::class, 'candidate_id');
     }
 
-    public function maritalStatus(): BelongsTo
-    {
-        return $this->belongsTo(MaritalStatus::class, 'marital_status_id');
-    }
-
-    public function careerLevel(): BelongsTo
-    {
-        return $this->belongsTo(CareerLevel::class, 'career_level_id');
-    }
-
-    public function functionalArea(): BelongsTo
-    {
-        return $this->belongsTo(FunctionalArea::class, 'functional_area_id');
-    }
-
+    /**
+     * @return BelongsToMany
+     */
     public function jobAlerts(): BelongsToMany
     {
-        return $this->belongsToMany(JobType::class, 'jobs_alerts', 'candidate_id', 'job_type_id');
+        return $this->belongsToMany(JobType::class, 'candidate_job_alerts', 'candidate_id', 'job_type_id');
     }
 
-    public function jobApplications(): HasMany
+    /**
+     * Get the resume URL
+     * 
+     * @return string|null
+     */
+    public function getResumeUrl(): ?string
     {
-        return $this->hasMany(JobApplication::class, 'candidate_id');
+        $fileService = new FileService();
+        
+        if (!empty($this->resume_path)) {
+            return $fileService->getFileUrl($this->resume_path);
+        }
+        
+        return null;
     }
-
-    public function penddingJobApplications(): HasMany
+    
+    /**
+     * Upload a profile image
+     * 
+     * @param UploadedFile $file
+     * @return bool
+     */
+    public function uploadProfileImage(UploadedFile $file): bool
     {
-        return $this->hasMany(JobApplication::class, 'candidate_id')->where('status', JobApplication::STATUS_APPLIED);
+        $fileService = new FileService();
+        
+        // Delete old image if exists
+        if (!empty($this->image_path)) {
+            $fileService->deleteFile($this->image_path);
+        }
+        
+        // Upload new image
+        $imagePath = $fileService->uploadFile(
+            $file, 
+            self::IMAGE_PATH,
+            'public'
+        );
+        
+        $this->image_path = $imagePath;
+        
+        return $this->save();
+    }
+    
+    /**
+     * Upload a resume
+     * 
+     * @param UploadedFile $file
+     * @param string $title
+     * @return bool
+     */
+    public function uploadResume(UploadedFile $file, string $title = 'resume'): bool
+    {
+        $fileService = new FileService();
+        
+        // Delete old resume if exists
+        if (!empty($this->resume_path)) {
+            $fileService->deleteFile($this->resume_path);
+        }
+        
+        // Upload new resume
+        $resumePath = $fileService->uploadFile(
+            $file, 
+            self::RESUME_PATH,
+            'public',
+            uniqid() . '_' . $title . '.' . $file->getClientOriginalExtension()
+        );
+        
+        $this->resume_path = $resumePath;
+        
+        return $this->save();
     }
 }

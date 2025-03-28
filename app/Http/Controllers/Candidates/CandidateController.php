@@ -17,6 +17,7 @@ use App\Models\JobApplicationSchedule;
 use App\Models\RequiredDegreeLevel;
 use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
+use App\Services\FileService;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -27,7 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CandidateController extends AppBaseController
 {
@@ -192,12 +193,26 @@ class CandidateController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.resume_update'));
     }
 
-    public function downloadResume(int $media): Media
+    /**
+     * Download resume file
+     */
+    public function downloadResume(string $candidateId, string $resumeId): BinaryFileResponse
     {
-        /** @var Media $mediaItem */
-        $mediaItem = Media::findOrFail($media);
-
-        return $mediaItem;
+        $candidate = Auth::user()->candidate;
+        
+        if ($candidate->id != $candidateId) {
+            Flash::error(__('messages.common.unauthorized'));
+            return redirect()->back();
+        }
+        
+        $path = storage_path('app/public/' . $candidate->resume_path);
+        
+        if (!file_exists($path)) {
+            Flash::error(__('messages.common.file_not_found'));
+            return redirect()->back();
+        }
+        
+        return response()->download($path);
     }
 
     /**

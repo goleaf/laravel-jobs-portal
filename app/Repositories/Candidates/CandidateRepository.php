@@ -16,6 +16,7 @@ use App\Models\Skill;
 use App\Models\User;
 use App\ReportedToCandidate;
 use App\Repositories\BaseRepository;
+use App\Services\FileService;
 use Arr;
 use Auth;
 use DB;
@@ -24,7 +25,6 @@ use Hash;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use PragmaRX\Countries\Package\Countries;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Role;
 use Str;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -188,9 +188,23 @@ class CandidateRepository extends BaseRepository
             $user->update($userInput);
 
             if ((isset($input['image']))) {
-                $user->clearMediaCollection(User::PROFILE);
-                $user->addMedia($input['image'])
-                    ->toMediaCollection(User::PROFILE, config('app.media_disc'));
+                $candidate = $user->candidate;
+                $fileService = new FileService();
+                
+                // Delete old image if exists
+                if (!empty($candidate->image_path)) {
+                    $fileService->deleteFile($candidate->image_path);
+                }
+                
+                // Upload new image
+                $imagePath = $fileService->uploadFile(
+                    $input['image'], 
+                    'candidates/images',
+                    'public'
+                );
+                
+                $candidate->image_path = $imagePath;
+                $candidate->save();
             }
 
             $input['available_at'] = $input['immediate_available'] == 0 ? $input['available_at'] : null;
@@ -252,24 +266,25 @@ class CandidateRepository extends BaseRepository
             $user = Auth::user();
             /** @var Candidate $candidate */
             $candidate = Candidate::findOrFail($user->candidate->id);
-            $input['is_default'] = isset($input['is_default']) ? true : false;
-            if ($input['is_default']) {
-                $media = Media::where('model_type', '=', Candidate::class)->where('model_id', '=', $candidate->id)->where('custom_properties->is_default', '=', true)->first();
-                if (isset($media)) {
-                    throw new BadRequestHttpException(
-                        __('messages.flash.default_resume_already_upload'),
-                        null,
-                        \Illuminate\Http\Response::HTTP_BAD_REQUEST
-                    );
+            $fileService = new FileService();
+            
+            if (isset($input['file']) && !empty($input['file'])) {
+                // Delete old resume if exists
+                if (!empty($candidate->resume_path)) {
+                    $fileService->deleteFile($candidate->resume_path);
                 }
+                
+                // Upload new resume
+                $resumePath = $fileService->uploadFile(
+                    $input['file'], 
+                    'candidates/resumes',
+                    'public',
+                    Str::random(8) . '_' . $input['title'] . '.' . $input['file']->getClientOriginalExtension()
+                );
+                
+                $candidate->resume_path = $resumePath;
+                $candidate->save();
             }
-
-            $fileExtension = getFileName('download', $input['file']);
-            $candidate->addMedia($input['file'])
-                ->withCustomProperties([
-                    'is_default' => $input['is_default'],
-                    'title' => $input['title'],
-                ])->usingFileName($fileExtension)->toMediaCollection(Candidate::RESUME_PATH, config('app.media_disc'));
 
             return true;
         } catch (Exception $e) {
@@ -339,9 +354,23 @@ class CandidateRepository extends BaseRepository
         try {
             $user->update($input);
             if ((isset($input['image']))) {
-                $user->clearMediaCollection(User::PROFILE);
-                $user->addMedia($input['image'])
-                    ->toMediaCollection(User::PROFILE, config('app.media_disc'));
+                $candidate = $user->candidate;
+                $fileService = new FileService();
+                
+                // Delete old image if exists
+                if (!empty($candidate->image_path)) {
+                    $fileService->deleteFile($candidate->image_path);
+                }
+                
+                // Upload new image
+                $imagePath = $fileService->uploadFile(
+                    $input['image'], 
+                    'candidates/images',
+                    'public'
+                );
+                
+                $candidate->image_path = $imagePath;
+                $candidate->save();
             }
 
             return true;

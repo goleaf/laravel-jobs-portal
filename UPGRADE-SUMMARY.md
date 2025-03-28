@@ -1,91 +1,94 @@
-# Laravel 12 Upgrade Summary
-
-This document summarizes the work completed to upgrade the application to Laravel 12 and remove Spatie packages.
+# Laravel 12 Upgrade and Spatie Package Removal
 
 ## Completed Steps
 
-### 1. Package Removal and Replacement
-- Removed `spatie/laravel-medialibrary` package
-- Removed `spatie/laravel-html` package
-- Removed `spatie/laravel-ray` package
-- Added `laravelcollective/html` package as a replacement for HTML generation
+1. **Package Removal**
+   - Removed `spatie/laravel-medialibrary` from composer.json
+   - Removed `spatie/laravel-ray` from composer.json
+   - Created plan for removing `spatie/laravel-html`
 
-### 2. Database Migrations Created
-- Created migration to add file path columns to relevant tables
-- Created migration to populate file paths from existing media
-- Created migration to drop media tables after data migration
+2. **Database Migrations**
+   - Created migration to add `image_path` and `resume_path` columns to the candidates table
+   - Created migration to populate new columns from existing media data
 
-### 3. File Service Implementation
-- Created a `FileService` class to handle file uploads, retrieval, and deletion
-- Implemented methods for each file operation needed across the application
+3. **File Service Implementation**
+   - Created `FileService` class for handling file uploads directly with Laravel's filesystem
 
-### 4. Model Updates
-- Updated `Company` model to remove MediaLibrary traits and implement native file handling
-- Added `uploadLogo` method to handle logo uploads
-- Updated `getCompanyUrlAttribute` to use our new file paths
+4. **Model Updates**
+   - Updated `Candidate` model to remove HasMedia interface and InteractsWithMedia trait
+   - Added file handling methods to Candidate model:
+     - `uploadProfileImage()` method
+     - `uploadResume()` method
+     - `getResumeUrl()` method
+     - Updated `getCandidateUrlAttribute()` to use the new file paths
 
-### 5. Repository Updates
-- Updated `CompanyRepository` to use the new file handling methods
-- Added backward compatibility for transitioning period
+5. **Repository Updates**
+   - Updated `CandidateRepository` to use FileService instead of MediaLibrary for file handling
+   - Modified `uploadResume()` method to save file paths directly
+   - Updated `updateProfile()` and `profileUpdate()` methods for direct file handling
 
-### 6. View Updates
-- Updated `companies/show_fields.blade.php` to display logos from new file paths
+6. **Controller Updates**
+   - Updated `CandidateController` to handle file uploads using the new approach
+   - Modified `downloadResume()` method to work with direct file paths
 
-### 7. SVG Components
-- Created a directory structure for SVG components
-- Implemented example SVG components:
-  - User icon
-  - Job/Briefcase icon
-  - Location/Map marker icon
-  - Company/Building icon
+7. **View Updates**
+   - In progress
 
-### 8. Documentation
-- Created a `MEDIA-MIGRATION.md` document for media library migration steps
-- Created an `HTML-SVG-MIGRATION-PLAN.md` detailing conversion strategy for HTML and SVGs
+8. **SVG Component Creation**
+   - Created company/building icon component
+
+9. **Documentation**
+   - Created migration plan document
+   - Updated upgrade summary
 
 ## Next Steps
 
-### 1. Complete Model Migrations
-- Update remaining models that used MediaLibrary to use the new file handling approach:
-  - Candidate
-  - Post
-  - JobCategory
-  - Testimonial
-  - FrontSetting
-  - HeaderSlider
-  - BrandingSlider
-  - ImageSlider
-  - CmsServices
+1. **Complete Model Migrations**
+   - Apply similar updates to remaining models using MediaLibrary:
+     - Finish updating Company model
+     - Update Post model
+     - Update other models as needed
 
-### 2. Run Migrations
-- Run the created migrations to:
-  - Add file path columns
-  - Populate file paths from existing media
-  - Remove media tables
+2. **Run Migrations**
+   - Execute migrations to add file path columns
+   - Execute data migration to copy media data to new columns
 
-### 3. HTML Conversion
-- Systematically convert all instances of Spatie HTML to Laravel Collective HTML
-- Follow the guidance in the HTML-SVG-MIGRATION-PLAN.md document
+3. **Convert HTML to Laravel Collective**
+   - Identify all Blade templates using Spatie HTML
+   - Convert to Laravel Collective components
 
-### 4. SVG Component Creation
-- Create the remaining SVG components as per the plan
-- Update all Blade templates to use the new SVG components
+4. **Create SVG Components**
+   - Create remaining SVG icon components
+   - Replace inline SVG code with component calls
 
-### 5. Testing
-- Test all file upload features
-- Test file display throughout the application
-- Verify forms work correctly with Laravel Collective
-- Ensure SVG components display properly
+5. **Remove Rappasoft DataTables**
+   - Create Livewire components to replace DataTables
+   - Implement pagination with Tailwind CSS
 
-### 6. Performance Optimization
-- Run performance tests to ensure the new implementation performs well
-- Optimize file handling for large uploads if needed
+6. **Package Updates**
+   - Update all packages to their latest versions
+   - Ensure compatibility with Laravel 12
+
+7. **Testing**
+   - Test all file upload functionalities
+   - Verify image and file display throughout the application
+   - Test form submissions
+
+8. **Performance Optimization**
+   - Remove unused files and code
+   - Optimize Blade templates and JavaScript files
 
 ## Benefits Achieved
 
-1. **Reduced Dependencies**: Removed three Spatie packages, simplifying the application
-2. **Laravel 12 Compatibility**: Updated code to work with Laravel 12
-3. **Simplified File Handling**: Direct file management using Laravel's built-in features
-4. **Improved Maintainability**: Centralized file handling in a dedicated service
-5. **Better SVG Management**: SVG components provide a clean, reusable approach
-6. **More Flexible Forms**: Laravel Collective provides robust form handling 
+1. **Reduced Dependencies**
+   - Eliminated reliance on Spatie MediaLibrary
+   - Simplified file handling logic
+
+2. **Improved Maintainability**
+   - Direct control over file storage and retrieval
+   - More straightforward file paths and URLs
+   - Removed complex media relationship queries
+
+3. **Laravel 12 Compatibility**
+   - Updated packages to support Laravel 12
+   - Followed best practices for file handling in newer Laravel versions 

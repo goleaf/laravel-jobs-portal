@@ -8,7 +8,7 @@
                         data-bs-dismiss="modal">
                 </button>
             </div>
-            {{ Form::open(['id'=>'changeAdminPasswordForm']) }}
+            @formOpen(['id' => 'changeAdminPasswordForm'])
             <div class="modal-body">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -19,33 +19,47 @@
                         </ul>
                     </div>
                 @endif
-                <div class="alert alert-danger  hide d-none" id="editPasswordValidationErrorsBox"></div>
-                {{ Form::hidden('user_id',null,['id'=>'pfUserId']) }}
-                {{ Form::hidden('is_active',1) }}
+                <div class="alert alert-danger hide d-none" id="editPasswordValidationErrorsBox"></div>
+                {{ Form::hidden('user_id', null, ['id' => 'pfUserId']) }}
+                {{ Form::hidden('is_active', 1) }}
                 {{csrf_field()}}
                 <div class="mb-5">
-                    {{ Form::label('current password', __('messages.company.current_password').(':'), ['class' => 'form-label required']) }}
-                    <input class="form-control  form-control-solid" id="pfCurrentPassword" type="password"
-                           name="password_current" required>
+                    {{ Form::label('pfCurrentPassword', __('messages.company.current_password').':', ['class' => 'form-label required']) }}
+                    {{ Form::password('password_current', [
+                        'class' => 'form-control form-control-solid',
+                        'id' => 'pfCurrentPassword',
+                        'required'
+                    ]) }}
                 </div>
                 <div class="mb-5">
-                    {{ Form::label('password', __('messages.company.new_password').(':'),['class' => 'required form-label']) }}
-                    <input class="form-control  form-control-solid" id="pfNewPassword" type="password" name="password"
-                           required>
+                    {{ Form::label('pfNewPassword', __('messages.company.new_password').':', ['class' => 'required form-label']) }}
+                    {{ Form::password('password', [
+                        'class' => 'form-control form-control-solid',
+                        'id' => 'pfNewPassword',
+                        'required'
+                    ]) }}
                 </div>
                 <div class="">
-                    {{ Form::label('password_confirmation', __('messages.company.confirm_password').(':'),['class' => 'required form-label ']) }}
-                    <input class="form-control form-control-solid" id="pfNewConfirmPassword" type="password"
-                           name="password_confirmation" required>
+                    {{ Form::label('pfNewConfirmPassword', __('messages.company.confirm_password').':', ['class' => 'required form-label']) }}
+                    {{ Form::password('password_confirmation', [
+                        'class' => 'form-control form-control-solid',
+                        'id' => 'pfNewConfirmPassword',
+                        'required'
+                    ]) }}
                 </div>
             </div>
             <div class="modal-footer pt-0">
-                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'btnPrPasswordEditSave','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
+                {{ Form::button(__('messages.common.save'), [
+                    'type' => 'submit',
+                    'class' => 'btn btn-primary m-0',
+                    'id' => 'btnPrPasswordEditSave',
+                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                ]) }}
                 <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
                         id="btnEditCancel"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>
-            {{ Form::close() }}
-    </div>
+            @formClose()
+        </div>
     </div>
 </div>

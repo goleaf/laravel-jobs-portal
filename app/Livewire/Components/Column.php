@@ -4,126 +4,107 @@ namespace App\Livewire\Components;
 
 class Column
 {
-    public string $title;
-    public string $field;
-    public bool $sortable = false;
-    public bool $searchable = false;
-    public ?string $viewComponent = null;
-    public ?string $format = null;
-    public bool $hidden = false;
+    protected string $field;
+    protected string $title;
+    protected bool $sortable = false;
+    protected bool $searchable = false;
+    protected ?string $viewComponent = null;
+    protected ?string $class = null;
+    protected bool $hidden = false;
+    protected $formatCallback = null;
     
-    /**
-     * Create a new column.
-     */
-    public function __construct(string $title, string $field)
+    public static function make(string $title, ?string $field = null): self
     {
-        $this->title = $title;
-        $this->field = $field;
+        return (new static())
+            ->setTitle($title)
+            ->setField($field ?? \Illuminate\Support\Str::snake($title));
     }
     
-    /**
-     * Create a new column instance.
-     */
-    public static function make(string $title, string $field): self
-    {
-        return new static($title, $field);
-    }
-    
-    /**
-     * Make the column sortable.
-     */
     public function sortable(bool $sortable = true): self
     {
         $this->sortable = $sortable;
-        
         return $this;
     }
     
-    /**
-     * Make the column searchable.
-     */
     public function searchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
-        
         return $this;
     }
     
-    /**
-     * Set the view component for the column.
-     */
     public function view(string $viewComponent): self
     {
         $this->viewComponent = $viewComponent;
-        
         return $this;
     }
     
-    /**
-     * Format the column using a callback.
-     */
-    public function format(string $format): self
+    public function class(string $class): self
     {
-        $this->format = $format;
-        
+        $this->class = $class;
         return $this;
     }
     
-    /**
-     * Hide the column.
-     */
-    public function hideIf(bool $condition): self
+    public function hidden(bool $hidden = true): self
     {
-        $this->hidden = $condition;
-        
+        $this->hidden = $hidden;
         return $this;
     }
     
-    /**
-     * Check if the column is hidden.
-     */
-    public function isHidden(): bool
+    public function format(callable $callback): self
     {
-        return $this->hidden;
+        $this->formatCallback = $callback;
+        return $this;
     }
     
-    /**
-     * Check if the column is sortable.
-     */
-    public function isSortable(): bool
-    {
-        return $this->sortable;
-    }
-    
-    /**
-     * Check if the column is searchable.
-     */
-    public function isSearchable(): bool
-    {
-        return $this->searchable;
-    }
-    
-    /**
-     * Get the field name.
-     */
     public function getField(): string
     {
         return $this->field;
     }
     
-    /**
-     * Get the title.
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
     
-    /**
-     * Get the view component.
-     */
+    public function isSortable(): bool
+    {
+        return $this->sortable;
+    }
+    
+    public function isSearchable(): bool
+    {
+        return $this->searchable;
+    }
+    
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+    
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+    
     public function getViewComponent(): ?string
     {
         return $this->viewComponent;
+    }
+    
+    public function getFormatCallback()
+    {
+        return $this->formatCallback;
+    }
+    
+    protected function setTitle(string $title): self
+    {
+        $this->title = $title;
+        return $this;
+    }
+    
+    protected function setField(string $field): self
+    {
+        $this->field = $field;
+        return $this;
     }
 } 

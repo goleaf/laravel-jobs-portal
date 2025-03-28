@@ -5,11 +5,18 @@ function loadSetLanguageData() {
         return;
     }
 
-    listenClick('.addLanguageModal', function () {
-        $('#addLanguageModal').appendTo('body').modal('show');
+    // Add language modal - open and close
+    listenClick('#addLanguageBtn', function () {
+        $('#addLanguageModal').removeClass('hidden');
     });
 
-    listenClick('.languages-edit-btn', function (event) {
+    listenClick('#languageBtnCancel', function () {
+        $('#addLanguageModal').addClass('hidden');
+        resetForm('#addLanguageForm', '#languageValidationErrorsBox');
+    });
+
+    // Edit language modal - open and close
+    listenClick('#editLanguage', function (event) {
         let languageId = $(event.currentTarget).data('id');
         $.ajax({
             url: route('languages.edit', languageId),
@@ -20,9 +27,8 @@ function loadSetLanguageData() {
                     element.innerHTML = result.data.language;
                     $('#languageId').val(result.data.id);
                     $('#editLanguage').val(element.value);
-                    $('#editNative').val(result.data.native);
                     $('#editIso').val(result.data.iso_code);
-                    $('#editLanguageModal').appendTo('body').modal('show');
+                    $('#editLanguageModal').removeClass('hidden');
                 }
             },
             error: function (result) {
@@ -31,23 +37,35 @@ function loadSetLanguageData() {
         });
     });
 
-    listenClick('.languages-delete-btn', function (event) {
-        let deleteLanguageId = $(event.currentTarget).attr('data-id');
-        deleteItem(route('languages.destroy', deleteLanguageId), Lang.get('js.language'));
+    listenClick('#btnEditCancel', function () {
+        $('#editLanguageModal').addClass('hidden');
+        resetForm('#editLanguageForm', '#editValidationErrorsBox');
     });
 
-    listenHiddenBsModal('#addLanguageModal', function () {
-        resetModalForm('#addLanguageForm', '#languageValidationErrorsBox');
+    // Delete language
+    listenClick('#deleteLanguage', function (event) {
+        let deleteLanguageId = $(event.currentTarget).data('id');
+        deleteItem(route('languages.destroy', deleteLanguageId), Lang.get('messages.language.language'));
     });
 
-    listenHiddenBsModal('#editLanguageModal', function () {
-        resetModalForm('#editLanguageForm', '#editValidationErrorsBox');
+    // ESC key to close modals
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            $('#addLanguageModal').addClass('hidden');
+            $('#editLanguageModal').addClass('hidden');
+        }
     });
+}
+
+function resetForm(formId, validationBoxId) {
+    $(formId)[0].reset();
+    $(validationBoxId).addClass('hidden');
 }
 
 listenSubmit('#addLanguageForm', function (e) {
     e.preventDefault();
-    processingBtn('#addLanguageForm', '#languageBtnSave', 'loading');
+    showLoadingButton('#languageBtnSave');
+    
     $.ajax({
         url: route('languages.store'),
         type: 'POST',
@@ -55,30 +73,24 @@ listenSubmit('#addLanguageForm', function (e) {
         success: function (result) {
             if (result.success) {
                 displaySuccessMessage(result.message);
-                $('#addLanguageModal').modal('hide');
+                $('#addLanguageModal').addClass('hidden');
+                // Refresh Livewire component
                 Livewire.dispatch('refresh');
-                setTimeout(function () {
-                    $('#languageBtnSave').button('reset');
-                }, 1000);
             }
         },
         error: function (result) {
-            displayErrorMessage(result.responseJSON.message);
-            setTimeout(function () {
-                $('#languageBtnSave').button('reset');
-            }, 1000);
+            displayValidationErrors(result.responseJSON.errors, '#languageValidationErrorsBox');
         },
         complete: function () {
-            setTimeout(function () {
-                processingBtn('#addLanguageForm', '#languageBtnSave');
-            }, 1000);
+            hideLoadingButton('#languageBtnSave');
         },
     });
 });
 
 listenSubmit('#editLanguageForm', function (event) {
     event.preventDefault();
-    processingBtn('#editLanguageForm', '#btnEditSave', 'loading');
+    showLoadingButton('#btnEditSave');
+    
     const updateLanguageId = $('#languageId').val();
     $.ajax({
         url: route('languages.update', updateLanguageId),
@@ -87,15 +99,40 @@ listenSubmit('#editLanguageForm', function (event) {
         success: function (result) {
             if (result.success) {
                 displaySuccessMessage(result.message);
-                $('#editLanguageModal').modal('hide');
-                Livewire.dispatch('refreshDatatable');
+                $('#editLanguageModal').addClass('hidden');
+                // Refresh Livewire component
+                Livewire.dispatch('refresh');
             }
         },
         error: function (result) {
-            displayErrorMessage(result.responseJSON.message);
+            displayValidationErrors(result.responseJSON.errors, '#editValidationErrorsBox');
         },
         complete: function () {
-            processingBtn('#editLanguageForm', '#btnEditSave');
+            hideLoadingButton('#btnEditSave');
         },
     });
 });
+
+// Helper functions
+function showLoadingButton(buttonId) {
+    $(buttonId).prop('disabled', true);
+    $(buttonId).html('<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Loading...');
+}
+
+function hideLoadingButton(buttonId) {
+    $(buttonId).prop('disabled', false);
+    $(buttonId).html(Lang.get('messages.common.save'));
+}
+
+function displayValidationErrors(errors, boxId) {
+    $(boxId).removeClass('hidden');
+    $(boxId).html('');
+    
+    let errorList = '<ul class="mt-1 list-disc list-inside">';
+    $.each(errors, function (key, value) {
+        errorList += '<li>' + value[0] + '</li>';
+    });
+    errorList += '</ul>';
+    
+    $(boxId).html(errorList);
+}

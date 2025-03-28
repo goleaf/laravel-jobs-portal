@@ -4,124 +4,85 @@ namespace App\Livewire\Components;
 
 class Filter
 {
-    public string $name;
-    public string $key;
-    public string $type;
-    public array $options = [];
-    public $default = null;
+    protected string $key;
+    protected string $label;
+    protected string $type = 'select';
+    protected array $options = [];
+    protected $callback;
     
-    /**
-     * Create a new filter instance.
-     */
-    public function __construct(string $name, string $key, string $type = 'select')
+    public static function make(string $key, string $label): self
     {
-        $this->name = $name;
-        $this->key = $key;
-        $this->type = $type;
+        return (new static())
+            ->setKey($key)
+            ->setLabel($label);
     }
     
-    /**
-     * Create a new select filter.
-     */
-    public static function select(string $name, string $key): self
+    public function select(array $options): self
     {
-        return new static($name, $key, 'select');
-    }
-    
-    /**
-     * Create a new multiselect filter.
-     */
-    public static function multiSelect(string $name, string $key): self
-    {
-        return new static($name, $key, 'multiselect');
-    }
-    
-    /**
-     * Create a new date range filter.
-     */
-    public static function dateRange(string $name, string $key): self
-    {
-        return new static($name, $key, 'daterange');
-    }
-    
-    /**
-     * Create a new number range filter.
-     */
-    public static function numberRange(string $name, string $key): self
-    {
-        return new static($name, $key, 'numberrange');
-    }
-    
-    /**
-     * Set the options for the filter.
-     */
-    public function options(array $options): self
-    {
+        $this->type = 'select';
         $this->options = $options;
-        
         return $this;
     }
     
-    /**
-     * Set the default value for the filter.
-     */
-    public function default($default): self
+    public function multiSelect(array $options): self
     {
-        $this->default = $default;
-        
+        $this->type = 'multi-select';
+        $this->options = $options;
         return $this;
     }
     
-    /**
-     * Get all available filter types.
-     */
-    public static function getTypes(): array
+    public function dateRange(): self
     {
-        return [
-            'select',
-            'multiselect',
-            'daterange',
-            'numberrange',
-        ];
+        $this->type = 'date-range';
+        return $this;
     }
     
-    /**
-     * Get the name of the filter.
-     */
-    public function getName(): string
+    public function text(): self
     {
-        return $this->name;
+        $this->type = 'text';
+        return $this;
     }
     
-    /**
-     * Get the key of the filter.
-     */
+    public function setCallback(callable $callback): self
+    {
+        $this->callback = $callback;
+        return $this;
+    }
+    
     public function getKey(): string
     {
         return $this->key;
     }
     
-    /**
-     * Get the type of the filter.
-     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+    
     public function getType(): string
     {
         return $this->type;
     }
     
-    /**
-     * Get the options for the filter.
-     */
     public function getOptions(): array
     {
         return $this->options;
     }
     
-    /**
-     * Get the default value for the filter.
-     */
-    public function getDefault()
+    public function getCallback()
     {
-        return $this->default;
+        return $this->callback;
+    }
+    
+    protected function setKey(string $key): self
+    {
+        $this->key = $key;
+        return $this;
+    }
+    
+    protected function setLabel(string $label): self
+    {
+        $this->label = $label;
+        return $this;
     }
 } 

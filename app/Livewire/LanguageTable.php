@@ -2,10 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Builder;
 
-class LanguageTable extends BaseTable
+class LanguageTable extends TableComponent
 {
     // UI Options
     public $showButtonOnHeader = true;
@@ -20,27 +21,18 @@ class LanguageTable extends BaseTable
     public function columns(): array
     {
         return [
-            [
-                'field' => 'language',
-                'label' => __('messages.language.language'),
-                'sortable' => true,
-                'searchable' => true,
-            ],
-            [
-                'field' => 'iso_code',
-                'label' => __('messages.language.iso_code'),
-                'sortable' => true,
-                'searchable' => true,
-                'view' => 'languages.iso_code',
-            ],
-            [
-                'field' => 'id',
-                'label' => __('messages.common.action'),
-                'sortable' => false,
-                'searchable' => false,
-                'view' => 'languages.action_buttons',
-                'class' => 'text-center',
-            ],
+            Column::make(__('messages.language.language'), 'language')
+                ->sortable()
+                ->searchable(),
+                
+            Column::make(__('messages.language.iso_code'), 'iso_code')
+                ->sortable()
+                ->searchable()
+                ->view('languages.table-components.iso_code'),
+                
+            Column::make(__('messages.common.action'), 'id')
+                ->view('languages.table-components.action_buttons')
+                ->class('text-center'),
         ];
     }
 

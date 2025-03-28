@@ -3,7 +3,13 @@
 return [
     'common' => [
         'add' => 'Pridėti',
-        'edit' => 'Redaguoti'
+        'edit' => 'Redaguoti',
+        'delete' => 'Ištrinti',
+        'view' => 'Peržiūrėti',
+        'save' => 'Išsaugoti',
+        'cancel' => 'Atšaukti',
+        'search' => 'Paieška',
+        'reset' => 'Atstatyti'
     ],
     'messages' => [
         'common' => [
@@ -154,13 +160,27 @@ return [
             'image' => 'Nuotrauka',
             'select_job_category' => 'Pasirinkti darbo kategoriją',
         ],
+        'job_type' => [
+            'job_type' => 'Darbo tipas',
+            'job_types' => 'Darbo tipai',
+            'new_job_type' => 'Naujas darbo tipas',
+            'edit_job_type' => 'Redaguoti darbo tipą',
+            'show_job_type' => 'Rodyti darbo tipą',
+            'name' => 'Pavadinimas',
+            'description' => 'Aprašymas',
+            'select_job_type' => 'Pasirinkti darbo tipą',
+        ],
         'language' => [
             'language' => 'Kalba',
+            'languages' => 'Kalbos',
+            'add_language' => 'Pridėti kalbą',
+            'edit_language' => 'Redaguoti kalbą',
             'iso_code' => 'ISO kodas',
             'is_default' => 'Numatytoji',
             'is_active' => 'Aktyvi',
             'native_name' => 'Pavadinimas gimtąja kalba',
             'display_name' => 'Rodomas pavadinimas',
+            'is_rtl' => 'Rašoma iš dešinės į kairę',
         ],
         'company' => [
             'company_name' => 'Įmonės pavadinimas',
@@ -170,6 +190,22 @@ return [
             'current_password' => 'Dabartinis slaptažodis',
             'new_password' => 'Naujas slaptažodis',
             'confirm_password' => 'Patvirtinti slaptažodį',
+        ],
+        'table' => [
+            'search' => 'Paieška lentelėje',
+            'columns' => 'Stulpeliai',
+            'export_to_excel' => 'Eksportuoti į Excel',
+            'export_to_csv' => 'Eksportuoti į CSV',
+            'export_to_pdf' => 'Eksportuoti į PDF',
+            'print' => 'Spausdinti',
+            'reset' => 'Atstatyti',
+            'reload' => 'Atnaujinti',
+            'per_page' => 'Puslapyje',
+            'showing' => 'Rodoma',
+            'to' => 'iki',
+            'of' => 'iš',
+            'results' => 'rezultatų',
+            'no_records' => 'Įrašų nerasta',
         ],
     ]
 ];

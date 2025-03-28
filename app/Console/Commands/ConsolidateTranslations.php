@@ -12,7 +12,7 @@ class ConsolidateTranslations extends Command
      *
      * @var string
      */
-    protected $signature = 'translations:consolidate {--locale=all}';
+    protected $signature = 'translations:consolidate {--locale=all} {--chunk-size=10}';
 
     /**
      * The console command description.
@@ -27,6 +27,7 @@ class ConsolidateTranslations extends Command
     public function handle()
     {
         $locale = $this->option('locale');
+        $chunkSize = $this->option('chunk-size');
         
         // Determine which locales to process
         $locales = [];
@@ -67,11 +68,13 @@ class ConsolidateTranslations extends Command
             File::makeDirectory($backupDir, 0755, true);
         }
         
-        // Process each locale
-        foreach ($locales as $currentLocale) {
-            $this->consolidateLocale($currentLocale, $langPath, $backupDir);
+        // Process each locale in chunks
+        foreach (array_chunk($locales, intval($chunkSize)) as $localeChunk) {
+            foreach ($localeChunk as $currentLocale) {
+                $this->consolidateLocale($currentLocale, $langPath, $backupDir);
+            }
             
-            // Free memory
+            // Free memory after each chunk
             gc_collect_cycles();
         }
         
@@ -92,11 +95,16 @@ class ConsolidateTranslations extends Command
             $this->info("Found locale directory: {$localeDir}");
             
             try {
-                // Process each PHP file in the locale directory
-                foreach (File::files($localeDir) as $file) {
-                    if ($file->getExtension() === 'php') {
+                // Process each PHP file in chunks to save memory
+                $files = collect(File::files($localeDir))->filter(function($file) {
+                    return $file->getExtension() === 'php';
+                });
+                
+                foreach ($files->chunk(5) as $fileChunk) {
+                    foreach ($fileChunk as $file) {
                         $this->processPhpFile($file->getPathname(), $allTranslations, $file->getFilenameWithoutExtension());
                     }
+                    gc_collect_cycles();
                 }
             } catch (\Exception $e) {
                 $this->error("Error processing directory {$localeDir}: " . $e->getMessage());
@@ -108,27 +116,45 @@ class ConsolidateTranslations extends Command
         if (File::exists($jsonFile)) {
             $this->info("Processing JSON file: {$jsonFile}");
             try {
-                $jsonContent = File::get($jsonFile);
-                $jsonTranslations = json_decode($jsonContent, true);
+                // Read JSON file in chunks to save memory
+                $handle = fopen($jsonFile, 'r');
+                $contents = '';
+                $chunkSize = 1024 * 1024; // 1MB chunks
+                
+                while (!feof($handle)) {
+                    $contents .= fread($handle, $chunkSize);
+                }
+                
+                fclose($handle);
+                
+                $jsonTranslations = json_decode($contents, true);
                 
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     $this->error("Error parsing JSON file {$jsonFile}: " . json_last_error_msg());
                 } else {
-                    // Add JSON translations to the consolidated array
-                    foreach ($jsonTranslations as $key => $value) {
-                        $allTranslations[$key] = $value;
+                    // Process JSON translations in chunks
+                    $jsonChunks = array_chunk($jsonTranslations, 100, true);
+                    
+                    foreach ($jsonChunks as $chunk) {
+                        foreach ($chunk as $key => $value) {
+                            $this->processJsonTranslation($key, $value, $allTranslations);
+                        }
+                        gc_collect_cycles();
                     }
                     
                     // Back up the JSON file
                     $backupFile = "{$backupDir}/{$locale}_" . date('Y-m-d_His') . '.json';
                     File::copy($jsonFile, $backupFile);
                     
-                    // Optionally remove the original JSON file
-                    // File::delete($jsonFile);
+                    // Remove the original JSON file after successful processing
+                    if (count($jsonTranslations) > 0) {
+                        File::delete($jsonFile);
+                        $this->info("Removed original JSON file after successful consolidation.");
+                    }
                 }
                 
                 // Free memory
-                unset($jsonContent);
+                unset($contents);
                 unset($jsonTranslations);
                 gc_collect_cycles();
             } catch (\Exception $e) {
@@ -139,11 +165,11 @@ class ConsolidateTranslations extends Command
         // Save consolidated translations
         if (!empty($allTranslations)) {
             try {
-                // Sort to help with memory
+                // Sort keys
                 ksort($allTranslations);
                 
                 // Create content in chunks
-                $content = "<?php\n\nreturn " . $this->varExportOptimized($allTranslations) . ";\n";
+                $this->writeTranslationsToFile($outputFile, $allTranslations);
                 
                 // Backup existing file if it exists
                 if (File::exists($outputFile)) {
@@ -151,13 +177,9 @@ class ConsolidateTranslations extends Command
                     File::copy($outputFile, $backupFile);
                 }
                 
-                // Write to file
-                File::put($outputFile, $content);
-                
                 $this->info("Successfully consolidated translations for locale: {$locale}");
                 
                 // Free memory
-                unset($content);
                 unset($allTranslations);
                 gc_collect_cycles();
                 
@@ -183,9 +205,6 @@ class ConsolidateTranslations extends Command
                 $backupFile = "{$backupDir}/" . basename(dirname($filePath)) . "_" . basename($filePath) . "_" . date('Y-m-d_His');
                 File::copy($filePath, $backupFile);
                 
-                // Optionally remove the original file
-                // File::delete($filePath);
-                
                 $this->info("Processed file: " . basename($filePath));
             }
             
@@ -196,34 +215,86 @@ class ConsolidateTranslations extends Command
         }
     }
     
-    /**
-     * Memory-optimized version of var_export for large arrays
-     */
-    protected function varExportOptimized($var)
+    protected function processJsonTranslation($key, $value, &$translations)
     {
-        if (is_array($var)) {
-            $output = "[";
-            $first = true;
+        // Process keys with dot notation (e.g., "auth.password")
+        if (strpos($key, '.') !== false) {
+            list($group, $item) = explode('.', $key, 2);
             
-            foreach ($var as $key => $value) {
-                if (!$first) {
-                    $output .= ",";
-                }
-                $first = false;
-                
-                $output .= PHP_EOL . "    " . var_export($key, true) . " => ";
-                
-                if (is_array($value)) {
-                    $output .= $this->varExportOptimized($value);
-                } else {
-                    $output .= var_export($value, true);
-                }
+            if (!isset($translations[$group])) {
+                $translations[$group] = [];
             }
             
-            $output .= PHP_EOL . "]";
-            return $output;
+            if (strpos($item, '.') !== false) {
+                // Handle nested keys (e.g., "auth.password.reset")
+                $parts = explode('.', $item);
+                $current = &$translations[$group];
+                
+                foreach ($parts as $index => $part) {
+                    if ($index === count($parts) - 1) {
+                        $current[$part] = $value;
+                    } else {
+                        if (!isset($current[$part])) {
+                            $current[$part] = [];
+                        }
+                        $current = &$current[$part];
+                    }
+                }
+            } else {
+                // Simple group.key format
+                $translations[$group][$item] = $value;
+            }
         } else {
-            return var_export($var, true);
+            // No dot notation, add to general group
+            if (!isset($translations['general'])) {
+                $translations['general'] = [];
+            }
+            
+            $translations['general'][$key] = $value;
         }
+    }
+    
+    protected function writeTranslationsToFile($filePath, $translations)
+    {
+        try {
+            // Start file with PHP opening
+            $fileContent = "<?php\n\nreturn [";
+            
+            // Write translations
+            foreach ($translations as $key => $value) {
+                $fileContent .= "\n    '{$key}' => ";
+                $fileContent .= $this->arrayAsString($value, 1);
+                $fileContent .= ",";
+            }
+            
+            // Close array and file
+            $fileContent .= "\n];\n";
+            
+            // Write to file
+            file_put_contents($filePath, $fileContent);
+        } catch (\Exception $e) {
+            $this->error("Error writing to file {$filePath}: " . $e->getMessage());
+        }
+    }
+    
+    protected function arrayAsString($array, $depth = 0)
+    {
+        $indent = str_repeat('    ', $depth);
+        $output = "[\n";
+        
+        foreach ($array as $key => $value) {
+            $output .= $indent . "    '" . addslashes($key) . "' => ";
+            
+            if (is_array($value)) {
+                $output .= $this->arrayAsString($value, $depth + 1);
+            } else {
+                $output .= "'" . addslashes($value) . "'";
+            }
+            
+            $output .= ",\n";
+        }
+        
+        $output .= $indent . "]";
+        return $output;
     }
 } 

@@ -311,7 +311,9 @@ function deleteItemAjax(url, header, callFunction = null) {
                 timer: 2000
             });
             if (callFunction) {
-                eval(callFunction);
+                if (typeof window[callFunction] === 'function') {
+                    window[callFunction]();
+                }
             }
         },
         error: function(data) {

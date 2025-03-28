@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
             \App\Console\Commands\ConvertSvgToComponents::class,
             \App\Console\Commands\StandardizeTranslations::class,
             \App\Console\Commands\StandardizeJavaScript::class,
+            \App\Console\Commands\MigrateFromSpatie::class,
         ]);
 
         require base_path('routes/console.php');

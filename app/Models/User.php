@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\PasswordReset;
 use App\Notifications\UserVerifyNotification;
+use App\Traits\HasFiles;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,8 +13,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Cashier\Billable;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -43,9 +42,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $candidate_skill_count
  * @property-read mixed $avatar
  * @property-read string $full_name
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read int|null $media_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Illuminate\Notifications\DatabaseNotification[]
  *     $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
@@ -129,9 +126,9 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRegionCode($value)
  */
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable
 {
-    use Notifiable, HasRoles, InteractsWithMedia, Billable;
+    use Notifiable, HasRoles, HasFiles, Billable;
 
     const DARK_MODE = 1;
 
@@ -244,10 +241,9 @@ class User extends Authenticatable implements HasMedia
      */
     public function getAvatarAttribute()
     {
-        /** @var Media $media */
-        $media = $this->getMedia(self::PROFILE)->first();
-        if (! empty($media)) {
-            return $media->getFullUrl();
+        $file = $this->getFirstFile(self::PROFILE);
+        if (!empty($file)) {
+            return $file->getUrl();
         }
 
         return asset('assets/img/infyom-logo.png');

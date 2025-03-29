@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Accueil',
     'jobs' => 'Emplois',
     'companies' => 'Entreprises',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'Il est facile de trouver votre',
     'admin' => 'Administrateur',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Rechercher',
         'browse_all' => 'Tout parcourir',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'Enregistrer comme brouillon',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Votre carrière commence maintenant',
         'keywords' => 'Mots clés',
@@ -82,7 +82,7 @@ return [
         'max' => 'Max',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'Rechercher des emplois',
         'job_by_type' => 'Travail par type',
@@ -106,7 +106,7 @@ return [
         'advertise_image' => 'Annoncer l`image',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'Détails de la tâche',
         'email_to_friend' => 'Envoyer un e-mail à un ami',
@@ -163,7 +163,7 @@ return [
         'share_this_job' => 'Partagez ce travail',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Rechercher des entreprises',
         'opened_jobs' => 'Ouvrir un travail',
@@ -171,7 +171,7 @@ return [
         'no_company_found' => 'Aucune entreprise trouvée',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => 'Rechercher des candidats',
         'no_candidates_found' => 'Aucun demandeur d`emploi trouvé',
@@ -180,7 +180,7 @@ return [
         'opened_jobs' => 'Emplois ouverts',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Détails de l\'entreprise',
         'follow' => 'Suivre',
@@ -190,7 +190,7 @@ return [
         'processing' => 'Traitement ...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Comment ça marche',
         'register' => 'S`inscrire',
@@ -207,13 +207,13 @@ return [
         'faq_not_available' => 'Foire aux questions non disponible',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Contactez-nous',
         'send_message' => 'Envoyer un message',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'Publier',
         'posts' => 'Messages',
@@ -224,7 +224,7 @@ return [
         'categories' => 'Catégories',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Candidat',
         'employer' => 'Employeur',
@@ -236,7 +236,7 @@ return [
         'confirm_password' => 'Confirmez le mot de passe',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Liens utiles',
         'newsletter' => 'Bulletin',
@@ -250,7 +250,7 @@ return [
         'terms' => 'Conditions',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'Connexion à',
         'remember_me' => 'Vous vous souvenez de moi',
@@ -265,13 +265,13 @@ return [
         'enter_password' => 'Entrez votre mot de passe',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'Basculer la navigation',
         'main_menu' => 'Menu principal',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'Quoi',
         'where' => 'Où',
@@ -302,7 +302,7 @@ return [
         'view_company_profile' => 'Voir le profil de l\'entreprise',
         'founded_in' => 'Fondé en',
         'phone' => 'Téléphone',
-        'Skill_Experience' => 'Compétence et expérience'
+        'Skill_Experience' => 'Compétence et expérience',
     ],
 
     'web_company' => [
@@ -350,7 +350,7 @@ return [
         'your_email' => 'Votre adresse e-mail',
         'email_password_reset_link' => 'Envoyer le lien de réinitialisation du mot de passe par e-mail',
         'cancel' => 'Annuler',
-        'forgot_password' => 'Mot de passe oublié'
+        'forgot_password' => 'Mot de passe oublié',
     ],
 
     'new_password' => [

@@ -4,12 +4,10 @@ namespace App\Livewire;
 
 use App\Models\JobCategory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
-use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Column;
 use Livewire\Attributes\Filter;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class JobCategoryTable extends LivewireTableComponent
 {
@@ -23,14 +21,14 @@ class JobCategoryTable extends LivewireTableComponent
     protected $listeners = [
         'refresh' => '$refresh',
         'jobCategorySaved' => '$refresh',
-        'jobCategoryDeleted' => '$refresh'
+        'jobCategoryDeleted' => '$refresh',
     ];
 
     public $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $perPage = 10;
-    
+
     public $filters = [
         'featured' => '',
         'date_range' => [
@@ -82,7 +80,7 @@ class JobCategoryTable extends LivewireTableComponent
         $query = JobCategory::query();
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         // Apply featured filter
@@ -91,11 +89,11 @@ class JobCategoryTable extends LivewireTableComponent
         }
 
         // Apply date range filter
-        if (!empty($this->filters['date_range']['start'])) {
+        if (! empty($this->filters['date_range']['start'])) {
             $query->whereDate('created_at', '>=', $this->filters['date_range']['start']);
         }
-        
-        if (!empty($this->filters['date_range']['end'])) {
+
+        if (! empty($this->filters['date_range']['end'])) {
             $query->whereDate('created_at', '<=', $this->filters['date_range']['end']);
         }
 
@@ -109,20 +107,20 @@ class JobCategoryTable extends LivewireTableComponent
                 ->sortable()
                 ->searchable()
                 ->view('job_categories.table_components.name'),
-            
+
             Column::make(__('messages.job_category.is_featured'), 'is_featured')
                 ->sortable()
                 ->view('job_categories.table_components.is_featured'),
-                
+
             Column::make(__('messages.common.created_date'), 'created_at')
                 ->sortable()
                 ->view('job_categories.table_components.created_at'),
-            
+
             Column::make(__('messages.common.action'), 'id')
                 ->view('job_categories.table_components.action_button'),
         ];
     }
-    
+
     public function filters(): array
     {
         return [
@@ -130,7 +128,7 @@ class JobCategoryTable extends LivewireTableComponent
                 ->select([
                     '1' => __('messages.common.yes'),
                     '0' => __('messages.common.no'),
-                ])
+                ]),
         ];
     }
 
@@ -140,4 +138,4 @@ class JobCategoryTable extends LivewireTableComponent
             'jobCategories' => $this->jobCategories,
         ]);
     }
-} 
+}

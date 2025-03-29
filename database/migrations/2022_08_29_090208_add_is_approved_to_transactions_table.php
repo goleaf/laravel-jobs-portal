@@ -16,8 +16,10 @@ return new class extends Migration
             $table->integer('is_approved')->after('status')->default('1');
         });
 
-        Artisan::call('db:seed',
-            ['--class' => 'DefaultCountryCodeSeeder', '--force' => true]);
+        Artisan::call(
+            'db:seed',
+            ['--class' => 'DefaultCountryCodeSeeder', '--force' => true]
+        );
     }
 
     /**

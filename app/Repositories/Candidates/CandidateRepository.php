@@ -27,7 +27,6 @@ use Illuminate\Validation\ValidationException;
 use PragmaRX\Countries\Package\Countries;
 use Spatie\Permission\Models\Role;
 use Str;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Throwable;
 
@@ -76,7 +75,7 @@ class CandidateRepository extends BaseRepository
      */
     public function prepareData()
     {
-        $countries = new Countries();
+        $countries = new Countries;
         $data['countries'] = getCountries();
         $data['maritalStatus'] = MaritalStatus::toBase()->pluck('marital_status', 'id');
         $data['careerLevel'] = CareerLevel::toBase()->pluck('level_name', 'id');
@@ -122,11 +121,13 @@ class CandidateRepository extends BaseRepository
             $input['unique_id'] = $this->getUniqueCandidateId();
             $candidateRole = Role::whereName('Candidate')->first();
             /** @var User $user */
-            $user = User::create(Arr::only($input, (new User())->getFillable()));
+            $user = User::create(Arr::only($input, (new User)->getFillable()));
 
             $candidate = Candidate::create(
-                array_merge(array_filter(Arr::only($input, (new Candidate())->getFillable())),
-                    ['user_id' => $user->id])
+                array_merge(
+                    array_filter(Arr::only($input, (new Candidate)->getFillable())),
+                    ['user_id' => $user->id]
+                )
             );
             $candidate->update(['immediate_available' => $input['immediate_available']]);
 
@@ -136,21 +137,21 @@ class CandidateRepository extends BaseRepository
             $user->update(['owner_id' => $ownerId, 'owner_type' => $ownerType]);
             $user->assignRole($candidateRole);
 
-            //Update Candidate Skills
+            // Update Candidate Skills
             if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
 
-            //update Candidate Languages
+            // update Candidate Languages
             if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
                 $user->candidateLanguage()->sync($input['candidateLanguage']);
             }
 
-//            if ($user->is_verified) {
-//                $user->update(['email_verified_at' => Carbon::now()]);
-//            }else{
-//                $user->sendEmailVerificationNotification();
-//            }
+            //            if ($user->is_verified) {
+            //                $user->update(['email_verified_at' => Carbon::now()]);
+            //            }else{
+            //                $user->sendEmailVerificationNotification();
+            //            }
             $user->update(['email_verified_at' => Carbon::now()]);
 
             DB::commit();
@@ -178,31 +179,33 @@ class CandidateRepository extends BaseRepository
             /** @var User $user */
             $user = Auth::user();
 
-            $userInput = Arr::only($input,
+            $userInput = Arr::only(
+                $input,
                 [
                     'first_name', 'last_name', 'email', 'password', 'phone',
                     'country_id', 'state_id', 'city_id', 'gender', 'dob', 'facebook_url', 'twitter_url', 'linkedin_url',
                     'pinterest_url', 'google_plus_url', 'region_code',
-                ]);
+                ]
+            );
 
             $user->update($userInput);
 
             if ((isset($input['image']))) {
                 $candidate = $user->candidate;
-                $fileService = new FileService();
-                
+                $fileService = new FileService;
+
                 // Delete old image if exists
-                if (!empty($candidate->image_path)) {
+                if (! empty($candidate->image_path)) {
                     $fileService->deleteFile($candidate->image_path);
                 }
-                
+
                 // Upload new image
                 $imagePath = $fileService->uploadFile(
-                    $input['image'], 
+                    $input['image'],
                     'candidates/images',
                     'public'
                 );
-                
+
                 $candidate->image_path = $imagePath;
                 $candidate->save();
             }
@@ -210,12 +213,12 @@ class CandidateRepository extends BaseRepository
             $input['available_at'] = $input['immediate_available'] == 0 ? $input['available_at'] : null;
             $user->candidate->update($input);
 
-            //Update Candidate Skills
+            // Update Candidate Skills
             if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
 
-            //update Candidate Languages
+            // update Candidate Languages
             if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
                 $user->candidateLanguage()->sync($input['candidateLanguage']);
             }
@@ -247,7 +250,7 @@ class CandidateRepository extends BaseRepository
             ]);
             $user->update($userInput);
             $user->candidate->update($input);
-            //Update Candidate Skills
+            // Update Candidate Skills
             if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
@@ -266,22 +269,22 @@ class CandidateRepository extends BaseRepository
             $user = Auth::user();
             /** @var Candidate $candidate */
             $candidate = Candidate::findOrFail($user->candidate->id);
-            $fileService = new FileService();
-            
-            if (isset($input['file']) && !empty($input['file'])) {
+            $fileService = new FileService;
+
+            if (isset($input['file']) && ! empty($input['file'])) {
                 // Delete old resume if exists
-                if (!empty($candidate->resume_path)) {
+                if (! empty($candidate->resume_path)) {
                     $fileService->deleteFile($candidate->resume_path);
                 }
-                
+
                 // Upload new resume
                 $resumePath = $fileService->uploadFile(
-                    $input['file'], 
+                    $input['file'],
                     'candidates/resumes',
                     'public',
-                    Str::random(8) . '_' . $input['title'] . '.' . $input['file']->getClientOriginalExtension()
+                    Str::random(8).'_'.$input['title'].'.'.$input['file']->getClientOriginalExtension()
                 );
-                
+
                 $candidate->resume_path = $resumePath;
                 $candidate->save();
             }
@@ -316,12 +319,12 @@ class CandidateRepository extends BaseRepository
             $user->update(['email_verified_at' => Carbon::now()]);
         }
 
-        //Update Candidate Skills
+        // Update Candidate Skills
         if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
             $user->candidateSkill()->sync($input['candidateSkills']);
         }
 
-        //update Candidate Languages
+        // update Candidate Languages
         if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
             $user->candidateLanguage()->sync($input['candidateLanguage']);
         }
@@ -355,20 +358,20 @@ class CandidateRepository extends BaseRepository
             $user->update($input);
             if ((isset($input['image']))) {
                 $candidate = $user->candidate;
-                $fileService = new FileService();
-                
+                $fileService = new FileService;
+
                 // Delete old image if exists
-                if (!empty($candidate->image_path)) {
+                if (! empty($candidate->image_path)) {
                     $fileService->deleteFile($candidate->image_path);
                 }
-                
+
                 // Upload new image
                 $imagePath = $fileService->uploadFile(
-                    $input['image'], 
+                    $input['image'],
                     'candidates/images',
                     'public'
                 );
-                
+
                 $candidate->image_path = $imagePath;
                 $candidate->save();
             }
@@ -398,8 +401,10 @@ class CandidateRepository extends BaseRepository
         foreach ($data['candidateExperiences'] as $experience) {
             $experience->country_name = getCountryName($experience->country_id);
         }
-        $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where('candidate_id',
-            $candidate)->get();
+        $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where(
+            'candidate_id',
+            $candidate
+        )->get();
         foreach ($data['candidateEducations'] as $education) {
             $education->country_name = getCountryName($education->country_id);
         }
@@ -408,7 +413,7 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * @param $companyId
+     * @param  $companyId
      * @return mixed
      */
     public function isAlreadyReported($candidateId)

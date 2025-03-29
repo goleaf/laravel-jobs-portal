@@ -73,15 +73,15 @@ class PlanRepository
 
         try {
             $envSetting = getEnvSetting();
-            if(!empty($envSetting['stripe_secret'])){
+            if (! empty($envSetting['stripe_secret'])) {
                 $stripe = new \Stripe\StripeClient(
                     $envSetting['stripe_secret']
                 );
-            }else{
-            $stripe = new \Stripe\StripeClient(
-                config('services.stripe.secret_key')
-            );
-        }
+            } else {
+                $stripe = new \Stripe\StripeClient(
+                    config('services.stripe.secret_key')
+                );
+            }
             $deletedStripePlan = $stripe->plans->delete(
                 $plan->stripe_plan_id,
                 []
@@ -112,7 +112,7 @@ class PlanRepository
 
         if ($data['subscription'] && $data['subscription']->paypal_payment_id && $data['subscription']->current_period_end <= Carbon::now()->toDayDateTimeString()) {
             $data['activePlanId'] = $data['subscription']->plan_id;
-//            $data['subscription'] = null;
+            //            $data['subscription'] = null;
         }
 
         $data['jobsCount'] = Job::whereStatus(Job::STATUS_OPEN)->where('company_id', $company->id)->where('is_created_by_admin', 0)->count();

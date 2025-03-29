@@ -8,4 +8,4 @@ return [
     'of' => 'iš',
     'results' => 'rezultatų',
     'go_to_page' => 'Eiti į puslapį',
-]; 
+];

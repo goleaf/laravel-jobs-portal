@@ -100,33 +100,44 @@ class AdminCandidateSearch extends Component
             'user', 'industry', 'user.candidateSkill',
         ])->select('candidates.*')->orderByDesc('created_at');
 
-        $query->when(isset($this->searchByAdminCandidate),
+        $query->when(
+            isset($this->searchByAdminCandidate),
             function (Builder $q) {
                 $q->whereHas('user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByAdminCandidate).'%')
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByAdminCandidate).'%'
+                    )
                         ->orWhere('email', 'like', '%'.strtolower($this->searchByAdminCandidate).'%');
                 });
-            });
+            }
+        );
 
-        $query->when(! empty($this->status) && $this->status == 1,
+        $query->when(
+            ! empty($this->status) && $this->status == 1,
             function (Builder $q) {
                 $q->whereHas('user', function (Builder $q) {
                     $q->where('is_active', '=', 1);
                 });
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 0,
+        $query->when(
+            ($this->status != '') && $this->status == 0,
             function (Builder $q) {
                 $q->wherehas('user', function (Builder $q) {
                     $q->where('is_active', '=', 0);
                 });
-            });
+            }
+        );
 
-        $query->when(isset($this->immediateAvailable) && $this->immediateAvailable != '',
+        $query->when(
+            isset($this->immediateAvailable) && $this->immediateAvailable != '',
             function (Builder $q) {
                 $q->where('immediate_available', $this->immediateAvailable);
-            });
+            }
+        );
 
         $query->when(($this->jobSkills != ''), function (Builder $q) {
             $q->whereHas('user.candidateSkill', function (Builder $query) {

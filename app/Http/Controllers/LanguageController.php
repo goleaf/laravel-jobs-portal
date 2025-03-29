@@ -9,10 +9,10 @@ use App\Repositories\LanguageRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class LanguageController extends AppBaseController
 {
@@ -108,19 +108,17 @@ class LanguageController extends AppBaseController
     /**
      * Change the application language
      *
-     * @param Request $request
-     * @param string $locale
      * @return \Illuminate\Http\RedirectResponse
      */
     public function changeLanguage(Request $request, string $locale)
     {
         $availableLocales = array_keys(config('app.available_locales', []));
-        
+
         if (in_array($locale, $availableLocales)) {
             Session::put('locale', $locale);
             App::setLocale($locale);
         }
-        
+
         return redirect()->back();
     }
 }

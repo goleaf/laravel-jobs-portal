@@ -79,8 +79,11 @@ class BlogCategories extends Component
         $query = PostCategory::query()->select('post_categories.*');
 
         $query->when(isset($this->searchByPostCategory) && $this->searchByPostCategory != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByPostCategory).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByPostCategory).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

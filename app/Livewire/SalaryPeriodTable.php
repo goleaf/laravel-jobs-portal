@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\SalaryPeriod;
 use App\Livewire\Components\Column;
+use App\Models\SalaryPeriod;
 
 class SalaryPeriodTable extends LivewireTableComponent
 {

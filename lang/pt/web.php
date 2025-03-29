@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Casa',
     'jobs' => 'Empregos',
     'companies' => 'Empresas',
@@ -38,8 +38,7 @@ return [
     'easy_to_find_your' => 'É Fácil Encontrar o Seu',
     'admin' => 'Admin',
 
-
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Pesquisar',
         'browse_all' => 'Navegar em todos',
@@ -58,7 +57,7 @@ return [
         'save_as_draft' => 'Salvar como rascunho',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Sua carreira começa agora',
         'keywords' => 'Palavras-chave',
@@ -83,7 +82,7 @@ return [
         'max' => 'Máx',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'Pesquisar empregos',
         'job_by_type' => 'Trabalho por tipo',
@@ -107,7 +106,7 @@ return [
         'advertise_image' => 'Anuncie Imagem',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'Detalhes do trabalho',
         'email_to_friend' => 'Enviar e-mail para um amigo',
@@ -164,7 +163,7 @@ return [
         'share_this_job' => 'Compartilhe este trabalho',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Pesquisar empresas',
         'opened_jobs' => 'Vagas Abertas',
@@ -172,7 +171,7 @@ return [
         'no_company_found' => 'Aucune entreprise trouvée',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => 'Pesquisar Candidatos',
         'no_candidates_found' => 'Nenhum candidato a emprego encontrado',
@@ -181,7 +180,7 @@ return [
         'opened_jobs' => 'Vagas Abertas',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Detalhes da Companhia',
         'follow' => 'Seguir',
@@ -191,7 +190,7 @@ return [
         'processing' => 'Processando ...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Como funciona',
         'register' => 'Registrar',
@@ -208,13 +207,13 @@ return [
         'faq_not_available' => 'Perguntas frequentes não disponíveis',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Entre em contato',
         'send_message' => 'Enviar mensagem',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'Post',
         'posts' => 'Postagens',
@@ -225,7 +224,7 @@ return [
         'categories' => 'Categorias',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Candidato',
         'employer' => 'Empregador',
@@ -237,7 +236,7 @@ return [
         'confirm_password' => 'Confirmar senha',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Links úteis',
         'newsletter' => 'Boletim de Notícias',
@@ -251,7 +250,7 @@ return [
         'terms' => 'Termos',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'Login para',
         'remember_me' => 'Lembra de mim',
@@ -266,13 +265,13 @@ return [
         'enter_password' => 'Digite a Senha',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'Alternar navegação',
         'main_menu' => 'Menu Principal',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'O que',
         'where' => 'Onde',
@@ -303,7 +302,7 @@ return [
         'view_company_profile' => 'Ver o perfil da empresa',
         'founded_in' => 'Fundado em',
         'phone' => 'Telefone',
-        'Skill_Experience' => 'Habilidade e experiência'
+        'Skill_Experience' => 'Habilidade e experiência',
     ],
 
     'web_company' => [
@@ -351,12 +350,12 @@ return [
         'your_email' => 'Seu E-mail',
         'email_password_reset_link' => 'Enviar Link de Redefinição de Senha por E-mail',
         'cancel' => 'Cancelar',
-        'forgot_password' => 'Esqueceu sua senh'
+        'forgot_password' => 'Esqueceu sua senh',
     ],
 
     'new_password' => [
         'reset_password' => 'Redefinir senha',
         'new_password' => 'Definir Nova Senha',
-        'set_new_password' => 'Configurar uma Nova Senha'
+        'set_new_password' => 'Configurar uma Nova Senha',
     ],
 ];

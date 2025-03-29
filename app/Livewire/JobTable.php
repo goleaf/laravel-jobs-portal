@@ -18,7 +18,7 @@ class JobTable extends DataTable
     public bool $showButtonOnHeader = true;
     public bool $showFilterOnHeader = true;
     public string $buttonComponent = 'jobs.table-components.add_button';
-    
+
     protected function initializeComponent()
     {
         $this->sortField = 'created_at';
@@ -35,33 +35,33 @@ class JobTable extends DataTable
                 ->sortable()
                 ->searchable()
                 ->view('jobs.table-components.title'),
-                
+
             Column::make(__('messages.job.job_company'), 'company.company_name')
                 ->sortable()
                 ->searchable(),
-                
+
             Column::make(__('messages.job.job_category'), 'jobCategory.name')
                 ->sortable()
                 ->searchable(),
-                
+
             Column::make(__('messages.job.job_type'), 'jobType.name')
                 ->sortable()
                 ->searchable(),
-                
+
             Column::make(__('messages.job.is_featured'), 'is_featured')
                 ->sortable()
                 ->view('jobs.table-components.featured'),
-                
+
             Column::make(__('messages.job.is_suspended'), 'is_suspended')
                 ->sortable()
                 ->view('jobs.table-components.suspended'),
-                
+
             Column::make(__('messages.job.job_expiry_date'), 'job_expiry_date')
                 ->sortable()
                 ->format(function ($value) {
                     return Carbon::parse($value)->format('Y-m-d');
                 }),
-                
+
             Column::make(__('messages.common.action'), 'id')
                 ->view('jobs.table-components.action_buttons'),
         ];
@@ -78,19 +78,19 @@ class JobTable extends DataTable
                     '1' => __('messages.common.yes'),
                     '0' => __('messages.common.no'),
                 ]),
-                
+
             Filter::make(__('messages.filter_name.suspended_job'), 'is_suspended')
                 ->select([
                     '1' => __('messages.common.yes'),
                     '0' => __('messages.common.no'),
                 ]),
-                
+
             Filter::make(__('messages.job.job_category'), 'job_category_id')
                 ->select(JobCategory::pluck('name', 'id')->toArray()),
-                
+
             Filter::make(__('messages.job.job_type'), 'job_type_id')
                 ->select(JobType::pluck('name', 'id')->toArray()),
-                
+
             Filter::make(__('messages.job.job_expiry_date'), 'job_expiry_date')
                 ->dateRange(),
         ];
@@ -116,16 +116,16 @@ class JobTable extends DataTable
         }
 
         return $query->where(function ($query) {
-            $query->where('job_title', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('company', function ($q) {
-                      $q->where('company_name', 'like', '%' . $this->search . '%');
-                  })
-                  ->orWhereHas('jobCategory', function ($q) {
-                      $q->where('name', 'like', '%' . $this->search . '%');
-                  })
-                  ->orWhereHas('jobType', function ($q) {
-                      $q->where('name', 'like', '%' . $this->search . '%');
-                  });
+            $query->where('job_title', 'like', '%'.$this->search.'%')
+                ->orWhereHas('company', function ($q) {
+                    $q->where('company_name', 'like', '%'.$this->search.'%');
+                })
+                ->orWhereHas('jobCategory', function ($q) {
+                    $q->where('name', 'like', '%'.$this->search.'%');
+                })
+                ->orWhereHas('jobType', function ($q) {
+                    $q->where('name', 'like', '%'.$this->search.'%');
+                });
         });
     }
 
@@ -151,16 +151,17 @@ class JobTable extends DataTable
     public function delete($id)
     {
         $job = Job::findOrFail($id);
-        
+
         if ($job->is_default) {
             $this->dispatchBrowserEvent('error', [
                 'message' => __('messages.job.cannot_delete_default'),
             ]);
+
             return;
         }
-        
+
         $job->delete();
-        
+
         $this->dispatchBrowserEvent('success', [
             'message' => __('messages.flash.delete_success'),
         ]);

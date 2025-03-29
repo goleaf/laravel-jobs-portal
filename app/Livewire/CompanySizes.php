@@ -79,8 +79,11 @@ class CompanySizes extends Component
         $query = CompanySize::query()->select('company_sizes.*');
 
         $query->when(isset($this->searchByCompanySize) && $this->searchByCompanySize != '', function (Builder $q) {
-            $q->where('size', 'like',
-                '%'.strtolower($this->searchByCompanySize).'%');
+            $q->where(
+                'size',
+                'like',
+                '%'.strtolower($this->searchByCompanySize).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

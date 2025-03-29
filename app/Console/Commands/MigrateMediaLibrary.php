@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
-use App\Models\Post;
-use App\Models\Company;
+use App\Models\BrandingSlider;
 use App\Models\Candidate;
-use App\Models\JobCategory;
-use App\Models\Testimonial;
+use App\Models\CmsServices;
+use App\Models\Company;
 use App\Models\FrontSetting;
 use App\Models\HeaderSlider;
-use App\Models\BrandingSlider;
 use App\Models\ImageSlider;
-use App\Models\CmsServices;
+use App\Models\JobCategory;
+use App\Models\Post;
+use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -50,20 +50,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $user = User::find($media->model_id);
 
-            if (!$user) {
+            if (! $user) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'users/profile_images/' . $media->file_name;
-                
+                $newPath = 'users/profile_images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $user->update(['profile_image_path' => $newPath]);
                 $this->info("Migrated media for user #{$user->id}");
             }
@@ -78,20 +78,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $company = Company::find($media->model_id);
 
-            if (!$company) {
+            if (! $company) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'companies/logos/' . $media->file_name;
-                
+                $newPath = 'companies/logos/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $company->update(['logo_path' => $newPath]);
                 $this->info("Migrated logo for company #{$company->id}");
             }
@@ -106,24 +106,24 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $candidate = Candidate::find($media->model_id);
 
-            if (!$candidate) {
+            if (! $candidate) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
                 // Check the collection name to determine if it's a resume or image
                 if ($media->collection_name === 'resumes') {
-                    $newPath = 'candidates/resumes/' . $media->file_name;
+                    $newPath = 'candidates/resumes/'.$media->file_name;
                     $candidate->update(['resume_path' => $newPath]);
                     $this->info("Migrated resume for candidate #{$candidate->id}");
                 } else {
-                    $newPath = 'candidates/images/' . $media->file_name;
+                    $newPath = 'candidates/images/'.$media->file_name;
                     $candidate->update(['image_path' => $newPath]);
                     $this->info("Migrated image for candidate #{$candidate->id}");
                 }
-                
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
@@ -131,7 +131,7 @@ class MigrateMediaLibrary extends Command
             }
         }
     }
-    
+
     private function migrateJobCategoryMedia()
     {
         $this->info('Migrating job category media...');
@@ -140,20 +140,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $category = JobCategory::find($media->model_id);
 
-            if (!$category) {
+            if (! $category) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'job_categories/images/' . $media->file_name;
-                
+                $newPath = 'job_categories/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $category->update(['image_path' => $newPath]);
                 $this->info("Migrated image for job category #{$category->id}");
             }
@@ -168,20 +168,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $post = Post::find($media->model_id);
 
-            if (!$post) {
+            if (! $post) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'posts/images/' . $media->file_name;
-                
+                $newPath = 'posts/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $post->update(['image_path' => $newPath]);
                 $this->info("Migrated image for post #{$post->id}");
             }
@@ -196,20 +196,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $testimonial = Testimonial::find($media->model_id);
 
-            if (!$testimonial) {
+            if (! $testimonial) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'testimonials/images/' . $media->file_name;
-                
+                $newPath = 'testimonials/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $testimonial->update(['image_path' => $newPath]);
                 $this->info("Migrated image for testimonial #{$testimonial->id}");
             }
@@ -224,24 +224,24 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $setting = FrontSetting::find($media->model_id);
 
-            if (!$setting) {
+            if (! $setting) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
                 // Check the collection name to determine if it's header or footer logo
                 if ($media->collection_name === 'header_logo') {
-                    $newPath = 'front_settings/header_logo/' . $media->file_name;
+                    $newPath = 'front_settings/header_logo/'.$media->file_name;
                     $setting->update(['header_logo_path' => $newPath]);
                     $this->info("Migrated header logo for front setting #{$setting->id}");
                 } else {
-                    $newPath = 'front_settings/footer_logo/' . $media->file_name;
+                    $newPath = 'front_settings/footer_logo/'.$media->file_name;
                     $setting->update(['footer_logo_path' => $newPath]);
                     $this->info("Migrated footer logo for front setting #{$setting->id}");
                 }
-                
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
@@ -258,20 +258,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = HeaderSlider::find($media->model_id);
 
-            if (!$slider) {
+            if (! $slider) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'header_sliders/images/' . $media->file_name;
-                
+                $newPath = 'header_sliders/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $slider->update(['image_path' => $newPath]);
                 $this->info("Migrated image for header slider #{$slider->id}");
             }
@@ -286,20 +286,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = BrandingSlider::find($media->model_id);
 
-            if (!$slider) {
+            if (! $slider) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'branding_sliders/images/' . $media->file_name;
-                
+                $newPath = 'branding_sliders/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $slider->update(['image_path' => $newPath]);
                 $this->info("Migrated image for branding slider #{$slider->id}");
             }
@@ -314,20 +314,20 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = ImageSlider::find($media->model_id);
 
-            if (!$slider) {
+            if (! $slider) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'image_sliders/images/' . $media->file_name;
-                
+                $newPath = 'image_sliders/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $slider->update(['image_path' => $newPath]);
                 $this->info("Migrated image for image slider #{$slider->id}");
             }
@@ -342,23 +342,23 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $service = CmsServices::find($media->model_id);
 
-            if (!$service) {
+            if (! $service) {
                 continue;
             }
 
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'cms_services/images/' . $media->file_name;
-                
+                $newPath = 'cms_services/images/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $service->update(['image_path' => $newPath]);
                 $this->info("Migrated image for CMS service #{$service->id}");
             }
         }
     }
-} 
+}

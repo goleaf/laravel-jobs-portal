@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Testimonial;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class TestimonialTable extends LivewireTableComponent
 {
@@ -47,7 +47,8 @@ class TestimonialTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setQueryStringStatus(false);
     }

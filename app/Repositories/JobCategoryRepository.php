@@ -44,8 +44,10 @@ class JobCategoryRepository extends BaseRepository
             $jobCategory = $this->create($input);
 
             if (isset($input['customer_image']) && ! empty($input['customer_image'])) {
-                $jobCategory->addMedia($input['customer_image'])->toMediaCollection(JobCategory::PATH,
-                    config('app.media_disc'));
+                $jobCategory->addMedia($input['customer_image'])->toMediaCollection(
+                    JobCategory::PATH,
+                    config('app.media_disc')
+                );
             }
         } catch (Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
@@ -64,8 +66,10 @@ class JobCategoryRepository extends BaseRepository
 
             if (! empty($input['customer_image'])) {
                 $jobCategories->clearMediaCollection(JobCategory::PATH);
-                $jobCategories->addMedia($input['customer_image'])->toMediaCollection(JobCategory::PATH,
-                    config('app.media_disc'));
+                $jobCategories->addMedia($input['customer_image'])->toMediaCollection(
+                    JobCategory::PATH,
+                    config('app.media_disc')
+                );
             }
         } catch (Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());

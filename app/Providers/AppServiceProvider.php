@@ -2,19 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Blade;
-use App\Helpers\TranslationHelper;
+use App\Console\Commands\ConsolidateTranslations;
 use App\Console\Commands\MigrateJsonTranslations;
 use App\Console\Commands\SynchronizeTranslations;
-use App\Console\Commands\ConsolidateTranslations;
-use Illuminate\Pagination\Paginator;
-use Livewire\Livewire;
-use App\Livewire\TableComponent;
 use App\Livewire\LanguageTable;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,15 +22,15 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Cashier::ignoreMigrations(); - Removed for Laravel 12 compatibility
-        
+
         // Removed localization.js singleton for Laravel 12 compatibility
-        
-//        $this->app->singleton(
-//        // the original class
-//            'vendor/brotzka/laravel-dotenv-editor/src/DotenvEditor.php',
-//            // my custom class
-//            'app/DotenvEditor.php'
-//        );
+
+        //        $this->app->singleton(
+        //        // the original class
+        //            'vendor/brotzka/laravel-dotenv-editor/src/DotenvEditor.php',
+        //            // my custom class
+        //            'app/DotenvEditor.php'
+        //        );
 
         // Register commands
         $this->commands([
@@ -85,24 +83,23 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Register Blade directives for translations
-        
+
         // Directive for translation: @t('app.welcome')
         Blade::directive('t', function ($expression) {
             return "<?php echo App\\Helpers\\TranslationHelper::get($expression); ?>";
         });
-        
+
         // Directive to check if a translation exists: @hasTranslation('app.welcome')
         Blade::directive('hasTranslation', function ($expression) {
             return "<?php if(App\\Helpers\\TranslationHelper::has($expression)): ?>";
         });
-        
+
         // Closing directive for @hasTranslation
         Blade::directive('endHasTranslation', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
 
-        // Register Livewire components
-        // Comment out for testing
+        // Comment out Livewire components registration to prevent errors
         // Livewire::component('language-table', LanguageTable::class);
         // Add other Livewire components here
     }
@@ -113,11 +110,11 @@ class AppServiceProvider extends ServiceProvider
     private function registerClassAliases(): void
     {
         // These aliases can be used without importing the classes
-        if (!class_exists('Column')) {
+        if (! class_exists('Column')) {
             class_alias(\App\Livewire\Column::class, 'Column');
         }
-        
-        if (!class_exists('Filter')) {
+
+        if (! class_exists('Filter')) {
             class_alias(\App\Livewire\Filter::class, 'Filter');
         }
     }

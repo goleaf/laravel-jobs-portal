@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\FavouriteCompany;
 use App\Models\Industry;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class FavouriteCompanyTable extends LivewireTableComponent
 {
@@ -36,10 +36,10 @@ class FavouriteCompanyTable extends LivewireTableComponent
             return [];
         });
 
-//        $this->setTableAttributes([
-//            'default' => false,
-//            'class' => 'table table-default',
-//        ]);
+        //        $this->setTableAttributes([
+        //            'default' => false,
+        //            'class' => 'table table-default',
+        //        ]);
 
         $this->setQueryStringStatus(false);
     }
@@ -82,8 +82,10 @@ class FavouriteCompanyTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-        $query = FavouriteCompany::with(['company.user', 'company.industry'])->where('favourite_companies.user_id',
-            getLoggedInUserId())->select('favourite_companies.*');
+        $query = FavouriteCompany::with(['company.user', 'company.industry'])->where(
+            'favourite_companies.user_id',
+            getLoggedInUserId()
+        )->select('favourite_companies.*');
 
         return $query;
     }

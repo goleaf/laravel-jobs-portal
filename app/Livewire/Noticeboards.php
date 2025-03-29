@@ -85,19 +85,26 @@ class Noticeboards extends Component
         $query = Noticeboard::query()->select('noticeboards.*');
 
         $query->when(isset($this->searchByNoticeboard) && $this->searchByNoticeboard != '', function (Builder $q) {
-            $q->where('title', 'like',
-                '%'.strtolower($this->searchByNoticeboard).'%');
+            $q->where(
+                'title',
+                'like',
+                '%'.strtolower($this->searchByNoticeboard).'%'
+            );
         });
 
-        $query->when(($this->status != '') && $this->status == 1,
+        $query->when(
+            ($this->status != '') && $this->status == 1,
             function (Builder $q) {
                 $q->where('is_active', '=', 1);
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 0,
+        $query->when(
+            ($this->status != '') && $this->status == 0,
             function (Builder $q) {
                 $q->where('is_active', '=', 0);
-            });
+            }
+        );
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

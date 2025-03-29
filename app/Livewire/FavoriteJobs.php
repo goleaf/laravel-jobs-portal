@@ -84,32 +84,32 @@ class FavoriteJobs extends Component
         $query = FavouriteJob::with(['job.company.user', 'job'])->orderByDesc('created_at');
         $query->where('user_id', Auth::id());
 
-//        $query->when($this->searchByJob != '', function (Builder $query) {
-//            $query->where(function (Builder $query) {
-//                $query->whereHas('job.company.user', function (Builder $query) {
-//                    $query->where('first_name', 'like', '%'.strtolower($this->searchByJob).'%');
-//                });
-//                $query->orWhereHas('job', function (Builder $query) {
-//                    $query->where('job_title', 'like', '%'.strtolower($this->searchByJob).'%');
-//                    $query->orWhere('job_expiry_date', 'like', '%'.strtolower($this->searchByJob).'%');
-//                    $query->orWhereHas('country', function (Builder $q) {
-//                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
-//                    });
-//                    $query->orWhereHas('state', function (Builder $q) {
-//                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
-//                    });
-//                    $query->orWhereHas('city', function (Builder $q) {
-//                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
-//                    });
-//                });
-//            });
-//        });
+        //        $query->when($this->searchByJob != '', function (Builder $query) {
+        //            $query->where(function (Builder $query) {
+        //                $query->whereHas('job.company.user', function (Builder $query) {
+        //                    $query->where('first_name', 'like', '%'.strtolower($this->searchByJob).'%');
+        //                });
+        //                $query->orWhereHas('job', function (Builder $query) {
+        //                    $query->where('job_title', 'like', '%'.strtolower($this->searchByJob).'%');
+        //                    $query->orWhere('job_expiry_date', 'like', '%'.strtolower($this->searchByJob).'%');
+        //                    $query->orWhereHas('country', function (Builder $q) {
+        //                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
+        //                    });
+        //                    $query->orWhereHas('state', function (Builder $q) {
+        //                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
+        //                    });
+        //                    $query->orWhereHas('city', function (Builder $q) {
+        //                        $q->where('name', 'like', '%'.$this->searchByJob.'%');
+        //                    });
+        //                });
+        //            });
+        //        });
 
-//        $query->when($this->filterFavouriteJobs != '', function (Builder $query) {
-//            $query->whereHas('job', function (Builder $q) {
-//                $q->where('status', $this->filterFavouriteJobs);
-//            });
-//        });
+        //        $query->when($this->filterFavouriteJobs != '', function (Builder $query) {
+        //            $query->whereHas('job', function (Builder $q) {
+        //                $q->where('status', $this->filterFavouriteJobs);
+        //            });
+        //        });
         $query->where('user_id', Auth::id());
 
         $all = $query->paginate($this->perPage);

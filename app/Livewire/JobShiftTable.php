@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\JobShift;
 use App\Livewire\Components\Column;
+use App\Models\JobShift;
 
 class JobShiftTable extends LivewireTableComponent
 {

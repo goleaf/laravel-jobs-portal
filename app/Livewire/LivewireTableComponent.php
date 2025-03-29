@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,36 +12,36 @@ abstract class LivewireTableComponent extends Component
 
     // Use Tailwind theme for pagination
     protected $paginationTheme = 'tailwind';
-    
+
     // Core pagination properties
     public $perPage = 10;
     public $perPageOptions = [10, 25, 50, 100];
-    
+
     // Sorting properties
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
-    
+
     // Search properties
     public $search = '';
     public $searchDebounce = 500; // ms
     public $searchableFields = [];
-    
+
     // Filter properties
     public $filters = [];
-    
+
     // Table properties
     public $tableName = 'livewire-table';
     public $primaryKey = 'id';
-    
+
     // UI control
     public $showButtonOnHeader = false;
     public $showFilterOnHeader = false;
     public $buttonComponent = null;
     public $filterComponent = '';
-    
+
     // Advanced features
     public $refreshInterval = null; // Set to a value in ms to enable polling
-    
+
     protected $listeners = ['resetPage', 'refresh' => '$refresh'];
 
     protected $model;
@@ -142,7 +141,7 @@ abstract class LivewireTableComponent extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        
+
         $this->resetPage();
     }
 
@@ -205,11 +204,11 @@ abstract class LivewireTableComponent extends Component
     public function selectAllFilters($key)
     {
         $filters = collect($this->filters())->firstWhere('key', $key);
-        
+
         if ($filters && isset($filters['options'])) {
             $this->filters[$key] = array_keys($filters['options']);
         }
-        
+
         $this->resetPage();
     }
 
@@ -221,7 +220,7 @@ abstract class LivewireTableComponent extends Component
         if (isset($this->model) && class_exists($this->model)) {
             return $this->model::query();
         }
-        
+
         // Override this method in child classes if model is not set
         return collect([]);
     }
@@ -249,10 +248,10 @@ abstract class LivewireTableComponent extends Component
         $searchableColumns = array_merge($searchableColumns, $this->searchableFields);
 
         // Apply search to each column
-        if (!empty($searchableColumns)) {
+        if (! empty($searchableColumns)) {
             $builder->where(function ($query) use ($searchableColumns) {
                 foreach ($searchableColumns as $column) {
-                    $query->orWhere($column, 'like', '%' . $this->search . '%');
+                    $query->orWhere($column, 'like', '%'.$this->search.'%');
                 }
             });
         }
@@ -289,7 +288,7 @@ abstract class LivewireTableComponent extends Component
         } else {
             $builder->where($key, $value);
         }
-        
+
         return $builder;
     }
 
@@ -307,11 +306,11 @@ abstract class LivewireTableComponent extends Component
     public function getQueryResults()
     {
         $builder = $this->getBaseQuery();
-        
+
         $builder = $this->applySearch($builder);
         $builder = $this->applyFilters($builder);
         $builder = $this->applySorting($builder);
-        
+
         return $builder->paginate($this->perPage);
     }
 
@@ -321,13 +320,14 @@ abstract class LivewireTableComponent extends Component
     public function render()
     {
         $columns = collect($this->columns());
-        $filters = collect($this->filters())->map(function($filter) {
+        $filters = collect($this->filters())->map(function ($filter) {
             if (is_array($filter)) {
                 return $filter;
             }
+
             return $filter->toArray();
         })->toArray();
-        
+
         return view('livewire.table', [
             'columns' => $columns,
             'data' => $this->getQueryResults(),

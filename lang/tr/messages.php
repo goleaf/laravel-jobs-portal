@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    //menu.blade keys
+    // menu.blade keys
     'dashboard' => 'Gösterge Paneli',
     'payment_failed' => 'Ödeme başarısız.',
     'job_categories' => 'İş Kategorileri',
@@ -306,7 +306,7 @@ return [
         'post_statistics' => 'Mesaj İstatistikleri',
     ],
 
-    //Job Category
+    // Job Category
     'job_category' => [
         'new_job_category' => 'Yeni İş Kategorisi',
         'edit_job_category' => 'İş Kategorisini Düzenle',
@@ -321,7 +321,7 @@ return [
         'no_job_category_available' => 'İş Kategorisi Yok',
     ],
 
-    //Settings
+    // Settings
     'setting' => [
         'paystack_payment_url' => 'ödeme yığını Ödeme URL',
         'application_name' => 'Uygulama Adı',
@@ -640,7 +640,7 @@ return [
         'no_degree_level_available' => 'Derece Seviyesi Yok',
     ],
 
-    //all resumes
+    // all resumes
     'resumes' => [
         'file' => 'Dosya',
         'name' => 'İsim Soyisim',
@@ -889,7 +889,7 @@ return [
         'no_testimonial_available' => 'Görüş Yok',
     ],
 
-    //employer heading menu
+    // employer heading menu
     'employer_menu' => [
         'general_dashboard' => 'Genel Gösterge Tablosu',
         'jobs' => 'Meslekler',
@@ -926,7 +926,7 @@ return [
         'job_applications' => 'İş başvuruları',
     ],
 
-    //skills
+    // skills
     'skill' => [
         'new_skill' => 'Yeni beceri',
         'edit_skill' => 'Beceri Düzenle',
@@ -1059,7 +1059,7 @@ return [
         'upgrade' => 'Güncelleme',
     ],
 
-    //transaction
+    // transaction
     'transaction' => [
         'plan_name' => 'Plan Adı',
         'subscription_id' => 'Abonelik Kimliği',
@@ -1073,7 +1073,7 @@ return [
         'user_name' => 'İşveren Adı',
     ],
 
-    //front settings
+    // front settings
     'front_settings' => [
         'featured_jobs_price' => 'Öne Çıkan İşler Fiyatı',
         'featured_jobs_due_days' => 'Varsayılan İşler Son Günler',
@@ -1119,7 +1119,7 @@ return [
         'about_image_three' => 'Resim Üç Hakkında',
     ],
 
-    //notification settings
+    // notification settings
     'notification_settings' => [
         'JOB_APPLICATION_SUBMITTED' => 'Yeni bir İş Başvurusu gönderirken',
         'MARK_JOB_FEATURED' => 'İşi Öne Çıkanlar olarak işaretlediğinde',
@@ -1188,7 +1188,7 @@ return [
     // Pricing Table
     'pricing_table' => [
         'get_started' => 'Başlamak',
-        'buy_plan' => 'Planı Satın Al'
+        'buy_plan' => 'Planı Satın Al',
     ],
     // Header notification
     'notification' => [
@@ -1591,6 +1591,6 @@ return [
         'follow_company_successfully' => 'Şirketi başarıyla takip edin.',
         'note_required' => 'Not alanı zorunludur',
         'resume_field_required' => 'Özgeçmiş alanı zorunludur.',
-        'verify_google_recaptcha' => 'Google recaptcha\'yı kontrol etmelisiniz.'
+        'verify_google_recaptcha' => 'Google recaptcha\'yı kontrol etmelisiniz.',
     ],
 ];

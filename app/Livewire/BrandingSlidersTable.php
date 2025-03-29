@@ -2,23 +2,23 @@
 
 namespace App\Livewire;
 
-use App\Models\BrandingSliders;
-use Illuminate\Database\Eloquent\Builder;
 use App\Livewire\Components\Column;
 use App\Livewire\Components\Filters\SelectFilter;
+use App\Models\BrandingSliders;
+use Illuminate\Database\Eloquent\Builder;
 
 class BrandingSlidersTable extends LivewireTableComponent
 {
     protected $model = BrandingSliders::class;
     public string $tableName = 'branding-sliders';
-    public $status =BrandingSliders::ALL;
-    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh','changeStatusFilter'];
+    public $status = BrandingSliders::ALL;
+    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeStatusFilter'];
 
     public $showButtonOnHeader = true;
     public $showFilterOnHeader = true;
 
     public $buttonComponent = 'branding_sliders.table_components.add_button';
-    public array $filterComponents = ['branding_sliders.table_components.filter',BrandingSliders::STATUS];
+    public array $filterComponents = ['branding_sliders.table_components.filter', BrandingSliders::STATUS];
 
     public function configure(): void
     {
@@ -52,7 +52,8 @@ class BrandingSlidersTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setQueryStringStatus(false);
 
@@ -78,46 +79,49 @@ class BrandingSlidersTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-        $query =  BrandingSliders::query();
-        $query->when($this->status != BrandingSliders::ALL, function($q) {
-         if($this->status) {
-                  $q->where('is_active', 1);
-         }else {
-                  $q->where('is_active', 0);
-         }
-});
-         return $query ->select('branding_sliders.*');
+        $query = BrandingSliders::query();
+        $query->when($this->status != BrandingSliders::ALL, function ($q) {
+            if ($this->status) {
+                $q->where('is_active', 1);
+            } else {
+                $q->where('is_active', 0);
+            }
+        });
+
+        return $query->select('branding_sliders.*');
     }
 
-//     public function filters(): array
-//     {
-//         return [
+    //     public function filters(): array
+    //     {
+    //         return [
 
-//             SelectFilter::make(__('messages.common.status'))
-//                 ->options([
-//                     '' => __('messages.filter_name.select_status'),
-//                     1 => __('messages.common.active'),
-//                     2 => __('messages.common.de_active'),
-//                 ])
-//                 ->filter(
-//                     function (Builder $builder, string $value) {
-//                         if ($value == 1) {
-//                             $builder->where('is_active', '=', 1);
-//                         } else {
-//                             $builder->where('is_active', '=', 0);
-//                         }
-//                     }
-//                 ),
-//         ];
-//     }
-    public function changeStatusFilter($status){
-         $this->status = $status;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+    //             SelectFilter::make(__('messages.common.status'))
+    //                 ->options([
+    //                     '' => __('messages.filter_name.select_status'),
+    //                     1 => __('messages.common.active'),
+    //                     2 => __('messages.common.de_active'),
+    //                 ])
+    //                 ->filter(
+    //                     function (Builder $builder, string $value) {
+    //                         if ($value == 1) {
+    //                             $builder->where('is_active', '=', 1);
+    //                         } else {
+    //                             $builder->where('is_active', '=', 0);
+    //                         }
+    //                     }
+    //                 ),
+    //         ];
+    //     }
+    public function changeStatusFilter($status)
+    {
+        $this->status = $status;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
 
     }
 
-    public function resetPagination() {
+    public function resetPagination()
+    {
         $this->resetPage('branding-slidersPage');
     }
 }

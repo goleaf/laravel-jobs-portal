@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\FavouriteCompany;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class EmployerFollowerTable extends LivewireTableComponent
 {
@@ -18,17 +18,18 @@ class EmployerFollowerTable extends LivewireTableComponent
 
         $this->setDefaultSort('created_at', 'desc');
 
-        $this->setThAttributes(function (Column $column) {
-            if ($column->isField('id')) {
+        $this->setThAttributes(
+            function (Column $column) {
+                if ($column->isField('id')) {
+                    return [
+                        'class' => 'text-center',
+                    ];
+                }
+
                 return [
                     'class' => 'text-center',
                 ];
             }
-
-            return [
-                'class' => 'text-center',
-            ];
-        }
         );
 
         $this->setTableAttributes(

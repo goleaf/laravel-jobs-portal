@@ -131,8 +131,10 @@ class JobApplicationRepository extends BaseRepository
         try {
             $documentMedia = Media::find($jobApplication->resume_id);
             if ($documentMedia == null) {
-                $documentMedia = Media::where('model_id', $jobApplication->candidate_id)->where('collection_name',
-                    'resumes')->latest()->first();
+                $documentMedia = Media::where('model_id', $jobApplication->candidate_id)->where(
+                    'collection_name',
+                    'resumes'
+                )->latest()->first();
             }
             $documentPath = $documentMedia->getPath();
             if (config('app.media_disc') === 'public') {

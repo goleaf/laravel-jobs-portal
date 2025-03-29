@@ -79,8 +79,11 @@ class MaritalStatuses extends Component
         $query = MaritalStatus::query()->select('marital_status.*');
 
         $query->when(isset($this->searchByMaritalStatus) && $this->searchByMaritalStatus != '', function (Builder $q) {
-            $q->where('marital_status', 'like',
-                '%'.strtolower($this->searchByMaritalStatus).'%');
+            $q->where(
+                'marital_status',
+                'like',
+                '%'.strtolower($this->searchByMaritalStatus).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

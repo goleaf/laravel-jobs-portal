@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Country;
 use App\Livewire\Components\Column;
+use App\Models\Country;
 
 class CountryTable extends LivewireTableComponent
 {
@@ -22,12 +22,12 @@ class CountryTable extends LivewireTableComponent
      * @var string
      */
     public $buttonComponent = 'countries.table-components.add_button';
-    
+
     /**
      * Enable pagination for this table
      */
     public bool $paginationStatus = true;
-    
+
     /**
      * Set per page pagination options
      */

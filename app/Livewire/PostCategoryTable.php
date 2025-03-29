@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\PostCategory;
 use App\Livewire\Components\Column;
+use App\Models\PostCategory;
 
 class PostCategoryTable extends LivewireTableComponent
 {

@@ -13,7 +13,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
 {
     use Queueable;
 
-    public $user;            //you'll need this to address the user
+    public $user;            // you'll need this to address the user
 
     /**
      * Create a new notification instance.
@@ -22,7 +22,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
      */
     public function __construct($user = '')
     {
-        $this->user = $user ?: Auth::user();         //if user is not supplied, get from session
+        $this->user = $user ?: Auth::user();         // if user is not supplied, get from session
     }
 
     /**
@@ -42,7 +42,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
      */
     public function toMail($notifiable): MailMessage
     {
-        $url = $this->verificationUrl($notifiable);     //verificationUrl required for the verification link
+        $url = $this->verificationUrl($notifiable);     // verificationUrl required for the verification link
         $user = $this->user;
         /** @var EmailTemplate $templateBody */
         $templateBody = EmailTemplate::whereTemplateName('Verify Email')->first();

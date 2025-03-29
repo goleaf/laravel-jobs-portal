@@ -3,24 +3,25 @@
 namespace Tests\Feature;
 
 use App\Models\Candidate;
-use App\Models\User;
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CandidateTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function candidate_can_be_created()
     {
         $user = User::factory()->create();
-        
+
         $candidateData = [
             'user_id' => $user->id,
             'expected_salary' => $this->faker->randomNumber(5),
@@ -34,7 +35,7 @@ class CandidateTest extends TestCase
         ];
 
         $candidate = Candidate::create($candidateData);
-        
+
         $this->assertInstanceOf(Candidate::class, $candidate);
         $this->assertEquals($candidateData['user_id'], $candidate->user_id);
         $this->assertEquals($candidateData['expected_salary'], $candidate->expected_salary);
@@ -46,16 +47,16 @@ class CandidateTest extends TestCase
     public function candidate_can_be_updated()
     {
         $candidate = Candidate::factory()->create();
-        
+
         $updatedData = [
             'expected_salary' => $this->faker->randomNumber(5),
             'current_salary' => $this->faker->randomNumber(5),
             'is_immediate_available' => false,
         ];
-        
+
         $candidate->update($updatedData);
         $candidate->refresh();
-        
+
         $this->assertEquals($updatedData['expected_salary'], $candidate->expected_salary);
         $this->assertEquals($updatedData['current_salary'], $candidate->current_salary);
         $this->assertFalse($candidate->is_immediate_available);
@@ -66,7 +67,7 @@ class CandidateTest extends TestCase
     {
         $user = User::factory()->create();
         $candidate = Candidate::factory()->create(['user_id' => $user->id]);
-        
+
         $this->assertInstanceOf(User::class, $candidate->user);
         $this->assertEquals($user->id, $candidate->user_id);
     }
@@ -75,7 +76,7 @@ class CandidateTest extends TestCase
     public function candidate_can_have_education_records()
     {
         $candidate = Candidate::factory()->create();
-        
+
         $education = CandidateEducation::factory()->create([
             'candidate_id' => $candidate->id,
             'degree_level' => $this->faker->word,
@@ -83,7 +84,7 @@ class CandidateTest extends TestCase
             'year' => $this->faker->year,
             'institute' => $this->faker->company,
         ]);
-        
+
         $this->assertInstanceOf(CandidateEducation::class, $candidate->educations->first());
         $this->assertCount(1, $candidate->educations);
         $this->assertEquals($education->id, $candidate->educations->first()->id);
@@ -93,7 +94,7 @@ class CandidateTest extends TestCase
     public function candidate_can_have_experience_records()
     {
         $candidate = Candidate::factory()->create();
-        
+
         $experience = CandidateExperience::factory()->create([
             'candidate_id' => $candidate->id,
             'company' => $this->faker->company,
@@ -102,7 +103,7 @@ class CandidateTest extends TestCase
             'end_date' => $this->faker->date(),
             'is_current_job' => false,
         ]);
-        
+
         $this->assertInstanceOf(CandidateExperience::class, $candidate->experiences->first());
         $this->assertCount(1, $candidate->experiences);
         $this->assertEquals($experience->id, $candidate->experiences->first()->id);
@@ -113,13 +114,13 @@ class CandidateTest extends TestCase
     {
         $candidate = Candidate::factory()->create();
         $job = Job::factory()->create();
-        
+
         $application = JobApplication::factory()->create([
             'candidate_id' => $candidate->id,
             'job_id' => $job->id,
             'status' => JobApplication::PENDING,
         ]);
-        
+
         $this->assertInstanceOf(JobApplication::class, $candidate->jobApplications->first());
         $this->assertCount(1, $candidate->jobApplications);
         $this->assertEquals($application->id, $candidate->jobApplications->first()->id);
@@ -130,10 +131,10 @@ class CandidateTest extends TestCase
     {
         Candidate::factory()->count(3)->create(['experience' => 5]);
         Candidate::factory()->count(2)->create(['experience' => 2]);
-        
+
         $experiencedCandidates = Candidate::where('experience', '>=', 5)->get();
         $lesserExperiencedCandidates = Candidate::where('experience', '<', 5)->get();
-        
+
         $this->assertCount(3, $experiencedCandidates);
         $this->assertCount(2, $lesserExperiencedCandidates);
     }
@@ -143,11 +144,11 @@ class CandidateTest extends TestCase
     {
         Candidate::factory()->count(3)->create(['is_immediate_available' => true]);
         Candidate::factory()->count(2)->create(['is_immediate_available' => false]);
-        
+
         $immediatelyAvailable = Candidate::where('is_immediate_available', true)->get();
         $notImmediatelyAvailable = Candidate::where('is_immediate_available', false)->get();
-        
+
         $this->assertCount(3, $immediatelyAvailable);
         $this->assertCount(2, $notImmediatelyAvailable);
     }
-} 
+}

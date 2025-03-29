@@ -3,10 +3,9 @@
 namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Computed;
 
 abstract class BaseTable extends Component
 {
@@ -35,6 +34,7 @@ abstract class BaseTable extends Component
     ];
 
     abstract public function columns(): array;
+
     abstract public function query(): Builder;
 
     public function filters(): array
@@ -96,7 +96,7 @@ abstract class BaseTable extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        
+
         $this->resetPage();
     }
 
@@ -114,32 +114,32 @@ abstract class BaseTable extends Component
     public function rows()
     {
         $query = $this->query();
-        
+
         // Apply search
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $this->applySearch($query);
         }
-        
+
         // Apply filters
         $this->applyFilters($query);
-        
+
         // Apply sorting
         $query->orderBy($this->sortField, $this->sortDirection);
-        
+
         return $query->paginate($this->perPage);
     }
 
     protected function applySearch($query)
     {
         $searchColumns = $this->getSearchableColumns();
-        
+
         if (empty($searchColumns)) {
             return;
         }
-        
+
         $query->where(function ($subQuery) use ($searchColumns) {
             foreach ($searchColumns as $column) {
-                $subQuery->orWhere($column, 'like', '%' . $this->search . '%');
+                $subQuery->orWhere($column, 'like', '%'.$this->search.'%');
             }
         });
     }
@@ -160,9 +160,9 @@ abstract class BaseTable extends Component
             if ($value === null || $value === '' || (is_array($value) && count($value) === 0)) {
                 continue;
             }
-            
+
             $filter = collect($this->filters())->firstWhere('key', $key);
-            
+
             if ($filter && isset($filter['callback']) && is_callable($filter['callback'])) {
                 call_user_func($filter['callback'], $query, $value);
             }
@@ -177,4 +177,4 @@ abstract class BaseTable extends Component
             'filters' => $this->filters(),
         ]);
     }
-} 
+}

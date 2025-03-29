@@ -1091,7 +1091,7 @@ return [
     ],
     'pricing_table' => [
         'get_started' => 'Get started',
-        'buy_plan' => 'Buy Plan'
+        'buy_plan' => 'Buy Plan',
     ],
     'notification' => [
         'notifications' => 'Notifications',
@@ -1523,6 +1523,6 @@ return [
         'follow_company_successfully' => 'Follow Company successfully.',
         'note_required' => 'The Note Field is required',
         'resume_field_required' => 'The Resume Field is Required.',
-        'verify_google_recaptcha' => 'You must verify google recaptcha.'
+        'verify_google_recaptcha' => 'You must verify google recaptcha.',
     ],
 ];

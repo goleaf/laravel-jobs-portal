@@ -2,15 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Candidate;
 use App\Models\CustomMedia;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class AllResumeTable extends LivewireTableComponent
 {
     public $showFilterOnHeader = false;
+
     public function configure(): void
     {
         $this->setPrimaryKey('id');
@@ -49,7 +50,8 @@ class AllResumeTable extends LivewireTableComponent
                 ->sortable(function (Builder $query, $direction) {
                     return $query->orderBy(User::select('first_name')->whereColumn('candidates.user_id', 'users.id'), $direction);
                 })
-                ->searchable(function (Builder $query, $direction) {
+                ->searchable(
+                    function (Builder $query, $direction) {
                         return $query->whereHas('candidate.user', function (Builder $q) use ($direction) {
                             $q->whereRaw("TRIM(CONCAT(first_name,' ',last_name,' ')) like '%{$direction}%'");
                         });
@@ -67,8 +69,10 @@ class AllResumeTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-        return CustomMedia::query()->where('model_type', Candidate::class)->where('collection_name',
-            Candidate::RESUME_PATH)->select('media.*')
+        return CustomMedia::query()->where('model_type', Candidate::class)->where(
+            'collection_name',
+            Candidate::RESUME_PATH
+        )->select('media.*')
             ->join('candidates', 'media.model_id', '=', 'candidates.id')
             ->join('users', 'candidates.user_id', '=', 'users.id')->with('candidate.user');
     }

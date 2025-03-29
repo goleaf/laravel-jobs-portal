@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\FAQ;
 use App\Livewire\Components\Column;
+use App\Models\FAQ;
 
 class FAQTable extends LivewireTableComponent
 {
@@ -24,7 +24,8 @@ class FAQTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setThAttributes(function (Column $column) {
             return [

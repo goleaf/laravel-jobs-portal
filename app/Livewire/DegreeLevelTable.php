@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\RequiredDegreeLevel;
 use App\Livewire\Components\Column;
+use App\Models\RequiredDegreeLevel;
 
 class DegreeLevelTable extends LivewireTableComponent
 {

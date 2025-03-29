@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Illuminate\Database\Eloquent\Builder;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 
 class Filter
 {
@@ -45,11 +45,9 @@ class Filter
     /**
      * Create a new filter instance.
      *
-     * @param string $key
-     * @param string|null $label
      * @return void
      */
-    public function __construct(string $key, string $label = null)
+    public function __construct(string $key, ?string $label = null)
     {
         $this->key = $key;
         $this->label = $label ?? ucfirst(str_replace('_', ' ', $key));
@@ -58,11 +56,9 @@ class Filter
     /**
      * Create a new filter instance.
      *
-     * @param string $key
-     * @param string|null $label
      * @return static
      */
-    public static function make(string $key, string $label = null): self
+    public static function make(string $key, ?string $label = null): self
     {
         return new static($key, $label);
     }
@@ -75,6 +71,7 @@ class Filter
     public function select(): self
     {
         $this->type = 'select';
+
         return $this;
     }
 
@@ -86,6 +83,7 @@ class Filter
     public function multiSelect(): self
     {
         $this->type = 'multiselect';
+
         return $this;
     }
 
@@ -97,6 +95,7 @@ class Filter
     public function date(): self
     {
         $this->type = 'date';
+
         return $this;
     }
 
@@ -108,37 +107,38 @@ class Filter
     public function dateRange(): self
     {
         $this->type = 'daterange';
+
         return $this;
     }
 
     /**
      * Set custom view for filter.
      *
-     * @param string $view
      * @return $this
      */
     public function view(string $view): self
     {
         $this->view = $view;
+
         return $this;
     }
 
     /**
      * Set options for the filter.
      *
-     * @param array $options
      * @return $this
      */
     public function options(array $options): self
     {
         $this->options = $options;
+
         return $this;
     }
 
     /**
      * Set options from an enum class.
      *
-     * @param string $enumClass
+     * @param  string  $enumClass
      * @return $this
      */
     public function optionsFromEnum($enumClass): self
@@ -150,65 +150,61 @@ class Filter
             }
             $this->options = $options;
         }
-        
+
         return $this;
     }
 
     /**
      * Set options from a query.
      *
-     * @param Builder $query
-     * @param string $valueField
-     * @param string $labelField
      * @return $this
      */
     public function optionsFromQuery(Builder $query, string $valueField = 'id', string $labelField = 'name'): self
     {
         $this->options = $query->pluck($labelField, $valueField)->toArray();
+
         return $this;
     }
 
     /**
      * Set a callback for the filter.
      *
-     * @param Closure $callback
      * @return $this
      */
     public function callback(Closure $callback): self
     {
         $this->callback = $callback;
+
         return $this;
     }
 
     /**
      * Set an attribute for the filter.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  mixed  $value
      * @return $this
      */
     public function attribute(string $key, $value): self
     {
         $this->attributes[$key] = $value;
+
         return $this;
     }
 
     /**
      * Set multiple attributes for the filter.
      *
-     * @param array $attributes
      * @return $this
      */
     public function attributes(array $attributes): self
     {
         $this->attributes = array_merge($this->attributes, $attributes);
+
         return $this;
     }
 
     /**
      * Get filter label.
-     *
-     * @return string
      */
     public function getLabel(): string
     {
@@ -217,8 +213,6 @@ class Filter
 
     /**
      * Get filter key.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -227,8 +221,6 @@ class Filter
 
     /**
      * Get filter type.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -237,8 +229,6 @@ class Filter
 
     /**
      * Get filter options.
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -247,8 +237,6 @@ class Filter
 
     /**
      * Get filter view.
-     *
-     * @return string|null
      */
     public function getView(): ?string
     {
@@ -257,8 +245,6 @@ class Filter
 
     /**
      * Get filter callback.
-     *
-     * @return Closure|null
      */
     public function getCallback(): ?Closure
     {
@@ -267,8 +253,6 @@ class Filter
 
     /**
      * Get filter attributes.
-     *
-     * @return array
      */
     public function getAttributes(): array
     {
@@ -278,8 +262,7 @@ class Filter
     /**
      * Apply filter to a query.
      *
-     * @param Builder $query
-     * @param mixed $value
+     * @param  mixed  $value
      * @return Builder
      */
     public function apply(Builder $query, $value)
@@ -291,26 +274,26 @@ class Filter
         switch ($this->type) {
             case 'select':
                 return $query->where($this->key, $value);
-            
+
             case 'multiselect':
-                return $query->whereIn($this->key, (array)$value);
-            
+                return $query->whereIn($this->key, (array) $value);
+
             case 'date':
                 return $query->whereDate($this->key, $value);
-            
+
             case 'daterange':
-                if (isset($value['from']) && !empty($value['from'])) {
+                if (isset($value['from']) && ! empty($value['from'])) {
                     $query->whereDate($this->key, '>=', $value['from']);
                 }
-                
-                if (isset($value['to']) && !empty($value['to'])) {
+
+                if (isset($value['to']) && ! empty($value['to'])) {
                     $query->whereDate($this->key, '<=', $value['to']);
                 }
-                
+
                 return $query;
-            
+
             default:
                 return $query->where($this->key, $value);
         }
     }
-} 
+}

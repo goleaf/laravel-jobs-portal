@@ -51,7 +51,7 @@ class PostRepository extends BaseRepository
             if (isset($input['image']) && ! empty($input['image'])) {
                 $post->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
-            //update blog assign Categories
+            // update blog assign Categories
             if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
                 $post->postAssignCategories()->sync($input['blogCategories']);
             }
@@ -72,7 +72,7 @@ class PostRepository extends BaseRepository
                 $blog->clearMediaCollection(Post::PATH);
                 $blog->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
-            //update blog assign Categories
+            // update blog assign Categories
             if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
                 $blog->postAssignCategories()->sync($input['blogCategories']);
             }
@@ -114,8 +114,10 @@ class PostRepository extends BaseRepository
         ])->findOrFail($blog->id);
         $data['blogCategories'] = PostCategory::withCount('postAssignCategories')->get();
         $data['blogCategory'] = PostCategory::toBase()->pluck('name', 'id');
-        $data['popularBlogs'] = Post::with('media')->whereNotIn('id',
-            [$blog->id])->orderByDesc('created_at')->take(3)->get();
+        $data['popularBlogs'] = Post::with('media')->whereNotIn(
+            'id',
+            [$blog->id]
+        )->orderByDesc('created_at')->take(3)->get();
 
         $data['comments'] = PostComment::with('user')->wherePostId($blog->id)->orderBy('id', 'DESC')->get();
         $data['prevPost'] = Post::where('id', '>', $blog->id)->orderBy('id', 'asc')->first();
@@ -139,8 +141,10 @@ class PostRepository extends BaseRepository
         $blogIds = $data['blogs']->pluck('id')->toArray();
         $data['blogCategories'] = PostCategory::withCount('postAssignCategories')->toBase()->get();
         $data['blogCategory'] = PostCategory::toBase()->pluck('name', 'id');
-        $data['popularBlogs'] = Post::with('media')->whereNotIn('id',
-            $blogIds)->orderByDesc('created_at')->take(3)->get();
+        $data['popularBlogs'] = Post::with('media')->whereNotIn(
+            'id',
+            $blogIds
+        )->orderByDesc('created_at')->take(3)->get();
         $data['categoryId'] = $categoryId;
 
         return $data;

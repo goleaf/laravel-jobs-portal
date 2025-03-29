@@ -53,7 +53,7 @@ class TranslationManagerController extends AppBaseController
 
     public function store(Request $request): JsonResponse
     {
-//        return $this->sendError('This action is not allow in demo');
+        //        return $this->sendError('This action is not allow in demo');
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|regex:/^[a-zA-Z]+$/u|min:2|max:2',
@@ -70,9 +70,9 @@ class TranslationManagerController extends AppBaseController
 
     public function update(Request $request): RedirectResponse
     {
-//        Flash::error('This action is not allow in demo');
+        //        Flash::error('This action is not allow in demo');
 
-//        return Redirect::back();
+        //        return Redirect::back();
 
         $lName = $request->get('translate_language');
         $fileName = $request->get('file_name');

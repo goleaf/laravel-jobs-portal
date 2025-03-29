@@ -39,11 +39,11 @@ class TransactionController extends AppBaseController
         try {
             setStripeApiKey();
             $envSetting = getEnvSetting();
-            if(!empty($envSetting['stripe_secret'])){
+            if (! empty($envSetting['stripe_secret'])) {
                 $stripe = new StripeClient(
                     $envSetting['stripe_secret']
                 );
-            }else{
+            } else {
                 $stripe = new StripeClient(
                     config('services.stripe.secret_key')
                 );

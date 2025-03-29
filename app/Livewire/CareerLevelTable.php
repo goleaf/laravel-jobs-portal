@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\CareerLevel;
 use App\Livewire\Components\Column;
+use App\Models\CareerLevel;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 
@@ -14,7 +14,7 @@ class CareerLevelTable extends LivewireTableComponent
     public $showButtonOnHeader = true;
 
     public $buttonComponent = 'career_levels.table-components.add_button';
-    
+
     // Properties to store form data
     public $careerLevelId = '';
     public $levelName = '';
@@ -25,7 +25,7 @@ class CareerLevelTable extends LivewireTableComponent
         'createCareerLevel' => 'create',
         'updateCareerLevel' => 'update',
         'editCareerLevel' => 'edit',
-        'deleteCareerLevel' => 'delete'
+        'deleteCareerLevel' => 'delete',
     ];
 
     public function configure(): void
@@ -41,13 +41,13 @@ class CareerLevelTable extends LivewireTableComponent
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('level_name')) {
-                return[
+                return [
                     'style' => 'width:70%',
                     'class' => 'text-start',
                 ];
             }
 
-            return[
+            return [
                 'class' => 'min-w-100px text-center',
             ];
         });
@@ -69,7 +69,7 @@ class CareerLevelTable extends LivewireTableComponent
                 ->view('career_levels.table-components.action_button'),
         ];
     }
-    
+
     /**
      * Create a new career level
      */
@@ -78,20 +78,20 @@ class CareerLevelTable extends LivewireTableComponent
     {
         try {
             CareerLevel::create([
-                'level_name' => $data['levelName']
+                'level_name' => $data['levelName'],
             ]);
-            
+
             $this->dispatch('showSuccessToast', message: __('career_level.created_successfully'));
-            
+
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->dispatch('showErrorToast', message: __('common.something_went_wrong'));
-            
+
             return false;
         }
     }
-    
+
     /**
      * Load career level data for editing
      */
@@ -103,22 +103,22 @@ class CareerLevelTable extends LivewireTableComponent
             $this->careerLevelId = $careerLevel->id;
             $this->levelName = $careerLevel->level_name;
             $this->editingCareerLevel = $careerLevel;
-            
+
             // Dispatch event to fill form fields
             $this->dispatch('fillCareerLevelForm', [
                 'id' => $careerLevel->id,
-                'levelName' => $careerLevel->level_name
+                'levelName' => $careerLevel->level_name,
             ]);
-            
+
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->dispatch('showErrorToast', message: __('common.something_went_wrong'));
-            
+
             return false;
         }
     }
-    
+
     /**
      * Update career level
      */
@@ -128,20 +128,20 @@ class CareerLevelTable extends LivewireTableComponent
         try {
             $careerLevel = CareerLevel::findOrFail($data['id']);
             $careerLevel->update([
-                'level_name' => $data['levelName']
+                'level_name' => $data['levelName'],
             ]);
-            
+
             $this->dispatch('showSuccessToast', message: __('career_level.updated_successfully'));
-            
+
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->dispatch('showErrorToast', message: __('common.something_went_wrong'));
-            
+
             return false;
         }
     }
-    
+
     /**
      * Delete career level
      */
@@ -151,14 +151,14 @@ class CareerLevelTable extends LivewireTableComponent
         try {
             $careerLevel = CareerLevel::findOrFail($data['id']);
             $careerLevel->delete();
-            
+
             $this->dispatch('showSuccessToast', message: __('career_level.deleted_successfully'));
-            
+
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->dispatch('showErrorToast', message: __('common.something_went_wrong'));
-            
+
             return false;
         }
     }

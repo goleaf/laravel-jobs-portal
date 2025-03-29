@@ -32,8 +32,6 @@ class Column
     /**
      * Create a new column instance.
      *
-     * @param string $title
-     * @param string|null $field
      * @return void
      */
     public function __construct(string $title, ?string $field = null)
@@ -45,8 +43,6 @@ class Column
     /**
      * Create a new column instance.
      *
-     * @param string $title
-     * @param string|null $field
      * @return static
      */
     public static function make(string $title, ?string $field = null): self
@@ -81,7 +77,6 @@ class Column
     /**
      * Set view to render the column.
      *
-     * @param string $view
      * @return $this
      */
     public function view(string $view): self
@@ -93,8 +88,6 @@ class Column
 
     /**
      * Get column title.
-     *
-     * @return string
      */
     public function getTitle(): string
     {
@@ -103,8 +96,6 @@ class Column
 
     /**
      * Get column field.
-     *
-     * @return string|null
      */
     public function getField(): ?string
     {
@@ -113,8 +104,6 @@ class Column
 
     /**
      * Check if column is sortable.
-     *
-     * @return bool
      */
     public function isSortable(): bool
     {
@@ -123,8 +112,6 @@ class Column
 
     /**
      * Check if column is searchable.
-     *
-     * @return bool
      */
     public function isSearchable(): bool
     {
@@ -133,11 +120,9 @@ class Column
 
     /**
      * Get column view.
-     *
-     * @return string|null
      */
     public function getView(): ?string
     {
         return $this->view;
     }
-} 
+}

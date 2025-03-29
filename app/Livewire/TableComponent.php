@@ -5,12 +5,10 @@ namespace App\Livewire;
 use App\Livewire\Components\Column;
 use App\Livewire\Components\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
-use Illuminate\Support\Str;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 abstract class TableComponent extends Component
 {
@@ -128,7 +126,7 @@ abstract class TableComponent extends Component
      */
     public function toggleFilters()
     {
-        $this->showFilters = !$this->showFilters;
+        $this->showFilters = ! $this->showFilters;
     }
 
     /**
@@ -194,7 +192,7 @@ abstract class TableComponent extends Component
         $query = $this->query();
 
         // Apply search if needed
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query = $this->applySearch($query);
         }
 
@@ -202,7 +200,7 @@ abstract class TableComponent extends Component
         $query = $this->applyFilters($query);
 
         // Apply sorting
-        if (!empty($this->sortField)) {
+        if (! empty($this->sortField)) {
             $query = $query->orderBy($this->sortField, $this->sortDirection);
         }
 
@@ -217,7 +215,7 @@ abstract class TableComponent extends Component
     {
         $searchableColumns = collect($this->getColumns())
             ->filter(function (Column $column) {
-                return $column->isSearchable() && !$column->isHidden();
+                return $column->isSearchable() && ! $column->isHidden();
             })
             ->map(function (Column $column) {
                 return $column->getField();
@@ -230,7 +228,7 @@ abstract class TableComponent extends Component
 
         return $query->where(function (Builder $query) use ($searchableColumns) {
             foreach ($searchableColumns as $column) {
-                $query->orWhere($column, 'like', '%' . $this->search . '%');
+                $query->orWhere($column, 'like', '%'.$this->search.'%');
             }
         });
     }
@@ -269,4 +267,4 @@ abstract class TableComponent extends Component
             'filters' => $this->filters(),
         ]);
     }
-} 
+}

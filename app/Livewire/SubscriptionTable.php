@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Plan;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class SubscriptionTable extends LivewireTableComponent
 {
@@ -45,7 +45,7 @@ class SubscriptionTable extends LivewireTableComponent
                 ];
             }
 
-            return[
+            return [
                 'class' => 'text-center',
             ];
         });

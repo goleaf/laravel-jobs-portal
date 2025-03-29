@@ -189,7 +189,9 @@ class SubscriptionController extends AppBaseController
 
         try {
             $event = Webhook::constructEvent(
-                $payload, $sigHeader, $stripeWebHookSecret
+                $payload,
+                $sigHeader,
+                $stripeWebHookSecret
             );
             $input = $request->all();
             $this->subscriptionRepository->updateSubscription($input);

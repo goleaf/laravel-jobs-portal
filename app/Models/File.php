@@ -46,12 +46,10 @@ class File extends Model
 
     /**
      * Get the URL of the file.
-     *
-     * @return string
      */
     public function getUrl(): string
     {
-        return asset('storage/' . $this->path);
+        return asset('storage/'.$this->path);
     }
 
     /**
@@ -64,8 +62,6 @@ class File extends Model
 
     /**
      * Get path attribute.
-     *
-     * @return string
      */
     public function getPathAttribute(): string
     {
@@ -74,8 +70,6 @@ class File extends Model
 
     /**
      * Get size in human readable format.
-     *
-     * @return string
      */
     public function getHumanReadableSize(): string
     {
@@ -86,6 +80,6 @@ class File extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
-} 
+}

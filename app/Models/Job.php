@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -141,14 +141,13 @@ class Job extends Model
         self::NO => 'No',
     ];
 
-
     const IS_FEATURED = [
         self::SELECT_FEATURD => 'Select Featured job',
         self::YES => 'Yes',
         self::NO => 'No',
     ];
-    const  SELECT_FEATURD = 2;
-    const  SELECT_IS_SUSPENDED = 2;
+    const SELECT_FEATURD = 2;
+    const SELECT_IS_SUSPENDED = 2;
     const SELECT_IS_FREELANCER = 2;
     const SELECT_JOBS_ACTIVE = 2;
     const YES = 1;
@@ -167,7 +166,6 @@ class Job extends Model
     const STATUS_SUSPENDED = 4;
 
     const NOT_SUSPENDED = 0;
-
 
     const STATUS = [
         self::SELECT_STATUS => 'Select Status',
@@ -196,7 +194,6 @@ class Job extends Model
         2 => 'danger',
         3 => 'primary',
     ];
-
 
     const IS_FREELANCER = [
         self::SELECT_IS_FREELANCER => 'Is Freelance',

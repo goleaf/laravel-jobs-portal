@@ -1090,7 +1090,7 @@ return [
     ],
     'pricing_table' => [
         'get_started' => 'loslegen',
-        'buy_plan' => 'Plan kaufen'
+        'buy_plan' => 'Plan kaufen',
     ],
     'notification' => [
         'notifications' => 'Benachrichtigungen',
@@ -1492,6 +1492,6 @@ return [
         'follow_company_successfully' => 'Verfolgen Sie das Unternehmen erfolgreich.',
         'note_required' => 'Hinweisfeld ist erforderlich',
         'resume_field_required' => 'Das Lebenslauffeld ist erforderlich.',
-        'verify_google_recaptcha' => 'Sie sollten Google Recaptcha überprüfen.'
+        'verify_google_recaptcha' => 'Sie sollten Google Recaptcha überprüfen.',
     ],
 ];

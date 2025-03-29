@@ -17,7 +17,7 @@ class ExampleWithHelpersTest extends TestCase
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'name' => 'Test User',
-            'is_admin' => true
+            'is_admin' => true,
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -31,9 +31,9 @@ class ExampleWithHelpersTest extends TestCase
     public function can_get_api_auth_headers()
     {
         $user = TestHelpers::createUserWithUniqueEmail();
-        
+
         $headers = TestHelpers::getApiAuthHeaders($user);
-        
+
         $this->assertArrayHasKey('Authorization', $headers);
         $this->assertArrayHasKey('Accept', $headers);
         $this->assertStringStartsWith('Bearer ', $headers['Authorization']);
@@ -43,14 +43,14 @@ class ExampleWithHelpersTest extends TestCase
     public function can_create_candidate_with_profile()
     {
         [$user, $candidate] = TestHelpers::createCandidateWithProfile([
-            'name' => 'Candidate User'
+            'name' => 'Candidate User',
         ]);
-        
+
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'name' => 'Candidate User',
         ]);
-        
+
         $this->assertDatabaseHas('candidates', [
             'user_id' => $user->id,
         ]);
@@ -60,16 +60,16 @@ class ExampleWithHelpersTest extends TestCase
     public function can_create_employer_with_company()
     {
         [$user, $company] = TestHelpers::createEmployerWithCompany([
-            'name' => 'Employer User'
+            'name' => 'Employer User',
         ], [
-            'name' => 'Test Company'
+            'name' => 'Test Company',
         ]);
-        
+
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'name' => 'Employer User',
         ]);
-        
+
         $this->assertDatabaseHas('companies', [
             'user_id' => $user->id,
             'name' => 'Test Company',
@@ -80,11 +80,11 @@ class ExampleWithHelpersTest extends TestCase
     public function can_create_jobs_for_company()
     {
         [$user, $company] = TestHelpers::createEmployerWithCompany();
-        
+
         $jobs = TestHelpers::createJobsForCompany($company, 2);
-        
+
         $this->assertCount(2, $jobs);
-        
+
         foreach ($jobs as $job) {
             $this->assertDatabaseHas('jobs', [
                 'id' => $job->id,
@@ -92,4 +92,4 @@ class ExampleWithHelpersTest extends TestCase
             ]);
         }
     }
-} 
+}

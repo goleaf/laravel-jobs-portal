@@ -79,10 +79,16 @@ class Inquires extends Component
         $query = Inquiry::query()->orderByDesc('created_at')->select('inquiries.*');
 
         $query->when(isset($this->searchInquiry) && $this->searchInquiry != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchInquiry).'%');
-            $q->orWhere('subject', 'like',
-                '%'.strtolower($this->searchInquiry).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchInquiry).'%'
+            );
+            $q->orWhere(
+                'subject',
+                'like',
+                '%'.strtolower($this->searchInquiry).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

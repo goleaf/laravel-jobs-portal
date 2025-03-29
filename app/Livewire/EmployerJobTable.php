@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 use App\Models\Job;
 use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Components\Column;
-use App\Livewire\Components\Filters\SelectFilter;
 
 class EmployerJobTable extends LivewireTableComponent
 {
@@ -17,11 +17,10 @@ class EmployerJobTable extends LivewireTableComponent
     public $showFilterOnHeader = true;
     public $featured = Job::SELECT_FEATURD;
     public $employeeJobStatus = Job::SELECT_STATUS;
-    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeFeaturedFilter','employeeJobStatus'];
-
+    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeFeaturedFilter', 'employeeJobStatus'];
 
     public $buttonComponent = 'employer.jobs.job_table_components.add_button';
-    public array $filterComponents = ['employer.jobs.job_table_components.filter', Job::IS_FEATURED,Job::STATUS];
+    public array $filterComponents = ['employer.jobs.job_table_components.filter', Job::IS_FEATURED, Job::STATUS];
 
     public function configure(): void
     {
@@ -33,7 +32,8 @@ class EmployerJobTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('status')) {
@@ -41,6 +41,7 @@ class EmployerJobTable extends LivewireTableComponent
                     'class' => 'd-flex justify-content-center',
                 ];
             }
+
             return [
                 'class' => 'text-center',
             ];
@@ -123,13 +124,13 @@ class EmployerJobTable extends LivewireTableComponent
             'jobShift'
         )
             ->where('company_id', Auth::user()->owner_id);
-            $query->when($this->featured != Job::SELECT_FEATURD, function($q) {
-                  $q->Has('activeFeatured', $this->featured);
-                 });
-            $query->when($this->employeeJobStatus != Job::SELECT_STATUS, function($q) {
-                  $q->where('status', $this->employeeJobStatus);
-                 });
-                 $query->select('jobs.*');
+        $query->when($this->featured != Job::SELECT_FEATURD, function ($q) {
+            $q->Has('activeFeatured', $this->featured);
+        });
+        $query->when($this->employeeJobStatus != Job::SELECT_STATUS, function ($q) {
+            $q->where('status', $this->employeeJobStatus);
+        });
+        $query->select('jobs.*');
 
         return $query->withCount('appliedJobs as total_applied_jobs');
     }
@@ -167,20 +168,23 @@ class EmployerJobTable extends LivewireTableComponent
                 ),
         ];
     }
+
     public function changeFeaturedFilter($featured)
     {
-         $this->featured = $featured;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
-    }
-    public function employeeJobStatus($employeeJobStatus)
-    {
-         $this->employeeJobStatus = $employeeJobStatus;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+        $this->featured = $featured;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
 
-    public function resetPagination(){
+    public function employeeJobStatus($employeeJobStatus)
+    {
+        $this->employeeJobStatus = $employeeJobStatus;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
+    }
+
+    public function resetPagination()
+    {
         $this->resetPage('jobsPage');
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\FavouriteJob;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class FavouriteJobTable extends LivewireTableComponent
 {
@@ -33,10 +33,10 @@ class FavouriteJobTable extends LivewireTableComponent
             ];
         });
 
-//        $this->setTableAttributes([
-//            'default' => false,
-//            'class' => 'table table-default',
-//        ]);
+        //        $this->setTableAttributes([
+        //            'default' => false,
+        //            'class' => 'table table-default',
+        //        ]);
         $this->setQueryStringStatus(false);
     }
 

@@ -28,7 +28,7 @@ class CreateJobCategoryRequest extends FormRequest
      */
     public function messages(): array
     {
-        return  [
+        return [
             'customer_image.mimes' => __('messages.image_type'),
         ];
     }

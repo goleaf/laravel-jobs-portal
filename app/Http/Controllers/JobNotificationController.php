@@ -58,9 +58,13 @@ class JobNotificationController extends AppBaseController
                 },
             ])->first();
         } else {
-            $employerJobs = Job::whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->where('status',
-                '1')->where('is_suspended', Job::NOT_SUSPENDED)->orderBy('created_at',
-                    'desc')->get();
+            $employerJobs = Job::whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->where(
+                'status',
+                '1'
+            )->where('is_suspended', Job::NOT_SUSPENDED)->orderBy(
+                'created_at',
+                'desc'
+            )->get();
         }
 
         return $this->sendResponse($employerJobs, 'Employer jobs retrieved successfully.');

@@ -208,4 +208,4 @@ return [
     'user' => [
         'change_password' => 'Change Password',
     ],
-]; 
+];

@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Noticeboard;
 use App\Livewire\Components\Column;
+use App\Models\Noticeboard;
 
 class NoticeboardTable extends LivewireTableComponent
 {
@@ -24,7 +24,8 @@ class NoticeboardTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('is_active')) {
@@ -33,19 +34,19 @@ class NoticeboardTable extends LivewireTableComponent
                 ];
             }
             if ($column->isField('title')) {
-                return[
+                return [
                     'style' => 'width:25%',
                     'class' => 'text-start',
                 ];
             }
             if ($column->isField('description')) {
-                return[
+                return [
                     'style' => 'width:40%',
                     'class' => 'text-start',
                 ];
             }
 
-            return[
+            return [
                 'class' => 'min-w-100px text-center p-5',
             ];
         });

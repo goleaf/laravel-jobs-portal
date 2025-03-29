@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
-use App\Livewire\Components\Filters\SelectFilter;
 
 class SelectedCandidateTable extends LivewireTableComponent
 {
@@ -16,7 +16,8 @@ class SelectedCandidateTable extends LivewireTableComponent
     public $showFilterOnHeader = true;
     protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeStatusFilter'];
 
-    public array $filterComponents = ['selected_candidate.table-components.filter',JobApplication::FILTER];
+    public array $filterComponents = ['selected_candidate.table-components.filter', JobApplication::FILTER];
+
     public function configure(): void
     {
         $this->setPrimaryKey('id');
@@ -52,7 +53,8 @@ class SelectedCandidateTable extends LivewireTableComponent
                 ->sortable(function (Builder $query, $direction) {
                     return $query->orderBy(User::select('first_name')->whereColumn('candidate.user_id', 'users.id'), $direction);
                 })
-                ->searchable(function (Builder $query, $direction) {
+                ->searchable(
+                    function (Builder $query, $direction) {
                         return $query->whereHas('candidate.user', function (Builder $q) use ($direction) {
                             $q->whereRaw("TRIM(CONCAT(first_name,' ',last_name,' ')) like '%{$direction}%'");
                         });
@@ -77,10 +79,11 @@ class SelectedCandidateTable extends LivewireTableComponent
     {
         $query = JobApplication::with('job.company.user', 'candidate')
             ->whereIn('job_applications.status', [JobApplication::SHORT_LIST, JobApplication::COMPLETE]);
-            $query->when($this->status != JobApplication::SELECT_STATUS, function($q) {
-                  $q->where('job_applications.status', $this->status);
-         });
-            return $query->select('job_applications.*');
+        $query->when($this->status != JobApplication::SELECT_STATUS, function ($q) {
+            $q->where('job_applications.status', $this->status);
+        });
+
+        return $query->select('job_applications.*');
     }
 
     public function filters(): array
@@ -103,12 +106,14 @@ class SelectedCandidateTable extends LivewireTableComponent
                 ),
         ];
     }
+
     public function changeStatusFilter($status)
     {
-         $this->status = $status;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+        $this->status = $status;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
+
     public function resetPagination()
     {
         $this->resetPage('selected-candidatesPage');

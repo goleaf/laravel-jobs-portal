@@ -95,11 +95,17 @@ class Cities extends Component
         });
 
         $query->when(isset($this->searchByCity) && $this->searchByCity != '', function (Builder $q) {
-            $q->Where('name', 'like',
-                '%'.strtolower($this->searchByCity).'%');
+            $q->Where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByCity).'%'
+            );
             $q->whereHas('state', function (Builder $q) {
-                $q->orWhere('name', 'like',
-                    '%'.strtolower($this->searchByCity).'%');
+                $q->orWhere(
+                    'name',
+                    'like',
+                    '%'.strtolower($this->searchByCity).'%'
+                );
             });
         });
 

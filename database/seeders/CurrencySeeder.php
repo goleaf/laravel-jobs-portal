@@ -608,7 +608,7 @@ class CurrencySeeder extends Seeder
                 'currency_icon' => 'ZK',
                 'currency_code' => 'ZMW',
             ],
-            //Zero Decimal Currencies
+            // Zero Decimal Currencies
             [
                 'currency_name' => 'BIF Burundi Franc',
                 'currency_icon' => 'FBu',

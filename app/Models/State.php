@@ -33,7 +33,6 @@ class State extends Model
     const COUNTIES = '';
     protected $table = 'states';
 
-
     protected $fillable = [
         'id',
         'country_id',

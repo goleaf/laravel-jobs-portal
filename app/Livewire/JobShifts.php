@@ -79,8 +79,11 @@ class JobShifts extends Component
         $query = JobShift::query()->select('job_shifts.*');
 
         $query->when(isset($this->searchByJobShifts) && $this->searchByJobShifts != '', function (Builder $q) {
-            $q->where('shift', 'like',
-                '%'.strtolower($this->searchByJobShifts).'%');
+            $q->where(
+                'shift',
+                'like',
+                '%'.strtolower($this->searchByJobShifts).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

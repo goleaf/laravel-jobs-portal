@@ -219,8 +219,10 @@ class CompanyController extends AppBaseController
         $totalFeaturedJob = Company::Has('activeFeatured')->count();
         $isFeaturedAvilabal = ($totalFeaturedJob >= $maxFeaturedJob) ? false : true;
 
-        return view('employer.companies.edit',
-            compact('data', 'company', 'cities', 'states', 'user', 'isFeaturedEnable', 'isFeaturedAvilabal'));
+        return view(
+            'employer.companies.edit',
+            compact('data', 'company', 'cities', 'states', 'user', 'isFeaturedEnable', 'isFeaturedAvilabal')
+        );
     }
 
     /**
@@ -309,11 +311,15 @@ class CompanyController extends AppBaseController
                 'end_time' => Carbon::now()->addDays($addDays),
             ];
             FeaturedRecord::create($featuredRecord);
-            $notificationStatus = NotificationSetting::where('key', '=', 'MARK_COMPANY_FEATURED')->pluck('value',
-                'key')->toArray();
+            $notificationStatus = NotificationSetting::where('key', '=', 'MARK_COMPANY_FEATURED')->pluck(
+                'value',
+                'key'
+            )->toArray();
             if ($notificationStatus['MARK_COMPANY_FEATURED'] == Company::ISACTIVE) {
-                NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where('type',
-                    'employer')->first()->value == 1 ?
+                NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
+                    'type',
+                    'employer'
+                )->first()->value == 1 ?
                     addNotification([
                         Notification::MARK_COMPANY_FEATURED_ADMIN,
                         $company->user->id,

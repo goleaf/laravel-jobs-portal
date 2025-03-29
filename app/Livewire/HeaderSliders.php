@@ -89,15 +89,19 @@ class HeaderSliders extends Component
     {
         $query = HeaderSlider::with('media')->select('header_sliders.*');
 
-        $query->when(($this->status != '') && $this->status == 1,
+        $query->when(
+            ($this->status != '') && $this->status == 1,
             function (Builder $q) {
                 $q->where('is_active', '=', 1);
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 0,
+        $query->when(
+            ($this->status != '') && $this->status == 0,
             function (Builder $q) {
                 $q->where('is_active', '=', 0);
-            });
+            }
+        );
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

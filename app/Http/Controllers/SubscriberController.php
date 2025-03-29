@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Illuminate\View\View;
 use App\Models\NewsLetter;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class SubscriberController

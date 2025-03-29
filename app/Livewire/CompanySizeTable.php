@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\CompanySize;
 use App\Livewire\Components\Column;
+use App\Models\CompanySize;
 
 class CompanySizeTable extends LivewireTableComponent
 {
@@ -36,7 +36,7 @@ class CompanySizeTable extends LivewireTableComponent
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('size')) {
-                return[
+                return [
                     'style' => 'width:50%',
                 ];
             }

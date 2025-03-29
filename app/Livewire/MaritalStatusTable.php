@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\MaritalStatus;
 use App\Livewire\Components\Column;
+use App\Models\MaritalStatus;
 
 class MaritalStatusTable extends LivewireTableComponent
 {
@@ -22,10 +22,9 @@ class MaritalStatusTable extends LivewireTableComponent
      * @var string
      */
     public $buttonComponent = 'marital_status.table-components.add_button';
-    
+
     /**
      * Define filter components array to prevent undefined array key error
-     * @var array
      */
     public array $filterComponents = [];
 
@@ -78,13 +77,13 @@ class MaritalStatusTable extends LivewireTableComponent
                 ->view('marital_status.table-components.action_button'),
         ];
     }
-    
+
     // Explicitly override the hasConfigurableAreaFor method to avoid the error
     public function hasConfigurableAreaFor(string $area): bool
     {
         return false;
     }
-    
+
     // Use a custom view for this table that doesn't rely on configurableAreas
     public function render(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {

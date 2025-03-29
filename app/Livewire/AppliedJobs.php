@@ -81,13 +81,13 @@ class AppliedJobs extends Component
             $this->dispatch('deleted');
         }
 
-//        $appliedJob = JobApplication::with('applicationSchedule')->findOrFail($id);
-//        if ($appliedJob->applicationSchedule->count() > 0) {
-//            $this->dispatchBrowserEvent('notDeleted');
-//        } else {
-//            $appliedJob->delete($id);
-//            $this->dispatchBrowserEvent('deleted');
-//        }
+        //        $appliedJob = JobApplication::with('applicationSchedule')->findOrFail($id);
+        //        if ($appliedJob->applicationSchedule->count() > 0) {
+        //            $this->dispatchBrowserEvent('notDeleted');
+        //        } else {
+        //            $appliedJob->delete($id);
+        //            $this->dispatchBrowserEvent('deleted');
+        //        }
     }
 
     public function updatingsearchByAppliedJob()
@@ -108,8 +108,10 @@ class AppliedJobs extends Component
 
     public function searchAppliedJob(): LengthAwarePaginator
     {
-        $query = JobApplication::with(['candidate.user', 'job.currency', 'jobStage'])->where('candidate_id',
-            getLoggedInUser()->owner_id)->orderByDesc('created_at');
+        $query = JobApplication::with(['candidate.user', 'job.currency', 'jobStage'])->where(
+            'candidate_id',
+            getLoggedInUser()->owner_id
+        )->orderByDesc('created_at');
 
         if ($this->value != '') {
             $query->where('status', $this->value);

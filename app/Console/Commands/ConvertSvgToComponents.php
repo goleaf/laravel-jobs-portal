@@ -24,7 +24,7 @@ class ConvertSvgToComponents extends Command
 
     /**
      * Array of common SVG icons mapped to their component replacements
-     * 
+     *
      * @var array
      */
     protected $iconMappings = [
@@ -48,40 +48,41 @@ class ConvertSvgToComponents extends Command
     public function handle()
     {
         $path = $this->option('path');
-        
+
         $this->info("Searching for SVG elements in path: $path");
-        
-        if (!File::isDirectory($path)) {
-            $this->error("The specified path does not exist or is not a directory.");
+
+        if (! File::isDirectory($path)) {
+            $this->error('The specified path does not exist or is not a directory.');
+
             return 1;
         }
-        
+
         $bladeFiles = $this->findBladeFiles($path);
-        $this->info("Found " . count($bladeFiles) . " Blade files to process.");
-        
+        $this->info('Found '.count($bladeFiles).' Blade files to process.');
+
         $totalReplaced = 0;
         $modifiedFiles = 0;
-        
+
         foreach ($bladeFiles as $file) {
             $content = File::get($file);
             $originalContent = $content;
             $replacementCount = 0;
-            
+
             foreach ($this->iconMappings as $svgPattern => $componentName) {
                 // Look for SVG elements containing this pattern
                 if (Str::contains($content, $svgPattern)) {
                     // Prepare regex patterns to match SVG elements
-                    $svgRegex = '/<svg[^>]*>.*?' . preg_quote($svgPattern, '/') . '.*?<\/svg>/s';
-                    
+                    $svgRegex = '/<svg[^>]*>.*?'.preg_quote($svgPattern, '/').'.*?<\/svg>/s';
+
                     // Count occurrences
                     preg_match_all($svgRegex, $content, $matches);
                     $replacementCount += count($matches[0]);
-                    
+
                     // Perform replacements
                     $content = $this->replaceSvgWithComponent($content, $svgPattern, $componentName);
                 }
             }
-            
+
             // Save the file if changes were made
             if ($content !== $originalContent) {
                 File::put($file, $content);
@@ -90,42 +91,42 @@ class ConvertSvgToComponents extends Command
                 $this->line("Modified file: $file (Replaced $replacementCount SVG elements)");
             }
         }
-        
+
         $this->info("Conversion complete! Modified $modifiedFiles files and replaced $totalReplaced SVG elements.");
-        
+
         return 0;
     }
-    
+
     /**
      * Find all Blade files in the specified directory and its subdirectories.
      *
-     * @param string $path
+     * @param  string  $path
      * @return array
      */
     protected function findBladeFiles($path)
     {
         return File::glob("$path/**/*.blade.php", GLOB_BRACE);
     }
-    
+
     /**
      * Replace SVG elements with component calls.
      *
-     * @param string $content
-     * @param string $svgPattern
-     * @param string $componentName
+     * @param  string  $content
+     * @param  string  $svgPattern
+     * @param  string  $componentName
      * @return string
      */
     protected function replaceSvgWithComponent($content, $svgPattern, $componentName)
     {
         // Pattern to match SVG elements containing the specific pattern
-        $svgRegex = '/<svg[^>]*(?:class="([^"]*)")?[^>]*>.*?' . preg_quote($svgPattern, '/') . '.*?<\/svg>/s';
-        
+        $svgRegex = '/<svg[^>]*(?:class="([^"]*)")?[^>]*>.*?'.preg_quote($svgPattern, '/').'.*?<\/svg>/s';
+
         return preg_replace_callback($svgRegex, function ($matches) use ($componentName) {
             // Extract class if it exists
             $class = isset($matches[1]) ? $matches[1] : 'w-5 h-5';
-            
+
             // Create the component call
             return "<x-icons.{$componentName} class=\"{$class}\" />";
         }, $content);
     }
-} 
+}

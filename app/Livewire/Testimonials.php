@@ -79,8 +79,11 @@ class Testimonials extends Component
         $query = Testimonial::with('media')->select('testimonials.*');
 
         $query->when(isset($this->searchByTestimonial) && $this->searchByTestimonial != '', function (Builder $q) {
-            $q->where('customer_name', 'like',
-                '%'.strtolower($this->searchByTestimonial).'%');
+            $q->where(
+                'customer_name',
+                'like',
+                '%'.strtolower($this->searchByTestimonial).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

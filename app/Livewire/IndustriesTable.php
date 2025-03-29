@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Industry;
 use App\Livewire\Components\Column;
+use App\Models\Industry;
 
 class IndustriesTable extends LivewireTableComponent
 {

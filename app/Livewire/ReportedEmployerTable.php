@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\ReportedToCompany;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class ReportedEmployerTable extends LivewireTableComponent
 {

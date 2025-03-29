@@ -59,10 +59,10 @@ class CompanySearch extends Component
         $this->searchByIndustry = '';
     }
 
-//    public function updatingSearchByCompany()
-//    {
-//        $this->resetPage();
-//    }
+    //    public function updatingSearchByCompany()
+    //    {
+    //        $this->resetPage();
+    //    }
 
     public function render()
     {
@@ -77,9 +77,12 @@ class CompanySearch extends Component
         $query = Company::with(['user.media', 'jobs', 'activeFeatured', 'industry', 'user.city']);
         $query->whereHas('user', function (Builder $q) {
             $q->where('first_name', 'like', '%'.strtolower($this->searchByCompany).'%')
-            ->orWhere('last_name', 'like', '%'.strtolower($this->searchByCompany).'%')
-            ->where('is_active', '=',
-                1);
+                ->orWhere('last_name', 'like', '%'.strtolower($this->searchByCompany).'%')
+                ->where(
+                    'is_active',
+                    '=',
+                    1
+                );
         });
 
         $query->when(! empty($this->searchByCity), function (Builder $q) {

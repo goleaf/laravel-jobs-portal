@@ -79,8 +79,11 @@ class CareerLevels extends Component
         $query = CareerLevel::query()->select('career_levels.*');
 
         $query->when(isset($this->searchByCareerLevel) && $this->searchByCareerLevel != '', function (Builder $q) {
-            $q->where('level_name', 'like',
-                '%'.strtolower($this->searchByCareerLevel).'%');
+            $q->where(
+                'level_name',
+                'like',
+                '%'.strtolower($this->searchByCareerLevel).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

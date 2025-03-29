@@ -128,7 +128,10 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles, HasFiles, Billable;
+    use Billable;
+    use HasFiles;
+    use HasRoles;
+    use Notifiable;
 
     const DARK_MODE = 1;
 
@@ -242,7 +245,7 @@ class User extends Authenticatable
     public function getAvatarAttribute()
     {
         $file = $this->getFirstFile(self::PROFILE);
-        if (!empty($file)) {
+        if (! empty($file)) {
             return $file->getUrl();
         }
 
@@ -337,7 +340,7 @@ class User extends Authenticatable
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new UserVerifyNotification($this));  //pass the currently logged in user to the notification class
+        $this->notify(new UserVerifyNotification($this));  // pass the currently logged in user to the notification class
     }
 
     /**

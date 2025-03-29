@@ -73,4 +73,4 @@ class TodoFactory extends Factory
             ];
         });
     }
-} 
+}

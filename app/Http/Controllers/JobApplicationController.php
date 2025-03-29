@@ -151,18 +151,18 @@ class JobApplicationController extends AppBaseController
         }
     }
 
-//    /**
-//     * @param  Request  $request
-//     *
-//     *
-//     * @return JsonResponse
-//     */
-//    public function getJobStage(Request $request)
-//    {
-//        $jobApplication = JobApplication::findOrFail($request->get('jobApplicationId'));
-//
-//        return $this->sendResponse($jobApplication,'Job Stage retrieve successfully.');
-//    }
+    //    /**
+    //     * @param  Request  $request
+    //     *
+    //     *
+    //     * @return JsonResponse
+    //     */
+    //    public function getJobStage(Request $request)
+    //    {
+    //        $jobApplication = JobApplication::findOrFail($request->get('jobApplicationId'));
+    //
+    //        return $this->sendResponse($jobApplication,'Job Stage retrieve successfully.');
+    //    }
 
     public function changeJobStage(Request $request): JsonResponse
     {
@@ -214,13 +214,17 @@ class JobApplicationController extends AppBaseController
                     $isSelectedRejectedSlot = JobApplicationSchedule::whereJobApplicationId($applicationId)
                         ->whereStageId($lastRecord->stage_id)
                         ->whereBatch($lastRecord->batch)
-                        ->whereIn('status',
-                            [JobApplicationSchedule::STATUS_SELECTED, JobApplicationSchedule::STATUS_REJECTED])
+                        ->whereIn(
+                            'status',
+                            [JobApplicationSchedule::STATUS_SELECTED, JobApplicationSchedule::STATUS_REJECTED]
+                        )
                         ->count();
                 }
 
-                return view('employer.job_applications.view_slot_screen',
-                    compact('jobStage', 'lastStage', 'isSelectedRejectedSlot', 'isStageMatch', 'applicationId'));
+                return view(
+                    'employer.job_applications.view_slot_screen',
+                    compact('jobStage', 'lastStage', 'isSelectedRejectedSlot', 'isStageMatch', 'applicationId')
+                );
             } else {
                 return view('errors.404');
             }
@@ -458,7 +462,7 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
-     * @param $jobId
+     * @param  $jobId
      */
     public function checkStage($jobApplicationId): JsonResponse
     {

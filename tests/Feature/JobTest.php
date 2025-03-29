@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Models\Job;
 use App\Models\Company;
-use App\Models\JobType;
+use App\Models\Job;
 use App\Models\JobCategory;
-use App\Models\User;
+use App\Models\JobType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class JobTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function job_can_be_created()
@@ -44,7 +44,7 @@ class JobTest extends TestCase
         ];
 
         $job = Job::create($jobData);
-        
+
         $this->assertInstanceOf(Job::class, $job);
         $this->assertEquals($jobData['job_title'], $job->job_title);
         $this->assertEquals($jobData['company_id'], $job->company_id);
@@ -56,16 +56,16 @@ class JobTest extends TestCase
     public function job_can_be_updated()
     {
         $job = Job::factory()->create();
-        
+
         $updatedData = [
             'job_title' => $this->faker->jobTitle,
             'description' => $this->faker->paragraph,
             'status' => Job::STATUS_CLOSED,
         ];
-        
+
         $job->update($updatedData);
         $job->refresh();
-        
+
         $this->assertEquals($updatedData['job_title'], $job->job_title);
         $this->assertEquals($updatedData['description'], $job->description);
         $this->assertEquals($updatedData['status'], $job->status);
@@ -76,10 +76,10 @@ class JobTest extends TestCase
     {
         Job::factory()->count(3)->create(['status' => Job::STATUS_OPEN]);
         Job::factory()->count(2)->create(['status' => Job::STATUS_CLOSED]);
-        
+
         $openJobs = Job::where('status', Job::STATUS_OPEN)->get();
         $closedJobs = Job::where('status', Job::STATUS_CLOSED)->get();
-        
+
         $this->assertCount(3, $openJobs);
         $this->assertCount(2, $closedJobs);
     }
@@ -89,7 +89,7 @@ class JobTest extends TestCase
     {
         $company = Company::factory()->create();
         $job = Job::factory()->create(['company_id' => $company->id]);
-        
+
         $this->assertInstanceOf(Company::class, $job->company);
         $this->assertEquals($company->id, $job->company_id);
     }
@@ -99,7 +99,7 @@ class JobTest extends TestCase
     {
         $jobType = JobType::factory()->create();
         $job = Job::factory()->create(['job_type_id' => $jobType->id]);
-        
+
         $this->assertInstanceOf(JobType::class, $job->jobType);
         $this->assertEquals($jobType->id, $job->job_type_id);
     }
@@ -109,7 +109,7 @@ class JobTest extends TestCase
     {
         $jobCategory = JobCategory::factory()->create();
         $job = Job::factory()->create(['job_category_id' => $jobCategory->id]);
-        
+
         $this->assertInstanceOf(JobCategory::class, $job->jobCategory);
         $this->assertEquals($jobCategory->id, $job->job_category_id);
     }
@@ -119,10 +119,10 @@ class JobTest extends TestCase
     {
         Job::factory()->count(3)->create(['is_featured' => true]);
         Job::factory()->count(2)->create(['is_featured' => false]);
-        
+
         $featuredJobs = Job::where('is_featured', true)->get();
         $nonFeaturedJobs = Job::where('is_featured', false)->get();
-        
+
         $this->assertCount(3, $featuredJobs);
         $this->assertCount(2, $nonFeaturedJobs);
     }
@@ -132,11 +132,11 @@ class JobTest extends TestCase
     {
         Job::factory()->count(2)->create(['job_expiry_date' => now()->subDay()]);
         Job::factory()->count(3)->create(['job_expiry_date' => now()->addDays(10)]);
-        
+
         $expiredJobs = Job::where('job_expiry_date', '<', now())->get();
         $activeJobs = Job::where('job_expiry_date', '>=', now())->get();
-        
+
         $this->assertCount(2, $expiredJobs);
         $this->assertCount(3, $activeJobs);
     }
-} 
+}

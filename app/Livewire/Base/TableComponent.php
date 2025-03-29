@@ -27,11 +27,11 @@ abstract class TableComponent extends Component
     public bool $showPagination = true;
     public bool $showPerPageOptions = true;
     public bool $showHeader = true;
-    
+
     // Common UI elements
     public bool $showButtonOnHeader = false;
     public string $buttonComponent = '';
-    
+
     // Filters
     public array $filters = [];
 
@@ -69,13 +69,13 @@ abstract class TableComponent extends Component
     public function getTableData()
     {
         $query = $this->query();
-        
-        if (!empty($this->search)) {
+
+        if (! empty($this->search)) {
             $query = $this->applySearch($query, $this->search);
         }
-        
+
         $query = $this->applyFilters($query);
-        
+
         return $query->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
     }
@@ -86,6 +86,7 @@ abstract class TableComponent extends Component
     protected function query(): Builder
     {
         $model = $this->model();
+
         return $model::query();
     }
 
@@ -115,13 +116,13 @@ abstract class TableComponent extends Component
     protected function getSearchableColumns(): array
     {
         $searchableColumns = [];
-        
+
         foreach ($this->columns() as $column) {
             if (isset($column['searchable']) && $column['searchable'] && isset($column['field'])) {
                 $searchableColumns[] = $column['field'];
             }
         }
-        
+
         return $searchableColumns;
     }
 
@@ -131,7 +132,7 @@ abstract class TableComponent extends Component
     public function sortBy(string $field): void
     {
         $this->resetPage();
-        
+
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
@@ -183,4 +184,4 @@ abstract class TableComponent extends Component
             'columns' => $this->columns(),
         ]);
     }
-} 
+}

@@ -57,8 +57,10 @@ class Followers extends Component
 
     public function searchFollowers(): LengthAwarePaginator
     {
-        $query = FavouriteCompany::with(['user'])->where('company_id',
-            getLoggedInUser()->owner_id)->orderBy('created_at', 'desc');
+        $query = FavouriteCompany::with(['user'])->where(
+            'company_id',
+            getLoggedInUser()->owner_id
+        )->orderBy('created_at', 'desc');
 
         if (! empty($this->searchByFollowers)) {
             $query->whereHas('user', function (Builder $query) {

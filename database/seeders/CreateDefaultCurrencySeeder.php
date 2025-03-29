@@ -727,7 +727,7 @@ class CreateDefaultCurrencySeeder extends Seeder
                 'currency_code' => 'ZMW',
                 'is_default' => 1,
             ],
-            //Zero Decimal Currencies
+            // Zero Decimal Currencies
             [
                 'currency_name' => 'BIF Burundi Franc',
                 'currency_icon' => 'FBu',

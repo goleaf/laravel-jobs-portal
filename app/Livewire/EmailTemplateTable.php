@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\EmailTemplate;
 use App\Livewire\Components\Column;
+use App\Models\EmailTemplate;
 
 class EmailTemplateTable extends LivewireTableComponent
 {
@@ -23,7 +23,8 @@ class EmailTemplateTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('template_name')) {
@@ -37,7 +38,7 @@ class EmailTemplateTable extends LivewireTableComponent
                 ];
             }
 
-            return[];
+            return [];
         });
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($columnIndex == '1') {

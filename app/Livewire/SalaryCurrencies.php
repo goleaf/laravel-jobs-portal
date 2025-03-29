@@ -79,12 +79,21 @@ class SalaryCurrencies extends Component
         $query = SalaryCurrency::query()->select('salary_currencies.*');
 
         $query->when(isset($this->searchSalaryCurrencies) && $this->searchSalaryCurrencies != '', function (Builder $q) {
-            $q->where('currency_name', 'like',
-                '%'.strtolower($this->searchSalaryCurrencies).'%');
-            $q->orWhere('currency_code', 'like',
-                '%'.strtolower($this->searchSalaryCurrencies).'%');
-            $q->orWhere('currency_icon', 'like',
-                '%'.strtolower($this->searchSalaryCurrencies).'%');
+            $q->where(
+                'currency_name',
+                'like',
+                '%'.strtolower($this->searchSalaryCurrencies).'%'
+            );
+            $q->orWhere(
+                'currency_code',
+                'like',
+                '%'.strtolower($this->searchSalaryCurrencies).'%'
+            );
+            $q->orWhere(
+                'currency_icon',
+                'like',
+                '%'.strtolower($this->searchSalaryCurrencies).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

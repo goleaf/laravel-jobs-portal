@@ -87,14 +87,19 @@ class JobCategories extends Component
         $query = JobCategory::query()->select('job_categories.*')->with('media');
 
         $query->when(isset($this->searchByJobCategory) && $this->searchByJobCategory != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByJobCategory).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByJobCategory).'%'
+            );
         });
 
-        $query->when(isset($this->filterFeatured) && $this->filterFeatured != '',
+        $query->when(
+            isset($this->filterFeatured) && $this->filterFeatured != '',
             function (Builder $q) {
                 $q->where('is_featured', '=', $this->filterFeatured);
-            });
+            }
+        );
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

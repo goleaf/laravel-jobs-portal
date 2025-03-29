@@ -44,5 +44,4 @@ class PasswordResetEmailTemplateSeeder extends Seeder
             }
         }
     }
-
 }

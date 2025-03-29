@@ -2,27 +2,30 @@
 
 namespace App\Jobs;
 
+use App\Mail\EmailToCandidate;
+use App\Models\EmailTemplate;
+use App\Models\Job;
+use App\Models\JobType;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\EmailToCandidate;
-use App\Models\EmailTemplate;
-use App\Models\JobType;
-use App\Models\Job;
-use App\Models\User;
 
 class CandidatesAlertJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
      */
     protected $data;
+
     public function __construct($data)
     {
         $this->data = $data;

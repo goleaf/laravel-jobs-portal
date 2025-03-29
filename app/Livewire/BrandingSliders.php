@@ -91,19 +91,26 @@ class BrandingSliders extends Component
         $query = \App\Models\BrandingSliders::with('media')->select('branding_sliders.*');
 
         $query->when(isset($this->searchByBrandingSlider) && $this->searchByBrandingSlider != '', function (Builder $q) {
-            $q->where('title', 'like',
-                '%'.strtolower($this->searchByBrandingSlider).'%');
+            $q->where(
+                'title',
+                'like',
+                '%'.strtolower($this->searchByBrandingSlider).'%'
+            );
         });
 
-        $query->when(($this->status != '') && $this->status == 1,
+        $query->when(
+            ($this->status != '') && $this->status == 1,
             function (Builder $q) {
                 $q->where('is_active', '=', 1);
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 0,
+        $query->when(
+            ($this->status != '') && $this->status == 0,
             function (Builder $q) {
                 $q->where('is_active', '=', 0);
-            });
+            }
+        );
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

@@ -88,12 +88,21 @@ class Countries extends Component
         $query = Country::query()->select('countries.*');
 
         $query->when(isset($this->searchCountries) && $this->searchCountries != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchCountries).'%');
-            $q->orWhere('short_code', 'like',
-                '%'.strtolower($this->searchCountries).'%');
-            $q->orWhere('phone_code', 'like',
-                '%'.strtolower($this->searchCountries).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchCountries).'%'
+            );
+            $q->orWhere(
+                'short_code',
+                'like',
+                '%'.strtolower($this->searchCountries).'%'
+            );
+            $q->orWhere(
+                'phone_code',
+                'like',
+                '%'.strtolower($this->searchCountries).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

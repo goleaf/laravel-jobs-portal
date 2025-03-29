@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    //menu.blade keys
+    // menu.blade keys
     'dashboard' => '仪表板',
     'payment_failed' => '支付失败。',
     'job_categories' => '工作类别',
@@ -304,7 +304,7 @@ return [
         'post_statistics' => '帖子統計',
     ],
 
-    //Job Category
+    // Job Category
     'job_category' => [
         'new_job_category' => '新工作类别',
         'edit_job_category' => '编辑工作类别',
@@ -319,7 +319,7 @@ return [
         'no_job_category_available' => '没有可用的工作类别',
     ],
 
-    //Settings
+    // Settings
     'setting' => [
         'paystack_payment_url' => '支付宝支付网址',
         'application_name' => '应用名称',
@@ -638,7 +638,7 @@ return [
         'no_degree_level_available' => '没有学位级别可用',
     ],
 
-    //all resumes
+    // all resumes
     'resumes' => [
         'file' => '文件',
         'name' => '名称',
@@ -885,7 +885,7 @@ return [
         'no_testimonial_available' => '没有可用的推荐',
     ],
 
-    //employer heading menu
+    // employer heading menu
     'employer_menu' => [
         'general_dashboard' => '通用仪表盘',
         'jobs' => '工作',
@@ -922,7 +922,7 @@ return [
         'job_applications' => '工作申请',
     ],
 
-    //skills
+    // skills
     'skill' => [
         'new_skill' => '新技能',
         'edit_skill' => '编辑技能',
@@ -1055,7 +1055,7 @@ return [
         'upgrade' => '升級',
     ],
 
-    //transaction
+    // transaction
     'transaction' => [
         'plan_name' => '计划名称',
         'subscription_id' => '订阅编号',
@@ -1069,7 +1069,7 @@ return [
         'user_name' => '雇主名稱',
     ],
 
-    //front settings
+    // front settings
     'front_settings' => [
         'featured_jobs_price' => '特色工作价格',
         'featured_jobs_due_days' => '默认作业到期日',
@@ -1115,7 +1115,7 @@ return [
         'about_image_three' => '關於圖三',
     ],
 
-    //notification settings
+    // notification settings
     'notification_settings' => [
         'JOB_APPLICATION_SUBMITTED' => '提交新的求职申请时',
         'MARK_JOB_FEATURED' => '将工作标记为精选时',
@@ -1184,7 +1184,7 @@ return [
     // Pricing Table
     'pricing_table' => [
         'get_started' => '開始',
-        'buy_plan' => '購買計劃'
+        'buy_plan' => '購買計劃',
     ],
 
     // Header notification
@@ -1589,6 +1589,6 @@ return [
         'follow_company_successfully' => '關注公司成功。',
         'note_required' => '註解欄位為必填項',
         'resume_field_required' => '履歷表欄位是必需的。',
-        'verify_google_recaptcha' => '你應該檢查谷歌驗證碼。'
+        'verify_google_recaptcha' => '你應該檢查谷歌驗證碼。',
     ],
 ];

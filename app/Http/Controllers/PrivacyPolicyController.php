@@ -35,9 +35,9 @@ class PrivacyPolicyController extends AppBaseController
     public function index(Request $request): View
     {
         $privacyPolicy = Setting::pluck('value', 'key')->toArray();
-//        $sectionName = ($request->section === null) ? 'privacy_policy' : $request->section;
+        //        $sectionName = ($request->section === null) ? 'privacy_policy' : $request->section;
 
-//        return view("privacy_policy.$sectionName", compact('privacyPolicy', 'sectionName'));
+        //        return view("privacy_policy.$sectionName", compact('privacyPolicy', 'sectionName'));
 
         return view('privacy_policy.index', compact('privacyPolicy'));
     }

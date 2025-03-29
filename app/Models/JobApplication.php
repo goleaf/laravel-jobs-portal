@@ -64,10 +64,10 @@ class JobApplication extends Model
 
     const SHORT_LIST = 4;
     const SELECT_STATUS = 5;
-    const FILTER =[
-          self::SELECT_STATUS => 'Select Status',
-          self::COMPLETE => 'Hired',
-          self::SHORT_LIST => 'Ongoing',
+    const FILTER = [
+        self::SELECT_STATUS => 'Select Status',
+        self::COMPLETE => 'Hired',
+        self::SHORT_LIST => 'Ongoing',
     ];
 
     const STATUS = [

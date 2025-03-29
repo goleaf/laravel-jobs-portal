@@ -79,8 +79,11 @@ class Faqs extends Component
         $query = FAQ::query()->select('faqs.*');
 
         $query->when(isset($this->searchByFaq) && $this->searchByFaq != '', function (Builder $q) {
-            $q->where('title', 'like',
-                '%'.strtolower($this->searchByFaq).'%');
+            $q->where(
+                'title',
+                'like',
+                '%'.strtolower($this->searchByFaq).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

@@ -22,7 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('featured_records', function (Blueprint $table) {
-        });
+        Schema::table('featured_records', function (Blueprint $table) {});
     }
 };

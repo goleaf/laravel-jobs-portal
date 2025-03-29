@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Livewire\Components\Column;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class AdminTable extends LivewireTableComponent
 {
@@ -63,12 +63,12 @@ class AdminTable extends LivewireTableComponent
                 Column::make(__('messages.common.name'), 'first_name')
                     ->sortable()
                     ->searchable(function (Builder $query, $direction) {
-                    $query->whereRaw("TRIM(CONCAT(first_name,' ',last_name,' ')) like '%{$direction}%'");
+                        $query->whereRaw("TRIM(CONCAT(first_name,' ',last_name,' ')) like '%{$direction}%'");
                     })
                     ->view('admins.table_components.name_email'),
                 Column::make(__('messages.company.email'), 'email')
-                ->hideIf('email')
-                ->searchable(),
+                    ->hideIf('email')
+                    ->searchable(),
                 Column::make(__('messages.setting.phone'), 'phone')
                     ->sortable()
                     ->searchable()

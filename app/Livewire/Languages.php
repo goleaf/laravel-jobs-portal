@@ -79,10 +79,16 @@ class Languages extends Component
         $query = language::query()->select('languages.*');
 
         $query->when(isset($this->searchLanguage) && $this->searchLanguage != '', function (Builder $q) {
-            $q->where('language', 'like',
-                '%'.strtolower($this->searchLanguage).'%');
-            $q->orWhere('iso_code', 'like',
-                '%'.strtolower($this->searchLanguage).'%');
+            $q->where(
+                'language',
+                'like',
+                '%'.strtolower($this->searchLanguage).'%'
+            );
+            $q->orWhere(
+                'iso_code',
+                'like',
+                '%'.strtolower($this->searchLanguage).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    //menu.blade keys
+    // menu.blade keys
     'dashboard' => 'لوحة القيادة',
     'payment_failed' => 'عملية الدفع فشلت.',
     'job_categories' => 'فئات الوظائف',
@@ -304,7 +304,7 @@ return [
         'post_statistics' => 'إحصائيات المشاركات',
     ],
 
-    //Job Category
+    // Job Category
     'job_category' => [
         'new_job_category' => 'فئة الوظيفة الجديدة',
         'edit_job_category' => 'تحرير فئة الوظيفة',
@@ -319,7 +319,7 @@ return [
         'no_job_category_available' => 'لا توجد فئة وظيفية متاحة',
     ],
 
-    //Settings
+    // Settings
     'setting' => [
         'paystack_payment_url' => 'عنوان URL لدفع Paystack',
         'application_name' => 'اسم التطبيق',
@@ -637,7 +637,7 @@ return [
         'no_degree_level_available' => 'لا يوجد مستوى درجة متاح',
     ],
 
-    //all resumes
+    // all resumes
     'resumes' => [
         'file' => 'ملف',
         'name' => 'اسم',
@@ -887,7 +887,7 @@ return [
         'no_testimonial_available' => 'لا شهادة متاحة',
     ],
 
-    //employer heading menu
+    // employer heading menu
     'employer_menu' => [
         'general_dashboard' => 'لوحة القيادة العامة',
         'jobs' => 'وظائف',
@@ -924,7 +924,7 @@ return [
         'job_applications' => 'تطبيقات وظيفة',
     ],
 
-    //skills
+    // skills
     'skill' => [
         'new_skill' => 'مهارة جديدة',
         'edit_skill' => 'تحرير المهارة',
@@ -1057,7 +1057,7 @@ return [
         'upgrade' => 'يرقي',
     ],
 
-    //transaction
+    // transaction
     'transaction' => [
         'plan_name' => 'اسم الخطة',
         'subscription_id' => 'اسم الخطة',
@@ -1097,7 +1097,7 @@ return [
         'expires_on' => 'تنتهي صلاحيته في',
     ],
 
-    //notification settings
+    // notification settings
     'notification_settings' => [
         'JOB_APPLICATION_SUBMITTED' => 'عند تقديم طلب وظيفة جديد',
         'MARK_JOB_FEATURED' => 'عند وضع علامة على الوظيفة على أنها مميزة',
@@ -1166,7 +1166,7 @@ return [
     // Pricing Table
     'pricing_table' => [
         'get_started' => 'البدء',
-        'buy_plan' => 'شراء الخطة'
+        'buy_plan' => 'شراء الخطة',
     ],
 
     // Header notification
@@ -1570,6 +1570,6 @@ return [
         'follow_company_successfully' => 'اتبع الشركة بنجاح.',
         'note_required' => 'حقل الملاحظة مطلوب',
         'resume_field_required' => 'حقل السيرة الذاتية مطلوب.',
-        'verify_google_recaptcha' => 'يجب عليك التحقق من جوجل recaptcha.'
+        'verify_google_recaptcha' => 'يجب عليك التحقق من جوجل recaptcha.',
     ],
 ];

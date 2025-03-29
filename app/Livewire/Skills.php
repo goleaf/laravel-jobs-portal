@@ -78,8 +78,11 @@ class Skills extends Component
     {
         $query = Skill::query()->select('skills.*');
         $query->when(isset($this->searchBySkills) && $this->searchBySkills != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchBySkills).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchBySkills).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

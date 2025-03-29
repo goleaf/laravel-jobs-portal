@@ -13,11 +13,11 @@ class XSS
      */
     public function handle(Request $request, Closure $next): Response
     {
-//        $input = $request->all();
-//        array_walk_recursive($input, function (&$input) {
-//            $input = (is_null($input)) ? null : Purifier::clean(html_entity_decode($input));
-//        });
-//        $request->merge($input);
+        //        $input = $request->all();
+        //        array_walk_recursive($input, function (&$input) {
+        //            $input = (is_null($input)) ? null : Purifier::clean(html_entity_decode($input));
+        //        });
+        //        $request->merge($input);
 
         return $next($request);
     }

@@ -96,22 +96,35 @@ class ReportedEmployee extends Component
         $query->when(isset($this->searchByEmployee) && $this->searchByEmployee != '', function (Builder $q) {
             if ($this->filterReportedDate == '') {
                 $q->whereHas('company.user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByEmployee).'%');
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByEmployee).'%'
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
                         $q->where('first_name', 'like', '%'.$this->searchByEmployee.'%');
                     });
             } else {
                 $q->whereHas('company.user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByEmployee).'%')->whereMonth('reported_to_companies.created_at',
-                            $this->filterReportedDate);
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByEmployee).'%'
+                    )->whereMonth(
+                        'reported_to_companies.created_at',
+                        $this->filterReportedDate
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
-                        $q->where('first_name', 'like',
-                            '%'.$this->searchByEmployee.'%')->whereMonth('reported_to_companies.created_at',
-                                $this->filterReportedDate);
+                        $q->where(
+                            'first_name',
+                            'like',
+                            '%'.$this->searchByEmployee.'%'
+                        )->whereMonth(
+                            'reported_to_companies.created_at',
+                            $this->filterReportedDate
+                        );
                     });
             }
         });

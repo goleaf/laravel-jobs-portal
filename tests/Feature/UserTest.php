@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function user_can_be_created()
@@ -23,7 +24,7 @@ class UserTest extends TestCase
         ];
 
         $user = User::create($userData);
-        
+
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($userData['name'], $user->name);
         $this->assertEquals($userData['email'], $user->email);
@@ -35,15 +36,15 @@ class UserTest extends TestCase
     public function user_can_be_updated()
     {
         $user = User::factory()->create();
-        
+
         $updatedData = [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
         ];
-        
+
         $user->update($updatedData);
         $user->refresh();
-        
+
         $this->assertEquals($updatedData['name'], $user->name);
         $this->assertEquals($updatedData['email'], $user->email);
     }
@@ -53,10 +54,10 @@ class UserTest extends TestCase
     {
         User::factory()->count(3)->create(['is_active' => true]);
         User::factory()->count(2)->create(['is_active' => false]);
-        
+
         $activeUsers = User::where('is_active', true)->get();
         $inactiveUsers = User::where('is_active', false)->get();
-        
+
         $this->assertCount(3, $activeUsers);
         $this->assertCount(2, $inactiveUsers);
     }
@@ -65,7 +66,7 @@ class UserTest extends TestCase
     public function user_can_have_candidate_profile()
     {
         $user = User::factory()->create();
-        
+
         // Assuming the user can be linked to a candidate profile
         $candidate = $user->candidate()->create([
             'expected_salary' => $this->faker->randomNumber(5),
@@ -74,7 +75,7 @@ class UserTest extends TestCase
             'industry_id' => 1,
             'functional_area_id' => 1,
         ]);
-        
+
         $this->assertNotNull($user->candidate);
         $this->assertEquals($user->id, $candidate->user_id);
     }
@@ -83,7 +84,7 @@ class UserTest extends TestCase
     public function user_can_have_company_profile()
     {
         $user = User::factory()->create();
-        
+
         // Assuming the user can be linked to a company profile
         $company = $user->company()->create([
             'name' => $this->faker->company,
@@ -93,8 +94,8 @@ class UserTest extends TestCase
             'size_id' => 1,
             'ownership_type_id' => 1,
         ]);
-        
+
         $this->assertNotNull($user->company);
         $this->assertEquals($user->id, $company->user_id);
     }
-} 
+}

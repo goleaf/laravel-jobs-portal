@@ -29,8 +29,8 @@ class OldDatabaseSeeder extends Seeder
         $this->call(CreateDefaultFunctionalAreaSeeder::class);
         $this->call(CreateDefaultDegreeLevelSeeder::class);
         $this->call(JobCategorySeeder::class);
-//        $this->call(CreateCompaniesSeeder::class);
-//        $this->call(CreateCandidateSeeder::class);
+        //        $this->call(CreateCompaniesSeeder::class);
+        //        $this->call(CreateCandidateSeeder::class);
         $this->call(CreateJobSeeder::class);
         $this->call(SkillTableSeeder::class);
         $this->call(LanguageTableSeeder::class);

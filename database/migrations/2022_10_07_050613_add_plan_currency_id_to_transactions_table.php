@@ -16,8 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('plan_currency_id')->nullable();
         });
 
-        Artisan::call('db:seed',
-            ['--class' => 'DefaultTransactionCurrencySeeder', '--force' => true]);
+        Artisan::call(
+            'db:seed',
+            ['--class' => 'DefaultTransactionCurrencySeeder', '--force' => true]
+        );
     }
 
     /**

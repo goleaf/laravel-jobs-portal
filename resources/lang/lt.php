@@ -9,7 +9,7 @@ return [
         'save' => 'Išsaugoti',
         'cancel' => 'Atšaukti',
         'search' => 'Paieška',
-        'reset' => 'Atstatyti'
+        'reset' => 'Atstatyti',
     ],
     'messages' => [
         'common' => [
@@ -210,5 +210,5 @@ return [
             'results' => 'rezultatų',
             'no_records' => 'Įrašų nerasta',
         ],
-    ]
+    ],
 ];

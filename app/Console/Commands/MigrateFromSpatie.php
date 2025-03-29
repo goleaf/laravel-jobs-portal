@@ -28,25 +28,28 @@ class MigrateFromSpatie extends Command
      */
     public function handle()
     {
-        if (!Schema::hasTable('media')) {
+        if (! Schema::hasTable('media')) {
             $this->error('Media table does not exist. Nothing to migrate.');
+
             return 1;
         }
 
-        if (!Schema::hasTable('files')) {
+        if (! Schema::hasTable('files')) {
             $this->error('Files table does not exist. Please run migrations first.');
+
             return 1;
         }
 
         $mediaCount = DB::table('media')->count();
-        
+
         if ($mediaCount === 0) {
             $this->info('No media records found to migrate.');
+
             return 0;
         }
 
         $this->info("Found {$mediaCount} media records to migrate.");
-        
+
         $bar = $this->output->createProgressBar($mediaCount);
         $bar->start();
 
@@ -55,10 +58,10 @@ class MigrateFromSpatie extends Command
                 // Check if file has already been migrated (to avoid duplicates)
                 $exists = File::where('model_type', $media->model_type)
                     ->where('model_id', $media->model_id)
-                    ->where('path', $media->id . '/' . $media->file_name)
+                    ->where('path', $media->id.'/'.$media->file_name)
                     ->exists();
-                
-                if (!$exists) {
+
+                if (! $exists) {
                     // Create new file record
                     File::create([
                         'model_type' => $media->model_type,
@@ -68,7 +71,7 @@ class MigrateFromSpatie extends Command
                         'file_name' => $media->file_name,
                         'mime_type' => $media->mime_type,
                         'disk' => $media->disk,
-                        'path' => $media->id . '/' . $media->file_name, // Use the same path structure as Spatie
+                        'path' => $media->id.'/'.$media->file_name, // Use the same path structure as Spatie
                         'size' => $media->size,
                         'order_column' => $media->order_column,
                         'custom_properties' => json_encode($media->custom_properties ?? []),
@@ -77,7 +80,7 @@ class MigrateFromSpatie extends Command
                         'updated_at' => $media->updated_at,
                     ]);
                 }
-                
+
                 $bar->advance();
             }
         });
@@ -88,4 +91,4 @@ class MigrateFromSpatie extends Command
 
         return 0;
     }
-} 
+}

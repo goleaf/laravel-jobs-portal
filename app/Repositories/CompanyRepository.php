@@ -65,7 +65,7 @@ class CompanyRepository extends BaseRepository
      */
     public function prepareData()
     {
-        $countries = new Countries();
+        $countries = new Countries;
         $data['industries'] = Industry::pluck('name', 'id');
         $data['ownerShipTypes'] = OwnerShipType::pluck('name', 'id');
         $data['companySize'] = CompanySize::pluck('size', 'id');
@@ -82,7 +82,7 @@ class CompanyRepository extends BaseRepository
         try {
             DB::beginTransaction();
             $input['unique_id'] = getUniqueCompanyId();
-            $company = $this->create(Arr::only($input, (new Company())->getFillable()));
+            $company = $this->create(Arr::only($input, (new Company)->getFillable()));
 
             // Create User
             $input['password'] = Hash::make($input['password']);
@@ -90,13 +90,15 @@ class CompanyRepository extends BaseRepository
             $input['owner_id'] = $company->id;
             $input['owner_type'] = Company::class;
             $input['is_verified'] = isset($input['is_verified']) ? 1 : 0;
-            $userInput = Arr::only($input,
+            $userInput = Arr::only(
+                $input,
                 [
                     'first_name', 'email', 'phone', 'password', 'owner_id', 'owner_type', 'country_id', 'state_id',
                     'city_id', 'is_active', 'dob', 'gender',
                     'facebook_url', 'twitter_url', 'linkedin_url', 'google_plus_url', 'pinterest_url', 'is_verified',
                     'is_default', 'region_code',
-                ]);
+                ]
+            );
 
             /** @var User $user */
             $user = User::create($userInput);
@@ -107,7 +109,7 @@ class CompanyRepository extends BaseRepository
             if ((isset($input['image']))) {
                 // Upload logo directly to the company using our new method
                 $company->uploadLogo($input['image']);
-                
+
                 // For backward compatibility during transition - still update the user's media as well
                 $user->addMedia($input['image'])
                     ->toMediaCollection(User::PROFILE, config('app.media_disc'));
@@ -116,7 +118,7 @@ class CompanyRepository extends BaseRepository
                 // For backward compatibility during transition - still update the user's media
                 $user->addMediaFromUrl($input['image_url'])
                     ->toMediaCollection(User::PROFILE, config('app.media_disc'));
-                
+
                 // TODO: Implement fetching remote image for company logo path when needed
             }
 
@@ -125,17 +127,17 @@ class CompanyRepository extends BaseRepository
             $subscriptionRepo->createStripeCustomer($user);
 
             if ($user->is_verified) {
-//                $user->update(['email_verified_at' => Carbon::now()]);
+                //                $user->update(['email_verified_at' => Carbon::now()]);
             } else {
-//                $user->sendEmailVerificationNotification();
+                //                $user->sendEmailVerificationNotification();
             }
             $user->update(['email_verified_at' => Carbon::now()]);
 
-//            if ($user->is_verified) {
-//                $user->update(['email_verified_at' => Carbon::now()]);
-//            } else {
-//                $user->sendEmailVerificationNotification();
-//            }
+            //            if ($user->is_verified) {
+            //                $user->update(['email_verified_at' => Carbon::now()]);
+            //            } else {
+            //                $user->sendEmailVerificationNotification();
+            //            }
 
             DB::commit();
 
@@ -152,7 +154,7 @@ class CompanyRepository extends BaseRepository
      *
      * @throws Throwable
      */
-    public function update($input,$company)
+    public function update($input, $company)
     {
         try {
             DB::beginTransaction();
@@ -160,11 +162,13 @@ class CompanyRepository extends BaseRepository
             $company->update($input);
 
             $input['first_name'] = $input['name'];
-            $userInput = Arr::only($input,
+            $userInput = Arr::only(
+                $input,
                 [
                     'first_name', 'email', 'phone', 'password', 'country_id', 'state_id', 'city_id', 'is_active',
                     'facebook_url', 'twitter_url', 'linkedin_url', 'google_plus_url', 'pinterest_url', 'region_code',
-                ]);
+                ]
+            );
             /** @var User $user */
             $user = $company->user;
             $user->phone = preparePhoneNumber($user->phone, $user->region_code);
@@ -173,7 +177,7 @@ class CompanyRepository extends BaseRepository
             if ((isset($input['image']))) {
                 // Upload logo directly to the company using our new method
                 $company->uploadLogo($input['image']);
-                
+
                 // For backward compatibility during transition - still update the user's media as well
                 $user->clearMediaCollection(User::PROFILE);
                 $user->addMedia($input['image'])
@@ -215,8 +219,8 @@ class CompanyRepository extends BaseRepository
      */
     public function getCompanyDetail($companyId)
     {
-        $data['companyDetail'] = Company::with('user','ownerShipType','companySize')->findOrFail($companyId);
-        $data['jobDetails'] = Job::with('jobShift','jobsSkill','company', 'jobCategory')
+        $data['companyDetail'] = Company::with('user', 'ownerShipType', 'companySize')->findOrFail($companyId);
+        $data['jobDetails'] = Job::with('jobShift', 'jobsSkill', 'company', 'jobCategory')
             ->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())
             ->where('is_suspended', '===', Job::NOT_SUSPENDED)
             ->where([
@@ -309,29 +313,37 @@ class CompanyRepository extends BaseRepository
             $query->without(['country', 'state', 'city']);
         }, 'activeFeatured'])->select('companies.*');
 
-        $query->when(isset($input['is_featured']) && $input['is_featured'] == 1,
+        $query->when(
+            isset($input['is_featured']) && $input['is_featured'] == 1,
             function (Builder $q) {
                 $q->has('activeFeatured');
-            });
+            }
+        );
 
-        $query->when(isset($input['is_featured']) && $input['is_featured'] == 0,
+        $query->when(
+            isset($input['is_featured']) && $input['is_featured'] == 0,
             function (Builder $q) {
                 $q->doesnthave('activeFeatured');
-            });
+            }
+        );
 
-        $query->when(isset($input['is_status']) && $input['is_status'] == 1,
+        $query->when(
+            isset($input['is_status']) && $input['is_status'] == 1,
             function (Builder $q) {
                 $q->wherehas('user', function (Builder $q) {
                     $q->where('is_active', '=', 1);
                 });
-            });
+            }
+        );
 
-        $query->when(isset($input['is_status']) && $input['is_status'] == 0,
+        $query->when(
+            isset($input['is_status']) && $input['is_status'] == 0,
             function (Builder $q) {
                 $q->wherehas('user', function (Builder $q) {
                     $q->where('is_active', '=', 0);
                 });
-            });
+            }
+        );
 
         $subQuery = $query->get();
 

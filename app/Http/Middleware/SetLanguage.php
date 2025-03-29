@@ -2,14 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Language;
+use App\Models\Setting;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
 
 class SetLanguage
 {
@@ -25,19 +24,19 @@ class SetLanguage
 
             if (Auth::user()) {
                 App::setLocale(Auth::user()->language);
-            }else{
+            } else {
                 App::setLocale($default->value);
             }
 
         } else {
             if (Auth::user()) {
-                if(isset($localeLanguage)){
+                if (isset($localeLanguage)) {
                     // dump(56456);
                     App::setLocale($localeLanguage);
-                }else{
+                } else {
                     App::setLocale(Auth::user()->language);
                 }
-            }else{
+            } else {
                 App::setLocale($localeLanguage);
             }
         }

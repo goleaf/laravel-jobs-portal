@@ -2,14 +2,14 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
 
 /**
  * Class TranslationHelper
- * 
+ *
  * This class provides constants for all translation keys to ensure standardization
  * and to avoid typos when using translation strings.
  */
@@ -31,7 +31,7 @@ class TranslationHelper
     public const COMMON_BACK = 'common.back';
     public const COMMON_NEXT = 'common.next';
     public const COMMON_PREVIOUS = 'common.previous';
-    
+
     // Common status translations
     public const COMMON_YES = 'common.yes';
     public const COMMON_NO = 'common.no';
@@ -39,7 +39,7 @@ class TranslationHelper
     public const COMMON_INACTIVE = 'common.inactive';
     public const COMMON_ENABLED = 'common.enabled';
     public const COMMON_DISABLED = 'common.disabled';
-    
+
     // Common form/table translations
     public const COMMON_ACTIONS = 'common.actions';
     public const COMMON_NAME = 'common.name';
@@ -95,7 +95,7 @@ class TranslationHelper
     public const COMMON_LAST = 'common.last';
     public const COMMON_NO_RECORDS_FOUND = 'common.no_records_found';
     public const COMMON_PROCESS = 'common.process';
-    
+
     // Flash messages
     public const FLASH_NO_RECORD = 'flash.no_record';
     public const FLASH_CREATE_SUCCESS = 'flash.create_success';
@@ -108,7 +108,7 @@ class TranslationHelper
     public const FLASH_SUCCESS = 'flash.success';
     public const FLASH_WARNING = 'flash.warning';
     public const FLASH_INFO = 'flash.info';
-    
+
     // Job translations
     public const JOB_TITLE = 'job.job_title';
     public const JOB_IS_FEATURED = 'job.is_featured';
@@ -149,7 +149,7 @@ class TranslationHelper
     public const JOB_FUNCTIONAL_AREA = 'job.functional_area';
     public const JOB_CAREER_LEVEL = 'job.career_level';
     public const JOB_SHIFT = 'job.job_shift';
-    
+
     // Filter name translations
     public const FILTER_FEATURED_JOB = 'filter.featured_job';
     public const FILTER_SELECT_FEATURED_COMPANY = 'filter.select_featured_company';
@@ -170,7 +170,7 @@ class TranslationHelper
     public const FILTER_JOB_SHIFT = 'filter.job_shift';
     public const FILTER_SKILLS = 'filter.skills';
     public const FILTER_LANGUAGE = 'filter.language';
-    
+
     // Pagination translations
     public const PAGINATION_PREVIOUS = 'pagination.previous';
     public const PAGINATION_NEXT = 'pagination.next';
@@ -179,7 +179,7 @@ class TranslationHelper
     public const PAGINATION_OF = 'pagination.of';
     public const PAGINATION_RESULTS = 'pagination.results';
     public const PAGINATION_GO_TO_PAGE = 'pagination.go_to_page';
-    
+
     // Company translations
     public const COMPANY_NAME = 'company.company_name';
     public const COMPANY_SELECT_COMPANY = 'company.select_company';
@@ -203,7 +203,7 @@ class TranslationHelper
     public const COMPANY_SELECT_FUNCTIONAL_AREA = 'company.select_functional_area';
     public const COMPANY_SELECT_DEGREE_LEVEL = 'company.select_degree_level';
     public const COMPANY_ENTER_EXPERIENCE_YEAR = 'company.enter_experience_year';
-    
+
     // Other entity translations
     public const CANDIDATE_GENDER = 'candidate.gender';
     public const JOB_CATEGORY_JOB_CATEGORY = 'job_category.job_category';
@@ -237,11 +237,11 @@ class TranslationHelper
     {
         $locale = App::getLocale();
         $cacheKey = "translations_{$locale}_all";
-        
+
         return Cache::remember($cacheKey, now()->addHours(24), function () use ($locale) {
             $translations = [];
-            $langPath = resource_path('lang/' . $locale);
-            
+            $langPath = resource_path('lang/'.$locale);
+
             if (File::exists($langPath)) {
                 foreach (File::allFiles($langPath) as $file) {
                     if ($file->getExtension() === 'php') {
@@ -250,20 +250,20 @@ class TranslationHelper
                     }
                 }
             }
-            
+
             // Handle JSON translations
-            $jsonPath = resource_path('lang/' . $locale . '.json');
+            $jsonPath = resource_path('lang/'.$locale.'.json');
             if (File::exists($jsonPath)) {
                 $jsonTranslations = json_decode(File::get($jsonPath), true);
                 if ($jsonTranslations) {
                     $translations['json'] = $jsonTranslations;
                 }
             }
-            
+
             return static::flattenTranslations($translations);
         });
     }
-    
+
     /**
      * Get missing translations for a specific locale compared to the fallback locale
      */
@@ -271,35 +271,35 @@ class TranslationHelper
     {
         $locale = $locale ?? App::getLocale();
         $fallbackLocale = config('app.fallback_locale', 'en');
-        
+
         if ($locale === $fallbackLocale) {
             return [];
         }
-        
+
         $localeFilePath = resource_path("lang/{$locale}.php");
         $fallbackFilePath = resource_path("lang/{$fallbackLocale}.php");
-        
-        if (!File::exists($localeFilePath) || !File::exists($fallbackFilePath)) {
+
+        if (! File::exists($localeFilePath) || ! File::exists($fallbackFilePath)) {
             return [];
         }
-        
+
         $localeTranslations = require $localeFilePath;
         $fallbackTranslations = require $fallbackFilePath;
-        
+
         $flatLocale = static::flattenTranslations($localeTranslations);
         $flatFallback = static::flattenTranslations($fallbackTranslations);
-        
+
         $missing = [];
-        
+
         foreach ($flatFallback as $key => $value) {
-            if (!isset($flatLocale[$key]) || (strpos($flatLocale[$key], '[TRANSLATION_NEEDED]') === 0)) {
+            if (! isset($flatLocale[$key]) || (strpos($flatLocale[$key], '[TRANSLATION_NEEDED]') === 0)) {
                 $missing[$key] = $value;
             }
         }
-        
+
         return $missing;
     }
-    
+
     /**
      * Check if a translation key exists for the current locale
      */
@@ -307,26 +307,26 @@ class TranslationHelper
     {
         $locale = App::getLocale();
         $filePath = resource_path("lang/{$locale}.php");
-        
-        if (!File::exists($filePath)) {
+
+        if (! File::exists($filePath)) {
             return false;
         }
-        
+
         $translations = require $filePath;
         $parts = explode('.', $key);
-        
+
         $section = array_shift($parts);
-        
-        if (!isset($translations[$section])) {
+
+        if (! isset($translations[$section])) {
             return false;
         }
-        
+
         $sectionTranslations = $translations[$section];
         $remainingKey = implode('.', $parts);
-        
+
         return Arr::has($sectionTranslations, $remainingKey);
     }
-    
+
     /**
      * Get a translation for a key in the standardized format
      */
@@ -334,54 +334,54 @@ class TranslationHelper
     {
         $locale = $locale ?? App::getLocale();
         $filePath = resource_path("lang/{$locale}.php");
-        
-        if (!File::exists($filePath)) {
+
+        if (! File::exists($filePath)) {
             return $key;
         }
-        
+
         $translations = require $filePath;
         $parts = explode('.', $key);
-        
+
         if (count($parts) < 2) {
             return $key;
         }
-        
+
         $section = array_shift($parts);
-        
-        if (!isset($translations[$section])) {
+
+        if (! isset($translations[$section])) {
             return $key;
         }
-        
+
         $sectionTranslations = $translations[$section];
         $remainingKey = implode('.', $parts);
-        
+
         $value = Arr::get($sectionTranslations, $remainingKey, $key);
-        
+
         // Replace placeholders
         foreach ($replace as $placeholder => $replacement) {
             $value = str_replace(":{$placeholder}", $replacement, $value);
         }
-        
+
         return $value;
     }
-    
+
     /**
      * Flatten translations array into dot notation
      */
     protected static function flattenTranslations(array $translations, string $prefix = ''): array
     {
         $result = [];
-        
+
         foreach ($translations as $key => $value) {
             $newKey = $prefix ? "{$prefix}.{$key}" : $key;
-            
+
             if (is_array($value)) {
                 $result = array_merge($result, static::flattenTranslations($value, $newKey));
             } else {
                 $result[$newKey] = $value;
             }
         }
-        
+
         return $result;
     }
 
@@ -391,54 +391,54 @@ class TranslationHelper
     public static function get(string $key, array $replace = [], ?string $locale = null): string
     {
         $locale = $locale ?: App::getLocale();
-        
+
         // Standardize the key format (e.g., convert legacy 'messages.common.search' to 'common.search')
         $standardizedKey = static::standardizeTranslationKey($key);
-        
+
         // Try Laravel's built-in translation function with the standardized key
         $translation = trans($standardizedKey, $replace, $locale);
-        
+
         // If the key wasn't found (Laravel returns the key itself), try our direct file access
         if ($translation === $standardizedKey) {
             // Memory efficient way to access translations - we only load what's needed
             $cacheKey = "translation:{$locale}:{$standardizedKey}";
-            
+
             return Cache::remember($cacheKey, now()->addDay(), function () use ($standardizedKey, $locale, $replace) {
                 // Parse the key (e.g., 'app.home' becomes ['app', 'home'])
                 $parts = explode('.', $standardizedKey);
-                
+
                 if (count($parts) < 2) {
                     return $standardizedKey; // Not a valid key format
                 }
-                
+
                 $file = resource_path("lang/{$locale}.php");
-                
+
                 if (File::exists($file)) {
                     $translations = require $file;
-                    
+
                     // Navigate through the nested array
                     $section = $parts[0];
                     $key = $parts[1];
-                    
+
                     if (isset($translations[$section][$key])) {
                         $value = $translations[$section][$key];
-                        
+
                         // Apply replacements
                         foreach ($replace as $placeholder => $replacement) {
                             $value = str_replace(":{$placeholder}", $replacement, $value);
                         }
-                        
+
                         return $value;
                     }
                 }
-                
+
                 return $standardizedKey; // Fallback to key if not found
             });
         }
-        
+
         return $translation;
     }
-    
+
     /**
      * Standardize a translation key to the new format
      */
@@ -448,7 +448,7 @@ class TranslationHelper
         if (strpos($key, 'messages.common.') === 0) {
             return substr_replace($key, 'common.', 0, strlen('messages.common.'));
         }
-        
+
         // Convert other legacy formats as needed
         $legacyPrefixes = [
             'messages.job.' => 'job.',
@@ -458,13 +458,13 @@ class TranslationHelper
             'messages.candidate.' => 'candidate.',
             'messages.flash.' => 'flash.',
         ];
-        
+
         foreach ($legacyPrefixes as $legacy => $new) {
             if (strpos($key, $legacy) === 0) {
                 return substr_replace($key, $new, 0, strlen($legacy));
             }
         }
-        
+
         return $key;
     }
-} 
+}

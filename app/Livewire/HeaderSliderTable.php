@@ -2,20 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Models\HeaderSlider;
-use Illuminate\Database\Eloquent\Builder;
 use App\Livewire\Components\Column;
 use App\Livewire\Components\Filters\SelectFilter;
+use App\Models\HeaderSlider;
+use Illuminate\Database\Eloquent\Builder;
 
 class HeaderSliderTable extends LivewireTableComponent
 {
     protected $model = HeaderSlider::class;
     public string $tableName = 'header-sliders';
-    public $status =HeaderSlider::ALL;
-    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh','changeStatusFilter'];
+    public $status = HeaderSlider::ALL;
+    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeStatusFilter'];
     public $showFilterOnHeader = true;
 
-    public array $filterComponents = ['header_sliders.table_components.filter',HeaderSlider::STATUS];
+    public array $filterComponents = ['header_sliders.table_components.filter', HeaderSlider::STATUS];
 
     public $showButtonOnHeader = true;
 
@@ -31,18 +31,18 @@ class HeaderSliderTable extends LivewireTableComponent
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('created_at')) {
-                return[
+                return [
                     'style' => 'width:40%',
                 ];
             }
             if ($column->isField('is_active')) {
-                return[
+                return [
                     'style' => 'width:20%',
                     'class' => 'text-center',
                 ];
             }
             if ($column->isField('id')) {
-                return[
+                return [
                     'style' => 'width:12%',
                     'class' => 'text-center',
                 ];
@@ -55,7 +55,8 @@ class HeaderSliderTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setQueryStringStatus(false);
 
@@ -79,46 +80,48 @@ class HeaderSliderTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-        $query=  HeaderSlider::query();
-        $query->when($this->status != HeaderSlider::ALL, function($q) {
-         if($this->status) {
-                  $q->where('is_active', 1);
-         }else {
-                  $q->where('is_active', 0);
-         }
-});
+        $query = HeaderSlider::query();
+        $query->when($this->status != HeaderSlider::ALL, function ($q) {
+            if ($this->status) {
+                $q->where('is_active', 1);
+            } else {
+                $q->where('is_active', 0);
+            }
+        });
+
         return $query->select('header_sliders.*');
     }
 
-//     public function filters(): array
-//     {
-//         return [
+    //     public function filters(): array
+    //     {
+    //         return [
 
-//             SelectFilter::make(__('messages.common.status'))
-//                 ->options([
-//                     '' => __('messages.filter_name.select_status'),
-//                     1 => __('messages.common.active'),
-//                     2 => __('messages.common.de_active'),
-//                 ])
-//                 ->filter(
-//                     function (Builder $builder, string $value) {
-//                         if ($value == 1) {
-//                             $builder->where('is_active', '=', 1);
-//                         } else {
-//                             $builder->where('is_active', '=', 0);
-//                         }
-//                     }
-//                 ),
-//         ];
-//     }
+    //             SelectFilter::make(__('messages.common.status'))
+    //                 ->options([
+    //                     '' => __('messages.filter_name.select_status'),
+    //                     1 => __('messages.common.active'),
+    //                     2 => __('messages.common.de_active'),
+    //                 ])
+    //                 ->filter(
+    //                     function (Builder $builder, string $value) {
+    //                         if ($value == 1) {
+    //                             $builder->where('is_active', '=', 1);
+    //                         } else {
+    //                             $builder->where('is_active', '=', 0);
+    //                         }
+    //                     }
+    //                 ),
+    //         ];
+    //     }
     public function changeStatusFilter($status)
     {
-            $this->status = $status;
-            $this->setBuilder($this->builder());
-            $this->resetPagination();
+        $this->status = $status;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
 
-    public function resetPagination() {
+    public function resetPagination()
+    {
         $this->resetPage('header-slidersPage');
     }
 }

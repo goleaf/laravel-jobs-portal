@@ -16,31 +16,31 @@ return new class extends Migration
     public function up()
     {
         $companies = Company::all();
-        
+
         foreach ($companies as $company) {
-            if (!$company->user) {
+            if (! $company->user) {
                 continue;
             }
-            
+
             $media = Media::where('model_type', User::class)
                 ->where('model_id', $company->user->id)
                 ->where('collection_name', User::PROFILE)
                 ->first();
-            
-            if (!$media) {
+
+            if (! $media) {
                 continue;
             }
-            
+
             $sourcePath = $media->getPath();
-            
+
             if (file_exists($sourcePath)) {
-                $newPath = 'companies/logos/' . $media->file_name;
-                
+                $newPath = 'companies/logos/'.$media->file_name;
+
                 Storage::disk('public')->put(
                     $newPath,
                     file_get_contents($sourcePath)
                 );
-                
+
                 $company->update(['logo_path' => $newPath]);
                 echo "Migrated logo for company #{$company->id}\n";
             }
@@ -56,4 +56,4 @@ return new class extends Migration
     {
         // This migration cannot be reversed without data loss
     }
-}; 
+};

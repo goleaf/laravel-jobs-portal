@@ -63,8 +63,10 @@ class ViewSlotScreen extends Component
         }
         $jobApplication = $this->Application;
 
-        return view('livewire.view-slot-screen',
-            compact('jobSchedules', 'isStatusNotSend', 'isLastRecordStage', 'jobApplication'));
+        return view(
+            'livewire.view-slot-screen',
+            compact('jobSchedules', 'isStatusNotSend', 'isLastRecordStage', 'jobApplication')
+        );
     }
 
     /**

@@ -33,7 +33,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Setting extends Model implements HasMedia
 {
-    use InteractsWithMedia, QueryCacheable;
+    use InteractsWithMedia;
+    use QueryCacheable;
 
     public $cacheFor = 3600; // cache time, in seconds
 

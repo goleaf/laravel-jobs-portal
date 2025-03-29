@@ -88,7 +88,7 @@ class CandidateSearch extends Component
         $this->min = '';
         $this->max = '';
         $this->searchByCandidate = '';
-//        $this->searchBy = 'byJobTitle';
+        //        $this->searchBy = 'byJobTitle';
         $this->gender = 'all';
     }
 
@@ -102,15 +102,15 @@ class CandidateSearch extends Component
         $query->when($this->searchByCandidate != '' && $this->searchBy == 'byName', function (Builder $q) {
             $q->whereHas('user', function (Builder $query) {
                 $query->where('first_name', 'like', '%'.strtolower($this->searchByCandidate).'%')
-                     ->orWhere('last_name', 'like', '%'.strtolower($this->searchByCandidate).'%');
+                    ->orWhere('last_name', 'like', '%'.strtolower($this->searchByCandidate).'%');
             });
         });
 
-//        $query->when($this->searchByCandidate != '' && $this->searchBy == 'byJobTitle', function (Builder $q) {
-//            $q->whereHas('penddingJobApplications.job', function (Builder $query) {
-//                $query->where('jobs.job_title', 'like', '%'.strtolower($this->searchByCandidate).'%');
-//            });
-//        });
+        //        $query->when($this->searchByCandidate != '' && $this->searchBy == 'byJobTitle', function (Builder $q) {
+        //            $q->whereHas('penddingJobApplications.job', function (Builder $query) {
+        //                $query->where('jobs.job_title', 'like', '%'.strtolower($this->searchByCandidate).'%');
+        //            });
+        //        });
 
         $query->when($this->location != '', function (Builder $q) {
             $q->whereHas('user', function (Builder $query) {

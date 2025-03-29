@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('is_completed')->default(false);
             $table->string('priority')->default('medium'); // low, medium, high
             $table->timestamps();
-            
+
             $table->index('user_id');
             $table->index('is_completed');
             $table->index('priority');
@@ -38,4 +38,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('todos');
     }
-}; 
+};

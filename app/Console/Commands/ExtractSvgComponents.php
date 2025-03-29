@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Symfony\Component\Finder\SplFileInfo;
 
 class ExtractSvgComponents extends Command
 {
@@ -34,7 +33,7 @@ class ExtractSvgComponents extends Command
     public function handle()
     {
         // Create components directory if it doesn't exist
-        if (!File::isDirectory($this->componentsDir)) {
+        if (! File::isDirectory($this->componentsDir)) {
             File::makeDirectory($this->componentsDir, 0755, true);
             $this->info("Created SVG components directory: {$this->componentsDir}");
         }
@@ -43,9 +42,11 @@ class ExtractSvgComponents extends Command
         if ($singleFile = $this->option('single-file')) {
             if (File::exists($singleFile) && Str::endsWith($singleFile, '.blade.php')) {
                 $this->processFile($singleFile);
+
                 return Command::SUCCESS;
             } else {
                 $this->error("File not found or not a blade file: {$singleFile}");
+
                 return Command::FAILURE;
             }
         }
@@ -53,98 +54,100 @@ class ExtractSvgComponents extends Command
         // Process multiple files from directory
         $searchDir = $this->option('dir');
         $chunkSize = (int) $this->option('chunk-size');
-        
-        if (!File::isDirectory($searchDir)) {
+
+        if (! File::isDirectory($searchDir)) {
             $this->error("Directory not found: {$searchDir}");
+
             return Command::FAILURE;
         }
-        
+
         $this->info("Searching for inline SVGs in {$searchDir}...");
-        
+
         // Find all blade files in chunks to avoid memory issues
         $this->processDirectoryInChunks($searchDir, $chunkSize);
-        
-        $this->info("SVG extraction completed.");
+
+        $this->info('SVG extraction completed.');
+
         return Command::SUCCESS;
     }
-    
+
     /**
      * Process a directory in chunks
      */
     protected function processDirectoryInChunks(string $directory, int $chunkSize): void
     {
-        $pattern = $directory . '/**/*.blade.php';
-        $finder = new \Symfony\Component\Finder\Finder();
+        $pattern = $directory.'/**/*.blade.php';
+        $finder = new \Symfony\Component\Finder\Finder;
         $finder->files()->name('*.blade.php')->in($directory);
-        
+
         $totalFiles = iterator_count($finder);
         $this->info("Found {$totalFiles} blade files. Processing in chunks of {$chunkSize}...");
-        
+
         $processedFiles = 0;
         $currentChunk = [];
         $chunkCount = 0;
-        
+
         foreach ($finder as $file) {
             $currentChunk[] = $file->getPathname();
             $processedFiles++;
-            
+
             if (count($currentChunk) >= $chunkSize || $processedFiles === $totalFiles) {
                 $chunkCount++;
                 $this->info("Processing chunk {$chunkCount} ({$processedFiles}/{$totalFiles} files)...");
-                
+
                 foreach ($currentChunk as $filePath) {
                     $this->processFile($filePath);
                 }
-                
+
                 $currentChunk = [];
                 gc_collect_cycles();
             }
         }
     }
-    
+
     /**
      * Process a single file to extract SVGs
      */
     protected function processFile(string $filePath): void
     {
         $this->info("Processing file: {$filePath}");
-        
+
         try {
             $content = File::get($filePath);
             $matches = [];
             preg_match_all('/<svg[^>]*>.*?<\/svg>/s', $content, $matches);
-            
+
             if (empty($matches[0])) {
                 return;
             }
-            
-            $this->info("  Found " . count($matches[0]) . " SVGs");
+
+            $this->info('  Found '.count($matches[0]).' SVGs');
             $fileName = basename($filePath, '.blade.php');
-            
+
             foreach ($matches[0] as $index => $svg) {
                 $componentName = $this->generateComponentName($filePath, $svg, $index);
                 $cleanedSvg = $this->cleanSvg($svg);
-                
+
                 $this->saveSvgComponent($componentName, $cleanedSvg);
             }
         } catch (\Exception $e) {
-            $this->error("  Error processing file {$filePath}: " . $e->getMessage());
+            $this->error("  Error processing file {$filePath}: ".$e->getMessage());
         }
     }
-    
+
     /**
      * Generate a component name based on the file and SVG content
      */
     protected function generateComponentName(string $filePath, string $svg, int $index): string
     {
         $fileName = basename($filePath, '.blade.php');
-        $componentName = Str::kebab($fileName) . '-' . ($index + 1);
-        
+        $componentName = Str::kebab($fileName).'-'.($index + 1);
+
         // Try to extract a meaningful name from SVG content or file path
         // Check for common icon patterns in the path attribute
         if (preg_match('/d="([^"]+)"/', $svg, $pathMatches)) {
             $path = $pathMatches[1];
-            
+
             // Map common SVG path patterns to meaningful names
             $iconPatterns = [
                 'building' => ['/M18 6H|h14v-1.5/i'],
@@ -164,9 +167,9 @@ class ExtractSvgComponents extends Command
                 'plus' => ['/M12 4v16|M4 12h16/i'],
                 'minus' => ['/M4 12h16/i'],
                 'filter' => ['/M3 6h18|m-18 6h18/i'],
-                'sort' => ['/M3 6h18|m-18 12h18/i']
+                'sort' => ['/M3 6h18|m-18 12h18/i'],
             ];
-            
+
             foreach ($iconPatterns as $name => $patterns) {
                 foreach ($patterns as $pattern) {
                     if (preg_match($pattern, $path)) {
@@ -176,23 +179,24 @@ class ExtractSvgComponents extends Command
                 }
             }
         }
-        
+
         // Check for SVG ID or title
         if (preg_match('/id=["\'](icon-)?([^"\'\s]+)["\']/', $svg, $idMatches)) {
             $id = $idMatches[2];
             $componentName = Str::kebab($id);
         }
-        
+
         if (preg_match('/<title[^>]*>([^<]+)<\/title>/', $svg, $titleMatches)) {
             $title = $titleMatches[1];
             $componentName = Str::kebab($title);
         }
-        
+
         // Clean up the name
         $componentName = preg_replace('/[^a-z0-9\-]/', '', $componentName);
+
         return $componentName;
     }
-    
+
     /**
      * Clean the SVG for use as a component
      */
@@ -200,35 +204,35 @@ class ExtractSvgComponents extends Command
     {
         // Remove hardcoded classes, IDs, etc.
         $svg = preg_replace('/(class|id|style)=(["\'])[^\2]*\2/', '', $svg);
-        
+
         // Replace fixed colors with currentColor
         $svg = preg_replace('/(fill|stroke)=(["\'])(?!none|transparent)([^\2]*)\2/', 'fill="currentColor"', $svg);
-        
+
         // Add merge attributes for dynamic classes
         $svg = preg_replace('/<svg([^>]*)>/', '<svg{{ $attributes->merge([\'class\' => \'\']) }}$1>', $svg);
-        
+
         // Format properly
         $svg = trim($svg);
-        
+
         return $svg;
     }
-    
+
     /**
      * Save the SVG as a component
      */
     protected function saveSvgComponent(string $name, string $svg): void
     {
-        $filename = Str::kebab($name) . '.blade.php';
+        $filename = Str::kebab($name).'.blade.php';
         $componentPath = "{$this->componentsDir}/{$filename}";
-        
+
         // Check if component already exists
         if (File::exists($componentPath)) {
-            if (!$this->option('force') && !$this->confirm("Component {$filename} already exists. Overwrite?", false)) {
+            if (! $this->option('force') && ! $this->confirm("Component {$filename} already exists. Overwrite?", false)) {
                 return;
             }
         }
-        
+
         File::put($componentPath, $svg);
         $this->info("  Created SVG component: {$filename}");
     }
-} 
+}

@@ -53,7 +53,7 @@ class CmsServicesController extends AppBaseController
             $cmsServices->update(['value' => $value]);
         }
         Flash::success(__('messages.flash.cms_service_update'));
-//        Flash::success('This functionality not allowed in demo.');
+        //        Flash::success('This functionality not allowed in demo.');
 
         return Redirect::back();
     }

@@ -24,7 +24,7 @@ class InquiryController extends AppBaseController
 
     public function show(Inquiry $inquiry): JsonResponse
     {
-//        return view('inquires.show', compact('inquiry'));
+        //        return view('inquires.show', compact('inquiry'));
 
         return $this->sendResponse($inquiry, __('messages.flash.inquiry_retrieve'));
     }

@@ -17,7 +17,6 @@ use App\Models\JobApplicationSchedule;
 use App\Models\RequiredDegreeLevel;
 use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
-use App\Services\FileService;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -79,21 +78,27 @@ class CandidateController extends AppBaseController
         }
 
         if ($sectionName == 'career-informations' || $sectionName == 'cv-builder') {
-            $data['candidateExperiences'] = CandidateExperience::where('candidate_id',
-                $user->owner_id)->orderByDesc('id')->get();
+            $data['candidateExperiences'] = CandidateExperience::where(
+                'candidate_id',
+                $user->owner_id
+            )->orderByDesc('id')->get();
             foreach ($data['candidateExperiences'] as $experience) {
                 $experience->country = getCountryName($experience->country_id);
             }
-            $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where('candidate_id',
-                $user->owner_id)->orderByDesc('id')->get();
+            $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where(
+                'candidate_id',
+                $user->owner_id
+            )->orderByDesc('id')->get();
             foreach ($data['candidateEducations'] as $education) {
                 $education->country = getCountryName($education->country_id);
             }
             $data['degreeLevels'] = RequiredDegreeLevel::pluck('name', 'id');
         }
 
-        return view("candidate.profile.$sectionName",
-            compact('user', 'data', 'countries', 'states', 'cities', 'candidateSkills', 'candidateLanguage'));
+        return view(
+            "candidate.profile.$sectionName",
+            compact('user', 'data', 'countries', 'states', 'cities', 'candidateSkills', 'candidateLanguage')
+        );
     }
 
     /**
@@ -149,10 +154,14 @@ class CandidateController extends AppBaseController
     public function updateOnlineProfile(CandidateUpdateOnlineProfileRequest $request): JsonResponse
     {
         $user = $this->candidateRepository->updateGeneralInformation($request->all());
-        $user['onlineProfileLayout'] = view('candidate.profile.career_informations.show_online_profile',
-            compact('user'))->render();
-        $user['editonlineProfileLayout'] = view('candidate.profile.career_informations.edit_online_profile',
-            compact('user'))->render();
+        $user['onlineProfileLayout'] = view(
+            'candidate.profile.career_informations.show_online_profile',
+            compact('user')
+        )->render();
+        $user['editonlineProfileLayout'] = view(
+            'candidate.profile.career_informations.edit_online_profile',
+            compact('user')
+        )->render();
 
         return $this->sendResponse($user, __('messages.flash.candidate_profile'));
     }
@@ -166,13 +175,17 @@ class CandidateController extends AppBaseController
     {
         $user = Auth::user();
         $data['user'] = $user;
-        $data['candidateExperiences'] = CandidateExperience::where('candidate_id',
-            $user->owner_id)->orderByDesc('id')->get();
+        $data['candidateExperiences'] = CandidateExperience::where(
+            'candidate_id',
+            $user->owner_id
+        )->orderByDesc('id')->get();
         foreach ($data['candidateExperiences'] as $experience) {
             $experience->country = getCountryName($experience->country_id);
         }
-        $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where('candidate_id',
-            $user->owner_id)->orderByDesc('id')->get();
+        $data['candidateEducations'] = CandidateEducation::with('degreeLevel')->where(
+            'candidate_id',
+            $user->owner_id
+        )->orderByDesc('id')->get();
         foreach ($data['candidateEducations'] as $education) {
             $education->country = getCountryName($education->country_id);
         }
@@ -199,19 +212,21 @@ class CandidateController extends AppBaseController
     public function downloadResume(string $candidateId, string $resumeId): BinaryFileResponse
     {
         $candidate = Auth::user()->candidate;
-        
+
         if ($candidate->id != $candidateId) {
             Flash::error(__('messages.common.unauthorized'));
+
             return redirect()->back();
         }
-        
-        $path = storage_path('app/public/' . $candidate->resume_path);
-        
-        if (!file_exists($path)) {
+
+        $path = storage_path('app/public/'.$candidate->resume_path);
+
+        if (! file_exists($path)) {
             Flash::error(__('messages.common.file_not_found'));
+
             return redirect()->back();
         }
-        
+
         return response()->download($path);
     }
 
@@ -333,8 +348,12 @@ class CandidateController extends AppBaseController
         /** @var JobApplicationSchedule $jobApplicationSchedules */
         $jobApplicationSchedules = JobApplicationSchedule::with([
             'jobApplication.job.company' => function ($query) {
-                $query->without('job.company.user.city', 'job.company.user.state', 'job.company.user.country',
-                    'job.company.user.media');
+                $query->without(
+                    'job.company.user.city',
+                    'job.company.user.state',
+                    'job.company.user.country',
+                    'job.company.user.media'
+                );
             },
         ])->whereJobApplicationId($jobApplication->id);
 
@@ -380,8 +399,10 @@ class CandidateController extends AppBaseController
         $data['employer_cancel_note'] = isset($employerCancelNote) ? $employerCancelNote->employer_cancel_slot_notes : '';
         $data['employer_fullName'] = $job->candidate->user->full_name;
         $data['company_fullName'] = ! empty($job->jobStage->company) ? $job->jobStage->company->user->full_name : '';
-        $data['isSlotRejected'] = $jobApplicationSchedules->where('status',
-            JobApplicationSchedule::STATUS_REJECTED)->count();
+        $data['isSlotRejected'] = $jobApplicationSchedules->where(
+            'status',
+            JobApplicationSchedule::STATUS_REJECTED
+        )->count();
         $data['scheduleSelect'] = $allJobSchedule->where('status', JobApplicationSchedule::STATUS_SEND)->count();
 
         return $this->sendResponse($data, __('messages.flash.job_schedule_send'));

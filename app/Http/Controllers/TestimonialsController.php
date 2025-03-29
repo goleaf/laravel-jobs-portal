@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Illuminate\View\View;
-use App\Models\Testimonial;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\View\Factory;
-use App\Repositories\TestimonialRepository;
 use App\Http\Requests\CreateTestimonialRequest;
 use App\Http\Requests\UpdateTestimonialRequest;
+use App\Models\Testimonial;
+use App\Repositories\TestimonialRepository;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TestimonialsController extends AppBaseController
@@ -46,7 +45,7 @@ class TestimonialsController extends AppBaseController
         $this->testimonialRepository->store($input);
 
         return $this->sendSuccess(__('messages.flash.testimonial_save'));
-//        return $this->sendSuccess('This functionality not allowed in demo.');
+        //        return $this->sendSuccess('This functionality not allowed in demo.');
     }
 
     /**

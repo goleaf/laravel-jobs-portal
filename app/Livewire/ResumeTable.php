@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Candidate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Components\Column;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ResumeTable extends LivewireTableComponent

@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    //menu.blade keys
+    // menu.blade keys
     'dashboard' => 'Панель приборов',
     'payment_failed' => 'Платеж не прошел.',
     'job_categories' => 'Категории вакансий',
@@ -307,7 +307,7 @@ return [
         'post_statistics' => 'Статистика сообщений',
     ],
 
-    //Job Category
+    // Job Category
     'job_category' => [
         'new_job_category' => 'новый работа категория',
         'edit_job_category' => 'редактировать работа категория',
@@ -322,7 +322,7 @@ return [
         'no_job_category_available' => 'Нет доступных категорий вакансий',
     ],
 
-    //Settings
+    // Settings
     'setting' => [
         'paystack_payment_url' => 'URL-адрес платежа Paystack',
         'application_name' => 'заявка название',
@@ -641,7 +641,7 @@ return [
         'no_degree_level_available' => 'Нет доступного уровня степени',
     ],
 
-    //all resumes
+    // all resumes
     'resumes' => [
         'file' => 'Файл',
         'name' => 'Имя',
@@ -888,7 +888,7 @@ return [
         'no_testimonial_available' => 'Отзыв недоступен',
     ],
 
-    //employer heading menu
+    // employer heading menu
     'employer_menu' => [
         'general_dashboard' => 'Общее Панель приборов',
         'jobs' => 'работы',
@@ -925,7 +925,7 @@ return [
         'job_applications' => 'Заявки на работу',
     ],
 
-    //skills
+    // skills
     'skill' => [
         'new_skill' => 'новый Умение',
         'edit_skill' => 'редактировать  Умение',
@@ -1058,7 +1058,7 @@ return [
         'upgrade' => 'Обновление',
     ],
 
-    //transaction
+    // transaction
     'transaction' => [
         'plan_name' => 'Nome do Plano',
         'subscription_id' => 'ID de Inscrição',
@@ -1072,7 +1072,7 @@ return [
         'user_name' => 'Имя работодателя',
     ],
 
-    //front settings
+    // front settings
     'front_settings' => [
         'featured_jobs_price' => 'Preço de empregos em destaque',
         'featured_jobs_due_days' => 'Сроки выполнения заданий по умолчанию',
@@ -1118,7 +1118,7 @@ return [
         'about_image_three' => 'Об изображении три',
     ],
 
-    //notification settings
+    // notification settings
     'notification_settings' => [
         'JOB_APPLICATION_SUBMITTED' => 'При подаче нового заявления о приеме на работу',
         'MARK_JOB_FEATURED' => 'При отметке вакансии как рекомендованной',
@@ -1187,7 +1187,7 @@ return [
     // Pricing Table
     'pricing_table' => [
         'get_started' => 'начать',
-        'buy_plan' => 'Купить план'
+        'buy_plan' => 'Купить план',
     ],
 
     // Header notification
@@ -1593,6 +1593,6 @@ return [
         'follow_company_successfully' => 'Следуйте за компанией успешно.',
         'note_required' => 'Поле примечания обязательно',
         'resume_field_required' => 'Поле резюме обязательно для заполнения.',
-        'verify_google_recaptcha' => 'Вам следует проверить Google Recaptcha.'
+        'verify_google_recaptcha' => 'Вам следует проверить Google Recaptcha.',
     ],
 ];

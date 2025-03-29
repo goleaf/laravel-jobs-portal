@@ -113,11 +113,11 @@ class JobController extends AppBaseController
         if ($job->company->user->id !== getLoggedInUserId()) {
             return view('errors.404');
         }
-//        if ($job->company->user->id !== getLoggedInUserId()) {
-//            Flash::error(__('messages.flash.job_not_found'));
-//
-//            return redirect(route('job.index'));
-//        }
+        //        if ($job->company->user->id !== getLoggedInUserId()) {
+        //            Flash::error(__('messages.flash.job_not_found'));
+        //
+        //            return redirect(route('job.index'));
+        //        }
         if ($job->status == Job::STATUS_CLOSED) {
             return redirect(route('job.index'))->withErrors(__('messages.flash.close_job'));
         }
@@ -175,8 +175,10 @@ class JobController extends AppBaseController
             return $this->sendError(__('messages.common.seems_message'));
         }
 
-        $jobAppliedCount = $job->appliedJobs()->whereIn('status',
-            [JobApplication::STATUS_APPLIED, JobApplication::STATUS_DRAFT])->count();
+        $jobAppliedCount = $job->appliedJobs()->whereIn(
+            'status',
+            [JobApplication::STATUS_APPLIED, JobApplication::STATUS_DRAFT]
+        )->count();
         if ($jobAppliedCount > 0) {
             return $this->sendError(__('messages.flash.job_apply_by_candidate'));
         }
@@ -440,11 +442,15 @@ class JobController extends AppBaseController
                 'end_time' => Carbon::now()->addDays($addDays),
             ];
             FeaturedRecord::create($featuredRecord);
-            $notificationStatus = NotificationSetting::where('key', '=', 'MARK_JOB_FEATURED')->pluck('value',
-                'key')->toArray();
+            $notificationStatus = NotificationSetting::where('key', '=', 'MARK_JOB_FEATURED')->pluck(
+                'value',
+                'key'
+            )->toArray();
             if ($notificationStatus['MARK_JOB_FEATURED'] == Job::STATUS_OPEN) {
-                NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where('type',
-                    'employer')->first()->value == 1 ?
+                NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
+                    'type',
+                    'employer'
+                )->first()->value == 1 ?
                     addNotification([
                         Notification::MARK_JOB_FEATURED_ADMIN,
                         $employerUser->company->user->id,

@@ -115,8 +115,10 @@ class FeaturedJobSubscriptionController extends AppBaseController
         ];
         FeaturedRecord::create($featuredRecord);
         $loggedInUser = getLoggedInUser();
-        NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where('type',
-            'employer')->first()->value == 1 ?
+        NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
+            'type',
+            'employer'
+        )->first()->value == 1 ?
             addNotification([
                 Notification::MARK_JOB_FEATURED,
                 $adminId,

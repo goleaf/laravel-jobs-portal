@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\FunctionalArea;
 use App\Livewire\Components\Column;
+use App\Models\FunctionalArea;
 
 class FunctionalAreaTable extends LivewireTableComponent
 {

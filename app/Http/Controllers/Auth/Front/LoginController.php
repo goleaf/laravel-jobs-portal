@@ -53,20 +53,20 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-//    /**
-//     * @return Factory|View
-//     */
-//    protected function showLoginForm()
-//    {
-//        return view('web.auth.login');
-//    }
+    //    /**
+    //     * @return Factory|View
+    //     */
+    //    protected function showLoginForm()
+    //    {
+    //        return view('web.auth.login');
+    //    }
 
     /**
      * @return Factory|View
      */
     protected function employeeLogin()
     {
-//        return view('web.auth.employer_login');
+        //        return view('web.auth.employer_login');
         return view('front_web_template.auth.employer_login');
     }
 
@@ -75,7 +75,7 @@ class LoginController extends Controller
      */
     protected function candidateLogin()
     {
-//        return view('web.auth.candidate_login');
+        //        return view('web.auth.candidate_login');
         return view('front_web_template.auth.candidate_login');
     }
 

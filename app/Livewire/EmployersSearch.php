@@ -96,39 +96,55 @@ class EmployersSearch extends Component
         /** @var Company $query */
         $query = Company::with('user', 'activeFeatured')->select('companies.*')->orderByDesc('created_at');
 
-        $query->when(isset($this->searchByEmployee) && $this->searchByEmployee != '',
+        $query->when(
+            isset($this->searchByEmployee) && $this->searchByEmployee != '',
             function (Builder $q) {
                 $q->whereHas('user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByEmployee).'%')
-                        ->orWhere('email', 'like',
-                            '%'.strtolower($this->searchByEmployee).'%');
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByEmployee).'%'
+                    )
+                        ->orWhere(
+                            'email',
+                            'like',
+                            '%'.strtolower($this->searchByEmployee).'%'
+                        );
                 });
-            });
+            }
+        );
 
-        $query->when(isset($this->featured) && $this->featured == 1,
+        $query->when(
+            isset($this->featured) && $this->featured == 1,
             function (Builder $q) {
                 $q->has('activeFeatured');
-            });
+            }
+        );
 
-        $query->when(($this->featured != '') && $this->featured == 0,
+        $query->when(
+            ($this->featured != '') && $this->featured == 0,
             function (Builder $q) {
                 $q->doesnthave('activeFeatured');
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 1,
+        $query->when(
+            ($this->status != '') && $this->status == 1,
             function (Builder $q) {
                 $q->wherehas('user', function (Builder $q) {
                     $q->where('is_active', '=', 1);
                 });
-            });
+            }
+        );
 
-        $query->when(($this->status != '') && $this->status == 0,
+        $query->when(
+            ($this->status != '') && $this->status == 0,
             function (Builder $q) {
                 $q->wherehas('user', function (Builder $q) {
                     $q->where('is_active', '=', 0);
                 });
-            });
+            }
+        );
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();
         $lastPage = $all->lastPage();

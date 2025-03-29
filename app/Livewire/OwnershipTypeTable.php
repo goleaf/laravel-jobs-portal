@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\OwnerShipType;
 use App\Livewire\Components\Column;
+use App\Models\OwnerShipType;
 
 class OwnershipTypeTable extends LivewireTableComponent
 {

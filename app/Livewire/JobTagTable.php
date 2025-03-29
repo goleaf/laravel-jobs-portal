@@ -11,7 +11,7 @@ class JobTagTable extends BaseTable
     public $showButtonOnHeader = true;
     public $showFilterOnHeader = false;
     public $buttonComponent = 'job_tags.table_components.add_button';
-    
+
     public function query(): Builder
     {
         return Tag::query();

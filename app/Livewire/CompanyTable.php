@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use App\Livewire\Components\Column;
-use App\Livewire\Components\Filters\SelectFilter;
 
 class CompanyTable extends LivewireTableComponent
 {
@@ -39,7 +39,7 @@ class CompanyTable extends LivewireTableComponent
         $this->setDefaultSort('created_at', 'desc');
 
         $this->setThAttributes(function (Column $column) {
-            if ($column->isField('created_at') || $column->isField('is_active') || $column->isField('last_name') ) {
+            if ($column->isField('created_at') || $column->isField('is_active') || $column->isField('last_name')) {
                 return [
                     'class' => 'd-flex justify-content-center',
                 ];
@@ -110,18 +110,19 @@ class CompanyTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-         $query =  Company::with('user', 'activeFeatured', 'featured', 'admin');
-         $query->when($this->featured != Company::ALL, function($q) {
-                  $q->Has('featured', $this->featured);
-         });
-         $query->when($this->status != Company::ALL, function($q) {
-                  if($this->status) {
-                           $q->where('user.is_active', 1);
-                  }else {
-                           $q->where('user.is_active', 0);
-                  }
-         });
-         return $query->select('companies.*');
+        $query = Company::with('user', 'activeFeatured', 'featured', 'admin');
+        $query->when($this->featured != Company::ALL, function ($q) {
+            $q->Has('featured', $this->featured);
+        });
+        $query->when($this->status != Company::ALL, function ($q) {
+            if ($this->status) {
+                $q->where('user.is_active', 1);
+            } else {
+                $q->where('user.is_active', 0);
+            }
+        });
+
+        return $query->select('companies.*');
     }
 
     public function filters(): array
@@ -161,18 +162,21 @@ class CompanyTable extends LivewireTableComponent
                 ),
         ];
     }
+
     public function changeFeaturedCompany($featured)
     {
-         $this->featured = $featured;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+        $this->featured = $featured;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
+
     public function changeStatusFilter($status)
     {
-         $this->status = $status;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+        $this->status = $status;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
+
     public function resetPagination()
     {
         $this->resetPage('employersPage');

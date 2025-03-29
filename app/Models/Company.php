@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Services\FileService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -110,9 +110,9 @@ class Company extends Model
     ];
 
     const STATUS = [
-         self::ALL => 'ALL',
-         self::ISACTIVE => 'Active',
-         self::DEACTIVE => 'Deactive',
+        self::ALL => 'ALL',
+        self::ISACTIVE => 'Active',
+        self::DEACTIVE => 'Deactive',
     ];
 
     public $fillable = [
@@ -203,9 +203,6 @@ class Company extends Model
 
     /**
      * Upload a logo for the company.
-     *
-     * @param UploadedFile $file
-     * @return void
      */
     public function uploadLogo(UploadedFile $file): void
     {
@@ -228,7 +225,7 @@ class Company extends Model
      */
     public function getCompanyUrlAttribute()
     {
-        if (!empty($this->logo_path)) {
+        if (! empty($this->logo_path)) {
             return app(FileService::class)->getFileUrl($this->logo_path);
         }
 

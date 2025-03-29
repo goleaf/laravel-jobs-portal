@@ -28,8 +28,8 @@ class CheckTranslations extends Command
     {
         $baseLocale = $this->option('base');
         $locale = $this->argument('locale');
-        
-        if (!$locale) {
+
+        if (! $locale) {
             $availableLocales = array_keys(config('app.available_locales', []));
             $locales = array_filter($availableLocales, function ($l) use ($baseLocale) {
                 return $l !== $baseLocale;
@@ -37,36 +37,36 @@ class CheckTranslations extends Command
         } else {
             $locales = [$locale];
         }
-        
+
         foreach ($locales as $locale) {
             $this->info("Checking translations for locale: {$locale}");
-            
+
             $missing = TranslationHelper::getMissingTranslations($locale, $baseLocale);
-            
+
             if (empty($missing)) {
                 $this->info("No missing translations found for {$locale}");
                 continue;
             }
-            
-            $this->warn("Found " . count($missing) . " missing translations for {$locale}:");
-            
+
+            $this->warn('Found '.count($missing)." missing translations for {$locale}:");
+
             $headers = ['Key', 'Base Value'];
             $rows = [];
-            
+
             foreach ($missing as $key => $value) {
                 $rows[] = [$key, is_array($value) ? 'Array' : $value];
             }
-            
+
             $this->table($headers, $rows);
-            
-            if ($this->confirm("Do you want to create a template file with the missing translations?")) {
+
+            if ($this->confirm('Do you want to create a template file with the missing translations?')) {
                 $path = resource_path("lang/{$locale}/missing.php");
-                $content = "<?php\n\nreturn " . var_export($missing, true) . ";\n";
+                $content = "<?php\n\nreturn ".var_export($missing, true).";\n";
                 file_put_contents($path, $content);
                 $this->info("Missing translations saved to {$path}");
             }
         }
-        
+
         return Command::SUCCESS;
     }
-} 
+}

@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\JobStage;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class JobStageTable extends LivewireTableComponent
 {
@@ -25,7 +25,8 @@ class JobStageTable extends LivewireTableComponent
                 return [
                     'class' => 'text-center',
                 ];
-            });
+            }
+        );
 
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($columnIndex == '2') {
@@ -43,7 +44,8 @@ class JobStageTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setQueryStringStatus(false);
     }

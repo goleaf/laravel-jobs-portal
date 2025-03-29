@@ -48,7 +48,7 @@ class NoticeboardController extends AppBaseController
         $this->noticeboardRepository->store($input);
 
         return $this->sendSuccess(__('messages.flash.noticeboard_save'));
-//        return $this->sendSuccess('This functionality not allowed in demo.');
+        //        return $this->sendSuccess('This functionality not allowed in demo.');
     }
 
     /**

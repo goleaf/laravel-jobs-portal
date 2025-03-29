@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use Exception;
-use App\Models\NewsLetter;
-use App\Models\Noticeboard;
 use App\Mail\NewsLetterMail;
 use App\Models\EmailTemplate;
+use App\Models\NewsLetter;
+use App\Models\Noticeboard;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -53,7 +53,7 @@ class NoticeboardRepository extends BaseRepository
                 $body = str_replace($keyVariable, $value, $templateBody->body);
                 $data['input'] = $input;
                 $data['body'] = $body;
-            //    Mail::to($newsLetterEmail)->send(new NewsLetterMail($data));
+                //    Mail::to($newsLetterEmail)->send(new NewsLetterMail($data));
             } catch (Exception $e) {
                 throw new UnprocessableEntityHttpException($e->getMessage());
             }

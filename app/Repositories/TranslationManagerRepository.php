@@ -26,10 +26,10 @@ class TranslationManagerRepository
 
         try {
             if (! empty($input['name'])) {
-                //Make directory in lang folder
+                // Make directory in lang folder
                 File::makeDirectory(resource_path().'/lang'.'/'.$input['name']);
 
-                //Copy all en folder files to new folder.
+                // Copy all en folder files to new folder.
                 $filesInFolder = File::files(App::langPath().'/en');
                 foreach ($filesInFolder as $path) {
                     $file = basename($path);

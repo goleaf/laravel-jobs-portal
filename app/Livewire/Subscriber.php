@@ -84,8 +84,11 @@ class Subscriber extends Component
         $query = NewsLetter::query()->select('news_letters.*');
 
         $query->when(isset($this->searchBySubscriber) && $this->searchBySubscriber != '', function (Builder $q) {
-            $q->where('email', 'like',
-                '%'.strtolower($this->searchBySubscriber).'%');
+            $q->where(
+                'email',
+                'like',
+                '%'.strtolower($this->searchBySubscriber).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

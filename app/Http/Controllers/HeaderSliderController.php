@@ -70,12 +70,14 @@ class HeaderSliderController extends AppBaseController
     public function update(Request $request, HeaderSlider $headerSlider): JsonResponse
     {
         $input = $request->all();
-        $request->validate([
-            'image_slider' => 'nullable|mimes:jpeg,jpg,png',
-        ],
+        $request->validate(
+            [
+                'image_slider' => 'nullable|mimes:jpeg,jpg,png',
+            ],
             [
                 'image_slider.mimes' => 'The image must be a file of type: jpeg, jpg, png.',
-            ]);
+            ]
+        );
 
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;
         $this->headerSliderRepository->updateHeaderSlider($input, $headerSlider->id);
@@ -117,6 +119,6 @@ class HeaderSliderController extends AppBaseController
         $setting->update(['value' => ! $setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
-//        return $this->sendSuccess('This functionality not allowed in demo.');
+        //        return $this->sendSuccess('This functionality not allowed in demo.');
     }
 }

@@ -29,8 +29,10 @@ class JobNotificationRepository
         })->get()->pluck('user.full_name', 'id');
 
         $now = Carbon::now()->toDateString();
-        $data['jobs'] = Job::whereDate('job_expiry_date', '>=', $now)->where('status', '1')->where('is_suspended', Job::NOT_SUSPENDED)->orderBy('created_at',
-            'desc')->get();
+        $data['jobs'] = Job::whereDate('job_expiry_date', '>=', $now)->where('status', '1')->where('is_suspended', Job::NOT_SUSPENDED)->orderBy(
+            'created_at',
+            'desc'
+        )->get();
 
         $data['companies'] = Company::with('user')->whereHas('user', function (Builder $q) {
             $q->where('is_active', true);
@@ -59,7 +61,7 @@ class JobNotificationRepository
                 $data['body'] = \Str::before($body, '{{jobs}}');
                 $data['jobs'] = $jobs;
 
-               Mail::to($candidate->user->email)->send(new JobNotification($data));
+                Mail::to($candidate->user->email)->send(new JobNotification($data));
             }
 
             DB::commit();

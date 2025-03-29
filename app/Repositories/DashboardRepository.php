@@ -37,8 +37,10 @@ class DashboardRepository
         $data['totalEmployers'] = User::whereOwnerType(Company::class)->whereIsActive(User::ACTIVE)->count();
         $data['totalActiveJobs'] = Job::whereDate('job_expiry_date', '>=', Carbon::now())->whereStatus(Job::STATUS_OPEN)->where('is_suspended', Job::NOT_SUSPENDED)->count();
         $data['totalVerifiedUsers'] = User::whereNotNull('is_verified')->count();
-        $data['todayJobs'] = Job::whereDate('created_at',
-            Carbon::today())->count();
+        $data['todayJobs'] = Job::whereDate(
+            'created_at',
+            Carbon::today()
+        )->count();
         $data['featuredJobs'] = Job::has('activeFeatured')->where('job_expiry_date', '>=', Carbon::now())->count();
         $data['featuredEmployers'] = Company::has('activeFeatured')->count();
         $data['featuredJobsIncomes'] = Transaction::whereOwnerType(Job::class)->sum('amount');
@@ -132,8 +134,10 @@ class DashboardRepository
      */
     public function getRecentJobsData()
     {
-        return Job::with(['company', 'jobCategory', 'jobType', 'jobShift', 'activeFeatured'])->orderBy('created_at',
-            'desc')->limit(5)->get();
+        return Job::with(['company', 'jobCategory', 'jobType', 'jobShift', 'activeFeatured'])->orderBy(
+            'created_at',
+            'desc'
+        )->limit(5)->get();
     }
 
     /**
@@ -147,8 +151,10 @@ class DashboardRepository
         $data['totalJobs'] = count($jobIds);
         $data['pausedJobCount'] = Job::whereCompanyId($user->owner_id)->where('status', Job::STATUS_PAUSED)->count();
         $data['closedJobCount'] = Job::whereCompanyId($user->owner_id)->where('status', Job::STATUS_CLOSED)->count();
-        $data['jobCount'] = Job::whereCompanyId($user->owner_id)->where('status',
-            Job::STATUS_OPEN)->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->count();
+        $data['jobCount'] = Job::whereCompanyId($user->owner_id)->where(
+            'status',
+            Job::STATUS_OPEN
+        )->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->count();
         $data['followersCount'] = FavouriteCompany::whereCompanyId($user->owner_id)->count();
 
         return $data;
@@ -171,8 +177,10 @@ class DashboardRepository
     public function getEmployerRecentFollowerData()
     {
         $user = Auth::user();
-        $followers = FavouriteCompany::with('user')->where('company_id',
-            $user->owner_id)->orderByDesc('created_at')->limit(5)->get();
+        $followers = FavouriteCompany::with('user')->where(
+            'company_id',
+            $user->owner_id
+        )->orderByDesc('created_at')->limit(5)->get();
 
         return $followers;
     }
@@ -237,8 +245,10 @@ class DashboardRepository
             $query->whereHas('candidate.user', function (Builder $query) use ($gender) {
                 $query->where('gender', '=', $gender);
             });
-        })->whereIn('job_id', $jobIds)->whereBetween('created_at',
-            [$dateS->format('Y-m-d').' 00:00:00', $dateE.' 23:59:59'])
+        })->whereIn('job_id', $jobIds)->whereBetween(
+            'created_at',
+            [$dateS->format('Y-m-d').' 00:00:00', $dateE.' 23:59:59']
+        )
             ->groupBy('date')
             ->orderBy('date')
             ->get([

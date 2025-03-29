@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class EmailToEmployer extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $data;
 

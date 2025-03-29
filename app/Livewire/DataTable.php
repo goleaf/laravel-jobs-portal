@@ -6,7 +6,6 @@ use App\Livewire\Columns\Column;
 use App\Livewire\Filters\Filter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -24,12 +23,12 @@ abstract class DataTable extends Component
     public array $activeFilters = [];
     public int $debounce = 350;
     public string $tableClass = 'min-w-full divide-y divide-gray-200';
-    
+
     /**
      * Cache key for storing table state
      */
     protected string $cacheKey;
-    
+
     /**
      * Cache duration in seconds (10 minutes by default)
      */
@@ -39,18 +38,18 @@ abstract class DataTable extends Component
      * Table name identifier
      */
     protected string $tableName;
-    
+
     /**
      * Initialize properties and load settings from cache
      */
     public function mount(): void
     {
         $this->tableName = $this->getTableName();
-        $this->cacheKey = "datatable_state_{$this->tableName}_" . auth()->id();
-        
+        $this->cacheKey = "datatable_state_{$this->tableName}_".auth()->id();
+
         $this->loadTableState();
     }
-    
+
     /**
      * Clean up and store table state
      */
@@ -58,13 +57,14 @@ abstract class DataTable extends Component
     {
         $this->storeTableState();
     }
-    
+
     /**
      * Get a table name based on the current class
      */
     protected function getTableName(): string
     {
         $className = class_basename(static::class);
+
         return str_replace('Table', '', $className);
     }
 
@@ -99,40 +99,40 @@ abstract class DataTable extends Component
      */
     protected function storeTableState(): void
     {
-        if (!$this->tableName) {
+        if (! $this->tableName) {
             return;
         }
-        
+
         $state = [
             'perPage' => $this->perPage,
             'sortField' => $this->sortField,
             'sortDirection' => $this->sortDirection,
             'activeFilters' => $this->activeFilters,
         ];
-        
+
         Cache::put($this->cacheKey, $state, $this->cacheDuration);
     }
-    
+
     /**
      * Load table state from cache
      */
     protected function loadTableState(): void
     {
-        if (!$this->tableName) {
+        if (! $this->tableName) {
             return;
         }
-        
+
         $state = Cache::get($this->cacheKey);
-        
+
         if ($state) {
             $this->perPage = $state['perPage'] ?? $this->perPage;
             $this->sortField = $state['sortField'] ?? $this->sortField;
             $this->sortDirection = $state['sortDirection'] ?? $this->sortDirection;
             $this->activeFilters = $state['activeFilters'] ?? $this->activeFilters;
         }
-        
+
         // Set default sort field if not set
-        if (empty($this->sortField) && !empty($this->columns())) {
+        if (empty($this->sortField) && ! empty($this->columns())) {
             $this->sortField = $this->columns()[0]->field;
         }
     }
@@ -195,7 +195,7 @@ abstract class DataTable extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        
+
         $this->storeTableState();
     }
 
@@ -207,7 +207,7 @@ abstract class DataTable extends Component
         if ($this->sortField && $this->columnExists($this->sortField)) {
             return $query->orderBy($this->sortField, $this->sortDirection);
         }
-        
+
         return $query;
     }
 
@@ -219,16 +219,16 @@ abstract class DataTable extends Component
         if (empty($this->search)) {
             return $query;
         }
-        
+
         $columns = collect($this->columns())
             ->filter(fn (Column $column) => $column->searchable)
             ->map(fn (Column $column) => $column->field)
             ->toArray();
-            
+
         if (empty($columns)) {
             return $query;
         }
-        
+
         return $query->where(function (Builder $query) use ($columns) {
             foreach ($columns as $column) {
                 $query->orWhere($column, 'LIKE', "%{$this->search}%");
@@ -244,21 +244,21 @@ abstract class DataTable extends Component
         if (empty($this->activeFilters)) {
             return $query;
         }
-        
+
         $filters = collect($this->filters());
-        
+
         foreach ($this->activeFilters as $name => $value) {
             if (empty($value)) {
                 continue;
             }
-            
+
             $filter = $filters->first(fn (Filter $filter) => $filter->name === $name);
-            
+
             if ($filter) {
                 $query = $filter->apply($query, $value);
             }
         }
-        
+
         return $query;
     }
 
@@ -276,11 +276,11 @@ abstract class DataTable extends Component
     public function getData(): LengthAwarePaginator
     {
         $query = $this->query();
-        
+
         $query = $this->applySearch($query);
         $query = $this->applyFilters($query);
         $query = $this->applySorting($query);
-        
+
         return $query->paginate($this->perPage);
     }
 
@@ -310,4 +310,4 @@ abstract class DataTable extends Component
             'filters' => $this->filters(),
         ]);
     }
-} 
+}

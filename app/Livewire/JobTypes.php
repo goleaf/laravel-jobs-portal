@@ -79,8 +79,11 @@ class JobTypes extends Component
         $query = JobType::query()->select('job_types.*');
 
         $query->when(isset($this->searchByJobTypes) && $this->searchByJobTypes != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByJobTypes).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByJobTypes).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

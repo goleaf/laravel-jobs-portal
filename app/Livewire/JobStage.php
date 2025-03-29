@@ -73,8 +73,11 @@ class JobStage extends Component
         $query = \App\Models\JobStage::whereCompanyId($companyId->id)->select('job_stages.*');
 
         $query->when(isset($this->searchByJobStage) && $this->searchByJobStage != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByJobStage).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByJobStage).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

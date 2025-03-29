@@ -247,7 +247,7 @@ class CandidateController extends AppBaseController
      */
     public function resendEmailVerification(Candidate $candidate)
     {
-       $candidate->user->sendEmailVerificationNotification();
+        $candidate->user->sendEmailVerificationNotification();
         if (Auth::user()->hasRole('Admin')) {
             $candidate->last_change = Auth::user()->id;
             $candidate->save();
@@ -258,7 +258,7 @@ class CandidateController extends AppBaseController
 
     public function candidateExportExcel(): BinaryFileResponse
     {
-        return Excel::download(new CandidatesExport(), 'candidates-'.time().'.xlsx');
+        return Excel::download(new CandidatesExport, 'candidates-'.time().'.xlsx');
     }
 
     public function resumes(): View

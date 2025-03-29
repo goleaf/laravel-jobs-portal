@@ -3,43 +3,41 @@
 namespace App\Repositories;
 
 use App\Jobs\CandidatesAlertJob;
-use DB;
-use to;
-use Exception;
-use Carbon\Carbon;
-use App\Models\Job;
-use App\Models\Tag;
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\Skill;
-use App\Models\Company;
-use App\Models\JobType;
-use App\Models\EmailJob;
-use App\Models\JobShift;
+use App\Mail\EmailJobToFriend;
 use App\Models\Candidate;
 use App\Models\CareerLevel;
-use App\Models\JobCategory;
-use App\Models\ReportedJob;
-use Illuminate\Support\Str;
+use App\Models\Company;
+use App\Models\EmailJob;
+use App\Models\EmailTemplate;
 use App\Models\FavouriteJob;
 use App\Models\FrontSetting;
-use App\Models\Notification;
-use App\Models\SalaryPeriod;
-use App\Models\EmailTemplate;
-use App\Mail\EmailJobToFriend;
-use App\Mail\EmailToCandidate;
 use App\Models\FunctionalArea;
+use App\Models\Job;
 use App\Models\JobApplication;
-use App\Models\SalaryCurrency;
+use App\Models\JobCategory;
+use App\Models\JobShift;
+use App\Models\JobType;
+use App\Models\Notification;
 use App\Models\NotificationSetting;
+use App\Models\Plan;
+use App\Models\ReportedJob;
 use App\Models\RequiredDegreeLevel;
+use App\Models\SalaryCurrency;
+use App\Models\SalaryPeriod;
+use App\Models\Skill;
+use App\Models\Tag;
+use App\Models\User;
+use Carbon\Carbon;
+use DB;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use PragmaRX\Countries\Package\Countries;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use PragmaRX\Countries\Package\Countries;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
@@ -97,7 +95,7 @@ class JobRepository extends BaseRepository
      */
     public function prepareData()
     {
-        $countries = new Countries();
+        $countries = new Countries;
         $data['jobType'] = JobType::pluck('name', 'id');
         $data['jobCategory'] = JobCategory::pluck('name', 'id');
         $data['careerLevels'] = CareerLevel::pluck('level_name', 'id');
@@ -197,7 +195,7 @@ class JobRepository extends BaseRepository
      *
      * @throws \Throwable
      */
-    public function update($input,$job)
+    public function update($input, $job)
     {
         try {
             DB::beginTransaction();
@@ -262,24 +260,39 @@ class JobRepository extends BaseRepository
         $jobApplicationRepo = app(JobApplicationRepository::class);
 
         // check candidate is already applied for job
-        $data['isApplied'] = $jobApplicationRepo->checkJobStatus($job->id, $candidate->id,
-            JobApplication::STATUS_APPLIED);
+        $data['isApplied'] = $jobApplicationRepo->checkJobStatus(
+            $job->id,
+            $candidate->id,
+            JobApplication::STATUS_APPLIED
+        );
 
         // check job is drafted
         $data['isJobDrafted'] = $data['isJobApplicationRejected'] = $data['isJobApplicationCompleted'] = false;
         if (! $data['isApplied']) {
             // check job is drafted or not
-            $data['isJobDrafted'] = $jobApplicationRepo->checkJobStatus($job->id, $candidate->id,
-                JobApplication::STATUS_DRAFT);
+            $data['isJobDrafted'] = $jobApplicationRepo->checkJobStatus(
+                $job->id,
+                $candidate->id,
+                JobApplication::STATUS_DRAFT
+            );
 
-            $data['isJobApplicationShortlisted'] = $jobApplicationRepo->checkJobStatus($job->id, $candidate->id,
-                JobApplication::SHORT_LIST);
+            $data['isJobApplicationShortlisted'] = $jobApplicationRepo->checkJobStatus(
+                $job->id,
+                $candidate->id,
+                JobApplication::SHORT_LIST
+            );
 
-            $data['isJobApplicationRejected'] = $jobApplicationRepo->checkJobStatus($job->id, $candidate->id,
-                JobApplication::REJECTED);
+            $data['isJobApplicationRejected'] = $jobApplicationRepo->checkJobStatus(
+                $job->id,
+                $candidate->id,
+                JobApplication::REJECTED
+            );
 
-            $data['isJobApplicationCompleted'] = $jobApplicationRepo->checkJobStatus($job->id, $candidate->id,
-                JobApplication::COMPLETE);
+            $data['isJobApplicationCompleted'] = $jobApplicationRepo->checkJobStatus(
+                $job->id,
+                $candidate->id,
+                JobApplication::COMPLETE
+            );
         }
 
         $data['isJobAddedToFavourite'] = $this->isJobAddedToFavourite($job->id);
@@ -317,8 +330,10 @@ class JobRepository extends BaseRepository
 
     public function storeReportJobAbuse($input): bool
     {
-        $jobReportedAsAbuse = ReportedJob::where('user_id', $input['userId'])->where('job_id',
-            $input['jobId'])->exists();
+        $jobReportedAsAbuse = ReportedJob::where('user_id', $input['userId'])->where(
+            'job_id',
+            $input['jobId']
+        )->exists();
         if (! $jobReportedAsAbuse) {
             $reportedJobNote = trim($input['note']);
             if (empty($reportedJobNote)) {
@@ -351,7 +366,7 @@ class JobRepository extends BaseRepository
             $value = [$emailJob->friend_name, $emailJob->job_url, config('app.name')];
             $body = str_replace($keyVariable, $value, $templateBody);
             $data['body'] = $body;
-           Mail::to($input['friend_email'])->send(new EmailJobToFriend($data));
+            Mail::to($input['friend_email'])->send(new EmailJobToFriend($data));
 
             DB::commit();
 
@@ -401,7 +416,9 @@ class JobRepository extends BaseRepository
     {
         return ReportedJob::with(['user.candidate', 'job.company'])->without([
             'user.media', 'user.country', 'user.state', 'user.city',
-        ])->select('reported_jobs.*')->orderBy('created_at',
-            'desc')->findOrFail($reportedJobID);
+        ])->select('reported_jobs.*')->orderBy(
+            'created_at',
+            'desc'
+        )->findOrFail($reportedJobID);
     }
 }

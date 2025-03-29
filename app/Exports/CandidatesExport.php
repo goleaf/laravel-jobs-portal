@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class CandidatesExport implements FromView, WithTitle, ShouldAutoSize, WithEvents
+class CandidatesExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
 {
     public function view(): View
     {

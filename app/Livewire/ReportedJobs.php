@@ -86,8 +86,10 @@ class ReportedJobs extends Component
     {
         $query = ReportedJob::with(['user.candidate', 'job.company', 'user' => function ($query) {
             $query->without(['media', 'country', 'state', 'city']);
-        }])->select('reported_jobs.*')->orderBy('created_at',
-            'desc');
+        }])->select('reported_jobs.*')->orderBy(
+            'created_at',
+            'desc'
+        );
 
         $query->when(isset($this->filterReportedDate) && $this->filterReportedDate != '', function (Builder $q) {
             $q->whereMonth('reported_jobs.created_at', $this->filterReportedDate);
@@ -96,8 +98,11 @@ class ReportedJobs extends Component
         $query->when(isset($this->searchByReportedJob) && $this->searchByReportedJob != '', function (Builder $q) {
             if ($this->filterReportedDate == '') {
                 $q->whereHas('job', function (Builder $q) {
-                    $q->where('job_title', 'like',
-                        '%'.strtolower($this->searchByReportedJob).'%');
+                    $q->where(
+                        'job_title',
+                        'like',
+                        '%'.strtolower($this->searchByReportedJob).'%'
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
                         $q->where('first_name', 'like', '%'.$this->searchByReportedJob.'%');
@@ -107,19 +112,34 @@ class ReportedJobs extends Component
                     });
             } else {
                 $q->whereHas('job', function (Builder $q) {
-                    $q->where('job_title', 'like',
-                        '%'.strtolower($this->searchByReportedJob).'%')->whereMonth('reported_jobs.created_at',
-                            $this->filterReportedDate);
+                    $q->where(
+                        'job_title',
+                        'like',
+                        '%'.strtolower($this->searchByReportedJob).'%'
+                    )->whereMonth(
+                        'reported_jobs.created_at',
+                        $this->filterReportedDate
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
-                        $q->where('first_name', 'like',
-                            '%'.$this->searchByReportedJob.'%')->whereMonth('reported_jobs.created_at',
-                                $this->filterReportedDate);
+                        $q->where(
+                            'first_name',
+                            'like',
+                            '%'.$this->searchByReportedJob.'%'
+                        )->whereMonth(
+                            'reported_jobs.created_at',
+                            $this->filterReportedDate
+                        );
                     })
                     ->orWhereHas('user', function (Builder $q) {
-                        $q->where('last_name', 'like',
-                            '%'.$this->searchByReportedJob.'%')->whereMonth('reported_jobs.created_at',
-                                $this->filterReportedDate);
+                        $q->where(
+                            'last_name',
+                            'like',
+                            '%'.$this->searchByReportedJob.'%'
+                        )->whereMonth(
+                            'reported_jobs.created_at',
+                            $this->filterReportedDate
+                        );
                     });
             }
         });

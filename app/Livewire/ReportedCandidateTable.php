@@ -2,13 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\ReportedToCandidate;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class ReportedCandidateTable extends LivewireTableComponent
 {
     public $showFilterOnHeader = false;
+
     public function configure(): void
     {
         $this->setPrimaryKey('id');
@@ -34,10 +35,13 @@ class ReportedCandidateTable extends LivewireTableComponent
         return [
             Column::make(__('messages.company.candidate_name'), 'candidate.user.first_name')
                 ->sortable(function (Builder $query, $direction) {
-                    return $query->orderBy(\App\Models\User::select('first_name')->whereColumn('candidate.user_id', 'users.id'),
-                        $direction);
+                    return $query->orderBy(
+                        \App\Models\User::select('first_name')->whereColumn('candidate.user_id', 'users.id'),
+                        $direction
+                    );
                 })
-                ->searchable(function (Builder $query, $direction) {
+                ->searchable(
+                    function (Builder $query, $direction) {
                         return $query->whereHas('candidate.user', function (Builder $q) use ($direction) {
                             $q->whereRaw("TRIM(CONCAT(first_name,' ',last_name,' ')) like '%{$direction}%'");
                         });
@@ -46,8 +50,10 @@ class ReportedCandidateTable extends LivewireTableComponent
                 ->view('candidate.reported_candidate.table-components.candidate_firstname'),
             Column::make(__('messages.company.reported_by'), 'user.first_name')
                 ->sortable(function (Builder $query, $direction) {
-                    return $query->orderBy(\App\Models\User::select('first_name')->whereColumn('reported_to_candidates.user_id', 'users.id'),
-                        $direction);
+                    return $query->orderBy(
+                        \App\Models\User::select('first_name')->whereColumn('reported_to_candidates.user_id', 'users.id'),
+                        $direction
+                    );
                 })
                 ->searchable()
                 ->view('candidate.reported_candidate.table-components.user_firstname'),

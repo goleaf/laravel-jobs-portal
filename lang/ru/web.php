@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Дом',
     'jobs' => 'Вакансии',
     'companies' => 'Компании',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'Легко найти свое',
     'admin' => 'Админ',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Искать',
         'browse_all' => 'Просмотреть все',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'Сохранить как черновик',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Твоя карьера начинается сейчас',
         'keywords' => 'Ключевые слова',
@@ -82,7 +82,7 @@ return [
         'max' => 'Макс',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'Искать вакансии',
         'job_by_type' => 'Работа по типу',
@@ -106,7 +106,7 @@ return [
         'advertise_image' => 'Рекламируйте изображение',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'Сведения о вакансии',
         'email_to_friend' => 'Отправить другу по электронной почте',
@@ -163,7 +163,7 @@ return [
         'share_this_job' => 'Поделиться этой работой',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Поисковые компании',
         'opened_jobs' => 'Открытые вакансии',
@@ -171,7 +171,7 @@ return [
         'no_company_found' => 'Компания не найдена',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => 'Искать кандидатов',
         'no_candidates_found' => 'Соискателей не найдено',
@@ -180,7 +180,7 @@ return [
         'opened_jobs' => 'Открытые вакансии',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Сведения о компании',
         'follow' => 'Следовать',
@@ -190,7 +190,7 @@ return [
         'processing' => 'Обработка ...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Как это работает',
         'register' => 'Зарегистрироваться',
@@ -207,13 +207,13 @@ return [
         'faq_not_available' => 'Часто задаваемые вопросы недоступны',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Свяжитесь с нами',
         'send_message' => 'Отправить сообщение',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'Опубликовать',
         'posts' => 'Записи',
@@ -224,7 +224,7 @@ return [
         'categories' => 'Категории',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Кандидат',
         'employer' => 'Работодатель',
@@ -236,7 +236,7 @@ return [
         'confirm_password' => 'Подтвердите пароль',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Полезные ссылки',
         'newsletter' => 'Информационный бюллетень',
@@ -250,7 +250,7 @@ return [
         'terms' => 'Условия',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'Войти в',
         'remember_me' => 'Запомнить меня',
@@ -265,13 +265,13 @@ return [
         'enter_password' => 'Введите пароль',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'Переключить навигацию',
         'main_menu' => 'Главное меню',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'Какие',
         'where' => 'Где',
@@ -302,7 +302,7 @@ return [
         'view_company_profile' => 'Посмотреть профиль компании',
         'founded_in' => 'Основана в',
         'phone' => 'Телефон',
-        'Skill_Experience' => 'Навыки и опыт'
+        'Skill_Experience' => 'Навыки и опыт',
     ],
 
     'web_company' => [
@@ -350,7 +350,7 @@ return [
         'your_email' => 'Ваш адрес электронной почты',
         'email_password_reset_link' => 'Отправить ссылку для сброса пароля на почту',
         'cancel' => 'Отмена',
-        'forgot_password' => 'Забыли пароль'
+        'forgot_password' => 'Забыли пароль',
     ],
 
     'new_password' => [

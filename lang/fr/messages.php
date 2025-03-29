@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    //menu.blade keys
+    // menu.blade keys
     'dashboard' => 'Tableau de bord',
     'payment_failed' => 'Paiement échoué.',
     'job_categories' => 'Emploi Catégories',
@@ -305,7 +305,7 @@ return [
         'post_statistics' => 'Statistiques des publications',
     ],
 
-    //Job Category
+    // Job Category
     'job_category' => [
         'new_job_category' => 'Nouvelle Emploi Catégorie',
         'edit_job_category' => 'Éditer Emploi Catégorie',
@@ -320,7 +320,7 @@ return [
         'no_job_category_available' => 'Aucune catégorie d\'emploi disponible',
     ],
 
-    //Settings
+    // Settings
     'setting' => [
         'paystack_payment_url' => 'URL de paiement de la pile de paie',
         'application_name' => 'Application Nom',
@@ -638,7 +638,7 @@ return [
         'no_degree_level_available' => 'Aucun niveau de diplôme disponible',
     ],
 
-    //all resumes
+    // all resumes
     'resumes' => [
         'file' => 'Déposer',
         'name' => 'Nom',
@@ -882,7 +882,7 @@ return [
         'no_testimonial_available' => 'Aucun témoignage disponible',
     ],
 
-    //employer heading menu
+    // employer heading menu
     'employer_menu' => [
         'general_dashboard' => 'Générale Tableau de bord',
         'jobs' => 'Emplois',
@@ -921,7 +921,7 @@ return [
         'job_applications' => 'Emploi Applications',
     ],
 
-    //skills
+    // skills
     'skill' => [
         'new_skill' => 'Nouvelle Compétence',
         'edit_skill' => 'Éditer  Compétence',
@@ -1054,7 +1054,7 @@ return [
         'upgrade' => 'Mise à niveau',
     ],
 
-    //transaction
+    // transaction
     'transaction' => [
         'plan_name' => 'Nom du plan',
         'subscription_id' => 'Identifiant d abonnement',
@@ -1068,7 +1068,7 @@ return [
         'user_name' => "nom de l'employeur",
     ],
 
-    //front settings
+    // front settings
     'front_settings' => [
         'featured_jobs_price' => 'Prix des emplois en vedette',
         'featured_jobs_due_days' => 'Jours d`échéance des travaux par défaut',
@@ -1114,7 +1114,7 @@ return [
         'about_image_three' => "À propos de l'image trois",
     ],
 
-    //notification settings
+    // notification settings
     'notification_settings' => [
         'JOB_APPLICATION_SUBMITTED' => 'Lors de la soumission d\'une nouvelle demande d\'emploi',
         'MARK_JOB_FEATURED' => 'Lorsque le job est marqué comme présenté',
@@ -1183,7 +1183,7 @@ return [
     // Pricing Table
     'pricing_table' => [
         'get_started' => 'Commencer',
-        'buy_plan' => 'Acheter un forfait'
+        'buy_plan' => 'Acheter un forfait',
     ],
 
     // Header notification
@@ -1589,7 +1589,7 @@ return [
         'follow_company_successfully' => 'Suivez l\'entreprise avec succès.',
         'note_required' => 'Le champ de note est obligatoire',
         'resume_field_required' => 'Le champ CV est obligatoire.',
-        'verify_google_recaptcha' => 'Vous devriez vérifier Google Recaptcha.'
+        'verify_google_recaptcha' => 'Vous devriez vérifier Google Recaptcha.',
     ],
 
 ];

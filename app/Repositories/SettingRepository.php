@@ -46,7 +46,6 @@ class SettingRepository extends BaseRepository
     public function getEnvData()
     {
 
-
         // $env = new DotenvEditor();
         // $key = $env->getContent();
         // // $data['mail'] = collect($key)->only([
@@ -80,13 +79,11 @@ class SettingRepository extends BaseRepository
     public function updateSetting(array $input): bool
     {
 
-        $input['cookie_consent_enabled'] = empty($input['cookie_consent_enabled']) ?  false : true;
+        $input['cookie_consent_enabled'] = empty($input['cookie_consent_enabled']) ? false : true;
 
         $envSettingInputArray = Arr::only($input, [
-            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect','pusher_app_id', 'pusher_app_key','pusher_app_secret', 'pusher_app_cluster', 'stripe_key', 'stripe_secret', 'stripe_webhook_key', 'paypal_client_id', 'paypal_secret','paystack_key','paystack_secret','paystack_payment_url', 'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect','cookie_consent_enabled'
+            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect', 'pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster', 'stripe_key', 'stripe_secret', 'stripe_webhook_key', 'paypal_client_id', 'paypal_secret', 'paystack_key', 'paystack_secret', 'paystack_payment_url', 'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect', 'cookie_consent_enabled',
         ]);
-
-
 
         foreach ($envSettingInputArray as $key => $value) {
             $value = is_null($value) ? '' : $value;

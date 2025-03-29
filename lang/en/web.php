@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Home',
     'jobs' => 'Jobs',
     'companies' => 'Companies',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'It’s Easy to Find Your',
     'admin' => 'Admin',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Search',
         'browse_all' => 'Browse All',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'Save as Draft',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Your Career Starts Now',
         'keywords' => 'Keywords',
@@ -82,7 +82,7 @@ return [
         'max' => 'Max',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'Search',
         'job_by_type' => 'Job By Type',
@@ -106,7 +106,7 @@ return [
         'advertise_image' => 'Advertise Image',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'Job Details',
         'email_to_friend' => 'Email To Friend',
@@ -163,7 +163,7 @@ return [
         'share_this_job' => 'Share This Job',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Search Companies',
         'opened_jobs' => 'Open Jobs',
@@ -171,7 +171,7 @@ return [
         'no_company_found' => 'No company found',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => 'Search Candidates',
         'no_candidates_found' => 'No Job seekers found',
@@ -180,7 +180,7 @@ return [
         'opened_jobs' => 'Opened Jobs',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Company Details',
         'follow' => 'Follow',
@@ -190,7 +190,7 @@ return [
         'processing' => 'Processing...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'How It Works',
         'register' => 'Register',
@@ -207,13 +207,13 @@ return [
         'faq_not_available' => 'Frequently Asked Questions not available',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Contact Us',
         'send_message' => 'Send Message',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'Post',
         'posts' => 'Posts',
@@ -224,7 +224,7 @@ return [
         'categories' => 'Categories',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Candidate',
         'employer' => 'Employer',
@@ -236,7 +236,7 @@ return [
         'confirm_password' => 'Confirm password',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Useful Links',
         'newsletter' => 'Newsletter',
@@ -250,7 +250,7 @@ return [
         'terms' => 'Terms',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'Login To',
         'remember_me' => 'Remember me',
@@ -262,16 +262,16 @@ return [
         'your_passowrd' => 'Your Password',
         'don\'t_have_an_account' => 'Don\'t have an account?',
         'enter_email' => 'Enter Email',
-        'enter_password' => 'Enter Password'
+        'enter_password' => 'Enter Password',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'Toggle navigation',
         'main_menu' => 'Main Menu',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'What',
         'where' => 'Where',
@@ -303,7 +303,7 @@ return [
         'view_company_profile' => 'View company profile',
         'founded_in' => 'Founded in',
         'phone' => 'Phone',
-        'Skill_Experience' => 'Skill & Experience'
+        'Skill_Experience' => 'Skill & Experience',
     ],
 
     'web_company' => [
@@ -352,12 +352,12 @@ return [
         'your_email' => 'Your Email',
         'email_password_reset_link' => 'Email Password Reset Link',
         'cancel' => 'Cancel',
-        'forgot_password' => 'Forgot Password'
+        'forgot_password' => 'Forgot Password',
     ],
 
     'new_password' => [
         'reset_password' => 'Reset Password',
         'new_password' => 'Setup New Password',
-        'set_new_password' => 'Set a New Password'
+        'set_new_password' => 'Set a New Password',
     ],
 ];

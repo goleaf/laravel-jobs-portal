@@ -39,15 +39,15 @@ class FavouriteCompanies extends Component
         }
     }
 
-//    /**
-//     * @param $id
-//     */
-//    public function removeFavouriteCompany($id)
-//    {
-//        $favouriteCompany = FavouriteCompany::findOrFail($id);
-//        $favouriteCompany->delete($id);
-//        $this->dispatchBrowserEvent('deleted');
-//    }
+    //    /**
+    //     * @param $id
+    //     */
+    //    public function removeFavouriteCompany($id)
+    //    {
+    //        $favouriteCompany = FavouriteCompany::findOrFail($id);
+    //        $favouriteCompany->delete($id);
+    //        $this->dispatchBrowserEvent('deleted');
+    //    }
 
     public function updatingsearchByFavouriteCompanies()
     {
@@ -66,8 +66,10 @@ class FavouriteCompanies extends Component
 
     public function searchFavouriteCompanies(): LengthAwarePaginator
     {
-        $query = FavouriteCompany::with(['company.user', 'company.industry'])->where('user_id',
-            getLoggedInUserId())->orderByDesc('created_at');
+        $query = FavouriteCompany::with(['company.user', 'company.industry'])->where(
+            'user_id',
+            getLoggedInUserId()
+        )->orderByDesc('created_at');
 
         $query->when($this->searchByFavouriteCompanies != '', function (Builder $query) {
             $query->where(function (Builder $query) {

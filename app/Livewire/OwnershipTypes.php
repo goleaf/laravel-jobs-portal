@@ -79,8 +79,11 @@ class OwnershipTypes extends Component
         $query = OwnerShipType::query()->select('ownership_types.*');
 
         $query->when(isset($this->searchByOwnershipType) && $this->searchByOwnershipType != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByOwnershipType).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByOwnershipType).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

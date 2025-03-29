@@ -49,7 +49,7 @@ class LanguageTableSeeder extends Seeder
                 'language' => 'Russian',
                 'iso_code' => 'ru',
                 'is_default' => 1,
-            ],[
+            ], [
                 'language' => 'Chinese',
                 'iso_code' => 'zh',
                 'is_default' => 1,

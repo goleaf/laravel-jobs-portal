@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Job;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class JobExpiredTable extends LivewireTableComponent
 {

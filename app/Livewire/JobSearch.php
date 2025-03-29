@@ -165,9 +165,9 @@ class JobSearch extends Component
 
         $query->when(! empty($this->featuredJob), function (Builder $q) {
             $q->has('activeFeatured')
-            ->whereStatus(Job::STATUS_OPEN)
-            ->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())
-            ->where('is_suspended', '=', Job::NOT_SUSPENDED);
+                ->whereStatus(Job::STATUS_OPEN)
+                ->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())
+                ->where('is_suspended', '=', Job::NOT_SUSPENDED);
         });
 
         $query->when(! empty($this->searchByLocation), function (Builder $q) {
@@ -214,7 +214,7 @@ class JobSearch extends Component
                 });
         });
 
-        $query->whereStatus(Job::STATUS_OPEN)->where('status', '!=',Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString());
+        $query->whereStatus(Job::STATUS_OPEN)->where('status', '!=', Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString());
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

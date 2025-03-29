@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Ana Sayfa',
     'jobs' => 'İşler',
     'companies' => 'Şirketler',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'Kolayca Bulabilirsiniz',
     'admin' => 'Yönetici',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Ara',
         'browse_all' => 'Tümüne Göz At',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'Taslak olarak kaydet',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Kariyeriniz Şimdi Başlıyor',
         'keywords' => 'Anahtar Kelimeler',
@@ -82,7 +82,7 @@ return [
         'max' => 'Maksimum',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'İşleri Ara',
         'job_by_type' => 'Türe Göre İş',
@@ -106,7 +106,7 @@ return [
         'advertise_image' => 'Reklam Resmi',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'İş Ayrıntıları',
         'email_to_friend' => 'Arkadaşa E-posta Gönder',
@@ -163,7 +163,7 @@ return [
         'share_this_job' => 'Bu İşi Paylaş',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Şirketleri Ara',
         'opened_jobs' => 'Açık İşler',
@@ -171,7 +171,7 @@ return [
         'no_company_found' => 'Şirket bulunamadı',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => 'Aday Ara',
         'no_candidates_found' => 'İş arayan bulunamadı',
@@ -180,7 +180,7 @@ return [
         'opened_jobs' => 'Açılan İşler',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Şirket Detayları',
         'follow' => 'Takip et',
@@ -190,7 +190,7 @@ return [
         'processing' => 'İşleniyor ...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Nasıl Çalışır',
         'register' => 'Kaydol',
@@ -207,13 +207,13 @@ return [
         'faq_not_available' => 'Sık Sorulan Sorular mevcut değil',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Bize Ulaşın',
         'send_message' => 'Mesaj Gönder',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'Gönderi',
         'posts' => 'Gönderiler',
@@ -224,7 +224,7 @@ return [
         'categories' => 'Kategoriler',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Aday',
         'employer' => 'İşveren',
@@ -236,7 +236,7 @@ return [
         'confirm_password' => 'Parolanızı Onaylayın',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Yararlı Bağlantılar',
         'newsletter' => 'Bülten',
@@ -250,7 +250,7 @@ return [
         'terms' => 'Koşullar',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'Giriş Yap',
         'remember_me' => 'Beni hatırladın mı',
@@ -266,13 +266,13 @@ return [
 
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'Gezinmeyi değiştir',
         'main_menu' => 'Ana Menü',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'Ne',
         'where' => 'Nereye',
@@ -303,7 +303,7 @@ return [
         'view_company_profile' => 'Şirket profilini görüntüle',
         'founded_in' => 'Da kuruldu',
         'phone' => 'Telefon',
-        'Skill_Experience' => 'Beceri ve Deneyim'
+        'Skill_Experience' => 'Beceri ve Deneyim',
     ],
 
     'web_company' => [
@@ -351,7 +351,7 @@ return [
         'your_email' => 'E-posta Adresiniz',
         'email_password_reset_link' => 'E-posta Şifre Sıfırlama Bağlantısı',
         'cancel' => 'İptal',
-        'forgot_password' => 'Parolanızı mı unuttunuz'
+        'forgot_password' => 'Parolanızı mı unuttunuz',
     ],
 
     'new_password' => [

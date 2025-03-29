@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
-use Illuminate\View\View;
+use App\Http\Requests\UpdateSettingRequest;
 use App\Models\EnvSetting;
-use Laracasts\Flash\Flash;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\View\Factory;
+use App\Models\Language;
+use App\Models\Setting;
 use App\Repositories\SettingRepository;
+use Brotzka\DotenvEditor\Exceptions\DotEnvException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\UpdateSettingRequest;
-use App\Models\Language;
-use App\Models\User;
-use Brotzka\DotenvEditor\Exceptions\DotEnvException;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
+use Laracasts\Flash\Flash;
 
 /**
  * Class SettingController
@@ -46,10 +45,12 @@ class SettingController extends AppBaseController
         $setting['phone'] = preparePhoneNumber($setting['phone'], $setting['region_code']);
         $sectionName = ($request->section === null) ? 'general' : $request->section;
         $envSetting = EnvSetting::pluck('value', 'key')->toArray();
-        $languages = Language::toBase()->pluck('language','iso_code');
+        $languages = Language::toBase()->pluck('language', 'iso_code');
 
-        return view("settings.$sectionName",
-            compact('setting', 'sectionName','envSetting','languages'))->with($envData);
+        return view(
+            "settings.$sectionName",
+            compact('setting', 'sectionName', 'envSetting', 'languages')
+        )->with($envData);
     }
 
     /**
@@ -59,14 +60,14 @@ class SettingController extends AppBaseController
     {
         $this->settingRepository->updateSetting($request->all());
         $language = $request->default_language;
-        if(!empty($language)){
+        if (! empty($language)) {
             Session::put('languageName', $language);
         }
 
-//        Flash::error('Settings can not be updated on demo.');
+        //        Flash::error('Settings can not be updated on demo.');
 
         Flash::success(__('messages.flash.setting_update'));
-//         in order to clear the cache for .env values
+        //         in order to clear the cache for .env values
         if ($request->get('sectionName') == 'env_setting') {
             Artisan::call('optimize:clear');
             Artisan::call('config:cache');

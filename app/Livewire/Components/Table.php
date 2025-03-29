@@ -20,17 +20,17 @@ abstract class Table extends Component
     public $sortDirection = 'desc';
     public $search = '';
     public $filters = [];
-    
+
     /**
      * The base query to use for data retrieval
      */
     abstract protected function query(): Builder;
-    
+
     /**
      * Define the table columns
      */
     abstract protected function columns(): array;
-    
+
     /**
      * Define the table filters
      */
@@ -38,7 +38,7 @@ abstract class Table extends Component
     {
         return [];
     }
-    
+
     /**
      * Define the table actions
      */
@@ -46,7 +46,7 @@ abstract class Table extends Component
     {
         return [];
     }
-    
+
     /**
      * Define the table bulk actions
      */
@@ -54,7 +54,7 @@ abstract class Table extends Component
     {
         return [];
     }
-    
+
     /**
      * Apply the search filter to the query
      */
@@ -63,27 +63,27 @@ abstract class Table extends Component
         if (empty($this->search)) {
             return $query;
         }
-        
+
         $columns = $this->columns();
-        $searchColumns = array_filter($columns, fn($column) => $column['searchable'] ?? false);
-        
+        $searchColumns = array_filter($columns, fn ($column) => $column['searchable'] ?? false);
+
         return $query->where(function (Builder $query) use ($searchColumns) {
             foreach ($searchColumns as $column) {
                 $field = $column['field'];
-                
+
                 if (str_contains($field, '.')) {
                     // Handle relationships
                     [$relation, $relationField] = explode('.', $field, 2);
                     $query->orWhereHas($relation, function (Builder $query) use ($relationField) {
-                        $query->where($relationField, 'like', '%' . $this->search . '%');
+                        $query->where($relationField, 'like', '%'.$this->search.'%');
                     });
                 } else {
-                    $query->orWhere($field, 'like', '%' . $this->search . '%');
+                    $query->orWhere($field, 'like', '%'.$this->search.'%');
                 }
             }
         });
     }
-    
+
     /**
      * Apply the sort to the query
      */
@@ -91,7 +91,7 @@ abstract class Table extends Component
     {
         return $query->orderBy($this->sortField, $this->sortDirection);
     }
-    
+
     /**
      * Apply filters to the query
      */
@@ -101,23 +101,23 @@ abstract class Table extends Component
             if (empty($value)) {
                 continue;
             }
-            
+
             $filter = collect($this->filters())->firstWhere('key', $key);
-            
-            if (!$filter) {
+
+            if (! $filter) {
                 continue;
             }
-            
+
             if (isset($filter['apply']) && is_callable($filter['apply'])) {
                 $query = call_user_func($filter['apply'], $query, $value);
             } else {
                 $query->where($key, $value);
             }
         }
-        
+
         return $query;
     }
-    
+
     /**
      * Get the data for the table
      */
@@ -127,10 +127,10 @@ abstract class Table extends Component
         $query = $this->applySearch($query);
         $query = $this->applySort($query);
         $query = $this->applyFilters($query);
-        
+
         return $query->paginate($this->perPage);
     }
-    
+
     /**
      * Reset pagination when search or filters change
      */
@@ -138,7 +138,7 @@ abstract class Table extends Component
     {
         $this->resetPage();
     }
-    
+
     /**
      * Reset pagination when filters change
      */
@@ -146,7 +146,7 @@ abstract class Table extends Component
     {
         $this->resetPage();
     }
-    
+
     /**
      * Reset pagination when per page changes
      */
@@ -154,7 +154,7 @@ abstract class Table extends Component
     {
         $this->resetPage();
     }
-    
+
     /**
      * Set the sort field and direction
      */
@@ -167,7 +167,7 @@ abstract class Table extends Component
             $this->sortDirection = 'asc';
         }
     }
-    
+
     /**
      * Reset filters
      */
@@ -176,7 +176,7 @@ abstract class Table extends Component
         $this->filters = [];
         $this->resetPage();
     }
-    
+
     /**
      * Render the table
      */
@@ -190,4 +190,4 @@ abstract class Table extends Component
             'bulkActions' => $this->bulkActions(),
         ]);
     }
-} 
+}

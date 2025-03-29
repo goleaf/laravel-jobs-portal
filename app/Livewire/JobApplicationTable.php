@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
-use App\Livewire\Components\Filters\SelectFilter;
 
 class JobApplicationTable extends LivewireTableComponent
 {
@@ -26,7 +26,8 @@ class JobApplicationTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if (in_array($column->getField(), ['0', '1', '2', '3', '4', '5'])) {

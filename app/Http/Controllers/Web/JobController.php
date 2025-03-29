@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
-use Auth;
-use Carbon\Carbon;
-use App\Models\Job;
-use Illuminate\View\View;
-use Laracasts\Flash\Flash;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Repositories\JobRepository;
-use Illuminate\Contracts\View\Factory;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\EmailJobToFriendRequest;
+use App\Models\Job;
+use App\Repositories\JobRepository;
+use Auth;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
-use App\Models\Skill;
-
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Laracasts\Flash\Flash;
 
 class JobController extends AppBaseController
 {
@@ -75,9 +73,11 @@ class JobController extends AppBaseController
         if (Auth::check() && Auth::user()->hasRole('Candidate')) {
             $data = $this->jobRepository->getJobDetails($job);
         }
-        $data['jobsCount'] = Job::whereStatus(Job::STATUS_OPEN)->whereCompanyId($job->company_id)->whereDate('job_expiry_date',
+        $data['jobsCount'] = Job::whereStatus(Job::STATUS_OPEN)->whereCompanyId($job->company_id)->whereDate(
+            'job_expiry_date',
             '>=',
-            Carbon::now()->toDateString())->count();
+            Carbon::now()->toDateString()
+        )->count();
 
         // check job status is active or not
         $data['isActive'] = ($job->status == Job::STATUS_OPEN) ? true : false;

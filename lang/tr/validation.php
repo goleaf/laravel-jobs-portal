@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Ev',
     'jobs' => 'Meslekler',
     'companies' => 'Şirketler',
@@ -26,7 +26,7 @@ return [
     'digits' => ':attribute alanı :digits rakamlarından oluşmalıdır.',
     'same' => ':attribute alanı :other ile eşleşmelidir.',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Arama',
         'browse_all' => 'Tümüne Göz At',
@@ -44,7 +44,7 @@ return [
         'close' => 'Kapat',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Kariyerin Şimdi Başlıyor',
         'keywords' => 'Anahtar Kelimeler',
@@ -63,7 +63,7 @@ return [
         'notices' => 'Uyarılar',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'İş Ara',
         'job_by_type' => 'Türe Göre İş',
@@ -82,7 +82,7 @@ return [
         'none' => 'Yok',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'İş Detayları',
         'email_to_friend' => 'Arkadaşa E-posta Gönder',
@@ -133,7 +133,7 @@ return [
         'already_applied' => 'Zaten Uygulandı',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Şirket Ara',
         'opened_jobs' => 'Açık İşler',
@@ -141,7 +141,7 @@ return [
         'no_companies_found' => 'Şirket bulunamadı',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'follow' => 'Takip et',
         'unfollow' => 'Takibi bırak',
@@ -150,7 +150,7 @@ return [
         'processing' => 'İşleme...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Nasıl çalışır',
         'register' => 'Kayıt ol',
@@ -167,13 +167,13 @@ return [
         'faq_not_available' => 'Sıkça Sorulan Sorular mevcut değil',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Bize Ulaşın',
         'send_message' => 'Mesaj gönder',
     ],
 
-    //BLog keys
+    // BLog keys
     'blog_menu' => [
         'blog' => 'Blog',
         'blogs' => 'Blog',
@@ -184,14 +184,14 @@ return [
         'categories' => 'Kategoriler',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Aday',
         'employer' => 'İşveren',
         'create_account' => 'Hesap oluştur',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Kullanışlı bağlantılar',
         'newsletter' => 'Bülten',

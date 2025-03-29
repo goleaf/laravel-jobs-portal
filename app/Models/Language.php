@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
@@ -20,7 +19,6 @@ use Illuminate\Support\Carbon;
  * @property bool $is_default
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidates
  *
  * @method static Builder|Language newModelQuery()
@@ -69,8 +67,6 @@ class Language extends Model
 
     /**
      * Get all candidates that use this language
-     *
-     * @return BelongsToMany
      */
     public function candidates(): BelongsToMany
     {

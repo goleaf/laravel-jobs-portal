@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Services\FileService;
-use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -88,7 +86,8 @@ use Spatie\Translatable\HasTranslations;
  */
 class Candidate extends Model
 {
-    use HasSlug, HasTranslations;
+    use HasSlug;
+    use HasTranslations;
 
     public $table = 'candidates';
 
@@ -229,7 +228,7 @@ class Candidate extends Model
             $location = $location.','.$this->user->city->name;
         }
 
-        return (! empty($location)) ? $location : '' ;
+        return (! empty($location)) ? $location : '';
     }
 
     /**
@@ -237,42 +236,30 @@ class Candidate extends Model
      */
     public function getCandidateUrlAttribute()
     {
-        $fileService = new FileService();
-        
-        if (!empty($this->image_path)) {
+        $fileService = new FileService;
+
+        if (! empty($this->image_path)) {
             return $fileService->getFileUrl($this->image_path);
         }
-        
+
         return asset('assets/img/candidate-default-profile.png');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function candidateEducation(): HasMany
     {
         return $this->hasMany(CandidateEducation::class, 'candidate_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function candidateExperience(): HasMany
     {
         return $this->hasMany(CandidateExperience::class, 'candidate_id');
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function jobAlerts(): BelongsToMany
     {
         return $this->belongsToMany(JobType::class, 'candidate_job_alerts', 'candidate_id', 'job_type_id');
@@ -280,73 +267,64 @@ class Candidate extends Model
 
     /**
      * Get the resume URL
-     * 
-     * @return string|null
      */
     public function getResumeUrl(): ?string
     {
-        $fileService = new FileService();
-        
-        if (!empty($this->resume_path)) {
+        $fileService = new FileService;
+
+        if (! empty($this->resume_path)) {
             return $fileService->getFileUrl($this->resume_path);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Upload a profile image
-     * 
-     * @param UploadedFile $file
-     * @return bool
      */
     public function uploadProfileImage(UploadedFile $file): bool
     {
-        $fileService = new FileService();
-        
+        $fileService = new FileService;
+
         // Delete old image if exists
-        if (!empty($this->image_path)) {
+        if (! empty($this->image_path)) {
             $fileService->deleteFile($this->image_path);
         }
-        
+
         // Upload new image
         $imagePath = $fileService->uploadFile(
-            $file, 
+            $file,
             self::IMAGE_PATH,
             'public'
         );
-        
+
         $this->image_path = $imagePath;
-        
+
         return $this->save();
     }
-    
+
     /**
      * Upload a resume
-     * 
-     * @param UploadedFile $file
-     * @param string $title
-     * @return bool
      */
     public function uploadResume(UploadedFile $file, string $title = 'resume'): bool
     {
-        $fileService = new FileService();
-        
+        $fileService = new FileService;
+
         // Delete old resume if exists
-        if (!empty($this->resume_path)) {
+        if (! empty($this->resume_path)) {
             $fileService->deleteFile($this->resume_path);
         }
-        
+
         // Upload new resume
         $resumePath = $fileService->uploadFile(
-            $file, 
+            $file,
             self::RESUME_PATH,
             'public',
-            uniqid() . '_' . $title . '.' . $file->getClientOriginalExtension()
+            uniqid().'_'.$title.'.'.$file->getClientOriginalExtension()
         );
-        
+
         $this->resume_path = $resumePath;
-        
+
         return $this->save();
     }
 }

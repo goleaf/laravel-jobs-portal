@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\SalaryCurrency;
 use App\Livewire\Components\Column;
+use App\Models\SalaryCurrency;
 
 class SalaryCurrencyTable extends LivewireTableComponent
 {

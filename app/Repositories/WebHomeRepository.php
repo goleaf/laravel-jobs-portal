@@ -2,28 +2,28 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
-use App\Models\Job;
-use App\Models\Plan;
-use App\Models\Post;
-use App\Models\Skill;
-use App\Models\Company;
-use App\Models\Inquiry;
-use App\Models\Setting;
-use App\Models\Candidate;
 use App\Mail\ContactEmail;
-use App\Models\ImageSlider;
-use App\Models\JobCategory;
-use App\Models\Noticeboard;
-use App\Models\Testimonial;
+use App\Models\BrandingSliders;
+use App\Models\Candidate;
+use App\Models\Company;
+use App\Models\EmailTemplate;
 use App\Models\FrontSetting;
 use App\Models\HeaderSlider;
-use App\Models\EmailTemplate;
-use App\Models\BrandingSliders;
-use Illuminate\Support\Facades\Mail;
+use App\Models\ImageSlider;
+use App\Models\Inquiry;
+use App\Models\Job;
+use App\Models\JobCategory;
+use App\Models\Noticeboard;
+use App\Models\Plan;
+use App\Models\Post;
+use App\Models\Setting;
+use App\Models\Skill;
+use App\Models\Testimonial;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -54,11 +54,11 @@ class WebHomeRepository
                 $query->where('is_active', '=', true);
             }
         )->count();
-        $data['jobs'] = Job::whereStatus(Job::STATUS_OPEN)->where('status', '!=',Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->count();
-        $data['resumes'] = Media::where('model_type', Candidate::class)->where('collection_name',Candidate::RESUME_PATH)
-        ->join('candidates', 'media.model_id', '=', 'candidates.id')
-        ->join('users', 'candidates.user_id', '=', 'users.id')->with('candidate.user')
-        ->count();
+        $data['jobs'] = Job::whereStatus(Job::STATUS_OPEN)->where('status', '!=', Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->count();
+        $data['resumes'] = Media::where('model_type', Candidate::class)->where('collection_name', Candidate::RESUME_PATH)
+            ->join('candidates', 'media.model_id', '=', 'candidates.id')
+            ->join('users', 'candidates.user_id', '=', 'users.id')->with('candidate.user')
+            ->count();
         $data['companies'] = Company::with('user')->whereHas('user', function (Builder $query) {
             $query->where('is_active', '=', true);
         })->count();
@@ -103,7 +103,7 @@ class WebHomeRepository
 
     public function getAllJobCategories(): \Illuminate\Support\Collection
     {
-        return JobCategory::with('media','jobs')->withCount([
+        return JobCategory::with('media', 'jobs')->withCount([
             'jobs' => function (Builder $q) {
                 $q->whereStatus(Job::STATUS_OPEN)
                     ->where('status', '!=', Job::STATUS_DRAFT)
@@ -173,17 +173,17 @@ class WebHomeRepository
         $body = str_replace($keyVariable, $value, $templateBody->body);
         $data['inquiry'] = $inquiry;
         $data['body'] = $body;
-    //    Mail::to($input['email'])->send(new ContactEmail($data));
+        //    Mail::to($input['email'])->send(new ContactEmail($data));
 
-       Mail::send(
-        view: 'emails.contact.contact_us',
-        data: [
-            'data' => $data,
-        ],
-        callback: function (Message $message) use ($input, $data) {
-            $message->to($input['email'])->from(config('mail.from.address'))->subject($data['inquiry']->subject);
-        }
-    );
+        Mail::send(
+            view: 'emails.contact.contact_us',
+            data: [
+                'data' => $data,
+            ],
+            callback: function (Message $message) use ($input, $data) {
+                $message->to($input['email'])->from(config('mail.from.address'))->subject($data['inquiry']->subject);
+            }
+        );
 
         return true;
     }
@@ -260,8 +260,11 @@ class WebHomeRepository
                 'company', 'country', 'state', 'city', 'jobShift', 'company.user', 'jobsSkill', 'jobCategory',
             ])
                 ->where('job_title', 'LIKE', '%'.$searchTerm.'%')
-                ->whereStatus(Job::STATUS_OPEN)->where('status', '!=',
-                    Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)
+                ->whereStatus(Job::STATUS_OPEN)->where(
+                    'status',
+                    '!=',
+                    Job::STATUS_DRAFT
+                )->whereIsSuspended(Job::NOT_SUSPENDED)
                 ->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->get();
             $skills = Skill::where('name', 'LIKE', '%'.$searchTerm.'%')->get();
             $companies = Company::whereHas(

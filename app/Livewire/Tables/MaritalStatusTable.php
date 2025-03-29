@@ -53,4 +53,4 @@ class MaritalStatusTable extends TableComponent
             ],
         ];
     }
-} 
+}

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\FeaturedRecord;
 use App\Models\FrontSetting;
 use App\Models\Notification;
 use App\Models\NotificationSetting;
+use App\Models\SalaryCurrency;
 use App\Models\Transaction;
 use App\Models\User;
 use Exception;
@@ -13,12 +15,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Stripe\Checkout\Session;
-use App\Models\FeaturedRecord;
-use App\Models\SalaryCurrency;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
+use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -52,7 +52,7 @@ class FeaturedCompanySubscriptionController extends AppBaseController
                         'unit_amount' => $amount * 100,
                         'currency' => $featuredCurrency->currency_code,
                     ],
-                    
+
                     'quantity' => 1,
                     'description' => 'Make '.$company->user->first_name.' as featured Company',
                 ],
@@ -104,8 +104,10 @@ class FeaturedCompanySubscriptionController extends AppBaseController
             'meta' => $sessionData->toJSON(),
         ];
         FeaturedRecord::create($featuredRecord);
-        NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where('type',
-            'employer')->first()->value == 1 ?
+        NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
+            'type',
+            'employer'
+        )->first()->value == 1 ?
             addNotification([
                 Notification::MARK_COMPANY_FEATURED,
                 $adminId,

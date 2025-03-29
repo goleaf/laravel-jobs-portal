@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => '家',
     'jobs' => '工作',
     'companies' => '公司',
@@ -38,8 +38,7 @@ return [
     'easy_to_find_your' => '轻松找到您的',
     'admin' => '管理员',
 
-
-    //common keys
+    // common keys
     'common' => [
         'search' => '搜索',
         'browse_all' => '全部浏览',
@@ -58,7 +57,7 @@ return [
         'save_as_draft' => '保存為草稿',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => '您的职业生涯现在开始',
         'keywords' => '关键字',
@@ -84,7 +83,7 @@ return [
 
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => '搜索工作',
         'job_by_type' => '按类型工作',
@@ -108,7 +107,7 @@ return [
         'advertise_image' => '广告图片',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => '职位详细信息',
         'email_to_friend' => '通过电子邮件发送给朋友',
@@ -165,7 +164,7 @@ return [
         'share_this_job' => '分享這份工作',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => '搜索公司',
         'opened_jobs' => '打开工作',
@@ -174,7 +173,7 @@ return [
         'opened_jobs' => '職位空缺',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search_candidates' => '搜索候选人',
         'no_candidates_found' => '未找到求职者',
@@ -182,7 +181,7 @@ return [
         'candidate_name' => '候选人名称',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => '公司詳情',
         'follow' => '关注',
@@ -192,7 +191,7 @@ return [
         'processing' => '处理中...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => '工作原理',
         'register' => '寄存器',
@@ -209,13 +208,13 @@ return [
         'faq_not_available' => '常见问题不可用',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => '联系我们',
         'send_message' => '发送消息',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => '发布',
         'posts' => '帖子',
@@ -226,7 +225,7 @@ return [
         'categories' => '类别',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => '候选人',
         'employer' => '雇主',
@@ -238,7 +237,7 @@ return [
         'confirm_password' => '确认密码',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => '有用的链接',
         'newsletter' => '通訊',
@@ -252,7 +251,7 @@ return [
         'terms' => '條款',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => '登录到',
         'remember_me' => '还记得我吗',
@@ -267,13 +266,13 @@ return [
         'enter_password' => '输入密码',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => '切换导航',
         'main_menu' => '主菜单',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => '什么',
         'where' => '在哪里',
@@ -304,7 +303,7 @@ return [
         'view_company_profile' => '查看公司简介',
         'founded_in' => '成立于',
         'phone' => '电话',
-        'Skill_Experience' => '技能和經驗'
+        'Skill_Experience' => '技能和經驗',
     ],
 
     'web_company' => [
@@ -352,7 +351,7 @@ return [
         'your_email' => '您的电子邮件',
         'email_password_reset_link' => '发送密码重置链接到邮箱',
         'cancel' => '取消',
-        'forgot_password' => '忘記密碼'
+        'forgot_password' => '忘記密碼',
     ],
 
     'new_password' => [

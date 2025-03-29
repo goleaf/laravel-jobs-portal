@@ -260,7 +260,7 @@ if (! function_exists('getStates')) {
 if (! function_exists('getStateFilter')) {
     function getStateFilter()
     {
-            return State::orderBy('name')->toBase()->pluck('name', 'id')->toArray();
+        return State::orderBy('name')->toBase()->pluck('name', 'id')->toArray();
     }
 }
 
@@ -316,8 +316,8 @@ if (! function_exists('formatCurrency')) {
     function formatCurrency($currencyValue)
     {
         $amountValue = $currencyValue;
-        $currencySuffix = ''; //thousand,lac, crore
-        $numberOfDigits = countDigit($amountValue); //this is call :)
+        $currencySuffix = ''; // thousand,lac, crore
+        $numberOfDigits = countDigit($amountValue); // this is call :)
         if ($numberOfDigits > 3) {
             if ($numberOfDigits % 2 != 0) {
                 $divider = divider($numberOfDigits - 1);
@@ -426,14 +426,12 @@ if (! function_exists('checkLanguageSession')) {
             if ($language) {
                 return $language['iso_code'];
             }
-        }
-        elseif (Auth::user()) {
+        } elseif (Auth::user()) {
             $language = Language::whereIsoCode(Auth::user()->language)->first();
             if ($language) {
                 return $language['iso_code'];
             }
-        }
-        else{
+        } else {
             $default = Setting::where('key', '=', 'default_language')->first();
             $language = $default->value;
 
@@ -448,22 +446,22 @@ if (! function_exists('checkLanguageSession')) {
  * @return mixed|null
  */
 if (! function_exists('getCurrentLanguageName')) {
-function getCurrentLanguageName()
-{
-     if (Session::has('languageName')) {
-        $language = Language::whereIsoCode(Session::get('languageName'))->first();
-        if ($language) {
-            return $language['language'];
-        }
+    function getCurrentLanguageName()
+    {
+        if (Session::has('languageName')) {
+            $language = Language::whereIsoCode(Session::get('languageName'))->first();
+            if ($language) {
+                return $language['language'];
+            }
 
-    }elseif (Auth::user()) {
-        $language = Language::whereIsoCode(Auth::user()->language)->first();
-        if ($language) {
-            return $language['language'];
-        }
-    }else{
-        $default = Setting::where('key', '=', 'default_language')->first();
-        $language = Language::whereIsoCode($default->value)->first();
+        } elseif (Auth::user()) {
+            $language = Language::whereIsoCode(Auth::user()->language)->first();
+            if ($language) {
+                return $language['language'];
+            }
+        } else {
+            $default = Setting::where('key', '=', 'default_language')->first();
+            $language = Language::whereIsoCode($default->value)->first();
 
             if ($language) {
                 return $language['language'];
@@ -486,14 +484,14 @@ if (! function_exists('getCurrentLanguageImage')) {
                 return asset($languageImages[$language]);
             }
 
-        }elseif (Auth::check()) {
+        } elseif (Auth::check()) {
             $user = Auth::user();
             $language = $user->language;
 
-                if ($language && array_key_exists($language, $languageImages)) {
-                    return asset($languageImages[$language]);
-                }
-        }else{
+            if ($language && array_key_exists($language, $languageImages)) {
+                return asset($languageImages[$language]);
+            }
+        } else {
             $default = Setting::where('key', '=', 'default_language')->first();
             $language = $default->value;
 
@@ -501,7 +499,6 @@ if (! function_exists('getCurrentLanguageImage')) {
         }
     }
 }
-
 
 /**
  * @return mixed
@@ -1061,7 +1058,7 @@ if (! function_exists('getEnvSetting')) {
 if (! function_exists('getCity')) {
     function getCity()
     {
-            return City::orderBy('name')->pluck('name', 'id')->toArray();
+        return City::orderBy('name')->pluck('name', 'id')->toArray();
     }
 }
 

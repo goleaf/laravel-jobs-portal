@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Lang;
 use App\Helpers\TranslationHelper;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 class TranslationServiceProvider extends ServiceProvider
 {
@@ -26,19 +25,19 @@ class TranslationServiceProvider extends ServiceProvider
         Blade::directive('t', function ($expression) {
             return "<?php echo \\App\\Helpers\\TranslationHelper::getTranslation($expression); ?>";
         });
-        
+
         // Create custom has_translation directive for Blade templates
         Blade::directive('hasTranslation', function ($expression) {
             return "<?php if (\\App\\Helpers\\TranslationHelper::hasTranslation($expression)): ?>";
         });
-        
+
         Blade::directive('endhasTranslation', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
-        
+
         // Register view composers to share translation-related data with views
         view()->composer('*', function ($view) {
             $view->with('missingTranslations', TranslationHelper::getMissingTranslations());
         });
     }
-} 
+}

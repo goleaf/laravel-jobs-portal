@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\NewsLetter;
 use App\Livewire\Components\Column;
+use App\Models\NewsLetter;
 
 class SubscriberTable extends LivewireTableComponent
 {

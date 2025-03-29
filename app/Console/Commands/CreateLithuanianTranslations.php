@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
 
 class CreateLithuanianTranslations extends Command
 {
@@ -50,7 +49,7 @@ class CreateLithuanianTranslations extends Command
         'results' => 'rezultatų',
         'no_results' => 'Rezultatų nėra',
         'per_page' => 'per puslapį',
-        
+
         // Job-related terms
         'job' => 'Darbas',
         'jobs' => 'Darbai',
@@ -74,7 +73,7 @@ class CreateLithuanianTranslations extends Command
         'archived' => 'Archyvuotas',
         'apply' => 'Kandidatuoti',
         'details' => 'Detalės',
-        
+
         // User-related terms
         'password' => 'Slaptažodis',
         'email' => 'El. paštas',
@@ -90,19 +89,20 @@ class CreateLithuanianTranslations extends Command
     public function handle()
     {
         $this->info('Starting Lithuanian translations creation...');
-        
+
         // Load English translations
         $englishTranslationsPath = resource_path('lang/en.php');
-        if (!File::exists($englishTranslationsPath)) {
+        if (! File::exists($englishTranslationsPath)) {
             $this->error('English translations file not found. Run translations:consolidate first.');
+
             return Command::FAILURE;
         }
-        
+
         $englishTranslations = require $englishTranslationsPath;
-        
+
         // Create Lithuanian translations directory if it doesn't exist
         $lithuanianPath = resource_path('lang/lt.php');
-        
+
         // Start with existing Lithuanian translations if available
         if (File::exists($lithuanianPath)) {
             $this->info('Found existing Lithuanian translations. Merging with new translations.');
@@ -110,18 +110,18 @@ class CreateLithuanianTranslations extends Command
         } else {
             $lithuanianTranslations = [];
         }
-        
+
         // Add auth translations
-        if (!isset($lithuanianTranslations['auth'])) {
+        if (! isset($lithuanianTranslations['auth'])) {
             $lithuanianTranslations['auth'] = [
                 'failed' => 'Šie kredencialai neatitinka mūsų įrašų.',
                 'password' => 'Pateiktas slaptažodis yra neteisingas.',
                 'throttle' => 'Per daug bandymų prisijungti. Bandykite dar kartą po :seconds sekundžių.',
             ];
         }
-        
+
         // Add pagination translations
-        if (!isset($lithuanianTranslations['pagination'])) {
+        if (! isset($lithuanianTranslations['pagination'])) {
             $lithuanianTranslations['pagination'] = [
                 'previous' => '&laquo; Ankstesnis',
                 'next' => 'Sekantis &raquo;',
@@ -132,9 +132,9 @@ class CreateLithuanianTranslations extends Command
                 'go_to_page' => 'Eiti į puslapį',
             ];
         }
-        
+
         // Add passwords translations
-        if (!isset($lithuanianTranslations['passwords'])) {
+        if (! isset($lithuanianTranslations['passwords'])) {
             $lithuanianTranslations['passwords'] = [
                 'reset' => 'Jūsų slaptažodis pakeistas!',
                 'sent' => 'Slaptažodžio atkūrimo nuoroda išsiųsta!',
@@ -143,43 +143,38 @@ class CreateLithuanianTranslations extends Command
                 'user' => 'Negalime rasti vartotojo su šiuo el. pašto adresu.',
             ];
         }
-        
+
         // Process all English translations and create Lithuanian versions
         foreach ($englishTranslations as $section => $translations) {
-            if (!isset($lithuanianTranslations[$section])) {
+            if (! isset($lithuanianTranslations[$section])) {
                 $lithuanianTranslations[$section] = [];
             }
-            
+
             $lithuanianTranslations[$section] = $this->translateSection($section, $translations, $lithuanianTranslations[$section]);
         }
-        
+
         // Write Lithuanian translations to file
-        $content = "<?php\n\nreturn " . var_export($lithuanianTranslations, true) . ";\n";
+        $content = "<?php\n\nreturn ".var_export($lithuanianTranslations, true).";\n";
         File::put($lithuanianPath, $content);
-        
+
         $this->info('Lithuanian translations created successfully!');
-        
+
         return Command::SUCCESS;
     }
-    
+
     /**
      * Translate a section of translations
-     *
-     * @param string $section
-     * @param array $englishTranslations
-     * @param array $existingLithuanianTranslations
-     * @return array
      */
     private function translateSection(string $section, array $englishTranslations, array $existingLithuanianTranslations = []): array
     {
         $result = $existingLithuanianTranslations;
-        
+
         foreach ($englishTranslations as $key => $value) {
             // Skip if translation already exists
             if (isset($result[$key])) {
                 continue;
             }
-            
+
             if (is_array($value)) {
                 // Recursively translate nested arrays
                 $result[$key] = $this->translateSection("{$section}.{$key}", $value, $result[$key] ?? []);
@@ -188,16 +183,12 @@ class CreateLithuanianTranslations extends Command
                 $result[$key] = $this->translateString($value, "{$section}.{$key}");
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Translate a string to Lithuanian
-     *
-     * @param string $englishString
-     * @param string $translationKey
-     * @return string
      */
     private function translateString(string $englishString, string $translationKey): string
     {
@@ -207,8 +198,8 @@ class CreateLithuanianTranslations extends Command
                 return $lithuanian;
             }
         }
-        
+
         // Create a placeholder for missing translation
         return "[REIKIA_IŠVERSTI] {$englishString}";
     }
-} 
+}

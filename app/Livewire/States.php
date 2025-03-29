@@ -105,12 +105,18 @@ class States extends Component
         });
 
         $query->when(isset($this->searchByState) && $this->searchByState != '', function (Builder $q) {
-            $q->Where('name', 'like',
-                '%'.strtolower($this->searchByState).'%');
+            $q->Where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByState).'%'
+            );
 
             $q->whereHas('country', function (Builder $q) {
-                $q->orWhere('name', 'like',
-                    '%'.strtolower($this->searchByState).'%');
+                $q->orWhere(
+                    'name',
+                    'like',
+                    '%'.strtolower($this->searchByState).'%'
+                );
             });
         });
 

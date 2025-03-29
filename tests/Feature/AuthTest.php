@@ -10,7 +10,8 @@ use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function users_can_register_as_candidate()
@@ -25,7 +26,7 @@ class AuthTest extends TestCase
         ];
 
         $response = $this->post('/register', $userData);
-        
+
         $response->assertRedirect('/candidate/profile/edit');
         $this->assertDatabaseHas('users', [
             'email' => $userData['email'],
@@ -46,7 +47,7 @@ class AuthTest extends TestCase
         ];
 
         $response = $this->post('/register', $userData);
-        
+
         $response->assertRedirect('/employer/company/edit');
         $this->assertDatabaseHas('users', [
             'email' => $userData['email'],
@@ -67,7 +68,7 @@ class AuthTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password123',
         ]);
-        
+
         $response->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($user);
     }
@@ -85,7 +86,7 @@ class AuthTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
         ]);
-        
+
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
     }
@@ -103,7 +104,7 @@ class AuthTest extends TestCase
             'email' => 'inactive@example.com',
             'password' => 'password123',
         ]);
-        
+
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
     }
@@ -116,8 +117,8 @@ class AuthTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                         ->post('/logout');
-        
+            ->post('/logout');
+
         $response->assertRedirect('/');
         $this->assertGuest();
     }
@@ -133,7 +134,7 @@ class AuthTest extends TestCase
         $response = $this->post('/password/email', [
             'email' => 'reset@example.com',
         ]);
-        
+
         $response->assertSessionHas('status');
         // This would normally test the email was sent, but for now we're just verifying basic functionality
     }
@@ -142,7 +143,7 @@ class AuthTest extends TestCase
     public function user_can_view_password_reset_form()
     {
         $response = $this->get('/password/reset');
-        
+
         $response->assertStatus(200);
     }
 
@@ -153,16 +154,16 @@ class AuthTest extends TestCase
             'email' => 'password@example.com',
             'is_active' => true,
         ]);
-        
+
         $token = app('auth.password.broker')->createToken($user);
-        
+
         $response = $this->post('/password/reset', [
             'token' => $token,
             'email' => 'password@example.com',
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
         ]);
-        
+
         $response->assertRedirect('/home');
     }
-} 
+}

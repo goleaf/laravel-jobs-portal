@@ -3,7 +3,6 @@
 namespace App\Livewire\Components;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,28 +14,28 @@ abstract class DataTable extends Component
     public $perPage = 10;
     public $perPageOptions = [10, 25, 50, 100];
     protected $paginationTheme = 'tailwind';
-    
+
     // Sorting settings
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
-    
+
     // Search settings
     public string $search = '';
     public $searchDebounce = 300; // ms
-    
+
     // Filters
     public array $filters = [];
-    
+
     // Table properties
     public string $tableName = 'data-table';
     public $primaryKey = 'id';
     public bool $showButtonOnHeader = false;
     public bool $showFilterOnHeader = false;
-    
+
     // UI Components
     public $buttonComponent = null;
     public array $filterComponents = [];
-    
+
     protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh'];
 
     public function mount()
@@ -70,7 +69,7 @@ abstract class DataTable extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        
+
         $this->resetPage();
     }
 
@@ -124,7 +123,7 @@ abstract class DataTable extends Component
         $query = $this->applySearch($query);
         $query = $this->applyFilters($query);
         $query = $this->applySort($query);
-        
+
         return $query->paginate($this->perPage);
     }
 
@@ -138,4 +137,4 @@ abstract class DataTable extends Component
             'columns' => $this->columns(),
         ]);
     }
-} 
+}

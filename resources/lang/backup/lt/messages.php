@@ -199,4 +199,4 @@ return [
     'user' => [
         'change_password' => 'Keisti slaptažodį',
     ],
-]; 
+];

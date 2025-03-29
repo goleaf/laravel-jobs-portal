@@ -67,4 +67,4 @@ return [
     |
     */
     'default_language' => 'en',
-]; 
+];

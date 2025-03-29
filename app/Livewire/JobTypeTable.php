@@ -15,11 +15,11 @@ class JobTypeTable extends TableComponent
     public $showFilterOnHeader = false;
 
     public $buttonComponent = 'job_types.table_components.add_button';
-    
+
     protected $listeners = [
         'refresh' => '$refresh',
         'jobTypeSaved' => '$refresh',
-        'jobTypeDeleted' => '$refresh'
+        'jobTypeDeleted' => '$refresh',
     ];
 
     #[On('jobTypeSaved')]
@@ -37,26 +37,26 @@ class JobTypeTable extends TableComponent
                 ->sortable()
                 ->searchable()
                 ->view('job_types.table_components.name'),
-            
+
             Column::make('created_at')
                 ->title(__('messages.common.created_date'))
                 ->sortable()
                 ->view('job_types.table_components.created_at'),
-            
+
             Column::make('id')
                 ->title(__('messages.common.action'))
                 ->view('job_types.table_components.action_button'),
         ];
     }
-    
+
     public function query(): Builder
     {
         return JobType::query()->select('job_types.*');
     }
-    
+
     public function resetFilters()
     {
         $this->reset(['search', 'filters']);
         $this->resetPage();
     }
-} 
+}

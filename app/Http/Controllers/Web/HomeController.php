@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\User;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\ContactFormRequest;
+use App\Models\CmsServices;
 use App\Models\Setting;
+use App\Models\User;
+use App\Repositories\WebHomeRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-use App\Models\CmsServices;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Redirector;
-use Illuminate\Contracts\View\Factory;
-use App\Repositories\WebHomeRepository;
-use Illuminate\Support\Facades\Session;
-use App\Http\Requests\ContactFormRequest;
-use App\Http\Controllers\AppBaseController;
-use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class HomeController extends AppBaseController
@@ -75,9 +75,10 @@ class HomeController extends AppBaseController
 
         /** @var User $user */
         $user = getLoggedInUser();
-        if(! empty($user)){
+        if (! empty($user)) {
             $user->update(['language' => $language]);
         }
+
         return $this->sendSuccess(__('messages.flash.language_changed'));
     }
 

@@ -79,8 +79,11 @@ class FunctionalAreas extends Component
         $query = FunctionalArea::query()->select('functional_areas.*');
 
         $query->when(isset($this->searchByFunctionalAreaName) && $this->searchByFunctionalAreaName != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByFunctionalAreaName).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByFunctionalAreaName).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

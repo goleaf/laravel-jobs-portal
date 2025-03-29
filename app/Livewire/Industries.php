@@ -79,8 +79,11 @@ class Industries extends Component
         $query = Industry::query()->select('industries.*');
 
         $query->when(isset($this->searchByIndustryNames) && $this->searchByIndustryNames != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByIndustryNames).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByIndustryNames).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

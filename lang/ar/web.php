@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'الصفحة الرئيسية',
     'jobs' => 'وظائف',
     'companies' => 'الشركات',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'من السهل العثور على موقعك',
     'admin' => 'المسؤول',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'بحث',
         'browse_all' => 'تصفح الكل',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'حفظ كمسودة',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'حياتك المهنية تبدأ الآن',
         'keywords' => 'الكلمات الدالة',
@@ -83,7 +83,7 @@ return [
         'max' => 'الأعلى',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'بحث عن وظيفة',
         'type' => 'اكتب',
@@ -107,7 +107,7 @@ return [
         'advertise_image' => 'أعلن عن الصورة',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'تفاصيل الوظيفة',
         'email_to_friend' => 'أرسل إلى صديق',
@@ -164,7 +164,7 @@ return [
         'share_this_job' => 'شارك هذه الوظيفة',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'البحث عن الشركات',
         'opened_jobs' => 'الوظائف المفتوحة',
@@ -173,7 +173,7 @@ return [
         'opened_jobs' => 'الوظائف المفتوحة',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'تفاصيل الشركة',
         'follow' => 'إتبع',
@@ -183,7 +183,7 @@ return [
         'processing' => 'معالجة...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'كيف تعمل',
         'register' => 'تسجيل',
@@ -200,13 +200,13 @@ return [
         'faq_not_available' => 'الأسئلة المتداولة غير متوفرة',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'اتصل بنا',
         'send_message' => 'أرسل رسالة',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'بريد',
         'posts' => 'المشاركات',
@@ -217,7 +217,7 @@ return [
         'categories' => 'التصنيفات',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'مرشح',
         'employer' => 'صاحب العمل',
@@ -229,7 +229,7 @@ return [
         'confirm_password' => 'تأكيد كلمة المرور',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'روابط مفيدة',
         'newsletter' => 'النشرة الإخبارية',
@@ -243,7 +243,7 @@ return [
         'terms' => 'شروط',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login_to' => 'تسجيل الدخول إلى',
         'remember_me' => 'تذكرنى؟',
@@ -258,13 +258,13 @@ return [
         'enter_password' => 'ادخل كلمة المرور',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle_navigation' => 'تبديل التنقل',
         'main_menu' => 'القائمة الرئيسية',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'ماذا او ما',
         'where' => 'أين',
@@ -295,7 +295,7 @@ return [
         'view_company_profile' => 'عرض ملف الشركة',
         'founded_in' => 'أسس في',
         'phone' => 'هاتف',
-        'Skill_Experience' => 'المهارة والخبرة'
+        'Skill_Experience' => 'المهارة والخبرة',
     ],
 
     'web_company' => [
@@ -343,12 +343,12 @@ return [
         'your_email' => 'بريدك الإلكتروني',
         'email_password_reset_link' => 'إرسال رابط إعادة تعيين كلمة المرور عبر البريد الإلكتروني',
         'cancel' => 'إلغاء',
-        'forgot_password' => 'هل نسيت كلمة السر'
+        'forgot_password' => 'هل نسيت كلمة السر',
     ],
 
     'new_password' => [
         'reset_password' => 'إعادة تعيين كلمة المرور',
         'new_password' => 'ضبط كلمة مرور جديدة',
-        'set_new_password' => 'تعيين كلمة مرور جديدة'
+        'set_new_password' => 'تعيين كلمة مرور جديدة',
     ],
 ];

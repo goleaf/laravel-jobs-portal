@@ -3,8 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\JobType;
-use Livewire\Component;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
 class JobTypeTable extends BaseTable
 {
@@ -73,4 +73,4 @@ class JobTypeTable extends BaseTable
     {
         return view('livewire.job-type-table');
     }
-} 
+}

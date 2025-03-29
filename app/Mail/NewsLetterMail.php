@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class NewsLetterMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var array
@@ -28,7 +29,9 @@ class NewsLetterMail extends Mailable
      */
     public function build(): self
     {
-        return $this->subject($this->data['input']['title'])->markdown('emails.news_letter.news_letter')->with('body',
-            $this->data['body']);
+        return $this->subject($this->data['input']['title'])->markdown('emails.news_letter.news_letter')->with(
+            'body',
+            $this->data['body']
+        );
     }
 }

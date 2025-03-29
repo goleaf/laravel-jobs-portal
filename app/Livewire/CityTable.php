@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
+use App\Livewire\Components\Filters\SelectFilter;
 use App\Models\City;
 use App\Models\State;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
-use App\Livewire\Components\Filters\SelectFilter;
 
 class CityTable extends LivewireTableComponent
 {
@@ -30,7 +30,6 @@ class CityTable extends LivewireTableComponent
     protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeStateFilter'];
 
     public array $filterComponents = ['cities.table-components.filter', City::STATE];
-
 
     public function configure(): void
     {
@@ -95,42 +94,44 @@ class CityTable extends LivewireTableComponent
 
     public function builder(): Builder
     {
-         $query = City::with('state');
-         $query->when(!empty($this->state), function($q) {
-                  $q->where('state_id', $this->state);
-         });
-        return  $query->select('cities.*');
+        $query = City::with('state');
+        $query->when(! empty($this->state), function ($q) {
+            $q->where('state_id', $this->state);
+        });
+
+        return $query->select('cities.*');
     }
 
-//     public function filters(): array
-//     {
-//         return [
-//             SelectFilter::make(__('messages.state.states'))
-//                         ->options(
-//                             State::query()
-//                                     ->orderBy('name')
-//                                     ->get()
-//                                     ->keyBy('id')
-//                                     ->map(
-//                                         function ($country) {
-//                                             return $country->name;
-//                                         }
-//                                     )
-//                                     ->toArray()
-//                         )
-//                         ->filter(function (Builder $builder, $value) {
-//                             return $builder->where('state_id', $value);
-//                         }),
-//         ];
-//     }
+    //     public function filters(): array
+    //     {
+    //         return [
+    //             SelectFilter::make(__('messages.state.states'))
+    //                         ->options(
+    //                             State::query()
+    //                                     ->orderBy('name')
+    //                                     ->get()
+    //                                     ->keyBy('id')
+    //                                     ->map(
+    //                                         function ($country) {
+    //                                             return $country->name;
+    //                                         }
+    //                                     )
+    //                                     ->toArray()
+    //                         )
+    //                         ->filter(function (Builder $builder, $value) {
+    //                             return $builder->where('state_id', $value);
+    //                         }),
+    //         ];
+    //     }
     public function changeStateFilter($state)
     {
-         $this->state = $state;
-         $this->setBuilder($this->builder());
-         $this->resetPagination();
+        $this->state = $state;
+        $this->setBuilder($this->builder());
+        $this->resetPagination();
     }
 
-    public function resetpagination(){
+    public function resetpagination()
+    {
         $this->resetPage('citiesPage');
     }
 }

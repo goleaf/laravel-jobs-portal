@@ -218,4 +218,4 @@ return [
     'please_try_again' => 'Bandykite dar kartą',
     'are_you_sure' => 'Ar tikrai?',
     'cannot_be_undone' => 'Šio veiksmo nebus galima atšaukti',
-]; 
+];

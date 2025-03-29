@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Components\Column;
 
 class TransactionTable extends LivewireTableComponent
 {
@@ -34,7 +34,7 @@ class TransactionTable extends LivewireTableComponent
                 ];
             }
             if ($column->getField('invoice_id') == 'invoice_id') {
-                return[
+                return [
                     'class' => 'text-center',
                 ];
             }
@@ -92,8 +92,8 @@ class TransactionTable extends LivewireTableComponent
                 ->searchable()
                 ->view('transactions.table-components.transaction-approved'),
             Column::make(__('messages.common.status'), 'status')
-            ->sortable()
-            ->view('transactions.table-components.status'),
+                ->sortable()
+                ->view('transactions.table-components.status'),
             Column::make(__('messages.transaction.invoice'), 'invoice_id')
                 ->sortable()
                 ->view('transactions.table-components.action_button'),

@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Inquiry;
 use App\Livewire\Components\Column;
+use App\Models\Inquiry;
 
 class InquiriesTable extends LivewireTableComponent
 {
@@ -20,7 +20,8 @@ class InquiriesTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('id')) {

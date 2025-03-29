@@ -44,14 +44,14 @@ class CreateCompanyRequest extends FormRequest
         return $rules;
     }
 
-//    /**
-//     * @return array|string[]
-//     */
-//    public function messages()
-//    {
-//        return [
-//            'country_id.required' => 'The country field is required.',
-//            'website.url' => ''
-//        ];
-//    }
+    //    /**
+    //     * @return array|string[]
+    //     */
+    //    public function messages()
+    //    {
+    //        return [
+    //            'country_id.required' => 'The country field is required.',
+    //            'website.url' => ''
+    //        ];
+    //    }
 }

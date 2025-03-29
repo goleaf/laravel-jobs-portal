@@ -30,4 +30,4 @@ class Form extends Facade
     {
         return 'form';
     }
-} 
+}

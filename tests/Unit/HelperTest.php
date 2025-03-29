@@ -24,7 +24,7 @@ class HelperTest extends TestCase
     public function array_get_returns_default_for_missing_key()
     {
         $array = ['name' => 'Taylor', 'age' => 25];
-        
+
         $this->assertEquals('Taylor', \Illuminate\Support\Arr::get($array, 'name'));
         $this->assertEquals('Unknown', \Illuminate\Support\Arr::get($array, 'gender', 'Unknown'));
         $this->assertNull(\Illuminate\Support\Arr::get($array, 'gender'));
@@ -34,7 +34,7 @@ class HelperTest extends TestCase
     public function array_has_checks_if_key_exists()
     {
         $array = ['product' => ['name' => 'Laravel', 'price' => 'free']];
-        
+
         $this->assertTrue(\Illuminate\Support\Arr::has($array, 'product'));
         $this->assertTrue(\Illuminate\Support\Arr::has($array, 'product.name'));
         $this->assertFalse(\Illuminate\Support\Arr::has($array, 'product.discount'));
@@ -64,8 +64,8 @@ class HelperTest extends TestCase
     public function bcrypt_hashes_passwords()
     {
         $this->assertTrue(function_exists('bcrypt'));
-        
+
         // This is a basic check that the bcrypt function exists
         // In an actual Laravel environment, we would test hashing works correctly
     }
-} 
+}

@@ -11,7 +11,7 @@ return [
     |
     */
 
-    //header keys
+    // header keys
     'home' => 'Zuhause',
     'jobs' => 'Arbeitsplätze',
     'companies' => 'Firmen',
@@ -38,7 +38,7 @@ return [
     'easy_to_find_your' => 'Es ist einfach, Ihr',
     'admin' => 'Administrator',
 
-    //common keys
+    // common keys
     'common' => [
         'search' => 'Suche',
         'browse_all' => 'Alle durchsuchen',
@@ -57,7 +57,7 @@ return [
         'save_as_draft' => 'Als Entwurf speichern',
     ],
 
-    //home menu keys
+    // home menu keys
     'home_menu' => [
         'your_career_starts_now' => 'Ihre Karriere beginnt jetzt',
         'keywords' => 'Schlüsselwörter',
@@ -82,7 +82,7 @@ return [
         'max' => 'Max',
     ],
 
-    //jobs menu keys
+    // jobs menu keys
     'job_menu' => [
         'search_job' => 'Arbeit suchen',
         'job_by_type' => 'Job nach Typ',
@@ -106,7 +106,7 @@ return [
         'advertise_image' => 'Bild werben',
     ],
 
-    //job details keys
+    // job details keys
     'job_details' => [
         'job_details' => 'Jobdetails',
         'email_to_friend' => 'E-Mail an Freund',
@@ -163,7 +163,7 @@ return [
         'share_this_job' => 'Teilen Sie diesen Job',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'companies_menu' => [
         'search_companies' => 'Unternehmen suchen',
         'opened_jobs' => 'Offene Arbeitsplätze',
@@ -171,7 +171,7 @@ return [
         'no_company_found' => 'Kein Unternehmen gefunden',
     ],
 
-    //Companies Menu
+    // Companies Menu
     'candidates_menu' => [
         'search candidates' => 'Kandidaten suchen',
         'no candidates found' => 'keine Arbeitssuchenden gefunden',
@@ -180,7 +180,7 @@ return [
         'opened_jobs' => 'Geöffnete Arbeitsplätze',
     ],
 
-    //Company Details keys
+    // Company Details keys
     'company_details' => [
         'company_details' => 'Firmendetails',
         'follow' => 'Folgen',
@@ -190,7 +190,7 @@ return [
         'processing' => 'Verarbeitung ...',
     ],
 
-    //About Us keys
+    // About Us keys
     'about_us_menu' => [
         'how_it_works' => 'Wie es funktioniert',
         'register' => 'Registrieren',
@@ -207,13 +207,13 @@ return [
         'faq_not_available' => 'Häufig gestellte Fragen nicht verfügbar',
     ],
 
-    //Contact Us keys
+    // Contact Us keys
     'contact_us_menu' => [
         'contact_us' => 'Kontakt',
         'send_message' => 'Nachricht senden',
     ],
 
-    //Post keys
+    // Post keys
     'post_menu' => [
         'post' => 'post',
         'posts' => 'Beiträge',
@@ -224,7 +224,7 @@ return [
         'categories' => 'Kategorien',
     ],
 
-    //Register Keys
+    // Register Keys
     'register_menu' => [
         'candidate' => 'Kandidat',
         'employer' => 'Arbeitgeber',
@@ -236,7 +236,7 @@ return [
         'confirm_password' => 'Passwort bestätigen',
     ],
 
-    //footer keys
+    // footer keys
     'footer' => [
         'useful_links' => 'Nützliche Links',
         'newsletter' => 'Newsletter',
@@ -250,7 +250,7 @@ return [
         'terms' => 'Begriffe',
     ],
 
-    //login keys
+    // login keys
     'login_menu' => [
         'login to' => 'Einloggen in',
         'remember me' => 'Erinnerst du dich an mich?',
@@ -265,13 +265,13 @@ return [
         'enter_password' => 'Passwort eingeben',
     ],
 
-    //header keys
+    // header keys
     'header' => [
         'toggle navigation' => 'Navigation umschalten',
         'main_menu' => 'Hauptmenü',
     ],
 
-    //Web keys
+    // Web keys
     'web_home' => [
         'what' => 'Was',
         'where' => 'Woher',
@@ -302,7 +302,7 @@ return [
         'view_company_profile' => 'Firmenprofil ansehen',
         'founded_in' => 'Gegründet in',
         'phone' => 'Telefon',
-        'Skill_Experience' => 'Können und Erfahrung'
+        'Skill_Experience' => 'Können und Erfahrung',
     ],
 
     'web_company' => [
@@ -350,12 +350,12 @@ return [
         'your_email' => 'Ihre E-Mail',
         'email_password_reset_link' => 'E-Mail zum Zurücksetzen des Passworts senden',
         'cancel' => 'Abbrechen',
-        'forgot_password' => 'Passwort vergessen'
+        'forgot_password' => 'Passwort vergessen',
     ],
 
     'new_password' => [
         'reset_password' => 'Passwort zurücksetzen',
         'new_password' => 'Neues Passwort einrichten',
-        'set_new_password' => 'Neues Passwort setzen'
+        'set_new_password' => 'Neues Passwort setzen',
     ],
 ];

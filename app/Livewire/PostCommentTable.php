@@ -2,15 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Post;
 use App\Models\PostComment;
 use Illuminate\Database\Eloquent\Builder;
-use App\Livewire\Components\Column;
 
 class PostCommentTable extends LivewireTableComponent
 {
     protected $model = PostComment::class;
     public $showFilterOnHeader = false;
+
     public function configure(): void
     {
         $this->setPrimaryKey('id');

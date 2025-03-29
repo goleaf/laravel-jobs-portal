@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\ImageSlider;
-use Illuminate\Database\Eloquent\Builder;
 use App\Livewire\Components\Column;
 use App\Livewire\Components\Filters\SelectFilter;
+use App\Models\ImageSlider;
+use Illuminate\Database\Eloquent\Builder;
 
 class ImageSliderTable extends LivewireTableComponent
 {
@@ -13,11 +13,11 @@ class ImageSliderTable extends LivewireTableComponent
     public string $tableName = 'image-sliders';
     public $showButtonOnHeader = true;
     public $buttonComponent = 'image_sliders.table_components.add_button';
-    public $status =ImageSlider::ALL;
-    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh','changeStatusFilter'];
+    public $status = ImageSlider::ALL;
+    protected $listeners = ['resetPage', 'refreshDatatable' => '$refresh', 'changeStatusFilter'];
     public $showFilterOnHeader = true;
 
-    public array $filterComponents = ['image_sliders.table_components.filter',ImageSlider::STATUS];
+    public array $filterComponents = ['image_sliders.table_components.filter', ImageSlider::STATUS];
 
     public function configure(): void
     {
@@ -29,18 +29,18 @@ class ImageSliderTable extends LivewireTableComponent
 
         $this->setThAttributes(function (Column $column) {
             if ($column->isField('created_at')) {
-                return[
+                return [
                     'style' => 'width:40%',
                 ];
             }
             if ($column->isField('is_active')) {
-                return[
+                return [
                     'style' => 'width:20%',
                     'class' => 'text-center',
                 ];
             }
             if ($column->isField('id')) {
-                return[
+                return [
                     'style' => 'width:12%',
                     'class' => 'text-center',
                 ];
@@ -53,7 +53,8 @@ class ImageSliderTable extends LivewireTableComponent
             [
                 'default' => false,
                 'class' => 'table table-striped',
-            ]);
+            ]
+        );
 
         $this->setQueryStringStatus(false);
 
@@ -82,45 +83,47 @@ class ImageSliderTable extends LivewireTableComponent
     public function builder(): Builder
     {
         $query = ImageSlider::query();
-        $query->when($this->status != ImageSlider::ALL, function($q) {
-         if($this->status) {
-                  $q->where('is_active', 1);
-         }else {
-                  $q->where('is_active', 0);
-         }
-});
+        $query->when($this->status != ImageSlider::ALL, function ($q) {
+            if ($this->status) {
+                $q->where('is_active', 1);
+            } else {
+                $q->where('is_active', 0);
+            }
+        });
+
         return $query->select('image_sliders.*');
     }
 
-//     public function filters(): array
-//     {
-//         return [
+    //     public function filters(): array
+    //     {
+    //         return [
 
-//             SelectFilter::make(__('messages.common.status'))
-//                 ->options([
-//                     '' => __('messages.filter_name.select_status'),
-//                     1 => __('messages.common.active'),
-//                     2 => __('messages.common.de_active'),
-//                 ])
-//                 ->filter(
-//                     function (Builder $builder, string $value) {
-//                         if ($value == 1) {
-//                             $builder->where('is_active', '=', 1);
-//                         } else {
-//                             $builder->where('is_active', '=', 0);
-//                         }
-//                     }
-//                 ),
-//         ];
-//     }
+    //             SelectFilter::make(__('messages.common.status'))
+    //                 ->options([
+    //                     '' => __('messages.filter_name.select_status'),
+    //                     1 => __('messages.common.active'),
+    //                     2 => __('messages.common.de_active'),
+    //                 ])
+    //                 ->filter(
+    //                     function (Builder $builder, string $value) {
+    //                         if ($value == 1) {
+    //                             $builder->where('is_active', '=', 1);
+    //                         } else {
+    //                             $builder->where('is_active', '=', 0);
+    //                         }
+    //                     }
+    //                 ),
+    //         ];
+    //     }
     public function changeStatusFilter($status)
     {
-            $this->status = $status;
-            $this->setBuilder($this->builder());
-            $this->resetPAgination();
+        $this->status = $status;
+        $this->setBuilder($this->builder());
+        $this->resetPAgination();
     }
 
-    public function resetPagination() {
+    public function resetPagination()
+    {
         $this->resetPage('image-slidersPage');
     }
 }

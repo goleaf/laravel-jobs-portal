@@ -3,8 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\JobType;
-use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Component;
 
 class JobTypeForm extends Component
 {
@@ -52,13 +52,14 @@ class JobTypeForm extends Component
     {
         $validator = Validator::make(
             ['name' => $this->name],
-            ['name' => 'required|string|max:120|unique:job_types,name' . ($this->jobTypeId ? ',' . $this->jobTypeId : '')]
+            ['name' => 'required|string|max:120|unique:job_types,name'.($this->jobTypeId ? ','.$this->jobTypeId : '')]
         );
 
         if ($validator->fails()) {
             foreach ($validator->errors()->getMessages() as $key => $value) {
                 $this->addError($key, $value[0]);
             }
+
             return;
         }
 
@@ -82,7 +83,7 @@ class JobTypeForm extends Component
     {
         $jobType = JobType::findOrFail($data['id']);
         $jobType->delete();
-        
+
         $this->dispatch('jobTypeDeleted');
         session()->flash('success', __('messages.flash.delete_success'));
     }
@@ -91,4 +92,4 @@ class JobTypeForm extends Component
     {
         return view('livewire.job-type-form');
     }
-} 
+}

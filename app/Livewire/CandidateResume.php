@@ -78,8 +78,10 @@ class CandidateResume extends Component
 
     public function candidateResume(): LengthAwarePaginator
     {
-        $query = CustomMedia::query()->where('model_type', Candidate::class)->where('collection_name',
-            Candidate::RESUME_PATH)->select('media.*')
+        $query = CustomMedia::query()->where('model_type', Candidate::class)->where(
+            'collection_name',
+            Candidate::RESUME_PATH
+        )->select('media.*')
             ->join('candidates', 'media.model_id', '=', 'candidates.id')
             ->join('users', 'candidates.user_id', '=', 'users.id')->with('candidate');
 

@@ -79,8 +79,11 @@ class SalaryPeriods extends Component
         $query = SalaryPeriod::query()->select('salary_periods.*');
 
         $query->when(isset($this->searchBySalaryPeriods) && $this->searchBySalaryPeriods != '', function (Builder $q) {
-            $q->where('period', 'like',
-                '%'.strtolower($this->searchBySalaryPeriods).'%');
+            $q->where(
+                'period',
+                'like',
+                '%'.strtolower($this->searchBySalaryPeriods).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

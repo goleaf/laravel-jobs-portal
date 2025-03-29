@@ -39,99 +39,99 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Transaction extends Model
 {
-         /**
-          * @var string
-          */
-         public $table = 'transactions';
+    /**
+     * @var string
+     */
+    public $table = 'transactions';
 
-         /**
-          * @var array
-          */
-         public $fillable = [
-                  'user_id',
-                  'owner_id',
-                  'owner_type',
-                  'amount',
-                  'invoice_id',
-                  'status',
-                  'is_approved',
-                  'approved_id',
-                  'plan_currency_id',
-         ];
+    /**
+     * @var array
+     */
+    public $fillable = [
+        'user_id',
+        'owner_id',
+        'owner_type',
+        'amount',
+        'invoice_id',
+        'status',
+        'is_approved',
+        'approved_id',
+        'plan_currency_id',
+    ];
 
-         const  STRIPE_PAYMENT = 3;
-         const  PAYPAL_PAYMENT = 4;
-         const  PAYSTACK_PAYMENT = 5;
-         const  DIGITAL = 1;
-         const  MANUALLY = 2;
+    const STRIPE_PAYMENT = 3;
+    const PAYPAL_PAYMENT = 4;
+    const PAYSTACK_PAYMENT = 5;
+    const DIGITAL = 1;
+    const MANUALLY = 2;
 
-         const STATUS = [
-                  self::DIGITAL => 'digital',
-                  self::MANUALLY => 'Manually',
-         ];
+    const STATUS = [
+        self::DIGITAL => 'digital',
+        self::MANUALLY => 'Manually',
+    ];
 
-         const PENDING = 0;
+    const PENDING = 0;
 
-         const APPROVED = 1;
+    const APPROVED = 1;
 
-         const REJECTED = 2;
+    const REJECTED = 2;
 
-         /**
-          * @var array
-          */
-         public $casts = [
-                  'user_id' => 'integer',
-                  'owner_id' => 'integer',
-                  'amount' => 'float',
-                  'invoice_id' => 'string',
-                  'owner_type' => 'string',
-                  'is_approved' => 'integer',
-                  'status' => 'integer',
-                  'approved_id' => 'integer',
-                  'plan_currency_id' => 'integer',
-         ];
+    /**
+     * @var array
+     */
+    public $casts = [
+        'user_id' => 'integer',
+        'owner_id' => 'integer',
+        'amount' => 'float',
+        'invoice_id' => 'string',
+        'owner_type' => 'string',
+        'is_approved' => 'integer',
+        'status' => 'integer',
+        'approved_id' => 'integer',
+        'plan_currency_id' => 'integer',
+    ];
 
-         protected $appends = ['type_name'];
+    protected $appends = ['type_name'];
 
-         public function user(): BelongsTo
-         {
-                  return $this->belongsTo(User::class, 'user_id');
-         }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-         public function owner()
-         {
-                  return $this->belongsTo(Subscription::class, 'owner_id');
-         }
+    public function owner()
+    {
+        return $this->belongsTo(Subscription::class, 'owner_id');
+    }
 
-         public function type()
-         {
-                  return $this->morphTo('owner');
-         }
+    public function type()
+    {
+        return $this->morphTo('owner');
+    }
 
-         public function admin(): \Illuminate\Database\Eloquent\Relations\HasOne
-         {
-                  return $this->hasOne(User::class, 'id', 'approved_id');
-         }
+    public function admin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'approved_id');
+    }
 
-         public function getTypeNameAttribute()
-         {
-                  switch ($this->owner_type) {
-                           case Company::class:
-                                    return 'Featured Company';
-                                    break;
-                           case Job::class:
-                                    return 'Featured Job';
-                                    break;
-                           case Subscription::class:
-                                    return 'Company Subscription';
-                                    break;
-                           default:
-                                    return 'N/A';
-                  }
-         }
+    public function getTypeNameAttribute()
+    {
+        switch ($this->owner_type) {
+            case Company::class:
+                return 'Featured Company';
+                break;
+            case Job::class:
+                return 'Featured Job';
+                break;
+            case Subscription::class:
+                return 'Company Subscription';
+                break;
+            default:
+                return 'N/A';
+        }
+    }
 
-         public function salaryCurrency(): BelongsTo
-         {
-                  return $this->belongsTo(SalaryCurrency::class, 'plan_currency_id', 'id');
-         }
+    public function salaryCurrency(): BelongsTo
+    {
+        return $this->belongsTo(SalaryCurrency::class, 'plan_currency_id', 'id');
+    }
 }

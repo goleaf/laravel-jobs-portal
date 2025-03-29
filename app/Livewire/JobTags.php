@@ -79,8 +79,11 @@ class JobTags extends Component
         $query = Tag::query()->select('tags.*');
 
         $query->when(isset($this->searchByJobTags) && $this->searchByJobTags != '', function (Builder $q) {
-            $q->where('name', 'like',
-                '%'.strtolower($this->searchByJobTags).'%');
+            $q->where(
+                'name',
+                'like',
+                '%'.strtolower($this->searchByJobTags).'%'
+            );
         });
 
         $all = $query->paginate($this->perPage);

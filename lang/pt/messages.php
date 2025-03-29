@@ -1088,7 +1088,7 @@ return [
     ],
     'pricing_table' => [
         'get_started' => 'iniciar',
-        'buy_plan' => 'Comprar Plano'
+        'buy_plan' => 'Comprar Plano',
     ],
     'notification' => [
         'notifications' => 'Notificações',
@@ -1487,6 +1487,6 @@ return [
         'follow_company_successfully' => 'Siga a empresa com sucesso.',
         'note_required' => 'O campo Observação é obrigatório',
         'resume_field_required' => 'O campo currículo é obrigatório.',
-        'verify_google_recaptcha' => 'Você deve verificar o Google recaptcha.'
+        'verify_google_recaptcha' => 'Você deve verificar o Google recaptcha.',
     ],
 ];

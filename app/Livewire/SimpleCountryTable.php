@@ -15,10 +15,10 @@ class SimpleCountryTable extends Component
     public $sortDirection = 'desc';
     public $searchTerm = '';
     public $perPage = 10;
-    
+
     // UI customization
     public $tableClass = 'table table-striped';
-    
+
     // Listeners
     protected $listeners = ['refresh' => '$refresh', 'deleteCountry'];
 
@@ -35,18 +35,19 @@ class SimpleCountryTable extends Component
     public function deleteCountry($id)
     {
         $country = Country::findOrFail($id);
-        
+
         // Check if country can be deleted
         if ($country->states()->count() > 0 || $country->users()->count() > 0) {
             session()->flash('error', __('messages.flash.country_cant_deleted'));
+
             return;
         }
-        
+
         $country->delete();
         $this->dispatch('deleted');
         session()->flash('success', __('messages.flash.country_deleted'));
     }
-    
+
     public function updatingSearchTerm()
     {
         $this->resetPage();
@@ -55,7 +56,7 @@ class SimpleCountryTable extends Component
     public function render()
     {
         $countries = Country::query()
-            ->when($this->searchTerm, function($query) {
+            ->when($this->searchTerm, function ($query) {
                 return $query->where('name', 'like', '%'.$this->searchTerm.'%')
                     ->orWhere('short_code', 'like', '%'.$this->searchTerm.'%')
                     ->orWhere('phone_code', 'like', '%'.$this->searchTerm.'%');
@@ -67,4 +68,4 @@ class SimpleCountryTable extends Component
             'countries' => $countries,
         ]);
     }
-} 
+}

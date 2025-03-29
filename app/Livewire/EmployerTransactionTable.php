@@ -2,11 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Components\Column;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Components\Column;
 
 class EmployerTransactionTable extends LivewireTableComponent
 {
@@ -46,9 +46,9 @@ class EmployerTransactionTable extends LivewireTableComponent
     {
         return [
             Column::make(__('messages.plan.amount'), 'amount')
-            ->sortable()
-            ->searchable()
-            ->view('employer.transactions.table_components.amount'),
+                ->sortable()
+                ->searchable()
+                ->view('employer.transactions.table_components.amount'),
             Column::make(__('messages.transaction.transaction_date'), 'created_at')
                 ->sortable()
                 ->searchable()

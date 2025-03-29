@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Auth;
-use Redirect;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\View\Factory;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\View\View;
+use Redirect;
 
 class LoginController extends Controller
 {
@@ -53,13 +53,13 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-//    /**
-//     * @return Factory|View
-//     */
-//    protected function showLoginForm()
-//    {
-//        return view('web.auth.login');
-//    }
+    //    /**
+    //     * @return Factory|View
+    //     */
+    //    protected function showLoginForm()
+    //    {
+    //        return view('web.auth.login');
+    //    }
 
     /**
      * Send the response after the user was authenticated.

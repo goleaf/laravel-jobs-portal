@@ -78,11 +78,16 @@ class DegreeLevel extends Component
     {
         $query = RequiredDegreeLevel::query()->select('required_degree_levels.*');
 
-        $query->when(isset($this->searchByDegreeLevel) && $this->searchByDegreeLevel != '',
+        $query->when(
+            isset($this->searchByDegreeLevel) && $this->searchByDegreeLevel != '',
             function (Builder $q) {
-                $q->where('name', 'like',
-                    '%'.strtolower($this->searchByDegreeLevel).'%');
-            });
+                $q->where(
+                    'name',
+                    'like',
+                    '%'.strtolower($this->searchByDegreeLevel).'%'
+                );
+            }
+        );
 
         $all = $query->paginate($this->perPage);
         $currentPage = $all->currentPage();

@@ -37,9 +37,9 @@ return [
         'webhook_secret_key' => env('STRIPE_WEBHOOK_SECRET_KEY'),
     ],
     'paystack' => [
-         'key' => env('PAYSTACK_PUBLIC_KEY'),
-         'secret_key' => env('PAYSTACK_SECRET_KEY'),
-     ],
+        'key' => env('PAYSTACK_PUBLIC_KEY'),
+        'secret_key' => env('PAYSTACK_SECRET_KEY'),
+    ],
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),

@@ -96,22 +96,35 @@ class ReportedCandidate extends Component
         $query->when(isset($this->searchByCandidate) && $this->searchByCandidate != '', function (Builder $q) {
             if ($this->filterByReportedDate == '') {
                 $q->whereHas('candidate.user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByCandidate).'%');
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByCandidate).'%'
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
                         $q->where('first_name', 'like', '%'.$this->searchByCandidate.'%');
                     });
             } else {
                 $q->whereHas('candidate.user', function (Builder $q) {
-                    $q->where('first_name', 'like',
-                        '%'.strtolower($this->searchByCandidate).'%')->whereMonth('reported_to_candidates.created_at',
-                            $this->filterByReportedDate);
+                    $q->where(
+                        'first_name',
+                        'like',
+                        '%'.strtolower($this->searchByCandidate).'%'
+                    )->whereMonth(
+                        'reported_to_candidates.created_at',
+                        $this->filterByReportedDate
+                    );
                 })
                     ->orWhereHas('user', function (Builder $q) {
-                        $q->where('first_name', 'like',
-                            '%'.$this->searchByCandidate.'%')->whereMonth('reported_to_candidates.created_at',
-                                $this->filterByReportedDate);
+                        $q->where(
+                            'first_name',
+                            'like',
+                            '%'.$this->searchByCandidate.'%'
+                        )->whereMonth(
+                            'reported_to_candidates.created_at',
+                            $this->filterByReportedDate
+                        );
                     });
             }
         });

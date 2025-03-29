@@ -4,10 +4,7 @@ namespace App\Livewire;
 
 use App\Livewire\Components\Column;
 use App\Livewire\Components\DataTable;
-use App\Livewire\Components\Filter;
 use App\Models\Candidate;
-use App\Models\Skill;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class CandidateTable extends DataTable
@@ -18,7 +15,7 @@ class CandidateTable extends DataTable
     public bool $showButtonOnHeader = true;
     public bool $showFilterOnHeader = true;
     public string $buttonComponent = 'candidates.table-components.add_button';
-    
+
     public $status = Candidate::ALL;
     public $immediate = Candidate::ALL;
 
@@ -67,7 +64,7 @@ class CandidateTable extends DataTable
 
         if ($this->status != Candidate::ALL) {
             $status = $this->status == Candidate::ACTIVE;
-            $query->whereHas('user', function($q) use ($status) {
+            $query->whereHas('user', function ($q) use ($status) {
                 $q->where('is_active', $status);
             });
         }
@@ -88,8 +85,8 @@ class CandidateTable extends DataTable
 
         return $query->whereHas('user', function ($userQuery) {
             $userQuery->where(function ($q) {
-                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $this->search . '%'])
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%'.$this->search.'%'])
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             });
         });
     }

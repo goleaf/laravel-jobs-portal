@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Candidate;
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
+use App\Models\Company;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\User;
@@ -16,6 +17,26 @@ class CandidateTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    protected $adminUser;
+    protected $candidateUser;
+    protected $candidate;
+    protected $employerUser;
+    protected $company;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Create users and associated models needed for tests
+        $this->adminUser = User::factory()->create(['user_type' => User::ADMIN]);
+        $this->candidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $this->candidate = Candidate::factory()->create(['user_id' => $this->candidateUser->id]);
+
+        $this->employerUser = User::factory()->create(['user_type' => User::EMPLOYER]);
+        $this->company = Company::factory()->create(['user_id' => $this->employerUser->id]);
+        $this->employerUser->company()->save($this->company);
+        $this->employerUser->load('company');
+    }
 
     /** @test */
     public function candidate_can_be_created()
@@ -150,5 +171,184 @@ class CandidateTest extends TestCase
 
         $this->assertCount(3, $immediatelyAvailable);
         $this->assertCount(2, $notImmediatelyAvailable);
+    }
+
+    // =========================================
+    // Admin Candidate Management Tests
+    // =========================================
+
+    /** @test */
+    public function guests_cannot_access_admin_candidates_section()
+    {
+        $this->get('/admin/candidates')->assertRedirect('/login'); // Assuming /admin prefix
+        $this->get('/admin/candidates/create')->assertRedirect('/login');
+        $this->post('/admin/candidates')->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function non_admin_users_cannot_access_admin_candidates_section()
+    {
+        // Test candidate access
+        $this->actingAs($this->candidateUser)->get('/admin/candidates')->assertStatus(403);
+        $this->actingAs($this->candidateUser)->get('/admin/candidates/create')->assertStatus(403);
+
+        // Test employer access
+        $this->actingAs($this->employerUser)->get('/admin/candidates')->assertStatus(403);
+        $this->actingAs($this->employerUser)->get('/admin/candidates/create')->assertStatus(403);
+    }
+
+    /** @test */
+    public function admin_can_view_candidates_list()
+    {
+        $response = $this->actingAs($this->adminUser)->get('/admin/candidates');
+        $response->assertStatus(200);
+        $response->assertViewIs('candidates.index');
+    }
+
+    /** @test */
+    public function admin_can_view_candidate_details()
+    {
+        $response = $this->actingAs($this->adminUser)->get("/admin/candidates/{$this->candidate->id}");
+        $response->assertStatus(200);
+        $response->assertViewIs('candidates.show');
+        $response->assertSee($this->candidateUser->name);
+    }
+
+    /** @test */
+    public function admin_can_view_edit_candidate_form()
+    {
+        $response = $this->actingAs($this->adminUser)->get("/admin/candidates/{$this->candidate->id}/edit");
+        $response->assertStatus(200);
+        $response->assertViewIs('candidates.edit');
+        $response->assertSee($this->candidateUser->name);
+    }
+
+    /** @test */
+    public function admin_can_update_candidate()
+    {
+        $updateData = [
+            // User fields
+            'name' => 'Updated Candidate Name',
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => 'password123', // Required by validation, but shouldn't change here usually
+            'password_confirmation' => 'password123',
+            'phone' => $this->faker->phoneNumber,
+            'region_code' => 'GB', // Example
+            'user_type' => User::CANDIDATE, // Required by validation
+            'dob' => $this->faker->date(),
+            'gender' => 1,
+            'country_id' => \App\Models\Country::factory()->create()->id,
+            'state_id' => \App\Models\State::factory()->create(['country_id' => 1])->id,
+            'city_id' => \App\Models\City::factory()->create(['state_id' => 1])->id,
+            'is_active' => true,
+            'is_verified' => true,
+            // Candidate fields
+            'candidate_id' => $this->candidate->id, // Required by validation
+            'father_name' => $this->faker->name('male'),
+            'marital_status_id' => \App\Models\MaritalStatus::factory()->create()->id,
+            'nationality' => $this->faker->country,
+            'national_id_card' => $this->faker->uuid,
+            'experience' => 5,
+            'career_level_id' => \App\Models\CareerLevel::factory()->create()->id,
+            'industry_id' => \App\Models\Industry::factory()->create()->id,
+            'functional_area_id' => \App\Models\FunctionalArea::factory()->create()->id,
+            'current_salary' => 60000,
+            'expected_salary' => 70000,
+            'salary_currency' => \App\Models\SalaryCurrency::factory()->create()->id,
+            'address' => $this->faker->address,
+            'immediate_available' => true,
+            'available_at' => now()->addMonth()->toDateString(),
+            // Skills and Languages (adjust based on actual form input names)
+            'skill_ids' => \App\Models\Skill::factory()->count(2)->create()->pluck('id')->toArray(),
+            'language_ids' => \App\Models\Language::factory()->count(2)->create()->pluck('id')->toArray(),
+        ];
+
+        $response = $this->actingAs($this->adminUser)->put("/admin/candidates/{$this->candidate->id}", $updateData);
+
+        $response->assertRedirect('/admin/candidates');
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('users', [
+            'id' => $this->candidateUser->id,
+            'name' => 'Updated Candidate Name',
+            'email' => $updateData['email'],
+        ]);
+        $this->assertDatabaseHas('candidates', [
+            'id' => $this->candidate->id,
+            'experience' => 5,
+            'current_salary' => 60000,
+            'expected_salary' => 70000,
+        ]);
+    }
+
+    /** @test */
+    public function admin_can_delete_candidate()
+    {
+        // Create a new candidate specifically for this test to avoid FK issues
+        $testCandidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $testCandidate = Candidate::factory()->create(['user_id' => $testCandidateUser->id]);
+
+        $response = $this->actingAs($this->adminUser)->delete("/admin/candidates/{$testCandidate->id}");
+
+        // Assuming JSON response based on controller
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->assertDatabaseMissing('candidates', ['id' => $testCandidate->id]);
+        $this->assertDatabaseMissing('users', ['id' => $testCandidateUser->id]);
+    }
+
+    /** @test */
+    public function admin_can_change_candidate_status()
+    {
+        $initialStatus = $this->candidateUser->is_active;
+
+        $response = $this->actingAs($this->adminUser)->postJson("/admin/candidates/{$this->candidate->id}/change-status");
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->candidateUser->refresh();
+        $this->assertEquals(!$initialStatus, $this->candidateUser->is_active);
+    }
+
+     /** @test */
+    public function admin_can_change_candidate_email_verified_status()
+    {
+        $this->candidateUser->update(['email_verified_at' => null]); // Ensure initially not verified
+
+        $response = $this->actingAs($this->adminUser)->postJson("/admin/candidates/{$this->candidate->id}/change-is-verified");
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->candidateUser->refresh();
+        $this->assertNotNull($this->candidateUser->email_verified_at);
+
+        // Test un-verifying
+        $response = $this->actingAs($this->adminUser)->postJson("/admin/candidates/{$this->candidate->id}/change-is-verified");
+        $response->assertStatus(200);
+        $this->candidateUser->refresh();
+        $this->assertNull($this->candidateUser->email_verified_at);
+    }
+
+    // =========================================
+    // Employer Candidate Interaction Tests
+    // =========================================
+
+    /** @test */
+    public function employer_can_report_a_candidate()
+    {
+        $reportData = [
+            'candidate_id' => $this->candidate->id,
+            'user_id' => $this->employerUser->id,
+            'note' => $this->faker->sentence,
+        ];
+
+        $response = $this->actingAs($this->employerUser)->postJson('/employer/report-candidate', $reportData);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->assertDatabaseHas('reported_to_candidates', [
+            'candidate_id' => $this->candidate->id,
+            'user_id' => $this->employerUser->id,
+            'note' => $reportData['note'],
+        ]);
     }
 }

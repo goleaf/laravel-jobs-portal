@@ -12,6 +12,15 @@ class UserTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
+    protected $adminUser;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Create an admin user for authentication in tests
+        $this->adminUser = User::factory()->create(['user_type' => User::ADMIN]); // Assuming User::ADMIN constant exists
+    }
+
     /** @test */
     public function user_can_be_created()
     {
@@ -97,5 +106,126 @@ class UserTest extends TestCase
 
         $this->assertNotNull($user->company);
         $this->assertEquals($user->id, $company->user_id);
+    }
+
+    /** @test */
+    public function guests_cannot_access_admin_users_section()
+    {
+        $this->get('/admin/users')->assertRedirect('/login');
+        $this->get('/admin/users/create')->assertRedirect('/login');
+        $this->post('/admin/users')->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function non_admin_users_cannot_access_admin_users_section()
+    {
+        $user = User::factory()->create(['user_type' => User::CANDIDATE]); // Or EMPLOYER
+        $this->actingAs($user)->get('/admin/users')->assertStatus(403); // Or appropriate redirect/error
+        $this->actingAs($user)->get('/admin/users/create')->assertStatus(403);
+        // Add checks for other admin actions (store, edit, update, destroy)
+    }
+
+    /** @test */
+    public function admin_can_view_admin_users_list()
+    {
+        $response = $this->actingAs($this->adminUser)->get('/admin/users');
+        $response->assertStatus(200);
+        $response->assertViewIs('admins.index'); // Assuming view name
+    }
+
+    /** @test */
+    public function admin_can_view_create_admin_user_form()
+    {
+        $response = $this->actingAs($this->adminUser)->get('/admin/users/create');
+        $response->assertStatus(200);
+        $response->assertViewIs('admins.create'); // Assuming view name
+    }
+
+    /** @test */
+    public function admin_can_create_a_new_admin_user()
+    {
+        $newAdminData = [
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'phone' => $this->faker->phoneNumber, // Add other required fields if necessary
+            'is_active' => true,
+            'user_type' => User::ADMIN,
+        ];
+
+        $response = $this->actingAs($this->adminUser)->post('/admin/users', $newAdminData);
+
+        $response->assertRedirect('/admin/users'); // Assuming redirect to index
+        $response->assertSessionHas('success'); // Check for flash message
+        $this->assertDatabaseHas('users', [
+            'email' => $newAdminData['email'],
+            'user_type' => User::ADMIN,
+        ]);
+    }
+
+    /** @test */
+    public function admin_can_view_edit_admin_user_form()
+    {
+        $adminToEdit = User::factory()->create(['user_type' => User::ADMIN]);
+
+        $response = $this->actingAs($this->adminUser)->get("/admin/users/{$adminToEdit->id}/edit");
+        $response->assertStatus(200);
+        $response->assertViewIs('admins.edit'); // Assuming view name
+        $response->assertSee($adminToEdit->name);
+    }
+
+    /** @test */
+    public function admin_can_update_an_admin_user()
+    {
+        $adminToUpdate = User::factory()->create(['user_type' => User::ADMIN]);
+        $updatedData = [
+            'name' => 'Updated Name',
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'is_active' => false,
+             'user_type' => User::ADMIN, // Required by UpdateAdminRequest
+        ];
+
+        $response = $this->actingAs($this->adminUser)->put("/admin/users/{$adminToUpdate->id}", $updatedData);
+
+        $response->assertRedirect('/admin/users'); // Assuming redirect to index
+        $response->assertSessionHas('success'); // Check for flash message
+        $this->assertDatabaseHas('users', [
+            'id' => $adminToUpdate->id,
+            'name' => 'Updated Name',
+            'email' => $updatedData['email'],
+            'is_active' => false,
+        ]);
+    }
+
+    /** @test */
+    public function admin_can_delete_an_admin_user()
+    {
+        $adminToDelete = User::factory()->create(['user_type' => User::ADMIN]);
+
+        $response = $this->actingAs($this->adminUser)->delete("/admin/users/{$adminToDelete->id}");
+
+        // Adjust assertions based on actual delete behavior (redirect vs JSON response)
+        // If JSON response:
+        $response->assertStatus(200); // or appropriate status
+        $response->assertJson(['success' => true]); // Example JSON response check
+        $this->assertDatabaseMissing('users', ['id' => $adminToDelete->id]);
+
+        // If redirect:
+        // $response->assertRedirect('/admin/users');
+        // $response->assertSessionHas('success');
+        // $this->assertDatabaseMissing('users', ['id' => $adminToDelete->id]);
+    }
+
+     /** @test */
+    public function admin_cannot_delete_self()
+    {
+        $response = $this->actingAs($this->adminUser)->delete("/admin/users/{$this->adminUser->id}");
+
+        // Assert that the delete was forbidden or failed
+        // This depends on implementation (e.g., status code, JSON error, no DB change)
+        $response->assertStatus(403); // Or 500, or check JSON error
+        $this->assertDatabaseHas('users', ['id' => $this->adminUser->id]);
     }
 }

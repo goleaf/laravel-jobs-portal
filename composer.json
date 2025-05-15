@@ -23,7 +23,8 @@
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
-        "spatie/laravel-ignition": "^2.4"
+        "spatie/laravel-ignition": "^2.4",
+        "barryvdh/laravel-debugbar": "^3.9"
     },
     "autoload": {
         "psr-4": {

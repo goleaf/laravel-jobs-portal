@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -165,5 +166,105 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertRedirect('/home');
+    }
+
+    /** @test */
+    public function registration_requires_name_email_password()
+    {
+        $response = $this->post('/register', [
+            'password_confirmation' => 'password123',
+            'user_type' => User::CANDIDATE,
+            'agree_terms_policy' => '1',
+        ]);
+        $response->assertSessionHasErrors(['name', 'email', 'password']);
+
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'user_type' => User::CANDIDATE,
+            'agree_terms_policy' => '1',
+        ]);
+        $response->assertSessionHasErrors('email');
+
+         $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'user_type' => User::CANDIDATE,
+            'agree_terms_policy' => '1',
+        ]);
+        $response->assertSessionHasErrors('password');
+    }
+
+    /** @test */
+    public function registration_requires_valid_email()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'not-an-email',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'user_type' => User::CANDIDATE,
+            'agree_terms_policy' => '1',
+        ]);
+        $response->assertSessionHasErrors('email');
+    }
+
+     /** @test */
+    public function registration_requires_password_confirmation()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => $this->faker->safeEmail,
+            'password' => 'password123',
+            'password_confirmation' => 'differentpassword',
+            'user_type' => User::CANDIDATE,
+            'agree_terms_policy' => '1',
+        ]);
+        $response->assertSessionHasErrors('password');
+    }
+
+    /** @test */
+    public function registration_requires_agreeing_to_terms()
+    {
+        $response = $this->post('/register', [
+            'name' => $this->faker->name,
+            'email' => $this->faker->safeEmail,
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'user_type' => User::CANDIDATE,
+            // Missing 'agree_terms_policy'
+        ]);
+        $response->assertSessionHasErrors('agree_terms_policy');
+    }
+
+    /** @test */
+    public function login_requires_email_and_password()
+    {
+        $response = $this->post('/login', [
+            'email' => 'test@example.com',
+        ]);
+        $response->assertSessionHasErrors('password');
+
+        $response = $this->post('/login', [
+            'password' => 'password123',
+        ]);
+        $response->assertSessionHasErrors('email');
+    }
+
+    /** @test */
+    public function authenticated_user_is_redirected_from_login_page()
+    {
+        $user = User::factory()->create(['is_active' => true]);
+        $response = $this->actingAs($user)->get('/login');
+        $response->assertRedirect('/dashboard'); // Assuming '/dashboard' is the intended redirect
+    }
+
+    /** @test */
+    public function authenticated_user_is_redirected_from_register_page()
+    {
+        $user = User::factory()->create(['is_active' => true]);
+        $response = $this->actingAs($user)->get('/register');
+        $response->assertRedirect('/dashboard'); // Assuming '/dashboard' is the intended redirect
     }
 }

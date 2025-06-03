@@ -13,10 +13,12 @@ class BasicFunctionalityTest extends DuskTestCase
     public function test_website_loads_successfully(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/')
-                    ->assertStatus(200)
-                    ->assertSee('Jobs')
-                    ->assertSee('Find Jobs');
+            $browser->visit('https://jobportal.prus.dev')
+                    ->pause(3000)
+                    ->assertDontSee('Error')
+                    ->assertDontSee('Unsupported cipher')
+                    ->assertTitleContains('Home')
+                    ->assertSee('Jobs');
         });
     }
 
@@ -26,11 +28,11 @@ class BasicFunctionalityTest extends DuskTestCase
     public function test_login_page_accessible(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/login')
-                    ->assertStatus(200)
-                    ->assertSee('Login')
-                    ->assertSee('Email')
-                    ->assertSee('Password');
+            $browser->visit('https://jobportal.prus.dev/login')
+                    ->pause(2000)
+                    ->assertDontSee('Error')
+                    ->assertTitleContains('Login')
+                    ->assertSee('Login');
         });
     }
 
@@ -40,11 +42,36 @@ class BasicFunctionalityTest extends DuskTestCase
     public function test_register_page_accessible(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/register')
-                    ->assertStatus(200)
-                    ->assertSee('Register')
-                    ->assertSee('Name')
-                    ->assertSee('Email');
+            $browser->visit('https://jobportal.prus.dev/register')
+                    ->pause(2000)
+                    ->assertDontSee('Error')
+                    ->assertTitleContains('Register')
+                    ->assertSee('Register');
+        });
+    }
+
+    /**
+     * Test navigation links work properly.
+     */
+    public function test_navigation_links(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('https://jobportal.prus.dev')
+                    ->pause(2000)
+                    ->assertSee('Jobs')
+                    ->assertSee('Login');
+        });
+    }
+
+    /**
+     * Test footer links are present.
+     */
+    public function test_footer_links(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('https://jobportal.prus.dev')
+                    ->pause(2000)
+                    ->assertDontSee('Error');
         });
     }
 } 

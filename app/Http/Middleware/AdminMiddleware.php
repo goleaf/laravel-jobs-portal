@@ -20,7 +20,7 @@ class AdminMiddleware
         }
 
         // Check if user has admin role (assuming you have a role system)
-        if (auth()->user()->hasRole && auth()->user()->hasRole('Admin')) {
+        if (method_exists(auth()->user(), 'hasRole') && auth()->user()->hasRole('Admin')) {
             return $next($request);
         }
 

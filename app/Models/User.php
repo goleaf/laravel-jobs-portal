@@ -182,7 +182,6 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-        'user_type',
         'dob',
         'gender',
         'country_id',
@@ -231,7 +230,6 @@ class User extends Authenticatable
     {
         return [
             'id' => 'integer',
-            'user_type' => 'integer',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'dob' => 'date',
@@ -253,13 +251,6 @@ class User extends Authenticatable
     protected static function boot(): void
     {
         parent::boot();
-
-        // Automatically hash passwords
-        static::creating(function ($user) {
-            if (!$user->password) {
-                $user->password = bcrypt(str()->random(16));
-            }
-        });
 
         // Clear cache when user is updated
         static::updated(function ($user) {
@@ -414,17 +405,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope for users by type.
+     * Scope for users by role name.
      */
-    public function scopeByType($query, int $type)
+    public function scopeByRole($query, string $roleName)
     {
-        return $query->whereHas('roles', function ($q) use ($type) {
-            $q->where('name', match($type) {
-                self::ADMIN => 'admin',
-                self::EMPLOYER => 'employer', 
-                self::CANDIDATE => 'candidate',
-                default => 'candidate'
-            });
+        return $query->whereHas('roles', function ($q) use ($roleName) {
+            $q->where('name', $roleName);
         });
     }
 

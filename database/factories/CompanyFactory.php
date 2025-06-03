@@ -11,6 +11,7 @@ use App\Models\Industry;
 use App\Models\OwnerShipType;
 use App\Models\CompanySize;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Company>
@@ -28,27 +29,23 @@ class CompanyFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => fake()->company(),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
-            'website' => fake()->url(),
-            'location' => fake()->address(),
-            'details' => fake()->text(500),
+            'ceo' => fake()->name(),
+            'no_of_offices' => fake()->numberBetween(1, 10),
             'industry_id' => 1, // Default industry
             'ownership_type_id' => 1, // Default ownership type
             'company_size_id' => 1, // Default company size
-            'country_id' => 1, // Default country
-            'state_id' => 1, // Default state  
-            'city_id' => 1, // Default city
             'established_in' => fake()->year(),
-            'ceo' => fake()->name(),
-            'is_active' => true,
+            'details' => fake()->text(500),
+            'website' => fake()->url(),
+            'location' => fake()->address(),
             'is_featured' => false,
-            'twitter_url' => fake()->url(),
+            'fax' => fake()->phoneNumber(),
             'facebook_url' => fake()->url(),
+            'twitter_url' => fake()->url(),
             'linkedin_url' => fake()->url(),
             'google_plus_url' => fake()->url(),
             'pinterest_url' => fake()->url(),
+            'unique_id' => Str::random(10),
         ];
     }
 

@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->string('image_path')->nullable()->after('expected_salary');
-            $table->string('resume_path')->nullable()->after('image_path');
+            if (!Schema::hasColumn('candidates', 'image_path')) {
+                $table->string('image_path')->nullable()->after('expected_salary');
+            }
+            if (!Schema::hasColumn('candidates', 'resume_path')) {
+                $table->string('resume_path')->nullable()->after('image_path');
+            }
         });
     }
 
@@ -23,8 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->dropColumn('image_path');
-            $table->dropColumn('resume_path');
+            if (Schema::hasColumn('candidates', 'image_path')) {
+                $table->dropColumn('image_path');
+            }
+            if (Schema::hasColumn('candidates', 'resume_path')) {
+                $table->dropColumn('resume_path');
+            }
         });
     }
 };

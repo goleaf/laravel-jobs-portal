@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\PasswordReset;
 use App\Notifications\UserVerifyNotification;
 use App\Traits\HasFiles;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -129,6 +130,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use Billable;
+    use HasFactory;
     use HasFiles;
     use HasRoles;
     use Notifiable;

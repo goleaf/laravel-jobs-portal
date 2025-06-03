@@ -3,6 +3,7 @@
 use App\Models\Candidate;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -13,6 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Only proceed if media table exists (it was dropped in a later migration)
+        if (!Schema::hasTable('media')) {
+            return;
+        }
+
         // Get all media items for candidates (resumes)
         $mediaItems = DB::table('media')
             ->where('model_type', 'App\\Models\\Candidate')

@@ -182,6 +182,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
+        // Admin users management
+        Route::resource('admin', App\Http\Controllers\AdminController::class);
+        
         // Candidates management
         Route::resource('candidates', App\Http\Controllers\Web\CandidateController::class);
         

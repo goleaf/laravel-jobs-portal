@@ -13,7 +13,7 @@
     </a>
 </li>
 <li class="nav-item {{ Request::is('admin/admin*') ? 'active' : '' }}">
-    <a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('admin.index') }}">
+    <a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('admin.admin.index') }}">
         <span class="aside-menu-icon pe-3"><i class="fa-solid fa-user-tie"></i></span>
         <span class="aside-menu-title">{{ __('messages.candidate.admins') }}</span>
     </a>

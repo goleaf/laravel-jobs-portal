@@ -13,7 +13,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_api_documentation_accessible(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/api/documentation')
+            $browser->visit('https://jobportal.prus.dev/api/documentation')
                     ->pause(2000)
                     ->assertDontSee('Error')
                     ->assertPresent('body');
@@ -26,7 +26,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_swagger_docs_accessible(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/docs')
+            $browser->visit('https://jobportal.prus.dev/docs')
                     ->pause(2000)
                     ->assertDontSee('Error')
                     ->assertPresent('body');
@@ -39,7 +39,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_sanctum_csrf_cookie(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/sanctum/csrf-cookie')
+            $browser->visit('https://jobportal.prus.dev/sanctum/csrf-cookie')
                     ->pause(2000)
                     ->assertDontSee('Error');
         });
@@ -52,7 +52,7 @@ class ApiRoutesTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             // Test /api/user route (should require authentication)
-            $browser->visit('/api/user')
+            $browser->visit('https://jobportal.prus.dev/api/user')
                     ->pause(2000);
             
             // Should receive unauthorized response or redirect
@@ -70,7 +70,7 @@ class ApiRoutesTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             // Test Livewire JavaScript file
-            $browser->visit('/livewire/livewire.js')
+            $browser->visit('https://jobportal.prus.dev/livewire/livewire.js')
                     ->pause(1000);
             
             // Should load JavaScript content
@@ -84,7 +84,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_horizon_routes(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/horizon')
+            $browser->visit('https://jobportal.prus.dev/horizon')
                     ->pause(2000);
             
             // Horizon might be protected, so just check it doesn't crash
@@ -98,7 +98,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_telescope_routes(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/telescope')
+            $browser->visit('https://jobportal.prus.dev/telescope')
                     ->pause(2000);
             
             // Telescope might be protected, so just check it doesn't crash
@@ -112,7 +112,7 @@ class ApiRoutesTest extends DuskTestCase
     public function test_pulse_routes(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/pulse')
+            $browser->visit('https://jobportal.prus.dev/pulse')
                     ->pause(2000);
             
             // Pulse might be protected, so just check it doesn't crash

@@ -125,8 +125,15 @@ class UserModelOptimizedTest extends UnitTestCase
     public function it_has_language_constants()
     {
         $expectedLanguages = [
-            1 => 'English',
-            2 => 'Lithuanian',
+            'ar' => 'Arabic',
+            'zh' => 'Chinese',
+            'en' => 'English',
+            'fr' => 'French',
+            'de' => 'German',
+            'pt' => 'Portuguese',
+            'ru' => 'Russian',
+            'es' => 'Spanish',
+            'tr' => 'Turkish',
         ];
 
         $this->assertEquals($expectedLanguages, User::LANGUAGES);
@@ -135,17 +142,13 @@ class UserModelOptimizedTest extends UnitTestCase
     /** @test */
     public function it_has_profile_constant()
     {
-        $this->assertEquals('profile/', User::PROFILE_PATH);
+        $this->assertEquals('profile-pictures', User::PROFILE);
     }
 
     /** @test */
     public function it_has_mode_constants()
     {
-        $expectedModes = [
-            1 => 'Light',
-            2 => 'Dark',
-        ];
-
-        $this->assertEquals($expectedModes, User::MODE);
+        $this->assertEquals(1, User::DARK_MODE);
+        $this->assertEquals(0, User::LIGHT_MODE);
     }
 } 

@@ -8,6 +8,7 @@
         "@tailwindcss/forms": "^0.5.10",
         "@types/bootstrap": "^5.2.10",
         "@types/jquery": "^3.5.32",
+        "@types/node": "^22.15.29",
         "@vitejs/plugin-vue2": "^2.2.0",
         "axios": "^1.6.1",
         "bootstrap": "^5.3.6",
@@ -53,6 +54,7 @@
         "tailwindcss": "^4.0.17",
         "timepicker": "^1.13.18",
         "toastr": "^2.1.4",
-        "web-vitals": "^5.0.2"
+        "web-vitals": "^5.0.2",
+        "workbox-webpack-plugin": "^7.3.0"
     }
 }

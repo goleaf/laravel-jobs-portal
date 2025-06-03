@@ -126,13 +126,13 @@ Route::get('/companies', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('dashboard.index');
     })->name('dashboard');
 
     // Candidate routes
     Route::prefix('candidate')->name('candidate.')->group(function () {
         Route::get('/profile', function () {
-            return view('candidate.profile');
+            return view('candidate.profile.index');
         })->name('profile');
 
         Route::get('/profile/edit', function () {
@@ -140,11 +140,11 @@ Route::middleware(['auth'])->group(function () {
         })->name('profile.edit');
 
         Route::get('/applied-jobs', function () {
-            return view('candidate.applied-jobs');
+            return view('candidate.applied_job.index');
         })->name('applied-jobs');
 
         Route::get('/favorite-jobs', function () {
-            return view('candidate.favorite-jobs');
+            return view('candidate.favourite_jobs.index');
         })->name('favorite-jobs');
 
         Route::get('/job-alerts', function () {
@@ -155,11 +155,11 @@ Route::middleware(['auth'])->group(function () {
     // Employer routes
     Route::prefix('employer')->name('employer.')->group(function () {
         Route::get('/company', function () {
-            return view('employer.company');
+            return view('employer.companies.edit');
         })->name('company');
 
         Route::get('/company/edit', function () {
-            return view('employer.company-edit');
+            return view('employer.companies.edit');
         })->name('company.edit');
 
         Route::prefix('jobs')->name('jobs.')->group(function () {
@@ -172,7 +172,7 @@ Route::middleware(['auth'])->group(function () {
             })->name('create');
 
             Route::get('/applications', function () {
-                return view('employer.jobs.applications');
+                return view('employer.job_applications.index');
             })->name('applications');
         });
     });

@@ -27,7 +27,7 @@
                 <div class=" mb-5">
                     {{ Form::label('plan_currency', __('messages.plan.currency').(':'), ['class' => 'form-label']) }}
                     <span class="required"></span>
-                    {!! Form::select('salary_currency_id',[], null, ['id'=>'editCurrency','required','class' => 'form-selectselect2Selector','placeholder' => __('messages.company.select_currency')]) !!}
+                    {!! Form::select('salary_currency_id',[], null, ['id'=>'editCurrency','required','class' => 'form-select select2Selector','placeholder' => __('messages.company.select_currency')]) !!}
                 </div>
                 <div class=" mb-5">
                     {{ Form::label('amount', __('messages.plan.amount').(':'), ['class' => 'form-label']) }}

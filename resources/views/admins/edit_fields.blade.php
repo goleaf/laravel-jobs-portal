@@ -42,7 +42,7 @@
     <div class="d-block">
         <div class="image-picker">
             <div class="image previewImage" id="logoPreview"
-                 style="background-image: url('{{!empty($user->avatar)) ? $user->avatar : asset('assets/img/infyom-logo.png'}}')">
+                 style="background-image: url('{{!empty($user->avatar) ? $user->avatar : asset('assets/img/infyom-logo.png'}}')">
             </div>
             <span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
                   data-placement="top" data-bs-original-title="{{__("messages.tooltip.change_profile")}}">

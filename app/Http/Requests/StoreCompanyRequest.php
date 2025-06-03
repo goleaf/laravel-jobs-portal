@@ -3,21 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateCompanyRequest extends FormRequest
+class StoreCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $company = $this->route('company');
-        
-        return auth()->check() && (
-            auth()->user()->hasRole('Admin') || 
-            (auth()->user()->hasRole('Employer') && auth()->user()->id === $company->user_id)
-        );
+        return auth()->check() && (auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Employer'));
     }
 
     /**
@@ -25,33 +19,26 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function rules(): array
     {
-        $company = $this->route('company');
-        
         return [
             // User data
-            'first_name' => 'sometimes|required|string|max:50',
-            'last_name' => 'sometimes|required|string|max:50',
-            'email' => [
-                'sometimes',
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($company->user_id)
-            ],
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:8|confirmed',
             'phone' => 'nullable|string|max:20',
             'country_id' => 'nullable|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
             
             // Company data
-            'ceo' => 'sometimes|required|string|max:180',
-            'industry_id' => 'sometimes|required|exists:industries,id',
-            'ownership_type_id' => 'sometimes|required|exists:ownership_types,id',
-            'company_size_id' => 'sometimes|required|exists:company_sizes,id',
-            'established_in' => 'sometimes|required|integer|min:1900|max:' . date('Y'),
+            'ceo' => 'required|string|max:180',
+            'industry_id' => 'required|exists:industries,id',
+            'ownership_type_id' => 'required|exists:ownership_types,id',
+            'company_size_id' => 'required|exists:company_sizes,id',
+            'established_in' => 'required|integer|min:1900|max:' . date('Y'),
             'website' => 'nullable|url|max:255',
-            'location' => 'sometimes|required|string|max:255',
-            'no_of_offices' => 'sometimes|required|integer|min:1|max:1000',
+            'location' => 'required|string|max:255',
+            'no_of_offices' => 'required|integer|min:1|max:1000',
             'details' => 'nullable|string|max:5000',
             'is_active' => 'boolean',
         ];
@@ -67,6 +54,9 @@ class UpdateCompanyRequest extends FormRequest
             'last_name.required' => 'Last name is required.',
             'email.required' => 'Email address is required.',
             'email.unique' => 'This email address is already registered.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
             'ceo.required' => 'CEO name is required.',
             'industry_id.required' => 'Please select an industry.',
             'industry_id.exists' => 'Selected industry is invalid.',
@@ -109,10 +99,8 @@ class UpdateCompanyRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if ($this->has('is_active')) {
-            $this->merge([
-                'is_active' => $this->boolean('is_active'),
-            ]);
-        }
+        $this->merge([
+            'is_active' => $this->boolean('is_active', true),
+        ]);
     }
-}
+} 

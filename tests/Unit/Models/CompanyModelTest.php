@@ -4,9 +4,27 @@ namespace Tests\Unit\Models;
 
 use App\Models\Company;
 use PHPUnit\Framework\TestCase;
+use App\Models\User;
+use App\Models\Industry;
+use App\Models\CompanySize;
+use App\Models\OwnerShipType;
+use App\Models\Job;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CompanyModelTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create required data for tests
+        $this->industry = Industry::factory()->create();
+        $this->companySize = CompanySize::factory()->create();
+        $this->ownershipType = OwnerShipType::factory()->create();
+    }
+
     /** @test */
     public function it_has_status_constants()
     {
@@ -177,5 +195,150 @@ class CompanyModelTest extends TestCase
         ];
 
         $this->assertEquals($expectedRules, Company::$rules);
+    }
+
+    public function test_company_belongs_to_user(): void
+    {
+        $user = User::factory()->create();
+        $company = Company::factory()->create([
+            'user_id' => $user->id,
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        $this->assertInstanceOf(User::class, $company->user);
+        $this->assertEquals($user->id, $company->user->id);
+    }
+
+    public function test_company_belongs_to_industry(): void
+    {
+        $company = Company::factory()->create([
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        $this->assertInstanceOf(Industry::class, $company->industry);
+        $this->assertEquals($this->industry->name, $company->industry->name);
+    }
+
+    public function test_company_belongs_to_company_size(): void
+    {
+        $company = Company::factory()->create([
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        $this->assertInstanceOf(CompanySize::class, $company->companySize);
+        $this->assertEquals($this->companySize->size, $company->companySize->size);
+    }
+
+    public function test_company_belongs_to_ownership_type(): void
+    {
+        $company = Company::factory()->create([
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        $this->assertInstanceOf(OwnerShipType::class, $company->ownerShipType);
+        $this->assertEquals($this->ownershipType->name, $company->ownerShipType->name);
+    }
+
+    public function test_company_has_many_jobs(): void
+    {
+        $company = Company::factory()->create([
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        Job::factory()->count(3)->create(['company_id' => $company->id]);
+
+        $this->assertCount(3, $company->jobs);
+        $this->assertInstanceOf(Job::class, $company->jobs->first());
+    }
+
+    public function test_company_fillable_attributes(): void
+    {
+        $fillableAttributes = [
+            'user_id', 'ceo', 'industry_id', 'ownership_type_id', 
+            'company_size_id', 'established_in', 'details', 'website',
+            'location', 'no_of_offices', 'unique_id'
+        ];
+
+        $company = new Company();
+        
+        $this->assertEquals($fillableAttributes, $company->getFillable());
+    }
+
+    public function test_company_creation_with_all_attributes(): void
+    {
+        $user = User::factory()->create();
+        
+        $companyData = [
+            'user_id' => $user->id,
+            'ceo' => 'John Doe',
+            'industry_id' => $this->industry->id,
+            'ownership_type_id' => $this->ownershipType->id,
+            'company_size_id' => $this->companySize->id,
+            'established_in' => 2020,
+            'website' => 'https://example.com',
+            'location' => 'New York',
+            'no_of_offices' => 5,
+            'details' => 'A great company',
+            'unique_id' => 'john-doe-2024',
+        ];
+
+        $company = Company::create($companyData);
+
+        $this->assertDatabaseHas('companies', $companyData);
+        $this->assertEquals('John Doe', $company->ceo);
+        $this->assertEquals(2020, $company->established_in);
+        $this->assertEquals('https://example.com', $company->website);
+    }
+
+    public function test_company_active_scope(): void
+    {
+        $activeUser = User::factory()->create(['is_active' => true]);
+        $inactiveUser = User::factory()->create(['is_active' => false]);
+        
+        $activeCompany = Company::factory()->create([
+            'user_id' => $activeUser->id,
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+        
+        $inactiveCompany = Company::factory()->create([
+            'user_id' => $inactiveUser->id,
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        $activeCompanies = Company::whereHas('user', fn($q) => $q->where('is_active', true))->get();
+
+        $this->assertTrue($activeCompanies->contains($activeCompany));
+        $this->assertFalse($activeCompanies->contains($inactiveCompany));
+    }
+
+    public function test_company_active_jobs_relationship(): void
+    {
+        $company = Company::factory()->create([
+            'industry_id' => $this->industry->id,
+            'company_size_id' => $this->companySize->id,
+            'ownership_type_id' => $this->ownershipType->id,
+        ]);
+
+        // Create jobs with different statuses
+        Job::factory()->create(['company_id' => $company->id, 'status' => 1]); // Active
+        Job::factory()->create(['company_id' => $company->id, 'status' => 1]); // Active
+        Job::factory()->create(['company_id' => $company->id, 'status' => 2]); // Closed
+
+        $this->assertCount(3, $company->jobs);
+        $this->assertCount(2, $company->jobs()->where('status', 1)->get());
     }
 } 

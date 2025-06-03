@@ -232,14 +232,22 @@ class Job extends Model
 
     protected $table = 'jobs';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'job_id',
         'job_title',
         'description',
-        'salary_from',
-        'salary_to',
+        'job_id',
         'company_id',
         'job_category_id',
+        'country_id',
+        'state_id', 
+        'city_id',
+        'salary_from',
+        'salary_to',
         'currency_id',
         'salary_period_id',
         'job_type_id',
@@ -247,191 +255,403 @@ class Job extends Model
         'functional_area_id',
         'job_shift_id',
         'degree_level_id',
-        'position',
         'experience',
         'job_expiry_date',
         'no_preference',
         'hide_salary',
         'is_freelance',
         'is_suspended',
-        'country_id',
-        'state_id',
-        'city_id',
         'status',
         'is_created_by_admin',
-        'last_change',
-        'key_responsibilities',
     ];
 
     /**
-     * @var array
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public $casts = [
-        'id' => 'integer',
-        'job_id' => 'string',
-        'job_title' => 'string',
-        'company_id' => 'integer',
-        'job_category_id' => 'integer',
-        'currency_id' => 'integer',
-        'salary_period_id' => 'integer',
-        'job_type_id' => 'integer',
-        'career_level_id' => 'integer',
-        'functional_area_id' => 'integer',
-        'job_shift_id' => 'integer',
-        'degree_level_id' => 'integer',
-        'position' => 'integer',
-        'experience' => 'integer',
-        'salary_from' => 'double',
-        'salary_to' => 'double',
-        'country_id' => 'integer',
-        'city_id' => 'integer',
-        'state_id' => 'integer',
-        'description' => 'string',
-        'job_expiry_date' => 'date',
-        'no_preference' => 'integer',
-        'hide_salary' => 'boolean',
-        'is_freelance' => 'boolean',
-        'is_suspended' => 'boolean',
-        'status' => 'integer',
-        'is_created_by_admin' => 'integer',
-        'last_change' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'company_id' => 'integer',
+            'job_category_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'currency_id' => 'integer',
+            'salary_period_id' => 'integer',
+            'job_type_id' => 'integer',
+            'career_level_id' => 'integer',
+            'functional_area_id' => 'integer',
+            'job_shift_id' => 'integer',
+            'degree_level_id' => 'integer',
+            'experience' => 'integer',
+            'job_expiry_date' => 'date',
+            'no_preference' => 'integer',
+            'hide_salary' => 'boolean',
+            'is_freelance' => 'boolean',
+            'is_suspended' => 'boolean',
+            'status' => 'integer',
+            'is_created_by_admin' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
-    protected $appends = ['country_name', 'state_name', 'city_name'];
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
 
-    protected $with = [];
+        // Generate unique job ID
+        static::creating(function ($job) {
+            if (!$job->job_id) {
+                $job->job_id = 'JOB-' . strtoupper(uniqid());
+            }
+        });
 
+        // Clear cache when job is updated
+        static::updated(function ($job) {
+            cache()->forget("job.{$job->id}");
+            cache()->forget("job.featured");
+            cache()->forget("jobs.active");
+        });
+
+        // Clear cache when job is deleted
+        static::deleted(function ($job) {
+            cache()->forget("job.{$job->id}");
+            cache()->forget("job.featured");
+            cache()->forget("jobs.active");
+        });
+    }
+
+    /**
+     * Get the job's country with caching.
+     */
     public function country(): BelongsTo
     {
-        return $this->belongsTo(Country::class, 'country_id');
+        return $this->belongsTo(Country::class)->withDefault();
     }
 
+    /**
+     * Get the job's state with caching.
+     */
     public function state(): BelongsTo
     {
-        return $this->belongsTo(State::class, 'state_id');
+        return $this->belongsTo(State::class)->withDefault();
     }
 
+    /**
+     * Get the job's city with caching.
+     */
     public function city(): BelongsTo
     {
-        return $this->belongsTo(City::class, 'city_id');
+        return $this->belongsTo(City::class)->withDefault();
     }
 
-    public function admin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    /**
+     * Get the admin who created this job.
+     */
+    public function admin(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'last_change');
+        return $this->hasOne(User::class, 'id', 'company_id')
+                    ->where('is_created_by_admin', true);
     }
 
-    public function getCountryNameAttribute()
+    /**
+     * Get cached country name.
+     */
+    public function getCountryNameAttribute(): ?string
     {
-        if (! empty($this->country)) {
-            return $this->country->name;
-        }
+        return cache()->remember("job.{$this->id}.country_name", 3600, function () {
+            return $this->country?->name;
+        });
     }
 
-    public function getStateNameAttribute()
+    /**
+     * Get cached state name.
+     */
+    public function getStateNameAttribute(): ?string
     {
-        if (! empty($this->state)) {
-            return $this->state->name;
-        }
+        return cache()->remember("job.{$this->id}.state_name", 3600, function () {
+            return $this->state?->name;
+        });
     }
 
-    public function getCityNameAttribute()
+    /**
+     * Get cached city name.
+     */
+    public function getCityNameAttribute(): ?string
     {
-        if (! empty($this->city)) {
-            return $this->city->name;
-        }
+        return cache()->remember("job.{$this->id}.city_name", 3600, function () {
+            return $this->city?->name;
+        });
     }
 
+    /**
+     * Get the job's company with optimized loading.
+     */
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(Company::class)->withDefault();
     }
 
+    /**
+     * Scope for filtering by status.
+     */
     public function scopeStatus(Builder $query, int $status): Builder
     {
         return $query->where('status', $status);
     }
 
+    /**
+     * Scope for active jobs.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_OPEN)
+                    ->where('is_suspended', false)
+                    ->where('job_expiry_date', '>=', now());
+    }
+
+    /**
+     * Scope for featured jobs.
+     */
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->whereHas('activeFeatured');
+    }
+
+    /**
+     * Scope for jobs by location.
+     */
+    public function scopeByLocation(Builder $query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null): Builder
+    {
+        if ($countryId) {
+            $query->where('country_id', $countryId);
+        }
+        if ($stateId) {
+            $query->where('state_id', $stateId);
+        }
+        if ($cityId) {
+            $query->where('city_id', $cityId);
+        }
+        return $query;
+    }
+
+    /**
+     * Scope for jobs by salary range.
+     */
+    public function scopeBySalaryRange(Builder $query, ?float $minSalary = null, ?float $maxSalary = null): Builder
+    {
+        if ($minSalary) {
+            $query->where('salary_from', '>=', $minSalary);
+        }
+        if ($maxSalary) {
+            $query->where('salary_to', '<=', $maxSalary);
+        }
+        return $query;
+    }
+
+    /**
+     * Get the job's currency.
+     */
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(SalaryCurrency::class, 'currency_id');
+        return $this->belongsTo(SalaryCurrency::class, 'currency_id')->withDefault();
     }
 
+    /**
+     * Get the job's salary period.
+     */
     public function salaryPeriod(): BelongsTo
     {
-        return $this->belongsTo(SalaryPeriod::class, 'salary_period_id');
+        return $this->belongsTo(SalaryPeriod::class)->withDefault();
     }
 
+    /**
+     * Get the job's type.
+     */
     public function jobType(): BelongsTo
     {
-        return $this->belongsTo(JobType::class, 'job_type_id');
+        return $this->belongsTo(JobType::class)->withDefault();
     }
 
+    /**
+     * Get the job's career level.
+     */
     public function careerLevel(): BelongsTo
     {
-        return $this->belongsTo(CareerLevel::class, 'career_level_id');
+        return $this->belongsTo(CareerLevel::class)->withDefault();
     }
 
+    /**
+     * Get the job's functional area.
+     */
     public function functionalArea(): BelongsTo
     {
-        return $this->belongsTo(FunctionalArea::class, 'functional_area_id');
+        return $this->belongsTo(FunctionalArea::class)->withDefault();
     }
 
+    /**
+     * Get the job's shift.
+     */
     public function jobShift(): BelongsTo
     {
-        return $this->belongsTo(JobShift::class, 'job_shift_id');
+        return $this->belongsTo(JobShift::class)->withDefault();
     }
 
+    /**
+     * Get the job's degree level requirement.
+     */
     public function degreeLevel(): BelongsTo
     {
-        return $this->belongsTo(RequiredDegreeLevel::class, 'degree_level_id');
+        return $this->belongsTo(RequiredDegreeLevel::class, 'degree_level_id')->withDefault();
     }
 
+    /**
+     * Get the job's skills with efficient loading.
+     */
     public function jobsSkill(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class, 'jobs_skill', 'job_id', 'skill_id');
+        return $this->belongsToMany(Skill::class, 'job_skills', 'job_id', 'skill_id');
     }
 
+    /**
+     * Get the job's tags with efficient loading.
+     */
     public function jobsTag(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'jobs_tag', 'job_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'job_tags', 'job_id', 'tag_id');
     }
 
+    /**
+     * Get job applications with optimized loading.
+     */
     public function appliedJobs(): HasMany
     {
-        return $this->hasMany(JobApplication::class, 'job_id', 'id');
+        return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * Get the job's category.
+     */
     public function jobCategory(): BelongsTo
     {
-        return $this->belongsTo(JobCategory::class, 'job_category_id');
+        return $this->belongsTo(JobCategory::class)->withDefault();
     }
 
+    /**
+     * Get the full location string.
+     */
     public function getFullLocationAttribute(): string
     {
-        $location = '';
-        if (! empty($this->city)) {
-            $location = $this->city->name.', ';
-        }
-
-        if (! empty($this->state)) {
-            $location = $location.$this->state->name.', ';
-        }
-
-        if (! empty($this->country)) {
-            $location = $location.$this->country->name;
-        }
-
-        return $location;
+        return cache()->remember("job.{$this->id}.full_location", 3600, function () {
+            $location = [];
+            
+            if ($this->city_name) {
+                $location[] = $this->city_name;
+            }
+            if ($this->state_name) {
+                $location[] = $this->state_name;
+            }
+            if ($this->country_name) {
+                $location[] = $this->country_name;
+            }
+            
+            return implode(', ', $location) ?: 'Remote';
+        });
     }
 
+    /**
+     * Get the job's featured record.
+     */
     public function featured(): MorphOne
     {
         return $this->morphOne(FeaturedRecord::class, 'owner');
     }
 
+    /**
+     * Get the job's active featured record.
+     */
     public function activeFeatured(): MorphOne
     {
-        return $this->morphOne(FeaturedRecord::class, 'owner')->where('end_time', '>', \Carbon\Carbon::now());
+        return $this->morphOne(FeaturedRecord::class, 'owner')
+                    ->where('start_time', '<=', now())
+                    ->where('end_time', '>=', now());
+    }
+
+    /**
+     * Check if job is expired.
+     */
+    public function isExpired(): bool
+    {
+        return $this->job_expiry_date < now();
+    }
+
+    /**
+     * Check if job is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_OPEN && 
+               !$this->is_suspended && 
+               !$this->isExpired();
+    }
+
+    /**
+     * Check if job is featured.
+     */
+    public function isFeatured(): bool
+    {
+        return $this->activeFeatured()->exists();
+    }
+
+    /**
+     * Get formatted salary range.
+     */
+    public function getFormattedSalaryAttribute(): string
+    {
+        if ($this->hide_salary) {
+            return 'Salary not disclosed';
+        }
+
+        $currency = $this->currency?->currency_symbol ?? '$';
+        $period = $this->salaryPeriod?->period ?? 'month';
+        
+        if ($this->salary_from && $this->salary_to) {
+            return "{$currency}{$this->salary_from} - {$currency}{$this->salary_to} per {$period}";
+        } elseif ($this->salary_from) {
+            return "From {$currency}{$this->salary_from} per {$period}";
+        } elseif ($this->salary_to) {
+            return "Up to {$currency}{$this->salary_to} per {$period}";
+        }
+
+        return 'Salary negotiable';
+    }
+
+    /**
+     * Get job status badge class.
+     */
+    public function getStatusBadgeClassAttribute(): string
+    {
+        return match($this->status) {
+            self::STATUS_DRAFT => 'badge-warning',
+            self::STATUS_OPEN => 'badge-success',
+            self::STATUS_CLOSED => 'badge-danger',
+            self::STATUS_PAUSED => 'badge-info',
+            default => 'badge-secondary'
+        };
+    }
+
+    /**
+     * Get job status text.
+     */
+    public function getStatusTextAttribute(): string
+    {
+        return self::STATUS_ARRAY[$this->status] ?? 'Unknown';
     }
 }

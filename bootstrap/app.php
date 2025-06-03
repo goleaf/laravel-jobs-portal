@@ -11,6 +11,12 @@
 |
 */
 
+// Set memory limit early in the bootstrap process
+if (function_exists('ini_set')) {
+    ini_set('memory_limit', env('MEMORY_LIMIT', '512M'));
+    ini_set('max_execution_time', env('MAX_EXECUTION_TIME', '300'));
+}
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );

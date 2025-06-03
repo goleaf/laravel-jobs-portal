@@ -199,6 +199,7 @@ class User extends Authenticatable
         'google_plus_url',
         'pinterest_url',
         'is_default',
+        'profile_views',
         'region_code',
     ];
 
@@ -209,152 +210,247 @@ class User extends Authenticatable
 
     protected $with = [];
 
-    public function country(): BelongsTo
-    {
-        return $this->belongsTo(Country::class, 'country_id');
-    }
-
-    public function state(): BelongsTo
-    {
-        return $this->belongsTo(State::class, 'state_id');
-    }
-
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'city_id');
-    }
-
-    public function getCountryNameAttribute()
-    {
-        if (! empty($this->country)) {
-            return $this->country->name;
-        }
-    }
-
-    public function getStateNameAttribute()
-    {
-        if (! empty($this->state)) {
-            return $this->state->name;
-        }
-    }
-
-    public function getCityNameAttribute()
-    {
-        if (! empty($this->city)) {
-            return $this->city->name;
-        }
-    }
-
     /**
-     * @return mixed
-     */
-    public function getAvatarAttribute()
-    {
-        $file = $this->getFirstFile(self::PROFILE);
-        if (! empty($file)) {
-            return $file->getUrl();
-        }
-
-        return asset('assets/img/infyom-logo.png');
-    }
-
-    /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
-     * @var array
-     */
-    public static $messages = [
-        'email.regex' => 'Please enter valid email.',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'first_name' => 'string',
-        'last_name' => 'string',
-        'email' => 'string',
-        'password' => 'string',
-        'user_type' => 'integer',
-        'dob' => 'date',
-        'gender' => 'integer',
-        'country_id' => 'integer',
-        'state_id' => 'integer',
-        'city_id' => 'integer',
-        'is_active' => 'boolean',
-        'is_verified' => 'boolean',
-        'phone' => 'string',
-        'email_verified_at' => 'datetime',
-        'owner_id' => 'integer',
-        'owner_type' => 'string',
-        'language' => 'string',
-        'facebook_url' => 'string',
-        'twitter_url' => 'string',
-        'linkedin_url' => 'string',
-        'google_plus_url' => 'string',
-        'pinterest_url' => 'string',
-        'is_default' => 'boolean',
-        'region_code' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'dob' => 'date',
+            'gender' => 'integer',
+            'is_active' => 'boolean',
+            'is_verified' => 'boolean',
+            'is_default' => 'boolean',
+            'profile_views' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'owner_id' => 'integer',
+        ];
+    }
 
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Automatically hash passwords
+        static::creating(function ($user) {
+            if (!$user->password) {
+                $user->password = bcrypt(str()->random(16));
+            }
+        });
+
+        // Clear cache when user is updated
+        static::updated(function ($user) {
+            cache()->forget("user.{$user->id}");
+            cache()->forget("user.profile.{$user->id}");
+        });
+    }
+
+    /**
+     * Get the user's country with caching.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class)->withDefault();
+    }
+
+    /**
+     * Get the user's state with caching.
+     */
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class)->withDefault();
+    }
+
+    /**
+     * Get the user's city with caching.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class)->withDefault();
+    }
+
+    /**
+     * Get cached country name.
+     */
+    public function getCountryNameAttribute(): ?string
+    {
+        return cache()->remember("user.{$this->id}.country_name", 3600, function () {
+            return $this->country?->name;
+        });
+    }
+
+    /**
+     * Get cached state name.
+     */
+    public function getStateNameAttribute(): ?string
+    {
+        return cache()->remember("user.{$this->id}.state_name", 3600, function () {
+            return $this->state?->name;
+        });
+    }
+
+    /**
+     * Get cached city name.
+     */
+    public function getCityNameAttribute(): ?string
+    {
+        return cache()->remember("user.{$this->id}.city_name", 3600, function () {
+            return $this->city?->name;
+        });
+    }
+
+    /**
+     * Get the user's avatar with optimized file handling.
+     */
+    public function getAvatarAttribute(): string
+    {
+        return cache()->remember("user.{$this->id}.avatar", 3600, function () {
+            if ($this->hasMedia(self::PROFILE)) {
+                return $this->getFirstMediaUrl(self::PROFILE);
+            }
+            
+            return asset('assets/img/infyom-logo.png');
+        });
+    }
+
+    /**
+     * Get the user's full name.
+     */
     public function getFullNameAttribute(): string
     {
-        return ucfirst($this->first_name).' '.ucfirst($this->last_name);
+        return trim("{$this->first_name} {$this->last_name}");
     }
 
+    /**
+     * Get the user's candidate profile.
+     */
     public function candidate(): HasOne
     {
-        return $this->hasOne(Candidate::class, 'user_id', 'id');
+        return $this->hasOne(Candidate::class)->withDefault();
     }
 
+    /**
+     * Get the user's company profile.
+     */
     public function company(): HasOne
     {
-        return $this->hasOne(Company::class, 'user_id', 'id');
+        return $this->hasOne(Company::class)->withDefault();
     }
 
+    /**
+     * Get the user's skills with efficient loading.
+     */
     public function candidateSkill(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'candidate_skills', 'user_id', 'skill_id');
     }
 
+    /**
+     * Get the user's languages with efficient loading.
+     */
     public function candidateLanguage(): BelongsToMany
     {
-        return $this->belongsToMany(Language::class, 'candidate_language', 'user_id', 'language_id');
-    }
-
-    public function followings(): HasMany
-    {
-        return $this->hasMany(FavouriteCompany::class, 'user_id');
-    }
-
-    public function getIsOnlineProfileAvailbalAttribute(): bool
-    {
-        if (empty($this->facebook_url) && empty($this->twitter_url) && empty($this->linkedin_url) && empty($this->google_plus_url) && empty($this->pinterest_url)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new UserVerifyNotification($this));  // pass the currently logged in user to the notification class
+        return $this->belongsToMany(Language::class, 'candidate_languages', 'user_id', 'language_id');
     }
 
     /**
-     * Send the password reset notification.
+     * Get the companies this user follows.
+     */
+    public function followings(): HasMany
+    {
+        return $this->hasMany(FavouriteCompany::class);
+    }
+
+    /**
+     * Check if user has online profile available.
+     */
+    public function getIsOnlineProfileAvailbalAttribute(): bool
+    {
+        return cache()->remember("user.{$this->id}.online_profile", 3600, function () {
+            return $this->candidate && 
+                   ($this->candidate->career_level_id || 
+                    $this->candidate->functional_area_id || 
+                    $this->candidateSkill()->exists());
+        });
+    }
+
+    /**
+     * Scope for active users.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for verified users.
+     */
+    public function scopeVerified($query)
+    {
+        return $query->where('is_verified', true);
+    }
+
+    /**
+     * Scope for users by type.
+     */
+    public function scopeByType($query, int $type)
+    {
+        return $query->whereHas('roles', function ($q) use ($type) {
+            $q->where('name', match($type) {
+                self::ADMIN => 'admin',
+                self::EMPLOYER => 'employer', 
+                self::CANDIDATE => 'candidate',
+                default => 'candidate'
+            });
+        });
+    }
+
+    /**
+     * Send email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new UserVerifyNotification());
+    }
+
+    /**
+     * Send password reset notification.
      */
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new PasswordReset($token));
+    }
+
+    /**
+     * Check if user can perform action.
+     */
+    public function canPerformAction(string $action): bool
+    {
+        return match($action) {
+            'create_job' => $this->hasRole('employer') && $this->is_active,
+            'apply_job' => $this->hasRole('candidate') && $this->is_active,
+            'manage_users' => $this->hasRole('admin'),
+            default => false
+        };
     }
 }

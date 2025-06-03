@@ -20,6 +20,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Memory Management
+    |--------------------------------------------------------------------------
+    |
+    | Configure memory limits for the application to handle large datasets
+    | and complex operations without running out of memory.
+    |
+    */
+
+    'memory_limit' => env('MEMORY_LIMIT', '512M'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

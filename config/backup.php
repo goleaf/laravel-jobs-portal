@@ -38,10 +38,10 @@ return [
         ],
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
         'mail' => [
-            'to' => 'your-email@example.com',
+            'to' => env('BACKUP_NOTIFICATION_EMAIL', 'admin@jobportal.prus.dev'),
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'name' => env('MAIL_FROM_NAME', 'Job Portal'),
             ],
         ],
         'slack' => [

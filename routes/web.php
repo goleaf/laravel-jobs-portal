@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Simple test route that doesn't require views
+Route::get('/test', function () {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Laravel is working!',
+        'timestamp' => now(),
+        'memory_usage' => memory_get_usage(true) / 1024 / 1024 . ' MB'
+    ]);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

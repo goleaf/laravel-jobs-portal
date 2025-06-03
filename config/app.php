@@ -194,17 +194,14 @@ return [
         /*
          * Package Service Providers...
          */
-        Barryvdh\Debugbar\ServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        App\Providers\LivewireServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\TranslationServiceProvider::class,
-        App\Providers\FormServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -219,7 +216,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Flash' => Laracasts\Flash\Flash::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,

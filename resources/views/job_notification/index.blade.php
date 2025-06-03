@@ -42,7 +42,7 @@
         </div>
         </div>
     </div>
-    @include('job_notification.templates.templates')
+    
     {{Form::hidden('getEmployerJobs',url('admin/employer-jobs'),['id'=>'indexGetEmployerJobs'])}}
     {{Form::hidden('jobDetails',url('admin/jobs'),['id'=>'indexJobDetails'])}}
     {{Form::hidden('jobNotification',url('admin/job-notifications'),['id'=>'indexJobNotification'])}}

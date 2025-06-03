@@ -253,7 +253,6 @@
             </div>
         </section>
         <!-- end-blog-details-section -->
-        @include('front_web_template.blogs.templates.templates')
         {{ Form::hidden('blogComment', route('blog.create.comment', $blog->id), ['id' => 'blogComment']) }}
         {{ Form::hidden('defaultBlogImage', asset('front_web/images/job-categories.png'), ['id' => 'defaultBlogImage']) }}
     </div>

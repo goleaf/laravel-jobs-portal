@@ -77,7 +77,7 @@
                 </div>
             </div>
             @include('candidate.profile.modals.cv_preview_model')
-            @include('candidate.profile.templates.templates')
+            
             {{ Form::hidden('plugin-url', asset('css/plugins.css'), ['id' => 'pluginUrl']) }}
             {{ Form::hidden('style-css-url', asset('assets/css/style.css'), ['id' => 'styleCssUrl']) }}
             {{ Form::hidden('font-css-url', asset('assets/css/font-awesome.min.css'), ['id' => 'fontCssUrl']) }}

@@ -229,7 +229,7 @@
     @include('candidate.profile.modals.add_education_modal')
     @include('candidate.profile.modals.edit_experience_modal')
     @include('candidate.profile.modals.edit_education_modal')
-    @include('candidate.profile.templates.templates')
+    
     {{Form::hidden('indexCareerInfoData',true,['id'=>'indexCareerInfoData'])}}
 @endsection
 @push('scripts')

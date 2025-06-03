@@ -13,7 +13,6 @@
             <livewire:company-size-table/>
         </div>
     </div>
-    @include('company_sizes.templates.templates')
     @include('company_sizes.add_modal')
     @include('company_sizes.edit_modal')
     {{Form::hidden('companySizeData',url('update-language'),['id'=>'indexCompanySizeData'])}}

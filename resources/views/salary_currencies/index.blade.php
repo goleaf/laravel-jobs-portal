@@ -9,7 +9,6 @@
             <livewire:salary-currency-table/>
         </div>
     </div>
-    @include('marital_status.templates.templates')
     @include('salary_currencies.add_modal')
     @include('salary_currencies.edit_modal')
 @endsection

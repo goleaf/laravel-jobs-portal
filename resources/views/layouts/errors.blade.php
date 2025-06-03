@@ -12,7 +12,7 @@
             <div>
                 <div class="d-flex">
                     <span class="mt-1"><i class="fa-solid fa-face-frown me-1"></i></span>
-                    <span class="mt-1">&nbsp{{$errors->first()}}</span>
+                    <span class="mt-1">&nbsp;{{ $errors->first() }}</span>
                 </div>
             </div>
         </div>

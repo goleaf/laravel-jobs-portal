@@ -8,7 +8,5 @@
         @livewire('applied-jobs')
     </div>
     @include('candidate.applied_job.show_applied_jobs_modal')
-    @include('candidate.applied_job.templates.templates')
     @include('candidate.applied_job.schedule_slot_book')
-
 @endsection

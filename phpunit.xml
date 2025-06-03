@@ -3,6 +3,10 @@
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         cacheResult="true"
+         cacheDirectory=".phpunit.cache"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -10,6 +14,19 @@
         </testsuite>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Small">
+            <file>./tests/Unit/ExampleTest.php</file>
+            <file>./tests/Unit/SimpleTest.php</file>
+            <file>./tests/Unit/HelperTest.php</file>
+            <file>./tests/Unit/Models/CompanyModelTest.php</file>
+            <file>./tests/Unit/Models/CandidateModelTest.php</file>
+            <file>./tests/Unit/Models/JobApplicationModelTest.php</file>
+            <file>./tests/Unit/Models/JobCategoryModelTest.php</file>
+            <file>./tests/Unit/Models/JobTypeModelTest.php</file>
+            <file>./tests/Unit/Models/SkillModelTest.php</file>
+            <file>./tests/Unit/Models/UserModelSimpleTest.php</file>
+            <file>./tests/Unit/Models/JobModelSimpleTest.php</file>
         </testsuite>
     </testsuites>
     <php>
@@ -22,6 +39,14 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
-        <ini name="memory_limit" value="2G"/>
+        <server name="APP_DEBUG" value="false"/>
+        <server name="DEBUGBAR_ENABLED" value="false"/>
+        <ini name="memory_limit" value="4G"/>
+        <ini name="max_execution_time" value="0"/>
+        <ini name="opcache.enable" value="0"/>
+        <ini name="xdebug.mode" value="off"/>
     </php>
+    <logging>
+        <junit outputFile="storage/logs/junit.xml"/>
+    </logging>
 </phpunit> 

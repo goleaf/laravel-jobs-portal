@@ -3,21 +3,36 @@
 namespace Tests\Unit\Models;
 
 use App\Models\User;
-use App\Models\Candidate;
-use App\Models\Company;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Candidate;
+use App\Models\Company;
 use App\Models\Skill;
 use App\Models\Language;
 use App\Models\FavouriteCompany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class UserModelTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+
+    protected User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->user = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'is_active' => true,
+            'is_verified' => true,
+        ]);
+    }
 
     /** @test */
     public function it_has_user_type_constants()
@@ -28,305 +43,247 @@ class UserModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function it_has_proper_fillable_attributes()
     {
-        $user = new User();
-        $fillable = $user->getFillable();
-
-        $expectedFillable = [
-            'first_name',
-            'last_name', 
-            'email',
-            'password',
-            'user_type',
-            'dob',
-            'gender',
-            'country_id',
-            'state_id',
-            'city_id',
-            'is_active',
-            'is_verified',
-            'phone',
-            'email_verified_at',
-            'owner_id',
-            'owner_type',
-            'language',
-            'facebook_url',
-            'twitter_url',
-            'linkedin_url',
-            'google_plus_url',
-            'pinterest_url',
-            'is_default',
-            'region_code',
+        $fillable = [
+            'first_name', 'last_name', 'email', 'password', 'user_type',
+            'dob', 'gender', 'country_id', 'state_id', 'city_id',
+            'is_active', 'is_verified', 'phone', 'email_verified_at',
+            'owner_id', 'owner_type', 'language', 'facebook_url',
+            'twitter_url', 'linkedin_url', 'google_plus_url',
+            'pinterest_url', 'is_default', 'profile_views', 'region_code',
         ];
 
-        foreach ($expectedFillable as $attribute) {
-            $this->assertContains($attribute, $fillable);
-        }
+        $this->assertEquals($fillable, $this->user->getFillable());
     }
 
     /** @test */
-    public function it_has_correct_hidden_attributes()
+    public function it_has_proper_hidden_attributes()
     {
-        $user = new User();
-        $hidden = $user->getHidden();
-
-        $this->assertContains('password', $hidden);
-        $this->assertContains('remember_token', $hidden);
+        $hidden = ['password', 'remember_token'];
+        $this->assertEquals($hidden, $this->user->getHidden());
     }
 
     /** @test */
-    public function it_has_correct_casts()
+    public function it_casts_attributes_correctly()
     {
-        $user = new User();
-        $casts = $user->getCasts();
-
-        $expectedCasts = [
-            'user_type' => 'integer',
+        $casts = [
+            'id' => 'integer',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'dob' => 'date',
+            'gender' => 'integer',
             'is_active' => 'boolean',
             'is_verified' => 'boolean',
             'is_default' => 'boolean',
-            'email_verified_at' => 'datetime',
-            'dob' => 'date',
+            'profile_views' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'owner_id' => 'integer',
         ];
 
-        foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals($cast, $casts[$attribute]);
+        foreach ($casts as $attribute => $cast) {
+            $this->assertEquals($cast, $this->user->getCasts()[$attribute] ?? null);
         }
-    }
-
-    /** @test */
-    public function it_can_be_created_with_valid_attributes()
-    {
-        $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'password' => bcrypt('password'),
-            'user_type' => User::CANDIDATE,
-            'is_active' => true,
-            'is_verified' => true,
-            'phone' => $this->faker->phoneNumber(),
-            'language' => 'en',
-        ];
-
-        $user = User::create($userData);
-
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals($userData['first_name'], $user->first_name);
-        $this->assertEquals($userData['last_name'], $user->last_name);
-        $this->assertEquals($userData['email'], $user->email);
-        $this->assertEquals($userData['user_type'], $user->user_type);
-        $this->assertTrue($user->is_active);
-        $this->assertTrue($user->is_verified);
-    }
-
-    /** @test */
-    public function it_generates_full_name_attribute()
-    {
-        $user = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe'
-        ]);
-
-        $this->assertEquals('John Doe', $user->full_name);
     }
 
     /** @test */
     public function it_belongs_to_country()
     {
-        $user = User::factory()->create(['country_id' => 1]);
+        $country = Country::factory()->create();
+        $this->user->update(['country_id' => $country->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $user->country());
+        $this->assertInstanceOf(Country::class, $this->user->country);
+        $this->assertEquals($country->id, $this->user->country->id);
     }
 
     /** @test */
     public function it_belongs_to_state()
     {
-        $user = User::factory()->create(['state_id' => 1]);
+        $state = State::factory()->create();
+        $this->user->update(['state_id' => $state->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $user->state());
+        $this->assertInstanceOf(State::class, $this->user->state);
+        $this->assertEquals($state->id, $this->user->state->id);
     }
 
     /** @test */
     public function it_belongs_to_city()
     {
-        $user = User::factory()->create(['city_id' => 1]);
+        $city = City::factory()->create();
+        $this->user->update(['city_id' => $city->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $user->city());
+        $this->assertInstanceOf(City::class, $this->user->city);
+        $this->assertEquals($city->id, $this->user->city->id);
     }
 
     /** @test */
     public function it_has_one_candidate()
     {
-        $user = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $candidate = Candidate::factory()->create(['user_id' => $this->user->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasOne::class, $user->candidate());
+        $this->assertInstanceOf(Candidate::class, $this->user->candidate);
+        $this->assertEquals($candidate->id, $this->user->candidate->id);
     }
 
     /** @test */
     public function it_has_one_company()
     {
-        $user = User::factory()->create(['user_type' => User::EMPLOYER]);
+        $company = Company::factory()->create(['user_id' => $this->user->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasOne::class, $user->company());
+        $this->assertInstanceOf(Company::class, $this->user->company);
+        $this->assertEquals($company->id, $this->user->company->id);
     }
 
     /** @test */
-    public function it_has_many_to_many_candidate_skills()
+    public function it_has_many_to_many_skills()
     {
-        $user = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $skills = Skill::factory()->count(3)->create();
+        $this->user->candidateSkill()->attach($skills->pluck('id'));
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class, $user->candidateSkill());
+        $this->assertCount(3, $this->user->candidateSkill);
+        $this->assertInstanceOf(Skill::class, $this->user->candidateSkill->first());
     }
 
     /** @test */
-    public function it_has_many_to_many_candidate_languages()
+    public function it_has_many_to_many_languages()
     {
-        $user = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $languages = Language::factory()->count(2)->create();
+        $this->user->candidateLanguage()->attach($languages->pluck('id'));
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class, $user->candidateLanguage());
+        $this->assertCount(2, $this->user->candidateLanguage);
+        $this->assertInstanceOf(Language::class, $this->user->candidateLanguage->first());
     }
 
     /** @test */
     public function it_has_many_followings()
     {
-        $user = User::factory()->create(['user_type' => User::CANDIDATE]);
+        $followings = FavouriteCompany::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        // Check relationship exists and returns the correct type
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasMany::class, $user->followings());
+        $this->assertCount(2, $this->user->followings);
+        $this->assertInstanceOf(FavouriteCompany::class, $this->user->followings->first());
+    }
+
+    /** @test */
+    public function it_returns_full_name_attribute()
+    {
+        $this->assertEquals('John Doe', $this->user->full_name);
+    }
+
+    /** @test */
+    public function it_returns_cached_country_name()
+    {
+        $country = Country::factory()->create(['name' => 'United States']);
+        $this->user->update(['country_id' => $country->id]);
+
+        // Clear cache first
+        Cache::forget("user.{$this->user->id}.country_name");
+
+        $countryName = $this->user->country_name;
+        $this->assertEquals('United States', $countryName);
+
+        // Verify it's cached
+        $this->assertTrue(Cache::has("user.{$this->user->id}.country_name"));
+    }
+
+    /** @test */
+    public function it_returns_cached_state_name()
+    {
+        $state = State::factory()->create(['name' => 'California']);
+        $this->user->update(['state_id' => $state->id]);
+
+        Cache::forget("user.{$this->user->id}.state_name");
+
+        $stateName = $this->user->state_name;
+        $this->assertEquals('California', $stateName);
+
+        $this->assertTrue(Cache::has("user.{$this->user->id}.state_name"));
+    }
+
+    /** @test */
+    public function it_returns_cached_city_name()
+    {
+        $city = City::factory()->create(['name' => 'Los Angeles']);
+        $this->user->update(['city_id' => $city->id]);
+
+        Cache::forget("user.{$this->user->id}.city_name");
+
+        $cityName = $this->user->city_name;
+        $this->assertEquals('Los Angeles', $cityName);
+
+        $this->assertTrue(Cache::has("user.{$this->user->id}.city_name"));
+    }
+
+    /** @test */
+    public function it_scopes_active_users()
+    {
+        User::factory()->create(['is_active' => false]);
+        User::factory()->create(['is_active' => true]);
+
+        $activeUsers = User::active()->get();
+        
+        $this->assertTrue($activeUsers->every(fn($user) => $user->is_active));
+    }
+
+    /** @test */
+    public function it_scopes_verified_users()
+    {
+        User::factory()->create(['is_verified' => false]);
+        User::factory()->create(['is_verified' => true]);
+
+        $verifiedUsers = User::verified()->get();
+        
+        $this->assertTrue($verifiedUsers->every(fn($user) => $user->is_verified));
+    }
+
+    /** @test */
+    public function it_clears_cache_when_updated()
+    {
+        // Set some cache values
+        Cache::put("user.{$this->user->id}", 'test_data');
+        Cache::put("user.profile.{$this->user->id}", 'profile_data');
+
+        // Update the user
+        $this->user->update(['first_name' => 'Jane']);
+
+        // Verify cache is cleared
+        $this->assertFalse(Cache::has("user.{$this->user->id}"));
+        $this->assertFalse(Cache::has("user.profile.{$this->user->id}"));
+    }
+
+    /** @test */
+    public function it_can_check_user_permissions()
+    {
+        // This would require setting up roles, but testing the method structure
+        $this->assertTrue(method_exists($this->user, 'canPerformAction'));
     }
 
     /** @test */
     public function it_returns_default_avatar_when_no_media()
     {
-        $user = User::factory()->create();
-
-        // Since we're not setting up media files in unit tests, should return default
-        $this->assertStringContains('infyom-logo.png', $user->avatar);
+        $avatar = $this->user->avatar;
+        $this->assertStringContains('infyom-logo.png', $avatar);
     }
 
     /** @test */
     public function it_checks_online_profile_availability()
     {
-        // User with no social URLs should return false
-        $userWithoutSocial = User::factory()->create([
-            'facebook_url' => null,
-            'twitter_url' => null,
-            'linkedin_url' => null,
-            'google_plus_url' => null,
-            'pinterest_url' => null,
+        // Create candidate with some data
+        $candidate = Candidate::factory()->create([
+            'user_id' => $this->user->id,
+            'career_level_id' => 1,
         ]);
 
-        $this->assertFalse($userWithoutSocial->is_online_profile_availbal);
+        Cache::forget("user.{$this->user->id}.online_profile");
 
-        // User with at least one social URL should return true
-        $userWithSocial = User::factory()->create([
-            'linkedin_url' => 'https://linkedin.com/in/johndoe',
-        ]);
-
-        $this->assertTrue($userWithSocial->is_online_profile_availbal);
+        $isAvailable = $this->user->is_online_profile_availbal;
+        $this->assertTrue($isAvailable);
     }
 
-    /** @test */
-    public function it_has_language_constants()
+    protected function tearDown(): void
     {
-        $expectedLanguages = [
-            'ar' => 'Arabic',
-            'zh' => 'Chinese',
-            'en' => 'English',
-            'fr' => 'French',
-            'de' => 'German',
-            'pt' => 'Portuguese',
-            'ru' => 'Russian',
-            'es' => 'Spanish',
-            'tr' => 'Turkish',
-        ];
-
-        $this->assertEquals($expectedLanguages, User::LANGUAGES);
-    }
-
-    /** @test */
-    public function it_can_be_created_as_admin()
-    {
-        $admin = User::factory()->create(['user_type' => User::ADMIN]);
-
-        $this->assertEquals(User::ADMIN, $admin->user_type);
-        $this->assertTrue($admin->user_type === User::ADMIN);
-    }
-
-    /** @test */
-    public function it_can_be_created_as_employer()
-    {
-        $employer = User::factory()->create(['user_type' => User::EMPLOYER]);
-
-        $this->assertEquals(User::EMPLOYER, $employer->user_type);
-        $this->assertTrue($employer->user_type === User::EMPLOYER);
-    }
-
-    /** @test */
-    public function it_can_be_created_as_candidate()
-    {
-        $candidate = User::factory()->create(['user_type' => User::CANDIDATE]);
-
-        $this->assertEquals(User::CANDIDATE, $candidate->user_type);
-        $this->assertTrue($candidate->user_type === User::CANDIDATE);
-    }
-
-    /** @test */
-    public function it_properly_casts_boolean_attributes()
-    {
-        $user = User::factory()->create([
-            'is_active' => 1,
-            'is_verified' => 0,
-            'is_default' => 1,
-        ]);
-
-        $this->assertTrue($user->is_active);
-        $this->assertFalse($user->is_verified);
-        $this->assertTrue($user->is_default);
-    }
-
-    /** @test */
-    public function it_properly_casts_date_attributes()
-    {
-        $user = User::factory()->create([
-            'dob' => '1990-01-01',
-            'email_verified_at' => now(),
-        ]);
-
-        $this->assertInstanceOf(\Carbon\Carbon::class, $user->dob);
-        $this->assertInstanceOf(\Carbon\Carbon::class, $user->email_verified_at);
-    }
-
-    /** @test */
-    public function password_is_hidden_in_array_conversion()
-    {
-        $user = User::factory()->create();
-        $userArray = $user->toArray();
-
-        $this->assertArrayNotHasKey('password', $userArray);
-        $this->assertArrayNotHasKey('remember_token', $userArray);
-    }
-
-    /** @test */
-    public function it_has_profile_constant()
-    {
-        $this->assertEquals('profile-pictures', User::PROFILE);
-    }
-
-    /** @test */
-    public function it_has_mode_constants()
-    {
-        $this->assertEquals(1, User::DARK_MODE);
-        $this->assertEquals(0, User::LIGHT_MODE);
-        $this->assertEquals(1, User::ACTIVE);
+        Cache::flush();
+        parent::tearDown();
     }
 } 

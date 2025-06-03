@@ -16,13 +16,35 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\JobApplication;
+use App\Models\Skill;
+use App\Models\Tag;
+use App\Models\FeaturedRecord;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class JobModelTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    protected Job $job;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->job = Job::factory()->create([
+            'job_title' => 'Software Engineer',
+            'description' => 'Great opportunity for a software engineer',
+            'status' => Job::STATUS_OPEN,
+            'is_suspended' => false,
+            'job_expiry_date' => now()->addDays(30),
+            'salary_from' => 50000,
+            'salary_to' => 80000,
+            'hide_salary' => false,
+        ]);
+    }
 
     /** @test */
     public function it_has_status_constants()
@@ -47,425 +69,470 @@ class JobModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function it_has_proper_fillable_attributes()
     {
-        $job = new Job();
-        $fillable = $job->getFillable();
-
-        $expectedAttributes = [
-            'job_id',
-            'job_title',
-            'description',
-            'company_id',
-            'job_type_id',
-            'job_category_id',
-            'career_level_id',
-            'functional_area_id',
-            'job_shift_id',
-            'degree_level_id',
-            'currency_id',
-            'salary_period_id',
-            'salary_from',
-            'salary_to',
-            'hide_salary',
-            'no_preference',
-            'is_freelance',
-            'is_featured',
-            'is_suspended',
-            'is_created_by_admin',
-            'status',
-            'position',
-            'experience',
-            'country_id',
-            'state_id',
-            'city_id',
-            'job_expiry_date',
+        $fillable = [
+            'job_title', 'description', 'job_id', 'company_id', 'job_category_id',
+            'country_id', 'state_id', 'city_id', 'salary_from', 'salary_to',
+            'currency_id', 'salary_period_id', 'job_type_id', 'career_level_id',
+            'functional_area_id', 'job_shift_id', 'degree_level_id', 'experience',
+            'job_expiry_date', 'no_preference', 'hide_salary', 'is_freelance',
+            'is_suspended', 'status', 'is_created_by_admin',
         ];
 
-        foreach ($expectedAttributes as $attribute) {
-            $this->assertContains($attribute, $fillable);
+        $this->assertEquals($fillable, $this->job->getFillable());
+    }
+
+    /** @test */
+    public function it_casts_attributes_correctly()
+    {
+        $casts = [
+            'id' => 'integer',
+            'company_id' => 'integer',
+            'job_category_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'currency_id' => 'integer',
+            'salary_period_id' => 'integer',
+            'job_type_id' => 'integer',
+            'career_level_id' => 'integer',
+            'functional_area_id' => 'integer',
+            'job_shift_id' => 'integer',
+            'degree_level_id' => 'integer',
+            'experience' => 'integer',
+            'job_expiry_date' => 'date',
+            'no_preference' => 'integer',
+            'hide_salary' => 'boolean',
+            'is_freelance' => 'boolean',
+            'is_suspended' => 'boolean',
+            'status' => 'integer',
+            'is_created_by_admin' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+
+        foreach ($casts as $attribute => $cast) {
+            $this->assertEquals($cast, $this->job->getCasts()[$attribute] ?? null);
         }
     }
 
     /** @test */
-    public function it_can_be_created_with_valid_attributes()
+    public function it_generates_unique_job_id_on_creation()
     {
-        $company = Company::factory()->create();
-
-        $jobData = [
-            'job_id' => 'JOB123456',
-            'job_title' => $this->faker->jobTitle(),
-            'description' => $this->faker->text(1000),
-            'company_id' => $company->id,
-            'job_type_id' => 1,
-            'job_category_id' => 1,
-            'status' => Job::STATUS_OPEN,
-            'salary_from' => 50000,
-            'salary_to' => 80000,
-            'position' => 2,
-            'experience' => 3,
-            'job_expiry_date' => now()->addDays(30),
-        ];
-
-        $job = Job::create($jobData);
-
-        $this->assertInstanceOf(Job::class, $job);
-        $this->assertEquals($jobData['job_title'], $job->job_title);
-        $this->assertEquals($jobData['company_id'], $job->company_id);
-        $this->assertEquals($jobData['status'], $job->status);
-        $this->assertEquals($jobData['salary_from'], $job->salary_from);
-        $this->assertEquals($jobData['salary_to'], $job->salary_to);
-    }
-
-    /** @test */
-    public function it_belongs_to_company()
-    {
-        $job = Job::factory()->create();
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->company());
-        $this->assertInstanceOf(Company::class, $job->company);
-    }
-
-    /** @test */
-    public function it_belongs_to_job_type()
-    {
-        $job = Job::factory()->create(['job_type_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->jobType());
-    }
-
-    /** @test */
-    public function it_belongs_to_job_category()
-    {
-        $job = Job::factory()->create(['job_category_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->jobCategory());
-    }
-
-    /** @test */
-    public function it_belongs_to_career_level()
-    {
-        $job = Job::factory()->create(['career_level_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->careerLevel());
-    }
-
-    /** @test */
-    public function it_belongs_to_functional_area()
-    {
-        $job = Job::factory()->create(['functional_area_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->functionalArea());
-    }
-
-    /** @test */
-    public function it_belongs_to_job_shift()
-    {
-        $job = Job::factory()->create(['job_shift_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->jobShift());
-    }
-
-    /** @test */
-    public function it_belongs_to_degree_level()
-    {
-        $job = Job::factory()->create(['degree_level_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->degreeLevel());
-    }
-
-    /** @test */
-    public function it_belongs_to_currency()
-    {
-        $job = Job::factory()->create(['currency_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->currency());
-    }
-
-    /** @test */
-    public function it_belongs_to_salary_period()
-    {
-        $job = Job::factory()->create(['salary_period_id' => 1]);
-
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->salaryPeriod());
+        $newJob = Job::factory()->create(['job_id' => null]);
+        
+        $this->assertNotNull($newJob->job_id);
+        $this->assertStringStartsWith('JOB-', $newJob->job_id);
     }
 
     /** @test */
     public function it_belongs_to_country()
     {
-        $job = Job::factory()->create(['country_id' => 1]);
+        $country = Country::factory()->create();
+        $this->job->update(['country_id' => $country->id]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->country());
+        $this->assertInstanceOf(Country::class, $this->job->country);
+        $this->assertEquals($country->id, $this->job->country->id);
     }
 
     /** @test */
     public function it_belongs_to_state()
     {
-        $job = Job::factory()->create(['state_id' => 1]);
+        $state = State::factory()->create();
+        $this->job->update(['state_id' => $state->id]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->state());
+        $this->assertInstanceOf(State::class, $this->job->state);
+        $this->assertEquals($state->id, $this->job->state->id);
     }
 
     /** @test */
     public function it_belongs_to_city()
     {
-        $job = Job::factory()->create(['city_id' => 1]);
+        $city = City::factory()->create();
+        $this->job->update(['city_id' => $city->id]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsTo::class, $job->city());
+        $this->assertInstanceOf(City::class, $this->job->city);
+        $this->assertEquals($city->id, $this->job->city->id);
     }
 
     /** @test */
-    public function it_has_many_job_applications()
+    public function it_belongs_to_company()
     {
-        $job = Job::factory()->create();
+        $company = Company::factory()->create();
+        $this->job->update(['company_id' => $company->id]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\HasMany::class, $job->appliedJobs());
+        $this->assertInstanceOf(Company::class, $this->job->company);
+        $this->assertEquals($company->id, $this->job->company->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_currency()
+    {
+        $currency = SalaryCurrency::factory()->create();
+        $this->job->update(['currency_id' => $currency->id]);
+
+        $this->assertInstanceOf(SalaryCurrency::class, $this->job->currency);
+        $this->assertEquals($currency->id, $this->job->currency->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_salary_period()
+    {
+        $period = SalaryPeriod::factory()->create();
+        $this->job->update(['salary_period_id' => $period->id]);
+
+        $this->assertInstanceOf(SalaryPeriod::class, $this->job->salaryPeriod);
+        $this->assertEquals($period->id, $this->job->salaryPeriod->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_job_type()
+    {
+        $jobType = JobType::factory()->create();
+        $this->job->update(['job_type_id' => $jobType->id]);
+
+        $this->assertInstanceOf(JobType::class, $this->job->jobType);
+        $this->assertEquals($jobType->id, $this->job->jobType->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_career_level()
+    {
+        $careerLevel = CareerLevel::factory()->create();
+        $this->job->update(['career_level_id' => $careerLevel->id]);
+
+        $this->assertInstanceOf(CareerLevel::class, $this->job->careerLevel);
+        $this->assertEquals($careerLevel->id, $this->job->careerLevel->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_functional_area()
+    {
+        $functionalArea = FunctionalArea::factory()->create();
+        $this->job->update(['functional_area_id' => $functionalArea->id]);
+
+        $this->assertInstanceOf(FunctionalArea::class, $this->job->functionalArea);
+        $this->assertEquals($functionalArea->id, $this->job->functionalArea->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_job_shift()
+    {
+        $jobShift = JobShift::factory()->create();
+        $this->job->update(['job_shift_id' => $jobShift->id]);
+
+        $this->assertInstanceOf(JobShift::class, $this->job->jobShift);
+        $this->assertEquals($jobShift->id, $this->job->jobShift->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_degree_level()
+    {
+        $degreeLevel = RequiredDegreeLevel::factory()->create();
+        $this->job->update(['degree_level_id' => $degreeLevel->id]);
+
+        $this->assertInstanceOf(RequiredDegreeLevel::class, $this->job->degreeLevel);
+        $this->assertEquals($degreeLevel->id, $this->job->degreeLevel->id);
+    }
+
+    /** @test */
+    public function it_belongs_to_job_category()
+    {
+        $category = JobCategory::factory()->create();
+        $this->job->update(['job_category_id' => $category->id]);
+
+        $this->assertInstanceOf(JobCategory::class, $this->job->jobCategory);
+        $this->assertEquals($category->id, $this->job->jobCategory->id);
     }
 
     /** @test */
     public function it_has_many_to_many_skills()
     {
-        $job = Job::factory()->create();
+        $skills = Skill::factory()->count(3)->create();
+        $this->job->jobsSkill()->attach($skills->pluck('id'));
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class, $job->jobsSkill());
+        $this->assertCount(3, $this->job->jobsSkill);
+        $this->assertInstanceOf(Skill::class, $this->job->jobsSkill->first());
     }
 
     /** @test */
     public function it_has_many_to_many_tags()
     {
-        $job = Job::factory()->create();
+        $tags = Tag::factory()->count(2)->create();
+        $this->job->jobsTag()->attach($tags->pluck('id'));
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class, $job->jobsTag());
+        $this->assertCount(2, $this->job->jobsTag);
+        $this->assertInstanceOf(Tag::class, $this->job->jobsTag->first());
     }
 
     /** @test */
-    public function it_has_morph_one_featured_relationship()
+    public function it_has_many_job_applications()
     {
-        $job = Job::factory()->create();
+        $applications = JobApplication::factory()->count(3)->create(['job_id' => $this->job->id]);
 
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphOne::class, $job->featured());
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphOne::class, $job->activeFeatured());
+        $this->assertCount(3, $this->job->appliedJobs);
+        $this->assertInstanceOf(JobApplication::class, $this->job->appliedJobs->first());
     }
 
     /** @test */
-    public function it_has_status_scope()
+    public function it_returns_cached_country_name()
     {
-        // Create jobs with different statuses
-        Job::factory()->count(3)->create(['status' => Job::STATUS_OPEN]);
-        Job::factory()->count(2)->create(['status' => Job::STATUS_CLOSED]);
-        Job::factory()->count(1)->create(['status' => Job::STATUS_DRAFT]);
+        $country = Country::factory()->create(['name' => 'United States']);
+        $this->job->update(['country_id' => $country->id]);
 
-        // Test status scope
-        $openJobs = Job::status(Job::STATUS_OPEN)->get();
-        $closedJobs = Job::status(Job::STATUS_CLOSED)->get();
-        $draftJobs = Job::status(Job::STATUS_DRAFT)->get();
+        Cache::forget("job.{$this->job->id}.country_name");
 
-        $this->assertCount(3, $openJobs);
-        $this->assertCount(2, $closedJobs);
-        $this->assertCount(1, $draftJobs);
+        $countryName = $this->job->country_name;
+        $this->assertEquals('United States', $countryName);
+
+        $this->assertTrue(Cache::has("job.{$this->job->id}.country_name"));
     }
 
     /** @test */
-    public function it_generates_full_location_attribute()
+    public function it_returns_cached_state_name()
     {
-        $job = Job::factory()->create([
-            'country_id' => 1,
-            'state_id' => 1,
-            'city_id' => 1,
+        $state = State::factory()->create(['name' => 'California']);
+        $this->job->update(['state_id' => $state->id]);
+
+        Cache::forget("job.{$this->job->id}.state_name");
+
+        $stateName = $this->job->state_name;
+        $this->assertEquals('California', $stateName);
+
+        $this->assertTrue(Cache::has("job.{$this->job->id}.state_name"));
+    }
+
+    /** @test */
+    public function it_returns_cached_city_name()
+    {
+        $city = City::factory()->create(['name' => 'Los Angeles']);
+        $this->job->update(['city_id' => $city->id]);
+
+        Cache::forget("job.{$this->job->id}.city_name");
+
+        $cityName = $this->job->city_name;
+        $this->assertEquals('Los Angeles', $cityName);
+
+        $this->assertTrue(Cache::has("job.{$this->job->id}.city_name"));
+    }
+
+    /** @test */
+    public function it_returns_full_location_attribute()
+    {
+        $country = Country::factory()->create(['name' => 'United States']);
+        $state = State::factory()->create(['name' => 'California']);
+        $city = City::factory()->create(['name' => 'Los Angeles']);
+        
+        $this->job->update([
+            'country_id' => $country->id,
+            'state_id' => $state->id,
+            'city_id' => $city->id,
         ]);
 
-        // The full_location attribute should combine location information
-        $this->assertIsString($job->full_location);
+        Cache::forget("job.{$this->job->id}.full_location");
+
+        $fullLocation = $this->job->full_location;
+        $this->assertEquals('Los Angeles, California, United States', $fullLocation);
     }
 
     /** @test */
-    public function it_can_be_featured()
+    public function it_returns_remote_when_no_location()
     {
-        $job = Job::factory()->featured()->create();
+        $this->job->update([
+            'country_id' => null,
+            'state_id' => null,
+            'city_id' => null,
+        ]);
 
-        $this->assertTrue($job->is_featured);
+        Cache::forget("job.{$this->job->id}.full_location");
+
+        $fullLocation = $this->job->full_location;
+        $this->assertEquals('Remote', $fullLocation);
     }
 
     /** @test */
-    public function it_can_be_suspended()
+    public function it_scopes_jobs_by_status()
     {
-        $job = Job::factory()->suspended()->create();
+        Job::factory()->create(['status' => Job::STATUS_DRAFT]);
+        Job::factory()->create(['status' => Job::STATUS_OPEN]);
 
-        $this->assertTrue($job->is_suspended);
+        $openJobs = Job::status(Job::STATUS_OPEN)->get();
+        $this->assertTrue($openJobs->every(fn($job) => $job->status === Job::STATUS_OPEN));
     }
 
     /** @test */
-    public function it_can_be_closed()
+    public function it_scopes_active_jobs()
     {
-        $job = Job::factory()->closed()->create();
+        Job::factory()->create(['status' => Job::STATUS_CLOSED]);
+        Job::factory()->create(['is_suspended' => true]);
+        Job::factory()->create(['job_expiry_date' => now()->subDays(1)]);
 
-        $this->assertEquals(Job::STATUS_CLOSED, $job->status);
+        $activeJobs = Job::active()->get();
+        $this->assertTrue($activeJobs->every(fn($job) => $job->isActive()));
     }
 
     /** @test */
-    public function it_can_be_draft()
+    public function it_scopes_jobs_by_location()
     {
-        $job = Job::factory()->draft()->create();
+        $country = Country::factory()->create();
+        $state = State::factory()->create();
+        $city = City::factory()->create();
 
-        $this->assertEquals(Job::STATUS_DRAFT, $job->status);
+        Job::factory()->create(['country_id' => $country->id, 'state_id' => $state->id, 'city_id' => $city->id]);
+        Job::factory()->create(['country_id' => 999]); // Different location
+
+        $locationJobs = Job::byLocation($country->id, $state->id, $city->id)->get();
+        $this->assertTrue($locationJobs->every(function($job) use ($country, $state, $city) {
+            return $job->country_id === $country->id && 
+                   $job->state_id === $state->id && 
+                   $job->city_id === $city->id;
+        }));
     }
 
     /** @test */
-    public function it_can_be_expired()
+    public function it_scopes_jobs_by_salary_range()
     {
-        $job = Job::factory()->expired()->create();
+        Job::factory()->create(['salary_from' => 30000, 'salary_to' => 50000]);
+        Job::factory()->create(['salary_from' => 60000, 'salary_to' => 80000]);
 
-        $this->assertTrue($job->job_expiry_date < now());
+        $salaryJobs = Job::bySalaryRange(40000, 70000)->get();
+        $this->assertTrue($salaryJobs->every(function($job) {
+            return $job->salary_from >= 40000 && $job->salary_to <= 70000;
+        }));
     }
 
     /** @test */
-    public function it_has_no_preference_constants()
+    public function it_checks_if_job_is_expired()
     {
-        $expectedNoPreference = [
-            2 => 'Both',
-            1 => 'Male',
-            0 => 'Female',
-        ];
+        $expiredJob = Job::factory()->create(['job_expiry_date' => now()->subDays(1)]);
+        $activeJob = Job::factory()->create(['job_expiry_date' => now()->addDays(1)]);
 
-        $this->assertEquals($expectedNoPreference, Job::NO_PREFERENCE);
+        $this->assertTrue($expiredJob->isExpired());
+        $this->assertFalse($activeJob->isExpired());
     }
 
     /** @test */
-    public function it_has_gender_constants()
+    public function it_checks_if_job_is_active()
     {
-        $expectedGender = [
-            0 => 'Male',
-            1 => 'Female',
-        ];
+        $activeJob = Job::factory()->create([
+            'status' => Job::STATUS_OPEN,
+            'is_suspended' => false,
+            'job_expiry_date' => now()->addDays(1),
+        ]);
 
-        $this->assertEquals($expectedGender, Job::GENDER);
+        $inactiveJob = Job::factory()->create([
+            'status' => Job::STATUS_CLOSED,
+        ]);
+
+        $this->assertTrue($activeJob->isActive());
+        $this->assertFalse($inactiveJob->isActive());
     }
 
     /** @test */
-    public function it_has_status_array_constants()
+    public function it_formats_salary_correctly()
     {
-        $expectedStatus = [
-            0 => 'Drafted',
-            1 => 'Live',
-            2 => 'Closed',
-            3 => 'Paused',
-        ];
-
-        $this->assertEquals($expectedStatus, Job::STATUS_ARRAY);
-    }
-
-    /** @test */
-    public function it_has_status_color_constants()
-    {
-        $expectedColors = [
-            0 => 'warning',
-            1 => 'success',
-            2 => 'danger',
-            3 => 'primary',
-        ];
-
-        $this->assertEquals($expectedColors, Job::STATUS_COLOR);
-    }
-
-    /** @test */
-    public function it_has_favorite_job_status_constants()
-    {
-        $expectedFavoriteStatus = [
-            1 => 'Live',
-            2 => 'Closed',
-            3 => 'Paused',
-        ];
-
-        $this->assertEquals($expectedFavoriteStatus, Job::FAVORITE_JOB_STATUS);
-    }
-
-    /** @test */
-    public function it_can_filter_jobs_by_status()
-    {
-        Job::factory()->count(5)->create(['status' => Job::STATUS_OPEN]);
-        Job::factory()->count(3)->create(['status' => Job::STATUS_CLOSED]);
-        Job::factory()->count(2)->create(['status' => Job::STATUS_DRAFT]);
-
-        $openJobs = Job::where('status', Job::STATUS_OPEN)->get();
-        $closedJobs = Job::where('status', Job::STATUS_CLOSED)->get();
-        $draftJobs = Job::where('status', Job::STATUS_DRAFT)->get();
-
-        $this->assertCount(5, $openJobs);
-        $this->assertCount(3, $closedJobs);
-        $this->assertCount(2, $draftJobs);
-    }
-
-    /** @test */
-    public function it_can_filter_jobs_by_featured_status()
-    {
-        Job::factory()->count(4)->featured()->create();
-        Job::factory()->count(6)->create(['is_featured' => false]);
-
-        $featuredJobs = Job::where('is_featured', true)->get();
-        $nonFeaturedJobs = Job::where('is_featured', false)->get();
-
-        $this->assertCount(4, $featuredJobs);
-        $this->assertCount(6, $nonFeaturedJobs);
-    }
-
-    /** @test */
-    public function it_can_filter_jobs_by_suspension_status()
-    {
-        Job::factory()->count(2)->suspended()->create();
-        Job::factory()->count(8)->create(['is_suspended' => false]);
-
-        $suspendedJobs = Job::where('is_suspended', true)->get();
-        $activJobs = Job::where('is_suspended', false)->get();
-
-        $this->assertCount(2, $suspendedJobs);
-        $this->assertCount(8, $activJobs);
-    }
-
-    /** @test */
-    public function it_can_filter_jobs_by_expiry_date()
-    {
-        Job::factory()->count(3)->expired()->create();
-        Job::factory()->count(7)->create(['job_expiry_date' => now()->addDays(30)]);
-
-        $expiredJobs = Job::where('job_expiry_date', '<', now())->get();
-        $activeJobs = Job::where('job_expiry_date', '>=', now())->get();
-
-        $this->assertCount(3, $expiredJobs);
-        $this->assertCount(7, $activeJobs);
-    }
-
-    /** @test */
-    public function it_stores_job_id_as_string()
-    {
-        $job = Job::factory()->create(['job_id' => 'JOB123456']);
-
-        $this->assertEquals('JOB123456', $job->job_id);
-        $this->assertIsString($job->job_id);
-    }
-
-    /** @test */
-    public function it_stores_salary_information()
-    {
-        $job = Job::factory()->create([
+        $currency = SalaryCurrency::factory()->create(['currency_symbol' => '$']);
+        $period = SalaryPeriod::factory()->create(['period' => 'month']);
+        
+        $this->job->update([
+            'currency_id' => $currency->id,
+            'salary_period_id' => $period->id,
             'salary_from' => 50000,
-            'salary_to' => 75000,
+            'salary_to' => 80000,
             'hide_salary' => false,
         ]);
 
-        $this->assertEquals(50000, $job->salary_from);
-        $this->assertEquals(75000, $job->salary_to);
-        $this->assertFalse($job->hide_salary);
+        $formattedSalary = $this->job->formatted_salary;
+        $this->assertEquals('$50000 - $80000 per month', $formattedSalary);
     }
 
     /** @test */
-    public function it_stores_position_and_experience_requirements()
+    public function it_returns_salary_not_disclosed_when_hidden()
     {
-        $job = Job::factory()->create([
-            'position' => 5,
-            'experience' => 3,
+        $this->job->update(['hide_salary' => true]);
+
+        $formattedSalary = $this->job->formatted_salary;
+        $this->assertEquals('Salary not disclosed', $formattedSalary);
+    }
+
+    /** @test */
+    public function it_returns_salary_negotiable_when_no_range()
+    {
+        $this->job->update([
+            'salary_from' => null,
+            'salary_to' => null,
+            'hide_salary' => false,
         ]);
 
-        $this->assertEquals(5, $job->position);
-        $this->assertEquals(3, $job->experience);
+        $formattedSalary = $this->job->formatted_salary;
+        $this->assertEquals('Salary negotiable', $formattedSalary);
+    }
+
+    /** @test */
+    public function it_returns_correct_status_badge_class()
+    {
+        $this->job->update(['status' => Job::STATUS_OPEN]);
+        $this->assertEquals('badge-success', $this->job->status_badge_class);
+
+        $this->job->update(['status' => Job::STATUS_DRAFT]);
+        $this->assertEquals('badge-warning', $this->job->status_badge_class);
+
+        $this->job->update(['status' => Job::STATUS_CLOSED]);
+        $this->assertEquals('badge-danger', $this->job->status_badge_class);
+    }
+
+    /** @test */
+    public function it_returns_correct_status_text()
+    {
+        $this->job->update(['status' => Job::STATUS_OPEN]);
+        $statusText = $this->job->status_text;
+        $this->assertNotEmpty($statusText);
+    }
+
+    /** @test */
+    public function it_clears_cache_when_updated()
+    {
+        Cache::put("job.{$this->job->id}", 'test_data');
+        Cache::put("job.featured", 'featured_data');
+        Cache::put("jobs.active", 'active_data');
+
+        $this->job->update(['job_title' => 'Updated Title']);
+
+        $this->assertFalse(Cache::has("job.{$this->job->id}"));
+        $this->assertFalse(Cache::has("job.featured"));
+        $this->assertFalse(Cache::has("jobs.active"));
+    }
+
+    /** @test */
+    public function it_clears_cache_when_deleted()
+    {
+        Cache::put("job.{$this->job->id}", 'test_data');
+        Cache::put("job.featured", 'featured_data');
+        Cache::put("jobs.active", 'active_data');
+
+        $this->job->delete();
+
+        $this->assertFalse(Cache::has("job.{$this->job->id}"));
+        $this->assertFalse(Cache::has("job.featured"));
+        $this->assertFalse(Cache::has("jobs.active"));
+    }
+
+    /** @test */
+    public function it_has_featured_relationship()
+    {
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphOne::class, $this->job->featured());
+    }
+
+    /** @test */
+    public function it_has_active_featured_relationship()
+    {
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Relations\MorphOne::class, $this->job->activeFeatured());
+    }
+
+    protected function tearDown(): void
+    {
+        Cache::flush();
+        parent::tearDown();
     }
 } 

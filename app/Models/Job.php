@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * App\Models\Job
@@ -124,6 +129,11 @@ use Illuminate\Support\Carbon;
  */
 class Job extends Model
 {
+    use HasFactory, SoftDeletes, Searchable, LogsActivity;
+
+    // Default eager loading for performance
+    protected $with = ['company', 'jobCategory', 'jobType'];
+
     const NO_PREFERENCE = [
         2 => 'Both',
         1 => 'Male',
@@ -296,6 +306,7 @@ class Job extends Model
             'is_created_by_admin' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
         ];
     }
 
@@ -318,6 +329,7 @@ class Job extends Model
             cache()->forget("job.{$job->id}");
             cache()->forget("job.featured");
             cache()->forget("jobs.active");
+            cache()->tags(['jobs', 'job-' . $job->id])->flush();
         });
 
         // Clear cache when job is deleted
@@ -325,7 +337,39 @@ class Job extends Model
             cache()->forget("job.{$job->id}");
             cache()->forget("job.featured");
             cache()->forget("jobs.active");
+            cache()->tags(['jobs', 'job-' . $job->id])->flush();
         });
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'job_title' => $this->job_title,
+            'description' => strip_tags($this->description),
+            'company_name' => $this->company?->name,
+            'location' => $this->full_location,
+            'job_category' => $this->jobCategory?->name,
+            'job_type' => $this->jobType?->name,
+            'skills' => $this->jobsSkill->pluck('name')->toArray(),
+            'tags' => $this->jobsTag->pluck('name')->toArray(),
+        ];
+    }
+
+    /**
+     * Activity log options
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['job_title', 'status', 'salary_from', 'salary_to', 'company_id'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -414,7 +458,7 @@ class Job extends Model
     {
         return $query->where('status', self::STATUS_OPEN)
                     ->where('is_suspended', false)
-                    ->where('job_expiry_date', '>=', now());
+                    ->where('job_expiry_date', '>', now());
     }
 
     /**
@@ -422,7 +466,8 @@ class Job extends Model
      */
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query->whereHas('activeFeatured');
+        return $query->whereHas('activeFeatured')
+                    ->active();
     }
 
     /**
@@ -430,16 +475,9 @@ class Job extends Model
      */
     public function scopeByLocation(Builder $query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null): Builder
     {
-        if ($countryId) {
-            $query->where('country_id', $countryId);
-        }
-        if ($stateId) {
-            $query->where('state_id', $stateId);
-        }
-        if ($cityId) {
-            $query->where('city_id', $cityId);
-        }
-        return $query;
+        return $query->when($countryId, fn($q) => $q->where('country_id', $countryId))
+                    ->when($stateId, fn($q) => $q->where('state_id', $stateId))
+                    ->when($cityId, fn($q) => $q->where('city_id', $cityId));
     }
 
     /**
@@ -447,13 +485,8 @@ class Job extends Model
      */
     public function scopeBySalaryRange(Builder $query, ?float $minSalary = null, ?float $maxSalary = null): Builder
     {
-        if ($minSalary) {
-            $query->where('salary_from', '>=', $minSalary);
-        }
-        if ($maxSalary) {
-            $query->where('salary_to', '<=', $maxSalary);
-        }
-        return $query;
+        return $query->when($minSalary, fn($q) => $q->where('salary_from', '>=', $minSalary))
+                    ->when($maxSalary, fn($q) => $q->where('salary_to', '<=', $maxSalary));
     }
 
     /**
@@ -653,5 +686,49 @@ class Job extends Model
     public function getStatusTextAttribute(): string
     {
         return self::STATUS_ARRAY[$this->status] ?? 'Unknown';
+    }
+
+    /**
+     * Scope for recent jobs (last 30 days).
+     */
+    public function scopeRecent(Builder $query): Builder
+    {
+        return $query->where('created_at', '>=', now()->subDays(30));
+    }
+
+    /**
+     * Scope for jobs by company.
+     */
+    public function scopeByCompany(Builder $query, int $companyId): Builder
+    {
+        return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * Scope for jobs by category.
+     */
+    public function scopeByCategory(Builder $query, int $categoryId): Builder
+    {
+        return $query->where('job_category_id', $categoryId);
+    }
+
+    /**
+     * Scope for jobs requiring specific skills.
+     */
+    public function scopeWithSkills(Builder $query, array $skillIds): Builder
+    {
+        return $query->whereHas('jobsSkill', function ($q) use ($skillIds) {
+            $q->whereIn('skill_id', $skillIds);
+        });
+    }
+
+    /**
+     * Scope for popular jobs (high application count).
+     */
+    public function scopePopular(Builder $query): Builder
+    {
+        return $query->withCount('appliedJobs')
+                    ->having('applied_jobs_count', '>', 10)
+                    ->orderByDesc('applied_jobs_count');
     }
 }

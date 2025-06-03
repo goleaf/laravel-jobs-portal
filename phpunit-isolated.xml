@@ -30,7 +30,7 @@
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
         <server name="APP_DEBUG" value="false"/>
-        <server name="DEBUGBAR_ENABLED" value="false"/>
+        <server name="DEBUGBAR_ENABLED" value="true"/>
         <server name="LOG_CHANNEL" value="null"/>
         <ini name="memory_limit" value="1G"/>
         <ini name="max_execution_time" value="300"/>

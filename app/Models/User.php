@@ -141,6 +141,11 @@ class User extends Authenticatable
 
     const ACTIVE = 1;
 
+    // User Types
+    const ADMIN = 1;
+    const EMPLOYER = 2;
+    const CANDIDATE = 3;
+
     const LANGUAGES = [
         'ar' => 'Arabic',
         'zh' => 'Chinese',
@@ -175,6 +180,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'user_type',
         'dob',
         'gender',
         'country_id',
@@ -201,7 +207,7 @@ class User extends Authenticatable
      */
     protected $appends = ['full_name', 'avatar', 'country_name', 'state_name', 'city_name'];
 
-    protected $with = ['media', 'country', 'city', 'state'];
+    protected $with = [];
 
     public function country(): BelongsTo
     {
@@ -278,6 +284,7 @@ class User extends Authenticatable
         'last_name' => 'string',
         'email' => 'string',
         'password' => 'string',
+        'user_type' => 'integer',
         'dob' => 'date',
         'gender' => 'integer',
         'country_id' => 'integer',

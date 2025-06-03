@@ -299,7 +299,7 @@ class Job extends Model
 
     protected $appends = ['country_name', 'state_name', 'city_name'];
 
-    protected $with = ['country', 'state', 'city', 'activeFeatured'];
+    protected $with = [];
 
     public function country(): BelongsTo
     {

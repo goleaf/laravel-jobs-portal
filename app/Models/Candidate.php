@@ -86,8 +86,8 @@ use Spatie\Translatable\HasTranslations;
  */
 class Candidate extends Model
 {
-    use HasSlug;
-    use HasTranslations;
+    // use HasSlug;
+    // use HasTranslations;
 
     public $table = 'candidates';
 
@@ -192,7 +192,7 @@ class Candidate extends Model
 
     protected $appends = ['country_name', 'state_name', 'city_name', 'full_location', 'candidate_url'];
 
-    protected $with = ['user'];
+    protected $with = [];
 
     public function getCountryNameAttribute()
     {

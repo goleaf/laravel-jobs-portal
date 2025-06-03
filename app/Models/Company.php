@@ -178,7 +178,7 @@ class Company extends Model
      */
     protected $appends = ['company_url'];
 
-    protected $with = ['user'];
+    protected $with = [];
 
     public function getCountryNameAttribute()
     {

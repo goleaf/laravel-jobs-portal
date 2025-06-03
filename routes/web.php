@@ -23,7 +23,7 @@ Route::get('/test', function () {
         'timestamp' => now(),
         'memory_usage' => memory_get_usage(true) / 1024 / 1024 . ' MB'
     ]);
-});
+})->name('test');
 
 Route::get('/', function () {
     return view('welcome');

@@ -9,7 +9,7 @@
                 <div class="col-12 mb-4">
                     <div class="row">
                         <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
-                            <a href="{{ route('candidates.index') }}" class=" text-decoration-none">
+                            <a href="{{ route('admin.candidates.index') }}" class=" text-decoration-none">
                             <div class="bg-primary shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
                                 <div class="bg-cyan-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
                                     <i class="fa-solid fa-users fs-1-xl text-white"></i>
@@ -141,7 +141,7 @@
                     <div class="d-flex justify-content-between pb-0">
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_candidates') }}</h3>
                         <div class="">
-                            <a href="{{ route('candidates.index') }}"
+                            <a href="{{ route('admin.candidates.index') }}"
                                class="btn btn-info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
@@ -161,7 +161,7 @@
                                 @forelse($data['registerCandidatesData'] as $registeredCandidates)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('candidates.show', $registeredCandidates->id) }}"
+                                            <a href="{{ route('admin.candidates.show', $registeredCandidates->id) }}"
                                                class="text-decoration-none">
                                                 {{ $registeredCandidates->user->full_name }}</a>
                                         </td>

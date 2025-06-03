@@ -26,16 +26,77 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource for admin.
      *
      * @return Application|Factory|View
      */
     public function index(Request $request): View
     {
+        // Check if this is an admin request (based on route or user role)
+        if ($request->route()->getPrefix() === 'admin' || (auth()->check() && auth()->user()->hasRole('Admin'))) {
+            $jobs = Job::with('company', 'jobCategory')->latest()->paginate(15);
+            return view('admin.jobs.index', compact('jobs'));
+        }
+
+        // Frontend job listing
         $data = $this->jobRepository->prepareJobData();
         $data['input'] = $request->all();
 
         return view('front_web_template.jobs.index')->with($data);
+    }
+
+    /**
+     * Show the form for creating a new job (admin)
+     */
+    public function create(): View
+    {
+        return view('admin.jobs.create');
+    }
+
+    /**
+     * Store a newly created job (admin)
+     */
+    public function store(Request $request)
+    {
+        // Implementation for storing job
+        return redirect()->route('admin.jobs.index')->with('success', 'Job created successfully');
+    }
+
+    /**
+     * Display the specified job (admin)
+     */
+    public function show($id): View
+    {
+        $job = Job::with('company', 'jobCategory')->findOrFail($id);
+        return view('admin.jobs.show', compact('job'));
+    }
+
+    /**
+     * Show the form for editing the specified job (admin)
+     */
+    public function edit($id): View
+    {
+        $job = Job::with('company', 'jobCategory')->findOrFail($id);
+        return view('admin.jobs.edit', compact('job'));
+    }
+
+    /**
+     * Update the specified job (admin)
+     */
+    public function update(Request $request, $id)
+    {
+        // Implementation for updating job
+        return redirect()->route('admin.jobs.index')->with('success', 'Job updated successfully');
+    }
+
+    /**
+     * Remove the specified job (admin)
+     */
+    public function destroy($id)
+    {
+        $job = Job::findOrFail($id);
+        $job->delete();
+        return redirect()->route('admin.jobs.index')->with('success', 'Job deleted successfully');
     }
 
     /**

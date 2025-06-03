@@ -124,6 +124,9 @@ Route::get('/companies', function () {
     return view('companies.index');
 })->name('companies.index');
 
+// Company management routes
+Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard.index');
@@ -180,8 +183,33 @@ Route::middleware(['auth'])->group(function () {
     // Admin routes
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
-            return view('dashboard.index');
+            // Mock data for dashboard
+            $data = [
+                'dashboardData' => [
+                    'totalCandidates' => 150,
+                    'totalEmployers' => 75,
+                    'totalActiveJobs' => 200,
+                    'featuredJobs' => 25,
+                    'featuredEmployers' => 15,
+                    'featuredJobsIncomes' => 5000,
+                    'featuredCompanysIncomes' => 3000,
+                    'subscriptionIncomes' => 8000,
+                ],
+                'registerCandidatesData' => collect([]),
+                'recentEmployersData' => collect([]),
+                'recentJobsData' => collect([]),
+            ];
+            return view('dashboard.index', compact('data'));
         })->name('dashboard');
+
+        // Candidates management
+        Route::resource('candidates', App\Http\Controllers\Web\CandidateController::class);
+        
+        // Jobs management
+        Route::resource('jobs', App\Http\Controllers\Web\JobController::class);
+        
+        // Transactions management
+        Route::resource('transactions', App\Http\Controllers\Web\TransactionController::class);
     });
 });
 

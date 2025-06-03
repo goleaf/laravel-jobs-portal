@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\Candidate;
+use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -18,6 +19,69 @@ class CandidateController extends AppBaseController
     public function __construct(CandidateRepository $candidateRepo)
     {
         $this->candidateRepository = $candidateRepo;
+    }
+
+    /**
+     * Display a listing of candidates for admin
+     */
+    public function index(): View
+    {
+        $candidates = Candidate::with('user')->paginate(15);
+        return view('admin.candidates.index', compact('candidates'));
+    }
+
+    /**
+     * Show the form for creating a new candidate
+     */
+    public function create(): View
+    {
+        return view('admin.candidates.create');
+    }
+
+    /**
+     * Store a newly created candidate
+     */
+    public function store(Request $request)
+    {
+        // Implementation for storing candidate
+        return redirect()->route('admin.candidates.index')->with('success', 'Candidate created successfully');
+    }
+
+    /**
+     * Display the specified candidate
+     */
+    public function show($id): View
+    {
+        $candidate = Candidate::with('user')->findOrFail($id);
+        return view('admin.candidates.show', compact('candidate'));
+    }
+
+    /**
+     * Show the form for editing the specified candidate
+     */
+    public function edit($id): View
+    {
+        $candidate = Candidate::with('user')->findOrFail($id);
+        return view('admin.candidates.edit', compact('candidate'));
+    }
+
+    /**
+     * Update the specified candidate
+     */
+    public function update(Request $request, $id)
+    {
+        // Implementation for updating candidate
+        return redirect()->route('admin.candidates.index')->with('success', 'Candidate updated successfully');
+    }
+
+    /**
+     * Remove the specified candidate
+     */
+    public function destroy($id)
+    {
+        $candidate = Candidate::findOrFail($id);
+        $candidate->delete();
+        return redirect()->route('admin.candidates.index')->with('success', 'Candidate deleted successfully');
     }
 
     /**

@@ -229,6 +229,7 @@ class User extends Authenticatable
     {
         return [
             'id' => 'integer',
+            'user_type' => 'integer',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'dob' => 'date',

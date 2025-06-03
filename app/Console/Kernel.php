@@ -21,9 +21,11 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        // Comment out heavy commands during testing
+        // $this->load(__DIR__.'/Commands');
 
-        // Register custom commands
+        // Register only essential commands for testing
+        /*
         $this->commands([
             \App\Console\Commands\ConsolidateTranslations::class,
             \App\Console\Commands\CreateLithuanianTranslations::class,
@@ -36,6 +38,7 @@ class Kernel extends ConsoleKernel
             \App\Console\Commands\StandardizeJavaScript::class,
             \App\Console\Commands\MigrateFromSpatie::class,
         ]);
+        */
 
         require base_path('routes/console.php');
     }

@@ -4,16 +4,26 @@ return [
         'name' => env('APP_NAME', 'Laravel'),
         'source' => [
             'files' => [
-                'include' => [],
-                'exclude' => [],
+                'include' => [
+                    base_path(),
+                ],
+                'exclude' => [
+                    base_path('vendor'),
+                    base_path('node_modules'),
+                ],
                 'followLinks' => false,
+                'relative_path' => base_path(),
             ],
-            'databases' => [],
+            'databases' => [
+                'mysql',
+            ],
         ],
         'database_dump_compressor' => null,
         'destination' => [
             'filename_prefix' => '',
-            'disks' => [],
+            'disks' => [
+                'local',
+            ],
         ],
         'temporary_directory' => storage_path('app/backup-temp'),
     ],

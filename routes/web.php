@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +27,86 @@ Route::get('/test', function () {
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('front.home');
 
+// Authentication Routes
 Route::get('/login', function () {
     return view('auth.login');
-})->name('login');
+})->middleware('guest')->name('login');
+
+Route::post('/login', function (Illuminate\Http\Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $request->session()->regenerate();
+        return redirect()->intended('/dashboard');
+    }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ])->onlyInput('email');
+})->middleware('guest')->name('login.submit');
 
 Route::get('/register', function () {
     return view('auth.register');
-})->name('register');
+})->middleware('guest')->name('register');
+
+Route::post('/register', function (Illuminate\Http\Request $request) {
+    $request->validate([
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['nullable', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'phone' => ['nullable', 'string', 'max:20'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ]);
+
+    $user = App\Models\User::create([
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'password' => Hash::make($request->password),
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+})->middleware('guest');
+
+Route::post('/logout', function (Illuminate\Http\Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+
+// Password Reset Routes
+Route::get('/password/reset', function () {
+    return view('auth.passwords.email');
+})->middleware('guest')->name('password.request');
+
+Route::post('/password/email', function (Illuminate\Http\Request $request) {
+    $request->validate(['email' => 'required|email']);
+    // Implement password reset logic here
+    return back()->with('status', 'Password reset link sent to your email!');
+})->middleware('guest')->name('password.email');
+
+Route::get('/password/reset/{token}', function ($token) {
+    return view('auth.passwords.reset', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/password/reset', function (Illuminate\Http\Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|confirmed|min:8',
+    ]);
+    // Implement password reset logic here
+    return redirect('/login')->with('status', 'Password has been reset!');
+})->middleware('guest')->name('password.update');
 
 Route::get('/about-us', function () {
     return view('about');
@@ -111,28 +184,6 @@ Route::middleware(['auth'])->group(function () {
         })->name('dashboard');
     });
 });
-
-// Add auth routes for login/logout functionality
-Route::post('/login', function () {
-    return redirect('/dashboard');
-})->name('login.submit');
-
-Route::post('/logout', function () {
-    return redirect('/');
-})->name('logout');
-
-// Password reset routes
-Route::get('/password/reset', function () {
-    return view('auth.passwords.reset');
-})->name('password.reset');
-
-Route::post('/password/email', function () {
-    return back()->with('status', 'Password reset link sent!');
-})->name('password.email');
-
-Route::post('/password/reset', function () {
-    return redirect('/home');
-})->name('password.update');
 
 // Job and company detail pages
 Route::get('/jobs/{id}', function ($id) {

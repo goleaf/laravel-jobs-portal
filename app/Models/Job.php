@@ -266,6 +266,7 @@ class Job extends Model
         'job_shift_id',
         'degree_level_id',
         'experience',
+        'position',
         'job_expiry_date',
         'no_preference',
         'hide_salary',
@@ -273,6 +274,8 @@ class Job extends Model
         'is_suspended',
         'status',
         'is_created_by_admin',
+        'key_responsibilities',
+        'last_change',
     ];
 
     /**
@@ -297,6 +300,7 @@ class Job extends Model
             'job_shift_id' => 'integer',
             'degree_level_id' => 'integer',
             'experience' => 'integer',
+            'position' => 'integer',
             'job_expiry_date' => 'date',
             'no_preference' => 'integer',
             'hide_salary' => 'boolean',

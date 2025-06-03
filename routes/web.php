@@ -136,7 +136,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('profile');
 
         Route::get('/profile/edit', function () {
-            return view('candidate.profile-edit');
+            return view('candidate.profile.general');
         })->name('profile.edit');
 
         Route::get('/applied-jobs', function () {
@@ -148,7 +148,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('favorite-jobs');
 
         Route::get('/job-alerts', function () {
-            return view('candidate.job-alerts');
+            return view('candidate.job_alert.index');
         })->name('job-alerts');
     });
 
@@ -180,7 +180,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin routes
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
-            return view('admin.dashboard');
+            return view('dashboard.index');
         })->name('dashboard');
     });
 });

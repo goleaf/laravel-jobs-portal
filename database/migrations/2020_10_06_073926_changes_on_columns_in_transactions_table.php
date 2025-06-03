@@ -12,14 +12,22 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Skip this migration for SQLite to avoid foreign key issues
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+        
         Schema::table('transactions', function (Blueprint $table) {
-            // Only drop foreign key if not using SQLite
-            if (DB::getDriverName() !== 'sqlite') {
-                $table->dropForeign('transactions_subscription_id_foreign');
-            }
-            
-            // Drop column works for all database drivers
+            // Check if foreign key exists before trying to drop it
             if (Schema::hasColumn('transactions', 'subscription_id')) {
+                // Try to drop foreign key if it exists
+                try {
+                    $table->dropForeign('transactions_subscription_id_foreign');
+                } catch (\Exception $e) {
+                    // Ignore if foreign key doesn't exist
+                }
+                
+                // Drop the column
                 $table->dropColumn('subscription_id');
             }
             

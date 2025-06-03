@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
+// use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
@@ -129,7 +129,7 @@ use Spatie\Activitylog\LogOptions;
  */
 class Job extends Model
 {
-    use HasFactory, SoftDeletes, Searchable, LogsActivity;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     // Default eager loading for performance
     protected $with = ['company', 'jobCategory', 'jobType'];

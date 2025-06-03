@@ -13,6 +13,8 @@
             <file>./tests/Unit/ExampleTest.php</file>
             <file>./tests/Unit/SimpleTest.php</file>
             <file>./tests/Unit/HelperTest.php</file>
+            <file>./tests/Unit/ConfigurationOptimizedTest.php</file>
+            <file>./tests/Unit/RouteOptimizedTest.php</file>
             <file>./tests/Unit/Models/CompanyModelTest.php</file>
             <file>./tests/Unit/Models/CandidateModelTest.php</file>
             <file>./tests/Unit/Models/JobApplicationModelTest.php</file>

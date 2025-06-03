@@ -7,28 +7,55 @@
          stopOnFailure="false"
          cacheResult="true"
          cacheDirectory=".phpunit.cache"
+         beStrictAboutOutputDuringTests="false"
+         failOnWarning="false"
+         timeoutForSmallTests="30"
+         timeoutForMediumTests="60"
+         timeoutForLargeTests="120"
 >
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
+            <exclude>./tests/Unit/ConfigurationTest.php</exclude>
+            <exclude>./tests/Unit/RouteTest.php</exclude>
+            <exclude>./tests/Unit/Models/UserModelTest.php</exclude>
+            <exclude>./tests/Unit/Models/JobModelTest.php</exclude>
+            <exclude>./tests/Unit/Models/UserModelDatabaseTest.php</exclude>
         </testsuite>
+        
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
-        <testsuite name="Small">
+        
+        <testsuite name="Optimized">
             <file>./tests/Unit/ExampleTest.php</file>
             <file>./tests/Unit/SimpleTest.php</file>
             <file>./tests/Unit/HelperTest.php</file>
+            <file>./tests/Unit/ConfigurationOptimizedTest.php</file>
+            <file>./tests/Unit/RouteOptimizedTest.php</file>
             <file>./tests/Unit/Models/CompanyModelTest.php</file>
             <file>./tests/Unit/Models/CandidateModelTest.php</file>
             <file>./tests/Unit/Models/JobApplicationModelTest.php</file>
             <file>./tests/Unit/Models/JobCategoryModelTest.php</file>
             <file>./tests/Unit/Models/JobTypeModelTest.php</file>
             <file>./tests/Unit/Models/SkillModelTest.php</file>
+            <file>./tests/Unit/Models/UserModelOptimizedTest.php</file>
+            <file>./tests/Unit/Models/JobModelOptimizedTest.php</file>
             <file>./tests/Unit/Models/UserModelSimpleTest.php</file>
             <file>./tests/Unit/Models/JobModelSimpleTest.php</file>
         </testsuite>
     </testsuites>
+    
+    <coverage>
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+        <exclude>
+            <directory>./app/Console</directory>
+            <file>./app/Helpers/helpers.php</file>
+        </exclude>
+    </coverage>
+    
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
@@ -41,10 +68,14 @@
         <server name="TELESCOPE_ENABLED" value="false"/>
         <server name="APP_DEBUG" value="false"/>
         <server name="DEBUGBAR_ENABLED" value="false"/>
-        <ini name="memory_limit" value="4G"/>
-        <ini name="max_execution_time" value="0"/>
+        <server name="LOG_CHANNEL" value="null"/>
+        <ini name="memory_limit" value="1G"/>
+        <ini name="max_execution_time" value="120"/>
         <ini name="opcache.enable" value="0"/>
         <ini name="xdebug.mode" value="off"/>
+        <ini name="error_reporting" value="E_ALL"/>
+        <ini name="display_errors" value="0"/>
+        <ini name="log_errors" value="0"/>
     </php>
     <logging>
         <junit outputFile="storage/logs/junit.xml"/>

@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Rennokki\QueryCache\Traits\QueryCacheable;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * App\Models\Setting
@@ -28,12 +26,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @mixin \Eloquent
  *
  * @property-read mixed $logo_url
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read int|null $media_count
  */
-class Setting extends Model implements HasMedia
+class Setting extends Model
 {
-    use InteractsWithMedia;
     use QueryCacheable;
 
     public $cacheFor = 3600; // cache time, in seconds
@@ -81,12 +76,7 @@ class Setting extends Model implements HasMedia
      */
     public function getLogoUrlAttribute()
     {
-        /** @var Media $media */
-        $media = $this->getMedia(self::PATH)->first();
-        if (! empty($media)) {
-            return $media->getFullUrl();
-        }
-
+        // Since MediaLibrary was removed, just return the asset URL from the value
         return asset($this->value);
     }
 

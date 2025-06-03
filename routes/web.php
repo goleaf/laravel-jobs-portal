@@ -139,9 +139,8 @@ Route::get('/jobs/{id}', function ($id) {
     return view('jobs.show');
 })->name('jobs.show');
 
-Route::get('/company/{id}', function ($id) {
-    return view('companies.show');
-})->name('company.show');
+Route::get('/company/{company}', [App\Http\Controllers\CompanyController::class, 'show'])->name('company.show');
+Route::get('/company/{company}/edit', [App\Http\Controllers\CompanyController::class, 'edit'])->name('company.edit');
 
 // Terms and privacy pages
 Route::get('/privacy-policy', function () {

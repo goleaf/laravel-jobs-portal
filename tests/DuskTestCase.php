@@ -16,6 +16,9 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare(): void
     {
+        // Increase memory limit for tests
+        ini_set('memory_limit', '4G');
+        
         if (! static::runningInSail()) {
             static::startChromeDriver();
         }
@@ -31,7 +34,16 @@ abstract class DuskTestCase extends BaseTestCase
             '--headless=new',
             '--no-sandbox',
             '--disable-dev-shm-usage',
-            '--window-size=1920,1080',
+            '--disable-extensions',
+            '--disable-plugins',
+            '--disable-images',
+            '--disable-javascript',
+            '--window-size=1280,720',
+            '--memory-pressure-off',
+            '--single-process',
+            '--disable-background-timer-throttling',
+            '--disable-renderer-backgrounding',
+            '--disable-backgrounding-occluded-windows',
         ]);
 
         return RemoteWebDriver::create(

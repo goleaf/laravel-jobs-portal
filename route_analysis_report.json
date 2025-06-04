@@ -1,763 +1,630 @@
 {
-    "working": [
+    "timestamp": "2025-06-04 08:52:23",
+    "summary": {
+        "total_blade_files": 1184,
+        "total_route_references": 183,
+        "total_defined_routes": 175,
+        "total_errors": 72,
+        "total_tests": 6
+    },
+    "errors": [
         {
-            "route": "debugbar.openhandler",
-            "uri": "_debugbar\/open",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.admin.create",
+            "severity": "high",
+            "description": "Route 'admin.admin.create' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "debugbar.assets.css",
-            "uri": "_debugbar\/assets\/stylesheets",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.admin.destroy",
+            "severity": "high",
+            "description": "Route 'admin.admin.destroy' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "debugbar.assets.js",
-            "uri": "_debugbar\/assets\/javascript",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.admin.edit",
+            "severity": "high",
+            "description": "Route 'admin.admin.edit' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "l5-swagger.default.api",
-            "uri": "api\/documentation",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.admin.index",
+            "severity": "high",
+            "description": "Route 'admin.admin.index' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "l5-swagger.default.docs",
-            "uri": "docs",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.admin.show",
+            "severity": "high",
+            "description": "Route 'admin.admin.show' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "l5-swagger.default.oauth2_callback",
-            "uri": "api\/oauth2-callback",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.stats.index",
-            "uri": "horizon\/api\/stats",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.workload.index",
-            "uri": "horizon\/api\/workload",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.masters.index",
-            "uri": "horizon\/api\/masters",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.monitoring.index",
-            "uri": "horizon\/api\/monitoring",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.jobs-metrics.index",
-            "uri": "horizon\/api\/metrics\/jobs",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.queues-metrics.index",
-            "uri": "horizon\/api\/metrics\/queues",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.jobs-batches.index",
-            "uri": "horizon\/api\/batches",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.pending-jobs.index",
-            "uri": "horizon\/api\/jobs\/pending",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.completed-jobs.index",
-            "uri": "horizon\/api\/jobs\/completed",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.silenced-jobs.index",
-            "uri": "horizon\/api\/jobs\/silenced",
-            "type": "controller"
-        },
-        {
-            "route": "horizon.failed-jobs.index",
-            "uri": "horizon\/api\/jobs\/failed",
-            "type": "controller"
-        },
-        {
-            "route": "pulse",
-            "uri": "pulse",
-            "type": "controller"
-        },
-        {
-            "route": "sanctum.csrf-cookie",
-            "uri": "sanctum\/csrf-cookie",
-            "type": "controller"
-        },
-        {
-            "route": null,
-            "uri": "telescope\/telescope-api\/monitored-tags",
-            "type": "controller"
-        },
-        {
-            "route": null,
-            "uri": "livewire\/livewire.js",
-            "type": "controller"
-        },
-        {
-            "route": null,
-            "uri": "livewire\/livewire.min.js.map",
-            "type": "controller"
-        },
-        {
-            "route": "ignition.healthCheck",
-            "uri": "_ignition\/health-check",
-            "type": "controller"
-        },
-        {
-            "route": null,
-            "uri": "api\/user",
-            "type": "controller"
-        },
-        {
-            "route": "test",
-            "uri": "test",
-            "type": "controller"
-        },
-        {
-            "route": "front.home",
-            "uri": "\/",
-            "type": "controller"
-        },
-        {
-            "route": "login",
-            "uri": "login",
-            "type": "controller"
-        },
-        {
-            "route": "register",
-            "uri": "register",
-            "type": "controller"
-        },
-        {
-            "route": "password.request",
-            "uri": "password\/reset",
-            "type": "controller"
-        },
-        {
-            "route": "about-us",
-            "uri": "about-us",
-            "type": "controller"
-        },
-        {
-            "route": "contact",
-            "uri": "contact",
-            "type": "controller"
-        },
-        {
-            "route": "jobs.index",
-            "uri": "jobs",
-            "type": "controller"
-        },
-        {
-            "route": "companies.index",
-            "uri": "companies",
-            "type": "controller"
-        },
-        {
-            "route": "employer.register",
-            "uri": "employer-register",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.register",
-            "uri": "candidate-register",
-            "type": "controller"
-        },
-        {
-            "route": "terms.conditions.list",
-            "uri": "terms-and-conditions",
-            "type": "controller"
-        },
-        {
-            "route": "privacy.policy.list",
-            "uri": "privacy-policy-page",
-            "type": "controller"
-        },
-        {
-            "route": "posts.index",
-            "uri": "posts",
-            "type": "controller"
-        },
-        {
-            "route": "job.index",
-            "uri": "job-listing",
-            "type": "controller"
-        },
-        {
-            "route": "company.index",
-            "uri": "company",
-            "type": "controller"
-        },
-        {
-            "route": "company.create",
-            "uri": "company\/create",
-            "type": "controller"
-        },
-        {
-            "route": "admin.login",
-            "uri": "admin\/login",
-            "type": "controller"
-        },
-        {
-            "route": "theme.mode",
-            "uri": "theme-mode-toggle",
-            "type": "controller"
-        },
-        {
-            "route": "components.icon-documentation",
-            "uri": "components\/icon-documentation",
-            "type": "controller"
-        },
-        {
-            "route": "icons.documentation",
-            "uri": "icons\/documentation",
-            "type": "controller"
-        },
-        {
-            "route": "admin.front.settings.index",
-            "uri": "admin\/front-settings",
-            "type": "controller"
-        },
-        {
-            "route": "admin.candidates.index",
-            "uri": "admin\/candidates",
-            "type": "controller"
-        },
-        {
-            "route": "admin.jobs.index",
-            "uri": "admin\/jobs",
-            "type": "controller"
-        },
-        {
-            "route": "admin.jobs.create",
-            "uri": "admin\/jobs\/create",
-            "type": "controller"
-        },
-        {
-            "route": "admin.transactions.index",
-            "uri": "admin\/transactions",
-            "type": "controller"
-        },
-        {
-            "route": "admin.transactions.create",
-            "uri": "admin\/transactions\/create",
-            "type": "controller"
-        },
-        {
-            "route": "states-list",
-            "uri": "states-list",
-            "type": "controller"
-        },
-        {
-            "route": "cities-list",
-            "uri": "cities-list",
-            "type": "controller"
-        },
-        {
-            "route": "countries-list",
-            "uri": "countries-list",
-            "type": "controller"
-        },
-        {
-            "route": "dashboard",
-            "uri": "dashboard",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.profile",
-            "uri": "candidate\/profile",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.profile.edit",
-            "uri": "candidate\/profile\/edit",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.applied-jobs",
-            "uri": "candidate\/applied-jobs",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.favorite-jobs",
-            "uri": "candidate\/favorite-jobs",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.job-alerts",
-            "uri": "candidate\/job-alerts",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.job.alert",
-            "uri": "candidate\/job-alert",
-            "type": "controller"
-        },
-        {
-            "route": "candidate.applied.job",
-            "uri": "candidate\/applied-job",
-            "type": "controller"
-        },
-        {
-            "route": "employer.company",
-            "uri": "employer\/company",
-            "type": "controller"
-        },
-        {
-            "route": "employer.company.edit",
-            "uri": "employer\/company\/edit",
-            "type": "controller"
-        },
-        {
-            "route": "employer.jobs.index",
-            "uri": "employer\/jobs",
-            "type": "controller"
-        },
-        {
-            "route": "employer.jobs.create",
-            "uri": "employer\/jobs\/create",
-            "type": "controller"
-        },
-        {
-            "route": "employer.jobs.applications",
-            "uri": "employer\/jobs\/applications",
-            "type": "controller"
-        },
-        {
-            "route": "admin.dashboard",
-            "uri": "admin\/dashboard",
-            "type": "controller"
-        },
-        {
-            "route": "admin.admin.admin.index",
-            "uri": "admin\/admin",
-            "type": "controller"
-        },
-        {
-            "route": "admin.admin.admin.create",
-            "uri": "admin\/admin\/create",
-            "type": "controller"
-        },
-        {
+            "type": "missing_route",
             "route": "admin.candidates.create",
-            "uri": "admin\/candidates\/create",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'admin.candidates.create' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "admin.subscribers.index",
-            "uri": "admin\/subscribers",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.candidates.edit",
+            "severity": "high",
+            "description": "Route 'admin.candidates.edit' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "admin.reported.companies",
-            "uri": "admin\/reported-employers",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.candidates.show",
+            "severity": "high",
+            "description": "Route 'admin.candidates.show' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "admin.reported.candidates",
-            "uri": "admin\/reported-candidates",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.dashboard",
+            "severity": "high",
+            "description": "Route 'admin.dashboard' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "admin.requiredDegreeLevel.index",
-            "uri": "admin\/degree-levels",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.edit",
+            "severity": "high",
+            "description": "Route 'admin.edit' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "admin.resumes.index",
-            "uri": "admin\/resumes",
-            "type": "controller"
-        },
-        {
-            "route": "admin.selected.candidate",
-            "uri": "admin\/selected-candidates",
-            "type": "controller"
-        },
-        {
-            "route": "admin.job-categories.index",
-            "uri": "admin\/job-categories",
-            "type": "controller"
-        },
-        {
-            "route": "admin.jobType.index",
-            "uri": "admin\/job-types",
-            "type": "controller"
-        },
-        {
-            "route": "admin.jobTag.index",
-            "uri": "admin\/job-tags",
-            "type": "controller"
-        },
-        {
-            "route": "admin.jobShift.index",
-            "uri": "admin\/job-shifts",
-            "type": "controller"
-        },
-        {
-            "route": "admin.reported.jobs",
-            "uri": "admin\/reported-jobs",
-            "type": "controller"
-        },
-        {
-            "route": "admin.job-notification.index",
-            "uri": "admin\/job-notification",
-            "type": "controller"
-        },
-        {
-            "route": "admin.admin.jobs.expiredJobs",
-            "uri": "admin\/expired-jobs",
-            "type": "controller"
-        },
-        {
-            "route": "admin.post-categories.index",
-            "uri": "admin\/post-categories",
-            "type": "controller"
-        },
-        {
-            "route": "admin.posts.index",
-            "uri": "admin\/posts",
-            "type": "controller"
-        },
-        {
-            "route": "admin.posts.create",
-            "uri": "admin\/posts\/create",
-            "type": "controller"
-        },
-        {
-            "route": "admin.post.comments",
-            "uri": "admin\/post-comments",
-            "type": "controller"
-        },
-        {
-            "route": "admin.plans.index",
-            "uri": "admin\/plans",
-            "type": "controller"
-        },
-        {
-            "route": "admin.countries.index",
-            "uri": "admin\/countries",
-            "type": "controller"
-        },
-        {
-            "route": "admin.states.index",
-            "uri": "admin\/states",
-            "type": "controller"
-        },
-        {
-            "route": "admin.cities.index",
-            "uri": "admin\/cities",
-            "type": "controller"
-        },
-        {
-            "route": "admin.maritalStatus.index",
-            "uri": "admin\/marital-status",
-            "type": "controller"
-        },
-        {
-            "route": "admin.skills.index",
-            "uri": "admin\/skills",
-            "type": "controller"
-        },
-        {
-            "route": "admin.salaryPeriod.index",
-            "uri": "admin\/salary-periods",
-            "type": "controller"
-        },
-        {
-            "route": "admin.industry.index",
-            "uri": "admin\/industries",
-            "type": "controller"
-        },
-        {
-            "route": "admin.companySize.index",
-            "uri": "admin\/company-sizes",
-            "type": "controller"
-        },
-        {
-            "route": "admin.functionalArea.index",
-            "uri": "admin\/functional-areas",
-            "type": "controller"
-        },
-        {
-            "route": "admin.careerLevel.index",
-            "uri": "admin\/career-levels",
-            "type": "controller"
-        },
-        {
-            "route": "admin.salaryCurrency.index",
-            "uri": "admin\/salary-currencies",
-            "type": "controller"
-        },
-        {
-            "route": "admin.ownerShipType.index",
-            "uri": "admin\/ownership-types",
-            "type": "controller"
-        },
-        {
-            "route": "admin.languages.index",
-            "uri": "admin\/languages",
-            "type": "controller"
-        },
-        {
-            "route": "admin.noticeboards.index",
-            "uri": "admin\/noticeboards",
-            "type": "controller"
-        },
-        {
-            "route": "admin.faqs.index",
-            "uri": "admin\/faqs",
-            "type": "controller"
-        },
-        {
-            "route": "admin.inquires.index",
-            "uri": "admin\/inquires",
-            "type": "controller"
-        },
-        {
-            "route": "admin.notification.settings.index",
-            "uri": "admin\/notification-settings",
-            "type": "controller"
-        },
-        {
-            "route": "admin.privacy.policy.index",
-            "uri": "admin\/privacy-policy",
-            "type": "controller"
-        },
-        {
-            "route": "admin.email.template.index",
-            "uri": "admin\/email-template",
-            "type": "controller"
-        },
-        {
-            "route": "admin.settings.index",
-            "uri": "admin\/settings",
-            "type": "controller"
-        },
-        {
-            "route": "admin.testimonials.index",
-            "uri": "admin\/testimonials",
-            "type": "controller"
-        },
-        {
-            "route": "admin.branding.sliders.index",
-            "uri": "admin\/branding-sliders",
-            "type": "controller"
-        },
-        {
-            "route": "admin.header.sliders.index",
-            "uri": "admin\/header-sliders",
-            "type": "controller"
-        },
-        {
-            "route": "admin.image-sliders.index",
-            "uri": "admin\/image-sliders",
-            "type": "controller"
-        },
-        {
-            "route": "admin.cms.services.index",
-            "uri": "admin\/cms-services",
-            "type": "controller"
-        },
-        {
-            "route": "admin.cms.about-us.service",
-            "uri": "admin\/cms-about-us",
-            "type": "controller"
-        },
-        {
+            "type": "missing_route",
             "route": "admin.index",
-            "uri": "admin",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'admin.index' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "manage-subscription.index",
-            "uri": "manage-subscription",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.reported.companies",
+            "severity": "high",
+            "description": "Route 'admin.reported.companies' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "transactions.index",
-            "uri": "transactions",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.settings.index",
+            "severity": "high",
+            "description": "Route 'admin.settings.index' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "followers.index",
-            "uri": "followers",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "admin.subscribers.index",
+            "severity": "high",
+            "description": "Route 'admin.subscribers.index' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "favourite.companies",
-            "uri": "favourite-companies",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "batch.slot.store",
+            "severity": "high",
+            "description": "Route 'batch.slot.store' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "favourite.jobs",
-            "uri": "favourite-jobs",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "blog.create.comment",
+            "severity": "high",
+            "description": "Route 'blog.create.comment' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "candidates.index",
-            "uri": "candidates-list",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "cancel.selected.slot",
+            "severity": "high",
+            "description": "Route 'cancel.selected.slot' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "testimonials.index",
-            "uri": "testimonials",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.applied.job",
+            "severity": "high",
+            "description": "Route 'candidate.applied.job' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "subscribers.index",
-            "uri": "subscribers",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.create-education",
+            "severity": "high",
+            "description": "Route 'candidate.create-education' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "noticeboards.index",
-            "uri": "noticeboards",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.create-experience",
+            "severity": "high",
+            "description": "Route 'candidate.create-experience' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "plans.index",
-            "uri": "plans",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.cv.template",
+            "severity": "high",
+            "description": "Route 'candidate.cv.template' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "post-categories.index",
-            "uri": "post-categories",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.edit.profile",
+            "severity": "high",
+            "description": "Route 'candidate.edit.profile' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "privacy-policy",
-            "uri": "privacy-policy",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.general.profile.update",
+            "severity": "high",
+            "description": "Route 'candidate.general.profile.update' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "terms-conditions",
-            "uri": "terms-conditions",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.job-alerts.create",
+            "severity": "high",
+            "description": "Route 'candidate.job-alerts.create' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.search.jobs",
-            "uri": "front\/search-jobs",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.job.alert",
+            "severity": "high",
+            "description": "Route 'candidate.job.alert' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.company.lists",
-            "uri": "front\/company-lists",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.online.profile.update",
+            "severity": "high",
+            "description": "Route 'candidate.online.profile.update' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.candidate.lists",
-            "uri": "front\/candidate-lists",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "candidate.profile",
+            "severity": "high",
+            "description": "Route 'candidate.profile' is referenced in blade files but not defined in route files"
         },
         {
+            "type": "missing_route",
+            "route": "candidates.create",
+            "severity": "high",
+            "description": "Route 'candidates.create' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "candidates.edit",
+            "severity": "high",
+            "description": "Route 'candidates.edit' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "candidates.export.excel",
+            "severity": "high",
+            "description": "Route 'candidates.export.excel' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "candidates.show",
+            "severity": "high",
+            "description": "Route 'candidates.show' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "change.job.stage",
+            "severity": "high",
+            "description": "Route 'change.job.stage' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "download.all-resume",
+            "severity": "high",
+            "description": "Route 'download.all-resume' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "download.post",
+            "severity": "high",
+            "description": "Route 'download.post' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "download.resume",
+            "severity": "high",
+            "description": "Route 'download.resume' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "email.template.edit",
+            "severity": "high",
+            "description": "Route 'email.template.edit' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "employer.dashboard",
+            "severity": "high",
+            "description": "Route 'employer.dashboard' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
             "route": "front.about.us",
-            "uri": "front\/about-us",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'front.about.us' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.contact",
-            "uri": "front\/contact-us",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.blog.category",
+            "severity": "high",
+            "description": "Route 'front.blog.category' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.post.lists",
-            "uri": "front\/posts",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.candidate.details",
+            "severity": "high",
+            "description": "Route 'front.candidate.details' is referenced in blade files but not defined in route files"
         },
         {
-            "route": "front.save.register",
-            "uri": "front\/register",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.candidate.lists",
+            "severity": "high",
+            "description": "Route 'front.candidate.lists' is referenced in blade files but not defined in route files"
         },
         {
+            "type": "missing_route",
             "route": "front.candidate.login",
-            "uri": "front\/candidate-login",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'front.candidate.login' is referenced in blade files but not defined in route files"
         },
         {
+            "type": "missing_route",
+            "route": "front.categories",
+            "severity": "high",
+            "description": "Route 'front.categories' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "front.company.details",
+            "severity": "high",
+            "description": "Route 'front.company.details' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "front.company.lists",
+            "severity": "high",
+            "description": "Route 'front.company.lists' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "front.contact",
+            "severity": "high",
+            "description": "Route 'front.contact' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "front.contact.store",
+            "severity": "high",
+            "description": "Route 'front.contact.store' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
             "route": "front.employee.login",
-            "uri": "front\/employee-login",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'front.employee.login' is referenced in blade files but not defined in route files"
         },
         {
+            "type": "missing_route",
+            "route": "front.job.details",
+            "severity": "high",
+            "description": "Route 'front.job.details' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
             "route": "front.login",
-            "uri": "front\/login",
-            "type": "controller"
+            "severity": "high",
+            "description": "Route 'front.login' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v4-2-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.post.lists",
+            "severity": "high",
+            "description": "Route 'front.post.lists' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v4-4-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.posts.details",
+            "severity": "high",
+            "description": "Route 'front.posts.details' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v4-5-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.save.register",
+            "severity": "high",
+            "description": "Route 'front.save.register' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v6-0-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "front.search.jobs",
+            "severity": "high",
+            "description": "Route 'front.search.jobs' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v6-1-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "get.jobs.search",
+            "severity": "high",
+            "description": "Route 'get.jobs.search' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v7-1-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "get.schedule.history",
+            "severity": "high",
+            "description": "Route 'get.schedule.history' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v7-1-1",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "interview.slot.store",
+            "severity": "high",
+            "description": "Route 'interview.slot.store' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v8-0-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "job-applications",
+            "severity": "high",
+            "description": "Route 'job-applications' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v8-1-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "job.create",
+            "severity": "high",
+            "description": "Route 'job.create' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v9-0-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "job.edit",
+            "severity": "high",
+            "description": "Route 'job.edit' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade-to-v9-1-0",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "job.stage.index",
+            "severity": "high",
+            "description": "Route 'job.stage.index' is referenced in blade files but not defined in route files"
         },
         {
-            "route": null,
-            "uri": "upgrade\/database",
-            "type": "controller"
+            "type": "missing_route",
+            "route": "jobApplicationId",
+            "severity": "high",
+            "description": "Route 'jobApplicationId' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "jobId",
+            "severity": "high",
+            "description": "Route 'jobId' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "report.to.candidate",
+            "severity": "high",
+            "description": "Route 'report.to.candidate' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "send.contact.email",
+            "severity": "high",
+            "description": "Route 'send.contact.email' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "token",
+            "severity": "high",
+            "description": "Route 'token' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "translation-manager.index",
+            "severity": "high",
+            "description": "Route 'translation-manager.index' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "view.slot.screen",
+            "severity": "high",
+            "description": "Route 'view.slot.screen' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "{{ $action }}",
+            "severity": "high",
+            "description": "Route '{{ $action }}' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "{{ route(",
+            "severity": "high",
+            "description": "Route '{{ route(' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "{{ url(",
+            "severity": "high",
+            "description": "Route '{{ url(' is referenced in blade files but not defined in route files"
+        },
+        {
+            "type": "missing_route",
+            "route": "{{url(",
+            "severity": "high",
+            "description": "Route '{{url(' is referenced in blade files but not defined in route files"
         }
     ],
-    "missing_views": [],
-    "missing_controllers": [],
-    "errors": [],
-    "total": 281
+    "missing_routes": {
+        "1": "admin.admin.create",
+        "2": "admin.admin.destroy",
+        "3": "admin.admin.edit",
+        "4": "admin.admin.index",
+        "5": "admin.admin.show",
+        "6": "admin.candidates.create",
+        "7": "admin.candidates.edit",
+        "9": "admin.candidates.show",
+        "10": "admin.dashboard",
+        "11": "admin.edit",
+        "12": "admin.index",
+        "19": "admin.reported.companies",
+        "20": "admin.settings.index",
+        "21": "admin.subscribers.index",
+        "28": "batch.slot.store",
+        "29": "blog.create.comment",
+        "31": "cancel.selected.slot",
+        "32": "candidate.applied.job",
+        "33": "candidate.create-education",
+        "34": "candidate.create-experience",
+        "35": "candidate.cv.template",
+        "36": "candidate.edit.profile",
+        "37": "candidate.general.profile.update",
+        "38": "candidate.job-alerts.create",
+        "39": "candidate.job.alert",
+        "40": "candidate.online.profile.update",
+        "41": "candidate.profile",
+        "43": "candidates.create",
+        "44": "candidates.edit",
+        "45": "candidates.export.excel",
+        "47": "candidates.show",
+        "49": "change.job.stage",
+        "66": "download.all-resume",
+        "68": "download.post",
+        "69": "download.resume",
+        "71": "email.template.edit",
+        "73": "employer.dashboard",
+        "79": "front.about.us",
+        "80": "front.blog.category",
+        "81": "front.candidate.details",
+        "82": "front.candidate.lists",
+        "83": "front.candidate.login",
+        "84": "front.categories",
+        "85": "front.company.details",
+        "86": "front.company.lists",
+        "87": "front.contact",
+        "88": "front.contact.store",
+        "89": "front.employee.login",
+        "91": "front.job.details",
+        "92": "front.login",
+        "93": "front.post.lists",
+        "94": "front.posts.details",
+        "95": "front.save.register",
+        "96": "front.search.jobs",
+        "99": "get.jobs.search",
+        "100": "get.schedule.history",
+        "107": "interview.slot.store",
+        "108": "job-applications",
+        "111": "job.create",
+        "112": "job.edit",
+        "114": "job.stage.index",
+        "115": "jobApplicationId",
+        "116": "jobId",
+        "152": "report.to.candidate",
+        "163": "send.contact.email",
+        "173": "token",
+        "175": "translation-manager.index",
+        "178": "view.slot.screen",
+        "179": "{{ $action }}",
+        "180": "{{ route(",
+        "181": "{{ url(",
+        "182": "{{url("
+    },
+    "unused_routes": {
+        "0": "\/branding-sliders",
+        "1": "\/career-levels",
+        "2": "\/cities",
+        "3": "\/cities-list",
+        "4": "\/cms-about-us",
+        "5": "\/cms-services",
+        "6": "\/company",
+        "7": "\/company-sizes",
+        "8": "\/company\/create",
+        "9": "\/company\/{company}",
+        "10": "\/company\/{company}\/edit",
+        "11": "\/countries",
+        "12": "\/countries-list",
+        "13": "\/dashboard",
+        "14": "\/functional-areas",
+        "15": "\/header-sliders",
+        "16": "\/image-sliders",
+        "17": "\/industries",
+        "18": "\/languages",
+        "19": "\/marital-status",
+        "20": "\/ownership-types",
+        "21": "\/salary-currencies",
+        "22": "\/salary-periods",
+        "23": "\/skills",
+        "24": "\/states",
+        "25": "\/states-list",
+        "26": "\/testimonials",
+        "28": "about.us",
+        "29": "admin.",
+        "32": "admin.jobs.destroy",
+        "43": "applications",
+        "44": "applied-jobs",
+        "45": "applied.job",
+        "47": "blog.category",
+        "49": "candidate.",
+        "50": "candidate.details",
+        "51": "candidate.lists",
+        "52": "candidate.login",
+        "61": "company",
+        "63": "company.details",
+        "67": "company.lists",
+        "73": "countries-list",
+        "75": "create",
+        "80": "employee.login",
+        "81": "employer.",
+        "84": "favorite-jobs",
+        "88": "front.",
+        "95": "index",
+        "99": "job-alerts",
+        "102": "job.alert",
+        "103": "job.details",
+        "108": "jobs.",
+        "126": "password.reset",
+        "127": "password.update",
+        "134": "post.lists",
+        "136": "posts.details",
+        "141": "privacy-policy",
+        "144": "profile",
+        "145": "profile.edit",
+        "150": "reported.companies",
+        "158": "save.register",
+        "159": "search.jobs",
+        "167": "terms-conditions",
+        "169": "test"
+    },
+    "test_results": {
+        "front.home": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        },
+        "login": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        },
+        "register": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        },
+        "dashboard": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        },
+        "jobs.index": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        },
+        "companies.index": {
+            "status": "simulated",
+            "accessible": true,
+            "errors": [],
+            "notes": "Simulation - actual browser testing needed"
+        }
+    },
+    "recommendations": [
+        "\ud83d\udd25 **URGENT:** Fix 72 route errors immediately",
+        "\ud83d\udea8 **HIGH PRIORITY:** Create 72 missing route definitions",
+        "\ud83e\uddea **TESTING:** Implement browser testing for all critical routes",
+        "\ud83d\udcdd **VALIDATION:** Create request files for all controller functions",
+        "\ud83c\udfa8 **UI:** Convert all Bootstrap to TailwindCSS",
+        "\ud83c\udf10 **I18N:** Implement JSON-based translation system"
+    ]
 }

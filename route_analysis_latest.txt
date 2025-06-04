@@ -1,0 +1,271 @@
+🔍 Starting Comprehensive Route Analysis...
+
+📁 Scanning blade files...
+Found 1212 blade files
+
+🔗 Extracting route references...
+Found 210 route references
+
+✅ Validating route existence...
+Found 51 missing routes
+
+🧪 Testing critical routes...
+✅ Route 'login' appears functional
+✅ Route 'register' appears functional
+✅ Route 'jobs.index' appears functional
+✅ Route 'companies.index' appears functional
+Tested 10 critical routes
+
+📊 COMPREHENSIVE ROUTE ANALYSIS REPORT
+=====================================
+
+📈 SUMMARY:
+- Blade files scanned: 1212
+- Route references found: 210
+- Missing routes: 51
+- Route errors: 6
+
+❌ MISSING ROUTES:
+- admin.edit
+  Used in: resources/views/admins/table_components/action_button.blade.php
+
+- email.template.index
+  Used in: resources/views/email_templates/edit.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- email.template.edit
+  Used in: resources/views/email_templates/table-components/action_button.blade.php
+
+- change.job.stage
+  Used in: resources/views/employer/job_applications/index.blade.php
+  Used in: resources/views/employer/job_applications/index.blade.php
+
+- view.slot.screen
+  Used in: resources/views/employer/job_applications/table_components/action_button.blade.php
+  Used in: resources/views/employer/job_applications/table_components/action_button.blade.php
+
+- job.edit
+  Used in: resources/views/employer/job_applications/table_components/edit_button.blade.php
+  Used in: resources/views/employer/jobs/job_table_components/action_button.blade.php
+  Used in: resources/views/employer/jobs/show.blade.php
+  Used in: resources/views/employer/job_applications/table_components/edit_button.blade.php
+  Used in: resources/views/employer/jobs/job_table_components/action_button.blade.php
+  Used in: resources/views/employer/jobs/show.blade.php
+
+- interview.slot.store
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+
+- batch.slot.store
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+
+- get.schedule.history
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+
+- cancel.selected.slot
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+  Used in: resources/views/employer/job_applications/view_slot_screen.blade.php
+
+- job-applications
+  Used in: resources/views/employer/jobs/job_table_components/action_button.blade.php
+  Used in: resources/views/employer/jobs/job_table_components/action_button.blade.php
+
+- job.create
+  Used in: resources/views/employer/jobs/job_table_components/add_button.blade.php
+  Used in: resources/views/employer/jobs/job_table_components/add_button.blade.php
+
+- job.stage.index
+  Used in: resources/views/employer/layouts/sidebar.blade.php
+  Used in: resources/views/employer/layouts/sidebar.blade.php
+
+- front.settings.index
+  Used in: resources/views/front_settings/fields.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- get.jobs.search
+  Used in: resources/views/front_web/home/home.blade.php
+  Used in: resources/views/front_web/home/home.blade.php
+
+- inquires.show
+  Used in: resources/views/inquires/inquiry_card.blade.php
+
+- job-notification.index
+  Used in: resources/views/job_notification/send_notification.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- countries.index
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- maritalStatus.index
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- cms.services.index
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- requiredDegreeLevel.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- reported.candidates
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- resumes.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- selected.candidate
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- job-categories.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- jobType.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- jobTag.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- jobShift.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- reported.jobs
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- admin.jobs.expiredJobs
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- post.comments
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- states.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- cities.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- skills.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- salaryPeriod.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- industry.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- companySize.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- functionalArea.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- careerLevel.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- salaryCurrency.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- ownerShipType.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- languages.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- faqs.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- inquires.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- notification.settings.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/notification_settings/fields.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- translation-manager.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- settings.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/settings/about_us.blade.php
+  Used in: resources/views/settings/env_setting.blade.php
+  Used in: resources/views/settings/front_office_details.blade.php
+  Used in: resources/views/settings/general.blade.php
+  Used in: resources/views/settings/setting_menu.blade.php
+  Used in: resources/views/settings/setting_menu.blade.php
+  Used in: resources/views/settings/setting_menu.blade.php
+  Used in: resources/views/settings/setting_menu.blade.php
+  Used in: resources/views/settings/setting_menu.blade.php
+  Used in: resources/views/settings/social_settings.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- branding.sliders.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- header.sliders.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- image-sliders.index
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+- cms.about-us.service
+  Used in: resources/views/layouts/sub_menu.blade.php
+  Used in: resources/views/layouts/sub_menu.blade.php
+
+⚠️ ROUTE ERRORS:
+- dashboard: Route requires authentication
+- home: Route requires authentication
+- admin.dashboard: Route requires authentication
+- candidate.dashboard: Route requires authentication
+- employer.dashboard: Route requires authentication
+- users.index: Route requires authentication
+
+🎯 RECOMMENDATIONS:
+1. Create missing route definitions in routes/web.php
+2. Implement missing controllers and methods
+3. Add proper middleware to secure routes
+4. Create missing view files
+5. Add request validation for all routes
+
+📁 Report saved to: storage/logs/route_analysis_2025-06-04_00-52-45.json
+
+🚀 Analysis complete! Check the generated report for details.

@@ -8,7 +8,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ __('Job Alerts') }}</h3>
             <div class="card-toolbar">
-                <a href="{{ route('candidate.job-alerts.create') }}" class="btn btn-primary">
+                <a href="{{ route('candidate.job.alerts.create') }}" class="btn btn-primary">
                     {{ __('Create Alert') }}
                 </a>
             </div>

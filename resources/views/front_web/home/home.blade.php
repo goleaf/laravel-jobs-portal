@@ -267,7 +267,7 @@
                                 </div>
                             @endforeach
                             <div class="col-12 text-center">
-                                <a href="{{ route('front.categories') }}" class="btn btn-primary fs-14 mt-3"
+                                <a href="{{ route('front.job-categories') }}" class="btn btn-primary fs-14 mt-3"
                                     style="padding: 7px 15px;">
                                     @lang('web.common.browse_all')
                                 </a>
@@ -633,7 +633,7 @@
 {{-- @section('page_scripts') --}}
 {{--    <script> --}}
 {{--        // var availableLocation = []; --}}
-{{-- let jobsSearchUrl = "{{ route('get.jobs.search') }}"; --}}
+{{-- let jobsSearchUrl = "{{ route('front.search-jobs') }}"; --}}
 {{--        @foreach (getCountries() as $county) --}}
 {{--        availableLocation.push("{{ $county  }}"); --}}
 {{--        @endforeach --}}

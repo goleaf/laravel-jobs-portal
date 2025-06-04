@@ -31,7 +31,7 @@
         <!-- Submit Field -->
         <div class="d-flex justify-content-end">
             {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3']) }}
-            <a href="{{ route('settings.index', ['section' => 'front_office_details']) }}"
+            <a href="{{ route('admin.dashboard', ['section' => 'front_office_details']) }}"
                class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
         </div>
     </div>

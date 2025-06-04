@@ -46,7 +46,7 @@
     <div class="row mt-4 mb-5">
         <div class="d-flex justify-content-end">
             {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3','id' => 'submitId']) }}
-            <a href="{{ route('settings.index', ['section' => 'social_settings']) }}"
+            <a href="{{ route('admin.dashboard', ['section' => 'social_settings']) }}"
                class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
         </div>
     </div>

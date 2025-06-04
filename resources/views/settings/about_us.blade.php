@@ -17,7 +17,7 @@
     <div class="mt-4 mb-5">
         <div class="d-flex justify-content-end">
             {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3','id' => 'btnAboutUs']) }}
-            <a href="{{ route('settings.index', ['section' => 'about_us']) }}"
+            <a href="{{ route('admin.dashboard', ['section' => 'about_us']) }}"
                class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
         </div>
     </div>

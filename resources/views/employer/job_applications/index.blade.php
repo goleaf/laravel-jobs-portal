@@ -9,7 +9,7 @@
             @include('employer.job_applications.job_stages_modal')
         </div>
         {{Form::hidden('jobApplicationData',true,['id'=>'indexJobApplicationData'])}}
-        {{Form::hidden('changeJobStage', route('change.job.stage', ['jobId' => $jobId]), ['id'=>'changeJobStage'])}}
+        {{Form::hidden('changeJobStage', route('employer.job.stage.change', ['jobId' => $jobId]), ['id'=>'changeJobStage'])}}
         {{Form::hidden('statusArray',json_encode($statusArray),['id'=>'employerJobStatusArray'])}}
 @endsection
 {{--@push('scripts')--}}

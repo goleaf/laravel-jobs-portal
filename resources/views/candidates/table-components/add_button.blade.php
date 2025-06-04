@@ -1,5 +1,5 @@
 <div class="menu-item">
-    <a href="{{ route('candidates.create') }}" type="button" class="btn btn-primary">
+    <a href="{{ route('admin.candidates.create') }}" type="button" class="btn btn-primary">
         {{ __('messages.common.add') }}
     </a>
 </div>

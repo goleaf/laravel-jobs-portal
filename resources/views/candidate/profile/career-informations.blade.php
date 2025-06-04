@@ -234,9 +234,9 @@
 @endsection
 @push('scripts')
     <script>
-        {{--let addExperienceUrl = "{{ route('candidate.create-experience') }}";--}}
+        {{--let addExperienceUrl = "{{ route('candidate.experience.create') }}";--}}
         {{--let experienceUrl = "{{ url('candidate/candidate-experience') }}/";--}}
-        {{--let addEducationUrl = "{{ route('candidate.create-education') }}";--}}
+        {{--let addEducationUrl = "{{ route('candidate.education.create') }}";--}}
         {{--let candidateUrl = "{{ url('candidate') }}/";--}}
         {{--let educationUrl = "{{ url('candidate/candidate-education') }}/";--}}
         {{--let present = "{{ __('messages.candidate_profile.present') }}";--}}

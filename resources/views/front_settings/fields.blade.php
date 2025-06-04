@@ -104,7 +104,7 @@
     </div>
     <div class="d-flex justify-content-end">
         {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3','name' => 'save', 'id' => 'saveJob']) }}
-        <a href="{{ route('front.settings.index') }}"
+        <a href="{{ route('admin.dashboard') }}"
            class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
     </div>
 </div>

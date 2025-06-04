@@ -164,7 +164,7 @@
             </div>
             <div class="d-flex justify-content-end mb-5 mt-5">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3','id' => 'btnSaveEnvData', 'disabled']) }}
-                <a href="{{ route('settings.index', ['section' => 'env_setting']) }}"
+                <a href="{{ route('admin.dashboard', ['section' => 'env_setting']) }}"
                    class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
             </div>
         </div>

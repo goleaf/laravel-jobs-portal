@@ -90,12 +90,12 @@
 @endsection
 @push('scripts')
     <script>
-        {{--let candidateProfileUrl = "{{ route('candidate.edit.profile') }}";--}}
-        {{--let updateCandidateUrl = "{{ route('candidate.general.profile.update') }}";--}}
-        {{--let updateonlineProfileUrl = "{{ route('candidate.online.profile.update') }}";--}}
-        {{--        let addExperienceUrl = "{{ route('candidate.create-experience') }}";--}}
+        {{--let candidateProfileUrl = "{{ route('candidate.profile.edit') }}";--}}
+        {{--let updateCandidateUrl = "{{ route('candidate.profile.general.update') }}";--}}
+        {{--let updateonlineProfileUrl = "{{ route('candidate.profile.online.update') }}";--}}
+        {{--        let addExperienceUrl = "{{ route('candidate.experience.create') }}";--}}
         {{--let experienceUrl = "{{ url('candidate/candidate-experience') }}/";--}}
-        {{--        let addEducationUrl = "{{ route('candidate.create-education') }}";--}}
+        {{--        let addEducationUrl = "{{ route('candidate.education.create') }}";--}}
         {{--let candidateUrl = "{{ url('candidate') }}/";--}}
 {{--        let educationUrl = "{{ url('candidate/candidate-education') }}/";--}}
 {{--        let present = "{{ __('messages.candidate_profile.present') }}";--}}

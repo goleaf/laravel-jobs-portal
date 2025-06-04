@@ -45,12 +45,12 @@
 @endsection
 @push('scripts')
     <script>
-        var interviewSlotStoreUrl = "{{ route('interview.slot.store', ['jobId' => request()->route('jobId')]) }}";
-        var batchSlotStoreUrl = "{{ route('batch.slot.store', ['jobId' => request()->route('jobId')]) }}";
+        var interviewSlotStoreUrl = "{{ route('employer.interview.slot.store', ['jobId' => request()->route('jobId')]) }}";
+        var batchSlotStoreUrl = "{{ route('employer.batch.slot.store', ['jobId' => request()->route('jobId')]) }}";
         var uniqueId = 1;
         var JobApplicationId = "{{ request()->route('jobApplicationId') }}";
-        var getScheduleHistory = "{{ route('get.schedule.history', ['jobId' => request()->route('jobId')]) }}";
-        var cancelSlotUrl = "{{ route('cancel.selected.slot', ['jobId' => request()->route('jobId')]) }}";
+        var getScheduleHistory = "{{ route('employer.schedule.history', ['jobId' => request()->route('jobId')]) }}";
+        var cancelSlotUrl = "{{ route('employer.slot.cancel', ['jobId' => request()->route('jobId')]) }}";
         var jobApplicationUrl = "{{url('employer/jobs/'.request()->route('jobId').'/applications')}}";
     </script>
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>

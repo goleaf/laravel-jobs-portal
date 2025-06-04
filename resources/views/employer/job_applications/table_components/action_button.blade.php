@@ -60,7 +60,7 @@
                 <a href="javascript:void(0)" class="btn btn-sm dropdown-item job-application-action-decline"
                    data-id="{{$row->id}}">{{__('messages.common.rejected')}}</a>
                 @if($isJobStage && !$isRejected && !$isJobExpiry)
-                    <a data-turbo="false" href="{{route('view.slot.screen', ['jobId'=>$this->jobId, 'jobApplicationId'=>$row->id])}}"
+                    <a data-turbo="false" href="{{route('employer.interview.slot.view', ['jobId'=>$this->jobId, 'jobApplicationId'=>$row->id])}}"
                        class="btn btn-sm dropdown-item">{{__('messages.job_stage.slots')}}</a>
                 @endif
             @endif

@@ -204,7 +204,7 @@
                                 </div>
                             @endforeach
                             <div class="col-12 text-center">
-                                <a href="{{ route('front.categories') }}" class="btn btn-primary btn-primary-register fs-14 mt-3">
+                                <a href="{{ route('front.job-categories') }}" class="btn btn-primary btn-primary-register fs-14 mt-3">
                                     @lang('web.common.browse_all')
                                 </a>
                             </div>

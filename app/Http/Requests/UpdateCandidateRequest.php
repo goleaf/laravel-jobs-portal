@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Candidate;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCandidateRequest extends FormRequest
 {
@@ -16,25 +16,87 @@ class UpdateCandidateRequest extends FormRequest
     }
 
     /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,{id}',
+            'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
+            'address' => 'nullable|string',
+        ];
+    }
+
+    /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => 'The :attribute field is required.',
+            'email' => 'Please enter a valid email address.',
+            'unique' => 'This :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'max' => 'The :attribute may not be greater than :max characters.',
+            'confirmed' => 'The :attribute confirmation does not match.',
+            'exists' => 'The selected :attribute is invalid.',
+            'image' => 'The :attribute must be an image.',
+            'mimes' => 'The :attribute must be a file of type: :values.',
+            'numeric' => 'The :attribute must be a number.',
+            'date' => 'The :attribute is not a valid date.',
+            'after' => 'The :attribute must be a date after :date.',
+            'url' => 'The :attribute format is invalid.',
+            'boolean' => 'The :attribute field must be true or false.',
+            'array' => 'The :attribute must be an array.',
+            'accepted' => 'The :attribute must be accepted.',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'date_of_birth' => 'Date Of Birth',
+            'gender' => 'Gender',
+            'address' => 'Address',
+        ];
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
     {
-        $currentSalary = removeCommaFromNumbers($this->request->get('current_salary'));
-        $expectedSalary = removeCommaFromNumbers($this->request->get('expected_salary'));
-
-        $this->request->set('current_salary', $currentSalary);
-        $this->request->set('expected_salary', $expectedSalary);
+        // Add any data preparation logic here
+        // Example: Convert empty strings to null
+        $this->merge([
+            // Add any automatic data transformations
+        ]);
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Configure the validator instance.
      */
-    public function rules(): array
+    public function withValidator($validator): void
     {
-        $rules = Candidate::$rules;
-        $rules['email'] = 'required|email:filter|unique:users,email,'.$this->route('candidate')->user->id;
-
-        return $rules;
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
     }
 }

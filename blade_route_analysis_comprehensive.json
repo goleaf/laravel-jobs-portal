@@ -1,0 +1,5683 @@
+{
+    "timestamp": "2025-06-04 01:01:56",
+    "statistics": {
+        "total_blade_files": 1078,
+        "total_route_references": 1049,
+        "unique_routes": 170,
+        "missing_routes": 28,
+        "valid_routes": 1021
+    },
+    "existing_routes": [
+        "debugbar.openhandler",
+        "debugbar.clockwork",
+        "debugbar.telescope",
+        "debugbar.assets.css",
+        "debugbar.assets.js",
+        "debugbar.cache.delete",
+        "debugbar.queries.explain",
+        "l5-swagger.default.api",
+        "l5-swagger.default.docs",
+        "l5-swagger.default.asset",
+        "l5-swagger.default.oauth2_callback",
+        "cashier.payment",
+        "cashier.webhook",
+        "dusk.login",
+        "dusk.logout",
+        "dusk.user",
+        "horizon.stats.index",
+        "horizon.workload.index",
+        "horizon.masters.index",
+        "horizon.monitoring.index",
+        "horizon.monitoring.store",
+        "horizon.monitoring-tag.paginate",
+        "horizon.monitoring-tag.destroy",
+        "horizon.jobs-metrics.index",
+        "horizon.jobs-metrics.show",
+        "horizon.queues-metrics.index",
+        "horizon.queues-metrics.show",
+        "horizon.jobs-batches.index",
+        "horizon.jobs-batches.show",
+        "horizon.jobs-batches.retry",
+        "horizon.pending-jobs.index",
+        "horizon.completed-jobs.index",
+        "horizon.silenced-jobs.index",
+        "horizon.failed-jobs.index",
+        "horizon.failed-jobs.show",
+        "horizon.retry-jobs.show",
+        "horizon.jobs.show",
+        "horizon.index",
+        "pulse",
+        "sanctum.csrf-cookie",
+        "",
+        "telescope",
+        "livewire.update",
+        "livewire.upload-file",
+        "livewire.preview-file",
+        "ignition.healthCheck",
+        "ignition.executeSolution",
+        "ignition.updateConfig",
+        "test",
+        "front.home",
+        "login",
+        "login.submit",
+        "register",
+        "logout",
+        "password.request",
+        "password.email",
+        "password.reset",
+        "password.update",
+        "about-us",
+        "contact",
+        "contact.submit",
+        "jobs.index",
+        "companies.index",
+        "employer.register",
+        "candidate.register",
+        "terms.conditions.list",
+        "privacy.policy.list",
+        "posts.index",
+        "job.index",
+        "company.index",
+        "company.create",
+        "admin.login",
+        "posts.store",
+        "uploads.store",
+        "password.confirm",
+        "theme.mode",
+        "components.icon-documentation",
+        "icons.documentation",
+        "admin.front.settings.index",
+        "posts.edit",
+        "posts.show",
+        "download.image",
+        "admin.candidates.index",
+        "payment-method-screen",
+        "paypal-payment",
+        "manually-payment",
+        "paystack.payment",
+        "admin.jobs.index",
+        "admin.jobs.create",
+        "admin.jobs.show",
+        "admin.jobs.edit",
+        "admin.jobs.destroy",
+        "admin.transactions.index",
+        "admin.transactions.create",
+        "admin.transactions.show",
+        "admin.transactions.edit",
+        "admin.transactions.destroy",
+        "language.change",
+        "states-list",
+        "cities-list",
+        "countries-list",
+        "dashboard",
+        "candidate.profile",
+        "candidate.profile.edit",
+        "candidate.applied-jobs",
+        "candidate.favorite-jobs",
+        "candidate.job-alerts",
+        "candidate.job.alert",
+        "candidate.applied.job",
+        "candidate.download-resume",
+        "candidate.experience.create",
+        "candidate.experience.store",
+        "candidate.education.create",
+        "candidate.education.store",
+        "candidate.profile.general.update",
+        "candidate.profile.online.update",
+        "candidate.job.alerts.create",
+        "employer.company",
+        "employer.company.edit",
+        "employer.jobs.index",
+        "employer.jobs.create",
+        "employer.jobs.applications",
+        "employer.job.stage.change",
+        "employer.interview.slot.view",
+        "employer.schedule.history",
+        "employer.slot.cancel",
+        "admin.dashboard",
+        "admin.admin.index",
+        "admin.admin.create",
+        "admin.admin.admin.store",
+        "admin.admin.show",
+        "admin.admin.edit",
+        "admin.admin.admin.update",
+        "admin.admin.destroy",
+        "admin.candidates.create",
+        "admin.candidates.store",
+        "admin.candidates.show",
+        "admin.candidates.edit",
+        "admin.candidates.update",
+        "admin.candidates.destroy",
+        "admin.jobs.store",
+        "admin.jobs.update",
+        "admin.transactions.store",
+        "admin.transactions.update",
+        "admin.subscribers.index",
+        "admin.subscribers.destroy",
+        "admin.reported.companies",
+        "admin.reported-candidates",
+        "admin.degree-levels",
+        "admin.resumes.index",
+        "admin.selected.candidate",
+        "admin.job-categories.index",
+        "admin.job-types.index",
+        "admin.job-tags.index",
+        "admin.job-shifts.index",
+        "admin.reported.jobs",
+        "admin.job-notification.index",
+        "admin.admin.jobs.expiredJobs",
+        "admin.post-categories.index",
+        "admin.posts.index",
+        "admin.posts.create",
+        "admin.posts.show",
+        "admin.posts.edit",
+        "admin.post.comments",
+        "admin.plans.index",
+        "admin.countries.index",
+        "admin.states.index",
+        "admin.cities.index",
+        "admin.maritalStatus.index",
+        "admin.skills.index",
+        "admin.salaryPeriod.index",
+        "admin.industries.index",
+        "admin.company-sizes.index",
+        "admin.functionalArea.index",
+        "admin.career-levels.index",
+        "admin.salaryCurrency.index",
+        "admin.ownerShipType.index",
+        "admin.languages.index",
+        "admin.noticeboards.index",
+        "admin.faqs.index",
+        "admin.inquires.index",
+        "admin.inquires.show",
+        "admin.notification.settings.index",
+        "admin.privacy.policy.index",
+        "email.template.index",
+        "admin.settings.index",
+        "admin.testimonials.index",
+        "admin.branding.sliders.index",
+        "admin.header.sliders.index",
+        "admin.image-sliders.index",
+        "admin.cms.services.index",
+        "admin.cms.about-us.service",
+        "admin.job-stages.index",
+        "admin.job-applications.index",
+        "admin.email-template.edit",
+        "admin.download-all-resume",
+        "admin.selected-candidate",
+        "admin.jobs.expiredJobs",
+        "admin.marital-statuses.index",
+        "admin.index",
+        "manage-subscription.index",
+        "transactions.index",
+        "followers.index",
+        "favourite.companies",
+        "favourite.jobs",
+        "candidates.index",
+        "testimonials.index",
+        "subscribers.index",
+        "noticeboards.index",
+        "plans.index",
+        "post-categories.index",
+        "jobs.show",
+        "company.show",
+        "company.edit",
+        "privacy-policy",
+        "terms-conditions",
+        "front.search.jobs",
+        "front.company.lists",
+        "front.candidate.lists",
+        "front.about.us",
+        "front.contact",
+        "front.post.lists",
+        "front.posts.details",
+        "front.job.details",
+        "front.company.details",
+        "front.candidate.details",
+        "front.save.register",
+        "front.candidate.login",
+        "front.employee.login",
+        "front.login",
+        "front.blog.category",
+        "show.apply-job-form",
+        "apply-job",
+        "save.favourite.company",
+        "save.favourite.job",
+        "report.to.company",
+        "report.job.abuse",
+        "email.job",
+        "news-letter.create",
+        "company.edit.form",
+        "privacy.policy.index",
+        "verification.resend",
+        "admin.edit",
+        "candidate.dashboard",
+        "candidate.edit.profile",
+        "candidate.general.profile.update",
+        "candidate.online.profile.update",
+        "candidate.create-experience",
+        "candidate.create-education",
+        "candidate.job-alerts.create",
+        "candidate.cv.template",
+        "employer.dashboard",
+        "job.create",
+        "job.edit",
+        "job.stage.index",
+        "change.job.stage",
+        "job-applications",
+        "job-notification.index",
+        "candidates.create",
+        "candidates.edit",
+        "candidates.show",
+        "candidates.export.excel",
+        "report.to.candidate",
+        "front.contact.store",
+        "front.categories",
+        "download.resume",
+        "download.all-resume",
+        "download.post",
+        "blog.create.comment",
+        "email.template.edit",
+        "interview.slot.store",
+        "batch.slot.store",
+        "cancel.selected.slot",
+        "view.slot.screen",
+        "get.schedule.history",
+        "get.jobs.search",
+        "translation-manager.index",
+        "send.contact.email",
+        "jobId",
+        "jobApplicationId",
+        "token",
+        "employer.change.job.stage",
+        "employer.view.slot.screen",
+        "employer.interview.slot.store",
+        "employer.batch.slot.store",
+        "employer.get.schedule.history",
+        "employer.cancel.selected.slot",
+        "employer.job-applications",
+        "employer.job.create",
+        "employer.job.edit",
+        "test-routes"
+    ],
+    "missing_routes": [
+        {
+            "route": "front.report-candidate",
+            "files": [
+                "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
+                "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
+                "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
+                "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php"
+            ],
+            "count": 4
+        },
+        {
+            "route": "front.job-categories",
+            "files": [
+                "resources\/views\/front_web\/home\/home.blade.php",
+                "resources\/views\/front_web_template\/home\/home.blade.php",
+                "resources\/views\/front_web\/home\/home.blade.php",
+                "resources\/views\/front_web_template\/home\/home.blade.php"
+            ],
+            "count": 4
+        },
+        {
+            "route": "front.search-jobs",
+            "files": [
+                "resources\/views\/front_web\/home\/home.blade.php",
+                "resources\/views\/front_web\/home\/home.blade.php"
+            ],
+            "count": 2
+        },
+        {
+            "route": "front.contact.send",
+            "files": [
+                "resources\/views\/front_web\/contact\/index.blade.php",
+                "resources\/views\/front_web\/contact\/index.blade.php"
+            ],
+            "count": 2
+        },
+        {
+            "route": "admin.email-template.index",
+            "files": [
+                "resources\/views\/email_templates\/edit.blade.php",
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 2
+        },
+        {
+            "route": "notification.settings.index",
+            "files": [
+                "resources\/views\/notification_settings\/fields.blade.php",
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 2
+        },
+        {
+            "route": "cms.services.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php",
+                "resources\/views\/layouts\/menu.blade.php"
+            ],
+            "count": 2
+        },
+        {
+            "route": "reported.jobs",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "post.comments",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "salaryPeriod.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "functionalArea.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "salaryCurrency.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "ownerShipType.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "branding.sliders.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "header.sliders.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "image-sliders.index",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        },
+        {
+            "route": "cms.about-us.service",
+            "files": [
+                "resources\/views\/layouts\/sub_menu.blade.php"
+            ],
+            "count": 1
+        }
+    ],
+    "route_references": [
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/welcome.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/welcome.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/welcome.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/welcome.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/candidates\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/candidates\/table-components\/name_email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/candidates\/table-components\/name_email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.edit",
+            "file": "resources\/views\/candidates\/table-components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.create",
+            "file": "resources\/views\/candidates\/table-components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidates.export.excel",
+            "file": "resources\/views\/candidates\/table-components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/candidates\/candidate_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.edit",
+            "file": "resources\/views\/candidates\/candidate_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/candidates\/edit.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/candidates\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "states-list",
+            "file": "resources\/views\/candidates\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "cities-list",
+            "file": "resources\/views\/candidates\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/candidates\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.edit",
+            "file": "resources\/views\/candidates\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidates.index",
+            "file": "resources\/views\/candidates\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/dashboard\/dashboard.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/candidate\/dashboard\/dashboard.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.download-resume",
+            "file": "resources\/views\/candidate\/profile\/resume_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.experience.create",
+            "file": "resources\/views\/candidate\/profile\/career-informations.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.education.create",
+            "file": "resources\/views\/candidate\/profile\/career-informations.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.edit",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.general.update",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.online.update",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.experience.create",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.education.create",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.cv.template",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/candidate\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/candidate\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "dashboard",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alerts.create",
+            "file": "resources\/views\/candidate\/job_alert\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/candidate\/favourite_jobs\/table_components\/job_title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/about_us.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/about_us.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/env_setting.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/env_setting.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/front_office_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/front_office_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/setting_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/social_settings.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/social_settings.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/general.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/settings\/general.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.index",
+            "file": "resources\/views\/blogs\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.show",
+            "file": "resources\/views\/blogs\/table_components\/title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.edit",
+            "file": "resources\/views\/blogs\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.posts.create",
+            "file": "resources\/views\/blogs\/table_components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.index",
+            "file": "resources\/views\/blogs\/edit.blade.php",
+            "exists": true
+        },
+        {
+            "route": "download.post",
+            "file": "resources\/views\/blogs\/show_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.index",
+            "file": "resources\/views\/blogs\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.index",
+            "file": "resources\/views\/blogs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.edit",
+            "file": "resources\/views\/blogs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job-notification.index",
+            "file": "resources\/views\/job_notification\/send_notification.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/job_notification\/send_notification.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/job_expired\/table_components\/name.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/job_expired\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.report-candidate",
+            "file": "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job-categories",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search-jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.blog.category",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact.send",
+            "file": "resources\/views\/front_web\/contact\/index.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "news-letter.create",
+            "file": "resources\/views\/front_web\/layouts\/app.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/about_us\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "apply-job",
+            "file": "resources\/views\/front_web\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.job",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.job.abuse",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "email.job",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/company\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.company",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.to.company",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.confirm",
+            "file": "resources\/views\/auth\/passwords\/confirm.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/auth\/passwords\/confirm.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth\/passwords\/email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.email",
+            "file": "resources\/views\/auth\/passwords\/email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth\/passwords\/email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth\/passwords\/reset.blade.php",
+            "exists": true
+        },
+        {
+            "route": "token",
+            "file": "resources\/views\/auth\/passwords\/reset.blade.php",
+            "exists": true
+        },
+        {
+            "route": "verification.resend",
+            "file": "resources\/views\/auth\/verify.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login.submit",
+            "file": "resources\/views\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/auth\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/auth\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/auth\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/auth\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth\/admin_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login.submit",
+            "file": "resources\/views\/auth\/admin_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/auth\/admin_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth\/admin_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/employer\/followers\/table_components\/name.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/employer\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/employer\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.dashboard",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-stages.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/reported_job_table_components\/reported_jobs.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/reportedJobs_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/job_title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-applications.index",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.create",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/jobs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.job.stage.change",
+            "file": "resources\/views\/employer\/job_applications\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/edit_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.view",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.view",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.store",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.batch.slot.store",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobApplicationId",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.schedule.history",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.slot.cancel",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobId",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/employer\/companies\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/emails\/jobs\/notification.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.email-template.edit",
+            "file": "resources\/views\/email_templates\/table-components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.email-template.index",
+            "file": "resources\/views\/email_templates\/edit.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/post_comments\/table_components\/post.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.download-all-resume",
+            "file": "resources\/views\/resumes\/table-components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.download-all-resume",
+            "file": "resources\/views\/resumes\/resume_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.create",
+            "file": "resources\/views\/admins\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.destroy",
+            "file": "resources\/views\/admins\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.show",
+            "file": "resources\/views\/admins\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.edit",
+            "file": "resources\/views\/admins\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.index",
+            "file": "resources\/views\/admins\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.edit",
+            "file": "resources\/views\/admins\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.create",
+            "file": "resources\/views\/admins\/table_components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.index",
+            "file": "resources\/views\/admins\/edit.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.index",
+            "file": "resources\/views\/admins\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.index",
+            "file": "resources\/views\/admins\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.report-candidate",
+            "file": "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job-categories",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.blog.category",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact.store",
+            "file": "resources\/views\/front_web_template\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "news-letter.create",
+            "file": "resources\/views\/front_web_template\/layouts\/app.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/about_us\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "apply-job",
+            "file": "resources\/views\/front_web_template\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.job",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.job.abuse",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "email.job",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/company\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.company",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.to.company",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "notification.settings.index",
+            "file": "resources\/views\/notification_settings\/fields.blade.php",
+            "exists": false
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/transactions\/failed_payments.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/livewire\/job-search.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/livewire\/applied-jobs.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/livewire\/candidate-search.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/livewire\/candidate-search.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/livewire\/candidate-search.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/livewire\/candidate-search.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/livewire\/followers.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.edit",
+            "file": "resources\/views\/livewire\/blog-post.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.show",
+            "file": "resources\/views\/livewire\/blog-post.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/livewire\/favorite-jobs.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/layouts\/auth.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.reported.companies",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidates.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.degree-levels",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.reported-candidates",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.resumes.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.selected-candidate",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-categories.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-types.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-tags.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-shifts.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "reported.jobs",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "job-notification.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.expiredJobs",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "post-categories.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "post.comments",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "plans.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "subscribers.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.countries.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.states.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.cities.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.marital-statuses.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.skills.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "salaryPeriod.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "admin.industries.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.company-sizes.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "functionalArea.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "admin.career-levels.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "salaryCurrency.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "ownerShipType.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "admin.languages.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "noticeboards.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.faqs.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.inquires.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "notification.settings.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "privacy.policy.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "translation-manager.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.email-template.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "testimonials.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "branding.sliders.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "header.sliders.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "image-sliders.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "cms.services.index",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "cms.about-us.service",
+            "file": "resources\/views\/layouts\/sub_menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.admin.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "post-categories.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "plans.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "subscribers.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.countries.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.marital-statuses.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "noticeboards.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "testimonials.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "cms.services.index",
+            "file": "resources\/views\/layouts\/menu.blade.php",
+            "exists": false
+        },
+        {
+            "route": "components.icon-documentation",
+            "file": "resources\/views\/layouts\/navigation.blade.php",
+            "exists": true
+        },
+        {
+            "route": "icons.documentation",
+            "file": "resources\/views\/layouts\/navigation.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/layouts\/simple.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/auth_template\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/auth_template\/register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.confirm",
+            "file": "resources\/views\/auth_template\/passwords\/confirm.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/auth_template\/passwords\/confirm.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth_template\/passwords\/email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.login",
+            "file": "resources\/views\/auth_template\/passwords\/email.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth_template\/passwords\/reset.blade.php",
+            "exists": true
+        },
+        {
+            "route": "verification.resend",
+            "file": "resources\/views\/auth_template\/verify.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/auth_template\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/auth_template\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/auth_template\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.dashboard",
+            "file": "resources\/views\/front_settings\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "download.image",
+            "file": "resources\/views\/testimonial\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "download.image",
+            "file": "resources\/views\/testimonial\/table_components\/download.blade.php",
+            "exists": true
+        },
+        {
+            "route": "download.image",
+            "file": "resources\/views\/testimonial\/testimonial-card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.inquires.show",
+            "file": "resources\/views\/inquires\/inquiry_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "dashboard",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "logout",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.show",
+            "file": "resources\/views\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/jobs\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/jobs\/table-components\/job_title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/jobs\/table-components\/action_buttons.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.create",
+            "file": "resources\/views\/jobs\/table-components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/jobs\/edit.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/jobs\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/jobs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/jobs\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/selected_candidate\/table-components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "payment-method-screen",
+            "file": "resources\/views\/pricing\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "payment-method-screen",
+            "file": "resources\/views\/pricing\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "paypal-payment",
+            "file": "resources\/views\/pricing\/payment_methods.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manually-payment",
+            "file": "resources\/views\/pricing\/payment_methods.blade.php",
+            "exists": true
+        },
+        {
+            "route": "paystack.payment",
+            "file": "resources\/views\/pricing\/payment_methods.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "dashboard",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "logout",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/companies\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/companies\/table_components\/company_name.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.show",
+            "file": "resources\/views\/companies\/table_components\/company_name.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit",
+            "file": "resources\/views\/companies\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.create",
+            "file": "resources\/views\/companies\/table_components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/edit.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "states-list",
+            "file": "resources\/views\/companies\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "cities-list",
+            "file": "resources\/views\/companies\/create.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/companies_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/companies_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit",
+            "file": "resources\/views\/companies\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/companies\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.index",
+            "file": "resources\/views\/privacy_policy\/section_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.index",
+            "file": "resources\/views\/privacy_policy\/section_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.index",
+            "file": "resources\/views\/privacy_policy\/section_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.index",
+            "file": "resources\/views\/privacy_policy\/section_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "language.change",
+            "file": "resources\/views\/components\/language-selector.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/components\/icon-documentation.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/components\/icon-documentation.blade.php",
+            "exists": true
+        },
+        {
+            "route": "posts.store",
+            "file": "resources\/views\/components\/forms\/readme.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/components\/forms\/readme.blade.php",
+            "exists": true
+        },
+        {
+            "route": "uploads.store",
+            "file": "resources\/views\/components\/forms\/readme.blade.php",
+            "exists": true
+        },
+        {
+            "route": "language.change",
+            "file": "resources\/views\/components\/language-switcher.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "register",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/about.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobs.index",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "companies.index",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "about-us",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "contact.submit",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/contact.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.create",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.edit",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.create",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.create",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.destroy",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.show",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.edit",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.settings.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.subscribers.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.create",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.show",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.edit",
+            "file": "resources\/views\/admin\/candidates\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.create",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.show",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/admin\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.create",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.destroy",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.show",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.edit",
+            "file": "resources\/views\/admin\/transactions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.candidates.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.transactions.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.settings.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.subscribers.index",
+            "file": "resources\/views\/admin\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/dashboard\/dashboard.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/candidate\/dashboard\/dashboard.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.download-resume",
+            "file": "resources\/views\/candidate\/profile\/resume_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.experience.create",
+            "file": "resources\/views\/candidate\/profile\/career-informations.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.education.create",
+            "file": "resources\/views\/candidate\/profile\/career-informations.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.edit",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.general.update",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile.online.update",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.experience.create",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.education.create",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.cv.template",
+            "file": "resources\/views\/candidate\/profile\/cv-builder.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/profile\/profile_menu.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/candidate\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/candidate\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "dashboard",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/candidate\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alerts.create",
+            "file": "resources\/views\/candidate\/job_alert\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/candidate\/favourite_jobs\/table_components\/job_title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.details",
+            "file": "resources\/views\/employer\/followers\/table_components\/name.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/dashboard\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/employer\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "theme.mode",
+            "file": "resources\/views\/employer\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.dashboard",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-stages.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/employer\/layouts\/sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/reported_job_table_components\/reported_jobs.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/reportedJobs_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/job_title.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.job-applications.index",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.create",
+            "file": "resources\/views\/employer\/jobs\/job_table_components\/add_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/jobs\/show.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/employer\/jobs\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.job.stage.change",
+            "file": "resources\/views\/employer\/job_applications\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "admin.jobs.edit",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/edit_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.view",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.view",
+            "file": "resources\/views\/employer\/job_applications\/table_components\/action_button.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.interview.slot.store",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.batch.slot.store",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobApplicationId",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.schedule.history",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.slot.cancel",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "jobId",
+            "file": "resources\/views\/employer\/job_applications\/view_slot_screen.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/employer\/companies\/edit_fields.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.report-candidate",
+            "file": "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job-categories",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search-jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.blog.category",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact.send",
+            "file": "resources\/views\/front_web\/contact\/index.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/front_web\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "news-letter.create",
+            "file": "resources\/views\/front_web\/layouts\/app.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/about_us\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "apply-job",
+            "file": "resources\/views\/front_web\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.job",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.job.abuse",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "email.job",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web\/company\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.company",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.to.company",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/candidate\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.report-candidate",
+            "file": "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job-categories",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": false
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/home\/home.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_based_on_category.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blogs_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.blog.category",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.posts.details",
+            "file": "resources\/views\/front_web_template\/blogs\/blog-sidebar.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact.store",
+            "file": "resources\/views\/front_web_template\/contact\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/candidate_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/auth\/employer_register.blade.php",
+            "exists": true
+        },
+        {
+            "route": "password.request",
+            "file": "resources\/views\/front_web_template\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/auth\/login.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web_template\/terms_conditions\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/common\/company_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/common\/job_card.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.employee.login",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "employer.register",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "favourite.companies",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.applied.job",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.job.alert",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "job.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "followers.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "manage-subscription.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "transactions.index",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "company.edit.form",
+            "file": "resources\/views\/front_web_template\/layouts\/header.blade.php",
+            "exists": true
+        },
+        {
+            "route": "news-letter.create",
+            "file": "resources\/views\/front_web_template\/layouts\/app.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.about.us",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.contact",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.post.lists",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "privacy.policy.list",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "terms.conditions.list",
+            "file": "resources\/views\/front_web_template\/layouts\/footer.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/about_us\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/jobs\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "apply-job",
+            "file": "resources\/views\/front_web_template\/jobs\/apply_job\/apply_job.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.register",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.candidate.login",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.job",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.job.abuse",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "email.job",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "candidate.profile",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.company.details",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/jobs\/job_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/categories\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.save.register",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "login",
+            "file": "resources\/views\/front_web_template\/privacy_policy\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.home",
+            "file": "resources\/views\/front_web_template\/company\/index.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "save.favourite.company",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "report.to.company",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.job.details",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/company\/company_details.blade.php",
+            "exists": true
+        },
+        {
+            "route": "front.search.jobs",
+            "file": "resources\/views\/front_web_template\/home.blade.php",
+            "exists": true
+        }
+    ],
+    "errors": []
+}

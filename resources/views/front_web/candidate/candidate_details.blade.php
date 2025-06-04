@@ -142,7 +142,7 @@
 @endsection
 {{--@section('scripts')--}}
 {{--    <script>--}}
-{{--        let reportToCandidateUrl = "{{ route('report.to.candidate') }}"--}}
+{{--        let reportToCandidateUrl = "{{ route('front.report-candidate') }}"--}}
 {{--    </script>--}}
 {{--@endsection--}}
 

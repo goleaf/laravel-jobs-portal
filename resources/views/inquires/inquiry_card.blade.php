@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="employee-action-btn">
-            <a title="{{ __('messages.common.view') }}" class="btn btn-info action-btn" href="{{ route('inquires.show', $inquiry->id)}}">
+            <a title="{{ __('messages.common.view') }}" class="btn btn-info action-btn" href="{{ route('admin.inquires.show', $inquiry->id)}}">
                 <i class="fa fa-eye"></i>
             </a>
             <a title="{{ __('messages.common.delete') }}" class="btn btn-danger action-btn delete-btn"

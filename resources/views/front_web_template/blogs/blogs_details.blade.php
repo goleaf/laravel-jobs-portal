@@ -253,13 +253,13 @@
             </div>
         </section>
         <!-- end-blog-details-section -->
-        {{ Form::hidden('blogComment', route('blog.create.comment', $blog->id), ['id' => 'blogComment']) }}
+        {{ Form::hidden('blogComment', route('front.blog.comment.store', $blog->id), ['id' => 'blogComment']) }}
         {{ Form::hidden('defaultBlogImage', asset('front_web/images/job-categories.png'), ['id' => 'defaultBlogImage']) }}
     </div>
 @endsection
 {{-- @section('page_scripts') --}}
 {{--    <script> --}}
-{{--        let blogComment = "{{ route('blog.create.comment', $blog->id) }}"; --}}
+{{--        let blogComment = "{{ route('front.blog.comment.store', $blog->id) }}"; --}}
 {{--        let commentUrl = "{{ url('post-comments') }}"; --}}
 {{--        let editCommentUrl = "{{ '/edit' }}"; --}}
 {{--        let defaultImage = "{{ asset('front_web/images/job-categories.png') }}"; --}}

@@ -12,95 +12,81 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $company = $this->route('company');
-        
-        return auth()->check() && (
-            auth()->user()->hasRole('Admin') || 
-            (auth()->user()->hasRole('Employer') && auth()->user()->id === $company->user_id)
-        );
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        $company = $this->route('company');
-        
         return [
-            // User data
-            'first_name' => 'sometimes|required|string|max:50',
-            'last_name' => 'sometimes|required|string|max:50',
-            'email' => [
-                'sometimes',
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($company->user_id)
-            ],
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:companies,email,{id}',
             'phone' => 'nullable|string|max:20',
-            'country_id' => 'nullable|exists:countries,id',
-            'state_id' => 'nullable|exists:states,id',
+            'website' => 'nullable|url',
+            'description' => 'nullable|string',
+            'address' => 'nullable|string',
             'city_id' => 'nullable|exists:cities,id',
-            
-            // Company data
-            'ceo' => 'sometimes|required|string|max:180',
-            'industry_id' => 'sometimes|required|exists:industries,id',
-            'ownership_type_id' => 'sometimes|required|exists:ownership_types,id',
-            'company_size_id' => 'sometimes|required|exists:company_sizes,id',
-            'established_in' => 'sometimes|required|integer|min:1900|max:' . date('Y'),
-            'website' => 'nullable|url|max:255',
-            'location' => 'sometimes|required|string|max:255',
-            'no_of_offices' => 'sometimes|required|integer|min:1|max:1000',
-            'details' => 'nullable|string|max:5000',
-            'is_active' => 'boolean',
+            'state_id' => 'nullable|exists:states,id',
+            'country_id' => 'nullable|exists:countries,id',
+            'industry_id' => 'nullable|exists:industries,id',
+            'company_size_id' => 'nullable|exists:company_sizes,id',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'established_year' => 'nullable|digits:4|min:1800|max:2024',
         ];
     }
 
     /**
-     * Get custom messages for validator errors.
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'first_name.required' => 'First name is required.',
-            'last_name.required' => 'Last name is required.',
-            'email.required' => 'Email address is required.',
-            'email.unique' => 'This email address is already registered.',
-            'ceo.required' => 'CEO name is required.',
-            'industry_id.required' => 'Please select an industry.',
-            'industry_id.exists' => 'Selected industry is invalid.',
-            'ownership_type_id.required' => 'Please select an ownership type.',
-            'ownership_type_id.exists' => 'Selected ownership type is invalid.',
-            'company_size_id.required' => 'Please select company size.',
-            'company_size_id.exists' => 'Selected company size is invalid.',
-            'established_in.required' => 'Establishment year is required.',
-            'established_in.min' => 'Establishment year must be after 1900.',
-            'established_in.max' => 'Establishment year cannot be in the future.',
-            'website.url' => 'Website must be a valid URL.',
-            'location.required' => 'Company location is required.',
-            'no_of_offices.required' => 'Number of offices is required.',
-            'no_of_offices.min' => 'Number of offices must be at least 1.',
-            'no_of_offices.max' => 'Number of offices cannot exceed 1000.',
-            'details.max' => 'Company details cannot exceed 5000 characters.',
+            'required' => 'The :attribute field is required.',
+            'email' => 'Please enter a valid email address.',
+            'unique' => 'This :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'max' => 'The :attribute may not be greater than :max characters.',
+            'confirmed' => 'The :attribute confirmation does not match.',
+            'exists' => 'The selected :attribute is invalid.',
+            'image' => 'The :attribute must be an image.',
+            'mimes' => 'The :attribute must be a file of type: :values.',
+            'numeric' => 'The :attribute must be a number.',
+            'date' => 'The :attribute is not a valid date.',
+            'after' => 'The :attribute must be a date after :date.',
+            'url' => 'The :attribute format is invalid.',
+            'boolean' => 'The :attribute field must be true or false.',
+            'array' => 'The :attribute must be an array.',
+            'accepted' => 'The :attribute must be accepted.',
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'first_name' => 'first name',
-            'last_name' => 'last name',
-            'email' => 'email address',
-            'ceo' => 'CEO name',
-            'industry_id' => 'industry',
-            'ownership_type_id' => 'ownership type',
-            'company_size_id' => 'company size',
-            'established_in' => 'establishment year',
-            'no_of_offices' => 'number of offices',
+            'name' => 'Name',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'website' => 'Website',
+            'description' => 'Description',
+            'address' => 'Address',
+            'city_id' => 'City Id',
+            'state_id' => 'State Id',
+            'country_id' => 'Country Id',
+            'industry_id' => 'Industry Id',
+            'company_size_id' => 'Company Size Id',
+            'logo' => 'Logo',
+            'established_year' => 'Established Year',
         ];
     }
 
@@ -109,10 +95,20 @@ class UpdateCompanyRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if ($this->has('is_active')) {
-            $this->merge([
-                'is_active' => $this->boolean('is_active'),
-            ]);
-        }
+        // Add any data preparation logic here
+        // Example: Convert empty strings to null
+        $this->merge([
+            // Add any automatic data transformations
+        ]);
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
     }
 }

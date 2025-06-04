@@ -7,7 +7,7 @@
         <div class="section-header">
             <h1>{{ __('messages.job.job_details') }}</h1>
             <div class="section-header-breadcrumb">
-                <a href="{{ route('job.edit',$job->id) }}"
+                <a href="{{ route('admin.jobs.edit',$job->id) }}"
                    class="btn btn-warning form-btn float-right mr-2">{{ __('messages.common.edit') }}</a>
                 <a href="{{ route('job.index') }}"
                    class="btn btn-primary form-btn float-right">{{ __('messages.common.back') }}</a>

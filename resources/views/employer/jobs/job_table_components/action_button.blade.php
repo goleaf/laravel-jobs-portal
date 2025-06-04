@@ -16,7 +16,7 @@
     ?>
     @if(!$isJobClosed)
         @if(!$isJobPause && !$isJobDraft)
-            <a data-turbo="false" href="{{route('job-applications', $row->id)}}" title="{{__('messages.job_applications') }}"
+            <a data-turbo="false" href="{{route('admin.job-applications.index', $row->id)}}" title="{{__('messages.job_applications') }}"
                class="btn px-2 text-info fs-3 pe-0" data-bs-toggle="tooltip"
                data-placement="bottom">
         <span class="svg-icon svg-icon-3">
@@ -24,7 +24,7 @@
         </span>
             </a>
             @endif
-        <a href="{{route('job.edit', $row->id)}}" title="{{__('messages.common.edit')}}"
+        <a href="{{route('admin.jobs.edit', $row->id)}}" title="{{__('messages.common.edit')}}"
            class=" btn px-2 text-primary fs-3 pe-0 edit-btn" data-bs-toggle="tooltip"
            data-placement="bottom">
             <i class="fa-solid fa-pen-to-square"></i>

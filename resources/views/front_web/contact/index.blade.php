@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('send.contact.email')])
+                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.contact.send')])
                                 @csrf
                                 @include('flash::message')
                                 @include('front_web.layouts.errors')

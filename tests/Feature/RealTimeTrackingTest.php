@@ -20,31 +20,37 @@ class RealTimeTrackingTest extends TestCase
     {
         parent::setUp();
         
-        // Create test users
-        $this->candidate = User::factory()->create([
-            'user_type' => 'candidate',
-            'email' => 'candidate@test.com'
+        // Create test users with minimal required fields
+        $this->candidate = User::create([
+            'first_name' => 'John',
+            'last_name' => 'Candidate', 
+            'email' => 'candidate@test.com',
+            'password' => bcrypt('password'),
+            'user_type' => 'candidate'
         ]);
         
-        $this->employer = User::factory()->create([
-            'user_type' => 'employer',
-            'email' => 'employer@test.com'
+        $this->employer = User::create([
+            'first_name' => 'Jane',
+            'last_name' => 'Employer',
+            'email' => 'employer@test.com', 
+            'password' => bcrypt('password'),
+            'user_type' => 'employer'
         ]);
         
-        // Create test company
-        $this->company = Company::factory()->create([
+        // Create test company with minimal required fields
+        $this->company = Company::create([
             'user_id' => $this->employer->id,
             'name' => 'Test Company'
         ]);
         
-        // Create test job
-        $this->job = Job::factory()->create([
+        // Create test job with minimal required fields
+        $this->job = Job::create([
             'company_id' => $this->company->id,
             'title' => 'Test Job Position'
         ]);
         
-        // Create test application
-        $this->application = JobApplication::factory()->create([
+        // Create test application with minimal required fields
+        $this->application = JobApplication::create([
             'job_id' => $this->job->id,
             'candidate_id' => $this->candidate->id,
             'status' => 'pending'

@@ -1271,3 +1271,7 @@ Route::get('/test-routes', function () {
         'sample_routes' => array_slice($routes, 0, 20)
     ]);
 })->name('test-routes');
+
+// SEO Optimization Routes
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])
+    ->name('sitemap');

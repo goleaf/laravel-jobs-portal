@@ -1,2 +1,34 @@
 User-agent: *
 Allow: /
+
+# Allow specific paths
+Allow: /jobs
+Allow: /companies
+Allow: /categories
+Allow: /api/
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /candidate/dashboard/
+Disallow: /employer/dashboard/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /api/admin/
+
+# Disallow search and filter URLs to prevent duplicate content
+Disallow: /*?search=
+Disallow: /*?filter=
+Disallow: /*?sort=
+
+# Allow CSS and JS files
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://jobportal.prus.dev/sitemap.xml
+
+# Crawl delay (1 second)
+Crawl-delay: 1

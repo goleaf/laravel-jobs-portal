@@ -8,7 +8,7 @@
 </li>
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/employers*', 'admin/reported-employers*') ? 'd-none' : '' }}">
     <a class="nav-link p-0 {{ Request::is('admin/reported-employers*') ? 'active' : '' }}"
-       href="{{ route('reported.companies') }}">{{ __('messages.company.reported_employers') }}</a>
+       href="{{ route('admin.reported.companies') }}">{{ __('messages.company.reported_employers') }}</a>
 </li>
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/admins*') ? 'd-none' : '' }}">
     <a class="nav-link p-0 {{ Request::is('admin/admins*') ? 'active' : '' }}"

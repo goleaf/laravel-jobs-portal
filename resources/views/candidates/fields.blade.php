@@ -263,7 +263,7 @@
     </div>
     <div class="d-flex justify-content-end mt-5">
         {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3']) }}
-        <a href="{{ route('candidates.index') }}"
+        <a href="{{ route('admin.candidates.index') }}"
            class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
     </div>
 </div>

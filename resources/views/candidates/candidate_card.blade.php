@@ -9,7 +9,7 @@
                 <div class="mb-auto w-100">
                     <div class="d-flex justify-content-center align-items-center w-100">
                         <div>
-                            <a href="{{ route('candidates.index') }}/{{ $candidate['id'] }}"
+                            <a href="{{ route('admin.candidates.show', $candidate['id']) }}"
                                class="employee-listing-title text-decoration-none">{{ $candidate['user']['first_name'] }}</a>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
         <div class="employee-action-btn">
             <a title="{{ __('messages.common.edit') }}"
                class="btn btn-warning action-btn edit-action-btn edit-btn"
-               href="{{ route('candidates.index') }}/{{ $candidate['id'] }}/edit">
+               href="{{ route('admin.candidates.edit', $candidate['id']) }}">
                 <i class="fa fa-edit"></i>
             </a>
             <a title="{{ __('messages.common.delete') }}"

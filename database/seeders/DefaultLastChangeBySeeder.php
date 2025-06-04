@@ -16,7 +16,7 @@ class DefaultLastChangeBySeeder extends Seeder
      */
     public function run(): void
     {
-        $adminId = getSuperAdmin()->id;
+        $adminId = getSuperAdmin();
         
         // Check if the tables exist and have the required columns before updating
         if (Schema::hasTable('jobs') && Schema::hasColumn('jobs', 'last_change')) {

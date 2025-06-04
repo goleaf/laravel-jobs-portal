@@ -100,7 +100,13 @@ if (!function_exists('truncateText')) {
 if (!function_exists('getSuperAdmin')) {
     function getSuperAdmin(): ?int
     {
-        // Return a default super admin ID for testing/seeding
-        return 1;
+        // For testing environment, return a default value
+        if (app()->environment('testing')) {
+            return 1;
+        }
+        
+        // In production, try to find the first admin user
+        $admin = \App\Models\User::where('role', 'admin')->first();
+        return $admin ? $admin->id : 1;
     }
 }

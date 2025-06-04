@@ -2,61 +2,86 @@
 
 namespace Tests\Feature\Api;
 
-use Tests\TestCase;
+use App\Models\Job;
 use App\Models\User;
-use Tests\Helpers\TestHelpers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class JobApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_get_jobs_list(): void
-    {
-        [$user, $jobs] = TestHelpers::createTestEnvironment(3);
+    protected $user;
 
-        $response = $this->getJson("/api/jobs");
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
+
+    /** @test */
+    public function it_can_list_jobs_via_api()
+    {
+        Job::factory()->count(3)->create();
+
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson('/api/jobs');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    "data" => [
-                        "*" => ["id", "title", "description"]
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'title', 'description', 'created_at']
+                ]
+            ]);
     }
 
-    public function test_can_create_job_with_authentication(): void
+    /** @test */
+    public function it_can_create_job_via_api()
     {
-        $user = TestHelpers::createUserWithUniqueEmail();
-        $headers = TestHelpers::getApiAuthHeaders($user);
-
         $jobData = [
-            "title" => "API Test Job",
-            "description" => "Job created via API test",
-            "company_id" => 1,
-            "job_category_id" => 1,
-            "job_type_id" => 1
+            'title' => 'API Test Job',
+            'description' => 'Job created via API',
+            'location' => 'Remote',
+            'salary_min' => 40000,
+            'salary_max' => 60000
         ];
 
-        $response = $this->postJson("/api/jobs", $jobData, $headers);
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->postJson('/api/jobs', $jobData);
 
         $response->assertStatus(201)
-                ->assertJson([
-                    "data" => [
-                        "title" => "API Test Job"
-                    ]
-                ]);
+            ->assertJsonFragment(['title' => 'API Test Job']);
+
+        $this->assertDatabaseHas('jobs', ['title' => 'API Test Job']);
     }
 
-    public function test_cannot_create_job_without_authentication(): void
+    /** @test */
+    public function it_can_show_job_via_api()
     {
-        $jobData = [
-            "title" => "Unauthorized Job",
-            "description" => "This should fail"
-        ];
+        $job = Job::factory()->create();
 
-        $response = $this->postJson("/api/jobs", $jobData);
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson("/api/jobs/{$job->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['id' => $job->id]);
+    }
+
+    /** @test */
+    public function it_requires_authentication_for_protected_endpoints()
+    {
+        $response = $this->postJson('/api/jobs', []);
 
         $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function it_validates_required_fields()
+    {
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->postJson('/api/jobs', []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title', 'description']);
     }
 }

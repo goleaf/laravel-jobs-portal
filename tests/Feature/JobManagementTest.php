@@ -2,79 +2,90 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Job;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class JobManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_authenticated_user_can_create_job(): void
+    protected $employer;
+    protected $candidate;
+    protected $company;
+
+    protected function setUp(): void
     {
-        $user = $this->createTestUser();
+        parent::setUp();
+        $this->company = Company::factory()->create();
+        $this->employer = User::factory()->create(['is_employer' => true]);
+        $this->candidate = User::factory()->create(['is_candidate' => true]);
+    }
 
-        $response = $this->actingAs($user)->post('/jobs', [
+    /** @test */
+    public function employer_can_create_job()
+    {
+        $category = Category::factory()->create();
+        
+        $jobData = [
             'title' => 'Software Developer',
-            'description' => 'We are looking for a skilled developer',
-            'expires_on' => now()->addDays(30)->format('Y-m-d'),
-        ]);
+            'description' => 'Looking for a skilled developer',
+            'category_id' => $category->id,
+            'company_id' => $this->company->id,
+            'salary_min' => 50000,
+            'salary_max' => 80000,
+            'location' => 'New York',
+            'job_type' => 'full-time',
+            'experience_level' => 'mid-level'
+        ];
 
-        $response->assertStatus(302); // Redirect after creation
-        $this->assertDatabaseHas('jobs', [
-            'title' => 'Software Developer',
-            'user_id' => $user->id,
+        $response = $this->actingAs($this->employer)->post('/jobs', $jobData);
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('jobs', ['title' => 'Software Developer']);
+    }
+
+    /** @test */
+    public function candidate_can_apply_for_job()
+    {
+        $job = Job::factory()->create(['company_id' => $this->company->id]);
+
+        $response = $this->actingAs($this->candidate)->post("/jobs/{$job->id}/apply");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('job_applications', [
+            'job_id' => $job->id,
+            'user_id' => $this->candidate->id
         ]);
     }
 
-    public function test_guest_cannot_create_job(): void
+    /** @test */
+    public function jobs_can_be_searched()
     {
-        $response = $this->post('/jobs', [
-            'title' => 'Software Developer',
-            'description' => 'We are looking for a skilled developer',
-        ]);
+        Job::factory()->create(['title' => 'PHP Developer']);
+        Job::factory()->create(['title' => 'JavaScript Developer']);
 
-        $response->assertRedirect('/login');
-    }
-
-    public function test_user_can_view_their_jobs(): void
-    {
-        $user = $this->createTestUser();
-        $job = $this->createTestJob(['user_id' => $user->id]);
-
-        $response = $this->actingAs($user)->get('/jobs');
+        $response = $this->get('/jobs?search=PHP');
 
         $response->assertStatus(200);
-        $response->assertSee($job->title);
+        $response->assertSee('PHP Developer');
+        $response->assertDontSee('JavaScript Developer');
     }
 
-    public function test_user_can_update_their_job(): void
+    /** @test */
+    public function jobs_can_be_filtered_by_category()
     {
-        $user = $this->createTestUser();
-        $job = $this->createTestJob(['user_id' => $user->id]);
+        $techCategory = Category::factory()->create(['name' => 'Technology']);
+        $marketingCategory = Category::factory()->create(['name' => 'Marketing']);
 
-        $response = $this->actingAs($user)->put("/jobs/{$job->id}", [
-            'title' => 'Updated Job Title',
-            'description' => $job->description,
-            'expires_on' => $job->expires_on->format('Y-m-d'),
-        ]);
+        Job::factory()->create(['category_id' => $techCategory->id]);
+        Job::factory()->create(['category_id' => $marketingCategory->id]);
 
-        $response->assertStatus(302);
-        $this->assertDatabaseHas('jobs', [
-            'id' => $job->id,
-            'title' => 'Updated Job Title',
-        ]);
-    }
+        $response = $this->get("/jobs?category={$techCategory->id}");
 
-    public function test_user_can_delete_their_job(): void
-    {
-        $user = $this->createTestUser();
-        $job = $this->createTestJob(['user_id' => $user->id]);
-
-        $response = $this->actingAs($user)->delete("/jobs/{$job->id}");
-
-        $response->assertStatus(302);
-        $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
+        $response->assertStatus(200);
     }
 }

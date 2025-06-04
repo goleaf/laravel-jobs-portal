@@ -11,18 +11,12 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to the "home" route for your application.
-     *
-     * @var string
+     * The path to your application's "home" route.
      */
-    public const ADMIN_HOME = '/admin/dashboard';
-
-    public const EMPLOYER_HOME = '/employer/dashboard';
-
-    public const CANDIDATE_HOME = '/candidate/dashboard';
+    public const HOME = '/home';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
+     * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
     {
@@ -30,43 +24,28 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        $this->routes(function () {
-            $this->mapApiRoutes();
-
-            $this->mapWebRoutes();
-
-            $this->mapUpgradeRoutes();
-
-            //
+        RateLimiter::for('auth', function (Request $request) {
+            return [
+                Limit::perMinute(5)->by($request->ip()),
+                Limit::perMinute(3)->by($request->input('email'))
+            ];
         });
-    }
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     */
-    protected function mapWebRoutes(): void
-    {
-        Route::middleware('web')
-            ->group(base_path('routes/web.php'));
-    }
+        RateLimiter::for('contact', function (Request $request) {
+            return Limit::perMinute(2)->by($request->ip());
+        });
 
-    protected function mapUpgradeRoutes()
-    {
-        Route::middleware('web')
-            ->group(base_path('routes/upgrade.php'));
-    }
+        RateLimiter::for('job-application', function (Request $request) {
+            return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+        });
 
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     */
-    protected function mapApiRoutes(): void
-    {
-        Route::prefix('api')
-            ->middleware('api')
-            ->group(base_path('routes/api.php'));
+        $this->routes(function () {
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+        });
     }
 }

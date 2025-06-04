@@ -110,7 +110,7 @@ class TailwindMigrationScript
         'pb-3' => 'pb-3',
         'pb-4' => 'pb-4',
         'pb-5' => 'pb-5',
-
+        
         // Buttons
         'btn' => 'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out',
         'btn-primary' => 'bg-blue-600 hover:bg-blue-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500',
@@ -125,7 +125,7 @@ class TailwindMigrationScript
         'btn-outline-secondary' => 'border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white',
         'btn-sm' => 'px-3 py-1.5 text-xs',
         'btn-lg' => 'px-6 py-3 text-base',
-
+        
         // Forms
         'form-control' => 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
         'form-select' => 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
@@ -136,7 +136,7 @@ class TailwindMigrationScript
         'form-text' => 'text-xs text-gray-500 mt-1',
         'input-group' => 'flex',
         'input-group-text' => 'px-3 py-2 bg-gray-50 border border-gray-300 border-r-0 rounded-l-md text-gray-500',
-
+        
         // Cards
         'card' => 'bg-white rounded-lg shadow-md border border-gray-200',
         'card-header' => 'px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg',
@@ -144,7 +144,7 @@ class TailwindMigrationScript
         'card-footer' => 'px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg',
         'card-title' => 'text-lg font-semibold text-gray-900 mb-2',
         'card-text' => 'text-gray-700',
-
+        
         // Alerts
         'alert' => 'px-4 py-3 rounded-md border mb-4',
         'alert-primary' => 'bg-blue-50 border-blue-200 text-blue-700',
@@ -153,7 +153,7 @@ class TailwindMigrationScript
         'alert-danger' => 'bg-red-50 border-red-200 text-red-700',
         'alert-warning' => 'bg-yellow-50 border-yellow-200 text-yellow-700',
         'alert-info' => 'bg-blue-50 border-blue-200 text-blue-700',
-
+        
         // Tables
         'table' => 'min-w-full divide-y divide-gray-200',
         'table-striped' => 'odd:bg-gray-50 even:bg-white',

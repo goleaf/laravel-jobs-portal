@@ -39,7 +39,7 @@
 #### ✅ **Vite Configuration Optimized**
 **Code Splitting Strategy:**
 ```javascript
-manualChunks: {
+                manualChunks: {
     'vendor': ['jquery', 'bootstrap', '@popperjs/core'],
     'ui-libs': ['select2', 'datatables.net', 'sweetalert2', 'alpinejs'],
     'charts': ['chart.js', 'apexcharts'],

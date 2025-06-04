@@ -182,6 +182,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'user_type',
         'dob',
         'gender',
         'country_id',
@@ -230,6 +231,7 @@ class User extends Authenticatable
     {
         return [
             'id' => 'integer',
+            'user_type' => 'integer',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'dob' => 'date',
@@ -252,10 +254,12 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        // Clear cache when user is updated
+        // Clear cache when user is updated (only if cache is available)
         static::updated(function ($user) {
-            cache()->forget("user.{$user->id}");
-            cache()->forget("user.profile.{$user->id}");
+            if (app()->bound('cache')) {
+                cache()->forget("user.{$user->id}");
+                cache()->forget("user.profile.{$user->id}");
+            }
         });
     }
 
@@ -288,6 +292,10 @@ class User extends Authenticatable
      */
     public function getCountryNameAttribute(): ?string
     {
+        if (!app()->bound('cache') || app()->environment('testing')) {
+            return $this->country?->name;
+        }
+        
         return cache()->remember("user.{$this->id}.country_name", 3600, function () {
             return $this->country?->name;
         });

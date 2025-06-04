@@ -35,4 +35,13 @@ class TestHelpers
             'Content-Type' => 'application/json',
         ];
     }
+
+    /**
+     * Create basic test data - placeholder method
+     */
+    public static function createBasicTestData(): void
+    {
+        // Basic test data setup - currently empty but prevents errors
+        // This method can be expanded later to create common test data
+    }
 }

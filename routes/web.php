@@ -313,7 +313,7 @@ Route::post('/contact/send', function (Illuminate\Http\Request $request) {
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/email-templates', function () {
         return view('admin.email_templates.index');
-    })->name('email-template.index');
+    })->name('first-email-template.index');
 });
 
 // Notification Settings
@@ -684,11 +684,11 @@ Route::middleware(['auth'])->group(function () {
         // Email templates management
         Route::get('/email-template/edit/{template}', function ($template) {
             return view('admin.email_templates.edit');
-        })->name('email-template.edit');
+        })->name('web-email-template.edit');
         
         Route::get('/email-template', function () {
             return view('admin.email_templates.index');
-        })->name('email-template.index');
+        })->name('web-email-template.index');
         
         // Resume management
         Route::get('/download-all-resume', function () {

@@ -97,14 +97,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return view('admin.job_applications.index');
     })->name('job-applications.index');
     
-    // Email templates management
+    // Email templates management (using unique names)
     Route::get('/email-template/edit/{template}', function ($template) {
         return view('admin.email_templates.edit');
-    })->name('email-template.edit');
+    })->name('admin-email-template.edit');
     
     Route::get('/email-template', function () {
         return view('admin.email_templates.index');
-    })->name('email-template.index');
+    })->name('admin-email-template.index');
     
     // Resume management
     Route::get('/download-all-resume', function () {

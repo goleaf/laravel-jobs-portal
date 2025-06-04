@@ -2,112 +2,106 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 /**
- * Translation Service for JSON-based translations
+ * JSON-based Translation Service
+ * 
+ * Handles loading and caching of JSON translation files
+ * for improved performance over PHP array files.
  */
 class TranslationService
 {
-    private $defaultLocale = 'en';
-    private $fallbackLocale = 'en';
-    private $translations = [];
+    private static array $loadedTranslations = [];
+    private static string $defaultLocale = "en";
 
     /**
-     * Load translations for a specific locale
+     * Get translation for a key
      */
-    public function loadTranslations($locale = null)
+    public static function trans(string $key, array $replace = [], ?string $locale = null): string
     {
-        $locale = $locale ?: App::getLocale();
+        $locale = $locale ?: app()->getLocale() ?: self::$defaultLocale;
         
-        if (isset($this->translations[$locale])) {
-            return $this->translations[$locale];
+        // Load translations for this locale if not already loaded
+        if (!isset(self::$loadedTranslations[$locale])) {
+            self::loadTranslations($locale);
         }
 
-        $cacheKey = "translations.$locale";
+        // Get the translation
+        $translation = self::getNestedTranslation($key, $locale);
         
-        return Cache::remember($cacheKey, 3600, function () use ($locale) {
-            return $this->loadTranslationsFromFile($locale);
-        });
+        // If not found, try default locale
+        if ($translation === $key && $locale !== self::$defaultLocale) {
+            if (!isset(self::$loadedTranslations[self::$defaultLocale])) {
+                self::loadTranslations(self::$defaultLocale);
+            }
+            $translation = self::getNestedTranslation($key, self::$defaultLocale);
+        }
+
+        // Replace placeholders
+        foreach ($replace as $placeholder => $value) {
+            $translation = str_replace(":{$placeholder}", $value, $translation);
+        }
+
+        return $translation;
     }
 
     /**
      * Load translations from JSON file
      */
-    private function loadTranslationsFromFile($locale)
+    private static function loadTranslations(string $locale): void
     {
-        $filePath = lang_path("$locale.json");
+        $cacheKey = "translations_{$locale}";
         
-        if (!File::exists($filePath)) {
-            // Fallback to default locale
-            $filePath = lang_path("{$this->fallbackLocale}.json");
-        }
+        self::$loadedTranslations[$locale] = Cache::remember($cacheKey, 3600, function () use ($locale) {
+            $filePath = lang_path("{$locale}.json");
+            
+            if (!File::exists($filePath)) {
+                return [];
+            }
 
-        if (!File::exists($filePath)) {
-            return [];
-        }
-
-        $content = File::get($filePath);
-        $translations = json_decode($content, true);
-
-        return $translations ?: [];
+            $content = File::get($filePath);
+            return json_decode($content, true) ?: [];
+        });
     }
 
     /**
-     * Get a translation by key
+     * Get nested translation using dot notation
      */
-    public function get($key, $replace = [], $locale = null)
+    private static function getNestedTranslation(string $key, string $locale): string
     {
-        $translations = $this->loadTranslations($locale);
-        
-        $value = data_get($translations, $key, $key);
-        
-        if (!empty($replace)) {
-            foreach ($replace as $placeholder => $replacement) {
-                $value = str_replace(":$placeholder", $replacement, $value);
+        $translations = self::$loadedTranslations[$locale] ?? [];
+        $keys = explode(".", $key);
+        $value = $translations;
+
+        foreach ($keys as $segment) {
+            if (is_array($value) && array_key_exists($segment, $value)) {
+                $value = $value[$segment];
+            } else {
+                return $key; // Return key if not found
             }
         }
 
-        return $value;
-    }
-
-    /**
-     * Check if a translation exists
-     */
-    public function has($key, $locale = null)
-    {
-        $translations = $this->loadTranslations($locale);
-        return data_get($translations, $key) !== null;
+        return is_string($value) ? $value : $key;
     }
 
     /**
      * Clear translation cache
      */
-    public function clearCache()
+    public static function clearCache(): void
     {
-        $cacheKeys = [];
-        foreach (['ar', 'de', 'en', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'] as $locale) {
-            $cacheKeys[] = "translations.$locale";
+        foreach (["ar", "de", "en", "es", "fr", "pt", "ru", "tr", "zh"] as $locale) {
+            Cache::forget("translations_{$locale}");
         }
-        
-        Cache::forget($cacheKeys);
+        self::$loadedTranslations = [];
     }
 
     /**
      * Get all available locales
      */
-    public function getAvailableLocales()
+    public static function getAvailableLocales(): array
     {
-        $locales = [];
-        $langPath = lang_path();
-        
-        foreach (glob($langPath . '/*.json') as $file) {
-            $locale = basename($file, '.json');
-            $locales[] = $locale;
-        }
-
-        return $locales;
+        return ["ar", "de", "en", "es", "fr", "pt", "ru", "tr", "zh"];
     }
 }

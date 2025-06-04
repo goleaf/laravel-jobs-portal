@@ -45,15 +45,15 @@
        href="{{ route('admin.job-categories.index') }}">{{ __('messages.job_categories') }}</a>
 </li>
 <li class="nav-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-types*') ? 'active' : '' }}"
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is('admin/job-types*') ? 'active' : '' }}"
        href="{{ route('admin.job-types.index') }}">{{ __('messages.job_types') }}</a>
 </li>
 <li class="nav-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-tags*') ? 'active' : '' }}"
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is('admin/job-tags*') ? 'active' : '' }}"
        href="{{ route('admin.job-tags.index') }}">{{ __('messages.job_tags') }}</a>
 </li>
 <li class="nav-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-shifts*') ? 'active' : '' }}"
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is('admin/job-shifts*') ? 'active' : '' }}"
        href="{{ route('admin.job-shifts.index') }}">{{ __('messages.job_shifts') }}</a>
 </li>
 <div class="{{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">

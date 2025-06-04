@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    @if( ! $row->user->email_verified_at )
+    @if(!row->user->email_verified_at )
         <label class="flex items-center form-switch form-switch-sm justify-center">
             <input type="checkbox" name="Is isActive"
                    class="flex items-center -input is-email-verified is-candidate-email-verified" data-id="{{ $row->id }}">

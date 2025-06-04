@@ -25,9 +25,11 @@ Route::get('/test', function () {
     ]);
 })->name('test');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('front.home');
+// Home route - aliased as both 'home' and 'front.home'
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Add alias for front.home
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('front.home');
 
 // Authentication Routes
 Route::get('/login', function () {
@@ -358,10 +360,7 @@ Route::delete('/admin/transactions/{transaction}', function ($transaction) {
 })->name('admin.transactions.destroy');
 
 // Language change route (referenced in components/language-selector.blade.php)
-Route::get('/language/{locale}', function ($locale) {
-    session(['locale' => $locale]);
-    return redirect()->back();
-})->name('language.change');
+Route::get('/language/{locale}', [App\Http\Controllers\LanguageController::class, 'change'])->name('language.change');
 
 // =============================================================================
 // FINAL MISSING ROUTES - Adding the last 9 routes for 100% coverage
@@ -1295,3 +1294,57 @@ Route::middleware(['auth'])->prefix('realtime')->name('realtime.')->group(functi
 Route::get('/dashboard/realtime', function () {
     return view('dashboard.realtime');
 })->middleware(['auth'])->name('dashboard.realtime');
+
+// ============================================================================
+// CRITICAL MISSING ROUTES - Added via comprehensive blade analysis
+// ============================================================================
+
+// Candidate and Employer Applications (from blade analysis)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/candidate/applications', [App\Http\Controllers\Candidate\ApplicationController::class, 'index'])
+        ->name('candidate.applications.index');
+    
+    Route::get('/employer/applications', [App\Http\Controllers\Employer\ApplicationController::class, 'index'])
+        ->name('employer.applications.index');
+});
+
+// Blog Comment Routes (from blade analysis)
+Route::middleware(['auth'])->group(function () {
+    Route::post('/blog/{blog}/comment', [App\Http\Controllers\Front\BlogCommentController::class, 'store'])
+        ->name('front.blog.comment.store');
+});
+
+// Admin Email Template Routes (from blade analysis)
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/email-templates', [App\Http\Controllers\Admin\EmailTemplateController::class, 'index'])
+        ->name('admin.email-template.index');
+    
+    Route::get('/email-templates/{template}/edit', [App\Http\Controllers\Admin\EmailTemplateController::class, 'edit'])
+        ->name('admin.email-template.edit');
+    
+    // Slider Management Routes (from blade analysis)
+    Route::get('/branding-sliders', [App\Http\Controllers\Admin\BrandingSliderController::class, 'index'])
+        ->name('branding.sliders.index');
+    
+    Route::get('/header-sliders', [App\Http\Controllers\Admin\HeaderSliderController::class, 'index'])
+        ->name('header.sliders.index');
+    
+    Route::get('/image-sliders', [App\Http\Controllers\Admin\ImageSliderController::class, 'index'])
+        ->name('image-sliders.index');
+    
+    // Other Admin Routes (from blade analysis)
+    Route::get('/reported-jobs', [App\Http\Controllers\Admin\ReportedJobController::class, 'index'])
+        ->name('reported.jobs');
+    
+    Route::get('/salary-periods', [App\Http\Controllers\Admin\SalaryPeriodController::class, 'index'])
+        ->name('salaryPeriod.index');
+    
+    Route::get('/functional-areas', [App\Http\Controllers\Admin\FunctionalAreaController::class, 'index'])
+        ->name('functionalArea.index');
+    
+    Route::get('/salary-currencies', [App\Http\Controllers\Admin\SalaryCurrencyController::class, 'index'])
+        ->name('salaryCurrency.index');
+    
+    Route::get('/ownership-types', [App\Http\Controllers\Admin\OwnershipTypeController::class, 'index'])
+        ->name('ownerShipType.index');
+});

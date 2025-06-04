@@ -17,7 +17,7 @@
     >
         @foreach(config('app.available_locales') as $locale => $name)
             <a 
-                href="{{ route('language.change', $locale) }}" 
+                href="{{ route('language.switch', $locale) }}" 
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 {{ app()->getLocale() === $locale ? 'bg-gray-100' : '' }}"
             >
                 {{ $name }}

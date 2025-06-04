@@ -28,11 +28,18 @@ class BladeRouteAnalyzer
     private array $findings = [];
     private array $errors = [];
     private array $allRoutes = [];
+    private array $routes = [];
+    private array $syntaxErrors = [];
+    private array $routeReferences = [];
+    private array $missingRoutes = [];
+    private array $bladeFiles = [];
 
     public function __construct()
     {
         echo "🚀 BLADE ROUTE ANALYZER - Starting Analysis\n";
         echo "=" . str_repeat("=", 50) . "\n\n";
+        $this->loadLaravelApp();
+        $this->loadRoutes();
     }
 
     public function analyzeAll(): void
@@ -42,16 +49,30 @@ class BladeRouteAnalyzer
         $this->generateReport();
     }
 
+    private function loadLaravelApp()
+    {
+        $app = require_once __DIR__ . '/bootstrap/app.php';
+        $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+    }
+
+    private function loadRoutes()
+    {
+        $routeCollection = app('router')->getRoutes();
+        foreach ($routeCollection as $route) {
+            $this->routes[] = [
+                'name' => $route->getName(),
+                'uri' => $route->uri(),
+                'methods' => $route->methods(),
+                'action' => $route->getActionName(),
+            ];
+        }
+    }
+
     private function loadApplicationRoutes(): void
     {
         echo "📊 Loading Application Routes...\n";
         
         try {
-            // Define the Laravel application bootstrap path
-            $app = require_once __DIR__ . '/bootstrap/app.php';
-            $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-            $kernel->bootstrap();
-            
             // Get all registered routes
             $routes = Route::getRoutes();
             

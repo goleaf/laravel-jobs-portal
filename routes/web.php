@@ -622,6 +622,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/salary-periods', [App\Http\Controllers\Admin\MasterDataController::class, 'salaryPeriods'])->name('salaryPeriod.index');
         Route::get('/industries', [App\Http\Controllers\Admin\MasterDataController::class, 'industries'])->name('industry.index');
         Route::get('/company-sizes', [App\Http\Controllers\Admin\MasterDataController::class, 'companySizes'])->name('companySize.index');
+        
+        // CompanySize CRUD routes
+        Route::post('/company-sizes', [App\Http\Controllers\CompanySizeController::class, 'store'])->name('companySize.store');
+        Route::get('/company-sizes/{companySize}/edit', [App\Http\Controllers\CompanySizeController::class, 'edit'])->name('companySize.edit');
+        Route::put('/company-sizes/{companySize}', [App\Http\Controllers\CompanySizeController::class, 'update'])->name('companySize.update');
+        Route::delete('/company-sizes/{companySize}', [App\Http\Controllers\CompanySizeController::class, 'destroy'])->name('companySize.destroy');
         Route::get('/functional-areas', [App\Http\Controllers\Admin\MasterDataController::class, 'functionalAreas'])->name('functionalArea.index');
         Route::get('/career-levels', [App\Http\Controllers\Admin\MasterDataController::class, 'careerLevels'])->name('careerLevel.index');
         Route::get('/salary-currencies', [App\Http\Controllers\Admin\MasterDataController::class, 'salaryCurrencies'])->name('salaryCurrency.index');

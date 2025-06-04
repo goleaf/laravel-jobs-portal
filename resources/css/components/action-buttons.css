@@ -1,0 +1,20 @@
+/* Action Button Components */
+.action-btn-base {
+  @apply inline-flex items-center justify-center p-2 rounded-lg font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 hover:scale-105;
+}
+
+.action-btn-edit {
+  @apply action-btn-base text-blue-600 hover:text-blue-800 hover:bg-blue-50 focus:ring-blue-500;
+}
+
+.action-btn-delete {
+  @apply action-btn-base text-red-600 hover:text-red-800 hover:bg-red-50 focus:ring-red-500;
+}
+
+.action-btn-icon {
+  @apply w-4 h-4;
+}
+
+.action-container {
+  @apply flex items-center justify-center gap-2;
+} 

@@ -281,3 +281,79 @@ foreach($routes as $route) {
 **ESTIMATED TOTAL TIME**: 12-15 days for complete implementation ✅ ACHIEVED
 **CRITICAL PATH**: Routes ✅ → Views ✅ → Validation ✅ → Translations ✅ → Testing ✅
 **CURRENT STATUS**: ALL 7 PRIORITIES COMPLETED (100% LEGENDARY ACHIEVEMENT 🏆) 
+
+# TODO: Application Upgrade and Fixes
+
+## Priority 1: Critical Route & Controller Fixes
+- [x] Analyze all Blade files for route usage
+- [ ] **URGENT**: Fix missing CompanySize CRUD routes (edit, update, delete, store)
+- [ ] Create proper request validation files for CompanySize operations
+- [ ] Fix broken action buttons in company_sizes/table-components/action_button.blade.php
+- [ ] Verify all routes are working and accessible
+
+## Priority 2: Multilingual System Implementation
+- [ ] Implement complete JSON-based translation system
+- [ ] Replace all hardcoded strings with translation keys
+- [ ] Create translation files for all supported languages (ar, de, en, es, fr, pt, ru, tr, zh)
+- [ ] Update all Blade templates to use @lang() or __() with JSON keys
+- [ ] Test language switching functionality
+
+## Priority 3: TailwindCSS Migration
+- [ ] **CRITICAL**: Remove all Bootstrap CSS dependencies from project
+- [ ] Migrate all Blade templates to use TailwindCSS classes
+- [ ] Remove CDN links from all Blade files
+- [ ] Convert all custom CSS to TailwindCSS utilities
+- [ ] Update company_sizes/table-components/action_button.blade.php to use pure TailwindCSS
+- [ ] Ensure all JavaScript and CSS files are served locally via Vite
+
+## Priority 4: Asset Management (Local Only)
+- [ ] Remove all CDN references from Blade templates
+- [ ] Ensure FontAwesome is loaded locally (already installed)
+- [ ] Move all JavaScript to resources/js/ directory
+- [ ] Move all CSS to resources/css/ directory
+- [ ] Update Vite configuration for optimal asset bundling
+- [ ] Remove inline CSS and JavaScript from Blade templates
+
+## Priority 5: Request Validation System
+- [ ] Create individual request classes for all controller methods
+- [ ] Implement proper validation rules and error messages
+- [ ] Add multilingual error messages
+- [ ] Create CompanySize request files:
+  - [ ] CreateCompanySizeRequest
+  - [ ] UpdateCompanySizeRequest
+  - [ ] DeleteCompanySizeRequest (if needed)
+
+## Priority 6: Testing Framework
+- [ ] Create comprehensive tests for all controllers
+- [ ] Create unit tests for models
+- [ ] Create feature tests for all routes
+- [ ] Create browser tests for UI interactions
+- [ ] Fix any failing tests
+- [ ] Ensure 100% route coverage
+
+## Priority 7: Code Quality & Standards
+- [ ] Remove unused Bootstrap framework files
+- [ ] Clean up duplicate route definitions
+- [ ] Standardize naming conventions
+- [ ] Add proper PHPDoc documentation
+- [ ] Implement proper error handling
+
+## Priority 8: Performance Optimization
+- [ ] Optimize Vite build configuration
+- [ ] Implement proper caching strategies
+- [ ] Minimize asset sizes
+- [ ] Remove unused dependencies
+
+## Current Issues Found:
+1. **BROKEN**: CompanySize action buttons reference non-existent routes
+2. **MISSING**: CompanySize CRUD routes (store, edit, update, destroy)
+3. **INCONSISTENT**: Mixed Bootstrap and TailwindCSS classes
+4. **VALIDATION**: Missing request validation classes
+5. **TRANSLATIONS**: Hardcoded strings not using translation system
+6. **ASSETS**: Some CSS/JS still using CDN references
+
+## Files Requiring Immediate Attention:
+- `resources/views/company_sizes/table-components/action_button.blade.php` (BROKEN)
+- `routes/web.php` (Missing CompanySize routes)
+- `app/Http/Controllers/CompanySizeController.php` (Route names mismatch)
+- All Blade templates (Bootstrap to TailwindCSS migration needed) 

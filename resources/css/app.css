@@ -1,5 +1,9 @@
-@import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+@import './components/action-buttons.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @custom-variant dark (&:where(.dark, .dark *));
 

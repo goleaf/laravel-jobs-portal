@@ -1,115 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('auth.login') }} - {{ config('app.name') }}</title>
-</head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 mx-auto">
-        <div class="flex flex-wrap justify-center">
-            <div class="md:w-6/12 flex-1 -lg-4">
-                <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mt-5">
-                    <div class="bg-white shadow rounded-lg overflow-hidden -header text-center bg-primary-600 text-white">
-                        <h4 class="mb-0">
-                            <i class="fas fa-sign-in-alt me-2"></i>
-                            {{ __('auth.login') }}
-                        </h4>
-                    </div>
-                    <div class="bg-white shadow rounded-lg overflow-hidden -body">
-                        @if ($errors->any())
-                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
-                            </div>
-                        @endif
+<x-auth-layout>
+    <x-slot:title>{{ __('auth.login') }}</x-slot>
 
-                        @if (session('status'))
-                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
-                                {{ session('status') }}
-                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
-                            </div>
-                        @endif
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <flux:brand href="{{ route('home') }}" name="{{ config('app.name') }}" class="mx-auto" />
+                <flux:heading size="lg" class="mt-6">
+                    <x-heroicon-o-lock-closed class="w-5 h-5 inline mr-2" />
+                    {{ __('auth.welcome_back') }}
+                </flux:heading>
+                <flux:text class="mt-2 text-gray-600 dark:text-gray-400">
+                    {{ __('auth.sign_in_to_account') }}
+                </flux:text>
+            </div>
 
-                        <form method="POST" action="{{ route('login.submit') }}">
-                            @csrf
-                            
-                            <div class="mb-3">
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-envelope me-1"></i>
-                                    {{ __('auth.email_address') }}
-                                </label>
-                                <input id="email" type="email" 
-                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
-                                       name="email" 
-                                       value="{{ old('email') }}" 
-                                       required 
-                                       autocomplete="email" 
-                                       autofocus>
-                                @error('email')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+            <!-- Flash Messages -->
+            @if ($errors->any())
+                <flux:callout variant="danger">
+                    <flux:callout.icon name="exclamation-circle" />
+                    <flux:callout.heading>{{ __('auth.errors_occurred') }}</flux:callout.heading>
+                    <flux:callout.description>
+                        <ul class="list-disc list-inside space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </flux:callout.description>
+                </flux:callout>
+            @endif
 
-                            <div class="mb-3">
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-lock me-1"></i>
-                                    {{ __('auth.password') }}
-                                </label>
-                                <input id="password" type="password" 
-                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
-                                       name="password" 
-                                       required 
-                                       autocomplete="current-password">
-                                @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+            @if (session('status'))
+                <flux:callout variant="success">
+                    <flux:callout.icon name="check-circle" />
+                    <flux:callout.description>
+                        {{ session('status') }}
+                    </flux:callout.description>
+                </flux:callout>
+            @endif
 
-                            <div class="mb-3 flex items-center">
-                                <input class="flex items-center -input" type="checkbox" name="remember" id="remember" 
-                                       {{ old('remember') ? 'checked' : '' }}>
-                                <label class="flex items-center" for="remember">
-                                    {{ __('auth.remember_me') }}
-                                </label>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition duration-150 ease-in-out">
-                                    <i class="fas fa-sign-in-alt me-1"></i>
-                                    {{ __('auth.login') }}
-                                </button>
-                            </div>
-                        </form>
-
-                        <div class="mt-3 text-center">
-                            @if (Route::has('password.request'))
-                                <a class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out" href="{{ route('password.request') }}">
-                                    {{ __('auth.forgot_password') }}
-                                </a>
-                            @endif
-                        </div>
-
-                        <hr>
+            <!-- Login Form -->
+            <flux:card class="mt-8">
+                <flux:card.body>
+                    <form method="POST" action="{{ route('login.submit') }}" class="space-y-6">
+                        @csrf
                         
-                        <div class="text-center">
-                            <p class="mb-2">{{ __("Don't have an account?") }}</p>
-                            <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-green-500 text-sm font-medium rounded-md text-green-600 hover:bg-green-50 transition duration-150 ease-in-out">
-                                <i class="fas fa-user-plus me-1"></i>
-                                {{ __('auth.register') }}
-                            </a>
+                        <!-- Email Field -->
+                        <flux:field>
+                            <flux:label for="email">
+                                <x-heroicon-o-envelope class="w-4 h-4 inline mr-1" />
+                                {{ __('auth.email_address') }}
+                            </flux:label>
+                            <flux:input 
+                                id="email"
+                                type="email" 
+                                name="email" 
+                                value="{{ old('email') }}"
+                                required 
+                                autocomplete="email" 
+                                autofocus
+                                placeholder="{{ __('auth.email_placeholder') }}"
+                                :invalid="$errors->has('email')"
+                            />
+                            @error('email')
+                                <flux:error>{{ $message }}</flux:error>
+                            @enderror
+                        </flux:field>
+
+                        <!-- Password Field -->
+                        <flux:field>
+                            <flux:label for="password">
+                                <x-heroicon-o-lock-closed class="w-4 h-4 inline mr-1" />
+                                {{ __('auth.password') }}
+                            </flux:label>
+                            <flux:input 
+                                id="password"
+                                type="password" 
+                                name="password" 
+                                required 
+                                autocomplete="current-password"
+                                placeholder="{{ __('auth.password_placeholder') }}"
+                                :invalid="$errors->has('password')"
+                            />
+                            @error('password')
+                                <flux:error>{{ $message }}</flux:error>
+                            @enderror
+                        </flux:field>
+
+                        <!-- Remember Me -->
+                        <flux:checkbox 
+                            name="remember" 
+                            id="remember"
+                            :checked="old('remember')"
+                            label="{{ __('auth.remember_me') }}"
+                        />
+
+                        <!-- Submit Button -->
+                        <flux:button 
+                            type="submit" 
+                            variant="primary" 
+                            class="w-full"
+                        >
+                            <x-heroicon-o-arrow-right-end-on-rectangle class="w-4 h-4 mr-2" />
+                            {{ __('auth.sign_in') }}
+                        </flux:button>
+                    </form>
+
+                    <!-- Forgot Password Link -->
+                    @if (Route::has('password.request'))
+                        <div class="mt-6 text-center">
+                            <flux:link 
+                                href="{{ route('password.request') }}" 
+                                class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                            >
+                                {{ __('auth.forgot_password') }}
+                            </flux:link>
                         </div>
+                    @endif
+                </flux:card.body>
+            </flux:card>
+
+            <!-- Register Link -->
+            <div class="text-center">
+                <flux:text class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ __('auth.dont_have_account') }}
+                    <flux:link 
+                        href="{{ route('register') }}" 
+                        class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                    >
+                        {{ __('auth.create_account') }}
+                    </flux:link>
+                </flux:text>
+            </div>
+
+            <!-- Role Selection (if needed) -->
+            @if(Route::has('admin.login'))
+                <div class="mt-6">
+                    <flux:separator />
+                    <div class="mt-6 grid grid-cols-1 gap-3">
+                        <flux:button 
+                            href="{{ route('admin.login') }}" 
+                            variant="secondary" 
+                            class="w-full"
+                        >
+                            <x-heroicon-o-shield-check class="w-4 h-4 mr-2" />
+                            {{ __('auth.admin_login') }}
+                        </flux:button>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
-    </div></body>
-</html> 
+    </div>
+</x-auth-layout> 

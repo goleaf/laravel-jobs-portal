@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 import './realtime-dashboard';
+import './components/action-buttons.js';
 
 // Import local packages
 import 'bootstrap';

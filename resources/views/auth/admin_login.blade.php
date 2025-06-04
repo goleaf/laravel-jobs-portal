@@ -1,41 +1,90 @@
-@extends('layouts.simple')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ __('Admin Login') }} - {{ config('app.name') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-login-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .login-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        .admin-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="admin-login-bg">
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="col-md-6 col-lg-4">
+                <div class="text-center mb-4">
+                    <a href="{{ route('front.home') }}" class="text-white text-decoration-none">
+                        <i class="fas fa-briefcase fa-3x mb-3"></i>
+                        <h2 class="text-white">{{ config('app.name') }}</h2>
+                    </a>
+                </div>
 
-@section('title', __('Admin Login'))
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center min-vh-100 align-items-center py-5">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-lg border-0">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
-                        <h2 class="fw-bold text-primary">{{ __('Admin Portal') }}</h2>
-                        <p class="text-muted">{{ __('Sign in to access the admin dashboard') }}</p>
-                    </div>
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="card login-card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <div class="admin-badge">
+                                <i class="fas fa-shield-alt me-1"></i>
+                                {{ __('ADMIN ACCESS') }}
+                            </div>
+                            <h4 class="text-dark mb-0">{{ __('Admin Portal') }}</h4>
+                            <p class="text-muted">{{ __('Secure administrator login') }}</p>
                         </div>
-                    @endif
 
-                    <form method="POST" action="{{ route('login.submit') }}">
-                        @csrf
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
 
-                        <div class="mb-3">
-                            <label for="email" class="form-label">{{ __('Email Address') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-envelope"></i>
-                                </span>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
-                                       name="email" value="{{ old('email') }}" required autofocus
+                        @if (session('status'))
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                {{ session('status') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('login.submit') }}">
+                            @csrf
+                            <input type="hidden" name="user_type" value="admin">
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope me-1 text-primary"></i>
+                                    {{ __('Administrator Email') }}
+                                </label>
+                                <input id="email" type="email" 
+                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                                       name="email" 
+                                       value="{{ old('email') }}" 
+                                       required 
+                                       autocomplete="email" 
+                                       autofocus
                                        placeholder="{{ __('Enter your admin email') }}">
                                 @error('email')
                                     <div class="invalid-feedback">
@@ -43,87 +92,110 @@
                                     </div>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">{{ __('Password') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-lock"></i>
-                                </span>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                                       name="password" required
-                                       placeholder="{{ __('Enter your password') }}">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-1 text-primary"></i>
+                                    {{ __('Password') }}
+                                </label>
+                                <div class="input-group">
+                                    <input id="password" type="password" 
+                                           class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                                           name="password" 
+                                           required 
+                                           autocomplete="current-password"
+                                           placeholder="{{ __('Enter your password') }}">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                        <i class="fas fa-eye" id="passwordToggle"></i>
+                                    </button>
+                                </div>
                                 @error('password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div class="mb-3 form-check">
-                            <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                            <label class="form-check-label" for="remember">
-                                {{ __('Remember me') }}
-                            </label>
-                        </div>
+                            <div class="mb-4 form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember" 
+                                       {{ old('remember') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="remember">
+                                    {{ __('Keep me signed in') }}
+                                </label>
+                            </div>
 
-                        <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-sign-in-alt me-2"></i>{{ __('Sign In') }}
-                            </button>
-                        </div>
-                    </form>
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt me-1"></i>
+                                    {{ __('Access Admin Panel') }}
+                                </button>
+                            </div>
+                        </form>
 
-                    <div class="text-center">
-                        <a href="{{ route('password.request') }}" class="text-decoration-none">
-                            {{ __('Forgot Your Password?') }}
-                        </a>
+                        @if (Route::has('password.request'))
+                            <div class="text-center">
+                                <a class="btn btn-link text-decoration-none" href="{{ route('password.request') }}">
+                                    <i class="fas fa-key me-1"></i>
+                                    {{ __('Forgot Password?') }}
+                                </a>
+                            </div>
+                        @endif
+
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <div class="d-flex justify-content-center align-items-center text-muted">
+                                <i class="fas fa-shield-check text-success me-2"></i>
+                                <small>{{ __('Secured by SSL encryption') }}</small>
+                            </div>
+                            <div class="mt-2">
+                                <a href="{{ route('front.home') }}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-arrow-left me-1"></i>
+                                    {{ __('Back to Website') }}
+                                </a>
+                            </div>
+                        </div>
                     </div>
-
-                    <hr class="my-4">
-
-                    <div class="text-center">
-                        <a href="{{ route('front.home') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>{{ __('Back to Website') }}
-                        </a>
+                    
+                    <div class="card-footer bg-light text-center">
+                        <small class="text-muted">
+                            {{ __('Admin access is restricted to authorized personnel only') }}
+                        </small>
                     </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <small class="text-white-50">
+                        &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}
+                    </small>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-@push('styles')
-<style>
-.card {
-    border-radius: 15px;
-}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('passwordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.className = 'fas fa-eye';
+            }
+        }
 
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-    transform: translateY(-1px);
-}
-
-.input-group-text {
-    background-color: #f8f9fa;
-    border-right: none;
-}
-
-.form-control {
-    border-left: none;
-}
-
-.form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-}
-</style>
-@endpush 
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html> 

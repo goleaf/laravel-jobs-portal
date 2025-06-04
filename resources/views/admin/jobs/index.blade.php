@@ -1,163 +1,125 @@
 @extends('layouts.app')
+
 @section('title')
-    {{ __('Jobs Management') }}
+    {{ __('Manage Jobs') }}
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0">{{ __('Jobs Management') }}</h1>
-            <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> {{ __('Add Job') }}
-            </a>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ __('All Jobs') }}</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>{{ __('ID') }}</th>
-                                <th>{{ __('Job Title') }}</th>
-                                <th>{{ __('Company') }}</th>
-                                <th>{{ __('Category') }}</th>
-                                <th>{{ __('Location') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Expires') }}</th>
-                                <th>{{ __('Created') }}</th>
-                                <th>{{ __('Actions') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($jobs as $job)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>{{ __('Manage Jobs') }}</h3>
+                    <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> {{ __('Add New Job') }}
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Search Filter -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="{{ __('Search jobs...') }}" id="searchInput">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="statusFilter">
+                                <option value="">{{ __('All Status') }}</option>
+                                <option value="active">{{ __('Active') }}</option>
+                                <option value="inactive">{{ __('Inactive') }}</option>
+                                <option value="expired">{{ __('Expired') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-secondary" id="filterBtn">{{ __('Filter') }}</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Jobs Table -->
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>{{ $job->id }}</td>
+                                    <th>{{ __('ID') }}</th>
+                                    <th>{{ __('Job Title') }}</th>
+                                    <th>{{ __('Company') }}</th>
+                                    <th>{{ __('Location') }}</th>
+                                    <th>{{ __('Type') }}</th>
+                                    <th>{{ __('Posted Date') }}</th>
+                                    <th>{{ __('Status') }}</th>
+                                    <th>{{ __('Actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Sample data - replace with real model data when Job model is available -->
+                                @for($i = 1; $i <= 10; $i++)
+                                <tr>
+                                    <td>{{ $i }}</td>
+                                    <td>Sample Job Title {{ $i }}</td>
+                                    <td>Sample Company {{ $i }}</td>
+                                    <td>New York, NY</td>
                                     <td>
-                                        <div>
-                                            <div class="fw-bold">{{ $job->job_title }}</div>
-                                            @if($job->job_type)
-                                                <small class="text-muted">{{ $job->job_type }}</small>
-                                            @endif
-                                        </div>
+                                        <span class="badge bg-primary">Full Time</span>
                                     </td>
+                                    <td>{{ now()->subDays($i)->format('M d, Y') }}</td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            @if($job->company->logo_url)
-                                                <img src="{{ $job->company->logo_url }}" alt="Logo" class="rounded me-2" width="30" height="30">
-                                            @else
-                                                <div class="bg-secondary rounded me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
-                                                    <i class="fas fa-building text-white"></i>
-                                                </div>
-                                            @endif
-                                            <div>
-                                                <div class="fw-bold">{{ $job->company->name }}</div>
-                                                <small class="text-muted">{{ $job->company->industry->name ?? 'N/A' }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @if($job->jobCategory)
-                                            <span class="badge bg-info">{{ $job->jobCategory->name }}</span>
-                                        @else
-                                            <span class="text-muted">N/A</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($job->country)
-                                            {{ $job->country->name }}
-                                            @if($job->state), {{ $job->state->name }}@endif
-                                        @else
-                                            <span class="text-muted">Remote</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @switch($job->status)
-                                            @case(1)
-                                                <span class="badge bg-success">{{ __('Open') }}</span>
-                                                @break
-                                            @case(0)
-                                                <span class="badge bg-secondary">{{ __('Draft') }}</span>
-                                                @break
-                                            @case(2)
-                                                <span class="badge bg-warning">{{ __('Paused') }}</span>
-                                                @break
-                                            @case(3)
-                                                <span class="badge bg-danger">{{ __('Closed') }}</span>
-                                                @break
-                                            @default
-                                                <span class="badge bg-light text-dark">{{ __('Unknown') }}</span>
-                                        @endswitch
-                                    </td>
-                                    <td>
-                                        @if($job->job_expiry_date)
-                                            <small class="{{ $job->job_expiry_date->isPast() ? 'text-danger' : 'text-success' }}">
-                                                {{ $job->job_expiry_date->format('M d, Y') }}
-                                            </small>
-                                        @else
-                                            <span class="text-muted">No expiry</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <small>{{ $job->created_at->format('M d, Y') }}</small>
+                                        <span class="badge bg-success">Active</span>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.jobs.show', $job->id) }}" class="btn btn-sm btn-outline-info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.jobs.show', $i) }}" class="btn btn-sm btn-info" title="{{ __('View') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.jobs.edit', $job->id) }}" class="btn btn-sm btn-outline-warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.jobs.edit', $i) }}" class="btn btn-sm btn-warning" title="{{ __('Edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.jobs.destroy', $job->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="{{ __('Delete') }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteJob({{ $i }})" title="{{ __('Delete') }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center py-4">
-                                        <div class="text-muted">
-                                            <i class="fas fa-briefcase fa-2x mb-2"></i>
-                                            <p>{{ __('No jobs found') }}</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if($jobs->hasPages())
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $jobs->links() }}
+                                @endfor
+                            </tbody>
+                        </table>
                     </div>
-                @endif
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Jobs pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <span class="page-link">{{ __('Previous') }}</span>
+                            </li>
+                            <li class="page-item active">
+                                <span class="page-link">1</span>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">{{ __('Next') }}</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
-@endsection
+</div>
 
-@push('styles')
-<style>
-    .table th {
-        border-top: none;
-        font-weight: 600;
-        color: #495057;
+<script>
+function deleteJob(id) {
+    if (confirm('{{ __("Are you sure you want to delete this job?") }}')) {
+        fetch(`/admin/jobs/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            }
+        });
     }
-    .btn-group .btn {
-        margin-right: 2px;
-    }
-    .btn-group .btn:last-child {
-        margin-right: 0;
-    }
-</style>
-@endpush 
+}
+</script>
+@endsection 

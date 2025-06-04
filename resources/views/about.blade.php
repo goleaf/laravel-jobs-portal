@@ -1,220 +1,265 @@
-@extends('layouts.simple')
-
-@section('title', __('About Us'))
-
-@section('content')
-<div class="container-fluid">
-    <!-- Hero Section -->
-    <div class="row bg-primary text-white py-5 mb-0">
-        <div class="col-12 text-center">
-            <h1 class="display-4 fw-bold mb-4">{{ __('About JobPortal') }}</h1>
-            <p class="lead">{{ __('Connecting talent with opportunity since 2020') }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ __('About Us') }} - {{ config('app.name') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('front.home') }}">
+                <i class="fas fa-briefcase me-2"></i>
+                {{ config('app.name') }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('front.home') }}">{{ __('Home') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('about-us') }}">{{ __('About Us') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold text-primary">{{ __('About Our Job Portal') }}</h1>
+                    <p class="lead">{{ __('Connecting talented professionals with amazing opportunities worldwide.') }}</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="About Us">
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Mission Section -->
-    <div class="container py-5">
-        <div class="row align-items-center mb-5">
-            <div class="col-lg-6">
-                <h2 class="fw-bold mb-4">{{ __('Our Mission') }}</h2>
-                <p class="lead text-muted mb-4">
-                    {{ __('We believe that everyone deserves a job they love. Our mission is to connect talented individuals with amazing companies and help build careers that matter.') }}
-                </p>
-                <p>
-                    {{ __('Founded with the vision of making job searching and hiring more efficient, transparent, and successful for everyone involved, we have grown to become a trusted platform for thousands of job seekers and employers worldwide.') }}
-                </p>
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-check-circle text-success me-3 fs-4"></i>
-                            <span>{{ __('Quality job matches') }}</span>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-check-circle text-success me-3 fs-4"></i>
-                            <span>{{ __('Trusted by top employers') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-check-circle text-success me-3 fs-4"></i>
-                            <span>{{ __('Advanced matching technology') }}</span>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-check-circle text-success me-3 fs-4"></i>
-                            <span>{{ __('24/7 support') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="bg-light rounded p-4 text-center">
-                    <i class="fas fa-handshake fa-5x text-primary mb-3"></i>
-                    <h4>{{ __('Building Connections') }}</h4>
-                    <p class="text-muted">{{ __('Every day, we help people find their dream jobs and companies find their perfect candidates.') }}</p>
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">{{ __('Our Mission') }}</h2>
+                    <p class="lead">
+                        {{ __('We are dedicated to bridging the gap between job seekers and employers, creating meaningful connections that drive careers forward and help businesses thrive.') }}
+                    </p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Stats Section -->
-        <div class="row py-5 bg-light rounded mb-5">
-            <div class="col-12">
-                <h2 class="text-center fw-bold mb-5">{{ __('Our Impact') }}</h2>
-                <div class="row text-center">
-                    <div class="col-md-3 mb-4">
-                        <div class="h-100">
-                            <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
-                            <h3 class="fw-bold text-primary">50,000+</h3>
-                            <p class="text-muted">{{ __('Jobs Posted') }}</p>
+    <!-- Features Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2>{{ __('Why Choose Us?') }}</h2>
+                    <p class="lead">{{ __('We offer the best platform for both job seekers and employers') }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-search fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">{{ __('Smart Job Search') }}</h5>
+                            <p class="card-text">{{ __('Advanced search filters and AI-powered recommendations to find the perfect job match.') }}</p>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="h-100">
-                            <i class="fas fa-building fa-3x text-success mb-3"></i>
-                            <h3 class="fw-bold text-success">5,000+</h3>
-                            <p class="text-muted">{{ __('Companies') }}</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-users fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">{{ __('Quality Candidates') }}</h5>
+                            <p class="card-text">{{ __('Access to verified, skilled professionals from various industries and backgrounds.') }}</p>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="h-100">
-                            <i class="fas fa-users fa-3x text-info mb-3"></i>
-                            <h3 class="fw-bold text-info">100,000+</h3>
-                            <p class="text-muted">{{ __('Job Seekers') }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="h-100">
-                            <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
-                            <h3 class="fw-bold text-warning">25,000+</h3>
-                            <p class="text-muted">{{ __('Successful Hires') }}</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">{{ __('Secure Platform') }}</h5>
+                            <p class="card-text">{{ __('Your data is protected with enterprise-level security and privacy measures.') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Values Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <h2 class="text-center fw-bold mb-5">{{ __('Our Values') }}</h2>
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center p-4">
-                                <i class="fas fa-heart fa-3x text-danger mb-3"></i>
-                                <h5 class="card-title">{{ __('Passion') }}</h5>
-                                <p class="card-text text-muted">{{ __('We are passionate about helping people find meaningful work and build successful careers.') }}</p>
+    <!-- Stats Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h3 class="text-primary fw-bold">10,000+</h3>
+                            <p class="mb-0">{{ __('Active Jobs') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h3 class="text-primary fw-bold">5,000+</h3>
+                            <p class="mb-0">{{ __('Companies') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h3 class="text-primary fw-bold">50,000+</h3>
+                            <p class="mb-0">{{ __('Job Seekers') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h3 class="text-primary fw-bold">95%</h3>
+                            <p class="mb-0">{{ __('Success Rate') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2>{{ __('Our Team') }}</h2>
+                    <p class="lead">{{ __('Meet the passionate people behind our success') }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center">
+                        <img src="https://via.placeholder.com/200x200" class="card-img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('John Doe') }}</h5>
+                            <p class="card-text text-muted">{{ __('CEO & Founder') }}</p>
+                            <div>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center p-4">
-                                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
-                                <h5 class="card-title">{{ __('Trust') }}</h5>
-                                <p class="card-text text-muted">{{ __('We build trust through transparency, reliability, and consistent delivery of quality service.') }}</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center">
+                        <img src="https://via.placeholder.com/200x200" class="card-img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('Jane Smith') }}</h5>
+                            <p class="card-text text-muted">{{ __('CTO') }}</p>
+                            <div>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center p-4">
-                                <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
-                                <h5 class="card-title">{{ __('Innovation') }}</h5>
-                                <p class="card-text text-muted">{{ __('We continuously innovate to provide better tools and experiences for job seekers and employers.') }}</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center">
+                        <img src="https://via.placeholder.com/200x200" class="card-img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ __('Mike Johnson') }}</h5>
+                            <p class="card-text text-muted">{{ __('Head of Marketing') }}</p>
+                            <div>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Team Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <h2 class="text-center fw-bold mb-5">{{ __('Meet Our Team') }}</h2>
-                <div class="row">
-                    @php
-                    $team = [
-                        ['name' => 'John Smith', 'role' => 'CEO & Founder', 'image' => 'https://via.placeholder.com/300x300', 'bio' => 'Passionate about connecting people with opportunities.'],
-                        ['name' => 'Sarah Johnson', 'role' => 'CTO', 'image' => 'https://via.placeholder.com/300x300', 'bio' => 'Leading our technology innovation and platform development.'],
-                        ['name' => 'Michael Brown', 'role' => 'Head of Operations', 'image' => 'https://via.placeholder.com/300x300', 'bio' => 'Ensuring smooth operations and excellent user experience.'],
-                        ['name' => 'Emily Davis', 'role' => 'Head of Marketing', 'image' => 'https://via.placeholder.com/300x300', 'bio' => 'Building our brand and connecting with our community.']
-                    ];
-                    @endphp
-
-                    @foreach($team as $member)
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center p-4">
-                                <div class="rounded-circle mx-auto mb-3" style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-user fa-3x text-white"></i>
-                                </div>
-                                <h5 class="card-title">{{ $member['name'] }}</h5>
-                                <p class="text-primary fw-bold">{{ $member['role'] }}</p>
-                                <p class="card-text text-muted small">{{ $member['bio'] }}</p>
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="#" class="btn btn-outline-primary btn-sm">
-                                        <i class="fab fa-linkedin-in"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-outline-info btn-sm">
-                                        <i class="fab fa-twitter"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">{{ __('Ready to Get Started?') }}</h2>
+            <p class="lead mb-4">{{ __('Join thousands of job seekers and employers who trust our platform') }}</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <a href="{{ route('register') }}" class="btn btn-light btn-lg me-2">
+                        <i class="fas fa-user-plus me-1"></i>
+                        {{ __('Join as Job Seeker') }}
+                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-building me-1"></i>
+                        {{ __('Post a Job') }}
+                    </a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Contact CTA -->
-        <div class="row">
-            <div class="col-12">
-                <div class="bg-primary text-white rounded p-5 text-center">
-                    <h2 class="fw-bold mb-4">{{ __('Ready to Get Started?') }}</h2>
-                    <p class="lead mb-4">{{ __('Join thousands of professionals who have found success through our platform.') }}</p>
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="{{ route('register') }}" class="btn btn-warning btn-lg">
-                            <i class="fas fa-user-plus me-2"></i>{{ __('Join as Job Seeker') }}
-                        </a>
-                        <a href="{{ route('employer.register') }}" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-building me-2"></i>{{ __('Post Jobs') }}
-                        </a>
-                        <a href="{{ route('contact') }}" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-envelope me-2"></i>{{ __('Contact Us') }}
-                        </a>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{ config('app.name') }}</h5>
+                    <p>{{ __('Your trusted partner in career growth and talent acquisition.') }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="mt-2">
+                        <a href="{{ route('privacy.policy.list') }}" class="text-white-50 me-3">{{ __('Privacy Policy') }}</a>
+                        <a href="{{ route('terms.conditions.list') }}" class="text-white-50">{{ __('Terms of Service') }}</a>
                     </div>
                 </div>
             </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}</p>
+            </div>
         </div>
-    </div>
-</div>
-@endsection
+    </footer>
 
-@push('styles')
-<style>
-.card {
-    transition: transform 0.2s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.bg-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-}
-
-.btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.btn-warning:hover {
-    background-color: #e0a800;
-    border-color: #d39e00;
-    transform: translateY(-1px);
-}
-</style>
-@endpush 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

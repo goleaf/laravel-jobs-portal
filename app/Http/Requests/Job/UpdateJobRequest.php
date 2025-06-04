@@ -14,7 +14,18 @@ class UpdateJobRequest extends FormRequest
     public function authorize(): bool
     {
         $job = $this->route('job');
-        return $this->user()->can('update', $job);
+        
+        // Admin can update any job
+        if (auth()->user()->hasRole('Admin')) {
+            return true;
+        }
+        
+        // Employer can only update their own jobs
+        if (auth()->user()->hasRole('Employer')) {
+            return $job && $job->company && $job->company->user_id === auth()->id();
+        }
+        
+        return false;
     }
 
     /**
@@ -25,35 +36,32 @@ class UpdateJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'job_title' => ['sometimes', 'string', 'max:180'],
-            'description' => ['sometimes', 'string'],
-            'company_id' => ['sometimes', 'exists:companies,id'],
-            'job_category_id' => ['sometimes', 'exists:job_categories,id'],
-            'country_id' => ['sometimes', 'exists:countries,id'],
-            'state_id' => ['sometimes', 'exists:states,id'],
-            'city_id' => ['sometimes', 'exists:cities,id'],
-            'salary_from' => ['sometimes', 'numeric', 'min:0', 'max:999999999'],
-            'salary_to' => ['sometimes', 'numeric', 'gte:salary_from', 'max:999999999'],
-            'currency_id' => ['sometimes', 'exists:salary_currencies,id'],
-            'salary_period_id' => ['sometimes', 'exists:salary_periods,id'],
-            'job_type_id' => ['sometimes', 'exists:job_types,id'],
+            'job_title' => ['required', 'string', 'max:255'],
+            'job_description' => ['required', 'string', 'min:50'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'state_id' => ['required', 'exists:states,id'],
+            'city_id' => ['required', 'exists:cities,id'],
+            'salary_from' => ['nullable', 'numeric', 'min:0'],
+            'salary_to' => ['nullable', 'numeric', 'min:0', 'gte:salary_from'],
+            'salary_currency_id' => ['nullable', 'exists:salary_currencies,id'],
+            'salary_period_id' => ['nullable', 'exists:salary_periods,id'],
+            'job_category_id' => ['required', 'exists:job_categories,id'],
+            'job_type_id' => ['required', 'exists:job_types,id'],
             'career_level_id' => ['nullable', 'exists:career_levels,id'],
-            'functional_area_id' => ['sometimes', 'exists:functional_areas,id'],
-            'job_shift_id' => ['nullable', 'exists:job_shifts,id'],
+            'functional_area_id' => ['nullable', 'exists:functional_areas,id'],
+            'job_skill_id' => ['nullable', 'array'],
+            'job_skill_id.*' => ['exists:job_skills,id'],
+            'job_tag_id' => ['nullable', 'array'],
+            'job_tag_id.*' => ['exists:job_tags,id'],
             'degree_level_id' => ['nullable', 'exists:required_degree_levels,id'],
-            'experience' => ['sometimes', 'integer', 'min:0', 'max:255'],
-            'position' => ['sometimes', 'integer', 'min:1', 'max:255'],
-            'job_expiry_date' => ['sometimes', 'date', 'after:today'],
-            'no_preference' => ['sometimes', 'integer', 'in:0,1,2'],
-            'hide_salary' => ['sometimes', 'boolean'],
-            'is_freelance' => ['sometimes', 'boolean'],
-            'is_suspended' => ['sometimes', 'boolean'],
-            'status' => ['sometimes', 'integer', Rule::in(array_keys(Job::STATUS_ARRAY))],
-            'key_responsibilities' => ['nullable', 'string'],
-            'skills' => ['sometimes', 'array'],
-            'skills.*' => ['exists:skills,id'],
-            'tags' => ['sometimes', 'array'],
-            'tags.*' => ['exists:tags,id'],
+            'position' => ['required', 'integer', 'min:1', 'max:1000'],
+            'experience' => ['nullable', 'string', 'max:255'],
+            'job_expiry_date' => ['required', 'date', 'after:today'],
+            'status' => ['required', 'in:0,1,2'], // 0=Draft, 1=Open, 2=Closed
+            'is_freelance' => ['boolean'],
+            'hide_salary' => ['boolean'],
+            'is_featured' => ['boolean'],
+            'is_immediate_available' => ['boolean'],
         ];
     }
 
@@ -65,23 +73,18 @@ class UpdateJobRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'job_title' => 'job title',
-            'job_category_id' => 'job category',
-            'country_id' => 'country',
-            'state_id' => 'state',
-            'city_id' => 'city',
-            'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary',
-            'currency_id' => 'currency',
-            'salary_period_id' => 'salary period',
-            'job_type_id' => 'job type',
-            'career_level_id' => 'career level',
-            'functional_area_id' => 'functional area',
-            'job_shift_id' => 'job shift',
-            'degree_level_id' => 'degree level',
-            'job_expiry_date' => 'job expiry date',
-            'key_responsibilities' => 'key responsibilities',
-            'is_suspended' => 'suspension status',
+            'job_title' => __('common.job_title'),
+            'job_description' => __('common.job_description'),
+            'country_id' => __('common.country'),
+            'state_id' => __('common.state'),
+            'city_id' => __('common.city'),
+            'salary_from' => __('common.salary_from'),
+            'salary_to' => __('common.salary_to'),
+            'job_category_id' => __('common.job_category'),
+            'job_type_id' => __('common.job_type'),
+            'position' => __('common.positions'),
+            'job_expiry_date' => __('common.job_expiry_date'),
+            'status' => __('common.status'),
         ];
     }
 
@@ -93,12 +96,34 @@ class UpdateJobRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'job_title.max' => 'The job title may not be greater than 180 characters.',
-            'salary_to.gte' => 'The maximum salary must be greater than or equal to the minimum salary.',
-            'job_expiry_date.after' => 'The job expiry date must be a date after today.',
-            'position.min' => 'The number of positions must be at least 1.',
-            'experience.min' => 'The experience cannot be negative.',
-            'status.in' => 'The selected status is invalid.',
+            'job_title.required' => __('validation.required', ['attribute' => __('common.job_title')]),
+            'job_title.max' => __('validation.max.string', ['attribute' => __('common.job_title'), 'max' => 255]),
+            'job_description.required' => __('validation.required', ['attribute' => __('common.job_description')]),
+            'job_description.min' => __('validation.min.string', ['attribute' => __('common.job_description'), 'min' => 50]),
+            'country_id.required' => __('validation.required', ['attribute' => __('common.country')]),
+            'country_id.exists' => __('validation.exists', ['attribute' => __('common.country')]),
+            'state_id.required' => __('validation.required', ['attribute' => __('common.state')]),
+            'state_id.exists' => __('validation.exists', ['attribute' => __('common.state')]),
+            'city_id.required' => __('validation.required', ['attribute' => __('common.city')]),
+            'city_id.exists' => __('validation.exists', ['attribute' => __('common.city')]),
+            'salary_from.numeric' => __('validation.numeric', ['attribute' => __('common.salary_from')]),
+            'salary_from.min' => __('validation.min.numeric', ['attribute' => __('common.salary_from'), 'min' => 0]),
+            'salary_to.numeric' => __('validation.numeric', ['attribute' => __('common.salary_to')]),
+            'salary_to.min' => __('validation.min.numeric', ['attribute' => __('common.salary_to'), 'min' => 0]),
+            'salary_to.gte' => __('validation.gte.numeric', ['attribute' => __('common.salary_to'), 'value' => __('common.salary_from')]),
+            'job_category_id.required' => __('validation.required', ['attribute' => __('common.job_category')]),
+            'job_category_id.exists' => __('validation.exists', ['attribute' => __('common.job_category')]),
+            'job_type_id.required' => __('validation.required', ['attribute' => __('common.job_type')]),
+            'job_type_id.exists' => __('validation.exists', ['attribute' => __('common.job_type')]),
+            'position.required' => __('validation.required', ['attribute' => __('common.positions')]),
+            'position.integer' => __('validation.integer', ['attribute' => __('common.positions')]),
+            'position.min' => __('validation.min.numeric', ['attribute' => __('common.positions'), 'min' => 1]),
+            'position.max' => __('validation.max.numeric', ['attribute' => __('common.positions'), 'max' => 1000]),
+            'job_expiry_date.required' => __('validation.required', ['attribute' => __('common.job_expiry_date')]),
+            'job_expiry_date.date' => __('validation.date', ['attribute' => __('common.job_expiry_date')]),
+            'job_expiry_date.after' => __('validation.after', ['attribute' => __('common.job_expiry_date'), 'date' => 'today']),
+            'status.required' => __('validation.required', ['attribute' => __('common.status')]),
+            'status.in' => __('validation.in', ['attribute' => __('common.status')]),
         ];
     }
 
@@ -111,28 +136,38 @@ class UpdateJobRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            // Additional validation: Can't set job to live if required fields are missing
-            if ($this->input('status') == Job::STATUS_OPEN) {
-                $job = $this->route('job');
+            // Check if salary_to is provided when salary_from is provided
+            if ($this->filled('salary_from') && !$this->filled('salary_to')) {
+                $validator->errors()->add('salary_to', __('validation.required_with', [
+                    'attribute' => __('common.salary_to'),
+                    'values' => __('common.salary_from')
+                ]));
+            }
+
+            // Ensure job expiry date is not more than 1 year in the future
+            if ($this->filled('job_expiry_date')) {
+                $expiryDate = \Carbon\Carbon::parse($this->job_expiry_date);
+                $maxDate = \Carbon\Carbon::now()->addYear();
                 
-                $requiredFields = [
-                    'job_title', 'description', 'company_id', 'job_category_id',
-                    'country_id', 'state_id', 'city_id', 'salary_from', 'salary_to',
-                    'currency_id', 'salary_period_id', 'job_type_id', 'functional_area_id',
-                    'experience', 'position', 'job_expiry_date'
-                ];
-
-                foreach ($requiredFields as $field) {
-                    $value = $this->input($field) ?? $job->$field;
-                    if (empty($value)) {
-                        $validator->errors()->add('status', "Cannot publish job: {$field} is required.");
-                    }
+                if ($expiryDate->gt($maxDate)) {
+                    $validator->errors()->add('job_expiry_date', __('validation.before', [
+                        'attribute' => __('common.job_expiry_date'),
+                        'date' => $maxDate->format('Y-m-d')
+                    ]));
                 }
+            }
 
-                // Check if job expiry date is not in the past
-                $expiryDate = $this->input('job_expiry_date') ?? $job->job_expiry_date;
-                if ($expiryDate && $expiryDate <= now()) {
-                    $validator->errors()->add('status', 'Cannot publish job: Job expiry date must be in the future.');
+            // Additional validation for published jobs
+            $job = $this->route('job');
+            if ($this->status == 1 && $job) { // Status Open
+                // Ensure required fields are complete for live jobs
+                $requiredForLive = ['job_description', 'country_id', 'state_id', 'city_id'];
+                foreach ($requiredForLive as $field) {
+                    if (!$this->filled($field)) {
+                        $validator->errors()->add($field, __('validation.required_for_live_job', [
+                            'attribute' => $this->attributes()[$field] ?? $field
+                        ]));
+                    }
                 }
             }
         });
@@ -159,8 +194,12 @@ class UpdateJobRequest extends FormRequest
             $this->merge(['is_freelance' => $this->boolean('is_freelance')]);
         }
 
-        if ($this->has('is_suspended')) {
-            $this->merge(['is_suspended' => $this->boolean('is_suspended')]);
+        if ($this->has('is_featured')) {
+            $this->merge(['is_featured' => $this->boolean('is_featured')]);
+        }
+
+        if ($this->has('is_immediate_available')) {
+            $this->merge(['is_immediate_available' => $this->boolean('is_immediate_available')]);
         }
     }
 } 

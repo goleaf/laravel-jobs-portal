@@ -1,130 +1,126 @@
 @extends('layouts.app')
+
 @section('title')
-    {{ __('Candidates Management') }}
+    {{ __('Manage Candidates') }}
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0">{{ __('Candidates Management') }}</h1>
-            <a href="{{ route('admin.candidates.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> {{ __('Add Candidate') }}
-            </a>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ __('All Candidates') }}</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>{{ __('ID') }}</th>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Email') }}</th>
-                                <th>{{ __('Phone') }}</th>
-                                <th>{{ __('Experience') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Registered') }}</th>
-                                <th>{{ __('Actions') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($candidates as $candidate)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>{{ __('Manage Candidates') }}</h3>
+                    <a href="{{ route('admin.candidates.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> {{ __('Add New Candidate') }}
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Search Filter -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="{{ __('Search candidates...') }}" id="searchInput">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="statusFilter">
+                                <option value="">{{ __('All Status') }}</option>
+                                <option value="active">{{ __('Active') }}</option>
+                                <option value="inactive">{{ __('Inactive') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-secondary" id="filterBtn">{{ __('Filter') }}</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Candidates Table -->
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('ID') }}</th>
+                                    <th>{{ __('Name') }}</th>
+                                    <th>{{ __('Email') }}</th>
+                                    <th>{{ __('Phone') }}</th>
+                                    <th>{{ __('Registration Date') }}</th>
+                                    <th>{{ __('Status') }}</th>
+                                    <th>{{ __('Actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse(\App\Models\User::where('role_name', 'candidate')->orWhereNull('role_name')->latest()->take(10)->get() as $candidate)
                                 <tr>
                                     <td>{{ $candidate->id }}</td>
+                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
+                                    <td>{{ $candidate->email }}</td>
+                                    <td>{{ $candidate->phone ?? __('Not provided') }}</td>
+                                    <td>{{ $candidate->created_at->format('M d, Y') }}</td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            @if($candidate->user->avatar_url)
-                                                <img src="{{ $candidate->user->avatar_url }}" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
-                                            @else
-                                                <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
-                                                    <i class="fas fa-user text-white"></i>
-                                                </div>
-                                            @endif
-                                            <div>
-                                                <div class="fw-bold">{{ $candidate->user->full_name }}</div>
-                                                @if($candidate->user->current_salary)
-                                                    <small class="text-muted">{{ $candidate->user->current_salary }}</small>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{ $candidate->user->email }}</td>
-                                    <td>{{ $candidate->user->phone ?? 'N/A' }}</td>
-                                    <td>
-                                        @if($candidate->experience)
-                                            {{ $candidate->experience->name ?? 'Not specified' }}
-                                        @else
-                                            <span class="text-muted">Not specified</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($candidate->user->is_active)
-                                            <span class="badge bg-success">{{ __('Active') }}</span>
-                                        @else
-                                            <span class="badge bg-danger">{{ __('Inactive') }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <small>{{ $candidate->created_at->format('M d, Y') }}</small>
+                                        <span class="badge {{ $candidate->is_verified ? 'bg-success' : 'bg-warning' }}">
+                                            {{ $candidate->is_verified ? __('Verified') : __('Pending') }}
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.candidates.show', $candidate->id) }}" class="btn btn-sm btn-outline-info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.candidates.show', $candidate->id) }}" class="btn btn-sm btn-info" title="{{ __('View') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.candidates.edit', $candidate->id) }}" class="btn btn-sm btn-outline-warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.candidates.edit', $candidate->id) }}" class="btn btn-sm btn-warning" title="{{ __('Edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.candidates.destroy', $candidate->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="{{ __('Delete') }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCandidate({{ $candidate->id }})" title="{{ __('Delete') }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
+                                @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-4">
-                                        <div class="text-muted">
-                                            <i class="fas fa-users fa-2x mb-2"></i>
-                                            <p>{{ __('No candidates found') }}</p>
-                                        </div>
-                                    </td>
+                                    <td colspan="7" class="text-center">{{ __('No candidates found') }}</td>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if($candidates->hasPages())
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $candidates->links() }}
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                @endif
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Candidates pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <span class="page-link">{{ __('Previous') }}</span>
+                            </li>
+                            <li class="page-item active">
+                                <span class="page-link">1</span>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">{{ __('Next') }}</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
-@endsection
+</div>
 
-@push('styles')
-<style>
-    .table th {
-        border-top: none;
-        font-weight: 600;
-        color: #495057;
+<script>
+function deleteCandidate(id) {
+    if (confirm('{{ __("Are you sure you want to delete this candidate?") }}')) {
+        // Implementation for delete functionality
+        fetch(`/admin/candidates/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            }
+        });
     }
-    .btn-group .btn {
-        margin-right: 2px;
-    }
-    .btn-group .btn:last-child {
-        margin-right: 0;
-    }
-</style>
-@endpush 
+}
+</script>
+@endsection 

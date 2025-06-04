@@ -12,8 +12,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest;
-use App\Http\Requests\Job\UpdateJobRequest;
+use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
+use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
 class JobShiftController extends AppBaseController
 {

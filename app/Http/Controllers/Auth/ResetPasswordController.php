@@ -18,7 +18,6 @@ class ResetPasswordController extends Controller
     |
     */
 
-    use ResetsPasswords;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;

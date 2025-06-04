@@ -19,7 +19,6 @@ class ConfirmPasswordController extends Controller
     |
     */
 
-    use ConfirmsPasswords;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;

@@ -2,87 +2,54 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\CacheService;
 
 trait QueryOptimization
 {
     /**
-     * Scope for active records
+     * Scope for active records only
      */
-    public function scopeActive(Builder $query): Builder
+    public function scopeActive($query)
     {
-        return $query->where('is_active', true);
-    }
-    
-    /**
-     * Scope for recent records
-     */
-    public function scopeRecent(Builder $query): Builder
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-    
-    /**
-     * Scope for published records
-     */
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->where('status', 'published');
-    }
-    
-    /**
-     * Scope for valid jobs (not expired)
-     */
-    public function scopeValid(Builder $query): Builder
-    {
-        return $query->where('expires_on', '>', now());
+        return $query->where('status', 'active');
     }
     
     /**
      * Scope for featured records
      */
-    public function scopeFeatured(Builder $query): Builder
+    public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
     
     /**
-     * Scope for searching by name/title
+     * Scope for recent records
      */
-    public function scopeSearch(Builder $query, string $search): Builder
+    public function scopeRecent($query, $days = 30)
     {
-        return $query->where(function ($q) use ($search) {
-            $q->where('name', 'LIKE', "%{$search}%")
-              ->orWhere('title', 'LIKE', "%{$search}%")
-              ->orWhere('description', 'LIKE', "%{$search}%");
-        });
+        return $query->where('created_at', '>=', now()->subDays($days));
     }
     
     /**
-     * Scope for filtering by location
+     * Cache a query result
      */
-    public function scopeLocation(Builder $query, string $location): Builder
+    public function cacheQuery($key, $callback, $duration = 'medium')
     {
-        return $query->where(function ($q) use ($location) {
-            $q->where('city', 'LIKE', "%{$location}%")
-              ->orWhere('state', 'LIKE', "%{$location}%")
-              ->orWhere('country', 'LIKE', "%{$location}%");
-        });
+        $modelName = strtolower(class_basename($this));
+        
+        return CacheService::{"cache" . ucfirst($modelName) . "s"}($key, $callback, $duration);
     }
     
     /**
-     * Scope for salary range filtering
+     * Get cached model with relationships
      */
-    public function scopeSalaryRange(Builder $query, ?int $minSalary = null, ?int $maxSalary = null): Builder
+    public static function getCachedWithRelations($id, array $relations = [])
     {
-        if ($minSalary) {
-            $query->where('salary_from', '>=', $minSalary);
-        }
+        $modelName = strtolower(class_basename(static::class));
+        $key = "{$modelName}_{$id}_" . md5(implode('_', $relations));
         
-        if ($maxSalary) {
-            $query->where('salary_to', '<=', $maxSalary);
-        }
-        
-        return $query;
+        return CacheService::{"cache" . ucfirst($modelName) . "s"}($key, function() use ($id, $relations) {
+            return static::with($relations)->find($id);
+        });
     }
 }

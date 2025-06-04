@@ -27,8 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Throwable;
-use App\Http\Requests\Company\StoreCompanyRequest;
-use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
 
 class CompanyController extends AppBaseController
 {

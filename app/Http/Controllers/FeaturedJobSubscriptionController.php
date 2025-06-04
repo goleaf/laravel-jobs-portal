@@ -22,8 +22,8 @@ use Laracasts\Flash\Flash;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use App\Http\Requests\Job\StoreJobRequest;
-use App\Http\Requests\Job\UpdateJobRequest;
+use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
+use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
 /**
  * Class FeaturedJobSubscriptionController

@@ -22,7 +22,6 @@ class RegisterController extends Controller
     |
 
 */
-    use RegistersUsers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;

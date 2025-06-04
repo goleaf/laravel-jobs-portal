@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Throwable;
-use App\Http\Requests\Job\StoreJobRequest;
-use App\Http\Requests\Job\UpdateJobRequest;
+use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 
 class JobController extends AppBaseController
 {

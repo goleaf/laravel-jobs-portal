@@ -27,7 +27,6 @@ class VerificationController extends Controller
     |
     */
 
-    use VerifiesEmails;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;

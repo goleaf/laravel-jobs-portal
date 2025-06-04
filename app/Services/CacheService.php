@@ -7,764 +7,130 @@ use Illuminate\Support\Facades\Redis;
 
 class CacheService
 {
-    const JOB_CACHE_TTL = 3600; // 1 hour
-    const COMPANY_CACHE_TTL = 7200; // 2 hours
-    const USER_CACHE_TTL = 1800; // 30 minutes
-    const STATS_CACHE_TTL = 900; // 15 minutes
-
-    /**
-     * Cache job listings
-     */
-    public static function cacheJobListings($page = 1, $filters = []): string
-    {
-        $cacheKey = 'jobs:list:' . md5(serialize([$page, $filters]));
-        
-        return Cache::remember($cacheKey, self::JOB_CACHE_TTL, function () use ($page, $filters) {
-            return app('App\Services\JobService')->getJobListings($page, $filters);
-        
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-});
+    const CACHE_TAGS = [
+        'jobs' => 'jobs',
+        'companies' => 'companies',
+        'users' => 'users',
+        'translations' => 'translations',
+        'settings' => 'settings'
+    ];
+    
+    const CACHE_DURATIONS = [
+        'short' => 300,    // 5 minutes
+        'medium' => 3600,  // 1 hour
+        'long' => 86400,   // 24 hours
+        'extended' => 604800 // 1 week
+    ];
     
     /**
-     * Redis-specific bulk operations
+     * Cache jobs with intelligent tagging
      */
-    public function bulkForget(array $keys): void
+    public static function cacheJobs($key, $callback, $duration = 'medium')
     {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
+        return Cache::tags([self::CACHE_TAGS['jobs']])
+            ->remember($key, self::CACHE_DURATIONS[$duration], $callback);
     }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Cache company data
-     */
-    public static function cacheCompanyData($companyId): array
-    {
-        $cacheKey = "company:{$companyId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}";
-        
-        return Cache::remember($cacheKey, self::COMPANY_CACHE_TTL, function () use ($companyId) {
-            return app('App\Models\Company')::with(['jobs:id,company_id,title,status'])
-                ->find($companyId);
-        
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-});
     
     /**
-     * Redis-specific bulk operations
+     * Cache companies data
      */
-    public function bulkForget(array $keys): void
+    public static function cacheCompanies($key, $callback, $duration = 'medium')
     {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
+        return Cache::tags([self::CACHE_TAGS['companies']])
+            ->remember($key, self::CACHE_DURATIONS[$duration], $callback);
     }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Cache user dashboard stats
-     */
-    public static function cacheUserStats($userId, $userType): array
-    {
-        $cacheKey = "user:stats:{$userId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}:{$userType
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}";
-        
-        return Cache::remember($cacheKey, self::STATS_CACHE_TTL, function () use ($userId, $userType) {
-            return app('App\Services\QueryOptimizer')::optimizeUserDashboard($userId, $userType);
-        
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-});
     
     /**
-     * Redis-specific bulk operations
+     * Cache user data
      */
-    public function bulkForget(array $keys): void
+    public static function cacheUsers($key, $callback, $duration = 'short')
+    {
+        return Cache::tags([self::CACHE_TAGS['users']])
+            ->remember($key, self::CACHE_DURATIONS[$duration], $callback);
+    }
+    
+    /**
+     * Cache translations with extended duration
+     */
+    public static function cacheTranslations($key, $callback, $duration = 'extended')
+    {
+        return Cache::tags([self::CACHE_TAGS['translations']])
+            ->remember($key, self::CACHE_DURATIONS[$duration], $callback);
+    }
+    
+    /**
+     * Cache application settings
+     */
+    public static function cacheSettings($key, $callback, $duration = 'long')
+    {
+        return Cache::tags([self::CACHE_TAGS['settings']])
+            ->remember($key, self::CACHE_DURATIONS[$duration], $callback);
+    }
+    
+    /**
+     * Invalidate cache by tags
+     */
+    public static function invalidate($tags)
+    {
+        if (is_string($tags)) {
+            $tags = [$tags];
+        }
+        
+        Cache::tags($tags)->flush();
+    }
+    
+    /**
+     * Get cache statistics
+     */
+    public static function getStats()
     {
         try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Cache popular searches
-     */
-    public static function cachePopularSearches(): array
-    {
-        return Cache::remember('popular:searches', 86400, function () {
+            $redis = Redis::connection();
+            
             return [
-                'PHP Developer',
-                'Laravel Developer',
-                'Frontend Developer',
-                'Project Manager',
-                'Data Analyst'
+                'total_keys' => $redis->dbsize(),
+                'memory_usage' => $redis->info('memory')['used_memory_human'] ?? 'N/A',
+                'hit_rate' => $redis->info('stats')['keyspace_hits'] ?? 0,
+                'miss_rate' => $redis->info('stats')['keyspace_misses'] ?? 0,
             ];
-        
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
         } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
+            return ['error' => 'Redis not available'];
         }
     }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-});
     
     /**
-     * Redis-specific bulk operations
+     * Warm up critical caches
      */
-    public function bulkForget(array $keys): void
+    public static function warmUp()
     {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Cache application statistics
-     */
-    public static function cacheApplicationStats(): array
-    {
-        return Cache::remember('app:stats', self::STATS_CACHE_TTL, function () {
-            return [
-                'total_jobs' => app('App\Models\Job')::where('status', 'active')->count(),
-                'total_companies' => app('App\Models\Company')::where('is_active', true)->count(),
-                'total_candidates' => app('App\Models\User')::where('user_type', 'candidate')->count(),
-                'total_applications' => app('App\Models\JobApplication')::count(),
-            ];
+        // Warm up job categories
+        self::cacheJobs('job_categories', function() {
+            return \App\Models\JobCategory::all();
+        });
         
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-});
-    
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Clear related caches
-     */
-    public static function clearJobCaches($jobId = null): void
-    {
-        Cache::tags(['jobs'])->flush();
+        // Warm up featured companies
+        self::cacheCompanies('featured_companies', function() {
+            return \App\Models\Company::where('is_featured', true)->limit(10)->get();
+        });
         
-        if ($jobId) {
-            Cache::forget("job:{$jobId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}");
+        // Warm up active jobs count
+        self::cacheJobs('active_jobs_count', function() {
+            return \App\Models\Job::where('status', 'active')->count();
+        });
         
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
+        // Warm up translations
+        self::cacheTranslations('app_translations', function() {
+            $translations = [];
+            $languages = ['en', 'ar', 'de', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'];
+            
+            foreach ($languages as $lang) {
+                $path = "lang/{$lang}.json";
+                if (file_exists($path)) {
+                    $translations[$lang] = json_decode(file_get_contents($path), true);
+                }
             }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-    
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Clear user caches
-     */
-    public static function clearUserCaches($userId): void
-    {
-        $patterns = [
-            "user:stats:{$userId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}:*",
-            "user:profile:{$userId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}",
-            "user:applications:{$userId
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}"
-        ];
-
-        foreach ($patterns as $pattern) {
-            Cache::forget($pattern);
-        
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-    
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-}
-
-    /**
-     * Redis-specific bulk operations
-     */
-    public function bulkForget(array $keys): void
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection('cache');
-            $redis->del($keys);
-        } catch (\Exception $e) {
-            // Fallback to individual deletions
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    /**
-     * Check Redis connection status
-     */
-    public function isRedisAvailable(): bool
-    {
-        try {
-            $redis = \Illuminate\Support\Facades\Redis::connection();
-            $redis->ping();
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+            
+            return $translations;
+        });
     }
 }

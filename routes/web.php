@@ -218,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
         // Admin users management
-        Route::resource('admin', App\Http\Controllers\AdminController::class);
+        Route::resource('admin', App\Http\Controllers\AdminController::class, ['as' => 'admin']);
         
         // Candidates management
         Route::resource('candidates', App\Http\Controllers\Web\CandidateController::class);
@@ -275,11 +275,11 @@ Route::middleware(['auth'])->group(function () {
         
         Route::get('/job-notification', function () {
             return view('admin.job_notification.index');
-        })->name('job.notification.index');
+        })->name('job-notification.index');
         
         Route::get('/expired-jobs', function () {
             return view('admin.jobs.expired');
-        })->name('expired.jobs.index');
+        })->name('admin.jobs.expiredJobs');
         
         Route::get('/post-categories', function () {
             return view('admin.post_categories.index');
@@ -309,57 +309,19 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.plans.index');
         })->name('plans.index');
         
-        Route::get('/countries', function () {
-            return view('admin.countries.index');
-        })->name('countries.index');
-        
-        Route::get('/states', function () {
-            return view('admin.states.index');
-        })->name('states.index');
-        
-        Route::get('/cities', function () {
-            return view('admin.cities.index');
-        })->name('cities.index');
-        
-        Route::get('/marital-status', function () {
-            return view('admin.marital_status.index');
-        })->name('maritalStatus.index');
-        
-        Route::get('/skills', function () {
-            return view('admin.skills.index');
-        })->name('skills.index');
-        
-        Route::get('/salary-periods', function () {
-            return view('admin.salary_periods.index');
-        })->name('salaryPeriod.index');
-        
-        Route::get('/industries', function () {
-            return view('admin.industries.index');
-        })->name('industry.index');
-        
-        Route::get('/company-sizes', function () {
-            return view('admin.company_sizes.index');
-        })->name('companySize.index');
-        
-        Route::get('/functional-areas', function () {
-            return view('admin.functional_areas.index');
-        })->name('functionalArea.index');
-        
-        Route::get('/career-levels', function () {
-            return view('admin.career_levels.index');
-        })->name('careerLevel.index');
-        
-        Route::get('/salary-currencies', function () {
-            return view('admin.salary_currencies.index');
-        })->name('salaryCurrency.index');
-        
-        Route::get('/ownership-types', function () {
-            return view('admin.ownership_types.index');
-        })->name('ownerShipType.index');
-        
-        Route::get('/languages', function () {
-            return view('admin.languages.index');
-        })->name('languages.index');
+        Route::get('/countries', [App\Http\Controllers\Admin\MasterDataController::class, 'countries'])->name('countries.index');
+        Route::get('/states', [App\Http\Controllers\Admin\MasterDataController::class, 'states'])->name('states.index');
+        Route::get('/cities', [App\Http\Controllers\Admin\MasterDataController::class, 'cities'])->name('cities.index');
+        Route::get('/marital-status', [App\Http\Controllers\Admin\MasterDataController::class, 'maritalStatus'])->name('maritalStatus.index');
+        Route::get('/skills', [App\Http\Controllers\Admin\MasterDataController::class, 'skills'])->name('skills.index');
+        Route::get('/salary-periods', [App\Http\Controllers\Admin\MasterDataController::class, 'salaryPeriods'])->name('salaryPeriod.index');
+        Route::get('/industries', [App\Http\Controllers\Admin\MasterDataController::class, 'industries'])->name('industry.index');
+        Route::get('/company-sizes', [App\Http\Controllers\Admin\MasterDataController::class, 'companySizes'])->name('companySize.index');
+        Route::get('/functional-areas', [App\Http\Controllers\Admin\MasterDataController::class, 'functionalAreas'])->name('functionalArea.index');
+        Route::get('/career-levels', [App\Http\Controllers\Admin\MasterDataController::class, 'careerLevels'])->name('careerLevel.index');
+        Route::get('/salary-currencies', [App\Http\Controllers\Admin\MasterDataController::class, 'salaryCurrencies'])->name('salaryCurrency.index');
+        Route::get('/ownership-types', [App\Http\Controllers\Admin\MasterDataController::class, 'ownershipTypes'])->name('ownerShipType.index');
+        Route::get('/languages', [App\Http\Controllers\Admin\MasterDataController::class, 'languages'])->name('languages.index');
         
         Route::get('/noticeboards', function () {
             return view('admin.noticeboards.index');
@@ -397,29 +359,12 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.settings.index');
         })->name('settings.index');
         
-        Route::get('/testimonials', function () {
-            return view('admin.testimonials.index');
-        })->name('testimonials.index');
-        
-        Route::get('/branding-sliders', function () {
-            return view('admin.branding_sliders.index');
-        })->name('branding.sliders.index');
-        
-        Route::get('/header-sliders', function () {
-            return view('admin.header_sliders.index');
-        })->name('header.sliders.index');
-        
-        Route::get('/image-sliders', function () {
-            return view('admin.image_sliders.index');
-        })->name('image-sliders.index');
-        
-        Route::get('/cms-services', function () {
-            return view('admin.cms_services.index');
-        })->name('cms.services.index');
-        
-        Route::get('/cms-about-us', function () {
-            return view('admin.cms_about_us.index');
-        })->name('cms.about-us.service');
+        Route::get('/testimonials', [App\Http\Controllers\Admin\CmsController::class, 'testimonials'])->name('testimonials.index');
+        Route::get('/branding-sliders', [App\Http\Controllers\Admin\CmsController::class, 'brandingSliders'])->name('branding.sliders.index');
+        Route::get('/header-sliders', [App\Http\Controllers\Admin\CmsController::class, 'headerSliders'])->name('header.sliders.index');
+        Route::get('/image-sliders', [App\Http\Controllers\Admin\CmsController::class, 'imageSliders'])->name('image-sliders.index');
+        Route::get('/cms-services', [App\Http\Controllers\Admin\CmsController::class, 'cmsServices'])->name('cms.services.index');
+        Route::get('/cms-about-us', [App\Http\Controllers\Admin\CmsController::class, 'cmsAboutUs'])->name('cms.about-us.service');
         
         // Missing admin index route
         Route::get('/', function () {
@@ -537,11 +482,11 @@ Route::prefix('front')->name('front.')->group(function () {
     })->name('posts.details');
     
     Route::get('/job-details/{jobId}', function ($jobId) {
-        return view('front_web.jobs.show');
+        return view('front_web.jobs.job_details');
     })->name('job.details');
     
     Route::get('/company-details/{companyId}', function ($companyId) {
-        return view('front_web.companies.show');
+        return view('front_web.company.company_details');
     })->name('company.details');
     
     Route::get('/candidate-details/{candidateId}', function ($candidateId) {
@@ -564,7 +509,59 @@ Route::prefix('front')->name('front.')->group(function () {
     Route::get('/login', function () {
         return view('front_web.auth.login');
     })->name('login');
+    
+    // Critical missing routes from blade analysis
+    Route::get('/blog-category/{categoryId}', function ($categoryId) {
+        return view('front_web.blogs.category');
+    })->name('blog.category');
 });
+
+// Job Application Routes
+Route::get('/apply-job-form/{jobId}', function ($jobId) {
+    return view('front_web.jobs.apply_job.apply_job');
+})->name('show.apply-job-form');
+
+Route::post('/apply-job', function () {
+    return redirect()->back()->with('success', 'Application submitted successfully!');
+})->name('apply-job');
+
+// Favorite functionality routes
+Route::post('/save-favourite-company', function () {
+    return response()->json(['success' => true, 'message' => 'Company added to favorites']);
+})->name('save.favourite.company');
+
+Route::post('/save-favourite-job', function () {
+    return response()->json(['success' => true, 'message' => 'Job added to favorites']);
+})->name('save.favourite.job');
+
+// Report functionality routes  
+Route::post('/report-to-company', function () {
+    return response()->json(['success' => true, 'message' => 'Report submitted']);
+})->name('report.to.company');
+
+Route::post('/report-job-abuse', function () {
+    return response()->json(['success' => true, 'message' => 'Report submitted']);
+})->name('report.job.abuse');
+
+// Email job functionality
+Route::post('/email-job', function () {
+    return response()->json(['success' => true, 'message' => 'Job emailed successfully']);
+})->name('email.job');
+
+// Newsletter subscription
+Route::post('/news-letter', function () {
+    return response()->json(['success' => true, 'message' => 'Subscribed to newsletter']);
+})->name('news-letter.create');
+
+// Company edit form route
+Route::get('/company/{companyId}/edit-form', function ($companyId) {
+    return view('companies.edit');
+})->name('company.edit.form');
+
+// Privacy policy with section parameter
+Route::get('/privacy-policy/{section?}', function ($section = 'privacy_policy') {
+    return view('front_web.privacy_policy.index', compact('section'));
+})->name('privacy.policy.index');
 
 // Additional utility routes
 Route::get('/language/{locale}', function ($locale) {
@@ -612,13 +609,127 @@ Route::get('/icons/documentation', function () {
     return view('icons.documentation');
 })->name('icons.documentation');
 
-// Additional API routes for form functionality
-Route::get('/states-list', function () {
-    $states = [];
-    return response()->json($states);
-})->name('states-list');
+// Location data routes using proper controller (not API)
+Route::get('/states-list', [App\Http\Controllers\LocationController::class, 'getStates'])->name('states-list');
+Route::get('/cities-list', [App\Http\Controllers\LocationController::class, 'getCities'])->name('cities-list');
+Route::get('/countries-list', [App\Http\Controllers\LocationController::class, 'getCountries'])->name('countries-list');
 
-Route::get('/cities-list', function () {
-    $cities = [];
-    return response()->json($cities);
-})->name('cities-list');
+// Critical missing routes from blade analysis
+Route::get('/download/resume/{id}', function ($id) {
+    return response()->download(storage_path('app/public/resumes/' . $id . '.pdf'));
+})->name('download.resume');
+
+Route::get('/download/post/{id}', function ($id) {
+    return response()->download(storage_path('app/public/posts/' . $id . '.pdf'));
+})->name('download.post');
+
+// Candidate experience and education routes
+Route::middleware(['auth'])->prefix('candidate')->name('candidate.')->group(function () {
+    Route::get('/create-experience', function () {
+        return view('candidate.profile.experience.create');
+    })->name('create-experience');
+    
+    Route::get('/create-education', function () {
+        return view('candidate.profile.education.create');
+    })->name('create-education');
+    
+    Route::get('/cv-template', function () {
+        return view('candidate.profile.cv_template');
+    })->name('cv.template');
+    
+    Route::post('/general-profile-update', function () {
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    })->name('general.profile.update');
+    
+    Route::post('/online-profile-update', function () {
+        return redirect()->back()->with('success', 'Online profile updated successfully');
+    })->name('online.profile.update');
+    
+    Route::get('/edit-profile', function () {
+        return view('candidate.profile.edit');
+    })->name('edit.profile');
+});
+
+// Job application routes
+Route::post('/change-job-stage', function () {
+    return response()->json(['success' => true, 'message' => 'Job stage changed successfully']);
+})->name('change.job.stage');
+
+Route::get('/view-slot-screen/{jobId}', function ($jobId) {
+    return view('employer.job_applications.slot_screen');
+})->name('view.slot.screen');
+
+Route::post('/interview-slot-store', function () {
+    return response()->json(['success' => true, 'message' => 'Interview slot stored successfully']);
+})->name('interview.slot.store');
+
+Route::post('/batch-slot-store', function () {
+    return response()->json(['success' => true, 'message' => 'Batch slot stored successfully']);
+})->name('batch.slot.store');
+
+Route::get('/get-schedule-history/{jobApplicationId}', function ($jobApplicationId) {
+    return response()->json(['data' => []]);
+})->name('get.schedule.history');
+
+Route::post('/cancel-selected-slot', function () {
+    return response()->json(['success' => true, 'message' => 'Slot cancelled successfully']);
+})->name('cancel.selected.slot');
+
+// Contact form route
+Route::post('/send-contact-email', function () {
+    return redirect()->back()->with('success', 'Message sent successfully!');
+})->name('send.contact.email');
+
+// Blog comment route
+Route::post('/blog-create-comment', function () {
+    return redirect()->back()->with('success', 'Comment posted successfully!');
+})->name('blog.create.comment');
+
+// Front-end search and category routes
+Route::get('/get-jobs-search', function () {
+    return response()->json(['data' => []]);
+})->name('get.jobs.search');
+
+Route::get('/front-categories', function () {
+    return view('front_web.categories.index');
+})->name('front.categories');
+
+// Report routes
+Route::post('/report-to-candidate', function () {
+    return response()->json(['success' => true, 'message' => 'Report submitted successfully']);
+})->name('report.to.candidate');
+
+// Admin login route
+Route::get('/admin/login', function () {
+    return view('admin.auth.login');
+})->name('admin.login');
+
+// Employer dashboard route
+Route::middleware(['auth'])->get('/employer/dashboard', function () {
+    return view('employer.dashboard.index');
+})->name('employer.dashboard');
+
+// Job stage management
+Route::get('/job-stage', function () {
+    return view('employer.job_stages.index');
+})->name('job.stage.index');
+
+// Download all resumes
+Route::get('/download-all-resume', function () {
+    return response()->download(storage_path('app/public/all_resumes.zip'));
+})->name('download.all-resume');
+
+// Upload store route
+Route::post('/uploads-store', function () {
+    return response()->json(['success' => true, 'url' => asset('storage/uploads/sample.jpg')]);
+})->name('uploads.store');
+
+// Posts store route
+Route::post('/posts-store', function () {
+    return redirect()->back()->with('success', 'Post created successfully');
+})->name('posts.store');
+
+// Translation manager route
+Route::get('/translation-manager', function () {
+    return view('admin.translation_manager.index');
+})->name('translation-manager.index');

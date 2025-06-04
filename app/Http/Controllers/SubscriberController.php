@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsLetter;
-use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,10 +13,7 @@ use Illuminate\View\View;
 class SubscriberController extends AppBaseController
 {
     /**
-     * @param  Request  $request
-     * @return Factory|View
-     *
-     * @throws Exception
+     * Display a listing of subscribers.
      */
     public function index(): View
     {
@@ -26,15 +21,13 @@ class SubscriberController extends AppBaseController
     }
 
     /**
-     * Remove the specified NewsLetter from storage.
-     *
-     *
-     * @throws Exception
+     * Remove the specified subscriber from storage.
      */
-    public function destroy(NewsLetter $newsLetter): JsonResponse
+    public function destroy($id): JsonResponse
     {
-        $newsLetter->delete();
+        $subscriber = NewsLetter::findOrFail($id);
+        $subscriber->delete();
 
-        return $this->sendSuccess(__('messages.flash.newsletter_delete'));
+        return $this->sendSuccess(__('messages.flash.subscriber_delete'));
     }
 }

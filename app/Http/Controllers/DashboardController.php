@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Job;
+use App\Models\Company;
+use App\Models\Candidate;
 use App\Repositories\DashboardRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends AppBaseController
 {
@@ -21,18 +25,52 @@ class DashboardController extends AppBaseController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * Display the dashboard.
      */
     public function index(): View
     {
-        $data['dashboardData'] = $this->dashboardRepository->getDashboardAssociatedData();
-        $data['registerCandidatesData'] = $this->dashboardRepository->getRegisteredCandidatesData();
-        $data['registerEmployersData'] = $this->dashboardRepository->getRegisteredEmployersData();
-        $data['recentJobsData'] = $this->dashboardRepository->getRecentJobsData();
+        $user = Auth::user();
 
-        return view('dashboard.index', compact('data'));
+        // Admin dashboard
+        if ($user->hasRole('Admin')) {
+            $stats = [
+                'total_users' => User::count(),
+                'total_jobs' => Job::count(),
+                'total_companies' => Company::count(),
+                'total_candidates' => Candidate::count(),
+                'active_jobs' => Job::where('status', 'open')->count(),
+                'pending_jobs' => Job::where('status', 'pending')->count(),
+            ];
+
+            return view('dashboard.admin', compact('stats'));
+        }
+
+        // Employer dashboard
+        if ($user->hasRole('Employer')) {
+            $company = $user->company;
+            $stats = [
+                'total_jobs' => $company ? $company->jobs()->count() : 0,
+                'active_jobs' => $company ? $company->jobs()->where('status', 'open')->count() : 0,
+                'applications' => $company ? $company->jobs()->withCount('jobApplications')->get()->sum('job_applications_count') : 0,
+            ];
+
+            return view('dashboard.employer', compact('stats'));
+        }
+
+        // Candidate dashboard
+        if ($user->hasRole('Candidate')) {
+            $candidate = $user->candidate;
+            $stats = [
+                'applications' => $candidate ? $candidate->jobApplications()->count() : 0,
+                'favourites' => $candidate ? $candidate->favouriteJobs()->count() : 0,
+                'profile_views' => $candidate ? $candidate->views ?? 0 : 0,
+            ];
+
+            return view('dashboard.candidate', compact('stats'));
+        }
+
+        // Default dashboard
+        return view('dashboard.index');
     }
 
     public function dashboardChartData(Request $request): JsonResponse

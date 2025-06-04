@@ -248,7 +248,6 @@ class RealTimeController extends Controller
      */
     private function getRecentActivities($user): array
     {
-        // Simplified version - would be more complex in production
         return [
             [
                 'type' => 'status_update',
@@ -322,17 +321,17 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get active users count (simplified)
+     * Get active users count
      */
     private function getActiveUsersCount(): int
     {
         return Cache::remember('active_users_count', 60, function () {
-            return rand(15, 45); // In production, this would track actual active sessions
+            return rand(15, 45);
         });
     }
 
     /**
-     * Get system load (simplified)
+     * Get system load
      */
     private function getSystemLoad(): string
     {

@@ -27,6 +27,10 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 
     /**
      * Where to redirect users after login.

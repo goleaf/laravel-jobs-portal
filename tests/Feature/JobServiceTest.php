@@ -9,13 +9,12 @@ use App\Models\JobCategory;
 use App\Models\JobType;
 use App\Services\JobService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class JobServiceTest extends TestCase
 {
-    use RefreshDatabase, DatabaseTransactions;
+    use RefreshDatabase;
 
     protected JobService $jobService;
     protected User $employer;

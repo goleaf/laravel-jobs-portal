@@ -20,6 +20,10 @@ class ConfirmPasswordController extends Controller
     */
 
     use ConfirmsPasswords;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 
     /**
      * Where to redirect users when the intended url fails.

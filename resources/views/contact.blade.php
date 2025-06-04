@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Contact Us') }} - {{ config('app.name') }}</title></head>
+    <title>{{ __('{{ __('common.contact_us') }}') }} - {{ config('app.name') }}</title></head>
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
@@ -27,7 +27,7 @@
                         <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('about-us') }}">{{ __('About Us') }}</a>
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('about-us') }}">{{ __('{{ __('common.about_us') }}') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium active" href="{{ route('contact') }}">{{ __('Contact') }}</a>
@@ -42,7 +42,7 @@
         <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-12 text-center">
-                    <h1 class="display-4 fw-bold text-primary-600">{{ __('Contact Us') }}</h1>
+                    <h1 class="display-4 fw-bold text-primary-600">{{ __('{{ __('common.contact_us') }}') }}</h1>
                     <p class="lead">{{ __('We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.') }}</p>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                                 <div class="mb-3">
                                     <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
                                         <i class="fas fa-tag me-1"></i>
-                                        {{ __('Subject') }} <span class="text-red-600">*</span>
+                                        {{ __('{{ __('common.subject') }}') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input id="subject" type="text" 
                                            class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("subject') is-invalid @enderror" 
@@ -173,7 +173,7 @@
                                 <div class="mb-3">
                                     <label for="message" class="block text-sm font-medium text-gray-700 mb-1">
                                         <i class="fas fa-comment me-1"></i>
-                                        {{ __('Message') }} <span class="text-red-600">*</span>
+                                        {{ __('{{ __('common.message') }}') }} <span class="text-red-600">*</span>
                                     </label>
                                     <textarea id="message" 
                                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("message') is-invalid @enderror" 
@@ -189,7 +189,7 @@
                                 <div class="d-grid">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
                                         <i class="fas fa-paper-plane me-1"></i>
-                                        {{ __('Send Message') }}
+                                        {{ __('{{ __('common.send_message') }}') }}
                                     </button>
                                 </div>
                             </form>

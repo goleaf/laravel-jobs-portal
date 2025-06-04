@@ -28,6 +28,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Http\Requests\Candidate\StoreCandidateRequest;
+use App\Http\Requests\Candidate\UpdateCandidateRequest;
 
 class CandidateController extends AppBaseController
 {
@@ -411,18 +413,11 @@ class CandidateController extends AppBaseController
     public function choosePreference(JobApplication $jobApplication, Request $request): JsonResponse
     {
         if (! isset($request->rejectSlot)) {
-            $request->validate([
-                'slot_book' => 'required',
-            ], [
-                'slot_book.required' => __('messages.flash.slot_preference_field'),
+            $request->validated(),
             ]);
         }
 
-        $request->validate([
-            'choose_slot_notes' => 'required',
-        ], [
-            'choose_slot_notes.required' => 'Notes Field is required',
-        ]);
+        $request->validated();
         $scheduleId = $request->get('schedule_id');
         $slotNotes = $request->get('choose_slot_notes');
         if (! isset($request->rejectSlot)) {

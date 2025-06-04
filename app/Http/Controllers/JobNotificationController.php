@@ -14,6 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
+use App\Http\Requests\Job\StoreJobRequest;
+use App\Http\Requests\Job\UpdateJobRequest;
 
 class JobNotificationController extends AppBaseController
 {
@@ -38,7 +40,7 @@ class JobNotificationController extends AppBaseController
         return view('job_notification.index')->with($data);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreJobRequest $request): RedirectResponse
     {
         $input = $request->all();
 

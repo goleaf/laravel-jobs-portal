@@ -1,5 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
+import './realtime-dashboard';
 
 // Import local packages
 import 'bootstrap';

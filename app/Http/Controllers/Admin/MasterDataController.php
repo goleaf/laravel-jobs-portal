@@ -17,6 +17,8 @@ use App\Models\SalaryCurrency;
 use App\Models\OwnerShipType;
 use App\Models\Language;
 use Illuminate\View\View;
+use App\Http\Requests\Admin\StoreAdminRequest;
+use App\Http\Requests\Admin\UpdateAdminRequest;
 
 class MasterDataController extends AppBaseController
 {

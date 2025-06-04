@@ -1275,3 +1275,17 @@ Route::get('/test-routes', function () {
 // SEO Optimization Routes
 Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])
     ->name('sitemap');
+
+// Real-Time Dashboard Routes
+Route::middleware(['auth'])->prefix('realtime')->name('realtime.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\RealTimeController::class, 'getDashboardData'])->name('dashboard');
+    Route::get('/stats', [App\Http\Controllers\RealTimeController::class, 'getRealTimeStats'])->name('stats');
+    Route::get('/activity', [App\Http\Controllers\RealTimeController::class, 'getActivityFeed'])->name('activity');
+    Route::get('/websocket-auth', [App\Http\Controllers\RealTimeController::class, 'getWebSocketAuth'])->name('websocket.auth');
+    Route::post('/applications/{jobApplication}/status', [App\Http\Controllers\RealTimeController::class, 'updateApplicationStatus'])->name('applications.status');
+});
+
+// Real-Time Dashboard Page
+Route::get('/dashboard/realtime', function () {
+    return view('dashboard.realtime');
+})->middleware(['auth'])->name('dashboard.realtime');

@@ -83,7 +83,7 @@
                     <!-- Quick Actions -->
                     <div class="flex flex-wrap mt-4">
                         <div class="flex-1 -12">
-                            <h4>{{ __('Quick Actions') }}</h4>
+                            <h4>{{ __('{{ __('admin.quick_actions') }}') }}</h4>
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -md-2 mb-3">
                                     <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
@@ -112,7 +112,7 @@
                                 <div class="flex-1 -md-2 mb-3">
                                     <a href="{{ route('admin.settings.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
                                         <i class="fas fa-cog"></i><br>
-                                        {{ __('Settings') }}
+                                        {{ __('{{ __('admin.settings') }}') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
@@ -148,7 +148,7 @@
                         <div class="flex-1 -md-6">
                             <div class="bg-white shadow rounded-lg overflow-hidden">
                                 <div class="bg-white shadow rounded-lg overflow-hidden -header">
-                                    <h5>{{ __('System Status') }}</h5>
+                                    <h5>{{ __('{{ __('admin.system_status') }}') }}</h5>
                                 </div>
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex flex-wrap">

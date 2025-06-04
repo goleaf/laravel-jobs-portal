@@ -48,7 +48,6 @@ class RealTimeDashboard {
                 this.updateConnectionStatus('connected');
                 console.log('🔗 WebSocket connected');
                 
-                // Authenticate and subscribe to channels
                 this.authenticateWebSocket();
             };
 
@@ -61,7 +60,6 @@ class RealTimeDashboard {
                 this.updateConnectionStatus('disconnected');
                 console.log('🔌 WebSocket disconnected');
                 
-                // Attempt to reconnect
                 this.attemptReconnection();
             };
 
@@ -110,10 +108,8 @@ class RealTimeDashboard {
     handleApplicationStatusUpdate(data) {
         console.log('📄 Application status update:', data);
         
-        // Update application status in UI
         this.updateApplicationStatusUI(data);
         
-        // Show notification
         this.showNotification({
             title: 'Application Status Updated',
             message: data.message,
@@ -121,10 +117,8 @@ class RealTimeDashboard {
             timestamp: data.timestamp
         });
         
-        // Update dashboard stats
         this.refreshUserStats();
         
-        // Trigger custom event for other components
         document.dispatchEvent(new CustomEvent('applicationStatusChanged', {
             detail: data
         }));
@@ -157,21 +151,18 @@ class RealTimeDashboard {
      * Setup event listeners for UI interactions
      */
     setupEventListeners() {
-        // Status update buttons
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('status-update-btn')) {
                 this.handleStatusUpdateClick(e);
             }
         });
 
-        // Notification click handlers
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('notification-item')) {
                 this.handleNotificationClick(e);
             }
         });
 
-        // Refresh button
         const refreshBtn = document.getElementById('dashboard-refresh');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
@@ -179,7 +170,6 @@ class RealTimeDashboard {
             });
         }
 
-        // Connection status indicator
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 this.pauseUpdates();
@@ -296,14 +286,12 @@ class RealTimeDashboard {
             </div>
         `;
         
-        // Add close functionality
         notificationEl.querySelector('.notification-close').addEventListener('click', () => {
             notificationEl.remove();
         });
         
         container.appendChild(notificationEl);
         
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             if (notificationEl.parentNode) {
                 notificationEl.classList.add('animate-slide-out');
@@ -313,7 +301,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Create notification container if it doesn't exist
+     * Create notification container
      */
     createNotificationContainer() {
         const container = document.createElement('div');
@@ -393,7 +381,6 @@ class RealTimeDashboard {
             if (response.ok) {
                 this.updateDashboardStats(data.user_stats);
                 this.updateActivityFeed(data.recent_activities);
-                this.updateSystemHealth(data.system_health);
             }
         } catch (error) {
             console.error('❌ Error loading initial data:', error);
@@ -454,7 +441,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Pause updates (when tab is hidden)
+     * Pause updates
      */
     pauseUpdates() {
         if (this.updateTimer) {
@@ -491,7 +478,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Fallback to polling when WebSocket fails
+     * Fallback to polling
      */
     fallbackToPolling() {
         console.log('📡 Using polling fallback');
@@ -499,7 +486,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Authenticate WebSocket connection
+     * Authenticate WebSocket
      */
     async authenticateWebSocket() {
         try {
@@ -512,7 +499,6 @@ class RealTimeDashboard {
                     data: authData
                 }));
                 
-                // Subscribe to user channels
                 authData.channels.forEach(channel => {
                     this.subscribeToChannel(channel);
                 });
@@ -523,7 +509,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Subscribe to a channel
+     * Subscribe to channel
      */
     subscribeToChannel(channel) {
         if (this.websocket.readyState === WebSocket.OPEN) {
@@ -538,7 +524,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Update connection status indicator
+     * Update connection status
      */
     updateConnectionStatus(status) {
         const indicator = document.getElementById('connection-status');
@@ -599,7 +585,7 @@ class RealTimeDashboard {
     }
 
     /**
-     * Cleanup function
+     * Cleanup
      */
     destroy() {
         if (this.websocket) {

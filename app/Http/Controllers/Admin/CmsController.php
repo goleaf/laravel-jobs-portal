@@ -10,6 +10,8 @@ use App\Models\ImageSlider;
 use App\Models\CmsServices;
 use App\Models\Setting;
 use Illuminate\View\View;
+use App\Http\Requests\Admin\StoreAdminRequest;
+use App\Http\Requests\Admin\UpdateAdminRequest;
 
 class CmsController extends AppBaseController
 {

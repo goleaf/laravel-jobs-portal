@@ -24,13 +24,13 @@
                         <div class="flex-1 -md-3">
                             <select class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="statusFilter">
                                 <option value="">{{ __('All Status') }}</option>
-                                <option value="active">{{ __('Active') }}</option>
-                                <option value="inactive">{{ __('Inactive') }}</option>
+                                <option value="active">{{ __('{{ __('admin.active') }}') }}</option>
+                                <option value="inactive">{{ __('{{ __('admin.inactive') }}') }}</option>
                                 <option value="expired">{{ __('Expired') }}</option>
                             </select>
                         </div>
                         <div class="flex-1 -md-2">
-                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" id="filterBtn">{{ __('Filter') }}</button>
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" id="filterBtn">{{ __('{{ __('admin.filter') }}') }}</button>
                         </div>
                     </div>
                     
@@ -45,8 +45,8 @@
                                     <th>{{ __('Location') }}</th>
                                     <th>{{ __('Type') }}</th>
                                     <th>{{ __('Posted Date') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Actions') }}</th>
+                                    <th>{{ __('{{ __('admin.status') }}') }}</th>
+                                    <th>{{ __('{{ __('admin.actions') }}') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,17 +62,17 @@
                                     </td>
                                     <td>{{ now()->subDays($i)->format('M d, Y') }}</td>
                                     <td>
-                                        <span class="badge bg-green-600">Active</span>
+                                        <span class="badge bg-green-600">{{ __('admin.active') }}</span>
                                     </td>
                                     <td>
                                         <div class="px-4 py-2 rounded font-medium transition-colors -group" role="group">
-                                            <a href="{{ route('admin.jobs.show', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.jobs.show', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -info" title="{{ __('{{ __('admin.view') }}') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.jobs.edit', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.jobs.edit', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -warning" title="{{ __('{{ __('admin.edit') }}') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -danger" onclick="deleteJob({{ $i }})" title="{{ __('Delete') }}">
+                                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -danger" onclick="deleteJob({{ $i }})" title="{{ __('{{ __('admin.delete') }}') }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>

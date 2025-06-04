@@ -26,10 +26,10 @@
                                 <th>{{ __('User') }}</th>
                                 <th>{{ __('Amount') }}</th>
                                 <th>{{ __('Payment Type') }}</th>
-                                <th>{{ __('Status') }}</th>
+                                <th>{{ __('{{ __('admin.status') }}') }}</th>
                                 <th>{{ __('Meta') }}</th>
                                 <th>{{ __('Date') }}</th>
-                                <th>{{ __('Actions') }}</th>
+                                <th>{{ __('{{ __('admin.actions') }}') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,7 +91,7 @@
                                     <td>
                                         @if($transaction->meta)
                                             <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" data-bs-toggle="modal" data-bs-target="#metaModal{{ $transaction->id }}">
-                                                <i class="fas fa-info-circle"></i> {{ __('View') }}
+                                                <i class="fas fa-info-circle"></i> {{ __('{{ __('admin.view') }}') }}
                                             </button>
                                             
                                             <!-- Meta Modal -->
@@ -117,16 +117,16 @@
                                     </td>
                                     <td>
                                         <div class="px-4 py-2 rounded font-medium transition-colors -group" role="group">
-                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" title="{{ __('{{ __('admin.view') }}') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-warning" title="{{ __('{{ __('admin.edit') }}') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-danger" title="{{ __('Delete') }}">
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-danger" title="{{ __('{{ __('admin.delete') }}') }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

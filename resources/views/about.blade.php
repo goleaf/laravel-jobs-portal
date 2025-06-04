@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('About Us') }} - {{ config('app.name') }}</title></head>
+    <title>{{ __('{{ __('common.about_us') }}') }} - {{ config('app.name') }}</title></head>
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
@@ -27,7 +27,7 @@
                         <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium active" href="{{ route('about-us') }}">{{ __('About Us') }}</a>
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium active" href="{{ route('about-us') }}">{{ __('{{ __('common.about_us') }}') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('contact') }}">{{ __('Contact') }}</a>
@@ -46,7 +46,7 @@
                     <p class="lead">{{ __('Connecting talented professionals with amazing opportunities worldwide.') }}</p>
                 </div>
                 <div class="flex-1 -lg-6">
-                    <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="About Us">
+                    <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="{{ __('common.about_us') }}">
                 </div>
             </div>
         </div>

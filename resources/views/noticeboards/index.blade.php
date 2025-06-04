@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.noticeboards') }}
+    {{ __('messages.noticeboards')  }}
 @endsection
 @push('css')
-    <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('css/header-padding.css')  }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">

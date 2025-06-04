@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.subscribers') }}
+    {{ __('messages.subscribers')  }}
 @endsection
 @push('css')
-        <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">
 @endpush
 @section('content')
 <div class="container mx-auto px-4 mx-auto -fluid">
@@ -13,6 +13,6 @@
     </div>
 </div>
 @endsection
-{{--@push('scripts')--}}
-{{--    <script src="{{mix('assets/js/subscribers/subscribers.js')}}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+{{ --    <script src="{{mix('assets/js/subscribers/subscribers.js') }}"></script>--}}
+{{ --@endpush-- }}

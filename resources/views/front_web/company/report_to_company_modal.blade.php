@@ -9,8 +9,8 @@
                 @csrf
             <div class="px-6 py-4">
                     <div class="form-group">
-                        <input type="hidden" name="userId" value="{{ (getLoggedInUserId() !== null) ? getLoggedInUserId() : null }}">
-                        <input type="hidden" name="companyId" value="{{ $companyDetail->id }}">
+                        <input type="hidden" name="userId" value="{{ (getLoggedInUserId() !== null) ? getLoggedInUserId() : null  }}">
+                        <input type="hidden" name="companyId" value="{{ $companyDetail->id  }}">
                         <textarea rows="5" id="noteForReportToCompany" name="note" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" required></textarea>
                     </div>
             </div>

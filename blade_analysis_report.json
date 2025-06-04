@@ -1,10 +1,10 @@
 {
     "summary": {
-        "total_blade_files": 1295,
-        "total_routes_found": 2339,
-        "working_routes": 504,
-        "missing_routes": 431,
-        "syntax_errors": 3102
+        "total_blade_files": 1308,
+        "total_routes_found": 2364,
+        "working_routes": 516,
+        "missing_routes": 418,
+        "syntax_errors": 3115
     },
     "missing_routes": [
         {
@@ -90,13 +90,6 @@
             "line": 55,
             "type": "href",
             "full_match": "href=\"javascript:void(0)\""
-        },
-        {
-            "route": "{{route(",
-            "file": "candidates\/table-components\/action_button.blade.php",
-            "line": 2,
-            "type": "named_route",
-            "full_match": "href=\"{{route('"
         },
         {
             "route": "#",
@@ -1304,14 +1297,6 @@
             "full_match": "href=\"javascript:void(0)\""
         },
         {
-            "route": "admin.email-template.index",
-            "file": "email_templates\/edit.blade.php",
-            "line": 49,
-            "type": "named_route",
-            "full_match": "route('admin.email-template.index')",
-            "parameters": ""
-        },
-        {
             "route": "{{route(",
             "file": "post_comments\/table_components\/post.blade.php",
             "line": 1,
@@ -1863,78 +1848,6 @@
             "line": 130,
             "type": "url",
             "full_match": "action=\"{{url('"
-        },
-        {
-            "route": "reported.jobs",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 68,
-            "type": "named_route",
-            "full_match": "route('reported.jobs')",
-            "parameters": ""
-        },
-        {
-            "route": "salaryPeriod.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 132,
-            "type": "named_route",
-            "full_match": "route('salaryPeriod.index')",
-            "parameters": ""
-        },
-        {
-            "route": "functionalArea.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 151,
-            "type": "named_route",
-            "full_match": "route('functionalArea.index')",
-            "parameters": ""
-        },
-        {
-            "route": "salaryCurrency.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 159,
-            "type": "named_route",
-            "full_match": "route('salaryCurrency.index')",
-            "parameters": ""
-        },
-        {
-            "route": "ownerShipType.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 163,
-            "type": "named_route",
-            "full_match": "route('ownerShipType.index')",
-            "parameters": ""
-        },
-        {
-            "route": "admin.email-template.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 210,
-            "type": "named_route",
-            "full_match": "route('admin.email-template.index')",
-            "parameters": ""
-        },
-        {
-            "route": "branding.sliders.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 225,
-            "type": "named_route",
-            "full_match": "route('branding.sliders.index')",
-            "parameters": ""
-        },
-        {
-            "route": "header.sliders.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 229,
-            "type": "named_route",
-            "full_match": "route('header.sliders.index')",
-            "parameters": ""
-        },
-        {
-            "route": "image-sliders.index",
-            "file": "layouts\/sub_menu.blade.php",
-            "line": 233,
-            "type": "named_route",
-            "full_match": "route('image-sliders.index')",
-            "parameters": ""
         },
         {
             "route": "javascript:void(0)",
@@ -2777,22 +2690,6 @@
             "full_match": "href=\"https:\/\/fonts.bunny.net\/css?family=figtree:400,500,600&display=swap\""
         },
         {
-            "route": "candidate.applications.index",
-            "file": "components\/realtime-dashboard.blade.php",
-            "line": 291,
-            "type": "named_route",
-            "full_match": "route('candidate.applications.index')",
-            "parameters": ""
-        },
-        {
-            "route": "employer.applications.index",
-            "file": "components\/realtime-dashboard.blade.php",
-            "line": 299,
-            "type": "named_route",
-            "full_match": "route('employer.applications.index')",
-            "parameters": ""
-        },
-        {
             "route": "https:\/\/fonts.bunny.net",
             "file": "components\/layout.blade.php",
             "line": 25,
@@ -3063,7 +2960,7 @@
             "file": "candidates\/table-components\/email_verified.blade.php",
             "line": 2,
             "error": "Unmatched quotes in directive",
-            "code": "@if( ! $row->user->email_verified_at )"
+            "code": "@if(!row->user->email_verified_at )"
         },
         {
             "file": "candidates\/table-components\/last_change.blade.php",
@@ -3087,7 +2984,7 @@
             "file": "candidates\/table-components\/available.blade.php",
             "line": 2,
             "error": "Unmatched quotes in directive",
-            "code": "@if($row->immediate_available == 1)"
+            "code": "@if(row->immediate_available  == 1)"
         },
         {
             "file": "candidates\/table-components\/action_button.blade.php",
@@ -3982,6 +3879,12 @@
             "line": 1,
             "error": "Malformed route() call",
             "code": "route('front.job.details',"
+        },
+        {
+            "file": "candidate\/applications\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.applications'))\n\n@section('content')"
         },
         {
             "file": "settings\/about_us.blade.php",
@@ -5200,6 +5103,12 @@
             "line": 2,
             "error": "Unmatched quotes in directive",
             "code": "@if(!empty($results))\n        @foreach($results as $result)"
+        },
+        {
+            "file": "front_web\/home\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.home'))\n\n@section('content')"
         },
         {
             "file": "front_web\/blogs\/index.blade.php",
@@ -7378,6 +7287,12 @@
             "line": 134,
             "error": "Malformed route() call",
             "code": "route('company.edit.form',"
+        },
+        {
+            "file": "employer\/applications\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.applications'))\n\n@section('content')"
         },
         {
             "file": "salary_currencies\/index.blade.php",
@@ -11991,7 +11906,7 @@
             "file": "components\/language-selector.blade.php",
             "line": 20,
             "error": "Malformed route() call",
-            "code": "route('language.change',"
+            "code": "route('language.switch',"
         },
         {
             "file": "components\/icons\/filter.blade.php",
@@ -13516,6 +13431,66 @@
             "line": 137,
             "error": "Unmatched quotes in directive",
             "code": "@foreach(\\App\\Models\\User::latest()->take(5)->get() as $user)"
+        },
+        {
+            "file": "admin\/email_templates\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.email_templates'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/email_templates\/edit.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.edit_email_template'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/branding_sliders\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.branding_sliders'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/header_sliders\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.header_sliders'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/image_sliders\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.image_sliders'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/reported_jobs\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.reported_jobs'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/salary_periods\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.salary_periods'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/functional_areas\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.functional_areas'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/salary_currencies\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.salary_currencies'))\n\n@section('content')"
+        },
+        {
+            "file": "admin\/ownership_types\/index.blade.php",
+            "line": 3,
+            "error": "Nested sections",
+            "code": "@section('title', __('messages.ownership_types'))\n\n@section('content')"
         },
         {
             "file": "flux\/accent.blade.php",
@@ -23027,7 +23002,7 @@
         {
             "route": "login.submit",
             "file": "auth\/login.blade.php",
-            "line": 45,
+            "line": 59,
             "type": "named_route",
             "full_match": "route('login.submit')",
             "parameters": ""
@@ -23035,7 +23010,7 @@
         {
             "route": "password.request",
             "file": "auth\/login.blade.php",
-            "line": 113,
+            "line": 127,
             "type": "named_route",
             "full_match": "route('password.request')",
             "parameters": ""
@@ -23043,7 +23018,7 @@
         {
             "route": "register",
             "file": "auth\/login.blade.php",
-            "line": 128,
+            "line": 142,
             "type": "named_route",
             "full_match": "route('register')",
             "parameters": ""
@@ -23051,7 +23026,7 @@
         {
             "route": "admin.login",
             "file": "auth\/login.blade.php",
-            "line": 142,
+            "line": 156,
             "type": "named_route",
             "full_match": "route('admin.login')",
             "parameters": ""
@@ -23364,6 +23339,14 @@
             "line": 46,
             "type": "named_route",
             "full_match": "route('jobId')",
+            "parameters": ""
+        },
+        {
+            "route": "admin.email-template.index",
+            "file": "email_templates\/edit.blade.php",
+            "line": 49,
+            "type": "named_route",
+            "full_match": "route('admin.email-template.index')",
             "parameters": ""
         },
         {
@@ -24516,6 +24499,14 @@
             "parameters": ""
         },
         {
+            "route": "reported.jobs",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 68,
+            "type": "named_route",
+            "full_match": "route('reported.jobs')",
+            "parameters": ""
+        },
+        {
             "route": "job-notification.index",
             "file": "layouts\/sub_menu.blade.php",
             "line": 72,
@@ -24620,6 +24611,14 @@
             "parameters": ""
         },
         {
+            "route": "salaryPeriod.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 132,
+            "type": "named_route",
+            "full_match": "route('salaryPeriod.index')",
+            "parameters": ""
+        },
+        {
             "route": "admin.industries.index",
             "file": "layouts\/sub_menu.blade.php",
             "line": 136,
@@ -24636,11 +24635,35 @@
             "parameters": ""
         },
         {
+            "route": "functionalArea.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 151,
+            "type": "named_route",
+            "full_match": "route('functionalArea.index')",
+            "parameters": ""
+        },
+        {
             "route": "admin.career-levels.index",
             "file": "layouts\/sub_menu.blade.php",
             "line": 155,
             "type": "named_route",
             "full_match": "route('admin.career-levels.index')",
+            "parameters": ""
+        },
+        {
+            "route": "salaryCurrency.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 159,
+            "type": "named_route",
+            "full_match": "route('salaryCurrency.index')",
+            "parameters": ""
+        },
+        {
+            "route": "ownerShipType.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 163,
+            "type": "named_route",
+            "full_match": "route('ownerShipType.index')",
             "parameters": ""
         },
         {
@@ -24708,6 +24731,14 @@
             "parameters": ""
         },
         {
+            "route": "admin.email-template.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 210,
+            "type": "named_route",
+            "full_match": "route('admin.email-template.index')",
+            "parameters": ""
+        },
+        {
             "route": "admin.dashboard",
             "file": "layouts\/sub_menu.blade.php",
             "line": 3,
@@ -24721,6 +24752,30 @@
             "line": 221,
             "type": "named_route",
             "full_match": "route('testimonials.index')",
+            "parameters": ""
+        },
+        {
+            "route": "branding.sliders.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 225,
+            "type": "named_route",
+            "full_match": "route('branding.sliders.index')",
+            "parameters": ""
+        },
+        {
+            "route": "header.sliders.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 229,
+            "type": "named_route",
+            "full_match": "route('header.sliders.index')",
+            "parameters": ""
+        },
+        {
+            "route": "image-sliders.index",
+            "file": "layouts\/sub_menu.blade.php",
+            "line": 233,
+            "type": "named_route",
+            "full_match": "route('image-sliders.index')",
             "parameters": ""
         },
         {
@@ -25420,11 +25475,27 @@
             "parameters": ""
         },
         {
+            "route": "candidate.applications.index",
+            "file": "components\/realtime-dashboard.blade.php",
+            "line": 291,
+            "type": "named_route",
+            "full_match": "route('candidate.applications.index')",
+            "parameters": ""
+        },
+        {
             "route": "employer.jobs.create",
             "file": "components\/realtime-dashboard.blade.php",
             "line": 295,
             "type": "named_route",
             "full_match": "route('employer.jobs.create')",
+            "parameters": ""
+        },
+        {
+            "route": "employer.applications.index",
+            "file": "components\/realtime-dashboard.blade.php",
+            "line": 299,
+            "type": "named_route",
+            "full_match": "route('employer.applications.index')",
             "parameters": ""
         },
         {

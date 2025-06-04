@@ -8,7 +8,7 @@
                             <input wire:model.debounce.100ms="searchByCareerLevel" id="searchByCareerLevel"
                                    type="search"
                                    autocomplete="off"
-                                   placeholder="{{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                   placeholder="{{ __('web.common.search')  }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                         </div>
                     </div>
                 </div>
@@ -20,9 +20,9 @@
             <div class="flex-1 -md-12">
                 <h5 class="text-black text-center">
                     @if ($searchByCareerLevel)
-                        {{ __('messages.career_level.no_career_level_found') }}
+                        {{ __('messages.career_level.no_career_level_found')  }}
                     @else
-                        {{ __('messages.career_level.no_career_level_available') }}
+                        {{ __('messages.career_level.no_career_level_available')  }}
                     @endif
                 </h5>
             </div>
@@ -30,7 +30,7 @@
         <div class="flex-1 -md-12">
             <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                 @if($careerLevels->count() > 0)
-                    {{$careerLevels->links()}}
+                    {{ $careerLevels->links() }}
                 @endif
             </div>
         </div>

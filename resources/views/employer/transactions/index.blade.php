@@ -1,6 +1,6 @@
 @extends('employer.layouts.app')
 @section('title')
-    {{ __('messages.transactions') }}
+    {{ __('messages.transactions')  }}
 @endsection
 @section('content')
         <div class="flex flex-col">

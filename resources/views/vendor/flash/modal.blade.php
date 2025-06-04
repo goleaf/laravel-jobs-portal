@@ -1,10 +1,10 @@
-<div id="flash-overlay-modal" class="fixed inset-0 z-50 overflow-y-auto fade {{ isset($modalClass) ? $modalClass : "' }}">
+<div id="flash-overlay-modal" class="fixed inset-0 z-50 overflow-y-auto fade {{ isset($modalClass) ? $modalClass : "'  }}">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
             <div class="px-6 py-4 border-b border-gray-200">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-                <h4 class="modal-title">{{ $title }}</h4>
+                <h4 class="modal-title">{{ $title  }}</h4>
             </div>
 
             <div class="px-6 py-4">

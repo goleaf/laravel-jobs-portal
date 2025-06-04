@@ -1,6 +1,6 @@
 @extends('candidate.layouts.app')
 @section('title')
-    {{ __('messages.applied_job.applied_jobs') }}
+    {{ __('messages.applied_job.applied_jobs')  }}
 @endsection
 @section('content')
     @include('flash::message')

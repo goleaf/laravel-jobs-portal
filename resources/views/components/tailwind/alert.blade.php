@@ -12,10 +12,10 @@
     ];
 @endphp
 
-<div {{ $attributes->merge(["class" => "px-4 py-3 rounded-md border mb-4 " . $classes[$type]]) }}>
+<div {{ $attributes->merge(["class" => "px-4 py-3 rounded-md border mb-4 " . $classes[$type]])  }}>
     <div class="flex">
         <div class="flex-1">
-            {{ $slot }}
+            {{ $slot  }}
         </div>
         @if($dismissible)
             <button type="button" class="ml-2 text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">

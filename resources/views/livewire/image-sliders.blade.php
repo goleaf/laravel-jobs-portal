@@ -5,14 +5,14 @@
         @empty
             <div class="flex-1 -md-12">
                 <h5 class="text-black text-center">
-                    {{ __('messages.image_slider.no_image_slider_available') }}
+                    {{ __('messages.image_slider.no_image_slider_available')  }}
                 </h5>
             </div>
         @endforelse
         <div class="flex-1 -md-12">
             <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                 @if($imageSliders->count() > 0)
-                    {{$imageSliders->links()}}
+                    {{ $imageSliders->links() }}
                 @endif
             </div>
         </div>

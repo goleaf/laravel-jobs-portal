@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.settings') }}
+    {{ __('messages.settings')  }}
 @endsection
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
-    {{--    <link href="{{ asset('assets/css/summernote.min.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css')  }}">
+    {{ --    <link href="{{ asset('assets/css/summernote.min.css')  }}" rel="stylesheet" type="text/css"/>--}}
+    <link href="{{ asset('css/header-padding.css')  }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -25,18 +25,18 @@
             </div>
         </div>
     </div>
-    {{ Form::hidden('enableEditText', __('messages.setting.enable_edit'), ['id' => 'enableEditText']) }}
-    {{ Form::hidden('disableEditText', __('messages.setting.disable_edit'), ['id' => 'disableEditText']) }}
-    {{ Form::hidden('enableCookie', __('messages.setting.enable_cookie'), ['id' => 'enableCookie']) }}
-    {{ Form::hidden('disableCookie', __('messages.setting.disable_cookie'), ['id' => 'disableCookie']) }}
+    {{ Form::hidden('enableEditText', __('messages.setting.enable_edit'), ['id' => 'enableEditText'])  }}
+    {{ Form::hidden('disableEditText', __('messages.setting.disable_edit'), ['id' => 'disableEditText'])  }}
+    {{ Form::hidden('enableCookie', __('messages.setting.enable_cookie'), ['id' => 'enableCookie'])  }}
+    {{ Form::hidden('disableCookie', __('messages.setting.disable_cookie'), ['id' => 'disableCookie'])  }}
 @endsection
-{{--@push('scripts')--}}
-{{--    <script>--}}
-{{--        let enableEditText = "{{ __('messages.setting.enable_edit') }}";--}}
-{{--        let disableEditText = "{{ __('messages.setting.disable_edit') }}";--}}
-{{--        let enableCookie = "{{ __('messages.setting.enable_cookie') }}";--}}
-{{--        let disableCookie = "{{ __('messages.setting.disable_cookie') }}";--}}
-{{--    </script>--}}
-    {{--    <script src="{{ asset('assets/js/summernote.min.js') }}"></script>--}}
-{{--    <script src="{{ mix('assets/js/settings/settings.js') }}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+{{ --    <script>-- }}
+{{ --        let enableEditText = "{{ __('messages.setting.enable_edit')  }}";--}}
+{{ --        let disableEditText = "{{ __('messages.setting.disable_edit')  }}";--}}
+{{ --        let enableCookie = "{{ __('messages.setting.enable_cookie')  }}";--}}
+{{ --        let disableCookie = "{{ __('messages.setting.disable_cookie')  }}";--}}
+{{ --    </script>-- }}
+    {{ --    <script src="{{ asset('assets/js/summernote.min.js')  }}"></script>--}}
+{{ --    <script src="{{ mix('assets/js/settings/settings.js')  }}"></script>--}}
+{{ --@endpush-- }}

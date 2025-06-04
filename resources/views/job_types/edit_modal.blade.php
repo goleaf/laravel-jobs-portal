@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="modal-title">{{ __('messages.job_type.edit_job_type') }}</h3>
+                <h3 class="modal-title">{{ __('messages.job_type.edit_job_type')  }}</h3>
                 <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal">
                     <x-icons.close class="h-4 w-4" />
                 </button>

@@ -1,7 +1,7 @@
 @component('mail::message')
-    {{-- Greeting --}}
+    {{ -- Greeting -- }}
     @if (! empty($greeting))
-        # {{ $greeting }}
+        # {{ $greeting  }}
     @else
         @if ($level === 'error')
             # @lang('Whoops!')
@@ -10,13 +10,13 @@
         @endif
     @endif
 
-    {{-- Intro Lines --}}
+    {{ -- Intro Lines -- }}
     @foreach ($introLines as $line)
-        {{ $line }}
+        {{ $line  }}
 
     @endforeach
 
-    {{-- Action Button --}}
+    {{ -- Action Button -- }}
     @isset($actionText)
         <?php
         switch ($level) {
@@ -29,25 +29,25 @@
         }
         ?>
         @component('mail::button', ['url' => $actionUrl, 'color' => $color])
-            {{ $actionText }}
+            {{ $actionText  }}
         @endcomponent
     @endisset
 
-    {{-- Outro Lines --}}
+    {{ -- Outro Lines -- }}
     @foreach ($outroLines as $line)
-        {{ $line }}
+        {{ $line  }}
 
     @endforeach
 
-    {{-- Salutation --}}
+    {{ -- Salutation -- }}
     @if (! empty($salutation))
-        {{ $salutation }}
+        {{ $salutation  }}
     @else
         @lang('Regards'),<br>
-        {{ getAppName() }}
+        {{ getAppName()  }}
     @endif
 
-    {{-- Subcopy --}}
+    {{ -- Subcopy -- }}
     @isset($actionText)
         @slot('subcopy')
             @lang(
@@ -56,7 +56,7 @@
                 [
                     'actionText' => $actionText,
                 ]
-            ) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+            ) <span class="break-all">[{{ $displayableActionUrl  }}]({{ $actionUrl  }})</span>
         @endslot
     @endisset
 @endcomponent

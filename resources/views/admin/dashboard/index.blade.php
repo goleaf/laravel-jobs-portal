@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ __('Admin Dashboard') }}
+    {{ __('Admin Dashboard')  }}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <div class="flex-1 -12">
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-white shadow rounded-lg overflow-hidden -header">
-                    <h3>{{ __('Admin Dashboard') }}</h3>
+                    <h3>{{ __('Admin Dashboard')  }}</h3>
                 </div>
                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     <div class="flex flex-wrap">
@@ -20,8 +20,8 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex justify-between">
                                         <div>
-                                            <h5>{{ __('Total Users') }}</h5>
-                                            <h2>{{ \App\Models\User::count() }}</h2>
+                                            <h5>{{ __('Total Users')  }}</h5>
+                                            <h2>{{ \App\Models\User::count()  }}</h2>
                                         </div>
                                         <div>
                                             <i class="fas fa-users fa-2x"></i>
@@ -36,8 +36,8 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex justify-between">
                                         <div>
-                                            <h5>{{ __('Active Jobs') }}</h5>
-                                            <h2>{{ \App\Models\Job::count() ?? 0 }}</h2>
+                                            <h5>{{ __('Active Jobs')  }}</h5>
+                                            <h2>{{ \App\Models\Job::count() ?? 0  }}</h2>
                                         </div>
                                         <div>
                                             <i class="fas fa-briefcase fa-2x"></i>
@@ -52,8 +52,8 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex justify-between">
                                         <div>
-                                            <h5>{{ __('Companies') }}</h5>
-                                            <h2>{{ \App\Models\Company::count() ?? 0 }}</h2>
+                                            <h5>{{ __('Companies')  }}</h5>
+                                            <h2>{{ \App\Models\Company::count() ?? 0  }}</h2>
                                         </div>
                                         <div>
                                             <i class="fas fa-building fa-2x"></i>
@@ -68,8 +68,8 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex justify-between">
                                         <div>
-                                            <h5>{{ __('Applications') }}</h5>
-                                            <h2>{{ \App\Models\JobApplication::count() ?? 0 }}</h2>
+                                            <h5>{{ __('Applications')  }}</h5>
+                                            <h2>{{ \App\Models\JobApplication::count() ?? 0  }}</h2>
                                         </div>
                                         <div>
                                             <i class="fas fa-file-alt fa-2x"></i>
@@ -83,42 +83,42 @@
                     <!-- Quick Actions -->
                     <div class="flex flex-wrap mt-4">
                         <div class="flex-1 -12">
-                            <h4>{{ __('{{ __('admin.quick_actions') }}') }}</h4>
+                            <h4>{{ __('{{ __('admin.quick_actions')  }}') }}</h4>
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
+                                    <a href="{{ route('admin.candidates.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
                                         <i class="fas fa-users"></i><br>
-                                        {{ __('Manage Candidates') }}
+                                        {{ __('Manage Candidates')  }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.jobs.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-success w-full">
+                                    <a href="{{ route('admin.jobs.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-success w-full">
                                         <i class="fas fa-briefcase"></i><br>
-                                        {{ __('Manage Jobs') }}
+                                        {{ __('Manage Jobs')  }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('company.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-warning w-full">
+                                    <a href="{{ route('company.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-warning w-full">
                                         <i class="fas fa-building"></i><br>
-                                        {{ __('Manage Companies') }}
+                                        {{ __('Manage Companies')  }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.transactions.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-info w-full">
+                                    <a href="{{ route('admin.transactions.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-info w-full">
                                         <i class="fas fa-money-bill"></i><br>
-                                        {{ __('Transactions') }}
+                                        {{ __('Transactions')  }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.settings.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
+                                    <a href="{{ route('admin.settings.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
                                         <i class="fas fa-cog"></i><br>
-                                        {{ __('{{ __('admin.settings') }}') }}
+                                        {{ __('{{ __('admin.settings')  }}') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.subscribers.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-dark w-full">
+                                    <a href="{{ route('admin.subscribers.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-dark w-full">
                                         <i class="fas fa-envelope"></i><br>
-                                        {{ __('Subscribers') }}
+                                        {{ __('Subscribers')  }}
                                     </a>
                                 </div>
                             </div>
@@ -130,14 +130,14 @@
                         <div class="flex-1 -md-6">
                             <div class="bg-white shadow rounded-lg overflow-hidden">
                                 <div class="bg-white shadow rounded-lg overflow-hidden -header">
-                                    <h5>{{ __('Recent Registrations') }}</h5>
+                                    <h5>{{ __('Recent Registrations')  }}</h5>
                                 </div>
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="list-group">
                                         @foreach(\App\Models\User::latest()->take(5)->get() as $user)
                                         <div class="list-group-item">
-                                            <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>
-                                            <small class="text-gray-500">{{ $user->created_at->diffForHumans() }}</small>
+                                            <strong>{{ $$user->first_name  }} {{ $$user->last_name  }}</strong>
+                                            <small class="text-gray-500">{{ $$user->created_at->diffForHumans()  }}</small>
                                         </div>
                                         @endforeach
                                     </div>
@@ -148,20 +148,20 @@
                         <div class="flex-1 -md-6">
                             <div class="bg-white shadow rounded-lg overflow-hidden">
                                 <div class="bg-white shadow rounded-lg overflow-hidden -header">
-                                    <h5>{{ __('{{ __('admin.system_status') }}') }}</h5>
+                                    <h5>{{ __('{{ __('admin.system_status')  }}') }}</h5>
                                 </div>
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex flex-wrap">
                                         <div class="flex-1 -6">
                                             <div class="text-center">
                                                 <i class="fas fa-server fa-2x text-green-600"></i>
-                                                <p class="mt-2">{{ __('System Online') }}</p>
+                                                <p class="mt-2">{{ __('System Online')  }}</p>
                                             </div>
                                         </div>
                                         <div class="flex-1 -6">
                                             <div class="text-center">
                                                 <i class="fas fa-database fa-2x text-green-600"></i>
-                                                <p class="mt-2">{{ __('Database Connected') }}</p>
+                                                <p class="mt-2">{{ __('Database Connected')  }}</p>
                                             </div>
                                         </div>
                                     </div>

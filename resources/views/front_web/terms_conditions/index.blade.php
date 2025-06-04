@@ -1,6 +1,6 @@
 @extends('front_web.layouts.app')
 @section('title')
-    {{ __('messages.setting.terms_conditions') }}
+    {{ __('messages.setting.terms_conditions')  }}
 @endsection
 @section('content')
     <section class="hero-section relative bg-gray-100 py-40">
@@ -9,13 +9,13 @@
                 <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                     <div class="hero-content">
                         <h1 class="text-gray-600 mb-3">
-                            {{ __('messages.setting.terms_conditions') }}
+                            {{ __('messages.setting.terms_conditions')  }}
                         </h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-center mb-0">
-                                <li class="breadcrumb-item "><a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}</a>
+                                <li class="breadcrumb-item "><a href="{{ route('front.home')  }}" class="fs-18 text-gray">{{ __('web.home')  }}</a>
                                 </li>
-                                <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('messages.setting.terms_conditions') }}</li>
+                                <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('messages.setting.terms_conditions')  }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -34,10 +34,10 @@
 </div>
 @endsection
 
-{{--@section('scripts')--}}
-{{--    <script>--}}
-{{--        let registerSaveUrl = "{{ route('front.save.register') }}";--}}
-{{--        let logInUrl = "{{ route('login') }}";--}}
-{{--    </script>--}}
-{{--    <script src="{{asset('assets/js/front_register/front_register.js')}}"></script>--}}
-{{--@endsection--}}
+{{ --@section('scripts')-- }}
+{{ --    <script>-- }}
+{{ --        let registerSaveUrl = "{{ route('front.save.register')  }}";--}}
+{{ --        let logInUrl = "{{ route('login')  }}";--}}
+{{ --    </script>-- }}
+{{ --    <script src="{{asset('assets/js/front_register/front_register.js') }}"></script>--}}
+{{ --@endsection-- }}

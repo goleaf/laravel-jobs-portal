@@ -24,7 +24,7 @@
                                     placeholder="@lang('web.web_company.search_by_industry')">
                             </div>
                             <div class="col-xl-2 flex-1 -lg-3 text-center p-xl-1 px-20">
-                                <a href="#" wire:click="resetFilter()" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register block pt-3 pb-3">{{ __('web.reset_filter') }}</a>
+                                <a href="#" wire:click="resetFilter()" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register block pt-3 pb-3">{{ __('web.reset_filter')  }}</a>
                             </div>
                         </div>
                     </div>
@@ -40,14 +40,14 @@
                         @include('front_web_template.common.company_card')
                     @empty
                         <div class="flex-1 -md-12 text-center text-gray">
-                            {{ __('web.companies_menu.no_company_found') }}
+                            {{ __('web.companies_menu.no_company_found')  }}
                         </div>
                     @endforelse
                 </div>
             </div>
             @if ($companies->count() > 0)
                 <div class="pagination-section pt-lg-5 pt-3">
-                    {{ $companies->links() }}
+                    {{ $companies->links()  }}
                 </div>
             @endif
         </div>

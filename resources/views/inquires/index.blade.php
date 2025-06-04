@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.inquires') }}
+    {{ __('messages.inquires')  }}
 @endsection
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -11,6 +11,6 @@
     </div>
     @include('inquires.show_modal')
 @endsection
-{{--@push('scripts')--}}
-{{--    <script src="{{mix('assets/js/inquires/inquires.js')}}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+{{ --    <script src="{{mix('assets/js/inquires/inquires.js') }}"></script>--}}
+{{ --@endpush-- }}

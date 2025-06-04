@@ -5,47 +5,47 @@
 <input type="hidden" id="educationId">
 <div class="flex flex-wrap">
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('degree_level_id', __('messages.candidate_profile.degree_level').':', ['class' => 'form-label ']) }}
+        {{ Form::label('degree_level_id', __('messages.candidate_profile.degree_level').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::select('degree_level_id', $data['degreeLevels'], null, ['class' => 'form-select','required','placeholder'=> __('messages.company.select_degree_level'),'id' => 'editDegreeLevel']) }}
+        {{ Form::select('degree_level_id', $data['degreeLevels'], null, ['class' => 'form-select','required','placeholder'=> __('messages.company.select_degree_level'),'id' => 'editDegreeLevel'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('degree_title', __('messages.candidate_profile.degree_title').':', ['class' => 'form-label ']) }}
+        {{ Form::label('degree_title', __('messages.candidate_profile.degree_title').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::text('degree_title', null, ['class' => 'form-control','id' => 'editDegreeTitle']) }}
+        {{ Form::text('degree_title', null, ['class' => 'form-control','id' => 'editDegreeTitle'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('country', __('messages.company.country').':', ['class' => 'form-label ']) }}
+        {{ Form::label('country', __('messages.company.country').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::select('country_id', $data['countries'], null, ['id'=>'editCvEducationCountry','class' => 'form-select','placeholder' => __('messages.company.select_country'), 'data-modal-type' => 'education', 'data-is-edit' => 'true']) }}
+        {{ Form::select('country_id', $data['countries'], null, ['id'=>'editCvEducationCountry','class' => 'form-select','placeholder' => __('messages.company.select_country'), 'data-modal-type' => 'education', 'data-is-edit' => 'true'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('state', __('messages.company.state').':', ['class' => 'form-label']) }}
-        {{ Form::select('state_id', [], null, ['id'=>'editCvEducationState','class' => 'form-select','placeholder' => __('messages.company.select_state'), 'data-modal-type' => 'education', 'data-is-edit' => 'true']) }}
+        {{ Form::label('state', __('messages.company.state').':', ['class' => 'form-label'])  }}
+        {{ Form::select('state_id', [], null, ['id'=>'editCvEducationState','class' => 'form-select','placeholder' => __('messages.company.select_state'), 'data-modal-type' => 'education', 'data-is-edit' => 'true'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('city', __('messages.company.city').':', ['class' => 'form-label']) }}
-        {{ Form::select('city_id', [], null, ['id'=>'editCvEducationCity','class' => 'form-select','placeholder' => __('messages.company.select_city'), 'data-is-edit' => 'true']) }}
+        {{ Form::label('city', __('messages.company.city').':', ['class' => 'form-label'])  }}
+        {{ Form::select('city_id', [], null, ['id'=>'editCvEducationCity','class' => 'form-select','placeholder' => __('messages.company.select_city'), 'data-is-edit' => 'true'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('institute',__('messages.candidate_profile.institute').':', ['class' => 'form-label ']) }}
+        {{ Form::label('institute',__('messages.candidate_profile.institute').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::text('institute', null, ['class' => 'form-control ','required', 'id' => 'editInstitute']) }}
+        {{ Form::text('institute', null, ['class' => 'form-control ','required', 'id' => 'editInstitute'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('result', __('messages.candidate_profile.result').':', ['class' => 'form-label ']) }}
+        {{ Form::label('result', __('messages.candidate_profile.result').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::text('result', null, ['class' => 'form-control ', 'required', 'id' => 'editResult']) }}
+        {{ Form::text('result', null, ['class' => 'form-control ', 'required', 'id' => 'editResult'])  }}
     </div>
     <div class="flex-1 -sm-6 mb-5">
-        {{ Form::label('year', __('messages.candidate_profile.year').':', ['class' => 'form-label ']) }}
+        {{ Form::label('year', __('messages.candidate_profile.year').':', ['class' => 'form-label '])  }}
         <span class="required"></span>
-        {{ Form::selectYear('year', date('Y'), 2000, null, ['class' => 'form-select', 'id' => 'editYear']) }}
+        {{ Form::selectYear('year', date('Y'), 2000, null, ['class' => 'form-select', 'id' => 'editYear'])  }}
     </div>
 </div>
 <div class="flex justify-end">
-    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditEducationSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> Processing..."]) }}
+    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditEducationSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> Processing..."])  }}
     <button type="button" id="btnEditEducationCancel"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
+            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel')  }}</button>
 </div>
 @formClose()

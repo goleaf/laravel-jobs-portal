@@ -1,6 +1,6 @@
 @extends('front_web_template.layouts.app')
 @section('title')
-    {{ __('messages.company.company_listing') }}
+    {{ __('messages.company.company_listing')  }}
 @endsection
 @section('page_css')
     @if (\Illuminate\Support\Facades\App::getLocale() == 'ar')
@@ -24,7 +24,7 @@
                             <nav aria-label="breadcrumb ">
                                 <ol class="breadcrumb justify-center mb-4 pb-3">
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('front.home') }}" class="fs-18 text-gray">@lang('web.home')
+                                        <a href="{{ route('front.home')  }}" class="fs-18 text-gray">@lang('web.home')
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">

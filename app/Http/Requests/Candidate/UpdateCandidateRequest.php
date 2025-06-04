@@ -1,9 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Candidate;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\NoMaliciousContent;
 
+/**
+ * Request validation for CandidateController::update
+ * 
+ * @enhanced by RequestValidationImprover
+ */
 class UpdateCandidateRequest extends FormRequest
 {
     /**
@@ -11,75 +17,111 @@ class UpdateCandidateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; // TODO: Implement proper authorization logic based on user permissions
     }
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return array (
-  'first_name' => 'required|string|max:255',
-  'last_name' => 'nullable|string|max:255',
-  'email' => 'required|email|unique:users,email,{id}',
-  'phone' => 'nullable|string|max:20',
-  'date_of_birth' => 'nullable|date',
-  'gender' => 'nullable|in:male,female,other',
-  'marital_status_id' => 'nullable|exists:marital_statuses,id',
-  'nationality' => 'nullable|string|max:255',
-  'national_id_card' => 'nullable|string|max:255',
-  'country_id' => 'nullable|exists:countries,id',
-  'state_id' => 'nullable|exists:states,id',
-  'city_id' => 'nullable|exists:cities,id',
-  'address' => 'nullable|string',
-  'postal_code' => 'nullable|string|max:20',
-  'career_level_id' => 'nullable|exists:career_levels,id',
-  'functional_area_id' => 'nullable|exists:functional_areas,id',
-  'current_salary' => 'nullable|numeric|min:0',
-  'expected_salary' => 'nullable|numeric|min:0',
-  'salary_currency_id' => 'nullable|exists:salary_currencies,id',
-  'immediate_available' => 'boolean',
-  'experience' => 'nullable|string',
-  'video_link' => 'nullable|url',
-);
+        return {
+    "user.first_name": "required|string|max:255",
+    "user.last_name": "required|string|max:255",
+    "user.email": "required|email|unique:users,email,{user_id}",
+    "user.phone": "nullable|string|max:20",
+    "user.dob": "nullable|date|before:today",
+    "marital_status_id": "nullable|exists:marital_statuses,id",
+    "nationality": "nullable|string|max:100",
+    "country_id": "nullable|exists:countries,id",
+    "state_id": "nullable|exists:states,id",
+    "city_id": "nullable|exists:cities,id",
+    "is_active": "boolean",
+    "is_verified": "boolean"
+};
     }
 
     /**
-     * Get custom error messages for validation rules.
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {
-        return array (
-  'first_name.required' => 'First name is required',
-  'email.required' => 'Email is required',
-  'email.unique' => 'Email already exists',
-);
+        return {
+    "user.first_name.required": "First name is required",
+    "user.last_name.required": "Last name is required",
+    "user.email.required": "Email is required",
+    "user.email.unique": "Email already exists"
+};
     }
 
     /**
      * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'first_name' => __('messages.common.first_name'),
-            'last_name' => __('messages.common.last_name'),
-            'email' => __('messages.common.email'),
-            'password' => __('messages.common.password'),
-            'phone' => __('messages.common.phone'),
-            'name' => __('messages.common.name'),
-            'description' => __('messages.common.description'),
-            'address' => __('messages.common.address'),
-            'website' => __('messages.common.website'),
-            'country_id' => __('messages.common.country'),
-            'state_id' => __('messages.common.state'),
-            'city_id' => __('messages.common.city'),
-            'job_title' => __('messages.job.job_title'),
-            'job_description' => __('messages.job.job_description'),
-            'salary_from' => __('messages.job.salary_from'),
-            'salary_to' => __('messages.job.salary_to'),
-            'job_expiry_date' => __('messages.job.job_expiry_date'),
+            'user.first_name' => 'first name',
+            'user.last_name' => 'last name',
+            'user.email' => 'email address',
+            'user.phone' => 'phone number',
+            'job_title' => 'job title',
+            'job_description' => 'job description',
+            'job_expiry_date' => 'job expiry date',
+            'salary_from' => 'minimum salary',
+            'salary_to' => 'maximum salary'
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('job_title')) {
+            $this->merge([
+                'job_title' => strip_tags($this->job_title)
+            ]);
+        }
+        
+        if ($this->has('job_description')) {
+            $this->merge([
+                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
+            ]);
+        }
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add custom validation logic here
+            if ($this->has('salary_from') && $this->has('salary_to')) {
+                if ($this->salary_from > $this->salary_to) {
+                    $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
+                }
+            }
+            
+            // Check for malicious content in text fields
+            foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
+                if ($this->has($field) && $this->{$field}) {
+                    $rule = new NoMaliciousContent();
+                    if (!$rule->passes($field, $this->{$field})) {
+                        $validator->errors()->add($field, $rule->message());
+                    }
+                }
+            }
+        });
     }
 }

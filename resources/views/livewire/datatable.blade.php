@@ -9,9 +9,9 @@
                 </div>
                 <input
                     type="text"
-                    wire:model.live.debounce.{{ $debounce }}ms="search"
+                    wire:model.live.debounce.{{ $debounce  }}ms="search"
                     class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                    placeholder="{{ __('Search') }}"
+                    placeholder="{{ __('Search')  }}"
                 >
             </div>
         </div>
@@ -26,10 +26,10 @@
                         class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500 w-full md:w-auto"
                     >
                         <x-icons.filter class="w-4 h-4 mr-2" />
-                        {{ __('Filters') }}
+                        {{ __('Filters')  }}
                         @if(count($activeFilters) > 0)
                             <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {{ count($activeFilters) }}
+                                {{ count($activeFilters)  }}
                             </span>
                         @endif
                     </button>
@@ -47,14 +47,14 @@
                     >
                         <div class="p-3">
                             <div class="flex justify-between items-center pb-2 border-b">
-                                <h3 class="text-sm font-medium text-gray-900">{{ __('Filters') }}</h3>
+                                <h3 class="text-sm font-medium text-gray-900">{{ __('Filters')  }}</h3>
                                 @if(count($activeFilters) > 0)
                                     <button
                                         wire:click="clearAllFilters"
                                         type="button"
                                         class="text-xs text-blue-600 hover:text-blue-800"
                                     >
-                                        {{ __('Clear all') }}
+                                        {{ __('Clear all')  }}
                                     </button>
                                 @endif
                             </div>
@@ -73,14 +73,14 @@
             
             <!-- Per page selector -->
             <div class="flex items-center w-full md:w-auto">
-                <label for="perPage" class="mr-2 text-sm font-medium text-gray-700">{{ __('Show') }}:</label>
+                <label for="perPage" class="mr-2 text-sm font-medium text-gray-700">{{ __('Show')  }}:</label>
                 <select
                     id="perPage"
                     wire:model.live="perPage"
                     class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2"
                 >
                     @foreach($perPageOptions as $option)
-                        <option value="{{ $option }}">{{ $option }}</option>
+                        <option value="{{ $option  }}">{{ $option  }}</option>
                     @endforeach
                 </select>
             </div>
@@ -98,17 +98,17 @@
 
     <!-- Table -->
     <div class="relative overflow-x-auto rounded-lg shadow">
-        <table class="{{ $tableClass }}">
+        <table class="{{ $tableClass  }}">
             <thead class="bg-gray-50">
                 <tr>
                     @foreach($columns as $column)
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             @if($column->sortable)
                                 <button
-                                    wire:click="sort('{{ $column->field }}')"
+                                    wire:click="sort('{{ $column->field  }}')"
                                     class="flex items-center group"
                                 >
-                                    {{ $column->label }}
+                                    {{ $column->label  }}
                                     
                                     @if($sortField === $column->field)
                                         <span class="ml-1">
@@ -125,7 +125,7 @@
                                     @endif
                                 </button>
                             @else
-                                {{ $column->label }}
+                                {{ $column->label  }}
                             @endif
                         </th>
                     @endforeach
@@ -142,8 +142,8 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ count($columns) }}" class="px-6 py-4 text-center text-gray-500">
-                            {{ __('No records found') }}
+                        <td colspan="{{ count($columns)  }}" class="px-6 py-4 text-center text-gray-500">
+                            {{ __('No records found')  }}
                         </td>
                     </tr>
                 @endforelse
@@ -153,6 +153,6 @@
 
     <!-- Pagination -->
     <div class="mt-4">
-        {{ $data->links() }}
+        {{ $data->links()  }}
     </div>
 </div> 

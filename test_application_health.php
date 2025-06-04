@@ -76,7 +76,7 @@ class ApplicationHealthTester
         
         $criticalViews = [
             'welcome',
-            'admin.dashboard.main',
+            'admin.dashboard.index',
             'candidates.index'
         ];
 

@@ -1,11 +1,11 @@
 @extends('front_web_template.layouts.app')
 @section('title')
-    {{ __('web.company_details.company_details') }}
+    {{ __('web.company_details.company_details')  }}
 @endsection
-{{-- @section('page_css') --}}
-{{--    <link href="{{asset('front_web/scss/company-details.css')}}" rel="stylesheet" type="text/css"> --}}
-{{-- @endsection --}}
-{{-- @dd($companyDetail) --}}
+{{ -- @section('page_css') -- }}
+{{ --    <link href="{{asset('front_web/scss/company-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- @endsection -- }}
+{{ -- @dd($companyDetail) -- }}
 @section('content')
     <div class="company-details-page">
         <!-- start hero section -->
@@ -16,21 +16,21 @@
                         <div class="flex align-items-md-center">
                             <div class="me-4">
                                 <div class="hero-img">
-                                    <img src="{{ !empty($companyDetail->company_url) ? $companyDetail->company_url : asset('assets/img/infyom-logo.png') }}"
+                                    <img src="{{ !empty($companyDetail->company_url) ? $companyDetail->company_url : asset('assets/img/infyom-logo.png')  }}"
                                         class="w-full h-full rounded-circle object-fit-cover" alt="company-details" />
                                 </div>
                             </div>
                             <div class="">
                                 <div class="hero-content">
                                     <h4 class="text-gray-600 lh-base mb-2">
-                                        {{ html_entity_decode($companyDetail->user->full_name) }}</h4>
+                                        {{ html_entity_decode($companyDetail->$user->full_name)  }}</h4>
                                     <div class="hero-desc d-md-flex flex-wrap">
                                         <div class="desc flex mb-4">
                                             <div class="me-3 w-20">
                                                 <x-icons.briefcase class="w-full" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">
-                                                {{ !empty($companyDetail->industry->name) ? html_entity_decode($companyDetail->industry->name) : __('messages.common.n/a') }}
+                                                {{ !empty($companyDetail->industry->name) ? html_entity_decode($companyDetail->industry->name) : __('messages.common.n/a')  }}
                                             </p>
                                         </div>
                                         <div class="desc flex mb-4">
@@ -38,16 +38,16 @@
                                                 <x-icons.location class="w-full" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">
-                                                {{ $companyDetail->user->city_name . ', ' . $companyDetail->user->country_name }}
+                                                {{ $companyDetail->$user->city_name . ', ' . $companyDetail->$user->country_name  }}
                                             </p>
                                         </div>
-                                        @isset($companyDetail->user->phone)
+                                        @isset($companyDetail->$user->phone)
                                             <div class="desc flex mb-4">
                                                 <div class="me-3 w-20">
                                                     <x-icons.phone class="w-full" />
                                                 </div>
                                                 <p class="fs-14 text-gray mb-0">
-                                                    {{ $companyDetail->user->phone }}
+                                                    {{ $companyDetail->$user->phone  }}
                                                 </p>
                                             </div>
                                         @endisset
@@ -56,7 +56,7 @@
                                                 <x-icons.mail class="w-full" />
                                             </div>
                                             <a href="#"
-                                                class="text-gray text-break">{{ $companyDetail->user->email }}</p></a>
+                                                class="text-gray text-break">{{ $companyDetail->$user->email  }}</p></a>
                                         </div>
                                     </div>
                                 </div>
@@ -67,8 +67,8 @@
                                 <div class="hero-desc d-md-flex">
                                     <div class="desc flex me-4 mb-sm-0 mb-2 pe-2">
                                         <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary reportJobAbuse"
-                                            data-favorite-user-id="{{ getLoggedInUserId() !== null ? getLoggedInUserId() : null }}"
-                                            data-favorite-company_id="{{ $companyDetail->id }}" id="addToFavourite">
+                                            data-favorite-user-id="{{ getLoggedInUserId() !== null ? getLoggedInUserId() : null  }}"
+                                            data-favorite-company_id="{{ $companyDetail->id  }}" id="addToFavourite">
                                             <i class="favouriteIcon"></i>
                                             <span class="favouriteText"></span>
                                         </a>
@@ -77,12 +77,12 @@
                                         @if ($isReportedToCompany)
                                             <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary reportToCompanyBtn me-4" disabled
                                                 data-bs-toggle="modal" data-bs-target="#reportToCompanyModal">
-                                                {{ __('messages.candidate.already_reported') }}
+                                                {{ __('messages.candidate.already_reported')  }}
                                             </button>
                                         @else
                                             <button data-bs-toggle="modal" data-bs-target="#reportToCompanyModal"
-                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary  reportToCompanyBtn {{ $isReportedToCompany ?"disabled' : '' }}"
-                                                {{ $isReportedToCompany ? 'style=pointer-events:none;' : '' }}>{{ __('messages.company.report_to_company') }}
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary  reportToCompanyBtn {{ $isReportedToCompany ?"disabled' : ''  }}"
+                                                {{ $isReportedToCompany ? 'style=pointer-events:none;' : ''  }}>{{ __('messages.company.report_to_company')  }}
                                             </button>
                                         @endif
                                     </div>
@@ -107,21 +107,21 @@
                             </p>
                         </div>
                         <div class="our-latest-jobs">
-                            <h5 class="fs-18 text-gray-600 mb-40">{{ ($jobDetails->count() > 0 ) ? __('web.company_details.our_latest_jobs')  : __('web.home_menu.latest_job_not_available') }}</h5>
+                            <h5 class="fs-18 text-gray-600 mb-40">{{ ($jobDetails->count() > 0 ) ? __('web.company_details.our_latest_jobs')  : __('web.home_menu.latest_job_not_available')  }}</h5>
                             <div class="job- bg-white shadow rounded-lg overflow-hidden">
                                 @foreach ($jobDetails as $job)
                                     <div class="mb-40">
-                                        <a href="{{ route('front.job.details', $job['job_id']) }}"
+                                        <a href="{{ route('front.job.details', $job['job_id'])  }}"
                                             class="bg-white shadow rounded-lg overflow-hidden py-30 border-0">
                                             <div class="d-sm-flex relative">
                                                 <div class="mb-sm-0 mb-3 me-sm-4">
-                                                    <img src="{{ $job->company->company_url }}" class="bg-white shadow rounded-lg overflow-hidden -img"
+                                                    <img src="{{ $$job->$company->company_url  }}" class="bg-white shadow rounded-lg overflow-hidden -img"
                                                         alt="">
                                                 </div>
                                                 <div class="">
                                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                                                         <h5 class="bg-white shadow rounded-lg overflow-hidden -title text-gray-600 fs-18 mb-0">
-                                                            {{ html_entity_decode(Str::limit($job['job_title'], 50)) }}
+                                                            {{ html_entity_decode(Str::limit($job['job_title'], 50))  }}
                                                         </h5>
                                                         <div class="">
                                                             <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-wrap mt-2">
@@ -130,7 +130,7 @@
                                                                         <x-icons.briefcase class="w-full" />
                                                                     </div>
                                                                     <p class="fs-14 text-gray mb-0">
-                                                                        {{ !empty($job->jobCategory->name) ? $job->jobCategory->name : '' }}
+                                                                        {{ !empty($$job->jobCategory->name) ? $$job->jobCategory->name : ''  }}
                                                                     </p>
                                                                 </div>
                                                                 <div class="desc flex mb-2">
@@ -138,17 +138,17 @@
                                                                         <x-icons.location class="w-full" />
                                                                     </div>
                                                                     <p class="fs-14 text-gray mb-0">
-                                                                        {{ !empty($job->full_location) ? $job->full_location : 'Location Info. not available.' }}
+                                                                        {{ !empty($$job->full_location) ? $$job->full_location : 'Location Info. not available.'  }}
                                                                     </p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="desc flex">
                                                             <p class="text text-primary-600 fs-14 mb-0 me-3">
-                                                                {{ !empty($job->jobsSkill[0]->name) ? $job->jobsSkill[0]->name : 'Skill' }}
+                                                                {{ !empty($$job->jobsSkill[0]->name) ? $$job->jobsSkill[0]->name : 'Skill'  }}
                                                             </p>
                                                             <p class="fs-14 text text-primary-600 mb-0">
-                                                                {{ $job->jobsSkill->count() }}+</p>
+                                                                {{ $$job->jobsSkill->count()  }}+</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -159,7 +159,7 @@
                             </div>
                             @if ($jobDetails->count() > 0)
                                 <div class="text-center py-4">
-                                    <a href="{{ route('front.search.jobs', ['company' => $companyDetail->id]) }}"
+                                    <a href="{{ route('front.search.jobs', ['company' => $companyDetail->id])  }}"
                                         class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register"> @lang('web.common.show_all')</a>
                                 </div>
                             @endif
@@ -169,63 +169,63 @@
                         <div class="about-company-right br-10 px-40 bg-gray-100">
                             <div class="desc flex justify-between mb-3">
                                 <p class="fs-14 text-gray-600 mb-0">@lang('web.web_company.ownership'):</p>
-                                <p class="fs-14 text-gray text-end mb-0">{{!empty($companyDetail->ownerShipType->name)? $companyDetail->ownerShipType->name : __('messages.common.n/a')}}</p>
+                                <p class="fs-14 text-gray text-end mb-0">{{ !empty($companyDetail->ownerShipType->name)? $companyDetail->ownerShipType->name : __('messages.common.n/a') }}</p>
                             </div>
                             <div class="desc flex justify-between mb-3">
                                 <p class="fs-14 text-gray-600 mb-0">@lang('web.web_company.company_size'):</p>
-                                <p class="fs-14 text-gray text-end mb-0">{{!empty($companyDetail->companySize->size)? $companyDetail->companySize->size : __('messages.common.n/a')}}</p>
+                                <p class="fs-14 text-gray text-end mb-0">{{ !empty($companyDetail->companySize->size)? $companyDetail->companySize->size : __('messages.common.n/a') }}</p>
                             </div>
                             <div class="desc flex justify-between mb-3">
                                 <p class="fs-14 text-gray-600 mb-0">@lang('web.web_jobs.founded_in'):</p>
-                                <p class="fs-14 text-gray text-end mb-0">{{!empty($companyDetail->established_in)? $companyDetail->established_in : __('messages.common.n/a')}}</p>
+                                <p class="fs-14 text-gray text-end mb-0">{{ !empty($companyDetail->established_in)? $companyDetail->established_in : __('messages.common.n/a') }}</p>
                             </div>
                             <div class="desc flex justify-between mb-3">
                                 <p class="fs-14 text-gray-600 mb-0">@lang('web.common.email'):</p>
-                                <a href="#" class="fs-14 text-gray text-end">{{ $companyDetail->user->email }}</a>
+                                <a href="#" class="fs-14 text-gray text-end">{{ $companyDetail->$user->email  }}</a>
                             </div>
                             <div class="desc flex justify-between">
                                 <p class="fs-14 text-gray-600 mb-0">@lang('web.common.location'):</p>
-                                <p class="fs-14 text-gray text-end mb-0">{{!empty($companyDetail->location)? $companyDetail->location : __('messages.common.n/a')}}
+                                <p class="fs-14 text-gray text-end mb-0">{{ !empty($companyDetail->location)? $companyDetail->location : __('messages.common.n/a') }}
                                     @empty($companyDetail->location2)
-                                        {{ $companyDetail->location2 }}
+                                        {{ $companyDetail->location2  }}
                                     @endempty
                                 </p>
                             </div>
                         </div>
-                        @if (isset($companyDetail->user->facebook_url) ||
-                                isset($companyDetail->user->twitter_url) ||
-                                isset($companyDetail->user->pinterest_url) ||
-                                isset($companyDetail->user->google_plus_url) ||
-                                isset($companyDetail->user->linkedin_url))
+                        @if (isset($companyDetail->$user->facebook_url) ||
+                                isset($companyDetail->$user->twitter_url) ||
+                                isset($companyDetail->$user->pinterest_url) ||
+                                isset($companyDetail->$user->google_plus_url) ||
+                                isset($companyDetail->$user->linkedin_url))
                             <div class="about-company-right company-details-social-media mt-5 br-10 px-40 bg-gray-100">
                                 <p class="fs-18 text-gray-600">@lang('web.web_company.social_media')</p>
                                 <div class="social-media mt-4">
-                                    @if(!empty($companyDetail->user->facebook_url))
-                                        <a href="{{ (isset($companyDetail->user->facebook_url)) ? addLinkHttpUrl($companyDetail->user->facebook_url) : 'javascript:void(0)' }}"
+                                    @if(!empty($companyDetail->$user->facebook_url))
+                                        <a href="{{ (isset($companyDetail->$user->facebook_url)) ? addLinkHttpUrl($companyDetail->$user->facebook_url) : 'javascript:void(0)'  }}"
                                            target="_blank" class="me-2">
                                             <x-icons.facebook class="w-6 h-6 text-primary-600" />
                                         </a>
                                     @endif
-                                    @if(!empty($companyDetail->user->linkedin_url))
-                                        <a href="{{ (isset($companyDetail->user->linkedin_url)) ? addLinkHttpUrl($companyDetail->user->linkedin_url) : 'javascript:void(0)' }}"
+                                    @if(!empty($companyDetail->$user->linkedin_url))
+                                        <a href="{{ (isset($companyDetail->$user->linkedin_url)) ? addLinkHttpUrl($companyDetail->$user->linkedin_url) : 'javascript:void(0)'  }}"
                                            target="_blank" class="me-2">
                                             <x-icons.linkedin class="w-6 h-6 text-primary-600" />
                                         </a>
                                     @endif
-                                    @if(!empty($companyDetail->user->twitter_url))
-                                        <a href="{{ (isset($companyDetail->user->twitter_url)) ? addLinkHttpUrl($companyDetail->user->twitter_url) : 'javascript:void(0)' }}"
+                                    @if(!empty($companyDetail->$user->twitter_url))
+                                        <a href="{{ (isset($companyDetail->$user->twitter_url)) ? addLinkHttpUrl($companyDetail->$user->twitter_url) : 'javascript:void(0)'  }}"
                                            target="_blank" class="me-2">
                                             <x-icons.twitter class="w-6 h-6 text-primary-600" />
                                         </a>
                                     @endif
-                                    @if(!empty($companyDetail->user->google_plus_url))
-                                        <a href="{{ (isset($companyDetail->user->google_plus_url)) ? addLinkHttpUrl($companyDetail->user->google_plus_url) : 'javascript:void(0)' }}"
+                                    @if(!empty($companyDetail->$user->google_plus_url))
+                                        <a href="{{ (isset($companyDetail->$user->google_plus_url)) ? addLinkHttpUrl($companyDetail->$user->google_plus_url) : 'javascript:void(0)'  }}"
                                            target="_blank" class="me-2">
                                             <x-icons.google-plus class="w-6 h-6 text-primary-600" />
                                         </a>
                                     @endif
-                                    @if(!empty($companyDetail->user->pinterest_url))
-                                        <a href="{{ (isset($companyDetail->user->pinterest_url)) ? addLinkHttpUrl($companyDetail->user->pinterest_url) : 'javascript:void(0)' }}"
+                                    @if(!empty($companyDetail->$user->pinterest_url))
+                                        <a href="{{ (isset($companyDetail->$user->pinterest_url)) ? addLinkHttpUrl($companyDetail->$user->pinterest_url) : 'javascript:void(0)'  }}"
                                            target="_blank" class="me-2">
                                             <x-icons.pinterest class="w-6 h-6 text-primary-600" />
                                         </a>
@@ -238,21 +238,21 @@
             </div>
         </section>
         <!-- end about-comapany section -->
-        {{-- @role('Candidate') --}}
+        {{ -- @role('Candidate') -- }}
             @include('front_web_template.company.report_to_company_modal')
-        {{-- @endrole --}}
+        {{ -- @endrole -- }}
         <!-- end about-comapany section -->
-        {{ Form::hidden('isCompanyAddedToFavourite', $isCompanyAddedToFavourite, ['id' => 'isCompanyAddedToFavourite']) }}
-        {{ Form::hidden('followText', __('web.company_details.follow'), ['id' => 'followText']) }}
-        {{ Form::hidden('unfollowText', __('web.company_details.unfollow'), ['id' => 'unfollowText']) }}
+        {{ Form::hidden('isCompanyAddedToFavourite', $isCompanyAddedToFavourite, ['id' => 'isCompanyAddedToFavourite'])  }}
+        {{ Form::hidden('followText', __('web.company_details.follow'), ['id' => 'followText'])  }}
+        {{ Form::hidden('unfollowText', __('web.company_details.unfollow'), ['id' => 'unfollowText'])  }}
     </div>
 @endsection
-{{-- @section('page_scripts') --}}
-{{--    <script> --}}
-{{-- let addCompanyFavouriteUrl = "{{ route('save.favourite.company') }}" --}}
-{{-- let isCompanyAddedToFavourite = "{{ $isCompanyAddedToFavourite }}" --}}
-{{-- let reportToCompanyUrl = "{{ route('report.to.company') }}" --}}
-{{-- let followText = "{{ __('web.company_details.follow') }}" --}}
-{{-- let unfollowText = "{{ __('web.company_details.unfollow') }}" --}}
-{{--    </script> --}}
-{{-- @endsection --}}
+{{ -- @section('page_scripts') -- }}
+{{ --    <script> -- }}
+{{ -- let addCompanyFavouriteUrl = "{{ route('save.favourite.company')  }}" --}}
+{{ -- let isCompanyAddedToFavourite = "{{ $isCompanyAddedToFavourite  }}" --}}
+{{ -- let reportToCompanyUrl = "{{ route('report.to.company')  }}" --}}
+{{ -- let followText = "{{ __('web.company_details.follow')  }}" --}}
+{{ -- let unfollowText = "{{ __('web.company_details.unfollow')  }}" --}}
+{{ --    </script> -- }}
+{{ -- @endsection -- }}

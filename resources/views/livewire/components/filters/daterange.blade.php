@@ -1,23 +1,23 @@
 <div class="filter- container mx-auto px-4 mx-auto">
-    <label for="filter-{{ $filter->getKey() }}" class="block text-sm font-medium text-gray-700 mb-1">{{ $filter->getName() }}</label>
+    <label for="filter-{{ $filter->getKey()  }}" class="block text-sm font-medium text-gray-700 mb-1">{{ $filter->getName()  }}</label>
     <div class="flex items-center">
         <input type="date" 
-               wire:model.live="filters.{{ $filter->getKey() }}.from" 
-               id="filter-{{ $filter->getKey() }}-from"
+               wire:model.live="filters.{{ $filter->getKey()  }}.from" 
+               id="filter-{{ $filter->getKey()  }}-from"
                class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm me-2" 
-               placeholder="{{ __('messages.common.from_date') }}">
+               placeholder="{{ __('messages.common.from_date')  }}">
 
         <input type="date" 
-               wire:model.live="filters.{{ $filter->getKey() }}.to" 
-               id="filter-{{ $filter->getKey() }}-to"
+               wire:model.live="filters.{{ $filter->getKey()  }}.to" 
+               id="filter-{{ $filter->getKey()  }}-to"
                class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" 
-               placeholder="{{ __('messages.common.to_date') }}">
+               placeholder="{{ __('messages.common.to_date')  }}">
     </div>
     @if(!empty($filters[$filter->getKey()]))
         <button 
-            wire:click="resetFilter('{{ $filter->getKey() }}')" 
+            wire:click="resetFilter('{{ $filter->getKey()  }}')" 
             class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -link absolute top-0 end-0 text-red-600"
-            title="{{ __('messages.common.clear') }}">
+            title="{{ __('messages.common.clear')  }}">
             <i class="fa fa-times"></i>
         </button>
     @endif

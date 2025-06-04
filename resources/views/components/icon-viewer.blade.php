@@ -18,7 +18,7 @@
                     @php $componentName = "icons.{$iconName}" @endphp
                     <x-dynamic-component :component="$componentName" class="w-6 h-6 text-blue-600" />
                 </div>
-                <span class="text-sm text-gray-700">{{ $iconName }}</span>
+                <span class="text-sm text-gray-700">{{ $iconName  }}</span>
             </div>
         @endforeach
     </div>

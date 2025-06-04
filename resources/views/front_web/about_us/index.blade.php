@@ -1,10 +1,10 @@
 @extends('front_web.layouts.app')
 @section('title')
-    {{ __('messages.about_us') }}
+    {{ __('messages.about_us')  }}
 @endsection
-{{--@section('page_css')--}}
-{{--    <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}">--}}
-{{--@endsection--}}
+{{ --@section('page_css')-- }}
+{{ --    <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css')  }}">--}}
+{{ --@endsection-- }}
 @section('content')
     <div class="About Us-page">
         <!-- start hero section -->
@@ -14,13 +14,13 @@
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
                             <h1 class="text-gray-600 mb-3">
-                                {{ __('web.about_us') }}
+                                {{ __('web.about_us')  }}
                             </h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
-                                    <li class="breadcrumb-item "><a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}</a>
+                                    <li class="breadcrumb-item "><a href="{{ route('front.home')  }}" class="fs-18 text-gray">{{ __('web.home')  }}</a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('web.about_us') }}</li>
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('web.about_us')  }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -34,7 +34,7 @@
         <div class="about-section py-60">
             <div class="container mx-auto px-4 mx-auto">
                 <div class="about-infyjob mb-40">
-                    <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us') }}</h5>
+                    <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us')  }}</h5>
                     <p class="fs-16 text-gray">
                         {!! getSettingValue('about_us') !!}
                     </p>
@@ -50,8 +50,8 @@
                     <div class="flex-1 -12">
                         <div class="section-heading mx-xxl-0 mx-xl-3 mx-md-2 text-center">
                             <h2 class="text-gray-600">
-                                {{ __('web.about_us_menu.how_it_works') }}?</h2>
-                            <div class="text-center text-gray">{{ __('web.web_jobSeeker.job_for_anyone_anywhere') }}</div>
+                                {{ __('web.about_us_menu.how_it_works')  }}?</h2>
+                            <div class="text-center text-gray">{{ __('web.web_jobSeeker.job_for_anyone_anywhere')  }}</div>
                         </div>
                     </div>
                 </div>
@@ -61,49 +61,49 @@
                             <div class="flex flex-wrap justify-center relative">
                                 <div class="flex-1 -lg-4 text-center">
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
-                                        <img src="{{$settings['about_image_one']}}" >
+                                        <img src="{{ $settings['about_image_one'] }}" >
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                         <h6 class="fs-18 text-gray-600">
-                                            {{ __('web.about_us_menu.step_1') }}</h6>
+                                            {{ __('web.about_us_menu.step_1')  }}</h6>
                                         <h5 class="fs-18 text-gray-600">
-                                            {{$settings['about_title_one']}}</h5>
+                                            {{ $settings['about_title_one'] }}</h5>
                                         <p class="fs-14 text-gray">
-                                            {{$settings['about_description_one']}}
+                                            {{ $settings['about_description_one'] }}
                                         </p>
                                     </div>
                                 </div>
                                 <div class="flex-1 -lg-4 text-center">
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
-                                        <img src="{{$settings['about_image_two']}}" >
+                                        <img src="{{ $settings['about_image_two'] }}" >
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                         <h6 class="fs-18 text-gray-600">
-                                            {{ __('web.about_us_menu.step_2') }}</h6>
+                                            {{ __('web.about_us_menu.step_2')  }}</h6>
                                         <h5 class="fs-18 text-gray-600">
-                                            {{$settings['about_title_two']}}</h5>
+                                            {{ $settings['about_title_two'] }}</h5>
                                         <p class="fs-14 text-gray">
-                                            {{ $settings['about_description_two'] }}</p>
+                                            {{ $settings['about_description_two']  }}</p>
                                     </div>
                                 </div>
                                 <div class="flex-1 -lg-4 text-center">
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
-                                        <img src="{{$settings['about_image_three']}}" >
+                                        <img src="{{ $settings['about_image_three'] }}" >
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                         <h6 class="fs-18 text-gray-600">
-                                            {{ __('web.about_us_menu.step_3') }}</h6>
+                                            {{ __('web.about_us_menu.step_3')  }}</h6>
                                         <h5 class="fs-18 text-gray-600">
-                                            {{$settings['about_title_three']}}</h5>
+                                            {{ $settings['about_title_three'] }}</h5>
                                         <p class="fs-14 text-gray">
-                                            {{ $settings['about_description_three'] }}</p>
+                                            {{ $settings['about_description_three']  }}</p>
                                     </div>
                                 </div>
                                 <div class="arrow1 absolute lg:block hidden">
-                                    <img src="{{asset('front_web/images/arrow-1.png')}}">
+                                    <img src="{{ asset('front_web/images/arrow-1.png') }}">
                                 </div>
                                 <div class="arrow2 absolute lg:block hidden">
-                                    <img src="{{asset('front_web/images/arrow-2.png')}}">
+                                    <img src="{{ asset('front_web/images/arrow-2.png') }}">
                                 </div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                     <div class="flex-1 -8">
                         <div class="section-heading mx-xxl-5 text-center">
                             <h2 class="text-gray-600 bg-white">
-                                {{ __('web.about_us_menu.frequently_asked_questions') }}
+                                {{ __('web.about_us_menu.frequently_asked_questions')  }}
                             </h2>
                         </div>
                     </div>
@@ -132,11 +132,11 @@
                                 <div class="accordion" id="accordionExample">
                                     @foreach($faqLists as $key => $faqList)
                                         <div class="accordion-item br-10">
-                                            <h2 class="accordion-header" id="heading-{{$key}}">
-                                                <button class="accordion-button collapsed fs-18 p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$key}}" aria-expanded="false" aria-controls="collapse-{{$key}}"> {{ html_entity_decode($faqList->title) }}
+                                            <h2 class="accordion-header" id="heading-{{ $key }}">
+                                                <button class="accordion-button collapsed fs-18 p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $key }}" aria-expanded="false" aria-controls="collapse-{{ $key }}"> {{ html_entity_decode($faqList->title)  }}
                                                 </button>
                                             </h2>
-                                            <div id="collapse-{{$key}}" class="accordion-collapse collapse " aria-labelledby="heading-{{$key}}" data-bs-parent="#accordionExample">
+                                            <div id="collapse-{{ $key }}" class="accordion-collapse collapse " aria-labelledby="heading-{{ $key }}" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     {!! nl2br( $faqList->description) !!}
                                                 </div>
@@ -146,7 +146,7 @@
                                 </div>
                             @else
                                 <div>
-                                    <h5 class="text-center">{{__('web.about_us_menu.faq_not_available')}}.</h5>
+                                    <h5 class="text-center">{{ __('web.about_us_menu.faq_not_available') }}.</h5>
                                 </div>
                             @endif
                         </div>

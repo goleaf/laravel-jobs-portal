@@ -1,11 +1,11 @@
 @extends('front_web_template.layouts.app')
 @section('title')
-    {{ __('web.job_details.apply_for_job') }}
+    {{ __('web.job_details.apply_for_job')  }}
 @endsection
-{{-- @section('page_css') --}}
-{{--    <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css') }}"> --}}
-{{--        <link href="{{asset('front_web/scss/apply-details.css')}}" rel="stylesheet" type="text/css"> --}}
-{{-- @endsection --}}
+{{ -- @section('page_css') -- }}
+{{ --    <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css')  }}"> --}}
+{{ --        <link href="{{asset('front_web/scss/apply-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- @endsection -- }}
 @section('content')
     <div class="apply-job-page">
         <section class="hero-section relative bg-gradient pt-15 pb-40">
@@ -17,7 +17,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
+                                        <a href="{{ route('front.home')  }}" class="fs-18 text-gray">{{ __('web.home')  }}
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
@@ -38,23 +38,23 @@
                         <div class="col-xl-8 flex-1 -md-10 mx-auto mb-4">
                             <div class="flex flex-wrap mb-3">
                                 <div class="flex-1 -lg-2">
-                                    <img src="{{ $job->company->company_url }}"
+                                    <img src="{{ $$job->$company->company_url  }}"
                                         class="mb-4 apply-img rounded-circle object-fit-cover">
                                 </div>
                                 <div class="flex-1 -lg-10">
-                                    <h2 class="ml-3 mb-2">{{ __('web.apply_for_job.apply_for') }}</h2> <span
-                                        class="text-primary-600 ml-3">{{ $job->job_title }}</span>
+                                    <h2 class="ml-3 mb-2">{{ __('web.apply_for_job.apply_for')  }}</h2> <span
+                                        class="text-primary-600 ml-3">{{ $$job->job_title  }}</span>
                                 </div>
                             </div>
-                            <h3 class="fs-4 mb-0">{{ __('web.apply_for_job.fill_details') }}</h3>
+                            <h3 class="fs-4 mb-0">{{ __('web.apply_for_job.fill_details')  }}</h3>
                             <p class="font-weight-bold">
-                                @if ($job->is_suspended)
-                                    {{ 'job is suspended' }}
+                                @if ($$job->is_suspended)
+                                    {{ 'job is suspended'  }}
                                 @elseif(!$isActive)
-                                    {{ 'job is ' . \App\Models\Job::STATUS[$job->status] }}
+                                    {{ 'job is ' . \App\Models\Job::STATUS[$$job->status]  }}
                                 @else
-                                    {{ __('web.apply_for_job.due_to_our_continued_growth') }} {{ $job->job_title }}
-                                    {{ __('web.apply_for_job.or_words_to_that_effect') }}
+                                    {{ __('web.apply_for_job.due_to_our_continued_growth')  }} {{ $$job->job_title  }}
+                                    {{ __('web.apply_for_job.or_words_to_that_effect')  }}
                                 @endif
                             </p>
                         </div>
@@ -65,14 +65,14 @@
                         @csrf
                         @include('front_web.layouts.errors')
                         @include('flash::message')
-                        <input type="hidden" value="{{ isset($job) ? $job->id : null }}" name="job_id">
+                        <input type="hidden" value="{{ isset($job) ? $$job->id : null  }}" name="job_id">
                         <div class="flex flex-wrap">
                             <div class="form-group lg:w-full px-2 md:w-full flex-1 -sm-12">
                                 <div class="response"></div>
                             </div>
 
                             <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
-                                {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3']) }}
+                                {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3'])  }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::select('resume_id', $resumes, ($isJobDrafted ? $draftJobDetails->resume_id : ''), [
                                     'class' => 'chosen-search-select form-select fs-14 text-gray bg-white br-10 p-3',
@@ -81,11 +81,11 @@
                                     'data-live-search' => 'true',
                                     'data-size' => '5',
                                     'data-control' => 'select2'
-                                ]) }}
+                                ])  }}
                             </div>
 
                             <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
-                                {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3']) }}
+                                {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3'])  }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::text('expected_salary', ($isJobDrafted ? $draftJobDetails->expected_salary : ''), [
                                     'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
@@ -93,23 +93,23 @@
                                     'min' => '0',
                                     'max' => '9999999999',
                                     'required'
-                                ]) }}
+                                ])  }}
                             </div>
 
                             <div class="flex-1 -md-12 mb-4">
                                 <div class="form-group">
-                                    {{ Form::label('notes', __('messages.apply_job.notes').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                    {{ Form::label('notes', __('messages.apply_job.notes').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
                                     {{ Form::textarea('notes', ($isJobDrafted ? $draftJobDetails->notes : ''), [
                                         'class' => 'form-control fs-14 text-gray br-10',
                                         'rows' => '5',
                                         'id' => 'notes'
-                                    ]) }}
+                                    ])  }}
                                 </div>
                             </div>
                             @if (getSettingValue('enable_google_recaptcha'))
                                 <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group mb-4 text-center">
                                     <div class="g-recaptcha flex justify-center"
-                                        data-sitekey="{{ config('app.google_recaptcha_site_key') }}" name="g-recaptcha"
+                                        data-sitekey="{{ config('app.google_recaptcha_site_key')  }}" name="g-recaptcha"
                                         id="g-recaptcha" required></div>
                                     <div id="g-recaptcha-error" required></div>
                                 </div>
@@ -121,34 +121,34 @@
                                             'class' => 'btn btn-primary btn-primary-register mx-2 save-draft',
                                             'id' => 'draftJobSave',
                                             'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
-                                        ]) }}
+                                        ])  }}
                                     @endif
-                                    @if ($isActive && !$job->is_suspended)
+                                    @if ($isActive && !$$job->is_suspended)
                                         {{ Form::button(__('web.common.apply'), [
                                             'class' => 'btn btn-secondary mx-2 apply-job',
                                             'id' => 'applyJobSave',
                                             'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
-                                        ]) }}
+                                        ])  }}
                                     @endif
                                 @else
                                     {{ Form::button(__('web.apply_for_job.already_applied'), [
                                         'class' => 'theme-btn btn-style-eight'
-                                    ]) }}
+                                    ])  }}
                                 @endif
                             </div>
                         </div>
                     @formClose()
-                    {{--                @endif --}}
+                    {{ --                @endif -- }}
                 </div>
             </div>
         </section>
     </div>
 @endsection
-{{-- @section('page_scripts') --}}
-{{--    <script> --}}
-{{--        let applyJobUrl = "{{ route('apply-job') }}"; --}}
-{{--        let jobDetailsUrl = "{{ url('job-details') }}"; --}}
-{{--    </script> --}}
-{{--    <script src="{{asset('assets/js/custom/input_price_format.js')}}"></script> --}}
-{{--    <script src="{{ asset('assets/js/jobs/front/apply_job.js') }}"></script> --}}
-{{-- @endsection --}}
+{{ -- @section('page_scripts') -- }}
+{{ --    <script> -- }}
+{{ --        let applyJobUrl = "{{ route('apply-job')  }}"; --}}
+{{ --        let jobDetailsUrl = "{{ url('job-details')  }}"; --}}
+{{ --    </script> -- }}
+{{ --    <script src="{{asset('assets/js/custom/input_price_format.js') }}"></script> --}}
+{{ --    <script src="{{ asset('assets/js/jobs/front/apply_job.js')  }}"></script> --}}
+{{ -- @endsection -- }}

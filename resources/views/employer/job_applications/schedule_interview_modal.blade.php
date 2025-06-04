@@ -4,12 +4,12 @@
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
 
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="modal-title">{{ __('messages.job_stage.add_slots') }}</h3>
+                <h3 class="modal-title">{{ __('messages.job_stage.add_slots')  }}</h3>
                 <button type="button" class="add-slot inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">
-                    {{ __('messages.job_stage.add_slots') }}
+                    {{ __('messages.job_stage.add_slots')  }}
                 </button>
             </div>
-            {{ Form::open(['id'=>'scheduleInterviewForm']) }}
+            {{ Form::open(['id'=>'scheduleInterviewForm'])  }}
 
             <div class="px-6 py-4">
                 <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger hidden" id="rejectSlotValidationErrorsBox">
@@ -24,9 +24,9 @@
                                     <label name="date"
                                            class="block text-sm font-medium text-gray-700 mb-1"><?php echo __('messages.job_stage.date').':' ?></label>
                                     <span class="required"></span>
-                                    {{--                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -solid" name="date" id="date" required>--}}
+                                    {{ --                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -solid" name="date" id="date" required>-- }}
                                     <input type="text"
-                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 scheduleInterviewDate {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 scheduleInterviewDate {{ (getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white' }}"
                                            name="date[1]"
                                            id="date[1]" required>
                                 </div>
@@ -35,9 +35,9 @@
                                                 'messages.job_stage.time'
                                             ).':' ?></label>
                                     <span class="required"></span>
-                                    {{--                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" name="date" id="date" required>--}}
+                                    {{ --                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" name="date" id="date" required>-- }}
                                     <input type="text"
-                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 scheduleInterviewTime {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 scheduleInterviewTime {{ (getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white' }}"
                                            name="time[1]"
                                            id="time[1]" required>
                                 </div>
@@ -52,18 +52,18 @@
                     </div>
                 </div>
                 <div id="historyMainDiv" class="hidden">
-                    <h3>{{ __('messages.job_stage.history') }}</h3>
+                    <h3>{{ __('messages.job_stage.history')  }}</h3>
                     <div id="historyDiv">
 
                     </div>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-2 pt-0">
-                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'batchSlotBtnSave','data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')]) }}
+                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'batchSlotBtnSave','data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')])  }}
                 <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0" id="batchSlotBtnCancel"
-                        data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
+                        data-bs-dismiss="modal">{{ __('messages.common.cancel')  }}</button>
             </div>
-            {{ Form::close() }}
+            {{ Form::close()  }}
         </div>
     </div>
 </div>

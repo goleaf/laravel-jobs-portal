@@ -12,8 +12,8 @@
                             @foreach($columns as $column)
                                 <th class="text-center">
                                     @if($column->isSortable())
-                                        <a href="#" wire:click.prevent="sort('{{ $column->getField() }}')">
-                                            {{ $column->getTitle() }}
+                                        <a href="#" wire:click.prevent="sort('{{ $column->getField()  }}')">
+                                            {{ $column->getTitle()  }}
                                             @if($this->getSort($column->getField()) == $column->getField())
                                                 @if($this->getSortDirection($column->getField()) == 'asc')
                                                     <i class="fas fa-sort-up"></i>
@@ -23,7 +23,7 @@
                                             @endif
                                         </a>
                                     @else
-                                        {{ $column->getTitle() }}
+                                        {{ $column->getTitle()  }}
                                     @endif
                                 </th>
                             @endforeach
@@ -47,8 +47,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ count($columns) }}" class="text-center">
-                                    {{ __('messages.flash.no_record') }}
+                                <td colspan="{{ count($columns)  }}" class="text-center">
+                                    {{ __('messages.flash.no_record')  }}
                                 </td>
                             </tr>
                         @endforelse
@@ -59,21 +59,21 @@
             <div class="flex justify-between items-center mt-3">
                 <div>
                     @if($rows->total() > 0)
-                        <span>{{ __('Showing') }}</span>
-                        <strong>{{ $rows->firstItem() }}</strong>
-                        <span>{{ __('to') }}</span>
-                        <strong>{{ $rows->lastItem() }}</strong>
-                        <span>{{ __('of') }}</span>
-                        <strong>{{ $rows->total() }}</strong>
-                        <span>{{ __('results') }}</span>
+                        <span>{{ __('Showing')  }}</span>
+                        <strong>{{ $rows->firstItem()  }}</strong>
+                        <span>{{ __('to')  }}</span>
+                        <strong>{{ $rows->lastItem()  }}</strong>
+                        <span>{{ __('of')  }}</span>
+                        <strong>{{ $rows->total()  }}</strong>
+                        <span>{{ __('results')  }}</span>
                     @else
-                        <span>{{ __('No results found') }}</span>
+                        <span>{{ __('No results found')  }}</span>
                     @endif
                 </div>
                 
                 @if($rows->hasPages())
                     <div>
-                        {{ $rows->links() }}
+                        {{ $rows->links()  }}
                     </div>
                 @endif
             </div>

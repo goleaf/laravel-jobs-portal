@@ -1,9 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\NoMaliciousContent;
 
+/**
+ * Request validation for AuthController::register
+ * 
+ * @enhanced by RequestValidationImprover
+ */
 class RegisterRequest extends FormRequest
 {
     /**
@@ -11,65 +17,109 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; // TODO: Implement proper authorization logic based on user permissions
     }
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return array (
-  'first_name' => 'required|string|max:255',
-  'last_name' => 'nullable|string|max:255',
-  'email' => 'required|email|unique:users,email',
-  'password' => 'required|string|min:8|confirmed',
-  'phone' => 'nullable|string|max:20',
-  'user_type' => 'required|in:candidate,employer',
-  'terms_accepted' => 'required|accepted',
-);
+        return {
+    "first_name": "required|string|max:255",
+    "last_name": "required|string|max:255",
+    "email": "required|email|unique:users,email",
+    "password": "required|string|min:8|confirmed",
+    "phone": "nullable|string|max:20",
+    "terms": "required|accepted"
+};
     }
 
     /**
-     * Get custom error messages for validation rules.
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {
-        return array (
-  'first_name.required' => 'First name is required',
-  'email.required' => 'Email is required',
-  'email.unique' => 'Email already exists',
-  'password.required' => 'Password is required',
-  'password.min' => 'Password must be at least 8 characters',
-  'password.confirmed' => 'Password confirmation does not match',
-  'user_type.required' => 'User type is required',
-  'terms_accepted.required' => 'You must accept the terms and conditions',
-);
+        return {
+    "first_name.required": "First name is required",
+    "last_name.required": "Last name is required",
+    "email.required": "Email is required",
+    "email.unique": "Email already exists",
+    "password.required": "Password is required",
+    "password.min": "Password must be at least 8 characters",
+    "password.confirmed": "Password confirmation does not match",
+    "terms.required": "You must accept the terms and conditions"
+};
     }
 
     /**
      * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'first_name' => __('messages.common.first_name'),
-            'last_name' => __('messages.common.last_name'),
-            'email' => __('messages.common.email'),
-            'password' => __('messages.common.password'),
-            'phone' => __('messages.common.phone'),
-            'name' => __('messages.common.name'),
-            'description' => __('messages.common.description'),
-            'address' => __('messages.common.address'),
-            'website' => __('messages.common.website'),
-            'country_id' => __('messages.common.country'),
-            'state_id' => __('messages.common.state'),
-            'city_id' => __('messages.common.city'),
-            'job_title' => __('messages.job.job_title'),
-            'job_description' => __('messages.job.job_description'),
-            'salary_from' => __('messages.job.salary_from'),
-            'salary_to' => __('messages.job.salary_to'),
-            'job_expiry_date' => __('messages.job.job_expiry_date'),
+            'user.first_name' => 'first name',
+            'user.last_name' => 'last name',
+            'user.email' => 'email address',
+            'user.phone' => 'phone number',
+            'job_title' => 'job title',
+            'job_description' => 'job description',
+            'job_expiry_date' => 'job expiry date',
+            'salary_from' => 'minimum salary',
+            'salary_to' => 'maximum salary'
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('job_title')) {
+            $this->merge([
+                'job_title' => strip_tags($this->job_title)
+            ]);
+        }
+        
+        if ($this->has('job_description')) {
+            $this->merge([
+                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
+            ]);
+        }
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add custom validation logic here
+            if ($this->has('salary_from') && $this->has('salary_to')) {
+                if ($this->salary_from > $this->salary_to) {
+                    $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
+                }
+            }
+            
+            // Check for malicious content in text fields
+            foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
+                if ($this->has($field) && $this->{$field}) {
+                    $rule = new NoMaliciousContent();
+                    if (!$rule->passes($field, $this->{$field})) {
+                        $validator->errors()->add($field, $rule->message());
+                    }
+                }
+            }
+        });
     }
 }

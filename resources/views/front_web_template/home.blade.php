@@ -4,8 +4,8 @@
         <div class="flex flex-wrap justify-center">
             <div class="flex-1 -12">
                 <div class="section-heading text-center">
-                    <h2 class="text-gray-600 fs-40 pb-3">{{ __('web.home.featured_categories') }}</h2>
-                    <p class="text text-gray">{{ __('web.home.featured_categories_desc') }}</p>
+                    <h2 class="text-gray-600 fs-40 pb-3">{{ __('web.home.featured_categories')  }}</h2>
+                    <p class="text text-gray">{{ __('web.home.featured_categories_desc')  }}</p>
                 </div>
             </div>
         </div>
@@ -33,9 +33,9 @@
                                 </div>
                             </div>
                             <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 text-center">
-                                <a href="{{ route('front.search.jobs', array('categories' => $featuredCategory->id)) }}"
-                                   class="text-gray-600 fw-medium fs-20 mb-2 block">{{ html_entity_decode($featuredCategory->name) }}</a>
-                                <p class="fs-14 text-gray mb-0">{{ $featuredCategory->jobs_count.' '.($featuredCategory->jobs_count > 1 ? __('web.common.open_positions') : __('web.common.open_position')) }}</p>
+                                <a href="{{ route('front.search.jobs', array('categories' => $featuredCategory->id))  }}"
+                                   class="text-gray-600 fw-medium fs-20 mb-2 block">{{ html_entity_decode($featuredCategory->name)  }}</a>
+                                <p class="fs-14 text-gray mb-0">{{ $featuredCategory->jobs_count.' '.($featuredCategory->jobs_count > 1 ? __('web.common.open_positions') : __('web.common.open_position'))  }}</p>
                             </div>
                         </div>
                     </div>

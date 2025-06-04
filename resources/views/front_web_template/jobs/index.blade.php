@@ -1,6 +1,6 @@
 @extends('front_web_template.layouts.app')
 @section('title')
-    {{ __('web.job_menu.search_job') }}
+    {{ __('web.job_menu.search_job')  }}
 @endsection
 @section('page_css')
     @if (\Illuminate\Support\Facades\App::getLocale() == 'ar')
@@ -10,7 +10,7 @@
             }
         </style>
     @endif
-    {{--    <link href="{{asset('front_web/scss/jobs.css')}}" rel="stylesheet" type="text/css"> --}}
+    {{ --    <link href="{{asset('front_web/scss/jobs.css') }}" rel="stylesheet" type="text/css"> --}}
 @endsection
 @section('content')
     <div class="Find Jobs-page">
@@ -24,7 +24,7 @@
                             </h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
-                                    <li class="breadcrumb-item "><a href="{{ route('front.home') }}"
+                                    <li class="breadcrumb-item "><a href="{{ route('front.home')  }}"
                                             class="fs-18 text-gray">@lang('web.home') </a>
                                     </li>
                                     <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.jobs')
@@ -47,9 +47,9 @@
                                     <div class="flex mb-3 justify-between flex-wrap">
                                         <label for="" class="fs-16 text-gray-600 mb-3">@lang('web.web_jobs.search_by_keywords')</label>
                                         <button
-                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register reset-filter mb-2 px-3 py-1 ms-1">{{ __('web.reset_filter') }}</button>
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register reset-filter mb-2 px-3 py-1 ms-1">{{ __('web.reset_filter')  }}</button>
                                     </div>
-                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" value="{{request()->input('keywords')}}"
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" value="{{ request()->input('keywords') }}"
                                        name="listing-search" id="searchByLocation"
                                        placeholder="@lang('web.web_home.job_title_keywords_company')">
                                 </div>
@@ -60,9 +60,9 @@
                                         id="searchCategories">
                                         <option value="">@lang('web.job_menu.none')</option>
                                         @foreach ($jobCategories as $key => $value)
-                                            <option value="{{ $key }}"
-                                                {{ request()->get('categories') == $key ? 'selected' : '' }}>
-                                                {{ html_entity_decode($value) }}
+                                            <option value="{{ $key  }}"
+                                                {{ request()->get('categories') == $key ? 'selected' : ''  }}>
+                                                {{ html_entity_decode($value)  }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -75,8 +75,8 @@
                                             data-live-search="true" data-size="5" name="search-skills" id="searchSkill">
                                             <option value="">@lang('web.job_menu.none')</option>
                                             @foreach ($jobSkills as $key => $value)
-                                                <option value="{{ $key }}">
-                                                    {{ html_entity_decode($value) }}
+                                                <option value="{{ $key  }}">
+                                                    {{ html_entity_decode($value)  }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -88,8 +88,8 @@
                                         data-live-search="true" data-size="5" name="search-gender" id="searchGender">
                                         <option value="">@lang('web.job_menu.none')</option>
                                         @foreach ($genders as $key => $value)
-                                            <option value="{{ $key }}">
-                                                {{ html_entity_decode($value) }}
+                                            <option value="{{ $key  }}">
+                                                {{ html_entity_decode($value)  }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -102,8 +102,8 @@
                                             id="searchCareerLevel">
                                             <option value="">@lang('web.job_menu.none')</option>
                                             @foreach ($careerLevels as $key => $value)
-                                                <option value="{{ $key }}">
-                                                    {{ html_entity_decode($value) }}
+                                                <option value="{{ $key  }}">
+                                                    {{ html_entity_decode($value)  }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -117,8 +117,8 @@
                                             id="searchFunctionalArea">
                                             <option value="">@lang('web.job_menu.none')</option>
                                             @foreach ($functionalAreas as $key => $value)
-                                                <option value="{{ $key }}">
-                                                    {{ html_entity_decode($value) }}
+                                                <option value="{{ $key  }}">
+                                                    {{ html_entity_decode($value)  }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -134,27 +134,27 @@
                                                 @if (Str::length($jobType->name) < 50)
                                                     <div class="form-group flex justify-between mb-2">
                                                         <label class="flex items-center -label fs-14 text-gray mb-2"
-                                                            for="{{ $jobType->id }}">
-                                                            {{ html_entity_decode($jobType->name) }}
-                                                            {{ $jobType->jobs_count > 0 ? '(' . $jobType->jobs_count . ')' : '' }}
+                                                            for="{{ $jobType->id  }}">
+                                                            {{ html_entity_decode($jobType->name)  }}
+                                                            {{ $jobType->jobs_count > 0 ? '(' . $jobType->jobs_count . ')' : ''  }}
                                                         </label>
                                                         <div class="flex items-center">
                                                             <input class="flex items-center -input jobType" type="checkbox"
-                                                                role="switch" name="job-type" id="{{ $jobType->id }}"
-                                                                value="{{ $jobType->id }}">
+                                                                role="switch" name="job-type" id="{{ $jobType->id  }}"
+                                                                value="{{ $jobType->id  }}">
                                                         </div>
                                                     </div>
                                                 @else
                                                     <div class="form-group flex justify-between">
                                                         <label class="flex items-center -label fs-14 text-gray mb-2"
-                                                            for="{{ $jobType->id }}" data-toggle="tooltip"
-                                                            data-placement="bottom" title="{{ $jobType->name }}">
-                                                            {{ html_entity_decode(Str::limit($jobType->name, 50, '...')) }}
+                                                            for="{{ $jobType->id  }}" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{ $jobType->name  }}">
+                                                            {{ html_entity_decode(Str::limit($jobType->name, 50, '...'))  }}
                                                         </label>
                                                         <div class="flex items-center">
                                                             <input class="flex items-center -input jobType" type="checkbox"
-                                                                role="switch" name="job-type" id="{{ $jobType->id }}"
-                                                                value="{{ $jobType->id }}">
+                                                                role="switch" name="job-type" id="{{ $jobType->id  }}"
+                                                                value="{{ $jobType->id  }}">
                                                         </div>
                                                     </div>
                                                 @endif
@@ -180,7 +180,7 @@
                         </div>
                         </form>
                         <div class="job-img mb-40">
-                            <img src="{{ isset($advertise_image->value) ? $advertise_image->value : asset('front_web/images/job-img.png') }}"
+                            <img src="{{ isset($advertise_image->value) ? $advertise_image->value : asset('front_web/images/job-img.png')  }}"
                                 class="w-full">
                         </div>
                     </div>
@@ -193,10 +193,10 @@
             </div>
         </section>
     </div>
-    {{ Form::hidden('jobType', json_encode($input), ['id' => 'input']) }}
+    {{ Form::hidden('jobType', json_encode($input), ['id' => 'input'])  }}
 @endsection
-{{-- @section('page_scripts') --}}
-{{--    <script> --}}
-{{--        let input = JSON.parse('@json($input)'); --}}
-{{--    </script> --}}
-{{-- @endsection --}}
+{{ -- @section('page_scripts') -- }}
+{{ --    <script> -- }}
+{{ --        let input = JSON.parse('@json($input)'); -- }}
+{{ --    </script> -- }}
+{{ -- @endsection -- }}

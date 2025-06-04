@@ -16,7 +16,7 @@
     $checked = old($name, $checked);
 @endphp
 
-<div class="{{ $containerClass }}">
+<div class="{{ $containerClass  }}">
     {!! Form::checkbox($name, $value, $checked, [
         'id' => $id,
         'class' => $errors->has($name) ? $class . ' border-red-500' : $class,
@@ -29,10 +29,10 @@
     @endif
 
     @error($name)
-        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ $message  }}</p>
     @enderror
 
     @if($error)
-        <p class="mt-1 text-sm text-red-600">{{ $error }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ $error  }}</p>
     @endif
 </div> 

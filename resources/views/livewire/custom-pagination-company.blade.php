@@ -1,7 +1,7 @@
 <nav aria-label="Page navigation example">
 @if ($paginator->hasPages())
     <ul role="navigation" class="pagination mb-0 justify-center flex-wrap">
-        {{-- Previous Page Link --}}
+        {{ -- Previous Page Link -- }}
         @if ($paginator->onFirstPage())
             <li class="page-item previous disabled mt-2" aria-disabled="true" aria-label="@lang('pagination.previous')">
                 <span aria-hidden="true">
@@ -20,29 +20,29 @@
                 </a>
             </li>
         @endif
-        {{-- Pagination Elements --}}
+        {{ -- Pagination Elements -- }}
         @foreach ($elements as $element)
-            {{-- "Three Dots" Separator --}}
+            {{ -- "Three Dots" Separator -- }}
             @if (is_string($element))
-                <li class="page-item disabled mt-1" aria-disabled="true">{{ $element }}</li>
+                <li class="page-item disabled mt-1" aria-disabled="true">{{ $element  }}</li>
             @endif
-            {{-- Array Of Links --}}
+            {{ -- Array Of Links -- }}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
                     @if ($page == $paginator->currentPage())
-                        <li class="page-item"><a class="page-link active">{{ $page }}</a></li>
+                        <li class="page-item"><a class="page-link active">{{ $page  }}</a></li>
                     @else
                         <li class="page-item">
-                            <a wire:click="gotoPage({{ $page }})" class="page-link text-gray">{{ $page }}</a>
+                            <a wire:click="gotoPage({{ $page  }})" class="page-link text-gray">{{ $page  }}</a>
                         </li>
                     @endif
                 @endforeach
             @endif
         @endforeach
-        {{-- Next Page Link --}}
+        {{ -- Next Page Link -- }}
         @if ($paginator->hasMorePages())
             <li class="page-item">
-                <a wire:click="nextPage({{$paginator->lastPage()}})" rel="next"
+                <a wire:click="nextPage({{ $paginator->lastPage() }})" rel="next"
                         aria-label="@lang('pagination.next')" class="page-link next">
                     <span aria-hidden="true">
                         <i class="fa-solid fa-angle-right text-gray"></i>

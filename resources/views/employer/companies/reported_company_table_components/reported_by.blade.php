@@ -1,1 +1,1 @@
-<span>{{$row->user->full_name}}</span>
+<span>{{ $$row->$user->full_name }}</span>

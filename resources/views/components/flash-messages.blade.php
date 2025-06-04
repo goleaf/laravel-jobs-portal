@@ -15,7 +15,7 @@
                 <x-icons.success />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('success') }}</p>
+                <p class="text-sm font-medium">{{ session('success')  }}</p>
             </div>
             <div class="ml-auto pl-3">
                 <div class="-mx-1.5 -my-1.5">
@@ -46,7 +46,7 @@
                 <x-icons.error />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('error') }}</p>
+                <p class="text-sm font-medium">{{ session('error')  }}</p>
             </div>
             <div class="ml-auto pl-3">
                 <div class="-mx-1.5 -my-1.5">
@@ -77,7 +77,7 @@
                 <x-icons.warning />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('warning') }}</p>
+                <p class="text-sm font-medium">{{ session('warning')  }}</p>
             </div>
             <div class="ml-auto pl-3">
                 <div class="-mx-1.5 -my-1.5">

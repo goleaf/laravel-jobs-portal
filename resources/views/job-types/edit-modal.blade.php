@@ -44,12 +44,12 @@
                 
                 <!-- Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('messages.job_type.edit_job_type') }}</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('messages.job_type.edit_job_type')  }}</h3>
                     <button 
                         type="button" 
                         @click="show = false" 
                         class="text-gray-400 hover:text-gray-500">
-                        <span class="sr-only">{{ __('messages.common.close') }}</span>
+                        <span class="sr-only">{{ __('messages.common.close')  }}</span>
                         <x-icons.close class="h-6 w-6" />
                     </button>
                 </div>
@@ -57,7 +57,7 @@
                 <!-- Body -->
                 <div class="px-6 py-4">
                     <div class="mb-4">
-                        <label for="editName" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.name') }} <span class="text-red-500">*</span></label>
+                        <label for="editName" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.name')  }} <span class="text-red-500">*</span></label>
                         <input 
                             type="text" 
                             name="name" 
@@ -68,7 +68,7 @@
                     </div>
                     
                     <div class="mb-4">
-                        <label for="editDescription" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.description') }}</label>
+                        <label for="editDescription" class="block text-sm font-medium text-gray-700">{{ __('messages.job_type.description')  }}</label>
                         <textarea 
                             name="description" 
                             id="editDescription" 
@@ -84,12 +84,12 @@
                         type="button" 
                         @click="show = false" 
                         class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        {{ __('messages.common.cancel') }}
+                        {{ __('messages.common.cancel')  }}
                     </button>
                     <button 
                         type="submit" 
                         class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-gray-300 border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        {{ __('messages.common.update') }}
+                        {{ __('messages.common.update')  }}
                     </button>
                 </div>
             </form>

@@ -1,10 +1,10 @@
 <div class="flex items-center">
     <a>
         <div class="image image-mini image-circle me-3">
-            <img src="{{ $row->candidate->candidate_url }}" alt="" class="user-img">
+            <img src="{{ $$row->$candidate->candidate_url  }}" alt="" class="user-img">
         </div>
     </a>
     <div class="flex flex-col">
-        {{ $row->candidate->user->full_name }}
+        {{ $$row->$candidate->$user->full_name  }}
     </div>
 </div>

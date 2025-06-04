@@ -21,10 +21,10 @@
 @endphp
 
 <button 
-    type="{{ $type }}"
+    type="{{ $type  }}"
     {{ $attributes->merge([
         "class" => "inline-flex items-center font-medium rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 " . $variants[$variant] . " " . $sizes[$size]
-    ]) }}
+    ])  }}
 >
-    {{ $slot }}
+    {{ $slot  }}
 </button>

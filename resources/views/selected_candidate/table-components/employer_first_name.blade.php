@@ -1,1 +1,1 @@
-{{ $row->job->company->user->full_name }}
+{{ $$row->$job->$company->$user->full_name  }}

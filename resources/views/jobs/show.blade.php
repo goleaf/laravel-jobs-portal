@@ -125,7 +125,7 @@
                     </div>
                     
                     <div class="mt-3">
-                        <a href="{{ route('company.show', 1) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">
+                        <a href="{{ route('company.show', 1)  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">
                             <i class="fas fa-external-link-alt me-2"></i>View Company Profile
                         </a>
                     </div>

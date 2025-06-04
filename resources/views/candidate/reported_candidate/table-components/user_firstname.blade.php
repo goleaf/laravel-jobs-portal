@@ -1,1 +1,1 @@
-{{ $row->user->full_name }}
+{{ $$row->$user->full_name  }}

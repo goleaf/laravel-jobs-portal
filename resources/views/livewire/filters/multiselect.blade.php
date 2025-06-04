@@ -1,6 +1,6 @@
 <div class="w-full" x-data="{ open: false }">
-    <label for="{{ $filter['key'] }}" class="block text-sm font-medium text-gray-700 mb-1">
-        {{ $filter['label'] }}
+    <label for="{{ $filter['key']  }}" class="block text-sm font-medium text-gray-700 mb-1">
+        {{ $filter['label']  }}
     </label>
     <div class="relative">
         <button 
@@ -10,9 +10,9 @@
         >
             <span class="block truncate">
                 @if(!empty($filters[$filter['key']]['values']))
-                    {{ count($filters[$filter['key']]['values']) }} {{ __('messages.common.selected') }}
+                    {{ count($filters[$filter['key']]['values'])  }} {{ __('messages.common.selected')  }}
                 @else
-                    {{ __('messages.common.select') }}...
+                    {{ __('messages.common.select')  }}...
                 @endif
             </span>
             <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -35,22 +35,22 @@
                 <div class="flex items-center space-x-2">
                     <input 
                         type="checkbox" 
-                        id="{{ $filter['key'] }}_select_all"
+                        id="{{ $filter['key']  }}_select_all"
                         class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         @click="
                             let allChecked = $event.target.checked;
-                            document.querySelectorAll('[id^={{ $filter['key'] }}_option_]').forEach(checkbox => {
+                            document.querySelectorAll('[id^={{ $filter['key']  }}_option_]').forEach(checkbox => {
                                 checkbox.checked = allChecked;
                                 if (allChecked) {
-                                    @this.set('filters.{{ $filter['key'] }}.values', Object.keys(@this.get('filters.{{ $filter['key'] }}.options')));
+                                    @this.set('filters.{{ $filter['key']  }}.values', Object.keys(@this.get('filters.{{ $filter['key']  }}.options')));
                                 } else {
-                                    @this.set('filters.{{ $filter['key'] }}.values', []);
+                                    @this.set('filters.{{ $filter['key']  }}.values', []);
                                 }
                             });
                         "
                     >
-                    <label for="{{ $filter['key'] }}_select_all" class="block text-sm font-medium text-gray-700">
-                        {{ __('messages.common.select_all') }}
+                    <label for="{{ $filter['key']  }}_select_all" class="block text-sm font-medium text-gray-700">
+                        {{ __('messages.common.select_all')  }}
                     </label>
                 </div>
             </div>
@@ -60,12 +60,12 @@
                     <label class="flex items-center space-x-3 w-full cursor-pointer">
                         <input 
                             type="checkbox" 
-                            id="{{ $filter['key'] }}_option_{{ $optionValue }}"
-                            value="{{ $optionValue }}"
-                            wire:model.live="filters.{{ $filter['key'] }}.values"
+                            id="{{ $filter['key']  }}_option_{{ $optionValue  }}"
+                            value="{{ $optionValue  }}"
+                            wire:model.live="filters.{{ $filter['key']  }}.values"
                             class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         >
-                        <span class="block truncate">{{ $optionLabel }}</span>
+                        <span class="block truncate">{{ $optionLabel  }}</span>
                     </label>
                 </div>
             @endforeach

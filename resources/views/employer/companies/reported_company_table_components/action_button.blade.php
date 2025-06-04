@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    <button title="{{__('messages.common.delete')}}" data-id="{{ $row->id }}"
+    <button title="{{ __('messages.common.delete') }}" data-id="{{ $$row->id  }}"
             class="reported-company-delete-btn px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 pe-0" data-bs-toggle="tooltip">
         <i class="fa-solid fa-trash"></i>
     </button>

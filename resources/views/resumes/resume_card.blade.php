@@ -3,24 +3,24 @@
         <div class="employee-listing-details">
             <div class="flex employee-listing-description items-center justify-center flex-col">
                 <div class="pl-0 mb-2 employee-avatar">
-                    <img src="{{ $candidateResume->candidate->candidate_url }}"
+                    <img src="{{ $candidateResume->$candidate->candidate_url  }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
                 <div class="mb-auto w-full employee-data">
                     <div class="flex justify-center items-center w-full">
                         <div>
-                            <span class="text-decoration-none text-color-gray one-line-ellip">{{ $candidateResume->candidate->user->full_name}}</span>
+                            <span class="text-decoration-none text-color-gray one-line-ellip">{{ $candidateResume->$candidate->$user->full_name }}</span>
                         </div>
                     </div>
                     <div class="text-center one-line-ellip">
-                        <label class="employee-label">{{ __('messages.faq.title') }} :</label>
-                        <span class="text-decoration-none text-color-gray">{{ $candidateResume->custom_properties['title']}}</span>
+                        <label class="employee-label">{{ __('messages.faq.title')  }} :</label>
+                        <span class="text-decoration-none text-color-gray">{{ $candidateResume->custom_properties['title'] }}</span>
                     </div>
                 </div>
             </div>
             <div class="download-resume">
-                <a href="{{ route('admin.download-all-resume') .'/'. $candidateResume->id}}"
-                   class="download-link"><i class="fas fa-download"></i> {{ __('messages.common.download') }}</a>
+                <a href="{{ route('admin.download-all-resume') .'/'. $candidateResume->id }}"
+                   class="download-link"><i class="fas fa-download"></i> {{ __('messages.common.download')  }}</a>
             </div>
         </div>
     </div>

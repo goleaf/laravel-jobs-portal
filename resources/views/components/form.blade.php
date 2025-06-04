@@ -12,10 +12,10 @@
 @endphp
 
 <form 
-    method="{{ $hasMethodField ? 'POST' : $method }}" 
-    action="{{ $action }}"
+    method="{{ $hasMethodField ? 'POST' : $method  }}" 
+    action="{{ $action  }}"
     @if($hasFiles) enctype="multipart/form-data" @endif
-    {{ $attributes->merge(['class' => $class]) }}
+    {{ $attributes->merge(['class' => $class])  }}
 >
     @csrf
     
@@ -23,5 +23,5 @@
         @method($method)
     @endif
     
-    {{ $slot }}
+    {{ $slot  }}
 </form> 

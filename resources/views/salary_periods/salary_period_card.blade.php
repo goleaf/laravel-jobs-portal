@@ -6,19 +6,19 @@
                     <div class="text-left employee-data text-limit">
                         <span class="text-decoration-none text-color-gray">
                             <a href="#" class="show- px-4 py-2 rounded font-medium transition-colors"
-                               data-id="{{$salaryPeriod->id}}">{{ Str::limit($salaryPeriod->period,30) }}</a>
+                               data-id="{{ $salaryPeriod->id }}">{{ Str::limit($salaryPeriod->period,30)  }}</a>
                             </span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
-            <a title="{{ __('messages.common.edit') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit- px-4 py-2 rounded font-medium transition-colors"
-               data-id="{{$salaryPeriod->id}}" href="#">
+            <a title="{{ __('messages.common.edit')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit- px-4 py-2 rounded font-medium transition-colors"
+               data-id="{{ $salaryPeriod->id }}" href="#">
                 <i class="fa fa-edit"></i>
             </a>
-            <a title="{{ __('messages.common.delete') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
-               data-id="{{$salaryPeriod->id}}" href="#">
+            <a title="{{ __('messages.common.delete')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
+               data-id="{{ $salaryPeriod->id }}" href="#">
                 <i class="fa fa-trash"></i>
             </a>
         </div>

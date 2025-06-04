@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.job.edit_job') }}
+    {{ __('messages.job.edit_job')  }}
 @endsection
 @section('header_toolbar')
     <div class="container mx-auto px-4 mx-auto -fluid">
         <div class="d-md-flex items-center justify-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{{ route('admin.jobs.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">{{ __('messages.common.back') }}</a>
+                <a href="{{ route('admin.jobs.index')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">{{ __('messages.common.back')  }}</a>
             </div>
         </div>
     </div>
@@ -22,11 +22,11 @@
             </div>
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
-                    {{ Form::model($job, ['route' => ['admin.jobs.update', $job->id], 'method' => 'put', 'id' => 'editJobForm']) }}
+                    {{ Form::model($job, ['route' => ['admin.jobs.update', $$job->id], 'method' => 'put', 'id' => 'editJobForm'])  }}
 
                     @include('jobs.edit_fields')
 
-                    {{ Form::close() }}
+                    {{ Form::close()  }}
                 </div>
             </div>
         </div>
@@ -42,11 +42,11 @@
         @include('jobs.modals.job_tags')
         @include('jobs.modals.required_degree_levels')
         @include('jobs.modals.functional_areas')
-        {{Form::hidden('employerPanel',false,['class'=>'jobEmployeePanel'])}}
-        {{Form::hidden('default-document-image-url', asset('front_web/images/job-categories.png'), ['id' => 'defaultDocumentImageUrl']) }}
-        {{Form::hidden('isEdit',true,['class'=>'isEdit'])}}
+        {{ Form::hidden('employerPanel',false,['class'=>'jobEmployeePanel']) }}
+        {{ Form::hidden('default-document-image-url', asset('front_web/images/job-categories.png'), ['id' => 'defaultDocumentImageUrl'])  }}
+        {{ Form::hidden('isEdit',true,['class'=>'isEdit']) }}
     </div>
 @endsection
-{{--@push('scripts')--}}
-    {{--    <script src="{{ asset('assets/js/autonumeric/autoNumeric.min.js') }}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+    {{ --    <script src="{{ asset('assets/js/autonumeric/autoNumeric.min.js')  }}"></script>--}}
+{{ --@endpush-- }}

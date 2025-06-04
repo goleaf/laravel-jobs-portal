@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.industries') }}
+    {{ __('messages.industries')  }}
 @endsection
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -12,8 +12,8 @@
     @include('industries.add_modal')
     @include('industries.edit_modal')
     @include('industries.show_modal')
-    {{Form::hidden('industries',true,['id'=>'indexIndustriesData'])}}
+    {{ Form::hidden('industries',true,['id'=>'indexIndustriesData']) }}
 @endsection
-{{--@push('scripts')--}}
-    {{--    <script src="{{mix('assets/js/industries/industries.js')}}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+    {{ --    <script src="{{mix('assets/js/industries/industries.js') }}"></script>--}}
+{{ --@endpush-- }}

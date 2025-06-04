@@ -8,7 +8,7 @@
         "class" => "min-w-full divide-y divide-gray-200 " . 
                    ($striped ? "odd:bg-gray-50 even:bg-white " : "") .
                    ($hover ? "hover:bg-gray-50 " : "")
-    ]) }}>
-        {{ $slot }}
+    ])  }}>
+        {{ $slot  }}
     </table>
 </div>

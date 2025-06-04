@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.job_shifts') }}
+    {{ __('messages.job_shifts')  }}
 @endsection
 @push('css')
-    <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">
 @endpush
 @section('content')
 <div class="container mx-auto px-4 mx-auto -fluid">
@@ -17,7 +17,7 @@
 @include('job_shifts.edit_modal')
 @include('job_shifts.show_modal')
 
-{{Form::hidden('indexJobShiftData',true,['id'=>'indexJobShiftData'])}}
+{{ Form::hidden('indexJobShiftData',true,['id'=>'indexJobShiftData']) }}
    
 @endsection
 

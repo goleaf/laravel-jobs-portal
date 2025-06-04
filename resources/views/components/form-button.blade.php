@@ -38,9 +38,9 @@
 @endphp
 
 <button
-    type="{{ $type }}"
+    type="{{ $type  }}"
     @if($disabled) disabled @endif
-    {{ $attributes->merge(['class' => $classes]) }}
+    {{ $attributes->merge(['class' => $classes])  }}
 >
-    {{ $slot }}
+    {{ $slot  }}
 </button> 

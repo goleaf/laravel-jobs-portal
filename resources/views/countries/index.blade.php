@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.country.countries') }}
+    {{ __('messages.country.countries')  }}
 @endsection
 @push('css')
-{{--    <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
+{{ --    <link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">--}}
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -14,5 +14,5 @@
     </div>
     @include('countries.add_modal')
     @include('countries.edit_modal')
-    {{Form::hidden('countriesData',true,['id'=>'indexCountriesData'])}}
+    {{ Form::hidden('countriesData',true,['id'=>'indexCountriesData']) }}
 @endsection

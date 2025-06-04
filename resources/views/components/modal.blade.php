@@ -19,9 +19,9 @@ $maxWidth = [
         show() { this.open = true },
         close() { this.open = false }
     }"
-    x-on:{{ $id }}.window="show()"
-    x-on:close-{{ $id }}.window="close()"
-    id="{{ $id }}"
+    x-on:{{ $id  }}.window="show()"
+    x-on:close-{{ $id  }}.window="close()"
+    id="{{ $id  }}"
     x-show="open"
     x-cloak
     class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0"
@@ -48,9 +48,9 @@ $maxWidth = [
         x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
+        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth  }} sm:mx-auto"
     >
-        {{ $slot }}
+        {{ $slot  }}
     </div>
 </div>
 

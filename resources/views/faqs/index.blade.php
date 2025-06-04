@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.faq.faq') }}
+    {{ __('messages.faq.faq')  }}
 @endsection
 @push('css')
-    <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -17,5 +17,5 @@
     @include('faqs.show_modal')
 @endsection
 @push('scripts')
-{{--    <script src="{{mix('assets/js/faqs/faqs.js')}}"></script>--}}
+{{ --    <script src="{{mix('assets/js/faqs/faqs.js') }}"></script>--}}
 @endpush

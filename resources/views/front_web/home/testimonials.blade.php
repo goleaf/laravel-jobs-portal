@@ -16,10 +16,10 @@
                                 <div class="md:w-3/12 col-sm-6 flex-1 -8 flex justify-center">
                                     <div class="relative">
                                         <div class="testimonial-img">
-                                            <img src="{{ isset($testimonial->customer_image_url)? $testimonial->customer_image_url:asset('assets/img/infyom-logo.png') }}" alt="profile">
+                                            <img src="{{ isset($testimonial->customer_image_url)? $testimonial->customer_image_url:asset('assets/img/infyom-logo.png')  }}" alt="profile">
                                         </div>
                                         <div class="comma absolute">
-                                            <img src="{{asset('front_web/images/comma.png')}}" alt="comma">
+                                            <img src="{{ asset('front_web/images/comma.png') }}" alt="comma">
                                         </div>
                                     </div>
                                 </div>
@@ -31,7 +31,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-1 -12 text-md-start text-center">
-                                            <p class="fs-18 text-gray-600 mb-md-0 mt-3">{{ html_entity_decode($testimonial->customer_name) }}
+                                            <p class="fs-18 text-gray-600 mb-md-0 mt-3">{{ html_entity_decode($testimonial->customer_name)  }}
                                             </p>
                                         </div>
                                     </div>

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.selected_candidate') }}
+    {{ __('messages.selected_candidate')  }}
 @endsection
 @push('css')
-<link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
+<link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">

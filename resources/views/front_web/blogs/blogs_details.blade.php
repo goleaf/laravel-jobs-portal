@@ -1,10 +1,10 @@
 @extends('front_web.layouts.app')
 @section('title')
-    {{ __('messages.post.post_details') }}
+    {{ __('messages.post.post_details')  }}
 @endsection
-{{--@section('page_css')--}}
-{{--    <link href="{{asset('front_web/scss/blog-details.css')}}" rel="stylesheet" type="text/css">--}}
-{{--@endsection--}}
+{{ --@section('page_css')-- }}
+{{ --    <link href="{{asset('front_web/scss/blog-details.css') }}" rel="stylesheet" type="text/css">--}}
+{{ --@endsection-- }}
 @section('content')
     <div class="Blog Detail-page">
         <!-- start hero section -->
@@ -19,11 +19,11 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
-                                        <a href="{{route('front.home')}}" class="fs-18 text-gray">
+                                        <a href="{{ route('front.home') }}" class="fs-18 text-gray">
                                             @lang('web.home')</a>
                                     </li>
                                     <li class="breadcrumb-item text-primary-600 fs-18"
-                                        aria-current="page">{{ __('messages.post.blog') }}</li>
+                                        aria-current="page">{{ __('messages.post.blog')  }}</li>
                                     <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.blog_detail')</li>
                                 </ol>
                             </nav>
@@ -41,44 +41,44 @@
                     <div class="flex-1 -lg-8">
                         <div class="blog-detail py-60">
                             <h5 class="fs-4 mb-3 text-gray-600">
-                                {{ html_entity_decode($blog->title) }}</h5>
+                                {{ html_entity_decode($blog->title)  }}</h5>
                             <div class="designer-details flex flex-wrap">
                                 <div class="me-4">
-                                    <img src="{{ isset($blog->user->avatar) ? $blog->user->avatar : asset('front_web/images/job-categories.png')}}"
+                                    <img src="{{ isset($blog->$user->avatar) ? $blog->$user->avatar : asset('front_web/images/job-categories.png') }}"
                                          class="img object-fit-cover rounded">
                                 </div>
                                 <p class="fs-16 text-gray me-3">
-                                    {{ $blog->user->full_name }}</p>
+                                    {{ $blog->$user->full_name  }}</p>
                                 <span class="text-primary-600 me-3"> | </span>
                                 <p class="fs-16 text-gray me-3">
-                                    {{ \Carbon\Carbon::parse($blog->created_at)->translatedFormat('M jS Y')}}</p>
+                                    {{ \Carbon\Carbon::parse($blog->created_at)->translatedFormat('M jS Y') }}</p>
                                 <span class="text-primary-600 me-3"> | </span>
                                 <p class="fs-16 text-gray me-3">
-                                    {{ isset($comments) ? count($comments) : 0 }} Comment</p>
+                                    {{ isset($comments) ? count($comments) : 0  }} Comment</p>
                             </div>
                             @role('Candidate')
                             <div class="designer-details flex flex-wrap">
-                                <a href="{{ $url['facebook'] }}" title="@lang('web.web_jobs.facebook')" target="_blank" class="flex me-2">
+                                <a href="{{ $url['facebook']  }}" title="@lang('web.web_jobs.facebook')" target="_blank" class="flex me-2">
                                     <div class="badge bg-primary-600 py-1 px-2">
                                         <i class="fa-brands fa-facebook fs-18"></i>
                                     </div>
                                 </a>
-                                <a href="{{ $url['twitter'] }}" title="@lang('web.web_jobs.twitter')" target="_blank" class="flex me-2">
+                                <a href="{{ $url['twitter']  }}" title="@lang('web.web_jobs.twitter')" target="_blank" class="flex me-2">
                                     <div class="badge bg-primary-600 py-1 px-2">
                                         <i class="fa-brands fa-twitter fs-18"></i>
                                     </div>
                                 </a>
-                                <a href="{{ $url['gmail'] }}" title="@lang('web.web_jobs.google')" target="_blank" class="flex me-2">
+                                <a href="{{ $url['gmail']  }}" title="@lang('web.web_jobs.google')" target="_blank" class="flex me-2">
                                     <div class="badge bg-primary-600 py-1 px-2">
                                         <i class="fa-brands fa-google fs-18"></i>
                                     </div>
                                 </a>
-                                <a href="{{ $url['pinterest'] }}" title="@lang('web.web_jobs.pinterest')" target="_blank" class="flex me-2">
+                                <a href="{{ $url['pinterest']  }}" title="@lang('web.web_jobs.pinterest')" target="_blank" class="flex me-2">
                                     <div class="badge bg-primary-600 py-1 px-2">
                                         <i class="fa-brands fa-pinterest fs-18"></i>
                                     </div>
                                 </a>
-                                <a href="{{ $url['linkedin'] }}" title="@lang('web.web_jobs.linkedin')" target="_blank" class="flex">
+                                <a href="{{ $url['linkedin']  }}" title="@lang('web.web_jobs.linkedin')" target="_blank" class="flex">
                                     <div class="badge bg-primary-600 py-1 px-2">
                                         <i class="fa-brands fa-linkedin fs-18"></i>
                                     </div>
@@ -86,7 +86,7 @@
                             </div>
                             @endrole
                             <div class="blog-img mt-40 mb-40">
-                                <img src="{{ !empty($blog->blog_image_url)?$blog->blog_image_url:asset('web/img/blog_default_image.jpg') }}">
+                                <img src="{{ !empty($blog->blog_image_url)?$blog->blog_image_url:asset('web/img/blog_default_image.jpg')  }}">
                             </div>
                             @php
                                 $assignCategories = $blog->postAssignCategories->pluck('name')->toArray();
@@ -94,9 +94,9 @@
                             @if(count($assignCategories) > 0)
                                 <div class="designer-details flex mb-3">
                                     @forelse($assignCategories as $categoryBadges)
-                                        <span class="p-2 me-2 badge bg-{{ getJobOtherColor($loop->index) }}">{{$categoryBadges}}</span>
+                                        <span class="p-2 me-2 badge bg-{{ getJobOtherColor($loop->index)  }}">{{ $categoryBadges }}</span>
                                     @empty
-                                        <span> {{ __('messages.employer_menu.no_data_available') }} </span>
+                                        <span> {{ __('messages.employer_menu.no_data_available')  }} </span>
                                     @endforelse
                                 </div>
                             @endif
@@ -108,12 +108,12 @@
                                     @if(count($prevPost) >0 )
                                         <div class="bg-white shadow rounded-lg overflow-hidden p-3">
                                             @foreach($prevPost as $post)
-                                                <a href="{{ route('front.posts.details',$post->id) }}"
+                                                <a href="{{ route('front.posts.details',$post->id)  }}"
                                                    class="text-gray primary-link-hover">
                                                     <h5>
-                                                        <small><i class="fa fa-angle-left"></i></small> {{ __('messages.post.previous_post') }}
+                                                        <small><i class="fa fa-angle-left"></i></small> {{ __('messages.post.previous_post')  }}
                                                     </h5>
-                                                    <h6 class="mb-0">{{$post->title}}</h6>
+                                                    <h6 class="mb-0">{{ $post->title }}</h6>
                                                 </a>
                                             @endforeach
                                         </div>
@@ -123,12 +123,12 @@
                                     @if(count($nextPost) >0 )
                                         <div class="bg-white shadow rounded-lg overflow-hidden p-3">
                                             @foreach($nextPost as $post)
-                                                <a href="{{ route('front.posts.details',$post->id) }}"
+                                                <a href="{{ route('front.posts.details',$post->id)  }}"
                                                    class="text-gray primary-link-hover">
                                                     <h5>
-                                                        {{ __('messages.post.next_post') }} <small><i class="fa fa-angle-right"></i></small>
+                                                        {{ __('messages.post.next_post')  }} <small><i class="fa fa-angle-right"></i></small>
                                                     </h5>
-                                                    <h6 class="mb-0">{{$post->title}}</h6>
+                                                    <h6 class="mb-0">{{ $post->title }}</h6>
                                                 </a>
                                             @endforeach
                                         </div>
@@ -138,21 +138,21 @@
                         </div>
                         <div class="comments py-60">
                             <h5 class="fs-4 mb-3 text-gray-600">
-                                @lang('web.web_blog.comments') <span class="comment-count" id="post-comment">({{count($comments)}})</span>
+                                @lang('web.web_blog.comments') <span class="comment-count" id="post-comment">({{ count($comments) }})</span>
                             </h5>
                             <div class="flex flex-wrap comment-box">
                                 @foreach($comments as $commentRecord)
-                                    <div class="comment-card bg-white shadow rounded-lg overflow-hidden py-20 {{$loop->last?"':'mb-40'}}">
+                                    <div class="comment-card bg-white shadow rounded-lg overflow-hidden py-20 {{ $loop->last?"':'mb-40' }}">
                                         <div class="flex flex-wrap justify-between">
                                             <div class="col-xl-1 col-sm-2 flex-1 -3">
                                                 <div class="">
                                                     @if(isset($commentRecord->user_id))
                                                         <img class="bg-white shadow rounded-lg overflow-hidden -img"
-                                                             src="{{$commentRecord->user->avatar }}"
+                                                             src="{{ $commentRecord->$user->avatar  }}"
                                                              alt="user-image">
                                                     @else
                                                         <img class="bg-white shadow rounded-lg overflow-hidden -img"
-                                                             src="{{ asset('front_web/images/job-categories.png')}}"
+                                                             src="{{ asset('front_web/images/job-categories.png') }}"
                                                              alt="user-image">
                                                     @endif
                                             </div>
@@ -160,18 +160,18 @@
                                         <div class="col-xl-6 col-sm-5 flex-1 -9 ps-xl-4">
                                             <div class="bg-white shadow rounded-lg overflow-hidden -body ps-0">
                                                 <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-16 text-gray-600">
-                                                    {{$commentRecord->name}}
+                                                    {{ $commentRecord->name }}
                                                     @if($commentRecord->user_id == getLoggedInUserId() && getLoggedInUser())
                                                         <div class="d-inline-flex ms-2">
-                                                            <a href="javascript:void(0)" title="{{ __('messages.common.edit') }}"
-                                                                   class="edit-comment-btn action- px-4 py-2 rounded font-medium transition-colors" data-id="{{$commentRecord->id}}">
+                                                            <a href="javascript:void(0)" title="{{ __('messages.common.edit')  }}"
+                                                                   class="edit-comment-btn action- px-4 py-2 rounded font-medium transition-colors" data-id="{{ $commentRecord->id }}">
                                                                 <div class="badge bg-primary-600 py-2 ms-1" data-text="Edit Comment">
                                                                     <span class="fa fa-pencil"></span>
                                                                 </div>
                                                             </a>
-                                                           <a href="javascript:void(0)" title="{{ __('messages.common.delete') }}"
+                                                           <a href="javascript:void(0)" title="{{ __('messages.common.delete')  }}"
                                                                    class="action-btn delete-comment- px-4 py-2 rounded font-medium transition-colors float-right"
-                                                                   data-id="{{$commentRecord->id}}">
+                                                                   data-id="{{ $commentRecord->id }}">
                                                                 <div class="badge bg-primary-600 py-2 ms-1" data-text="Delete Comment">
                                                                     <span class="fa fa-trash"></span>
                                                                 </div>
@@ -179,13 +179,13 @@
                                                         </div>
                                                     @endif
                                                 </h5>
-                                                <p class="fs-16 text-gray" id="comment-{{$commentRecord->id}}">
-                                                    {{ $commentRecord->comment }}</p>
+                                                <p class="fs-16 text-gray" id="comment-{{ $commentRecord->id }}">
+                                                    {{ $commentRecord->comment  }}</p>
                                             </div>
                                         </div>
                                         <div class="flex-1 -sm-5 text-end">
                                             <span class="fs-14 text-gray">
-                                                 {{ \Carbon\Carbon::parse($commentRecord->created_at)->translatedFormat('d, M Y g:i a') }}
+                                                 {{ \Carbon\Carbon::parse($commentRecord->created_at)->translatedFormat('d, M Y g:i a')  }}
                                             </span>
                                         </div>
                                     </div>
@@ -195,57 +195,57 @@
                         </div>
                         <div class="leave-comment py-60">
                             <h5 class="fs-4 mb-3 text-gray-600 mb-4">@lang('messages.post.post_a_comments')</h5>
-                            {{ Form::open(['id' => 'commentForm']) }}
-                            {{ Form::token() }}
-                            {{ Form::hidden('comment-id', null, ['class' => 'comment-id','value' => '']) }}
+                            {{ Form::open(['id' => 'commentForm'])  }}
+                            {{ Form::token()  }}
+                            {{ Form::hidden('comment-id', null, ['class' => 'comment-id','value' => ''])  }}
                                 <div class="flex flex-wrap clearfix mb-40">
                                     @if(!Auth::check())
                                         <div class="flex-1 -md-6 mb-4">
                                             <div class="form-group">
-                                                <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_name')}}</label>
+                                                <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.your_name') }}</label>
                                                 <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-name"
-                                                       placeholder="{{__('web.web_blog.your_name')}}">
+                                                       placeholder="{{ __('web.web_blog.your_name') }}">
                                             </div>
                                         </div>
                                         <div class="flex-1 -md-6 mb-4">
                                             <div class="form-group">
-                                                <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_email')}}</label>
+                                                <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.your_email') }}</label>
                                                 <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-email"
-                                                       placeholder="{{__('web.web_blog.your_email')}}">
+                                                       placeholder="{{ __('web.web_blog.your_email') }}">
                                             </div>
                                         </div>
                                     @endif
                                     <div class="flex-1 -md-12">
                                         <div class="form-group">
-                                            <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_comment')}}</label>
+                                            <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.your_comment') }}</label>
                                             <textarea id="comment-field" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment"
-                                                      placeholder="{{__('web.web_blog.add_your_comment')}}" rows="3" name="comment"></textarea>
+                                                      placeholder="{{ __('web.web_blog.add_your_comment') }}" rows="3" name="comment"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap justify-center">
                                     <div class="flex-1 -sm-6 mb-40 text-center">
                                         <button type="submit" id="submitBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary"
-                                                data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{__('messages.common.process')}}">
+                                                data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{ __('messages.common.process') }}">
                                             @lang('messages.post_comment.post_comment')</button>
                                     </div>
                                 </div>
-                            {{ Form::close() }}
+                            {{ Form::close()  }}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         <!-- end-blog-details-section -->
-        {{Form::hidden('blogComment',route('front.blog.comment.store', $blog->id),['id'=>'blogComment'])}}
-        {{Form::hidden('defaultBlogImage',asset('front_web/images/job-categories.png'),['id'=>'defaultBlogImage'])}}
+        {{ Form::hidden('blogComment',route('front.blog.comment.store', $blog->id),['id'=>'blogComment']) }}
+        {{ Form::hidden('defaultBlogImage',asset('front_web/images/job-categories.png'),['id'=>'defaultBlogImage']) }}
     </div>
 @endsection
-{{--@section('page_scripts')--}}
-{{--    <script>--}}
-{{--        let blogComment = "{{ route('front.blog.comment.store', $blog->id) }}";--}}
-{{--        let commentUrl = "{{ url('post-comments') }}";--}}
-{{--        let editCommentUrl = "{{ '/edit' }}";--}}
-{{--        let defaultImage = "{{ asset('front_web/images/job-categories.png') }}";--}}
-{{--    </script>--}}
-{{--@endsection--}}
+{{ --@section('page_scripts')-- }}
+{{ --    <script>-- }}
+{{ --        let blogComment = "{{ route('front.blog.comment.store', $blog->id)  }}";--}}
+{{ --        let commentUrl = "{{ url('post-comments')  }}";--}}
+{{ --        let editCommentUrl = "{{ '/edit'  }}";--}}
+{{ --        let defaultImage = "{{ asset('front_web/images/job-categories.png')  }}";--}}
+{{ --    </script>-- }}
+{{ --@endsection-- }}

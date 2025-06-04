@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="modal-title">{{ __('messages.industry.industry_detail') }}</h3>
+                <h3 class="modal-title">{{ __('messages.industry.industry_detail')  }}</h3>
                 <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
@@ -14,11 +14,11 @@
                 </div>
                 <div class="flex flex-wrap">
                     <div class="mb-5">
-                        {{ Form::label('name', __('messages.industry.name').(':'), ['class' => 'form-label']) }}
+                        {{ Form::label('name', __('messages.industry.name').(':'), ['class' => 'form-label'])  }}
                         <p id="showIndustryName" class="text-gray-600"></p>
                     </div>
                     <div class="mb-5">
-                        {{ Form::label('showDescription', __('messages.industry.description').(':'),['class' => 'form-label']) }}
+                        {{ Form::label('showDescription', __('messages.industry.description').(':'),['class' => 'form-label'])  }}
                         <p id="showIndustryDescription" class=" text-gray-600"></p>
                     </div>
                 </div>

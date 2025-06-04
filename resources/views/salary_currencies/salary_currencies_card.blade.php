@@ -4,16 +4,16 @@
             <div class="flex employee-listing-description items-center justify-center flex-col">
                 <div class="mb-auto w-full employee-data mt-4">
                     <div class="text-center">
-                        <label class="employee-label">{{ __('messages.salary_currency.currency_name') }} :</label>
-                        <label class="text-decoration-none text-color-gray">{{ $salaryCurrency->currency_name }}</label>
+                        <label class="employee-label">{{ __('messages.salary_currency.currency_name')  }} :</label>
+                        <label class="text-decoration-none text-color-gray">{{ $salaryCurrency->currency_name  }}</label>
                     </div>
                     <div class="text-center">
-                        <label class="employee-label">{{ __('messages.salary_currency.currency_code') }} :</label>
-                        <label class="text-decoration-none text-color-gray">{{ $salaryCurrency->currency_code }}</label>
+                        <label class="employee-label">{{ __('messages.salary_currency.currency_code')  }} :</label>
+                        <label class="text-decoration-none text-color-gray">{{ $salaryCurrency->currency_code  }}</label>
                     </div>
                     <div class="text-center">
-                        <label class="employee-label">{{ __('messages.salary_currency.currency_icon') }} :</label>
-                        <label class="text-decoration-none text-color-gray">{{$salaryCurrency->currency_icon}}</label>
+                        <label class="employee-label">{{ __('messages.salary_currency.currency_icon')  }} :</label>
+                        <label class="text-decoration-none text-color-gray">{{ $salaryCurrency->currency_icon }}</label>
                     </div>
                 </div>
             </div>

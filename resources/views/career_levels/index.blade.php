@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.career_levels') }}
+    {{ __('messages.career_levels')  }}
 @endsection
 @push('css')
-{{--<link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
+{{ --<link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">--}}
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -14,7 +14,7 @@
     </div>
     @include('career_levels.add_modal')
     @include('career_levels.edit_modal')
-    {{Form::hidden('careerLevelData',true,['id'=>'indexCareerLevelData'])}}
+    {{ Form::hidden('careerLevelData',true,['id'=>'indexCareerLevelData']) }}
 @endsection
 
 @push('scripts')

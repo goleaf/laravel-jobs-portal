@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ __('messages.job_types') }}
+    {{ __('messages.job_types')  }}
 @endsection
 
 @section('content')

@@ -1,1 +1,1 @@
-<b>{{ $row->name}}</b><br><p>{{$row->email}}</p>
+<b>{{ $$row->name }}</b><br><p>{{ $$row->email }}</p>

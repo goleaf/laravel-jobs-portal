@@ -1,3 +1,3 @@
 <p class="">
-    {{$row->user->full_name}}
+    {{ $$row->$user->full_name }}
 </p>

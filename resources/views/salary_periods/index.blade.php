@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.salary_periods') }}
+    {{ __('messages.salary_periods')  }}
 @endsection
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -12,8 +12,8 @@
     @include('salary_periods.add_modal')
     @include('salary_periods.edit_modal')
     @include('salary_periods.show_modal')
-    {{Form::hidden('salaryPeriodData',true,['id'=>'indexSalaryPeriodData'])}}
+    {{ Form::hidden('salaryPeriodData',true,['id'=>'indexSalaryPeriodData']) }}
 @endsection
-{{--@push('scripts')--}}
-    {{--    <script src="{{mix('assets/js/salary_periods/salary_periods.js')}}"></script>--}}
-{{--@endpush--}}
+{{ --@push('scripts')-- }}
+    {{ --    <script src="{{mix('assets/js/salary_periods/salary_periods.js') }}"></script>--}}
+{{ --@endpush-- }}

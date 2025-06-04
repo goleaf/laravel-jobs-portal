@@ -1,5 +1,5 @@
-@if(!empty($row->company->no_of_offices))
-    {{$row->company->no_of_offices}}
+@if(!empty($$row->$company->no_of_offices))
+    {{ $$row->$company->no_of_offices }}
 @else
-    {{__('messages.n/a')}}
+    {{ __('messages.n/a') }}
 @endif

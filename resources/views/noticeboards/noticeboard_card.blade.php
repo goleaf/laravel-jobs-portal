@@ -6,28 +6,28 @@
                     <div class="text-left employee-data text-limit">
                         <span class="text-decoration-none text-color-gray">
                             <a href="javascript:void(0)" class="show- px-4 py-2 rounded font-medium transition-colors"
-                               data-id="{{$noticeboard->id}}">{{ Str::limit($noticeboard->title,30) }}</a>
+                               data-id="{{ $noticeboard->id }}">{{ Str::limit($noticeboard->title,30)  }}</a>
                             </span>
                     </div>
                     <div class="text-left employee-data mt-2">
                         <label class=" pl-0">
                             <input type="checkbox" name="Is Active"
                                    class=" isActive"
-                                   data-id="{{ $noticeboard->id }}" {{ $noticeboard->is_active == 0 ? '' : 'checked' }}>
+                                   data-id="{{ $noticeboard->id  }}" {{ $noticeboard->is_active == 0 ? '' : 'checked'  }}>
                             <span class=""></span>
-                            <span class="employee-label ml-1">{{ __('messages.common.status') }}</span>
+                            <span class="employee-label ml-1">{{ __('messages.common.status')  }}</span>
                         </label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
-            <a title="{{ __('messages.common.edit') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit- px-4 py-2 rounded font-medium transition-colors"
-               data-id="{{$noticeboard->id}}" href="javascript:void(0)">
+            <a title="{{ __('messages.common.edit')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit- px-4 py-2 rounded font-medium transition-colors"
+               data-id="{{ $noticeboard->id }}" href="javascript:void(0)">
                 <i class="fa fa-edit"></i>
             </a>
-            <a title="{{ __('messages.common.delete') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
-               data-id="{{$noticeboard->id}}" href="javascript:void(0)">
+            <a title="{{ __('messages.common.delete')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
+               data-id="{{ $noticeboard->id }}" href="javascript:void(0)">
                 <i class="fa fa-trash"></i>
             </a>
         </div>

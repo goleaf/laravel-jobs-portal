@@ -1,6 +1,6 @@
 @extends('front_web_template.layouts.app')
 @section('title')
-    {{ __('web.contact_us') }}
+    {{ __('web.contact_us')  }}
 @endsection
 @section('page_css')
     <style>
@@ -17,15 +17,15 @@
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center">
                         <div class="hero-content">
-                            <h1 class="text-gray-600 mb-2">{{ __('web.contact_us') }}</h1>
+                            <h1 class="text-gray-600 mb-2">{{ __('web.contact_us')  }}</h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
-                                        <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
+                                        <a href="{{ route('front.home')  }}" class="fs-18 text-gray">{{ __('web.home')  }}
                                         </a>
                                     </li>
                                     <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
-                                        {{ __('web.contact_us') }}
+                                        {{ __('web.contact_us')  }}
                                     </li>
                                 </ol>
                             </nav>
@@ -43,14 +43,14 @@
                     <div class="flex flex-wrap">
                         <div class="flex-1 -lg-3 lg:block hidden text-end">
                             <div class="contact-img mt-5">
-                                <img src="{{ asset('img_template/contact-page.png') }}">
+                                <img src="{{ asset('img_template/contact-page.png')  }}">
                             </div>
                         </div>
                         <div class="flex-1 -lg-9">
                             <div class="contact-form">
                                 <div class="section-heading mb-40">
                                     <h2 class="fs-40 text-gray-600 fw-bold mb-0">
-                                        {{ __('web.home_menu.contact_us') }}
+                                        {{ __('web.home_menu.contact_us')  }}
                                     </h2>
                                 </div>
                                 @formOpen(['url' => route('front.contact.store'), 'id' => 'contactForm'])
@@ -58,44 +58,44 @@
                                     <div class="flex flex-wrap">
                                         <div class="flex-1 -md-6">
                                             <div class="form-group mb-4">
-                                                {{ Form::label('name', __('web.common.name').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                                {{ Form::label('name', __('web.common.name').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::text('name', old('name'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.enter_your_name')]) }}
+                                                {{ Form::text('name', old('name'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.enter_your_name')])  }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -md-6">
                                             <div class="form-group mb-4">
-                                                {{ Form::label('email', __('web.common.email').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                                {{ Form::label('email', __('web.common.email').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::email('email', old('email'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.common.email')]) }}
+                                                {{ Form::email('email', old('email'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.common.email')])  }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -md-6">
                                             <div class="form-group mb-4">
-                                                {{ Form::label('subject', __('web.contact_menu.subject').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                                {{ Form::label('subject', __('web.contact_menu.subject').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::text('subject', old('subject'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.subject')]) }}
+                                                {{ Form::text('subject', old('subject'), ['class' => 'form-control fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.subject')])  }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -md-6">
                                             <div class="form-group mb-4">
-                                                {{ Form::label('phone_no', __('web.web_contact.phone_number').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                                {{ Form::tel('phone_no', old('phone_no'), ['class' => 'form-control fs-14 text-gray br-10', 'placeholder' => __('web.web_contact.phone_number')]) }}
+                                                {{ Form::label('phone_no', __('web.web_contact.phone_number').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
+                                                {{ Form::tel('phone_no', old('phone_no'), ['class' => 'form-control fs-14 text-gray br-10', 'placeholder' => __('web.web_contact.phone_number')])  }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -12">
                                             <div class="form-group mb-4">
-                                                {{ Form::label('message', __('web.contact_menu.message').':', ['class' => 'fs-16 text-secondary mb-2']) }}
+                                                {{ Form::label('message', __('web.contact_menu.message').':', ['class' => 'fs-16 text-secondary mb-2'])  }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::textarea('message', old('message'), ['class' => 'form-control fs-14 text-gray br-10', 'rows' => 5, 'required', 'placeholder' => __('web.contact_menu.type_message')]) }}
+                                                {{ Form::textarea('message', old('message'), ['class' => 'form-control fs-14 text-gray br-10', 'rows' => 5, 'required', 'placeholder' => __('web.contact_menu.type_message')])  }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -12 mb-4">
-                                            <div class="g-recaptcha" data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
+                                            <div class="g-recaptcha" data-sitekey="{{ config('app.google_recaptcha_site_key')  }}"></div>
                                             <div id="g-recaptcha-error"></div>
                                         </div>
                                         <div class="flex-1 -12 text-center">
-                                            {{ Form::submit(__('web.common.send_message'), ['class' => 'btn btn-primary fs-14 py-3 px-5']) }}
+                                            {{ Form::submit(__('web.common.send_message'), ['class' => 'btn btn-primary fs-14 py-3 px-5'])  }}
                                         </div>
                                     </div>
                                 @formClose()
@@ -109,14 +109,14 @@
     </div>
 @endsection
 <script>
-    var phoneNo = "{{ old('region_code') . old('phone_no') }}";
+    var phoneNo = "{{ old('region_code') . old('phone_no')  }}";
 </script>
-{{-- @section('page_scripts') --}}
-{{--    <script> --}}
-{{--        let isEdit = false --}}
-{{--        var phoneNo = "{{ old('region_code').old('phone') }}" --}}
-{{--        let utilsScript = "{{asset('assets/js/inttel/js/utils.min.js')}}" --}}
-{{--    </script> --}}
+{{ -- @section('page_scripts') -- }}
+{{ --    <script> -- }}
+{{ --        let isEdit = false -- }}
+{{ --        var phoneNo = "{{ old('region_code').old('phone')  }}" --}}
+{{ --        let utilsScript = "{{asset('assets/js/inttel/js/utils.min.js') }}" --}}
+{{ --    </script> -- }}
 
-{{--    {{-- CDN JS removed - now using local assets --}} --}}
-{{-- @endsection --}}
+{{ --    {{-- CDN JS removed - now using local assets -- }} --}}
+{{ -- @endsection -- }}

@@ -3,16 +3,16 @@
         @foreach($jobSchedules as $batch => $jobSchedule)
             <div class="slot-box-inner mb-3">
                 <div class="slot-box-inner-heading p-5 flex justify-between items-center">
-                    <h1>{{__('messages.job_stage.batch')}} {{$batch}}</h1>
+                    <h1>{{ __('messages.job_stage.batch') }} {{ $batch }}</h1>
                     @if($jobApplication->job_stage_id==$jobSchedule[0]->stage_id)
-                        {{--                        <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form-btn px-4 py-2 rounded font-medium transition-colors -sm float-right batch-slot"--}}
-                        {{--                           data-batch="{{ $batch }}">--}}
-                        {{--                            <i class="fas fa-plus"></i> {{ __('messages.common.add') }}--}}
-                        {{--                        </a>--}}
+                        {{ --                        <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form-btn px-4 py-2 rounded font-medium transition-colors -sm float-right batch-slot"-- }}
+                        {{ --                           data-batch="{{ $batch  }}">--}}
+                        {{ --                            <i class="fas fa-plus"></i> {{ __('messages.common.add')  }}--}}
+                        {{ --                        </a>-- }}
                         <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors float-right">
                             <a href="javascript:void(0)"
-                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary  batch-slot ms-2" data-batch="{{ $batch }}">
-                                {{ __('messages.common.add') }}
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary  batch-slot ms-2" data-batch="{{ $batch  }}">
+                                {{ __('messages.common.add')  }}
                             </a>
                         </div>
                     @endif
@@ -21,73 +21,73 @@
                     <div
                             class="slot-data mb-5">
                         <input type="hidden"
-                               class="{{$value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED ? 'slot-bg-danger' : ''}}{{$value->status == \App\Models\JobApplicationSchedule::STATUS_SEND ? 'slot-bg-success' : ''}}"
-                               value="{{$value->id}}">
+                               class="{{ $value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED ? 'slot-bg-danger' : '' }}{{ $value->status == \App\Models\JobApplicationSchedule::STATUS_SEND ? 'slot-bg-success' : '' }}"
+                               value="{{ $value->id }}">
                         <div
-                                class="flex flex-wrap shadow-sm py-9 px-5 rounded {{$value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED ?"slot-bg-danger' : ''}}{{$value->status == \App\Models\JobApplicationSchedule::STATUS_SEND ? 'slot-bg-success' : ''}}">
+                                class="flex flex-wrap shadow-sm py-9 px-5 rounded {{ $value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED ?"slot-bg-danger' : '' }}{{ $value->status == \App\Models\JobApplicationSchedule::STATUS_SEND ? 'slot-bg-success' : '' }}">
                             <div class="flex-1 -sm-1 flex justify-center items-center">
-                                <h6>{{$loop->iteration}}.</h6>
+                                <h6>{{ $loop->iteration }}.</h6>
                             </div>
                             <div class="flex-1 -sm-5 mb-3">
                                 <div class="">
                                     <label name="date"
-                                           class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job_stage.date').':' }}</label>
+                                           class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job_stage.date').':'  }}</label>
                                     <span class="required"></span>
                                     <div class="mt-2">
                                         <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" name=""
-                                               value="{{ $value->date }}" disabled required>
+                                               value="{{ $value->date  }}" disabled required>
                                     </div>
                                 </div>
                                 <div class=" mt-2">
                                     <label name="time"
-                                           class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job_stage.time').':' }}</label>
+                                           class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job_stage.time').':'  }}</label>
                                     <span class="required"></span>
                                     <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" name=""
-                                           value="{{ $value->time }}" disabled required>
+                                           value="{{ $value->time  }}" disabled required>
                                 </div>
                             </div>
                             <div class="flex-1 -sm-6 mt-0">
                                 <label name="notes"
-                                       class="block text-sm font-medium text-gray-700 mb-1 flex justify-between m-0">{{ __('messages.job.notes').':' }}
+                                       class="block text-sm font-medium text-gray-700 mb-1 flex justify-between m-0">{{ __('messages.job.notes').':'  }}
                                     <div class="h-full" style="margin-top: -10px;">
                                         @if($jobApplication->job_stage_id==$jobSchedule[0]->stage_id)
                                             @if(!($value->status == \App\Models\JobApplicationSchedule::STATUS_SEND) && !($value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED))
-                                                <a title="{{ __('messages.common.edit') }}"
+                                                <a title="{{ __('messages.common.edit')  }}"
                                                    class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-2 text-primary-600 fs-3 ps-0 edit-slot- px-4 py-2 rounded font-medium transition-colors"
-                                                   href="javascript:void(0)" data-id="{{$value->id}}"
+                                                   href="javascript:void(0)" data-id="{{ $value->id }}"
                                                    data-bs-toggle="tooltip">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>
                                             @endif
                                         @endif
-                                        <a title="{{ __('messages.common.delete') }}"
+                                        <a title="{{ __('messages.common.delete')  }}"
                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-2 text-red-600 fs-3 ps-0 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
-                                           data-id="{{$value->id}}" href="javascript:void(0)" data-bs-toggle="tooltip">
+                                           data-id="{{ $value->id }}" href="javascript:void(0)" data-bs-toggle="tooltip">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </div>
                                 </label>
                                 <textarea class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 textarea-sizing" name=""
-                                          disabled rows="5">{{ $value->notes }}</textarea>
+                                          disabled rows="5">{{ $value->notes  }}</textarea>
                             </div>
                         </div>
                     </div>
                     <div
-                            class="flex flex-wrap shadow rounded mb-5 p-5 choose-slot-textarea {{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_SEND) ?"' : 'd-none' }}">
-                        {{ Form::label('candidate_slot', __('messages.job_stage.candidate_note').':',['class'=>'form-label']) }}
+                            class="flex flex-wrap shadow rounded mb-5 p-5 choose-slot-textarea {{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_SEND) ?"' : 'd-none'  }}">
+                        {{ Form::label('candidate_slot', __('messages.job_stage.candidate_note').':',['class'=>'form-label'])  }}
                         <textarea name="choose_slot_notes" class="textarea-sizing w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                                   readonly
-                                  placeholder="{{__('messages.flash.enter_notes')}}">{{ $value->rejected_slot_notes }}</textarea>
+                                  placeholder="{{ __('messages.flash.enter_notes') }}">{{ $value->rejected_slot_notes  }}</textarea>
                         @if($isLastRecordStage == $value->stage_id)
-                            <label>{{ Form::label('candidate_slot', __('messages.job_stage.your_note').':', ['class' => 'form-label mt-3']) }}
+                            <label>{{ Form::label('candidate_slot', __('messages.job_stage.your_note').':', ['class' => 'form-label mt-3'])  }}
                                 <span class="required"></span></label>
                             <textarea name="cancel_slot_notes"
                                       class="textarea-sizing w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 cancel-slot-notes" required
-                                      placeholder="{{__('messages.flash.enter_cancel_reason')}}"></textarea>
+                                      placeholder="{{ __('messages.flash.enter_cancel_reason') }}"></textarea>
                             <div class="text-center">
                                 <a href="javascript:void(0)"
                                    class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 form- px-4 py-2 rounded font-medium transition-colors float-right cancel-slot mt-4 mx-auto"
-                                   data-schedule="{{$value->id}}">{{ __('messages.job_stage.cancel_slot') }}</a>
+                                   data-schedule="{{ $value->id }}">{{ __('messages.job_stage.cancel_slot')  }}</a>
                             </div>
                         @endif
                     </div>
@@ -103,22 +103,22 @@
                 ?>
                 @if($candidateRejectedSlot > 0)
                     <div class="flex flex-wrap shadow-sm py-5 choose-slot-textarea
-                                {{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED && empty($value->employer_cancel_slot_notes)) ?"' : 'd-none' }}">
+                                {{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED && empty($value->employer_cancel_slot_notes)) ?"' : 'd-none'  }}">
                         <div class="flex-1 -sm-12 flex flex-col">
-                            <span><b>{{__('messages.common.reason')}}:-</b> {{ $value->rejected_slot_notes }}</span>
+                            <span><b>{{ __('messages.common.reason') }}:-</b> {{ $value->rejected_slot_notes  }}</span>
                             <span name="choose_slot_notes">
-                                {{ $value->jobApplication->candidate->user->full_name .' '. __('messages.job_stage.cancel_this_slot') }}
+                                {{ $value->jobApplication->$candidate->$user->full_name .' '. __('messages.job_stage.cancel_this_slot')  }}
                             </span>
                         </div>
                     </div>
                 @endif
                 @if($employerRejectedSlot > 0 && !empty($value->rejected_slot_notes))
                     <div class="flex flex-wrap shadow-sm py-5 choose-slot-textarea
-{{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED && !empty($value->employer_cancel_slot_notes)) ?"' : 'd-none' }}">
+{{ ($value->status == \App\Models\JobApplicationSchedule::STATUS_REJECTED && !empty($value->employer_cancel_slot_notes)) ?"' : 'd-none'  }}">
                         <div class="flex-1 -sm-12 flex flex-col">
-                            <span><b>{{__('messages.common.reason')}}:-</b> {{ $value->employer_cancel_slot_notes }}</span>
+                            <span><b>{{ __('messages.common.reason') }}:-</b> {{ $value->employer_cancel_slot_notes  }}</span>
                             <span name="choose_slot_notes">
-                                {{__('messages.common.you_cancel_slot_date')}}:- {{ $value->date }} {{__('messages.common.and_time')}}:- {{ $value->time }}
+                                {{ __('messages.common.you_cancel_slot_date') }}:- {{ $value->date  }} {{ __('messages.common.and_time') }}:- {{ $value->time  }}
                             </span>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
         @endforeach
     @else
         <div class="lg:w-full px-2 flex-1 -md-12 flex justify-center">
-            <h5 class="text-gray-600">{{ __('messages.job_stage.no_slot_available') }} </h5>
+            <h5 class="text-gray-600">{{ __('messages.job_stage.no_slot_available')  }} </h5>
         </div>
     @endif
 </div>

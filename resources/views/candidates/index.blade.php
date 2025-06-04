@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.candidates') }}
+    {{ __('messages.candidates')  }}
 @endsection
 @push('css')
-{{--    <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
+{{ --    <link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">--}}
 @endpush
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -12,5 +12,5 @@
             <livewire:candidate-table/>
         </div>
     </div>
-    {{Form::hidden('candidateData',true,['id'=>'indexCandidateData'])}}
+    {{ Form::hidden('candidateData',true,['id'=>'indexCandidateData']) }}
 @endsection

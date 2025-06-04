@@ -35,7 +35,7 @@
                 <button 
                     @click="remove(notification.id)" 
                     class="ml-4 inline-flex text-gray-400 hover:text-gray-500">
-                    <span class="sr-only">{{ __('common.close') }}</span>
+                    <span class="sr-only">{{ __('common.close')  }}</span>
                     <x-icons.close class="h-5 w-5" />
                 </button>
             </div>

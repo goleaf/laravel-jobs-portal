@@ -8,7 +8,7 @@
                             <input wire:model.debounce.100ms="searchByAdminCandidate" id="searchByAdminCandidate"
                                    type="search"
                                    autocomplete="off"
-                                   placeholder="{{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                   placeholder="{{ __('web.common.search')  }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                         </div>
                     </div>
                 </div>
@@ -20,9 +20,9 @@
             <div class="flex-1 -md-12">
                 <h5 class="text-black text-center">
                     @if($searchByAdminCandidate)
-                        {{__('messages.candidate.no_candidate_found')}}
+                        {{ __('messages.candidate.no_candidate_found') }}
                     @else
-                        {{__('messages.candidate.no_candidate_available')}}
+                        {{ __('messages.candidate.no_candidate_available') }}
                     @endif
                 </h5>
             </div>
@@ -30,7 +30,7 @@
         <div class="flex-1 -md-12">
             <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                 @if($candidates->count() > 0)
-                    {{$candidates->links()}}
+                    {{ $candidates->links() }}
                 @endif
             </div>
         </div>

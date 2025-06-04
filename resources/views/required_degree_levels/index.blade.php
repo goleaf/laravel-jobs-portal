@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.required_degree_levels') }}
+    {{ __('messages.required_degree_levels')  }}
 @endsection
 @section('content')
     <div class="container mx-auto px-4 mx-auto -fluid">
@@ -11,5 +11,5 @@
         @include('required_degree_levels.add_modal')
         @include('required_degree_levels.edit_modal')
     </div>
-    {{Form::hidden('requiredDegreeLevel',true,['id'=>'indexRequiredDegreeLevel'])}}
+    {{ Form::hidden('requiredDegreeLevel',true,['id'=>'indexRequiredDegreeLevel']) }}
 @endsection

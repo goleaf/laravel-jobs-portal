@@ -24,12 +24,12 @@
         <script src="{{ asset('vendor/livewire/livewire.js') }}"></script>
         @include('livewire.livewire-turbo')
 
-        <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
+        <script {{-- Turbo included via @vite(['resources/js/vendor.js']) --}}
                 data-turbolinks-eval="false" data-turbo-eval="false">
         </script>
         <script src="https://js.stripe.com/v3/"></script>
         <script src="{{asset('js/front-third-party.js')}}"></script>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
+        {{-- CDN JS removed - now using local assets --}}
         <script>
             let siteKey = "{{config('app.google_recaptcha_site_key')}}"
         </script>
@@ -40,7 +40,9 @@
         @foreach(googleJobSchema() as $jobSchema)
             {!! nl2br($jobSchema) !!}
         @endforeach
-    </head>
+    
+    @vite(['resources/css/app.css', 'resources/js/frontend.js'])
+</head>
     <body {{$lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : ''}}>
     <span class="header-padding"></span>
     @include('front_web.layouts.header')

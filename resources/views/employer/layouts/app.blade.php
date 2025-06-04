@@ -8,9 +8,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css') }}">
+    <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}"/><link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css') }}">
     @if(getLoggedInUser()->theme_mode)
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom-dark.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.dark.css') }}">
@@ -23,12 +21,11 @@
     @livewireStyles
     @routes
     @livewireScripts
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false" data-turbo-eval="false"></script>
+    @vite(['resources/css/app.css', 'resources/js/admin.js'])
 </head>
 <script src="https://js.stripe.com/v3/"></script>
-<script src="{{ mix('js/third-party.js') }}"></script>
-<script src="{{ mix('js/pages.js') }}"></script>
+
+
 <body class="overflow-x-hidden">
 <div class="flex flex-col flex-root">
     <div class="flex flex-col flex-column-fluid">

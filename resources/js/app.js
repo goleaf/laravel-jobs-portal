@@ -1,54 +1,115 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 import './bootstrap';
-import '../assets/js/currency.js';
+import '../css/app.css';
 
-// Third-party libraries
-import 'jquery';
-import 'slick-carousel';
-import 'intl-tel-input';
-import 'intl-tel-input/build/js/utils.js';
-import 'autonumeric';
-import 'quill';
+// Import local packages
+import 'bootstrap';
+import $ from 'jquery';
+window.$ = window.jQuery = $;
 
-// Custom JS
-import '../assets/js/turbo';
-import '../assets/js/custom/helpers';
-import '../assets/js/custom/custom';
+import 'select2';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
-// Import the CSS files
-import 'intl-tel-input/build/css/intlTelInput.css';
-import 'timepicker/jquery.timepicker.min.css';
-import 'quill/dist/quill.snow.css';
-import 'quill/dist/quill.bubble.css';
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
+Alpine.start();
 
-// Include Vue
-import Vue from 'vue';
-window.Vue = Vue;
+import moment from 'moment';
+window.moment = moment;
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+import _ from 'lodash';
+window._ = _;
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+import axios from 'axios';
+window.axios = axios;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Chart libraries
+import Chart from 'chart.js/auto';
+window.Chart = Chart;
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+import ApexCharts from 'apexcharts';
+window.ApexCharts = ApexCharts;
 
-const app = new Vue({
-    el: '#app',
+// Date picker
+import flatpickr from 'flatpickr';
+window.flatpickr = flatpickr;
+
+// File upload
+import { Dropzone } from 'dropzone';
+window.Dropzone = Dropzone;
+
+// Sliders
+import { Swiper } from 'swiper/bundle';
+window.Swiper = Swiper;
+
+// Initialize common functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Initialize popovers
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+    });
+    
+    // Initialize DataTables
+    if ($.fn.DataTable) {
+        $('.data-table').DataTable({
+            responsive: true,
+            pageLength: 25,
+            language: {
+                search: 'Search:',
+                lengthMenu: 'Show _MENU_ entries',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                paginate: {
+                    first: 'First',
+                    last: 'Last',
+                    next: 'Next',
+                    previous: 'Previous'
+                }
+            }
+        });
+    }
+    
+    // Initialize Select2
+    if ($.fn.select2) {
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
+    }
+    
+    // Initialize date pickers
+    if (window.flatpickr) {
+        flatpickr('.datepicker', {
+            dateFormat: 'Y-m-d',
+            allowInput: true
+        });
+        
+        flatpickr('.datetimepicker', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i',
+            allowInput: true
+        });
+    }
 });
+
+// Global error handling
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.error);
+});
+
+// CSRF token setup
+const token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+    console.error('CSRF token not found');
+}

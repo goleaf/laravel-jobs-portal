@@ -166,7 +166,7 @@
 {{--        let isGoogleReCaptchaEnabled = "{{ (boolean)$isGoogleReCaptchaEnabled }}";--}}
 {{--    </script>--}}
 {{--    @if($isGoogleReCaptchaEnabled)--}}
-{{--        <script src='https://www.google.com/recaptcha/api.js'></script>--}}
+{{--        {{-- CDN JS removed - now using local assets --}}--}}
 {{--        <script src="{{asset('assets/js/front_register/google-recaptcha.js')}}"></script>--}}
 {{--    @endif--}}
 {{--@endsection--}}

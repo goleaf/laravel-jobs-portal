@@ -9,9 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" />
-    <!--begin::Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-    <!--end::Fonts-->
+    <!--begin::Fonts--><!--end::Fonts-->
 
     @vite(['resources/js/app.js'])
     
@@ -28,13 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pagination-fix.css') }}">
     @livewireStyles
     @routes
-    <!-- Add Alpine.js CDN -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @livewireScripts
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false" data-turbo-eval="false"></script>
-
-    <script src="{{ asset('js/third-party.js') }}"></script>
+    <!-- Add Alpine.js CDN -->@livewireScripts<script src="{{ asset('js/third-party.js') }}"></script>
     <script src="{{ asset('js/pages.js') }}"></script>
 
 </head>

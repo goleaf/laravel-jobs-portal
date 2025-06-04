@@ -118,5 +118,5 @@
 {{--        let utilsScript = "{{asset('assets/js/inttel/js/utils.min.js')}}" --}}
 {{--    </script> --}}
 
-{{--    <script src='https://www.google.com/rec aptcha/api.js'></script> --}}
+{{--    {{-- CDN JS removed - now using local assets --}} --}}
 {{-- @endsection --}}

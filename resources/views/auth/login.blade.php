@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Login') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
+    <title>{{ __('Login') }} - {{ config('app.name') }}</title></head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">

@@ -9,9 +9,8 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     
-    <!-- Bootstrap CSS --><!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/css/vendor.css'])
     @yield('page_css')
 </head>
 <body>
@@ -118,6 +117,8 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->@yield('page_scripts')
+    <!-- Vite Assets -->
+    @vite(['resources/js/app.js', 'resources/js/vendor.js'])
+    @yield('page_scripts')
 </body>
 </html> 

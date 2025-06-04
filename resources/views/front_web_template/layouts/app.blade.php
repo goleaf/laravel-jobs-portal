@@ -12,7 +12,8 @@
     <title>@yield('title') | {{ getAppName() }}</title>
     <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
     <link rel="icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
-    <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
+    @vite(['resources/css/app.css', 'resources/css/vendor.css'])
+    <link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 
     <link href="{{ asset('assets/css/front-third-party.css') }}" rel="stylesheet" type="text/css">
@@ -23,11 +24,10 @@
     @routes
 
     @livewireScripts
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-            data-turbolinks-eval="false" data-turbo-eval="false"></script>
+    @vite(['resources/js/app.js', 'resources/js/vendor.js'])
     <script src="https://js.stripe.com/v3/"></script>
     <script src="{{ mix('js/front-third-party.js') }}"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    {{-- CDN JS removed - now using local assets --}}
     <script>
         let siteKey = "{{ config('app.google_recaptcha_site_key') }}"
     </script>

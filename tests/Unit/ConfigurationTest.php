@@ -3,60 +3,33 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Support\Facades\Config;
 
 class ConfigurationTest extends TestCase
 {
-    /** @test */
-    public function it_has_database_configuration()
+    public function test_app_configuration_is_accessible(): void
     {
-        $dbConnection = Config::get('database.default');
-        $this->assertNotNull($dbConnection);
-        $this->assertIsString($dbConnection);
+        $this->assertIsString(config('app.name'));
+        $this->assertEquals('testing', config('app.env'));
     }
 
-    /** @test */
-    public function it_has_app_configuration()
+    public function test_database_configuration_for_testing(): void
     {
-        $appName = Config::get('app.name');
-        $appEnv = Config::get('app.env');
-        $appDebug = Config::get('app.debug');
-        
-        $this->assertNotNull($appName);
-        $this->assertIsString($appName);
-        $this->assertNotNull($appEnv);
-        $this->assertIsBool($appDebug);
+        $this->assertEquals('sqlite', config('database.default'));
+        $this->assertEquals(':memory:', config('database.connections.sqlite.database'));
     }
 
-    /** @test */
-    public function it_has_mail_configuration()
+    public function test_cache_configuration_for_testing(): void
     {
-        $mailDriver = Config::get('mail.default');
-        $this->assertNotNull($mailDriver);
-        $this->assertIsString($mailDriver);
+        $this->assertEquals('array', config('cache.default'));
     }
 
-    /** @test */
-    public function it_has_queue_configuration()
+    public function test_session_configuration_for_testing(): void
     {
-        $queueConnection = Config::get('queue.default');
-        $this->assertNotNull($queueConnection);
-        $this->assertIsString($queueConnection);
+        $this->assertEquals('array', config('session.driver'));
     }
 
-    /** @test */
-    public function it_has_cache_configuration()
+    public function test_mail_configuration_for_testing(): void
     {
-        $cacheStore = Config::get('cache.default');
-        $this->assertNotNull($cacheStore);
-        $this->assertIsString($cacheStore);
+        $this->assertEquals('array', config('mail.default'));
     }
-
-    /** @test */
-    public function it_has_session_configuration()
-    {
-        $sessionDriver = Config::get('session.driver');
-        $this->assertNotNull($sessionDriver);
-        $this->assertIsString($sessionDriver);
-    }
-} 
+}

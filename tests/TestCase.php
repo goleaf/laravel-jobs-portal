@@ -3,45 +3,29 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Helpers\TestHelpers;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
         
-        // Disable telescope for testing
-        config(['telescope.enabled' => false]);
+        // Create basic test data
+        TestHelpers::createBasicTestData();
         
-        // Set up basic configuration for testing
-        config([
-            'app.name' => 'Job Portal Test',
-            'app.env' => 'testing',
-            'database.default' => 'sqlite',
-            'database.connections.sqlite.database' => ':memory:',
-        ]);
+        // Set up testing environment
+        config(["app.env" => "testing"]);
+        config(["cache.default" => "array"]);
+        config(["session.driver" => "array"]);
+        config(["queue.default" => "sync"]);
     }
 
-    protected function createTestUser(array $attributes = []): \App\Models\User
+    protected function tearDown(): void
     {
-        return \App\Models\User::factory()->create(array_merge([
-            'email' => 'test_' . uniqid() . '@example.com',
-            'password' => bcrypt('password'),
-            'email_verified_at' => now(),
-        ], $attributes));
-    }
-
-    protected function createTestJob(array $attributes = []): \App\Models\Job
-    {
-        $user = $this->createTestUser();
-        
-        return \App\Models\Job::factory()->create(array_merge([
-            'user_id' => $user->id,
-            'title' => 'Test Job',
-            'description' => 'Test job description',
-            'expires_on' => now()->addDays(30),
-        ], $attributes));
+        parent::tearDown();
     }
 }

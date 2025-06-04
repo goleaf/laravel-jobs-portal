@@ -40,7 +40,8 @@ class RealTimeTrackingTest extends TestCase
         // Create test company with minimal required fields
         $this->company = Company::create([
             'user_id' => $this->employer->id,
-            'name' => 'Test Company'
+            'name' => 'Test Company',
+            'unique_id' => 'test_company_' . uniqid()
         ]);
         
         // Create test job with minimal required fields
@@ -168,7 +169,13 @@ class RealTimeTrackingTest extends TestCase
     /** @test */
     public function unauthorized_user_cannot_update_application_status()
     {
-        $otherUser = User::factory()->create(['user_type' => 'candidate']);
+        $otherUser = User::create([
+            'first_name' => 'Other',
+            'last_name' => 'User',
+            'email' => 'other@test.com',
+            'password' => bcrypt('password'),
+            'user_type' => 'candidate'
+        ]);
         
         $response = $this->actingAs($otherUser)
             ->postJson("/realtime/applications/{$this->application->id}/status", [

@@ -51,7 +51,7 @@ class AdminController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        return redirect()->route('admin.index')
+        return redirect()->route('admin.admin.index')
             ->with('success', 'Admin user created successfully.');
     }
 
@@ -84,7 +84,7 @@ class AdminController extends Controller
 
         $admin->update($validatedData);
 
-        return redirect()->route('admin.index')
+        return redirect()->route('admin.admin.index')
             ->with('success', 'Admin user updated successfully.');
     }
 
@@ -94,13 +94,13 @@ class AdminController extends Controller
     public function destroy(User $admin): RedirectResponse
     {
         if ($admin->id === auth()->id()) {
-            return redirect()->route('admin.index')
+            return redirect()->route('admin.admin.index')
                 ->with('error', 'You cannot delete your own account.');
         }
 
         $admin->delete();
 
-        return redirect()->route('admin.index')
+        return redirect()->route('admin.admin.index')
             ->with('success', 'Admin user deleted successfully.');
     }
 }

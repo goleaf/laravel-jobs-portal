@@ -12,7 +12,7 @@
 </li>
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/admins*') ? 'd-none' : '' }}">
     <a class="nav-link p-0 {{ Request::is('admin/admins*') ? 'active' : '' }}"
-       href="{{ route('admin.index') }}">{{ __('messages.candidate.admins') }}</a>
+       href="{{ route('admin.admin.index') }}">{{ __('messages.candidate.admins') }}</a>
 </li>
 
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">

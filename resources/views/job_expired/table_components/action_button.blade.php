@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-    <a href="{{route('admin.job.edit', $row->id)}}" title="{{__('messages.common.edit') }}"
+    <a href="{{route('admin.jobs.edit', $row->id)}}" title="{{__('messages.common.edit') }}"
        class="btn px-2 text-primary fs-3 ps-0" data-bs-toggle="tooltip">
         <i class="fa-solid fa-pen-to-square"></i>
     </a>

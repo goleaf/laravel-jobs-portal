@@ -22,7 +22,7 @@
             </div>
             <div class="card ">
                 <div class="card-body ">
-                    {{ Form::open(['route' => 'admin.job.store','id' => 'createJobForm']) }}
+                    {{ Form::open(['route' => 'admin.jobs.store','id' => 'createJobForm']) }}
 
                     @include('jobs.fields')
 

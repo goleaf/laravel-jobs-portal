@@ -127,7 +127,7 @@ class UserController extends AppBaseController
 
         Flash::success(__('messages.flash.admin_save'));
 
-        return redirect(route('admin.index'));
+        return redirect(route('admin.admin.index'));
     }
 
     /**
@@ -155,7 +155,7 @@ class UserController extends AppBaseController
 
         Flash::success(__('messages.flash.admin_update'));
 
-        return redirect(route('admin.index'));
+        return redirect(route('admin.admin.index'));
     }
 
     public function adminDestroy(User $user): JsonResponse

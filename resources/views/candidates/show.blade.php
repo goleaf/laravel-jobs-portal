@@ -7,9 +7,9 @@
         <div class="d-md-flex align-items-center justify-content-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{{ route('candidates.edit',$candidate->id) }}"
+                <a href="{{ route('admin.candidates.edit',$candidate->id) }}"
                    class="btn btn-primary me-4">{{ __('messages.common.edit') }}</a>
-                <a href="{{ route('candidates.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
+                <a href="{{ route('admin.candidates.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>

@@ -17,7 +17,9 @@
                         <label class="text-decoration-none text-color-gray">{{ $candidate['user']['email'] }}</label>
                     </div>
                     <div class="text-center">
-                        <span class="badge text-uppercase text-black available-badge"> {{ $candidate['immediate_available'] == 0 ? {{ __('messages.not_immediate_available') }}:{{ __('messages.immediate_available') }} }}</span>
+                        <span class="badge text-uppercase text-black available-badge">
+                            {{ $candidate['immediate_available'] == 0 ? __('messages.not_immediate_available') : __('messages.immediate_available') }}
+                        </span>
                     </div>
                 </div>
             </div>

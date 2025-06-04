@@ -124,6 +124,31 @@ Route::get('/companies', function () {
     return view('companies.index');
 })->name('companies.index');
 
+// Additional routes that are commonly referenced in navigation
+Route::get('/employer-register', function () {
+    return view('auth.employer_register');
+})->name('employer.register');
+
+Route::get('/candidate-register', function () {
+    return view('auth.candidate_register');
+})->name('candidate.register');
+
+Route::get('/terms-and-conditions', function () {
+    return view('terms_conditions');
+})->name('terms.conditions.list');
+
+Route::get('/privacy-policy-page', function () {
+    return view('privacy_policy');
+})->name('privacy.policy.list');
+
+Route::get('/posts', function () {
+    return view('posts.index');
+})->name('posts.index');
+
+Route::get('/job-listing', function () {
+    return view('jobs.index');
+})->name('job.index');
+
 // Company management routes
 Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
 Route::get('/company/create', [App\Http\Controllers\CompanyController::class, 'create'])->name('company.create');
@@ -152,6 +177,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/job-alerts', function () {
             return view('candidate.job_alert.index');
         })->name('job-alerts');
+        
+        // Missing candidate routes
+        Route::get('/job-alert', function () {
+            return view('candidate.job_alert.index');
+        })->name('job.alert');
+        
+        Route::get('/applied-job', function () {
+            return view('candidate.applied_job.index');
+        })->name('applied.job');
     });
 
     // Employer routes
@@ -386,7 +420,62 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cms-about-us', function () {
             return view('admin.cms_about_us.index');
         })->name('cms.about-us.service');
+        
+        // Missing admin index route
+        Route::get('/', function () {
+            return view('admin.dashboard.index');
+        })->name('index');
     });
+    
+    // Utility routes for authenticated users
+    Route::get('/manage-subscription', function () {
+        return view('subscription.index');
+    })->name('manage-subscription.index');
+    
+    Route::get('/transactions', function () {
+        return view('transactions.index');
+    })->name('transactions.index');
+    
+    Route::get('/theme-mode-toggle', function () {
+        session(['theme_mode' => !session('theme_mode', false)]);
+        return redirect()->back();
+    })->name('theme.mode');
+    
+    Route::get('/followers', function () {
+        return view('followers.index');
+    })->name('followers.index');
+    
+    Route::get('/favourite-companies', function () {
+        return view('candidate.favourite_companies.index');
+    })->name('favourite.companies');
+    
+    Route::get('/favourite-jobs', function () {
+        return view('candidate.favourite_jobs.index');
+    })->name('favourite.jobs');
+    
+    Route::get('/candidates-list', function () {
+        return view('candidates.index');
+    })->name('candidates.index');
+    
+    Route::get('/testimonials', function () {
+        return view('testimonials.index');
+    })->name('testimonials.index');
+    
+    Route::get('/subscribers', function () {
+        return view('subscribers.index');
+    })->name('subscribers.index');
+    
+    Route::get('/noticeboards', function () {
+        return view('noticeboards.index');
+    })->name('noticeboards.index');
+    
+    Route::get('/plans', function () {
+        return view('plans.index');
+    })->name('plans.index');
+    
+    Route::get('/post-categories', function () {
+        return view('post_categories.index');
+    })->name('post-categories.index');
 });
 
 // Job and company detail pages
@@ -458,6 +547,23 @@ Route::prefix('front')->name('front.')->group(function () {
     Route::get('/candidate-details/{candidateId}', function ($candidateId) {
         return view('front_web.candidates.show');
     })->name('candidate.details');
+    
+    // Additional front-end routes that are missing
+    Route::get('/register', function () {
+        return view('front_web.auth.register');
+    })->name('save.register');
+    
+    Route::get('/candidate-login', function () {
+        return view('front_web.auth.candidate_login');
+    })->name('candidate.login');
+    
+    Route::get('/employee-login', function () {
+        return view('front_web.auth.employee_login');
+    })->name('employee.login');
+    
+    Route::get('/login', function () {
+        return view('front_web.auth.login');
+    })->name('login');
 });
 
 // Additional utility routes
@@ -505,3 +611,14 @@ Route::get('/components/icon-documentation', function () {
 Route::get('/icons/documentation', function () {
     return view('icons.documentation');
 })->name('icons.documentation');
+
+// Additional API routes for form functionality
+Route::get('/states-list', function () {
+    $states = [];
+    return response()->json($states);
+})->name('states-list');
+
+Route::get('/cities-list', function () {
+    $cities = [];
+    return response()->json($cities);
+})->name('cities-list');

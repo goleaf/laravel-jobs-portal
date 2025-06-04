@@ -13,7 +13,7 @@
         <div class="d-md-flex align-items-center justify-content-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{{ route('candidates.index') }}"
+                <a href="{{ route('admin.candidates.index') }}"
                    class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    {{ Form::model($user, ['route' => ['candidates.update', $candidate->id], 'method' => 'put', 'id' => 'editCandidatesForm']) }}
+                    {{ Form::model($user, ['route' => ['admin.candidates.update', $candidate->id], 'method' => 'put', 'id' => 'editCandidatesForm']) }}
 
                     @include('candidates.edit_fields')
 
@@ -56,7 +56,7 @@
         let stateId = '{{$candidate->user->state_id}}';
         let cityId = '{{$candidate->user->city_id}}';
     </script>
-    {{--    <script src="{{mix('assets/js/custom/input_price_format.js')}}"></script>--}}
-    {{--    <script src="{{mix('assets/js/candidate/create-edit.js')}}"></script>--}}
-    {{--    <script src="{{ mix('assets/js/custom/phone-number-country-code.js') }}"></script>--}}
+    <script src="{{ asset('assets/js/custom/input_price_format.js') }}"></script>
+    <script src="{{ asset('assets/js/candidate/create-edit.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/phone-number-country-code.js') }}"></script>
 @endpush

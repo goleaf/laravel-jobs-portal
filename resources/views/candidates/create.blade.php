@@ -7,7 +7,7 @@
         <div class="d-md-flex align-items-center justify-content-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{{ route('candidates.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
+                <a href="{{ route('admin.candidates.index') }}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    {{ Form::open(['route' => 'candidates.store', 'id' => 'createCandidatesForm']) }}
+                    {{ Form::open(['route' => 'admin.candidates.store', 'id' => 'createCandidatesForm']) }}
                     @include('candidates.fields')
                     {{ Form::close() }}
                 </div>

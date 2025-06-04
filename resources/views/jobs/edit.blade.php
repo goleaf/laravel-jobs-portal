@@ -22,7 +22,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    {{ Form::model($job, ['route' => ['admin.job.update', $job->id], 'method' => 'put', 'id' => 'editJobForm']) }}
+                    {{ Form::model($job, ['route' => ['admin.jobs.update', $job->id], 'method' => 'put', 'id' => 'editJobForm']) }}
 
                     @include('jobs.edit_fields')
 

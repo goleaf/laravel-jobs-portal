@@ -2,148 +2,203 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+// Bootstrap Laravel application
 $app = require_once __DIR__ . '/bootstrap/app.php';
-
-// Bind the app to the facade root
-Illuminate\Support\Facades\Facade::setFacadeApplication($app);
-
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-// Create a fake request to properly initialize the application
-$request = Illuminate\Http\Request::create('/', 'GET');
+// Create a request instance
+$request = Request::create('/', 'GET');
 $response = $kernel->handle($request);
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
+// Initialize the application
+$app->boot();
 
-echo "🔍 Route Analysis Report\n";
-echo "========================\n\n";
+echo "=== COMPREHENSIVE ROUTE ANALYSIS ===\n\n";
 
+// Get all registered routes
 $routes = Route::getRoutes();
-$totalRoutes = count($routes);
-$workingRoutes = [];
-$brokenRoutes = [];
-$missingViews = [];
+$routeCollection = $routes->getRoutes();
 
-echo "📊 Total Routes Found: {$totalRoutes}\n\n";
+$results = [
+    'working' => [],
+    'missing_views' => [],
+    'missing_controllers' => [],
+    'errors' => [],
+    'total' => 0
+];
 
-foreach ($routes as $route) {
-    $name = $route->getName();
-    $uri = $route->uri();
-    $methods = implode('|', $route->methods());
-    $action = $route->getActionName();
+echo "Total routes found: " . count($routeCollection) . "\n\n";
+
+foreach ($routeCollection as $route) {
+    $results['total']++;
+    $routeName = $route->getName();
+    $routeUri = $route->uri();
+    $routeMethods = implode('|', $route->methods());
     
-    if (str_contains($uri, '{') || in_array('POST', $route->methods()) || in_array('PUT', $route->methods()) || in_array('DELETE', $route->methods())) {
-        // Skip routes with parameters or non-GET methods for this test
-        continue;
-    }
-    
-    echo "🧪 Testing: {$methods} {$uri}";
-    if ($name) {
-        echo " [{$name}]";
-    }
-    echo "\n";
+    echo "Testing Route: {$routeName} ({$routeMethods}) -> {$routeUri}\n";
     
     try {
-        // Test if the route action exists
-        if (str_contains($action, '@')) {
-            [$controller, $method] = explode('@', $action);
-            if (!class_exists($controller)) {
-                $brokenRoutes[] = [
-                    'route' => $name,
-                    'uri' => $uri,
-                    'error' => "Controller {$controller} not found"
-                ];
-                echo "   ❌ Controller missing: {$controller}\n";
-                continue;
-            }
-            
-            if (!method_exists($controller, $method)) {
-                $brokenRoutes[] = [
-                    'route' => $name,
-                    'uri' => $uri,
-                    'error' => "Method {$method} not found in {$controller}"
-                ];
-                echo "   ❌ Method missing: {$method}\n";
-                continue;
-            }
+        // Skip routes that require parameters for now
+        if (strpos($routeUri, '{') !== false) {
+            echo "  ⚠️  Skipped (requires parameters)\n\n";
+            continue;
         }
         
-        // Check for view existence if it's a closure that returns a view
-        $closure = $route->getAction('uses');
-        if ($closure instanceof Closure) {
-            // Try to extract view name from closure source
-            $reflection = new ReflectionFunction($closure);
-            $source = file($reflection->getFileName());
-            $body = '';
-            for ($i = $reflection->getStartLine() - 1; $i < $reflection->getEndLine(); $i++) {
-                $body .= $source[$i];
-            }
+        // Skip POST/PUT/DELETE routes for basic testing
+        if (in_array('POST', $route->methods()) || 
+            in_array('PUT', $route->methods()) || 
+            in_array('DELETE', $route->methods())) {
+            echo "  ⚠️  Skipped (non-GET method)\n\n";
+            continue;
+        }
+        
+        // Create test request
+        $testRequest = Request::create('/' . ltrim($routeUri, '/'), 'GET');
+        
+        // Try to match the route
+        try {
+            $matchedRoute = $routes->match($testRequest);
             
-            if (preg_match("/view\s*\(\s*['\"]([^'\"]+)['\"]/", $body, $matches)) {
-                $viewName = $matches[1];
-                if (!View::exists($viewName)) {
-                    $missingViews[] = [
-                        'route' => $name,
-                        'uri' => $uri,
-                        'view' => $viewName
+            // Check if it's a closure or controller
+            $action = $route->getAction();
+            
+            if (isset($action['uses']) && is_string($action['uses'])) {
+                // Controller action
+                list($controller, $method) = explode('@', $action['uses']);
+                
+                if (!class_exists($controller)) {
+                    $results['missing_controllers'][] = [
+                        'route' => $routeName,
+                        'uri' => $routeUri,
+                        'controller' => $controller,
+                        'method' => $method
                     ];
-                    echo "   ⚠️  View missing: {$viewName}\n";
-                } else {
-                    echo "   ✅ View exists: {$viewName}\n";
+                    echo "  ❌ Missing Controller: {$controller}\n\n";
+                    continue;
                 }
+                
+                if (!method_exists($controller, $method)) {
+                    $results['missing_controllers'][] = [
+                        'route' => $routeName,
+                        'uri' => $routeUri,
+                        'controller' => $controller,
+                        'method' => $method,
+                        'issue' => 'Missing method'
+                    ];
+                    echo "  ❌ Missing Method: {$controller}@{$method}\n\n";
+                    continue;
+                }
+                
+                echo "  ✅ Controller exists: {$controller}@{$method}\n";
+            } else {
+                // Closure route
+                echo "  ✅ Closure route\n";
             }
+            
+            $results['working'][] = [
+                'route' => $routeName,
+                'uri' => $routeUri,
+                'type' => isset($action['uses']) ? 'controller' : 'closure'
+            ];
+            
+        } catch (Exception $e) {
+            $results['errors'][] = [
+                'route' => $routeName,
+                'uri' => $routeUri,
+                'error' => $e->getMessage()
+            ];
+            echo "  ❌ Error: " . $e->getMessage() . "\n\n";
+            continue;
         }
-        
-        $workingRoutes[] = [
-            'route' => $name,
-            'uri' => $uri,
-            'action' => $action
-        ];
-        echo "   ✅ Route structure OK\n";
         
     } catch (Exception $e) {
-        $brokenRoutes[] = [
-            'route' => $name,
-            'uri' => $uri,
+        $results['errors'][] = [
+            'route' => $routeName,
+            'uri' => $routeUri,
             'error' => $e->getMessage()
         ];
-        echo "   ❌ Error: " . $e->getMessage() . "\n";
+        echo "  ❌ Exception: " . $e->getMessage() . "\n\n";
     }
     
     echo "\n";
 }
 
-// Summary Report
-echo "\n📋 SUMMARY REPORT\n";
-echo "==================\n";
-echo "✅ Working Routes: " . count($workingRoutes) . "\n";
-echo "❌ Broken Routes: " . count($brokenRoutes) . "\n";
-echo "⚠️  Missing Views: " . count($missingViews) . "\n\n";
+// Generate summary report
+echo "\n=== SUMMARY REPORT ===\n";
+echo "Total Routes: " . $results['total'] . "\n";
+echo "Working Routes: " . count($results['working']) . "\n";
+echo "Missing Controllers: " . count($results['missing_controllers']) . "\n";
+echo "Errors: " . count($results['errors']) . "\n";
 
-if (!empty($brokenRoutes)) {
-    echo "🚨 BROKEN ROUTES:\n";
-    echo "------------------\n";
-    foreach ($brokenRoutes as $broken) {
-        echo "❌ {$broken['route']} ({$broken['uri']})\n";
-        echo "   Error: {$broken['error']}\n\n";
+if (!empty($results['missing_controllers'])) {
+    echo "\n=== MISSING CONTROLLERS ===\n";
+    foreach ($results['missing_controllers'] as $missing) {
+        echo "Route: {$missing['route']} -> {$missing['controller']}\n";
+        if (isset($missing['method'])) {
+            echo "  Method: {$missing['method']}\n";
+        }
+        if (isset($missing['issue'])) {
+            echo "  Issue: {$missing['issue']}\n";
+        }
+        echo "\n";
     }
 }
 
-if (!empty($missingViews)) {
-    echo "📄 MISSING VIEWS:\n";
-    echo "------------------\n";
-    foreach ($missingViews as $missing) {
-        echo "⚠️  {$missing['route']} ({$missing['uri']})\n";
-        echo "   View: {$missing['view']}\n\n";
+if (!empty($results['errors'])) {
+    echo "\n=== ERRORS ===\n";
+    foreach ($results['errors'] as $error) {
+        echo "Route: {$error['route']} ({$error['uri']})\n";
+        echo "Error: {$error['error']}\n\n";
     }
 }
 
-echo "🎯 RECOMMENDATIONS:\n";
-echo "---------------------\n";
+// Check for commonly referenced routes in blade files
+echo "\n=== BLADE FILE ROUTE ANALYSIS ===\n";
+
+$commonRoutes = [
+    'front.home',
+    'jobs.index',
+    'companies.index',
+    'about-us',
+    'contact',
+    'login',
+    'register',
+    'dashboard',
+    'admin.dashboard',
+    'admin.jobs.index',
+    'admin.candidates.index',
+    'admin.transactions.index',
+    'company.show',
+    'company.edit',
+    'posts.show',
+    'posts.edit',
+    'front.job.details',
+    'front.candidate.details',
+    'front.company.details'
+];
+
+foreach ($commonRoutes as $routeName) {
+    if (Route::has($routeName)) {
+        echo "✅ {$routeName} - EXISTS\n";
+    } else {
+        echo "❌ {$routeName} - MISSING\n";
+    }
+}
+
+// Save results to JSON file
+file_put_contents('route_analysis_report.json', json_encode($results, JSON_PRETTY_PRINT));
+echo "\n📄 Detailed report saved to: route_analysis_report.json\n";
+
+echo "\n=== RECOMMENDATIONS ===\n";
 echo "1. Create missing controllers and methods\n";
-echo "2. Create missing view files\n";
-echo "3. Fix route name conflicts\n";
-echo "4. Test routes with parameters separately\n\n";
+echo "2. Implement proper request validation classes\n";
+echo "3. Add missing view files\n";
+echo "4. Test routes with parameters manually\n";
+echo "5. Implement proper error handling\n";
+echo "6. Add middleware for authentication and authorization\n";
 
-echo "✅ Route analysis complete!\n"; 
+$kernel->terminate($request, $response); 

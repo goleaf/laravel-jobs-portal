@@ -21,7 +21,7 @@
                                         <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="language" id="editLanguage" required 
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                         placeholder="{{ __('messages.language.language') }}">
                                 </div>
                                 
@@ -31,7 +31,7 @@
                                         <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="iso_code" id="editIso" required 
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                                         placeholder="{{ __('messages.language.iso_code') }}">
                                 </div>
                             </form>
@@ -41,11 +41,11 @@
             </div>
             <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex- flex flex-wrap -reverse">
                 <button type="button" id="btnEditSave" 
-                    class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-primary-600 border border-gray-300 border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
                     {{ __('messages.common.save') }}
                 </button>
                 <button type="button" id="btnEditCancel"
-                    class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                     {{ __('messages.common.cancel') }}
                 </button>
             </div>

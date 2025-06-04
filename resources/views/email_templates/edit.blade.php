@@ -3,18 +3,18 @@
     {{ __('messages.email_template.edit_email_template') }}
 @endsection
 @section('header_toolbar')
-    <div class="container mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto -fluid">
         <div class="d-md-flex items-center justify-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a href="{!! URL::previous() !!}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary">{{ __('messages.common.back') }}</a>
+                <a href="{!! URL::previous() !!}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>
 @endsection
 @section('content')
-    <div class="container mx-auto -fluid">
-        <div class="flex flex-column">
+    <div class="container mx-auto px-4 mx-auto -fluid">
+        <div class="flex flex-col">
             <div class="flex flex-wrap">
                 <div class="flex-1 -12">
                     @include('layouts.errors')
@@ -44,10 +44,10 @@
                                     {{ Form::text('variables', null, ['class' => 'form-control','readonly']) }}
                                 </div>
 
-                                <div class="flex justify-content-end mt-5">
+                                <div class="flex justify-end mt-5">
                                     {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3']) }}
                                     <a href="{{ route('admin.email-template.index') }}"
-                                       class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
+                                       class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
                                 </div>
                             </div>
                         </div>

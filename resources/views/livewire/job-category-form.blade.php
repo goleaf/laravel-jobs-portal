@@ -36,7 +36,7 @@
                                     class="hidden"
                                     accept="image/*"
                                 >
-                                <label for="image" class="cursor-pointer px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <label for="image" class="cursor-pointer px-4 py-2 bg-white border border-gray-300 border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     {{ __('messages.common.choose_file') }}
                                 </label>
                                 <span class="ml-2 text-sm text-gray-500">
@@ -46,7 +46,7 @@
                             
                             @if($image || $existingImage)
                                 <div class="mt-2">
-                                    <div class="relative h-24 w-24 overflow-hidden rounded-lg border border-gray-200">
+                                    <div class="relative h-24 w-24 overflow-hidden rounded-lg border border-gray-300 border-gray-200">
                                         @if($image)
                                             <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-full w-full object-cover">
                                         @elseif($existingImage)
@@ -78,12 +78,12 @@
                             <x-button
                                 type="button"
                                 value="{{ __('messages.common.cancel') }}"
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 wire:click="closeModal"
                             />
                             <x-submit-button
                                 value="{{ $isEditing ? __('messages.common.update') : __('messages.common.save') }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             />
                         </div>
                     </x-form>

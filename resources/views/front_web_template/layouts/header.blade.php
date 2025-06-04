@@ -1,8 +1,8 @@
 <header class="bg-gradient">
-    <nav class="navbar bg-white shadow-sm -expand-lg">
-        <div class="container mx-auto">
+    <nav class="bg-white shadow-sm border-b border-gray-200 bg-white shadow-sm -expand-lg">
+        <div class="container mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm -brand" href="{{ url('/') }}">
-                <img src="{{ asset($settings['logo']) }}" alt="" class="d-inline-block img-fluid h-full" />
+                <img src="{{ asset($settings['logo']) }}" alt="" class="inline-block img-fluid h-full" />
             </a>
             <div class="flex items-center">
                 <button class="bg-white shadow-sm -toggler border-0 p-0" type="button" data-bs-toggle="collapse"
@@ -14,8 +14,8 @@
                         <span class="icon-bar bottom-bar"></span>
                     </div>
                 </button>
-                <div class="collapse bg-white shadow-sm -collapse justify-content-lg-between justify-content-end" id="navbarNav">
-                    <ul class="bg-white shadow-sm -nav flex justify-content-end align-items-lg-center w-full">
+                <div class="collapse bg-white shadow-sm -collapse justify-content-lg-between justify-end" id="navbarNav">
+                    <ul class="bg-white shadow-sm -nav flex justify-end align-items-lg-center w-full">
                         <li class="nav-item">
                             <a class="header- bg-white shadow-sm -color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("/') ? 'header-navbar-color-active' : '' }}"
                                 aria-current="page" href="{{ route('front.home') }}">{{ __('web.home') }}</a>
@@ -51,8 +51,8 @@
                                 href="{{ route('front.post.lists') }}">{{ __('messages.post.blog') }}</a>
                         </li>
                         <li class="nav-item">
-                            <div class="dropdown">
-                                <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray dropdown-toggle language-dropdown- px-4 py-2 rounded font-medium transition-colors" type="button"
+                            <div class="relative inline-block text-left">
+                                <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 language-dropdown- px-4 py-2 rounded font-medium transition-colors" type="button"
                                      aria-expanded="false">
                                     {{ getCurrentLanguageName() }}
                                 </a>
@@ -61,7 +61,7 @@
                                         <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : '' }}"
                                             data-prefix-value="{{ $key }}">
                                             <a href="javascript:void(0)"
-                                                class="dropdown-item text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
                                                 @if (array_key_exists($key, \App\Models\User::LANGUAGES_IMAGE))
                                                     @foreach (\App\Models\User::LANGUAGES_IMAGE as $imageKey => $imageValue)
                                                         @if ($imageKey == $key)
@@ -82,8 +82,8 @@
                         </li>
 
                         {{-- <div class="flex items-center gap-xl-4 gap-3 mt-lg-0 mt-2 ms-xl-3 ms-lg-2">
-                            <button class="btn px-4 py-2 rounded font-medium transition-colors -secondary" type="submit">Login</button>
-                            <button class="btn px-4 py-2 rounded font-medium transition-colors -primary" type="submit">
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" type="submit">Login</button>
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary" type="submit">
                                 Register
                             </button>
                         </div> --}}
@@ -92,8 +92,8 @@
                                 <ul class="bg-white shadow-sm -nav flex flex- flex flex-wrap items-center py-2 py-lg-0">
                                     <li class="nav-item login_btn">
                                         <a href="{{ route('front.candidate.login') }}"
-                                            class="nav-link btn bg-gray-500 text-white hover:bg-gray-600 px-4 py-2 rounded font-medium transition-colors -secondary-login me-xxl-4 me-2 mb-3 mb-lg-0 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ __('web.login') }}</a>
-                                        <ul class="nav submenu">
+                                            class="px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-gray-500 text-white hover:bg-gray-600 px-4 py-2 rounded font-medium transition-colors -secondary-login me-xxl-4 me-2 mb-3 mb-lg-0 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ __('web.login') }}</a>
+                                        <ul class="flex space-x-1 submenu">
                                             <li class="nav-item mb-3 mt-2">
                                                 <a href="{{ route('front.candidate.login') }}"
                                                     class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray flex items-center">
@@ -110,8 +110,8 @@
                                     </li>
                                     <li class="nav-item register_btn">
                                         <a href="{{ route('candidate.register') }}"
-                                            class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register mb-3 mb-lg-0">{{ __('web.register') }}</a>
-                                        <ul class="nav submenu">
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register mb-3 mb-lg-0">{{ __('web.register') }}</a>
+                                        <ul class="flex space-x-1 submenu">
                                             <li class="nav-item mb-3 mt-2">
                                                 <a href="{{ route('candidate.register') }}"
                                                     class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray flex items-center">
@@ -140,7 +140,7 @@
                                             <span class="text-truncate"> {{ __('messages.common.hi') }},
                                                 {{ getLoggedInUser()->full_name }}</span>
                                         </a>
-                                        <ul class="nav submenu" style="text-align: initial;">
+                                        <ul class="flex space-x-1 submenu" style="text-align: initial;">
                                             <li class="nav-item mb-3 mt-2">
                                                 <a href="{{ dashboardURL() }}" data-turbo="false"
                                                     class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray flex items-center">

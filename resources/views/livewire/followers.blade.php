@@ -1,28 +1,28 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
-                <div class="col-lg-12 flex-1 -md-12">
+                <div class="lg:w-full px-2 flex-1 -md-12">
                     @if(count($followers) > 0 || $searchByFollowers != '')
-                        <div class="flex flex-wrap mb-2 justify-content-end">
+                        <div class="flex flex-wrap mb-2 justify-end">
                             <div class="flex-1 -md-3 mx-width">
                                 <input wire:model.debounce.100ms="searchByFollowers" type="search"
                                        id="searchByFollowers"
-                                       placeholder="{{ __('web.job_menu.search_followers') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                       placeholder="{{ __('web.job_menu.search_followers') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                             </div>
                         </div>
                     @endif
                     @if(count($followers) > 0)
                         <div class="favorite-company-dashboard-box">
-                            <div class="flex flex-wrap position-relative">
+                            <div class="flex flex-wrap relative">
                                 @foreach($followers as $follower)
                                     <div class="w-full col-sm-6 md:w-6/12 flex-1 -xl-4 favorite-job-details">
-                                        <div class="hover-effect-favorite-company position-relative {{ $loop->odd ? 'blue-color' : 'black-color' }} mb-5">
-                                            <div class="ribbon float-right {{ ($follower->user->candidate->immediate_available == 1) ? 'ribbon-primary' : 'ribbon-danger' }} favorite-companies-ribbon">
+                                        <div class="hover-effect-favorite-company relative {{ $loop->odd ? "blue-color' : 'black-color' }} mb-5">
+                                            <div class="ribbon float-right {{ ($follower->user->candidate->immediate_available == 1) ? "ribbon-primary' : 'ribbon-danger' }} favorite-companies-ribbon">
                                                 {{ ($follower->user->candidate->immediate_available == 1) ? __('messages.candidate.immediate_available') : __('messages.candidate.not_immediate_available') }}
                                             </div>
                                             <div class="job-listing-details nopadding">
-                                                <div class="flex job-listing-description position-relative">
+                                                <div class="flex job-listing-description relative">
                                                     <div class="pl-0 mb-auto float-left follower-avatar">
                                                         <img src="{{ $follower->user->avatar }}"
                                                              class="img-responsive favorite-company-image mr-2">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         @else
-                            <div class="col-lg-12 flex-1 -md-12 flex justify-center">
+                            <div class="lg:w-full px-2 flex-1 -md-12 flex justify-center">
                                 <h5>
                                     @if($searchByFollowers)
                                         {{ __('messages.job.no_followers_found') }}

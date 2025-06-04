@@ -2,13 +2,13 @@
     <div class="flex flex-wrap">
         @if(count($salaryPeriods) > 0 || $searchBySalaryPeriods != '')
             <div class="flex-1 -md-12">
-                <div class="flex flex-wrap mb-3 justify-content-end flex-wrap">
+                <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                     <div>
                         <div class="selectgroup mr-4">
                             <input wire:model.debounce.100ms="searchBySalaryPeriods" id="searchBySalaryPeriods"
                                    type="search"
                                    autocomplete="off"
-                                   placeholder="{{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                   placeholder="{{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
             </div>
         @endforelse
         <div class="flex-1 -md-12">
-            <div class="flex flex-wrap mb-3 justify-content-end flex-wrap">
+            <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                 @if($salaryPeriods->count() > 0)
                     {{$salaryPeriods->links()}}
                 @endif

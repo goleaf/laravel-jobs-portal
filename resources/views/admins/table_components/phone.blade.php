@@ -1,5 +1,5 @@
 <div class="flex items-center">
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         @if($row->phone)
             <span class="fs-6">{{ $row->phone }}</span>
         @else

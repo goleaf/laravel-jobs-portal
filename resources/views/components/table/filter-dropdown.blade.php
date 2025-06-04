@@ -54,14 +54,14 @@
                     <button
                         type="button"
                         @click="close"
-                        class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="inline-flex justify-center rounded-md border border-gray-300 border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         {{ __('cancel') }}
                     </button>
                     <button
                         type="button"
                         onclick="this.previousElementSibling.previousElementSibling.dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))"
-                        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-2 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="inline-flex justify-center rounded-md border border-gray-300 border-transparent bg-indigo-600 px-2 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         {{ __('apply') }}
                     </button>

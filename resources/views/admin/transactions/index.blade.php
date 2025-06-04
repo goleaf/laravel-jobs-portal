@@ -4,10 +4,10 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto -fluid">
         <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('Transactions Management') }}</h1>
-            <a href="{{ route('admin.transactions.create') }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
+            <a href="{{ route('admin.transactions.create') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">
                 <i class="fas fa-plus"></i> {{ __('Add Transaction') }}
             </a>
         </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 <div class="w-full divide-y divide-gray-200 -responsive">
-                    <table class="table odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
+                    <table class="min-w-full divide-y divide-gray-200 odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
                         <thead>
                             <tr>
                                 <th>{{ __('ID') }}</th>
@@ -38,7 +38,7 @@
                                     <td>{{ $transaction->id }}</td>
                                     <td>
                                         @if($transaction->invoice_id)
-                                            <span class="badge bg-info">{{ $transaction->invoice_id }}</span>
+                                            <span class="badge bg-blue-500">{{ $transaction->invoice_id }}</span>
                                         @else
                                             <span class="text-gray-500">N/A</span>
                                         @endif
@@ -48,7 +48,7 @@
                                             @if($transaction->user->avatar_url)
                                                 <img src="{{ $transaction->user->avatar_url }}" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
                                             @else
-                                                <div class="bg-secondary rounded-circle me-2 flex items-center justify-center" style="width: 30px; height: 30px;">
+                                                <div class="bg-gray-600 rounded-circle me-2 flex items-center justify-center" style="width: 30px; height: 30px;">
                                                     <i class="fas fa-user text-white"></i>
                                                 </div>
                                             @endif
@@ -65,7 +65,7 @@
                                     </td>
                                     <td>
                                         @if($transaction->payment_type)
-                                            <span class="badge bg-secondary">{{ ucfirst($transaction->payment_type) }}</span>
+                                            <span class="badge bg-gray-600">{{ ucfirst($transaction->payment_type) }}</span>
                                         @else
                                             <span class="text-gray-500">N/A</span>
                                         @endif
@@ -85,24 +85,24 @@
                                                 <span class="badge bg-yellow-500">{{ __('Pending') }}</span>
                                                 @break
                                             @default
-                                                <span class="badge bg-gray-100 text-dark">{{ ucfirst($transaction->status ?? 'Unknown') }}</span>
+                                                <span class="badge bg-gray-100 text-gray-900">{{ ucfirst($transaction->status ?? 'Unknown') }}</span>
                                         @endswitch
                                     </td>
                                     <td>
                                         @if($transaction->meta)
-                                            <button type="button" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" data-bs-toggle="modal" data-bs-target="#metaModal{{ $transaction->id }}">
+                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" data-bs-toggle="modal" data-bs-target="#metaModal{{ $transaction->id }}">
                                                 <i class="fas fa-info-circle"></i> {{ __('View') }}
                                             </button>
                                             
                                             <!-- Meta Modal -->
-                                            <div class="modal fade" id="metaModal{{ $transaction->id }}" tabindex="-1">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
+                                            <div class="fixed inset-0 z-50 overflow-y-auto fade" id="metaModal{{ $transaction->id }}" tabindex="-1">
+                                                <div class="flex items-center justify-center min-h-screen px-4">
+                                                    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
+                                                        <div class="px-6 py-4 border-b border-gray-200">
                                                             <h5 class="modal-title">{{ __('Transaction Meta') }}</h5>
                                                             <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"></button>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="px-6 py-4">
                                                             <pre>{{ json_encode(json_decode($transaction->meta), JSON_PRETTY_PRINT) }}</pre>
                                                         </div>
                                                     </div>
@@ -117,16 +117,16 @@
                                     </td>
                                     <td>
                                         <div class="px-4 py-2 rounded font-medium transition-colors -group" role="group">
-                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" title="{{ __('View') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-warning" title="{{ __('Edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
+                                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-danger" title="{{ __('Delete') }}">
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-danger" title="{{ __('Delete') }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

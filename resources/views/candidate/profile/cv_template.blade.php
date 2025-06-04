@@ -1,7 +1,7 @@
 <div class="flex flex-wrap resumes">
     <div class="flex-1 -md-12 mb-8">
         <h1 class="fs-2hx mb-6 text-primary-600">{{ $user->full_name }}</h1>
-        <div class="mt-3 flex flex-column">
+        <div class="mt-3 flex flex-col">
             @isset($user->candidate->full_location)
                 <div class="mb-1 flex items-center">
                     <img class="me-3" src="{{ asset('assets/img/map-marker.png') }}">
@@ -20,8 +20,8 @@
     </div>
     <div class="flex-1 -md-12 mb-8 ps-7">
         @if($user->candidateSkill->count())
-            <h2 class="border-bottom border-2 border-danger pb-3 text-info fs-2x mb-5">
-                <img class="text-info p-3 border rounded-circle border-info me-3" src="{{ asset('assets/img/list.png') }}">
+            <h2 class="border-bottom border-2 border-red-600 pb-3 text-blue-500 fs-2x mb-5">
+                <img class="text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3" src="{{ asset('assets/img/list.png') }}">
                 {{ __('messages.candidate.candidate_skill') }}
             </h2>
             @foreach($user->candidateSkill as $skill)
@@ -31,8 +31,8 @@
     </div>
     <div class="flex-1 -md-12 mb-8 ps-7">
         @if($candidateEducations->count())
-            <h2 class="border-bottom border-2 border-danger pb-3 text-info fs-2x mb-5">
-                <img class="text-info p-3 border rounded-circle border-info me-3" src="{{ asset('assets/img/user-graduate.png') }}">
+            <h2 class="border-bottom border-2 border-red-600 pb-3 text-blue-500 fs-2x mb-5">
+                <img class="text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3" src="{{ asset('assets/img/user-graduate.png') }}">
                 {{ __('messages.candidate_profile.education') }}
             </h2>
         @endif
@@ -50,8 +50,8 @@
     </div>
     <div class="flex-1 -md-12 mb-8 ps-7">
         @if($candidateExperiences->count())
-            <h2 class="border-bottom border-2 border-danger pb-3 text-info fs-2x mb-5">
-                <img class="text-info p-3 border rounded-circle border-info me-3" src="{{ asset('assets/img/briefcase.png') }}">
+            <h2 class="border-bottom border-2 border-red-600 pb-3 text-blue-500 fs-2x mb-5">
+                <img class="text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3" src="{{ asset('assets/img/briefcase.png') }}">
                 {{ __('messages.candidate_profile.experience') }}
             </h2>
         @endif
@@ -73,8 +73,8 @@
     </div>
     <div class="flex-1 -md-12 ps-7">
         @if($user->is_online_profile_availbal)
-            <h2 class="border-bottom border-2 border-danger pb-3 text-info fs-2x mb-5">
-                <img class="text-info p-3 border rounded-circle border-info me-3" src="{{ asset('assets/img/link.png') }}">
+            <h2 class="border-bottom border-2 border-red-600 pb-3 text-blue-500 fs-2x mb-5">
+                <img class="text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3" src="{{ asset('assets/img/link.png') }}">
                 {{ __('messages.candidate_profile.online_profile') }}
             </h2>
         @endif

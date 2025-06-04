@@ -12,10 +12,7 @@
     <title>@yield('title') | {{ getAppName() }}</title>
     <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
     <link rel="icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
-    <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('front_web/scss/bootstrap.css') }}" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
+    <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 
     <link href="{{ asset('assets/css/front-third-party.css') }}" rel="stylesheet" type="text/css">

@@ -26,22 +26,22 @@
         {{ Form::label('password', __('messages.company.password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         <input name="password" type="password" id="password"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                {{ (isset($company)) ? '' : 'required' }} placeholder="{{__('messages.company.password')}}">
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('password_confirmation', __('messages.company.confirm_password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         <input name="password_confirmation" type="password" id="confirmPassword"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                {{ (isset($company)) ? '' : 'required' }} placeholder="{{__('messages.company.confirm_password')}}">
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('industry_id', __('messages.company.industry').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('industry_id', $data['industries'], null, ['id'=>'addEmployerIndustryId','class' => 'form-select','placeholder' => __('messages.company.select_industry'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerIndustryModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -50,9 +50,9 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('ownership_type_id', __('messages.company.ownership_type').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('ownership_type_id', $data['ownerShipTypes'], null, ['id'=>'ownershipTypeId','class' => 'form-select','placeholder' => __('messages.company.select_ownership_type'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerOwnerShipTypeModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -61,9 +61,9 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('country', __('messages.company.country').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('country_id', $data['countries'], null, ['id'=>'countryId','class' => 'form-select','placeholder' => __('messages.company.select_country'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerCountryModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -72,9 +72,9 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('state', __('messages.company.state').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('state_id', [], null, ['id'=>'stateId','class' => 'form-select','placeholder' => __('messages.company.select_state'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerStateModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -83,9 +83,9 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('city', __('messages.company.city').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('city_id', [], null, ['id'=>'cityId','class' => 'form-select','placeholder' => __('messages.company.select_city'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerCityModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -94,9 +94,9 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('company_size_id', __('messages.company.company_size').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <div class="input-group flex-nowrap">
+        <div class="flex flex-nowrap">
             {{ Form::select('company_size_id', $data['companySize'], null, ['id'=>'companySizeId','class' => 'form-select','placeholder' => __('messages.company.select_employer_size'),'required']) }}
-            <div class="input-group-text border-0">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <a href="javascript:void(0)" class="text-gray-500 createEmployerCompanySizeModal"><i
                             class="fa fa-plus"></i></a>
             </div>
@@ -137,8 +137,8 @@
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('facebook_url', __('messages.company.facebook_url').':', ['class' => 'form-label ']) }}
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fab fa-facebook-f facebook-fa-icon text-primary-600"></i>
             </div>
             {{ Form::text('facebook_url',null, ['class' => 'form-control','id'=>'facebookUrl','placeholder'=>'https://www.facebook.com']) }}
@@ -146,8 +146,8 @@
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('twitter_url', __('messages.company.twitter_url').':', ['class' => 'form-label ']) }}
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fab fa-twitter twitter-fa-icon text-primary-600"></i>
             </div>
             {{ Form::text('twitter_url', null, ['class' => 'form-control','id'=>'twitterUrl','placeholder'=>'https://www.twitter.com']) }}
@@ -155,8 +155,8 @@
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('linkedin_url', __('messages.company.linkedin_url').':', ['class' => 'form-label ']) }}
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fab fa-linkedin-in linkedin-fa-icon text-primary-600"></i>
             </div>
             {{ Form::text('linkedin_url', null, ['class' => 'form-control','id'=>'linkedInUrl','placeholder'=>'https://www.linkedin.com']) }}
@@ -164,8 +164,8 @@
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('google_plus_url', __('messages.company.google_plus_url').':', ['class' => 'form-label ']) }}
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fab fa-google-plus-g google-plus-fa-icon text-red-600"></i>
             </div>
             {{ Form::text('google_plus_url', null, ['class' => 'form-control','id'=>'googlePlusUrl','placeholder'=>'https://www.plus.google.com']) }}
@@ -173,8 +173,8 @@
     </div>
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('pinterest_url', __('messages.company.pinterest_url').':', ['class' => 'form-label ']) }}
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fab fa-pinterest-p pinterest-fa-icon text-red-600"></i>
             </div>
             {{ Form::text('pinterest_url', null, ['class' => 'form-control','id'=>'pinterestUrl','placeholder'=>'https://www.pinterest.com']) }}
@@ -215,9 +215,9 @@
     </div>
 
     <!-- Submit Field -->
-    <div class="flex justify-content-end">
+    <div class="flex justify-end">
         {{ Form::submit(__('messages.common.save'),['class' => 'btn btn-primary me-3', 'id' => 'btnSave']) }}
         <a href="{{ route('company.index') }}"
-           class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
+           class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
     </div>
 </div>

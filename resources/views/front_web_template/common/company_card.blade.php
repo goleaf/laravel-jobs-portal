@@ -1,12 +1,12 @@
 {{-- <div class="flex-1 -4 px-xl-3 mb-20">
-    <div class="card last-jobs- bg-white shadow rounded-lg overflow-hidden border-left-color">
-        <div class="position-absolute top-0 end-0 mt-3">
+    <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 last-jobs- bg-white shadow rounded-lg overflow-hidden border-left-color">
+        <div class="absolute top-0 end-0 mt-3">
             @if ($company->activeFeatured)
-                <div class="md:w-1/12 col-sm-1 flex-1 -8 justify-content-end bookmark-icon position-relative pe-0 float-end flex">
+                <div class="md:w-1/12 col-sm-1 flex-1 -8 justify-end bookmark-icon relative pe-0 float-end flex">
                     <i class="text-primary-600 fa-solid fa-bookmark"></i>
                 </div>
             @else
-                <div class="md:w-1/12 col-sm-1 flex-1 -8 bookmark-icon justify-content-end position-relative pe-0 float-end flex text-gray">
+                <div class="md:w-1/12 col-sm-1 flex-1 -8 bookmark-icon justify-end relative pe-0 float-end flex text-gray">
                     <i class="fa-regular fa-bookmark"></i>
                 </div>
             @endif
@@ -18,7 +18,7 @@
             <div class="flex-1 -9 px-3">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                     <a href="{{ route('front.company.details', $company->unique_id) }}"
-                       class="text-secondary primary-link-hover">
+                       class="text-gray-600 primary-link-hover">
                         <h5 class="bg-white shadow rounded-lg overflow-hidden -title   fs-20 mb-0">
                             {!! $company->user->first_name !!}</h5>
                     </a>
@@ -41,7 +41,7 @@
             @if ($open_jobs <= 0)
                 <div class="bg-white shadow rounded-lg overflow-hidden -desc mt-3">
                     <div class="desc flex mt-2">
-                        <p class="jobs-position bg-gray fs-14 mb-0 me-3 text-secondary">
+                        <p class="jobs-position bg-gray fs-14 mb-0 me-3 text-gray-600">
                             {{ __('web.no_positions') }}
                         </p>
                     </div>
@@ -60,7 +60,7 @@
     </div>
 </div> --}}
 
-{{-- <div class="col-lg-4 flex-1 -md-6 px-xl-3 mb-40">
+{{-- <div class="lg:w-4/12 px-2 flex-1 -md-6 px-xl-3 mb-40">
     <div class="bg-white shadow rounded-lg overflow-hidden py-30">
         <div class="flex justify-between items-center">
             <div class="flex items-center">
@@ -69,18 +69,18 @@
                 </div>
                 <div class="">
                     <a href="{{ route('front.company.details', $company->unique_id) }}"
-                        class="text-secondary primary-link-hover" >
+                        class="text-gray-600 primary-link-hover" >
                         <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                             <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">{!! $company->user->first_name !!}</h5>
                         </div>
                     </a>
                 </div>
             </div>
-            <div class="icon position-relative pe-0">
+            <div class="icon relative pe-0">
                 <i class="text-primary-600 fa-solid fa-bookmark"></i>
             </div>
         </div>
-        <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-column justify-between h-full mt-4">
+        <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-col justify-between h-full mt-4">
             <div class="desc">
                 <div class="flex mb-1">
                     @if (!empty($company->location) || !empty($company->location2))
@@ -116,7 +116,7 @@
 
 {{-- @dd($company) --}}
 
-<div class="col-lg-4 flex-1 -md-6 px-xl-3 mb-40">
+<div class="lg:w-4/12 px-2 flex-1 -md-6 px-xl-3 mb-40">
     <div class="bg-white shadow rounded-lg overflow-hidden py-30">
         <div class="flex justify-between items-center">
             <div class="flex items-center">
@@ -126,7 +126,7 @@
                 <div class="">
                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                         <a href="{{ route('front.company.details', $company->unique_id) }}"
-                            class="text-secondary primary-link-hover">
+                            class="text-gray-600 primary-link-hover">
                             <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">
                                 {!! $company->user->first_name !!}</h5>
                         </a>
@@ -134,7 +134,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-column justify-between h-full mt-4">
+        <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-col justify-between h-full mt-4">
             <div class="desc">
                 @if (!empty($company->location) || !empty($company->location2))
                     <div class="flex mb-2">

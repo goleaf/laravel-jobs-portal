@@ -1,14 +1,12 @@
 @extends('candidate.profile.index')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.css') }}">
-@endpush
+    <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">@endpush
 @section('section')
     <div class="bg-white shadow rounded-lg overflow-hidden">
         <div class="bg-white shadow rounded-lg overflow-hidden -body">
             @formOpen(['route' => 'candidate-profile.update', 'files' => true, 'id' => 'candidateProfileUpdate', 'method' => 'put'])
             <div class="mt-5">
-                <div class="alert p-4 rounded-md mb-4 -danger hidden" id="validationErrors">
+                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger hidden" id="validationErrors">
                     <i class='fa-solid fa-face-frown me-4'></i>
                 </div>
                 <div class="flex flex-wrap mb-5">
@@ -36,7 +34,7 @@
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-6 mb-5">
                         {{ Form::label('dob',__('messages.candidate.birth_date').':', ['class' => 'form-label']) }}
                         <input type="text" name="dob" id="birthDate"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
+                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
                                autocomplete="off" placeholder="{{__('messages.candidate.birth_date')}}"
                                value="{{$user->dob}}">
                     </div>
@@ -44,7 +42,7 @@
                         {{ Form::label('gender', __('messages.candidate.gender').':', ['class' => 'form-label']) }}
                         <span class="required"></span>
                         <br>
-                        <span class="form-check is-valid flex items-center -sm">
+                        <span class="flex items-center is-valid flex items-center -sm">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.common.male') }}</label>&nbsp;&nbsp;
                 {{ Form::radio('gender', '0', isset($user->gender) ? $user->gender == 0 : true, ['class' => 'form-check-input','id'=>'male']) }} &nbsp;
                 <br>
@@ -132,7 +130,7 @@
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('immediate_available', __('messages.candidate.immediate_available').':', ['class' => 'form-label']) }}
                 <br>
-                <span class="form-check is-valid flex items-center -sm">
+                <span class="flex items-center is-valid flex items-center -sm">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.candidate.immediate_available')}}</label>&nbsp;&nbsp;
                 {{ Form::radio('immediate_available', '1', isset($user->candidate->immediate_available) ? $user->candidate->immediate_available == 1 : true, ['class' => 'form-check-input','id'=>'available']) }} &nbsp;
                 <br>
@@ -145,14 +143,14 @@
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5 available-at">
                         {{ Form::label('available_at', __('messages.candidate.available_at').':', ['class' => 'form-label  mb-3']) }}
                         <input type="text" name="available_at" id="availableAt"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
+                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}"
                                placeholder="{{__('messages.candidate.available_at')}}"
                                value="{{ isset($user->candidate->available_at) ? $user->candidate->available_at : null}}">
                     </div>
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('facebook_url', __('messages.company.facebook_url').':', ['class' => 'form-label']) }}
-                        <div class="input-group">
-                            <div class="input-group-text border-0">
+                        <div class="flex">
+                            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                                 <i class="fab fa-facebook-f facebook-fa-icon text-primary-600"></i>
                             </div>
                             {{ Form::text('facebook_url', $user->facebook_url, ['class' => 'form-control','id'=>'facebookUrl','placeholder'=>'https://www.facebook.com']) }}
@@ -161,8 +159,8 @@
 
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('twitter_url', __('messages.company.twitter_url').':', ['class' => 'form-label']) }}
-                <div class="input-group">
-                    <div class="input-group-text border-0">
+                <div class="flex">
+                    <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                         <i class="fab fa-twitter twitter-fa-icon text-primary-600"></i>
                     </div>
                     {{ Form::text('twitter_url', $user->twitter_url, ['class' => 'form-control','id'=>'twitterUrl','placeholder'=>'https://www.twitter.com']) }}
@@ -170,8 +168,8 @@
                     </div>
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('linkedin_url', __('messages.company.linkedin_url').':', ['class' => 'form-label']) }}
-                <div class="input-group">
-                    <div class="input-group-text border-0">
+                <div class="flex">
+                    <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                         <i class="fab fa-linkedin-in linkedin-fa-icon text-primary-600"></i>
                     </div>
                     {{ Form::text('linkedin_url', $user->linkedin_url, ['class' => 'form-control','id'=>'linkedInUrl','placeholder'=>'https://www.linkedin.com']) }}
@@ -179,8 +177,8 @@
                     </div>
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('google_plus_url', __('messages.company.google_plus_url').':', ['class' => 'form-label']) }}
-                <div class="input-group">
-                    <div class="input-group-text border-0">
+                <div class="flex">
+                    <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                         <i class="fab fa-google-plus-g google-plus-fa-icon text-red-600"></i>
                     </div>
                     {{ Form::text('google_plus_url', $user->google_plus_url ,['class' => 'form-control','id'=>'googlePlusUrl','placeholder'=>'https://www.plus.google.com']) }}
@@ -189,8 +187,8 @@
 
                     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
                         {{ Form::label('pinterest_url', __('messages.company.pinterest_url').':', ['class' => 'form-label']) }}
-                <div class="input-group">
-                    <div class="input-group-text border-0">
+                <div class="flex">
+                    <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                         <i class="fab fa-pinterest-p pinterest-fa-icon text-red-600"></i>
                     </div>
                     {{ Form::text('pinterest_url', $user->pinterest_url, ['class' => 'form-control','id'=>'pinterestUrl','placeholder'=>'https://www.pinterest.com']) }}
@@ -225,10 +223,10 @@
         </div>
 
         <!-- Submit Field -->
-        <div class="flex justify-content-end">
+        <div class="flex justify-end">
             {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3 btnSave']) }}
             {{--                <a href=""--}}
-            {{--               class="btn bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -active-light-primary me-2">{{__('messages.common.cancel')}}</a>--}}
+            {{--               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -active-light-primary me-2">{{__('messages.common.cancel')}}</a>--}}
         </div>
     </div>
 </div>

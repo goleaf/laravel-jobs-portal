@@ -1,5 +1,5 @@
 <div>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         <div class="flex justify-between items-center mb-3">
             @if($showButtonOnHeader && !empty($buttonComponent))
                 @include($buttonComponent)
@@ -7,14 +7,14 @@
 
             @if($showSearchInput)
                 <div class="ms-auto">
-                    <div class="input-group">
+                    <div class="flex">
                         <input 
                             type="text" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
+                            class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
                             placeholder="{{ __('messages.common.search') }}" 
                             wire:model.debounce.300ms="search"
                         >
-                        <span class="input-group-text">
+                        <span class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500">
                             <i class="fas fa-search"></i>
                         </span>
                     </div>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="w-full divide-y divide-gray-200 -responsive">
-            <table class="table w-full divide-y divide-gray-200 -striped">
+            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped">
                 @if($showHeader)
                 <thead>
                     <tr>
@@ -91,7 +91,7 @@
                 @if($showPerPageOptions)
                     <div class="flex items-center">
                         <span class="me-2">{{ __('Per page') }}:</span>
-                        <select class="form-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" wire:model="perPage">
+                        <select class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" wire:model="perPage">
                             @foreach($perPageOptions as $option)
                                 <option value="{{ $option }}">{{ $option }}</option>
                             @endforeach

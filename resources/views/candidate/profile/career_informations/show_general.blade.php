@@ -9,9 +9,9 @@
     <p class="mb-1 text-gray-500" id="cadidateEmail">{{ $user->email}}</p>
     <p id="candidatePhone" class="text-gray-500">{{ $user->phone}}</p>
 </div>
-<div class="my-5 border-2 border-bottom border-danger px-5">
-    <h5 class="mt-2 fs-2 text-info"><i
-                class="fas fa-list-ul text-info p-3 border rounded-circle border-info me-3"></i>{{ __('messages.candidate.candidate_skill') }}
+<div class="my-5 border-2 border-bottom border-red-600 px-5">
+    <h5 class="mt-2 fs-2 text-blue-500"><i
+                class="fas fa-list-ul text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3"></i>{{ __('messages.candidate.candidate_skill') }}
     </h5>
 </div>
 <div id="candidateSkillDiv" class="px-6">

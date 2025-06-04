@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Register') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('Register') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
             <div class="md:w-8/12 flex-1 -lg-6">
                 <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mt-5">
@@ -20,7 +18,7 @@
                     </div>
                     <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         @if ($errors->any())
-                            <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -41,7 +39,7 @@
                                             {{ __('First Name') }}
                                         </label>
                                         <input id="first_name" type="text" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
+                                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
                                                name="first_name" 
                                                value="{{ old('first_name') }}" 
                                                required 
@@ -62,7 +60,7 @@
                                             {{ __('Last Name') }}
                                         </label>
                                         <input id="last_name" type="text" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
+                                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
                                                name="last_name" 
                                                value="{{ old('last_name') }}" 
                                                autocomplete="family-name">
@@ -81,7 +79,7 @@
                                     {{ __('Email Address') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -99,7 +97,7 @@
                                     {{ __('Phone Number') }} <small class="text-gray-500">({{ __('Optional') }})</small>
                                 </label>
                                 <input id="phone" type="tel" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
                                        name="phone" 
                                        value="{{ old('phone') }}" 
                                        autocomplete="tel">
@@ -118,7 +116,7 @@
                                             {{ __('Password') }}
                                         </label>
                                         <input id="password" type="password" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
+                                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
                                                name="password" 
                                                required 
                                                autocomplete="new-password">
@@ -127,7 +125,7 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
-                                        <div class="form-text">
+                                        <div class="text-xs text-gray-500 mt-1">
                                             {{ __('Password must be at least 8 characters') }}
                                         </div>
                                     </div>
@@ -140,7 +138,7 @@
                                             {{ __('Confirm Password') }}
                                         </label>
                                         <input id="password_confirmation" type="password" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
+                                               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
                                                name="password_confirmation" 
                                                required 
                                                autocomplete="new-password">
@@ -159,7 +157,7 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded font-medium transition-colors -lg">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded font-medium transition-colors -lg">
                                     <i class="fas fa-user-plus me-1"></i>
                                     {{ __('Create Account') }}
                                 </button>
@@ -170,7 +168,7 @@
                         
                         <div class="text-center">
                             <p class="mb-2">{{ __('Already have an account?') }}</p>
-                            <a href="{{ route('login') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary">
+                            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">
                                 <i class="fas fa-sign-in-alt me-1"></i>
                                 {{ __('Login Here') }}
                             </a>
@@ -179,8 +177,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </div></body>
 </html> 

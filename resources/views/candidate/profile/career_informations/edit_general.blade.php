@@ -45,9 +45,9 @@
         {{ Form::select('city_id', [],  null, ['id'=>'candidateCityId','class' => 'form-select','placeholder' => __('messages.company.select_city')]) }}
     </div>
 </div>
-<div class="flex justify-content-end">
-    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditGeneralSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
+<div class="flex justify-end">
+    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditGeneralSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')]) }}
     <button type="button" id="btnGeneralCancel"
-            class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
+            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
 {{ Form::close() }}

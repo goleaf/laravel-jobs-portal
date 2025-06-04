@@ -4,7 +4,7 @@
             <img src="{{$row->company->user->avatar}}" alt="user" class="user-img">
         </div>
     </a>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
             <a class="mb-1 text-decoration-none fs-6">
             {{$row->company->user->first_name}}
         </a>

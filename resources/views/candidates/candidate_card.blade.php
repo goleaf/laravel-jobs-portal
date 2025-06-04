@@ -1,7 +1,7 @@
 <div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
-    <div class="hover-effect-employee position-relative mb-5 border-hover-primary employee-border fix-candidate-height">
+    <div class="hover-effect-employee relative mb-5 border-hover-primary employee-border fix-candidate-height">
         <div class="employee-listing-details">
-            <div class="flex employee-listing-description items-center justify-center flex-column">
+            <div class="flex employee-listing-description items-center justify-center flex-col">
                 <div class="pl-0 mb-2 employee-avatar">
                     <img src="{{ $candidate['candidate_url'] }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
@@ -46,7 +46,7 @@
             @else
                 <div>
                     <a title="{{ __('messages.common.resend_verification_mail') }}"
-                       class="btn bg-primary-600 text-white hover: bg-primary-600 -700 action- px-4 py-2 rounded font-medium transition-colors send-email-verification" data-id="{{ $candidate['id'] }}"
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 action- px-4 py-2 rounded font-medium transition-colors send-email-verification" data-id="{{ $candidate['id'] }}"
                        href="#">
                         <i class="fa fa-sync"></i>
                     </a>
@@ -57,12 +57,12 @@
 
         <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
             <a title="{{ __('messages.common.edit') }}"
-               class="btn bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit-action-btn edit- px-4 py-2 rounded font-medium transition-colors"
+               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit-action-btn edit- px-4 py-2 rounded font-medium transition-colors"
                href="{{ route('admin.candidates.edit', $candidate['id']) }}">
                 <i class="fa fa-edit"></i>
             </a>
             <a title="{{ __('messages.common.delete') }}"
-               class="btn bg-red-600 text-white hover:bg-red-700 action-btn delete-action-btn delete- px-4 py-2 rounded font-medium transition-colors" data-id="{{ $candidate['id'] }}"
+               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete-action-btn delete- px-4 py-2 rounded font-medium transition-colors" data-id="{{ $candidate['id'] }}"
                href="#">
                 <i class="fa fa-trash"></i>
             </a>

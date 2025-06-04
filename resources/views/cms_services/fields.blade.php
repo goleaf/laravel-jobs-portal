@@ -1,5 +1,5 @@
-{{--<div class="modal-body">--}}
-{{--    <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox"></div>--}}
+{{--<div class="px-6 py-4">--}}
+{{--    <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox"></div>--}}
     <div class="flex flex-wrap">
         <div class="flex-1 -sm-12 mb-5">
             {{ Form::label('home_title', __('messages.cms_service.home_title').(':'), ['class' => 'form-label']) }}
@@ -40,9 +40,9 @@
 
     <div class="flex flex-wrap mt-5">
         <!-- Submit Field -->
-        <div class="flex justify-content-end">
+        <div class="flex justify-end">
             {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3']) }}
-            {{--            <a class="btn bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -active-light-primary me-2">{{__('messages.common.cancel')}}</a>--}}
+            {{--            <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -active-light-primary me-2">{{__('messages.common.cancel')}}</a>--}}
         </div>
     </div>
 {{--</div>--}}

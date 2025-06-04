@@ -3,8 +3,8 @@
     {{ __('messages.dashboard') }}
 @endsection
 @section('content')
-    <div class="container mx-auto -fluid">
-        <div class="flex flex-column">
+    <div class="container mx-auto px-4 mx-auto -fluid">
+        <div class="flex flex-col">
             <div class="flex flex-wrap">
                 <div class="flex-1 -12 mb-4">
                     <div class="flex flex-wrap">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('admin.jobs.index') }}" class=" text-decoration-none">
-                            <div class="bg-info shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                            <div class="bg-blue-500 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                                 <div class="bg-blue-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-list-alt fs-1-xl text-white"></i>
                                 </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('company.index') }}" class=" text-decoration-none">
-                                <div class="bg-secondary shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-gray-600 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                                     <div class="bg-gray-600 widget-icon rounded-10 me-2 flex items-center justify-center">
                                         <i class="fa-solid fa-user-tag fs-1-xl text-white"></i>
                                     </div>
@@ -124,7 +124,7 @@
                     <div class="bg-white shadow rounded-lg overflow-hidden">
                         <div class="bg-white shadow rounded-lg overflow-hidden -header pb-0 px-10">
                             <h3 class="mb-0">{{ __('messages.admin_dashboard.weekly_users') }}</h3>
-                            <div id="timeRange" class="time_range time_range_width w-30 border rounded-2 p-2">
+                            <div id="timeRange" class="time_range time_range_width w-30 border border-gray-300 rounded-2 p-2">
                                 <i class="far fa-calendar-alt"
                                    aria-hidden="true"></i>&nbsp;&nbsp<span></span> <b
                                         class="caret"></b>
@@ -142,13 +142,13 @@
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_candidates') }}</h3>
                         <div class="">
                             <a href="{{ route('admin.candidates.index') }}"
-                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
                         <div class="w-full divide-y divide-gray-200 -responsive">
-                            <table class="table w-full divide-y divide-gray-200 -striped mb-0">
+                            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped mb-0">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.common.name') }}</th>
@@ -194,13 +194,13 @@
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_employers') }}</h3>
                         <div>
                             <a href="{{ route('company.index') }}"
-                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
                         <div class="w-full divide-y divide-gray-200 -responsive">
-                            <table class="table w-full divide-y divide-gray-200 -striped mb-0">
+                            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped mb-0">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.common.name') }}</th>
@@ -257,13 +257,13 @@
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_jobs') }}</h3>
                         <div>
                             <a href="{{ route('admin.jobs.index') }}"
-                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
                         <div class="w-full divide-y divide-gray-200 -responsive">
-                            <table class="table w-full divide-y divide-gray-200 -striped">
+                            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.job.job_title') }}</th>

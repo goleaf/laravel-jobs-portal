@@ -3,7 +3,7 @@
     Reset Password
 @endsection
 @section('content')
-    <div class="flex flex-column flex-column-fluid items-center justify-center p-4">
+    <div class="flex flex-col flex-column-fluid items-center justify-center p-4">
         <div class="flex-1 -12 text-center">
             <a href="{{ route('front.home') }}" class="image mb-7 mb-sm-10" data-turbo="false">
                 <img alt="Logo" src="{{ asset(getSettingValue('logo')) }}" class="img-fluid logo-fix-size">
@@ -37,7 +37,7 @@
                 {{--Password--}}
                 <div class="mb-sm-7 mb-4">
                     {{ Form::label('password', 'Password', ['class' => 'form-label']) }}
-                    <div class="mb-3 position-relative">
+                    <div class="mb-3 relative">
                         {{ Form::password('password', [
                             'class' => 'form-control form-control-solid' . ($errors->has('password') ? ' is-invalid' : ''),
                             'required' => true,

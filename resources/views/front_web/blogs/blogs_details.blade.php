@@ -8,12 +8,12 @@
 @section('content')
     <div class="Blog Detail-page">
         <!-- start hero section -->
-        <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-color-light py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-3">
+                            <h1 class="text-gray-600 mb-3">
                                 @lang('web.blog_detail')
                             </h1>
                             <nav aria-label="breadcrumb">
@@ -36,11 +36,11 @@
 
         <!-- start-blog-details-section -->
         <section class="blog-detail-section ">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap justify-center">
                     <div class="flex-1 -lg-8">
                         <div class="blog-detail py-60">
-                            <h5 class="fs-4 mb-3 text-secondary">
+                            <h5 class="fs-4 mb-3 text-gray-600">
                                 {{ html_entity_decode($blog->title) }}</h5>
                             <div class="designer-details flex flex-wrap">
                                 <div class="me-4">
@@ -137,7 +137,7 @@
                             </div>
                         </div>
                         <div class="comments py-60">
-                            <h5 class="fs-4 mb-3 text-secondary">
+                            <h5 class="fs-4 mb-3 text-gray-600">
                                 @lang('web.web_blog.comments') <span class="comment-count" id="post-comment">({{count($comments)}})</span>
                             </h5>
                             <div class="flex flex-wrap comment-box">
@@ -159,7 +159,7 @@
                                         </div>
                                         <div class="col-xl-6 col-sm-5 flex-1 -9 ps-xl-4">
                                             <div class="bg-white shadow rounded-lg overflow-hidden -body ps-0">
-                                                <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-16 text-secondary">
+                                                <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-16 text-gray-600">
                                                     {{$commentRecord->name}}
                                                     @if($commentRecord->user_id == getLoggedInUserId() && getLoggedInUser())
                                                         <div class="d-inline-flex ms-2">
@@ -194,7 +194,7 @@
                             </div>
                         </div>
                         <div class="leave-comment py-60">
-                            <h5 class="fs-4 mb-3 text-secondary mb-4">@lang('messages.post.post_a_comments')</h5>
+                            <h5 class="fs-4 mb-3 text-gray-600 mb-4">@lang('messages.post.post_a_comments')</h5>
                             {{ Form::open(['id' => 'commentForm']) }}
                             {{ Form::token() }}
                             {{ Form::hidden('comment-id', null, ['class' => 'comment-id','value' => '']) }}
@@ -202,31 +202,31 @@
                                     @if(!Auth::check())
                                         <div class="flex-1 -md-6 mb-4">
                                             <div class="form-group">
-                                                <label for="" class="fs-16 text-secondary mb-2">{{__('web.your_name')}}</label>
-                                                <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-name"
+                                                <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_name')}}</label>
+                                                <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-name"
                                                        placeholder="{{__('web.web_blog.your_name')}}">
                                             </div>
                                         </div>
                                         <div class="flex-1 -md-6 mb-4">
                                             <div class="form-group">
-                                                <label for="" class="fs-16 text-secondary mb-2">{{__('web.your_email')}}</label>
-                                                <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-email"
+                                                <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_email')}}</label>
+                                                <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment-email"
                                                        placeholder="{{__('web.web_blog.your_email')}}">
                                             </div>
                                         </div>
                                     @endif
                                     <div class="flex-1 -md-12">
                                         <div class="form-group">
-                                            <label for="" class="fs-16 text-secondary mb-2">{{__('web.your_comment')}}</label>
-                                            <textarea id="comment-field" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment"
+                                            <label for="" class="fs-16 text-gray-600 mb-2">{{__('web.your_comment')}}</label>
+                                            <textarea id="comment-field" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10 comment"
                                                       placeholder="{{__('web.web_blog.add_your_comment')}}" rows="3" name="comment"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap justify-center">
                                     <div class="flex-1 -sm-6 mb-40 text-center">
-                                        <button type="submit" id="submitBtn" class="btn px-4 py-2 rounded font-medium transition-colors -primary"
-                                                data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{__('messages.common.process')}}">
+                                        <button type="submit" id="submitBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary"
+                                                data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{__('messages.common.process')}}">
                                             @lang('messages.post_comment.post_comment')</button>
                                     </div>
                                 </div>

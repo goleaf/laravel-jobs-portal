@@ -2,7 +2,7 @@
     @if(!$row->featured)
         <div class="relative inline-block text-left">
             <button type="button" 
-                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     id="featured-menu-button-{{ $row->id }}"
                     aria-expanded="false"
                     aria-haspopup="true"
@@ -31,7 +31,7 @@
         <div class="relative inline-block text-left" 
              title="Expires On {{ Carbon\Carbon::parse($row->featured->end_time)->translatedFormat('jS M, Y') }}">
             <button type="button" 
-                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-gray-300 border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     id="featured-menu-button-{{ $row->id }}"
                     aria-expanded="false"
                     aria-haspopup="true"

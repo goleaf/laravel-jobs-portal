@@ -1,5 +1,5 @@
 @formOpen(['id' => 'addCVEducationForm'])
-<div class="alert p-4 rounded-md mb-4 -danger hidden" id="validationErrorsBox">
+<div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger hidden" id="validationErrorsBox">
     <i class='fa-solid fa-face-frown me-4'></i>
 </div>
 <div class="flex flex-wrap">
@@ -42,9 +42,9 @@
         {{ Form::selectYear('year', date('Y'), 2000, null, ['class' => 'form-select','id'=>'educationYearId']) }}
     </div>
 </div>
-<div class="flex justify-content-end">
-    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEducationSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) }}
+<div class="flex justify-end">
+    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEducationSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> Processing..."]) }}
     <button type="button" id="btnEducationCancel"
-            class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
+            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
 @formClose()

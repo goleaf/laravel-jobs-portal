@@ -3,7 +3,7 @@
     {{ __('messages.job_stage.job_stage') }}
 @endsection
 @section('content')
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         @include('flash::message')
         <livewire:job-stage-table/>
     </div>

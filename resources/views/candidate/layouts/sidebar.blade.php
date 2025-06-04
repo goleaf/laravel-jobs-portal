@@ -1,27 +1,27 @@
 <div class="ps-xl-7 px-2 pe-xl-0 flex align-items-stretch">
-    <ul class="horizontal-menu nav flex- flex flex-wrap block d-xl-flex">
-        <li class="nav-item {{ Request::is('candidate/dashboard*') ? 'active' : ''}}">
+    <ul class="horizontal-menu flex space-x-1 flex- flex flex-wrap block d-xl-flex">
+        <li class="nav-item {{ Request::is("candidate/dashboard*') ? 'active' : ''}}">
             <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                href="{{ route('dashboard') }}">
                 <span class="horizontal-menu-icon"><i class="fab fa-dashcube"></i></span>
                 <span class="horizontal-menu-title">{{ __('messages.candidate.dashboard') }}</span>
             </a>
         </li>
-        <li class="nav-item {{ Request::is('candidate/profile*') ? 'active' : ''}}">
+        <li class="nav-item {{ Request::is("candidate/profile*') ? 'active' : ''}}">
             <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                href="{{ route('candidate.profile') }}">
                 <span class="horizontal-menu-icon"><i class="far fa-user-circle"></i></span>
                 <span class="horizontal-menu-title">{{ __('messages.profile') }}</span>
             </a>
         </li>
-        <li class="nav-item {{ Request::is('candidate/favourite-jobs*') ? 'active' : ''}}">
+        <li class="nav-item {{ Request::is("candidate/favourite-jobs*') ? 'active' : ''}}">
             <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                href="{{ route('favourite.jobs') }}">
                 <span class="horizontal-menu-icon"><i class="far fa-star"></i></span>
                 <span class="horizontal-menu-title">{{ __('messages.favourite_jobs') }}</span>
             </a>
         </li>
-        <li class="nav-item {{ Request::is('candidate/favourite-companies*') ? 'active' : ''}}">
+        <li class="nav-item {{ Request::is("candidate/favourite-companies*') ? 'active' : ''}}">
             <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                href="{{ route('favourite.companies') }}">
                 <span class="horizontal-menu-icon"><i class="far fa-building"></i></span>
@@ -29,21 +29,21 @@
             </a>
         </li>
         @if(getCurrentLanguageCode() == 'de' || getCurrentLanguageCode() == 'tr' || getCurrentLanguageCode() == 'pt' || getCurrentLanguageCode() == 'ru' || getCurrentLanguageCode() == 'es' || getCurrentLanguageCode() == 'fr')
-            <li class="nav-item hidden d-xl-grid dropdown dropdown-hover {{ Request::is("candidate/applied-job*','candidate/job-alerts*') ? 'active' : '' }}">
+            <li class="nav-item hidden d-xl-grid relative inline-block text-left dropdown-hover {{ Request::is("candidate/applied-job*','candidate/job-alerts*') ? 'active' : '' }}">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3 ps-2" aria-current="page"
                    href="javascript:void(0)">
                     <span class="horizontal-menu-icon"><i class="fas fa-ellipsis-vertical fs-4"></i></span>
                 </a>
-                <ul class="horizontal-submenu dropdown-menu top-100">
+                <ul class="horizontal-submenu origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 top-100">
                     <li>
-                        <a class="dropdown-item {{ Request::is('candidate/applied-job*') ? 'active' : '' }}"
+                        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("candidate/applied-job*') ? 'active' : '' }}"
                            href="{{ route('candidate.applied.job') }}">
                             <span class="horizontal-menu-icon me-1"><i class="fas fa-briefcase fs-6"></i></span>
                             <span class="horizontal-menu-title fs-6">{{ __('messages.applied_job.applied_jobs') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item {{ Request::is('candidate/job-alerts*') ? 'active' : '' }}"
+                        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("candidate/job-alerts*') ? 'active' : '' }}"
                            href="{{ route('candidate.job.alert') }}">
                             <span class="horizontal-menu-icon me-1"><i class="far fa-bell fs-6"></i></span>
                             <span class="horizontal-menu-title fs-6">{{ __('messages.job.job_alert') }}</span>
@@ -53,14 +53,14 @@
             </li>
 
             {{-- start side bar menu for bar--}}
-            <li class="nav-item d-xl-none {{ Request::is('candidate/applied-job*') ? 'active' : ''}}">
+            <li class="nav-item d-xl-none {{ Request::is("candidate/applied-job*') ? 'active' : ''}}">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                    href="{{ route('candidate.applied.job') }}">
                     <span class="horizontal-menu-icon me-1"><i class="fas fa-briefcase"></i></span>
                     <span class="horizontal-menu-title">{{ __('messages.applied_job.applied_jobs') }}</span>
                 </a>
             </li>
-            <li class="nav-item d-xl-none {{ Request::is('candidate/job-alerts*') ? 'active' : ''}}">
+            <li class="nav-item d-xl-none {{ Request::is("candidate/job-alerts*') ? 'active' : ''}}">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                    href="{{ route('candidate.job.alert') }}">
                     <span class="horizontal-menu-icon me-1"><i class="far fa-bell"></i></span>
@@ -69,14 +69,14 @@
             </li>
             {{-- end side bar menu for bar--}}
         @else
-            <li class="nav-item {{ Request::is('candidate/applied-job*') ? 'active' : ''}}">
+            <li class="nav-item {{ Request::is("candidate/applied-job*') ? 'active' : ''}}">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                    href="{{ route('candidate.applied.job') }}">
                     <span class="horizontal-menu-icon"><i class="fas fa-briefcase"></i></span>
                     <span class="horizontal-menu-title">{{ __('messages.applied_job.applied_jobs') }}</span>
                 </a>
             </li>
-            <li class="nav-item {{ Request::is('candidate/job-alerts*') ? 'active' : ''}}">
+            <li class="nav-item {{ Request::is("candidate/job-alerts*') ? 'active' : ''}}">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
                    href="{{ route('candidate.job.alert') }}">
                     <span class="horizontal-menu-icon"><i class="far fa-bell"></i></span>

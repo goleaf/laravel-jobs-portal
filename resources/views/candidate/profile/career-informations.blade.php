@@ -1,7 +1,5 @@
 @extends('candidate.profile.index')
-@push('css')
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.css') }}">
-@endpush
+@push('css')@endpush
 @section('section')
     <div class="mb-xl-8">
         <div class="border-0">
@@ -9,7 +7,7 @@
                 <h1 class="mb-0">{{ __('messages.candidate_profile.experience') }}</h1>
                 <div class="text-end mt-4 mt-md-0">
                     <a
-                            class="btn bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addExperienceModal" data-bs-toggle="modal"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addExperienceModal" data-bs-toggle="modal"
                             data-bs-target="#addExperienceModal">{{ __('messages.candidate_profile.add_experience') }}  </a>
                 </div>
             </div>
@@ -17,7 +15,7 @@
             <div class="pt-0 fs-6 py-8 px-3 text-gray-700">
                 {{Form::hidden(null,__('messages.candidate_profile.present'),['id' => 'candidatePresentMsg'])}}
                 <div class="flex flex-wrap">
-                    <div class="candidate-experience- container mx-auto">
+                    <div class="candidate-experience- container mx-auto px-4 mx-auto">
                         <div class="flex-1 -12 {{ ($data["candidateExperiences']->count()) ? 'd-none' : '' }}"
                              id="notfoundExperience">
                             <h5 class="product-item pb-5 flex justify-center text-gray-600">
@@ -75,14 +73,14 @@
                 <h1 class="mb-0">{{ __('messages.candidate_profile.education') }}</h1>
                 <div class="text-end mt-4 mt-md-0">
                     <a
-                            class="btn bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addEducationModal" data-bs-toggle="modal"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addEducationModal" data-bs-toggle="modal"
                             data-bs-target="#addEducationModal">{{ __('messages.candidate_profile.add_education') }}
                     </a>
                 </div>
             </div>
             <div class="pt-0 fs-6 py-8 px-3 text-gray-700">
                 <div class="flex flex-wrap">
-                    <div class="candidate-education- container mx-auto">
+                    <div class="candidate-education- container mx-auto px-4 mx-auto">
                         <div class="flex-1 -12 {{ ($data["candidateEducations']->count()) ? 'd-none' : '' }}"
                      id="notfoundEducation">
                     <h5 class="product-item pb-5 flex justify-center text-gray-600">
@@ -129,15 +127,15 @@
         {{--    <section class="section">--}}
     {{--        <div class="section-header candidate-experience-header">--}}
     {{--            <h1>{{ __('messages.candidate_profile.experience') }}</h1>--}}
-    {{--            <div class="section-header-breadcrumb justify-content-end">--}}
+    {{--            <div class="section-header-breadcrumb justify-end">--}}
     {{--                <a--}}
-    {{--                   class="btn bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addExperienceModal" data-bs-toggle="modal"--}}
+    {{--                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addExperienceModal" data-bs-toggle="modal"--}}
     {{--                   data-bs-target="#addExperienceModal">{{ __('messages.candidate_profile.add_experience') }}--}}
     {{--                    <i class="fas fa-plus"></i></a>--}}
     {{--            </div>--}}
     {{--        </div>--}}
     {{--        <div class="section-body">--}}
-    {{--            <div class="flex flex-wrap candidate-experience- container mx-auto">--}}
+    {{--            <div class="flex flex-wrap candidate-experience- container mx-auto px-4 mx-auto">--}}
     {{--                <div class="flex-1 -12 {{ ($data["candidateExperiences']->count()) ? 'd-none' : '' }}" id="notfoundExperience">--}}
     {{--                    <h4 class="product-item pb-5 flex justify-center">--}}
     {{--                        {{ __('messages.candidate.experience_not_found') }}--}}
@@ -168,9 +166,9 @@
     {{--                                @endif--}}
 
     {{--                                <div class="article-cta candidate-experience-edit-delete">--}}
-    {{--                                    <a href="javascript:void(0)" class="btn bg-yellow-500 text-white hover:bg-yellow-600 action- px-4 py-2 rounded font-medium transition-colors edit-experience" title="Edit"--}}
+    {{--                                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action- px-4 py-2 rounded font-medium transition-colors edit-experience" title="Edit"--}}
     {{--                                       data-id="{{ $candidateExperience->id }}"><i class="fa fa-edit p-1"></i></a>--}}
-    {{--                                    <a href="javascript:void(0)" class="btn bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors delete-experience" title="Delete"--}}
+    {{--                                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors delete-experience" title="Delete"--}}
     {{--                                       data-id="{{ $candidateExperience->id }}"><i class="fa fa-trash p-1"></i></a>--}}
     {{--                                </div>--}}
     {{--                            </div>--}}
@@ -184,15 +182,15 @@
     {{--    <section class="section">--}}
     {{--        <div class="section-header candidate-experience-header">--}}
     {{--            <h1>{{ __('messages.candidate_profile.education') }}</h1>--}}
-    {{--            <div class="section-header-breadcrumb justify-content-end">--}}
+    {{--            <div class="section-header-breadcrumb justify-end">--}}
     {{--                <a--}}
-    {{--                   class="btn bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addEducationModal" data-bs-toggle="modal"--}}
+    {{--                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 form- px-4 py-2 rounded font-medium transition-colors addEducationModal" data-bs-toggle="modal"--}}
     {{--                   data-bs-target="#addEducationModal">{{ __('messages.candidate_profile.add_education') }}--}}
     {{--                    <i class="fas fa-plus"></i></a>--}}
     {{--            </div>--}}
     {{--        </div>--}}
     {{--        <div class="section-body">--}}
-    {{--            <div class="flex flex-wrap candidate-education- container mx-auto">--}}
+    {{--            <div class="flex flex-wrap candidate-education- container mx-auto px-4 mx-auto">--}}
     {{--                <div class="flex-1 -12 {{ ($data["candidateEducations']->count()) ? 'd-none' : '' }}" id="notfoundEducation">--}}
     {{--                    <h4 class="product-item pb-5 flex justify-center">--}}
     {{--                        {{ __('messages.candidate.education_not_found') }}--}}
@@ -213,9 +211,9 @@
     {{--                                <span class="text-gray-500">{{ $candidateEducation->year }} | {{ $candidateEducation->country }}</span>--}}
     {{--                                <p class="mb-0 pb-md-0 pb-4">{{ $candidateEducation->institute }}</p>--}}
     {{--                                <div class="article-cta candidate-education-edit-delete">--}}
-    {{--                                    <a href="javascript:void(0)" class="btn bg-yellow-500 text-white hover:bg-yellow-600 action- px-4 py-2 rounded font-medium transition-colors edit-education" title="Edit"--}}
+    {{--                                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-yellow-500 text-white hover:bg-yellow-600 action- px-4 py-2 rounded font-medium transition-colors edit-education" title="Edit"--}}
     {{--                                       data-id="{{ $candidateEducation->id }}"><i class="fa fa-edit p-1"></i></a>--}}
-    {{--                                    <a href="javascript:void(0)" class="btn bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors delete-education" title="Delete"--}}
+    {{--                                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors delete-education" title="Delete"--}}
     {{--                                       data-id="{{ $candidateEducation->id }}"><i class="fa fa-trash p-1"></i></a>--}}
     {{--                                </div>--}}
     {{--                            </div>--}}
@@ -243,6 +241,6 @@
         // let isEdit = false;
     </script>
 {{--    <script src="{{ asset('assets/js/moment.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>--}}
+    {{----}}
     {{--    <script src="{{mix('assets/js/candidate-profile/candidate_career_informations.js')}}"></script>--}}
 @endpush

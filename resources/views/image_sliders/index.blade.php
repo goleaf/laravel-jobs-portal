@@ -3,15 +3,15 @@
     {{ __('messages.image_sliders') }}
 @endsection
 @section('content')
-    <div class="container mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto -fluid">
         @include('flash::message')
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             <div class="flex-1 -lg-12">
                 <div class="flex flex-wrap">
                     <div class="flex-1 -lg-12">
                         <form method="post" id="searchIsActive" class="d-lg-flex m-6">
                             @csrf
-                            <div class="col-lg-6 flex-1 -sm-12 mb-5 flex items-center">
+                            <div class="lg:w-6/12 px-2 flex-1 -sm-12 mb-5 flex items-center">
                                 <div class="flex items-center form-switch mb-0">
                                     <input class="flex items-center -input isFullSlider" type="checkbox"
                                            name="is_active" {{ ($settings['is_full_slider'] == 1) ? 'checked' : '' }}>
@@ -25,7 +25,7 @@
 
                                 </label>
                             </div>
-                            <div class="col-lg-6 flex-1 -sm-12 mb-5 flex items-center">
+                            <div class="lg:w-6/12 px-2 flex-1 -sm-12 mb-5 flex items-center">
                                 <div class="flex items-center form-switch mb-0">
                                     <input class="flex items-center -input isSliderActive" type="checkbox"
                                            name="is_active" {{ ($settings['is_slider_active'] == 1) ? 'checked' : '' }}>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             <livewire:image-slider-table/>
         </div>
 

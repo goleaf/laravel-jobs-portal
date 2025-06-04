@@ -4,7 +4,7 @@
             <img src="{{$row->branding_slider_url}}" alt="" class="user-img">
         </div>
     </a>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         {{$row->title}}
     </div>
 </div>

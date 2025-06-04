@@ -3,12 +3,12 @@
     {{ __('messages.setting.privacy_policy') }}
 @endsection
 @section('content')
-    <section class="hero-section position-relative bg-gray-100 py-40">
-        <div class="container mx-auto">
+    <section class="hero-section relative bg-gray-100 py-40">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                     <div class="hero-content">
-                        <h1 class="text-secondary mb-3">
+                        <h1 class="text-gray-600 mb-3">
                             {{ __('messages.setting.privacy_policy') }}
                         </h1>
                         <nav aria-label="breadcrumb">
@@ -25,14 +25,14 @@
     </section>
 
 {{--    <section class="tnc-section">--}}
-{{--        <div class="auto- container mx-auto">--}}
+{{--        <div class="auto- container mx-auto px-4 mx-auto">--}}
 {{--            <div class="text-box">--}}
 {{--                <p>{!! nl2br($privacyPolicy[0]['value']) !!}</p>--}}
 {{--            </div>--}}
 {{--        </div>--}}
 {{--    </section>--}}
     <div class="py-60">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="mb-40">
                 <div class="privacy-policy">
                     {!! nl2br($privacyPolicy) !!}

@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <h1>Privacy Policy</h1>
         <p>This is a placeholder privacy policy page.</p>
         <p>Your privacy is important to us. This privacy statement explains the personal data we process and how we process it.</p>

@@ -7,12 +7,12 @@
 {{-- @endsection --}}
 {{-- @dd($candidateDetails) --}}
 @section('content')
-    {{-- <section class="hero-section position-relative bg-color py-40">
-        <div class="container mx-auto">
+    {{-- <section class="hero-section relative bg-color py-40">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex flex-wrap align-items-lg-center mb-3">
-                        <div class="col-lg-1 col-sm-2 flex-1 -3">
+                        <div class="lg:w-1/12 px-2 col-sm-2 flex-1 -3">
                             <div class="candidate-profile-img mt-md-0 mt-3">
                                 <img
                                         src="{{ (!empty($candidateDetails->user->avatar)) ? $candidateDetails->user->avatar : asset('assets/img/infyom-logo.png') }}"
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-sm-10 flex-1 -9">
                             <div class="hero-content ps-xl-0 ps-3">
-                                <h4 class="text-secondary mb-0">
+                                <h4 class="text-gray-600 mb-0">
                                     {{ html_entity_decode($candidateDetails->user->full_name) }}
                                 </h4>
                                 <div class="hero-desc flex items-center flex-wrap">
@@ -67,10 +67,10 @@
                                 @role('Employer')
                                 <ul class="post-tags mt-3 ps-0">
                                     @if ($isReportedToCandidate)
-                                        <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate" disabled
+                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate" disabled
                                         >{{ __('messages.candidate.already_reported') }}</button>
                                     @else
-                                        <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate"
+                                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#reportToCandidateModal">
                                             {{ __('messages.candidate.reporte_to_candidate') }}
@@ -87,11 +87,11 @@
     </section>
 
     <section class="about-company-section py-60">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-8">
                     <div class="mb-5">
-                        <h5 class="fs-4 text-secondary mb-4">{{__('messages.candidate_profile.education')}}</h5>
+                        <h5 class="fs-4 text-gray-600 mb-4">{{__('messages.candidate_profile.education')}}</h5>
                         <div class="job-description">
                             @forelse($candidateEducations as $candidateEducation)
                                 <div class="job-description-block pb-3">
@@ -99,7 +99,7 @@
                                     <div class="job-description-right">
                                         <h5 class="fs-18 text-gary mb-0">{{$candidateEducation->degreeLevel->name}}</h5>
                                         <span class="text-primary-600"> {{ucfirst($candidateEducation->institute)}}</span>
-                                        <span class="badge bg-secondary">{{ $candidateEducation->year }}</span>
+                                        <span class="badge bg-gray-600">{{ $candidateEducation->year }}</span>
                                     </div>
                                 </div>
                             @empty
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div>
-                        <h5 class="fs-4 text-secondary mb-4">{{__('messages.candidate_profile.work_experience')}}</h5>
+                        <h5 class="fs-4 text-gray-600 mb-4">{{__('messages.candidate_profile.work_experience')}}</h5>
                         <div class="job-description">
                             @forelse($candidateExperiences as $candidateExperience)
                                 <div class="job-description-block pb-3">
@@ -117,7 +117,7 @@
                                         <div class="info-box">
                                             <h5 class="fs-18 text-gary mb-0">{{$candidateExperience->experience_title}}</h5>
                                             <span class="text-primary-600">{{ucfirst($candidateExperience->company)}}</span>
-                                            <span class="badge bg-secondary"> {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }} - {{($candidateExperience->currently_working) ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
+                                            <span class="badge bg-gray-600"> {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }} - {{($candidateExperience->currently_working) ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
                                         </div>
                                     </div>
                                     @if (!empty($candidateExperience->description))
@@ -137,8 +137,8 @@
         </div>
     </section> --}}
 
-    <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-        <div class="container mx-auto">
+    <section class="hero-section relative bg-gradient pt-15 pb-40">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex align-items-md-center">
@@ -150,7 +150,7 @@
                         </div>
                         <div class="">
                             <div class="hero-content">
-                                <h4 class="text-secondary lh-base mb-2">
+                                <h4 class="text-gray-600 lh-base mb-2">
                                     {{ html_entity_decode($candidateDetails->user->full_name) }}</h4>
                                 <div class="hero-desc d-md-flex">
                                     <div class="flex mb-1">
@@ -202,11 +202,11 @@
     </section>
 
     <section class="job-details-section py-60 mb-sm-4">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-8">
                     <div class="Job Description mb-lg-5 mb-4">
-                        <h5 class="fs-18 text-secondary mb-4">{{ __('messages.candidate_profile.education') }}</h5>
+                        <h5 class="fs-18 text-gray-600 mb-4">{{ __('messages.candidate_profile.education') }}</h5>
                         <div class="job-description">
                             @forelse($candidateEducations as $candidateEducation)
                                 <div class="job-description-block pb-3">
@@ -224,7 +224,7 @@
                         </div>
                     </div>
                     <div class="key-responsibilities mb-lg-5 mb-4">
-                        <h5 class="fs-18 text-secondary mb-4">{{ __('messages.candidate_profile.work_experience') }}</h5>
+                        <h5 class="fs-18 text-gray-600 mb-4">{{ __('messages.candidate_profile.work_experience') }}</h5>
                         @forelse($candidateExperiences as $candidateExperience)
                             <div class="job-description-block pb-3">
                                 <div class="job-description-right">
@@ -264,7 +264,7 @@
         <div class="flex-1 -12 mb-40">
             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
                 <div class="flex flex-wrap flex justify-content-lg-between">
-                    <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
+                    <p class="fs-18 text-gray-600">@lang('web.web_company.social_media')</p>
                     <div class="mt-3">
                         @if (!empty($candidateDetails->user->facebook_url))
                             <a href="{{ (isset($candidateDetails->user->facebook_url)) ? addLinkHttpUrl($candidateDetails->user->facebook_url) : 'javascript:void(0)' }}" target="_blank" class="mx-2">

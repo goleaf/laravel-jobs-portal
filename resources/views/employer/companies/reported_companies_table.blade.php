@@ -1,4 +1,4 @@
-<table class="table table- flex flex-wrap -dashed align-middle fs-6 gy-5 no-footer w-full dataTable w-full divide-y divide-gray-200 -responsive-sm"
+<table class="min-w-full divide-y divide-gray-200 table- flex flex-wrap -dashed align-middle fs-6 gy-5 no-footer w-full dataTable w-full divide-y divide-gray-200 -responsive-sm"
        id="reportedJobTbl">
     <thead>
     <tr class="text-start text-gray-500 fw-bolder fs-7 text-uppercase gs-0">

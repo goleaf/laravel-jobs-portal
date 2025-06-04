@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    <a href="javascript:void(0)" title="{{__('messages.common.show')}}" class="showReportedJobModal px-4 py-2 rounded font-medium transition-colors px-1 text-info fs-3"
+    <a href="javascript:void(0)" title="{{__('messages.common.show')}}" class="showReportedJobModal px-4 py-2 rounded font-medium transition-colors px-1 text-blue-500 fs-3"
        data-id={{ $row->id }} data-bs-toggle="tooltip">
         <i class="fas fa-eye fs-4"></i>
     </a>

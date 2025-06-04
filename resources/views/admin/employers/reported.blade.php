@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto -fluid">
         <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('messages.company.reported_employers') }}</h1>
         </div>
@@ -15,7 +15,7 @@
             </div>
             <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 <div class="w-full divide-y divide-gray-200 -responsive">
-                    <table class="table odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
+                    <table class="min-w-full divide-y divide-gray-200 odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
                         <thead>
                             <tr>
                                 <th>{{ __('messages.common.id') }}</th>

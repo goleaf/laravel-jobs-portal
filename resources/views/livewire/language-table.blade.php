@@ -1,7 +1,7 @@
 @include('livewire.table')
 
 @section('add-button')
-    <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+    <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
         <x-icons.add class="w-5 h-5 mr-2" />
         {{ __('language.add_language') }}
     </button>
@@ -16,7 +16,7 @@
             </div>
             <input type="text" 
                 wire:model.debounce.300ms="search" 
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" 
+                class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" 
                 placeholder="{{ __('common.search') }}">
             @if($search)
                 <button wire:click="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -33,7 +33,7 @@
                 </label>
                 <select id="perPage" 
                     wire:model="perPage"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5">
+                    class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5">
                     <option>10</option>
                     <option>25</option>
                     <option>50</option>

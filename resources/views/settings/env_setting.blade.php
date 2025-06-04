@@ -6,7 +6,7 @@
     {{ Form::open(['route' => 'settings.update', 'id' => 'envUpdateForm']) }}
     {{ Form::hidden('sectionName', $sectionName) }}
     <div class="flex flex-wrap mt-3">
-        {{--        <div class="flex-1 -md-12 flex justify-content-end">--}}
+        {{--        <div class="flex-1 -md-12 flex justify-end">--}}
         {{--            <label class="custom-switch mt-2">--}}
         {{--                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input flex items-center -input" id="enableEdit">--}}
         {{--                <span class="custom-switch-indicator"></span>--}}
@@ -162,10 +162,10 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-content-end mb-5 mt-5">
+            <div class="flex justify-end mb-5 mt-5">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3','id' => 'btnSaveEnvData', 'disabled']) }}
                 <a href="{{ route('admin.dashboard', ['section' => 'env_setting']) }}"
-                   class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
             </div>
         </div>
     {{ Form::close() }}

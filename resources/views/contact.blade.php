@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Contact Us') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('Contact Us') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
-        <div class="container mx-auto">
+    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
+        <div class="container mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm -brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -42,7 +40,7 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-12 text-center">
                     <h1 class="display-4 fw-bold text-primary-600">{{ __('Contact Us') }}</h1>
@@ -54,9 +52,9 @@
 
     <!-- Contact Form and Info Section -->
     <section class="py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             @if (session('success'))
-                <div class="alert bg-green-50 border border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
                     {{ session('success') }}
                     <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
@@ -75,7 +73,7 @@
                         </div>
                         <div class="bg-white shadow rounded-lg overflow-hidden -body">
                             @if ($errors->any())
-                                <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                     <ul class="mb-0">
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
@@ -96,7 +94,7 @@
                                                 {{ __('First Name') }} <span class="text-red-600">*</span>
                                             </label>
                                             <input id="first_name" type="text" 
-                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
                                                    name="first_name" 
                                                    value="{{ old('first_name') }}" 
                                                    required>
@@ -113,7 +111,7 @@
                                                 {{ __('Last Name') }}
                                             </label>
                                             <input id="last_name" type="text" 
-                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
                                                    name="last_name" 
                                                    value="{{ old('last_name') }}">
                                             @error('last_name')
@@ -131,7 +129,7 @@
                                                 {{ __('Email Address') }} <span class="text-red-600">*</span>
                                             </label>
                                             <input id="email" type="email" 
-                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
                                                    name="email" 
                                                    value="{{ old('email') }}" 
                                                    required>
@@ -148,7 +146,7 @@
                                                 {{ __('Phone Number') }}
                                             </label>
                                             <input id="phone" type="tel" 
-                                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
                                                    name="phone" 
                                                    value="{{ old('phone') }}">
                                             @error('phone')
@@ -164,7 +162,7 @@
                                         {{ __('Subject') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input id="subject" type="text" 
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("subject') is-invalid @enderror" 
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("subject') is-invalid @enderror" 
                                            name="subject" 
                                            value="{{ old('subject') }}" 
                                            required>
@@ -179,18 +177,18 @@
                                         {{ __('Message') }} <span class="text-red-600">*</span>
                                     </label>
                                     <textarea id="message" 
-                                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("message') is-invalid @enderror" 
+                                              class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("message') is-invalid @enderror" 
                                               name="message" 
                                               rows="6" 
                                               required>{{ old('message') }}</textarea>
                                     @error('message')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="form-text">{{ __('Please provide as much detail as possible.') }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">{{ __('Please provide as much detail as possible.') }}</div>
                                 </div>
 
                                 <div class="d-grid">
-                                    <button type="submit" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
                                         <i class="fas fa-paper-plane me-1"></i>
                                         {{ __('Send Message') }}
                                     </button>
@@ -213,7 +211,7 @@
                                     </h5>
                                     
                                     <div class="mb-3">
-                                        <div class="flex align-items-start">
+                                        <div class="flex items-start">
                                             <i class="fas fa-map-marker-alt text-primary-600 me-3 mt-1"></i>
                                             <div>
                                                 <h6 class="mb-1">{{ __('Address') }}</h6>
@@ -273,11 +271,11 @@
                                     </h5>
                                     <p class="bg-white shadow rounded-lg overflow-hidden -text">{{ __('Check out our frequently asked questions or browse our help center.') }}</p>
                                     <div class="d-grid gap-2">
-                                        <a href="#" class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fas fa-question me-1"></i>
                                             {{ __('FAQ') }}
                                         </a>
-                                        <a href="#" class="btn btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fas fa-life-ring me-1"></i>
                                             {{ __('Help Center') }}
                                         </a>
@@ -292,16 +290,16 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body text-center">
                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title">{{ __('Follow Us') }}</h5>
                                     <div class="flex justify-center gap-3">
-                                        <a href="#" class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fab fa-facebook"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fab fa-twitter"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fab fa-linkedin"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-danger px-4 py-2 rounded font-medium transition-colors -sm">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-danger px-4 py-2 rounded font-medium transition-colors -sm">
                                             <i class="fab fa-instagram"></i>
                                         </a>
                                     </div>
@@ -316,12 +314,12 @@
 
     <!-- Map Section (Optional) -->
     <section class="py-5 bg-gray-100">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-12 text-center">
                     <h2 class="mb-4">{{ __('Find Us') }}</h2>
                     <div class="embed-responsive embed-responsive-16by9">
-                        <div class="bg-secondary flex items-center justify-center" style="height: 400px; border-radius: 10px;">
+                        <div class="bg-gray-600 flex items-center justify-center" style="height: 400px; border-radius: 10px;">
                             <div class="text-center text-white">
                                 <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
                                 <h5>{{ __('Interactive Map') }}</h5>
@@ -336,7 +334,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -md-6">
                     <h5>{{ config('app.name') }}</h5>
@@ -360,8 +358,5 @@
                 <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}</p>
             </div>
         </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </footer></body>
 </html> 

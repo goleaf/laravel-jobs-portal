@@ -15,7 +15,7 @@
                                         ]) }}
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-12 mb-3 position-relative">
+                                <div class="flex-1 -md-12 mb-3 relative">
                                     <div class="flex justify-between">
                                         {{ Form::label('password', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3']) }}
                                         <a href="{{ route('password.request') }}"
@@ -28,7 +28,7 @@
                                         'placeholder' => __('web.login_menu.enter_password'),
                                         'required'
                                     ]) }}
-                                    <span class="position-absolute flex items-center top-0 mt-7 bottom-0 end-0 me-4 input-icon input-password-hide cursor-pointer text-gray-600 fs-14 change-type">
+                                    <span class="absolute flex items-center top-0 mt-7 bottom-0 end-0 me-4 input-icon input-password-hide cursor-pointer text-gray-600 fs-14 change-type">
                                         <i class="fas fa-eye-slash"></i>
                                     </span>
                                 </div>
@@ -54,7 +54,7 @@
                                         'type' => 'submit',
                                         'class' => 'btn btn-secondary btn-secondary-login',
                                         'id' => 'loginBtn',
-                                        'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                        'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
                                     ]) }}
                                 </div>
                                 <div class="flex-1 -12 flex justify-center">
@@ -72,7 +72,7 @@
                                                 !empty($envSetting['facebook_app_secret'] || config('services.facebook.client_secret')) &&
                                                 !empty($envSetting['facebook_redirect'] || config('services.facebook.redirect')))
                                             <a href="{{ url('/login/facebook') }}"
-                                                class="btn facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                     class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook') }}
                                             </a>
                                         @endif
@@ -81,7 +81,7 @@
                                                 !empty($envSetting['google_client_secret'] || config('services.google.client_secret')) &&
                                                 !empty($envSetting['google_redirect'] || config('services.google.redirect')))
                                             <a href="{{ url('/login/google') }}"
-                                                class="btn google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                     class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google') }}
                                             </a>
                                         @endif
@@ -90,7 +90,7 @@
                                                 !empty($envSetting['linkedin_client_secret'] || config('services.linkedin.client_secret')) &&
                                                 !empty(config('services.linkedin.redirect')))
                                             <a href="{{ url('/login/linkedin') }}"
-                                                class="btn linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
                                                     class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin') }}
                                             </a>
                                         @endif

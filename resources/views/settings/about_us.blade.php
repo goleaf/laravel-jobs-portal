@@ -15,10 +15,10 @@
         </div>
     </div>
     <div class="mt-4 mb-5">
-        <div class="flex justify-content-end">
+        <div class="flex justify-end">
             {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary me-3','id' => 'btnAboutUs']) }}
             <a href="{{ route('admin.dashboard', ['section' => 'about_us']) }}"
-               class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
+               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
         </div>
     </div>
     {{ Form::close() }}

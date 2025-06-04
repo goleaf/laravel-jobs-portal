@@ -60,7 +60,7 @@
         </div>
         <div class="col-xl-4 flex-1 -sm-6 widget">
             <a href="{{ route('followers.index') }}" class=" text-decoration-none">
-            <div class="bg-info shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+            <div class="bg-blue-500 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                 <div
                         class="bg-blue-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="far fa-user text-white fs-1-xl fa-4x"></i>
@@ -85,27 +85,27 @@
             </div>
         </div>
     </div>
-    <div class="card bg-white shadow rounded-lg overflow-hidden -xl-stretch mb-xl-8">
+    <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 bg-white shadow rounded-lg overflow-hidden -xl-stretch mb-xl-8">
         <!--begin::Header-->
         <div class="bg-white shadow rounded-lg overflow-hidden -header border-0 pt-5">
-            <h3 class="bg-white shadow rounded-lg overflow-hidden -title align-items-start flex-column">
+            <h3 class="bg-white shadow rounded-lg overflow-hidden -title items-start flex-col">
                                     <span
                                             class="bg-white shadow rounded-lg overflow-hidden -label fs-3 mb-1">{{ __('messages.job_applications') }}</span>
             </h3>
-            <div class="col-lg-8 md:w-8/12 flex-1 -sm-12">
-                <div class="flex flex-wrap justify-content-end">
-                    <div class="col-lg-4 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
+            <div class="lg:w-8/12 px-2 md:w-8/12 flex-1 -sm-12">
+                <div class="flex flex-wrap justify-end">
+                    <div class="lg:w-4/12 px-2 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
                         <div class="bg-white shadow rounded-lg overflow-hidden -header-action w-full">
                             {{  Form::select('jobs', $jobStatus, null, ['id' => 'jobStatus', 'class' => 'form-control status-filter', 'placeholder' => __('messages.flash.select_job')]) }}
                         </div>
                     </div>
-                    <div class="col-lg-4 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
+                    <div class="lg:w-4/12 px-2 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
                         <div class="bg-white shadow rounded-lg overflow-hidden -header-action w-full">
                             {{  Form::select('gender', $gender, null, ['id' => 'gender', 'class' => 'form-control status-filter', 'placeholder' => __('messages.company.select_gender')]) }}
                         </div>
                     </div>
-                    <div class="col-lg-4 md:w-4/12 col-xl-4 flex-1 -sm-4 mt-0">
-                        <div id="timeRange" class="time_range time_range_width w-30 border rounded-2 p-3">
+                    <div class="lg:w-4/12 px-2 md:w-4/12 col-xl-4 flex-1 -sm-4 mt-0">
+                        <div id="timeRange" class="time_range time_range_width w-30 border border-gray-300 rounded-2 p-3">
                             <i class="far fa-calendar-alt"
                                aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
                                     class="caret"></b>
@@ -125,14 +125,14 @@
             <div class="mb-xl-8">
                 <!--begin::Header-->
                 <div class="flex justify-between border-0 pt-5">
-                    <h3 class="align-items-start flex-column">
+                    <h3 class="items-start flex-col">
                         <span class="fs-3 mb-1">{{ __('messages.employer_menu.recent_jobs') }}</span>
                     </h3>
                     <!--begin::Menu-->
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span>
                          <a href="{{ route('job.index') }}"
-                            class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                      class="fas fa-chevron-right"></i></a>
                     </span>
                     <!--end::Svg Icon-->
@@ -144,7 +144,7 @@
                     <!--begin::Table container-->
                     <div class="w-full divide-y divide-gray-200 -responsive">
                         <!--begin::Table-->
-                        <table class="table w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
+                        <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
                             <!--begin::Table head-->
                             <thead>
                             <tr class="text-start text-gray-500 fs-7 text-uppercase gs-0">
@@ -193,14 +193,14 @@
             <div class="mb-xl-8">
                 <!--begin::Header-->
                 <div class="flex justify-between border-0 pt-5">
-                    <h3 class="align-items-start flex-column">
+                    <h3 class="items-start flex-col">
                         <span class=" fs-3 mb-1">{{ __('messages.employer_menu.recent_follower') }}</span>
                     </h3>
                     <!--begin::Menu-->
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span>
                          <a href="{{ route('followers.index') }}"
-                            class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                      class="fas fa-chevron-right"></i></a>
                     </span>
                     <!--end::Svg Icon-->
@@ -212,7 +212,7 @@
                     <!--begin::Table container-->
                     <div class="w-full divide-y divide-gray-200 -responsive">
                         <!--begin::Table-->
-                        <table class="table w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
+                        <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
                             <!--begin::Table head-->
                             <thead>
                             <tr class="text-start text-gray-500 fs-7 text-uppercase gs-0">

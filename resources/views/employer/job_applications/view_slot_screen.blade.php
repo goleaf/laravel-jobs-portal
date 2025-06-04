@@ -2,16 +2,14 @@
 @section('title')
     {{ __('messages.job_stage.slots') }}
 @endsection
-@push('css')
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.css') }}">
-@endpush
+@push('css')@endpush
 @section('content')
     @include('flash::message')
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             @include('layouts.errors')
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
-                    <div class="flex justify-content-end">
+                    <div class="flex justify-end">
                         @php
                             $stageId = null;
                         @endphp
@@ -19,14 +17,14 @@
                             @php
                                 $stageId = $lastStage->stage_id;
                             @endphp
-                            <div class="w-25">
+                            <div class="w-1/4">
                                 {{ Form::select('stage_id', $jobStage, $lastStage->stage_id, ['id' => 'stages', 'class' => 'form-select status-filter w-100']) }}
                             </div>
                         @endif
                         @if($isSelectedRejectedSlot > 0 || $isStageMatch)
                             <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors schedule-interview">
                                 <a href="javascript:void(0)"
-                                   class="btn px-4 py-2 rounded font-medium transition-colors -primary addJobStageModal ms-2">
+                                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary addJobStageModal ms-2">
                                     {{ __('messages.common.add') }}
                                 </a>
                             </div>
@@ -52,8 +50,6 @@
         var getScheduleHistory = "{{ route('employer.schedule.history', ['jobId' => request()->route('jobId')]) }}";
         var cancelSlotUrl = "{{ route('employer.slot.cancel', ['jobId' => request()->route('jobId')]) }}";
         var jobApplicationUrl = "{{url('employer/jobs/'.request()->route('jobId').'/applications')}}";
-    </script>
-    <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-    {{--    <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script>--}}
+    </script>{{--    <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script>--}}
 @endpush
 

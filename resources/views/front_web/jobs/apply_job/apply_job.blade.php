@@ -8,12 +8,12 @@
 {{--@endsection--}}
 @section('content')
     <div class="apply-job-page">
-        <section class="hero-section position-relative bg-gray-100 py-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gray-100 py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-3">
+                            <h1 class="text-gray-600 mb-3">
                                 @lang('web.job_details.apply_for_job')
                             </h1>
                             <nav aria-label="breadcrumb">
@@ -29,7 +29,7 @@
             </div>
         </section>
         <section class="apply-job-section contact-section py-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="upper-box">
                     <div class="flex flex-wrap">
                         <div class="col-xl-8 flex-1 -md-10 mx-auto mb-4">
@@ -60,13 +60,13 @@
                         @include('flash::message')
                         <input type="hidden" value="{{ isset($job) ? $job->id : null }}" name="job_id">
                         <div class="flex flex-wrap">
-                            <div class="form-group col-lg-12 md:w-full flex-1 -sm-12">
+                            <div class="form-group lg:w-full px-2 md:w-full flex-1 -sm-12">
                                 <div class="response"></div>
                             </div>
-                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group chosen-search">
-                                <label class="fs-16 text-secondary mb-2" for="resumeId">{{ __('messages.apply_job.resume').':' }}<span
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group chosen-search">
+                                <label class="fs-16 text-gray-600 mb-2" for="resumeId">{{ __('messages.apply_job.resume').':' }}<span
                                             class="text-red-600">*</span></label>
-                                <select class="chosen-search-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" data-live-search="true" data-size="5"
+                                <select class="chosen-search-select w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" data-live-search="true" data-size="5"
                                         name="resume_id" id="resumeId" data-control="select2">
                                     <option value="">{{ __('web.job_menu.none') }}</option>
                                     @foreach($resumes as $key => $value)
@@ -78,37 +78,37 @@
                                 {{--                            {{ Form::select('resume_id', $resumes, ($isJobDrafted) ? $draftJobDetails->resume_id : $default_resume, ['class' => 'selectpicker form-control','id' => 'resumeId','placeholder'=>'Select Resume', 'required']) }}--}}
                             </div>
 
-                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group">
-                                <label class="fs-16 text-secondary mb-2" for="expected_salary">{{ __('messages.candidate.expected_salary').':' }}<span
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group">
+                                <label class="fs-16 text-gray-600 mb-2" for="expected_salary">{{ __('messages.candidate.expected_salary').':' }}<span
                                         class="text-red-600">*</span></label>
                                 <input type="text" id="expected_salary" name="expected_salary" min="0" max="9999999999"
                                        value="{{ ($isJobDrafted) ? $draftJobDetails->expected_salary : '' }}"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 price-input" required>
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 price-input" required>
                             </div>
 
-                            <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group">
-                                <label class="fs-16 text-secondary mb-2" for="notes">{{ __('messages.apply_job.notes').':' }}</label>
+                            <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group">
+                                <label class="fs-16 text-gray-600 mb-2" for="notes">{{ __('messages.apply_job.notes').':' }}</label>
                                 <textarea rows="5" id="notes" name="notes"
-                                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">{{ ($isJobDrafted) ? $draftJobDetails->notes : '' }}</textarea>
+                                          class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">{{ ($isJobDrafted) ? $draftJobDetails->notes : '' }}</textarea>
                             </div>
                             @if(getSettingValue('enable_google_recaptcha'))
-                            <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group mt10 text-center">
+                            <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group mt10 text-center">
                                 <div class="g-recaptcha flex justify-center"
                                      data-sitekey="{{ config('app.google_recaptcha_site_key') }}" name="g-recaptcha" id="g-recaptcha"  required></div>
                                 <div id="g-recaptcha-error" required></div>
                             </div>
                             @endif
-                            <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group text-center">
+                            <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group text-center">
                                 @if(!$isApplied)
                                     @if(!$isJobDrafted)
-                                        <button class="btn px-4 py-2 rounded font-medium transition-colors -primary mx-2 save-draft"
-                                                data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{__('messages.common.process')}}"
+                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary mx-2 save-draft"
+                                                data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{__('messages.common.process')}}"
                                                 id="draftJobSave">{{__('web.common.save_as_draft')}}
                                         </button>
                                     @endif
                                     @if($isActive && !$job->is_suspended)
-                                        <button class="btn px-4 py-2 rounded font-medium transition-colors -secondary mx-2 apply-job"
-                                                data-loading-text="<span class='spinner-border spinner-border-sm'></span> {{__('messages.common.process')}}"
+                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary mx-2 apply-job"
+                                                data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{__('messages.common.process')}}"
                                                 id="applyJobSave">{{ __('web.common.apply') }}</button>
                                     @endif
                                 @else

@@ -119,7 +119,7 @@
 
 </div>
 <!-- Submit Field -->
-<div class="flex justify-content-end mt-5">
+<div class="flex justify-end mt-5">
     {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3']) }}
 </div>
 

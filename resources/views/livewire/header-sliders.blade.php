@@ -10,7 +10,7 @@
             </div>
         @endforelse
         <div class="flex-1 -md-12">
-            <div class="flex flex-wrap mb-3 justify-content-end flex-wrap">
+            <div class="flex flex-wrap mb-3 justify-end flex-wrap">
                 @if($headerSliders->count() > 0)
                     {{$headerSliders->links()}}
                 @endif

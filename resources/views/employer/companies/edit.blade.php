@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
 @endpush
 @section('content')
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         <div class="flex flex-wrap">
             <div class="flex-1 -12">
                 @include('layouts.errors')
                 @include('flash::message')
-                <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox">
+                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox">
                     <i class="fa-solid fa-face-frown me-5"></i>
                 </div>
             </div>
@@ -22,18 +22,18 @@
             <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 {{ Form::model($user, ['route' => ['company.update.form', $company->id], 'method' => 'put','id'=>'editCompanyForm']) }}
                 @if($isFeaturedEnable)
-                    <div class="flex justify-content-end">
+                    <div class="flex justify-end">
                         @if($company->activeFeatured)
-                            <div class="badge badge-info d-inline-block rounded">
+                            <div class="badge badge-info inline-block rounded">
                                 {{ __('messages.front_settings.featured') }}
                                 {{ __('messages.front_settings.exipre_on') }}
                                 {{ (new Carbon\Carbon($company->activeFeatured->end_time))->format('d/m/y') }}</div>
                         @else
                             @if($isFeaturedAvilabal)
-                                <a class="btn bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm"
+                                <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm"
                                    id="makeFeatured">{{ __('messages.front_settings.make_featured') }}</a>
                                 {{--                                @else--}}
-                                {{--                                    <button class="btn bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm" data-bs-toggle="tooltip"--}}
+                                {{--                                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm" data-bs-toggle="tooltip"--}}
                                 {{--                                            data-bs-placement="bottom"--}}
                                 {{--                                            title="{{ __('messages.front_settings.featured_employer_not_available') }}">--}}
                                 {{--                                        {{ __('messages.front_settings.make_featured') }}</button>--}}

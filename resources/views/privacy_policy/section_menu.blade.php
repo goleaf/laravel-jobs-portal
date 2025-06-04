@@ -2,7 +2,7 @@
     <div class="flex-1 -md-3">
         <div class="bg-white shadow rounded-lg overflow-hidden">
             <div class="bg-white shadow rounded-lg overflow-hidden -body px-0">
-                <ul class="nav nav-pills flex-column">
+                <ul class="flex space-x-1 nav-pills flex-col">
                     <li class="nav-item">
                         <a href="{{ route('privacy.policy.index', ['section' => 'privacy_policy']) }}"
                            class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ (isset($sectionName) && $sectionName =="privacy_policy') ? 'active' : ''}}">

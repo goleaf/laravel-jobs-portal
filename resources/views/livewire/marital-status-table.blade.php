@@ -1,12 +1,12 @@
 <div>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         <div>
             @if($this->showButtonOnHeader)
                 @include($this->buttonComponent)
             @endif
 
             <div class="w-full divide-y divide-gray-200 -responsive">
-                <table class="table w-full divide-y divide-gray-200 -striped">
+                <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped">
                     <thead>
                         <tr>
                             @foreach($columns as $column)

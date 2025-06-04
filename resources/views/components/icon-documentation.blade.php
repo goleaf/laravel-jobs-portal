@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Icon Documentation') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('Icon Documentation') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .icon-card {
             transition: transform 0.2s, box-shadow 0.2s;
@@ -35,8 +33,8 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
-        <div class="container mx-auto">
+    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
+        <div class="container mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm -brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -50,7 +48,7 @@
         </div>
     </nav>
 
-    <div class="container mx-auto -fluid py-4">
+    <div class="container mx-auto px-4 mx-auto -fluid py-4">
         <div class="flex flex-wrap">
             <!-- Sidebar with Search -->
             <div class="flex-1 -md-3">
@@ -61,25 +59,25 @@
                                 <i class="fas fa-search me-2"></i>
                                 {{ __('Icon Search') }}
                             </h5>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="iconSearch" placeholder="{{ __('Search icons...') }}">
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="iconSearch" placeholder="{{ __('Search icons...') }}">
                             
                             <hr>
                             
                             <h6>{{ __('Categories') }}</h6>
                             <div class="px-4 py-2 rounded font-medium transition-colors -group-vertical d-grid gap-1" role="group">
-                                <button type="button" class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="all">
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="all">
                                     {{ __('All Icons') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="ui">
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="ui">
                                     {{ __('UI Icons') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="business">
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="business">
                                     {{ __('Business') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="social">
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="social">
                                     {{ __('Social Media') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="file">
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="file">
                                     {{ __('Files & Docs') }}
                                 </button>
                             </div>
@@ -188,7 +186,7 @@
 
                     @foreach($icons as $iconData)
                     <div class="md:w-4/12 flex-1 -lg-3 mb-3 icon-item" data-category="{{ $iconData['category'] }}" data-name="{{ strtolower($iconData['name']) }}">
-                        <div class="card h-full icon- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 h-full icon- bg-white shadow rounded-lg overflow-hidden">
                             <div class="bg-white shadow rounded-lg overflow-hidden -body text-center">
                                 <div class="icon-preview">
                                     <i class="{{ $iconData['icon'] }}"></i>
@@ -217,7 +215,7 @@
     </div>
 
     <!-- Toast for Copy Confirmation -->
-    <div class="toast- container mx-auto position-fixed bottom-0 end-0 p-3">
+    <div class="toast- container mx-auto px-4 mx-auto fixed bottom-0 end-0 p-3">
         <div id="copyToast" class="toast" role="alert">
             <div class="toast-header">
                 <i class="fas fa-copy text-green-600 me-2"></i>
@@ -228,10 +226,7 @@
                 {{ __('Icon code copied to clipboard') }}
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    </div><script>
         // Search functionality
         document.getElementById('iconSearch').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();

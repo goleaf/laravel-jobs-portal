@@ -1,4 +1,4 @@
-{{--<div class="col-lg-4 flex-1 -md-6 px-xl-3 mb-40">--}}
+{{--<div class="lg:w-4/12 px-2 flex-1 -md-6 px-xl-3 mb-40">--}}
 {{--    <div class="bg-white shadow rounded-lg overflow-hidden py-30">--}}
 {{--        <div class="flex flex-wrap items-center">--}}
 {{--            <div class="flex-1 -3">--}}
@@ -9,7 +9,7 @@
 {{--                <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">--}}
 {{--                    @if(Str::length($job->job_title) < 35)--}}
 {{--                        <a href="{{ route('front.job.details',$job->job_id) }}"--}}
-{{--                           class="text-secondary primary-link-hover">--}}
+{{--                           class="text-gray-600 primary-link-hover">--}}
 {{--                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">--}}
 {{--                                {{ html_entity_decode($job->job_title) }}--}}
 {{--                            </h5>--}}
@@ -26,7 +26,7 @@
 {{--                </div>--}}
 {{--            </div>--}}
 {{--            @if($job->activeFeatured)--}}
-{{--                <div class="flex-1 -1 icon position-relative pe-0">--}}
+{{--                <div class="flex-1 -1 icon relative pe-0">--}}
 {{--                    <i class="text-primary-600 fa-solid fa-bookmark"></i>--}}
 {{--                </div>--}}
 {{--            @endif--}}
@@ -64,28 +64,28 @@
 <div class="flex-1 -12 px-xl-3 mb-20">
     <div class="bg-white shadow rounded-lg overflow-hidden border-left-color" style="padding:18px">
         <div class="flex flex-wrap flex">
-            <div class="col-lg-1 md:w-2/12 flex-1 -2 mb-md-0 mb-1 flex justify-center items-center">
+            <div class="lg:w-1/12 px-2 md:w-2/12 flex-1 -2 mb-md-0 mb-1 flex justify-center items-center">
                 <img src="{{$job->company->company_url}}" class="img-fluid" alt="job image"  style="border-radius:10px; width:70px; height:72px;">
             </div>
-            <div class="col-lg-8 md:w-9/12 flex-1 -9 d-sm-inline p-0">
+            <div class="lg:w-8/12 px-2 md:w-9/12 flex-1 -9 d-sm-inline p-0">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     @if((Str::length($job->job_title)) < 35)
                         <a href=""
-                           class="text-secondary primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block" >
+                           class="text-gray-600 primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
+                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 inline-block" >
                                 {{ ucfirst($job->job_title) }}
 
                             </h5>
                         </a>
-                    {{--                    <a href="{{ route('front.job.details',$job->job_id) }}" class="text-secondary primary-link-hover">--}}
+                    {{--                    <a href="{{ route('front.job.details',$job->job_id) }}" class="text-gray-600 primary-link-hover">--}}
                     {{--                        <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">--}}
                     {{--                            {{ html_entity_decode($job->job_title) }}--}}
                     {{--                        </h5>--}}
                     {{--                    </a>--}}
                     @else
                         <a href="{{ route('front.job.details',$job->job_id) }}"
-                           class="text-secondary primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block" >
+                           class="text-gray-600 primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
+                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 inline-block" >
                                 {{ Str::limit(html_entity_decode($job->job_title),30,'...') }}
                             </h5>
                         </a>
@@ -116,19 +116,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 md:w-9/12 flex-1 -9 d-sm-inline me-5 position-absolute top-50 end-0 translate-middle-y">
-                <div class="text-end justify-content-end float-end flex align-top">
+            <div class="lg:w-2/12 px-2 md:w-9/12 flex-1 -9 d-sm-inline me-5 absolute top-50 end-0 translate-middle-y">
+                <div class="text-end justify-end float-end flex align-top">
                     <a href="{{ route('front.job.details',$job->job_id) }}"
-                    class="btn px-4 py-2 rounded font-medium transition-colors -primary" style="padding:5px 15px !important;">{{__('messages.view_details')}}</a>
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary" style="padding:5px 15px !important;">{{__('messages.view_details')}}</a>
                 </div>
             </div>
-            <div class="position-absolute top-0 end-0 mt-3">
+            <div class="absolute top-0 end-0 mt-3">
                 @if($job->activeFeatured)
-                    <div class="md:w-1/12 col-sm-1 flex-1 -8 justify-content-end bookmark-icon position-relative pe-0 float-end flex">
+                    <div class="md:w-1/12 col-sm-1 flex-1 -8 justify-end bookmark-icon relative pe-0 float-end flex">
                         <i class="text-primary-600 fa-solid fa-bookmark"></i>
                     </div>
                 @else
-                    <div class="md:w-1/12 col-sm-1 flex-1 -8 bookmark-icon justify-content-end position-relative pe-0 float-end flex text-gray">
+                    <div class="md:w-1/12 col-sm-1 flex-1 -8 bookmark-icon justify-end relative pe-0 float-end flex text-gray">
                         <i class="fa-regular fa-bookmark"></i>
                     </div>
                 @endif   
@@ -138,21 +138,21 @@
                 <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 ps-xl-3">
                     @if(Str::length($job->job_title) < 35)
                         <a href="{{ route('front.job.details',$job->job_id) }}"
-                           class="text-secondary primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block" >
+                           class="text-gray-600 primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
+                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 inline-block" >
                                 {{ html_entity_decode($job->job_title) }}
 
                             </h5>
                         </a>
-                        {{--                    <a href="{{ route('front.job.details',$job->job_id) }}" class="text-secondary primary-link-hover">--}}
+                        {{--                    <a href="{{ route('front.job.details',$job->job_id) }}" class="text-gray-600 primary-link-hover">--}}
                         {{--                        <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">--}}
                         {{--                            {{ html_entity_decode($job->job_title) }}--}}
                         {{--                        </h5>--}}
                         {{--                    </a>--}}
                     @else
                         <a href="{{ route('front.job.details',$job->job_id) }}"
-                           class="text-secondary primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block" >
+                           class="text-gray-600 primary-link-hover"  title="{{ html_entity_decode($job->job_title) }}">
+                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 inline-block" >
                                 {{ Str::limit(html_entity_decode($job->job_title),30,'...') }}
                             </h5>
                         </a>
@@ -186,11 +186,11 @@
     </div>
    
 </div>
-{{--<div class="col-lg-12 flex-1 -md-6 px-xl-3 mb-40">--}}
+{{--<div class="lg:w-full px-2 flex-1 -md-6 px-xl-3 mb-40">--}}
 {{--    <div class="bg-white shadow rounded-lg overflow-hidden py-30">--}}
 {{--        <div class="bg-white shadow rounded-lg overflow-hidden -body">--}}
 {{--            @if(Str::length($job->job_title) < 35)--}}
-{{--                <a href="{{ route('front.job.details',$job->job_id) }}" class="text-secondary primary-link-hover">--}}
+{{--                <a href="{{ route('front.job.details',$job->job_id) }}" class="text-gray-600 primary-link-hover">--}}
 {{--                    <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0">--}}
 {{--                        {{ html_entity_decode($job->job_title) }}--}}
 {{--                    </h5>--}}
@@ -239,11 +239,11 @@
 {{--                   --}}
 {{--                </div>--}}
 {{--                @if($job->activeFeatured)--}}
-{{--                    <div class="flex-1 -1 icon position-relative pe-0 float-end flex items-center">--}}
+{{--                    <div class="flex-1 -1 icon relative pe-0 float-end flex items-center">--}}
 {{--                        <i class="text-primary-600 fa-solid fa-bookmark"></i>--}}
 {{--                    </div>--}}
 {{--                @else--}}
-{{--                    <div class="flex-1 -1 icon position-relative pe-0 float-end flex items-center text-gray">--}}
+{{--                    <div class="flex-1 -1 icon relative pe-0 float-end flex items-center text-gray">--}}
 {{--                        <i class="fa-regular fa-bookmark"></i>--}}
 {{--                    </div>--}}
 {{--                @endif--}}

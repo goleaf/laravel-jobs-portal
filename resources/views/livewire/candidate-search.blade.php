@@ -1,34 +1,34 @@
-<div class="container mx-auto">
+<div class="container mx-auto px-4 mx-auto">
     <div class="flex flex-wrap">
         {{-- <div class="flex-1 -lg-4">
             <div class="latest-job-left br-10 px-40 bg-color-light">
                 <div class="form-group mb-md-4 mb-3">
                     <div class="flex flex-wrap mb-3 justify-between">
-                        <label for="" class="fs-16 text-secondary my-auto pb-2">
+                        <label for="" class="fs-16 text-gray-600 my-auto pb-2">
                             {{ __('web.web_jobs.search_by_keywords') }}</label>
-                        <button wire:click="resetFilter()" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -primary reset-filter text-nowrap mb-2"
+                        <button wire:click="resetFilter()" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -primary reset-filter text-nowrap mb-2"
                             id="btnReset">{{ __('web.reset_filter') }}</button>
                     </div>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3"
+                    <input class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3"
                         wire:model.debounce.100ms="searchByCandidate" type="search" id="searchByCandidate"
                         autocomplete="off" placeholder="@lang('web.common.search')">
                 </div>
                 <div class="form-group mb-md-4 mb-3">
-                    <label for="" class="fs-16 text-secondary mb-3">
+                    <label for="" class="fs-16 text-gray-600 mb-3">
                         {{ __('web.common.location') }}</label>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3 search-by-location" type="search"
+                    <input class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3 search-by-location" type="search"
                         autocomplete="off" placeholder="@lang('web.web_jobSeeker.search_by_location')" name="min" wire:model="location">
                 </div>
                 <div class="form-group mb-md-4 mb-3">
-                    <label for="" class="fs-16 text-secondary mb-3">
+                    <label for="" class="fs-16 text-gray-600 mb-3">
                         {{ __('messages.candidate.expected_salary') }}</label>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" type="text" placeholder="Min"
+                    <input class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" type="text" placeholder="Min"
                         name="min" wire:model="min" autocomplete="off">
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3 mt-2" type="text" placeholder="Max"
+                    <input class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3 mt-2" type="text" placeholder="Max"
                         name="max" wire:model="max" autocomplete="off">
                 </div>
                 <div class="form-group mb-md-4 mb-3">
-                    <label for="" class="fs-16 text-secondary mb-3">
+                    <label for="" class="fs-16 text-gray-600 mb-3">
                         {{ __('messages.candidate.gender') }}</label>
                     <ul>
                         <li>
@@ -60,7 +60,7 @@
                     <div class="form-group mb-md-4 mb-3">
                         <div class="flex flex-wrap mb-3 justify-between">
                             {{ Form::label('', __('web.web_jobs.search_by_keywords'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                            <button wire:click.prevent="resetFilter()" class="btn px-3 py-1.5 text-sm bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register reset-filter text-nowrap mb-2 px-3 py-1"
+                            <button wire:click.prevent="resetFilter()" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register reset-filter text-nowrap mb-2 px-3 py-1"
                             id="btnReset">{{ __('web.reset_filter') }}</button>
                         </div>
                         {{ Form::text('searchByCandidate', null, ['class' => 'form-control fs-14 text-gray bg-white br-10 p-3', 'wire:model.debounce.100ms.live' => 'searchByCandidate', 'autocomplete' => 'off', 'placeholder' => __('web.common.search')]) }}
@@ -94,10 +94,10 @@
                 @formClose()
             </div>
         </div>
-        {{-- <div class="content-column col-lg-8 md:w-full flex-1 -sm-12">
+        {{-- <div class="content-column lg:w-8/12 px-2 md:w-full flex-1 -sm-12">
             <div class="flex flex-wrap">
                 @forelse($candidates as $candidate)
-                    <div class="col-lg-6 flex-1 -md-6 px-xl-3 mb-40">
+                    <div class="lg:w-6/12 px-2 flex-1 -md-6 px-xl-3 mb-40">
                         <div class="bg-white shadow rounded-lg overflow-hidden py-30">
                             <div class="flex flex-wrap items-center">
                                 <div class="flex-1 -2">
@@ -106,7 +106,7 @@
                                 <div class="flex-1 -10 px-3">
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                                         <a href="{{ route('front.candidate.details', $candidate->unique_id) }}"
-                                            class="text-secondary primary-link-hover">
+                                            class="text-gray-600 primary-link-hover">
                                             <h5 class="bg-white shadow rounded-lg overflow-hidden -title   fs-20 mb-0">
                                                 {!! $candidate->user->full_name !!}</h5>
                                         </a>
@@ -156,18 +156,18 @@
                 @forelse($candidates as $candidate)
                     <div class=" mb-40">
                         <div class="bg-white shadow rounded-lg overflow-hidden py-30 border-0">
-                            <div class="d-sm-flex position-relative">
+                            <div class="d-sm-flex relative">
                                 <div class="mb-sm-0 mb-3 me-sm-4">
                                     <img src="{{ asset('img_template/test-job.png') }}" class="bg-white shadow rounded-lg overflow-hidden -img" alt="...">
                                 </div>
                                 <div class="">
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                                         <a href="{{ route('front.candidate.details', $candidate->unique_id) }}"
-                                            class="text-secondary primary-link-hover">
-                                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title text-secondary fs-18 mb-0">{!! $candidate->user->full_name !!}
+                                            class="text-gray-600 primary-link-hover">
+                                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title text-gray-600 fs-18 mb-0">{!! $candidate->user->full_name !!}
                                             </h5>
                                         </a>
-                                        <div class="candidate-info position-relative mt-4">
+                                        <div class="candidate-info relative mt-4">
                                             <div class="flex flex-wrap items-center mt-sm-0 ct">
                                                 <div class="col-xl-6 md:w-6/12 flex-1 -sm-6">
                                                     <div class="candidate-info-desc flex">

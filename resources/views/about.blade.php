@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('About Us') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('About Us') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
-        <div class="container mx-auto">
+    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
+        <div class="container mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm -brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -42,7 +40,7 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center">
                 <div class="flex-1 -lg-6">
                     <h1 class="display-4 fw-bold text-primary-600">{{ __('About Our Job Portal') }}</h1>
@@ -57,7 +55,7 @@
 
     <!-- Mission Section -->
     <section class="py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-8 mx-auto text-center">
                     <h2 class="mb-4">{{ __('Our Mission') }}</h2>
@@ -71,7 +69,7 @@
 
     <!-- Features Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-12 text-center mb-5">
                     <h2>{{ __('Why Choose Us?') }}</h2>
@@ -118,7 +116,7 @@
 
     <!-- Stats Section -->
     <section class="py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap text-center">
                 <div class="flex-1 -md-3 mb-4">
                     <div class="bg-white shadow rounded-lg overflow-hidden border-0">
@@ -158,7 +156,7 @@
 
     <!-- Team Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -lg-12 text-center mb-5">
                     <h2>{{ __('Our Team') }}</h2>
@@ -214,16 +212,16 @@
 
     <!-- Call to Action -->
     <section class="py-5 bg-primary-600 text-white">
-        <div class="container mx-auto text-center">
+        <div class="container mx-auto px-4 mx-auto text-center">
             <h2 class="mb-4">{{ __('Ready to Get Started?') }}</h2>
             <p class="lead mb-4">{{ __('Join thousands of job seekers and employers who trust our platform') }}</p>
             <div class="flex flex-wrap justify-center">
                 <div class="flex-1 -md-6">
-                    <a href="{{ route('register') }}" class="btn bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -lg me-2">
+                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors -lg me-2">
                         <i class="fas fa-user-plus me-1"></i>
                         {{ __('Join as Job Seeker') }}
                     </a>
-                    <a href="{{ route('register') }}" class="btn btn-outline-light px-4 py-2 rounded font-medium transition-colors -lg">
+                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-light px-4 py-2 rounded font-medium transition-colors -lg">
                         <i class="fas fa-building me-1"></i>
                         {{ __('Post a Job') }}
                     </a>
@@ -234,7 +232,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 -md-6">
                     <h5>{{ config('app.name') }}</h5>
@@ -258,8 +256,5 @@
                 <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}</p>
             </div>
         </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </footer></body>
 </html> 

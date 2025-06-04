@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Admin Login') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('Admin Login') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .admin-login-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -30,7 +28,7 @@
     </style>
 </head>
 <body class="admin-login-bg">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center items-center" style="min-height: 100vh;">
             <div class="md:w-6/12 flex-1 -lg-4">
                 <div class="text-center mb-4">
@@ -40,19 +38,19 @@
                     </a>
                 </div>
 
-                <div class="card login- bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 login- bg-white shadow rounded-lg overflow-hidden">
                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-4">
                         <div class="text-center mb-4">
                             <div class="admin-badge">
                                 <i class="fas fa-shield-alt me-1"></i>
                                 {{ __('ADMIN ACCESS') }}
                             </div>
-                            <h4 class="text-dark mb-0">{{ __('Admin Portal') }}</h4>
+                            <h4 class="text-gray-900 mb-0">{{ __('Admin Portal') }}</h4>
                             <p class="text-gray-500">{{ __('Secure administrator login') }}</p>
                         </div>
 
                         @if ($errors->any())
-                            <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -63,7 +61,7 @@
                         @endif
 
                         @if (session('status'))
-                            <div class="alert bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-blue-50 border border-gray-300 border-blue-200 text-blue-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 {{ session('status') }}
                                 <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
@@ -79,7 +77,7 @@
                                     {{ __('Administrator Email') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -98,14 +96,14 @@
                                     <i class="fas fa-lock me-1 text-primary-600"></i>
                                     {{ __('Password') }}
                                 </label>
-                                <div class="input-group">
+                                <div class="flex">
                                     <input id="password" type="password" 
-                                           class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("password') is-invalid @enderror" 
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("password') is-invalid @enderror" 
                                            name="password" 
                                            required 
                                            autocomplete="current-password"
                                            placeholder="{{ __('Enter your password') }}">
-                                    <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary" type="button" onclick="togglePassword()">
+                                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary" type="button" onclick="togglePassword()">
                                         <i class="fas fa-eye" id="passwordToggle"></i>
                                     </button>
                                 </div>
@@ -125,7 +123,7 @@
                             </div>
 
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
                                     <i class="fas fa-sign-in-alt me-1"></i>
                                     {{ __('Access Admin Panel') }}
                                 </button>
@@ -134,7 +132,7 @@
 
                         @if (Route::has('password.request'))
                             <div class="text-center">
-                                <a class="btn px-4 py-2 rounded font-medium transition-colors -link text-decoration-none" href="{{ route('password.request') }}">
+                                <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -link text-decoration-none" href="{{ route('password.request') }}">
                                     <i class="fas fa-key me-1"></i>
                                     {{ __('Forgot Password?') }}
                                 </a>
@@ -149,7 +147,7 @@
                                 <small>{{ __('Secured by SSL encryption') }}</small>
                             </div>
                             <div class="mt-2">
-                                <a href="{{ route('front.home') }}" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm">
+                                <a href="{{ route('front.home') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm">
                                     <i class="fas fa-arrow-left me-1"></i>
                                     {{ __('Back to Website') }}
                                 </a>
@@ -171,10 +169,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    </div><script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const passwordToggle = document.getElementById('passwordToggle');

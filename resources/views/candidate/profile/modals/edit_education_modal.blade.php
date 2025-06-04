@@ -1,15 +1,15 @@
-<div id="editEducationModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div id="editEducationModal" class="fixed inset-0 z-50 overflow-y-auto fade" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="flex items-center justify-center min-h-screen px-4 modal-lg">
         <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
                 <h2>{{  __('messages.candidate_profile.edit_education') }}</h2>
                 <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
             @formOpen(['id' => 'editCareerEducationForm'])
-            <div class="modal-body">
-                <div class="alert p-4 rounded-md mb-4 -danger hide hidden" id="editValidationErrorsBox">
+            <div class="px-6 py-4">
+                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger hide hidden" id="editValidationErrorsBox">
                     <i class='fa-solid fa-face-frown me-4'></i>
                 </div>
                 {{ Form::hidden('educationId', null, ['id' => 'educationId']) }}
@@ -56,12 +56,12 @@
 
                 </div>
             </div>
-            <div class="modal-footer pt-0">
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-2 pt-0">
                 {{ Form::button(__('messages.common.save'), [
                     'type' => 'submit',
                     'class' => 'btn btn-primary me-3',
                     'id' => 'btnEditEducationSave',
-                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                    'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
                 ]) }}
                 {{ Form::button(__('messages.common.cancel'), [
                     'type' => 'button',

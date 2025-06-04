@@ -8,12 +8,12 @@
 @section('content')
     <div class="company-details-page">
         <!-- start hero section -->
-        <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-color-light py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -12">
                         <div class="flex flex-wrap align-items-lg-center mb-3">
-                            <div class="col-lg-1 col-sm-2 flex-1 -3">
+                            <div class="lg:w-1/12 px-2 col-sm-2 flex-1 -3">
                                 <div class="company-profile-img mt-md-0 mt-3">
                                     <img src="{{ !empty($companyDetail->company_url) ? $companyDetail->company_url : asset('assets/img/infyom-logo.png') }}"
                                         alt="job_detail_logo">
@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-sm-10 flex-1 -9">
                                 <div class="hero-content ps-xl-0 ps-3">
-                                    <h4 class="text-secondary mb-0">
+                                    <h4 class="text-gray-600 mb-0">
                                         {{ html_entity_decode($companyDetail->user->full_name) }}
                                     </h4>
                                     <div class="hero-desc flex items-center flex-wrap">
@@ -60,7 +60,7 @@
                             <div class="flex flex-wrap align-items-lg-center">
                                 <div class="hero-desc d-md-flex">
                                     <div class="desc flex me-4 pe-2">
-                                        <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success reportJobAbuse"
+                                        <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-success reportJobAbuse"
                                             data-favorite-user-id="{{ getLoggedInUserId() !== null ? getLoggedInUserId() : null }}"
                                             data-favorite-company_id="{{ $companyDetail->id }}" id="addToFavourite">
                                             <i class="favouriteIcon"></i>
@@ -69,13 +69,13 @@
                                     </div>
                                     <div class="desc flex me-4 pe-2">
                                         @if ($isReportedToCompany)
-                                            <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompanyBtn" disabled
+                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompanyBtn" disabled
                                                 data-bs-toggle="modal" data-bs-target="#reportToCompanyModal">
                                                 {{ __('messages.candidate.already_reported') }}
                                             </button>
                                         @else
                                             <button data-bs-toggle="modal" data-bs-target="#reportToCompanyModal"
-                                                class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger  reportToCompanyBtn {{ $isReportedToCompany ?"disabled' : '' }}"
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-danger  reportToCompanyBtn {{ $isReportedToCompany ?"disabled' : '' }}"
                                                 {{ $isReportedToCompany ? 'style=pointer-events:none;' : '' }}>{{ __('messages.company.report_to_company') }}
                                             </button>
                                         @endif
@@ -91,11 +91,11 @@
 
         <!-- start about-comapany section -->
         <section class="about-company-section py-60">
-         <div class="container mx-auto">
+         <div class="container mx-auto px-4 mx-auto">
              <div class="flex flex-wrap">
                  <div class="flex-1 -lg-8">
                      <div class="about-company-left">
-                         <h5 class="fs-18 text-secondary">@lang('web.web_company.about_company')</h5>
+                         <h5 class="fs-18 text-gray-600">@lang('web.web_company.about_company')</h5>
                          <div class="job-description mb-5 pb-lg-2">
                              {!! nl2br($companyDetail->details) !!}
                          </div>
@@ -111,7 +111,7 @@
                                          <i class="fa-solid fa-cake-candles text-primary-600 fs-4"></i>
                                          <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                                              @lang('web.web_jobs.founded_in')</p>
-                                         <p class="text-secondary fs-14">
+                                         <p class="text-gray-600 fs-14">
                                              {{!empty($companyDetail->established_in)? $companyDetail->established_in : __('messages.common.n/a')}}
                                          </p>
                                      </div>
@@ -120,7 +120,7 @@
                                          <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                              @lang('web.web_company.ownership')
                                          </p>
-                                         <p class="text-secondary fs-14">
+                                         <p class="text-gray-600 fs-14">
                                              {{!empty($companyDetail->ownerShipType->name)? $companyDetail->ownerShipType->name : __('messages.common.n/a')}}
                                          </p>
                                      </div>
@@ -129,7 +129,7 @@
                                          <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                                              @lang('web.web_company.company_size')
                                          </p>
-                                         <p class="text-secondary fs-14">
+                                         <p class="text-gray-600 fs-14">
                                              {{!empty($companyDetail->companySize->size)? $companyDetail->companySize->size : __('messages.common.n/a')}}
                                          </p>
                                      </div>
@@ -149,7 +149,7 @@
                                                  <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.web_jobs.phone')
                                                  </p>
-                                                 <p class="text-secondary fs-14 mb-0">
+                                                 <p class="text-gray-600 fs-14 mb-0">
                                                      {{$companyDetail->user->phone}}</p>
                                              </div>
                                          </div>
@@ -161,7 +161,7 @@
                                              <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                  @lang('web.common.location')
                                              </p>
-                                             <p class="text-secondary fs-14 mb-0">
+                                             <p class="text-gray-600 fs-14 mb-0">
                                                  {{ (isset($companyDetail->location)) ? html_entity_decode(Str::limit($companyDetail->location,12,'...')) : __('messages.common.n/a') }} {{ (isset($companyDetail->location2)) ? ','.html_entity_decode(Str::limit($companyDetail->location2,12,'...')) : '' }}</p>
                                          </div>
                                      </div>
@@ -173,7 +173,7 @@
                                                  <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.common.location')
                                                  </p>
-                                                 <p class="text-secondary fs-14 mb-0">
+                                                 <p class="text-gray-600 fs-14 mb-0">
                                                      <a href="{{ (isset($companyDetail->website))
                                      ?
                                          (!str_contains($companyDetail->website,'https://')
@@ -192,7 +192,7 @@
                                                  <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.common.email')
                                                  </p>
-                                                 <p class="text-secondary fs-14 mb-0">
+                                                 <p class="text-gray-600 fs-14 mb-0">
                                                      {{$companyDetail->user->email}}</p>
                                              </div>
                                          </div>
@@ -205,7 +205,7 @@
                          <div class="flex-1 -12 mb-40">
                              <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
                                  <div class="flex flex-wrap flex justify-content-lg-between">
-                                         <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
+                                         <p class="fs-18 text-gray-600">@lang('web.web_company.social_media')</p>
                                          <div class="mt-3">
                                              @if(isset($companyDetail->user->facebook_url))
                                                  <a href="{{ (isset($companyDetail->user->facebook_url)) ? addLinkHttpUrl($companyDetail->user->facebook_url) : 'javascript:void(0)' }}"
@@ -241,22 +241,22 @@
                      @endif
                  </div>
                  <div class="our-latest-jobs">
-                     <h5 class="fs-18 text-secondary mb-40">
+                     <h5 class="fs-18 text-gray-600 mb-40">
                          {{ ($jobDetails->count() > 0 ) ? __('web.company_details.our_latest_jobs')  : __('web.home_menu.latest_job_not_available') }}
                      </h5>
                      <div class="flex flex-wrap">
                          @foreach($jobDetails as $job)
                              <div class="flex-1 -12 px-xl-3 mb-20">
                                  <div class="bg-white shadow rounded-lg overflow-hidden py-30 border-left-color">
-                                     <div class="flex flex-wrap position-relative">
+                                     <div class="flex flex-wrap relative">
                                          <div class="col-xl-1 md:w-2/12 flex-1 -3 mb-md-0 mb-3">
                                              <img src="{{$job->company->company_url}}" class="bg-white shadow rounded-lg overflow-hidden -img" alt="">
                                          </div>
                                          <div class="col-xl-10 md:w-9/12 col-sm-8 flex-1 -12">
                                              <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 ps-xl-3">
                                                  <a href="{{route('front.job.details',$job['job_id']) }}"
-                                                    class="text-secondary primary-link-hover">
-                                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block">
+                                                    class="text-gray-600 primary-link-hover">
+                                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 inline-block">
                                                          {{ html_entity_decode(Str::limit($job['job_title'], 50)) }}
 
                                                      </h5>
@@ -286,7 +286,7 @@
                                              </div>
                                          </div>
                                          @if($job->activeFeatured)
-                                             <div class="bookmark text-end position-absolute">
+                                             <div class="bookmark text-end absolute">
                                                  <i class="text-primary-600 fa-solid fa-bookmark"></i>
                                              </div>
                                          @endif
@@ -298,7 +298,7 @@
                              <div class="flex flex-wrap justify-center">
                                  <div class="flex-1 -8 text-center">
                                      <a href="{{ route('front.search.jobs',array('company'=> $companyDetail->id)) }}"
-                                        class="btn px-4 py-2 rounded font-medium transition-colors -primary mb-40 mt-lg-4">
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary mb-40 mt-lg-4">
                                          @lang('web.common.show_all')</a>
                                  </div>
                              </div>

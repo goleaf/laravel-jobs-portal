@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Login') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ __('Login') }} - {{ config('app.name') }}</title><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
             <div class="md:w-6/12 flex-1 -lg-4">
                 <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mt-5">
@@ -20,7 +18,7 @@
                     </div>
                     <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         @if ($errors->any())
-                            <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -31,7 +29,7 @@
                         @endif
 
                         @if (session('status'))
-                            <div class="alert bg-green-50 border border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 {{ session('status') }}
                                 <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
@@ -46,7 +44,7 @@
                                     {{ __('Email Address') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -65,7 +63,7 @@
                                     {{ __('Password') }}
                                 </label>
                                 <input id="password" type="password" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
                                        name="password" 
                                        required 
                                        autocomplete="current-password">
@@ -85,7 +83,7 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">
                                     <i class="fas fa-sign-in-alt me-1"></i>
                                     {{ __('Login') }}
                                 </button>
@@ -94,7 +92,7 @@
 
                         <div class="mt-3 text-center">
                             @if (Route::has('password.request'))
-                                <a class="btn px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
+                                <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
                             @endif
@@ -104,7 +102,7 @@
                         
                         <div class="text-center">
                             <p class="mb-2">{{ __("Don't have an account?") }}</p>
-                            <a href="{{ route('register') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success">
+                            <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-success">
                                 <i class="fas fa-user-plus me-1"></i>
                                 {{ __('Register') }}
                             </a>
@@ -113,8 +111,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </div></body>
 </html> 

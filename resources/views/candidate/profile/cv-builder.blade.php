@@ -1,12 +1,10 @@
 @extends('candidate.profile.index')
-@push('css')
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.css') }}">
-@endpush
+@push('css')@endpush
 @section('section')
     
             <div class="flex flex-wrap">
-                <div class="flex justify-content-end">
-                    <a href="#cvModal" role="button" class="btn px-4 py-2 rounded font-medium transition-colors -primary cv-preview"
+                <div class="flex justify-end">
+                    <a href="#cvModal" role="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary cv-preview"
                        data-bs-toggle="modal">{{ __('messages.common.preview') }}</a>
                 </div>
                 <div class="flex-1 -md-12 mt-5 shadow p-9 bg-white shadow rounded-lg overflow-hidden">
@@ -18,16 +16,16 @@
                         @include('candidate.profile.career_informations.edit_general')
                     </div>
                     {{-- Education Section --}}
-                    <div class="border-bottom border-danger my-5 border-2 flex justify-between">
-                        <h5 class="mt-2 fs-2 text-info"><i
-                                class="fas fa-user-graduate text-info p-3 border rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.education') }}
+                    <div class="border-bottom border-red-600 my-5 border-2 flex justify-between">
+                        <h5 class="mt-2 fs-2 text-blue-500"><i
+                                class="fas fa-user-graduate text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.education') }}
                         </h5>
                         <a href="javascript:void(0)" class="addEducationBtn">
                             <i class="fas fa-plus-circle fa-2x text-primary-600"></i>
                         </a>
                     </div>
                     <div class="section-body">
-                        <div class="flex flex-wrap candidate-education- container mx-auto" id="candidateEducationsDiv">
+                        <div class="flex flex-wrap candidate-education- container mx-auto px-4 mx-auto" id="candidateEducationsDiv">
                             @include('candidate.profile.career_informations.show_education')
                         </div>
                         <div class="hidden" id="createEducationsDiv">
@@ -38,16 +36,16 @@
                         </div>
                     </div>
                     {{-- Experience Section --}}
-                    <div class="border-bottom my-5 border-danger border-2 flex justify-between">
-                        <h5 class="mt-2 fs-2 text-info"><i
-                                class="fas fa-briefcase text-info p-3 border rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.experience') }}
+                    <div class="border-bottom my-5 border-red-600 border-2 flex justify-between">
+                        <h5 class="mt-2 fs-2 text-blue-500"><i
+                                class="fas fa-briefcase text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.experience') }}
                         </h5>
                         <a href="javascript:void(0)" class="addExperienceBtn">
                             <i class="fas fa-plus-circle fa-2x text-primary-600"></i>
                         </a>
                     </div>
                     <div class="section-body">
-                        <div class="flex flex-wrap candidate-experience- container mx-auto" id="candidateExperienceDiv">
+                        <div class="flex flex-wrap candidate-experience- container mx-auto px-4 mx-auto" id="candidateExperienceDiv">
                             @include('candidate.profile.career_informations.show_experience')
                         </div>
                         <div class="hidden" id="createExperienceDiv">
@@ -58,9 +56,9 @@
                         </div>
                     </div>
                     {{-- Online Profile Section --}}
-                    <div class="border-bottom my-5 border-danger border-2 flex justify-between">
-                        <h5 class="mt-2 fs-2 text-info"><i
-                                class="fas fa-link text-info p-3 border rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.online_profile') }}
+                    <div class="border-bottom my-5 border-red-600 border-2 flex justify-between">
+                        <h5 class="mt-2 fs-2 text-blue-500"><i
+                                class="fas fa-link text-blue-500 p-3 border border-gray-300 rounded-circle border-info me-3"></i>{{ __('messages.candidate_profile.online_profile') }}
                         </h5>
                         <a href="javascript:void(0)" class="addOnlineProfileBtn">
                             <i class="fas fa-plus-circle fa-2x text-primary-600"></i>
@@ -111,7 +109,7 @@
         {{--        let cvTemplateUrl = "{{ route('candidate.cv.template') }}";--}}
     </script>
 {{--    <script src="{{ asset('assets/js/moment.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>--}}
+    {{----}}
 {{--    <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>--}}
     {{--    <script src="{{mix('assets/js/candidate-profile/candidate-education-experience.js')}}"></script>--}}
     {{--    <script src="{{mix('assets/js/candidate-profile/cv-builder.js')}}"></script>--}}

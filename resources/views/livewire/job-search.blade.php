@@ -5,13 +5,13 @@
 
                 <div class=" mb-40">
                     <a href="{{ route('front.job.details', $job['job_id']) }}" class="bg-white shadow rounded-lg overflow-hidden py-30 border-0">
-                        <div class="d-sm-flex position-relative">
+                        <div class="d-sm-flex relative">
                             <div class="mb-sm-0 mb-3 me-sm-4">
                                 <img src="{{ $job->company->company_url }}" class="bg-white shadow rounded-lg overflow-hidden -img" alt="...">
                             </div>
                             <div class="">
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
-                                    <h5 class="bg-white shadow rounded-lg overflow-hidden -title text-secondary fs-18 mb-0">
+                                    <h5 class="bg-white shadow rounded-lg overflow-hidden -title text-gray-600 fs-18 mb-0">
                                         {{ html_entity_decode(Str::limit($job['job_title'], 50)) }}
                                         @if (isset($job->jobShift->shift))
                                         <span class="text text-primary-600 fs-6 mb-0 me-3">

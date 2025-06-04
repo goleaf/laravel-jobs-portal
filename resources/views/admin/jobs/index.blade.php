@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto -fluid">
+<div class="container mx-auto px-4 mx-auto -fluid">
     <div class="flex flex-wrap">
         <div class="flex-1 -12">
             <div class="bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-white shadow rounded-lg overflow-hidden -header flex justify-between items-center">
                     <h3>{{ __('Manage Jobs') }}</h3>
-                    <a href="{{ route('admin.jobs.create') }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
+                    <a href="{{ route('admin.jobs.create') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">
                         <i class="fas fa-plus"></i> {{ __('Add New Job') }}
                     </a>
                 </div>
@@ -19,10 +19,10 @@
                     <!-- Search Filter -->
                     <div class="flex flex-wrap mb-3">
                         <div class="flex-1 -md-4">
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Search jobs...') }}" id="searchInput">
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Search jobs...') }}" id="searchInput">
                         </div>
                         <div class="flex-1 -md-3">
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="statusFilter">
+                            <select class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="statusFilter">
                                 <option value="">{{ __('All Status') }}</option>
                                 <option value="active">{{ __('Active') }}</option>
                                 <option value="inactive">{{ __('Inactive') }}</option>
@@ -30,13 +30,13 @@
                             </select>
                         </div>
                         <div class="flex-1 -md-2">
-                            <button class="btn px-4 py-2 rounded font-medium transition-colors -secondary" id="filterBtn">{{ __('Filter') }}</button>
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" id="filterBtn">{{ __('Filter') }}</button>
                         </div>
                     </div>
                     
                     <!-- Jobs Table -->
                     <div class="w-full divide-y divide-gray-200 -responsive">
-                        <table class="table w-full divide-y divide-gray-200 -striped">
+                        <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped">
                             <thead>
                                 <tr>
                                     <th>{{ __('ID') }}</th>
@@ -66,13 +66,13 @@
                                     </td>
                                     <td>
                                         <div class="px-4 py-2 rounded font-medium transition-colors -group" role="group">
-                                            <a href="{{ route('admin.jobs.show', $i) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -info" title="{{ __('View') }}">
+                                            <a href="{{ route('admin.jobs.show', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -info" title="{{ __('View') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.jobs.edit', $i) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.jobs.edit', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -warning" title="{{ __('Edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -danger" onclick="deleteJob({{ $i }})" title="{{ __('Delete') }}">
+                                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -danger" onclick="deleteJob({{ $i }})" title="{{ __('Delete') }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>

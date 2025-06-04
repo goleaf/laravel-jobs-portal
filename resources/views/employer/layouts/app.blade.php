@@ -30,23 +30,23 @@
 <script src="{{ mix('js/third-party.js') }}"></script>
 <script src="{{ mix('js/pages.js') }}"></script>
 <body class="overflow-x-hidden">
-<div class="flex flex-column flex-root">
-    <div class="flex flex-column flex-column-fluid">
+<div class="flex flex-col flex-root">
+    <div class="flex flex-col flex-column-fluid">
         <div class="header fixed-header">
             @include('employer.layouts.header')
         </div>
-        <div class="theme-wrapper flex flex-column flex- flex flex-wrap -fluid">
-            <div class="flex flex-column flex- flex flex-wrap -fluid">
-                <div class="flex flex-column flex-column-fluid pt-7">
+        <div class="theme-wrapper flex flex-col flex- flex flex-wrap -fluid">
+            <div class="flex flex-col flex- flex flex-wrap -fluid">
+                <div class="flex flex-col flex-column-fluid pt-7">
                     <div class="content flex-column-fluid">
-                        <div class="w-full container mx-auto -xxl">
+                        <div class="w-full container mx-auto px-4 mx-auto -xxl">
                             @yield('content')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-full container mx-auto -xxl">
+        <div class="w-full container mx-auto px-4 mx-auto -xxl">
             @include('layouts.footer')
         </div>
         @include('employer_profile.edit_profile_modal')

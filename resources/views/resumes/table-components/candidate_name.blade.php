@@ -4,7 +4,7 @@
             <img src="{{ $row->candidate->candidate_url }}" alt="" class="user-img">
         </div>
     </a>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         {{ $row->candidate->user->full_name }}
     </div>
 </div>

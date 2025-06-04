@@ -3,7 +3,7 @@
         <div class="flex-1 -12 mb-40">
             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
                 <div class="flex flex-wrap flex justify-content-lg-between">
-                    <h5 class="fs-18 text-secondary mb-4 ">
+                    <h5 class="fs-18 text-gray-600 mb-4 ">
                         {{ __('web.post_menu.categories') }}</h5>
                     @foreach($blogCategories as $blogCategory)
                         @if($blogCategory->post_assign_categories_count > 0)
@@ -23,7 +23,7 @@
         <div class="flex-1 -12 mb-40">
             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
                 <div class="flex flex-wrap flex justify-content-lg-between">
-                    <h5 class="fs-18 text-secondary mb-4 ">
+                    <h5 class="fs-18 text-gray-600 mb-4 ">
                         {{ __('web.web_blog.recent_posts') }}</h5>
                     @foreach($popularBlogs as $popularBlog)
                         <div class="recent-post flex {{$loop->last?"':'mb-40'}}">
@@ -34,7 +34,7 @@
                             </div>
                             <div class="desc ms-4">
                                 <p class="mb-0">
-                                    <a href="{{ route('front.posts.details',$popularBlog->id) }}" class="fs-14 text-secondary">
+                                    <a href="{{ route('front.posts.details',$popularBlog->id) }}" class="fs-14 text-gray-600">
                                         {{ html_entity_decode($popularBlog->title) }}
                                     </a>
                                 </p>

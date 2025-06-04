@@ -3,11 +3,11 @@
     {{ __('messages.job_type.job_types') }}
 @endsection
 @section('content')
-    <div class="container mx-auto mx-auto px-4 py-6">
+    <div class="container mx-auto px-4 mx-auto mx-auto px-4 py-6">
         <div class="flex flex- flex-1">
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-2xl font-semibold text-gray-900">{{ __('messages.job_type.job_types') }}</h1>
-                <button id="addJobTypeBtn" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <button id="addJobTypeBtn" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                     <x-icons.add class="w-5 h-5 mr-2" />
                     {{ __('messages.job_type.new_job_type') }}
                 </button>

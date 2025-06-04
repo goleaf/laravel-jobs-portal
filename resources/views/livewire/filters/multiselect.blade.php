@@ -6,7 +6,7 @@
         <button 
             type="button" 
             @click="open = !open" 
-            class="mt-1 relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            class="mt-1 relative w-full bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         >
             <span class="block truncate">
                 @if(!empty($filters[$filter['key']]['values']))

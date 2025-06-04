@@ -4,7 +4,7 @@
             <img src="{{$row->company_url}}" alt="user" class="user-img">
         </div>
     </a>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         <a href="{{route('company.show', $row->id)}}" class="mb-1 text-decoration-none fs-6">
             {{$row->user->full_name}}
         </a>

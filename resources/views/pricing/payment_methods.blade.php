@@ -10,19 +10,19 @@
             </div>
             <div class="flex-1 -12">
                 <div class="flex flex-wrap justify-content-lg-around">
-                    <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 subscribe" href="javascript:void(0)"
+                    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 subscribe" href="javascript:void(0)"
                        data-id="{{ $plan->id }}">
                         <span class="fs-4">{{ __('messages.plan.pay_with_stripe') }}</span>
                     </a>
-                    <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
+                    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
                        href="{{ route('paypal-payment', $plan->id) }}">
                         <span class="fs-4">{{ __('messages.plan.pay_with_paypal') }}</span>
                     </a>
-                    <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
+                    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
                        href="{{ route('manually-payment', $plan->id) }}">
                         <span class="fs-4">{{ __('messages.plan.pay_with_manually') }}</span>
                     </a>
-                    <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
+                    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg mt-2 md:w-2/12 flex-1 -12 pay-with-paypal"
                     href="{{ route('paystack.payment', $plan->id) }}">
                      <span class="fs-4">{{ __('messages.plan.pay_with_stack') }}</span>
                  </a>

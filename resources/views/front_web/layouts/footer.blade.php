@@ -1,6 +1,6 @@
 <!-- start footer section -->
 <footer class="footer bg-color-light">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-between">
             <div class="col-xxl-3 col-xl-4 flex-1 -lg-5 mb-xl-0 mb-5">
                 <div class="footer-logo">
@@ -82,26 +82,25 @@
                     <div class="flex footer-info__block mb-3">
                         <span class="f-icon-box"><i class="fa-solid fa-phone me-3 fs-14"></i></span>
                         <a href="tel:{{ '+'.$settings['region_code'].' '.$settings['phone'] }}"
-                           class="text-decoration-none footer- bg-white shadow-sm -color text-dark fs-14">
+                           class="text-decoration-none footer- bg-white shadow-sm -color text-gray-900 fs-14">
                             {{ $settings['region_code'].' '.$settings['phone'] }}
                         </a>
                     </div>
                     <div class="flex footer-info__block mb-3">
-                        <span class="f-icon-box"><i class="fa-solid fa-location-dot me-3 text-dark fs-14"></i></span>
-                        <p class="text-dark mb-0 fs-14">
+                        <span class="f-icon-box"><i class="fa-solid fa-location-dot me-3 text-gray-900 fs-14"></i></span>
+                        <p class="text-gray-900 mb-0 fs-14">
                             {{$settings['address'] }}
                         </p>
                     </div>
                     <div class="flex footer-info__block mb-3">
-                        <span class="f-icon-box"><i class="fa-solid fa-at me-3 mt-2  text-dark"></i></span>
-                        <a href="mailto:{{$settings['email']}}" class="text-decoration-none footer- bg-white shadow-sm -color text-dark">
+                        <span class="f-icon-box"><i class="fa-solid fa-at me-3 mt-2  text-gray-900"></i></span>
+                        <a href="mailto:{{$settings['email']}}" class="text-decoration-none footer- bg-white shadow-sm -color text-gray-900">
                             {{ $settings['email'] }}
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="flex-1 -12 text-center mt-lg-5 mt-4
-                        copy-right">
+            <div class="flex-1 -12 text-center mt-lg-5 mt-4                        copy-right">
                 <p class="pt-4 pb-4 fs-14">
                     &copy;{{ date('Y') }}
                     <a href="{{ getSettingValue('company_url') }}">

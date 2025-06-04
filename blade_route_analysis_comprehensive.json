@@ -1,11 +1,11 @@
 {
-    "timestamp": "2025-06-04 01:07:07",
+    "timestamp": "2025-06-04 01:12:23",
     "statistics": {
-        "total_blade_files": 1078,
+        "total_blade_files": 1083,
         "total_route_references": 1049,
         "unique_routes": 171,
-        "missing_routes": 10,
-        "valid_routes": 1039
+        "missing_routes": 9,
+        "valid_routes": 1040
     },
     "existing_routes": [
         "debugbar.openhandler",
@@ -114,6 +114,12 @@
         "admin.transactions.edit",
         "admin.transactions.destroy",
         "language.switch",
+        "admin.reported.jobs",
+        "post.comments",
+        "admin.salaryPeriod.index",
+        "admin.functionalArea.index",
+        "admin.salaryCurrency.index",
+        "admin.ownerShipType.index",
         "states-list",
         "cities-list",
         "countries-list",
@@ -171,7 +177,6 @@
         "admin.job-types.index",
         "admin.job-tags.index",
         "admin.job-shifts.index",
-        "admin.reported.jobs",
         "admin.job-notification.index",
         "admin.admin.jobs.expiredJobs",
         "admin.post-categories.index",
@@ -185,13 +190,9 @@
         "admin.cities.index",
         "admin.maritalStatus.index",
         "admin.skills.index",
-        "admin.salaryPeriod.index",
         "admin.industries.index",
         "admin.company-sizes.index",
-        "admin.functionalArea.index",
         "admin.career-levels.index",
-        "admin.salaryCurrency.index",
-        "admin.ownerShipType.index",
         "admin.languages.index",
         "admin.noticeboards.index",
         "admin.faqs.index",
@@ -199,7 +200,6 @@
         "admin.inquires.show",
         "admin.notification.settings.index",
         "admin.privacy.policy.index",
-        "email.template.index",
         "admin.settings.index",
         "admin.testimonials.index",
         "admin.branding.sliders.index",
@@ -215,7 +215,7 @@
         "admin.jobs.expiredJobs",
         "admin.post.comments",
         "admin.marital-statuses.index",
-        "admin.index",
+        "admin.dashboard.main",
         "manage-subscription.index",
         "transactions.index",
         "followers.index",
@@ -259,6 +259,7 @@
         "privacy.policy.index",
         "verification.resend",
         "admin.edit",
+        "admin.index",
         "candidate.dashboard",
         "candidate.edit.profile",
         "candidate.general.profile.update",
@@ -311,13 +312,6 @@
     "missing_routes": [
         {
             "route": "reported.jobs",
-            "files": [
-                "resources\/views\/layouts\/sub_menu.blade.php"
-            ],
-            "count": 1
-        },
-        {
-            "route": "post.comments",
             "files": [
                 "resources\/views\/layouts\/sub_menu.blade.php"
             ],
@@ -2869,7 +2863,7 @@
         {
             "route": "post.comments",
             "file": "resources\/views\/layouts\/sub_menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "plans.index",

@@ -28,7 +28,7 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <x-icons.search class="w-5 h-5 text-gray-400" />
                         </div>
-                        <input wire:model.live.debounce.{{ $searchDebounce }}ms="search" type="search" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="{{ __('messages.common.search') }}">
+                        <input wire:model.live.debounce.{{ $searchDebounce }}ms="search" type="search" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 border-gray-300 rounded-lg w-60 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="{{ __('messages.common.search') }}">
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                 <div class="flex items-center space-x-4">
                     <div>
                         <label for="perPage" class="sr-only">{{ __('messages.common.per_page') }}</label>
-                        <select id="perPage" wire:model.live="perPage" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <select id="perPage" wire:model.live="perPage" class="mt-1 block w-full py-2 px-3 border border-gray-300 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             @foreach($perPageOptions as $option)
                                 <option value="{{ $option }}">{{ $option }}</option>
                             @endforeach

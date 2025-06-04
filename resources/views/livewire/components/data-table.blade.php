@@ -23,7 +23,7 @@
         <div class="flex items-center ms-auto">
             <div class="flex items-center">
                 <label for="paginate" class="me-2">{{ __('messages.common.showing') }}</label>
-                <select id="paginate" wire:model.live="perPage" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm">
+                <select id="paginate" wire:model.live="perPage" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm">
                     @foreach($perPageOptions as $option)
                         <option value="{{ $option }}">{{ $option }}</option>
                     @endforeach
@@ -31,7 +31,7 @@
             </div>
 
             <div class="ms-3">
-                <input type="search" wire:model.live.debounce.{{ $searchDebounce }}ms="search" class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" 
+                <input type="search" wire:model.live.debounce.{{ $searchDebounce }}ms="search" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" 
                     placeholder="{{ __('messages.common.search') }}">
             </div>
         </div>
@@ -39,7 +39,7 @@
 
     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
         <div class="w-full divide-y divide-gray-200 -responsive">
-            <table class="table w-full divide-y divide-gray-200 -striped align-middle mb-0">
+            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped align-middle mb-0">
                 <thead>
                     <tr>
                         @foreach($columns as $column)
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <div class="bg-white shadow rounded-lg overflow-hidden -footer flex justify-content-end">
+    <div class="bg-white shadow rounded-lg overflow-hidden -footer flex justify-end">
         {{ $results->links() }}
     </div>
 </div> 

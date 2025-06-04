@@ -10,7 +10,7 @@
                 <input
                     type="text"
                     wire:model.live.debounce.{{ $debounce }}ms="search"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                    class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
                     placeholder="{{ __('Search') }}"
                 >
             </div>
@@ -23,7 +23,7 @@
                 <div class="relative w-full md:w-auto" x-data="{ open: false }">
                     <button 
                         @click="open = !open" 
-                        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500 w-full md:w-auto"
+                        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-blue-500 w-full md:w-auto"
                     >
                         <x-icons.filter class="w-4 h-4 mr-2" />
                         {{ __('Filters') }}
@@ -77,7 +77,7 @@
                 <select
                     id="perPage"
                     wire:model.live="perPage"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2"
+                    class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2"
                 >
                     @foreach($perPageOptions as $option)
                         <option value="{{ $option }}">{{ $option }}</option>

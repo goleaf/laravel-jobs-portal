@@ -18,7 +18,7 @@
         {{ Form::hidden('terms_conditions', null, ['id' => 'termData']) }}
     </div>
 </div>
-<div class="flex justify-content-end">
+<div class="flex justify-end">
     {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary']) }}
     </div>
 {{ Form::close() }}

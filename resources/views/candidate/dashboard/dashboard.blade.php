@@ -17,8 +17,8 @@
                 </div>
             </div>
             <div class="flex-grow-1">
-                <div class="flex justify-between align-items-start flex-wrap mb-2">
-                    <div class="flex flex-column">
+                <div class="flex justify-between items-start flex-wrap mb-2">
+                    <div class="flex flex-col">
                         <div class="items-center mb-2">
                             <a class="text-gray-900 text-hover-primary fs-2 me-1 text-decoration-none">{{ html_entity_decode($user->full_name) }}</a>
                         </div>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="flex my-4">
-                        <a href="{{ route('candidate.profile') }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -primary me-2">
+                        <a href="{{ route('candidate.profile') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -primary me-2">
                             {{ __('messages.user.edit_profile') }}
                         </a>
                     </div>

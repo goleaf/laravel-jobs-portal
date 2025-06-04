@@ -38,11 +38,11 @@
     <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('job_expiry_date', __('messages.job.job_expiry_date').':', ['class' => 'form-label']) }}
         <span class="required"></span>
-        <div class="input-group">
-            <div class="input-group-text border-0">
+        <div class="flex">
+            <div class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500 border-0">
                 <i class="fas fa-calendar-alt"></i>
             </div>
-            <input type="text" name="job_expiry_date" id="availableAt" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 expiryDatepicker  {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off" value="{{isset($job->job_expiry_date) ? $job->job_expiry_date : null,}}" placeholder="{{__('messages.job.job_expiry_date')}}">
+            <input type="text" name="job_expiry_date" id="availableAt" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 expiryDatepicker  {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off" value="{{isset($job->job_expiry_date) ? $job->job_expiry_date : null,}}" placeholder="{{__('messages.job.job_expiry_date')}}">
 {{--            {{ Form::text('job_expiry_date', isset($job->job_expiry_date) ? $job->job_expiry_date : null, ['class' => 'form-control expiryDatepicker', 'required', 'autocomplete' => 'off', 'placeholder' => __('messages.job.job_expiry_date')]) }}--}}
         </div>
     </div>
@@ -131,12 +131,12 @@
         </label>
     </div>
     <!-- Submit Field -->
-    <div class="flex justify-content-end mt-5">
+    <div class="flex justify-end mt-5">
         <input name="saveAsDraft" type="hidden" value="" id="saveAsDraft">
-        {{ Form::button(__('messages.common.save_as_draft'), ['type' => 'submit', 'name' => 'saveDraft', 'class' => 'btn btn-primary me-3 saveDraft','id' => 'saveDraft','value'=>'draft','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-        {{ Form::button(__('messages.common.save'), ['type' => 'submit', 'name' => 'save', 'class' => 'btn btn-primary me-3','id' => 'jobsSaveBtn','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
+        {{ Form::button(__('messages.common.save_as_draft'), ['type' => 'submit', 'name' => 'saveDraft', 'class' => 'btn btn-primary me-3 saveDraft','id' => 'saveDraft','value'=>'draft','data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')]) }}
+        {{ Form::button(__('messages.common.save'), ['type' => 'submit', 'name' => 'save', 'class' => 'btn btn-primary me-3','id' => 'jobsSaveBtn','data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')]) }}
         <a href="{{ route('job.index') }}"
-           class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
+           class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
     </div>
 
 </div>

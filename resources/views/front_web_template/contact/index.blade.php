@@ -12,12 +12,12 @@
 @section('content')
     <div class="Blog-page">
         <!-- start hero section -->
-        <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gradient pt-15 pb-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-2">{{ __('web.contact_us') }}</h1>
+                            <h1 class="text-gray-600 mb-2">{{ __('web.contact_us') }}</h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
@@ -38,10 +38,10 @@
 
         <!--start contact-us-section-->
         <section class="contact-us-section py-60 mb-5">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="contact-us bg-gray-100 br-10">
                     <div class="flex flex-wrap">
-                        <div class="flex-1 -lg-3 d-lg-block hidden text-end">
+                        <div class="flex-1 -lg-3 lg:block hidden text-end">
                             <div class="contact-img mt-5">
                                 <img src="{{ asset('img_template/contact-page.png') }}">
                             </div>
@@ -49,7 +49,7 @@
                         <div class="flex-1 -lg-9">
                             <div class="contact-form">
                                 <div class="section-heading mb-40">
-                                    <h2 class="fs-40 text-secondary fw-bold mb-0">
+                                    <h2 class="fs-40 text-gray-600 fw-bold mb-0">
                                         {{ __('web.home_menu.contact_us') }}
                                     </h2>
                                 </div>

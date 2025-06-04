@@ -1,65 +1,65 @@
 <!-- start header section -->
 
 <header class="bg-color-light">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap items-center">
-            <div class="col-lg-1 flex-1 -4">
+            <div class="lg:w-1/12 px-2 flex-1 -4">
                 <a href="{{url('/')}}" class="header-logo">
                     <img src="{{asset($settings['logo'])}}" alt="Jobs" class="img-fluid"/>
                 </a>
             </div>
             <div class="col-lg-11 flex-1 -8">
-                <nav class="navbar navbar-expand-lg bg-white shadow-sm -light justify-content-end py-0">
+                <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -light justify-end py-0">
                     <button class="bg-white shadow-sm -toggler border-0 p-0" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="bg-white shadow-sm -toggler-icon"></span>
                     </button>
-                    <div class="collapse bg-white shadow-sm -collapse justify-content-end" id="navbarNav">
+                    <div class="collapse bg-white shadow-sm -collapse justify-end" id="navbarNav">
                         <ul class="bg-white shadow-sm -nav items-center py-2 py-lg-0">
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("/') ? 'header-navbar-color-active' : '' }}" aria-current="page"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("/') ? 'header-navbar-color-active' : '' }}" aria-current="page"
                                    href="{{ route('front.home') }}">{{ __('web.home') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("search-jobs') || Request::is('job-details*') ? 'header-navbar-color-active' : '' }}"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("search-jobs') || Request::is('job-details*') ? 'header-navbar-color-active' : '' }}"
                                    href="{{ route('front.search.jobs') }}">{{ __('web.jobs') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("company-lists') || Request::is('company-details*') ? 'header-navbar-color-active' : '' }}"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("company-lists') || Request::is('company-details*') ? 'header-navbar-color-active' : '' }}"
                                    href="{{ route('front.company.lists') }}">{{ __('web.companies') }}</a>
                             </li>
                             @auth
                                 @role('Employer|Admin')
                                 <li class="nav-item">
-                                    <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("candidate-lists') || Request::is('candidate-details*') ? 'header-navbar-color-active' : '' }}"
+                                    <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("candidate-lists') || Request::is('candidate-details*') ? 'header-navbar-color-active' : '' }}"
                                        href="{{ route('front.candidate.lists') }}">{{ __('web.job_seekers') }}</a>
                                 </li>
                                 @endrole
                             @endauth
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("about-us') ? 'header-navbar-color-active' : '' }}"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("about-us') ? 'header-navbar-color-active' : '' }}"
                                    href="{{ route('front.about.us') }}">{{ __('web.about_us') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("contact-us') ? 'header-navbar-color-active' : '' }}"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("contact-us') ? 'header-navbar-color-active' : '' }}"
                                    href="{{ route('front.contact') }}">{{ __('web.contact_us') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="header- bg-white shadow-sm -color text-dark text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("posts*') ? 'header-navbar-color-active' : '' }}"
+                                <a class="header- bg-white shadow-sm -color text-gray-900 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium {{ Request::is("posts*') ? 'header-navbar-color-active' : '' }}"
                                    href="{{ route('front.post.lists') }}">{{ __('messages.post.blog') }}</a>
                             </li>
                             <li class="nav-item">
                                     <div class="px-1 flex">
                                         <img class="country-flag" style="width:28px;" src="{{ getCurrentLanguageImage() }}" />
-                                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-dark" href="javascript:void(0)">
+                                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-gray-900" href="javascript:void(0)">
                                              {{ getCurrentLanguageName() }}</a>
                                     </div>
-                                <ul class="nav submenu language-menu">
+                                <ul class="flex space-x-1 submenu language-menu">
                                     @foreach(getUserLanguages() as $key => $value)
                                         <li class="languageSelection {{ (checkLanguageSession() == $key) ? 'active' : '' }}"
                                             data-prefix-value="{{ $key }}" style="max-height: 40px">
-                                            <a class="dropdown-item {{ (checkLanguageSession() == $key) ? 'active' : '' }}"
+                                            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ (checkLanguageSession() == $key) ? "active' : '' }}"
                                                href="javascript:void(0)">
                                                 @if(array_key_exists($key,\App\Models\User::LANGUAGES_IMAGE))
                                                     @foreach(\App\Models\User::LANGUAGES_IMAGE as $imageKey=> $imageValue)
@@ -81,8 +81,8 @@
                             <div class="text-lg-end header- px-4 py-2 rounded font-medium transition-colors -grp ms-xxl-5 ms-lg-3">
                                 <ul class="bg-white shadow-sm -nav items-center py-2 py-lg-0">
                                     <li class="nav-item">
-                                        <a href="{{route('front.candidate.login')}}" class="nav-link btn px-4 py-2 rounded font-medium transition-colors -secondary me-xxl-3 me-2 mb-3 mb-lg-0 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ __('web.login') }}</a>
-                                        <ul class="nav submenu">
+                                        <a href="{{route('front.candidate.login')}}" class="px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-xxl-3 me-2 mb-3 mb-lg-0 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ __('web.login') }}</a>
+                                        <ul class="flex space-x-1 submenu">
                                             <li class="nav-item">
                                                 <a href="{{ route('front.candidate.login') }}"
                                                    class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center">
@@ -98,8 +98,8 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('candidate.register')}}" class="btn px-4 py-2 rounded font-medium transition-colors -primary mb-3 mb-lg-0">{{ __('web.register') }}</a>
-                                        <ul class="nav submenu">
+                                        <a href="{{route('candidate.register')}}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary mb-3 mb-lg-0">{{ __('web.register') }}</a>
+                                        <ul class="flex space-x-1 submenu">
                                             <li class="nav-item">
                                                 <a href="{{ route('candidate.register') }}"
                                                    class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center">
@@ -124,7 +124,7 @@
                                             <img src="{{ getLoggedInUser()->avatar }}" width="50" class="rounded object-cover"/>&nbsp;&nbsp;
                                             <span class="text-truncate"> {{ __('messages.common.hi') }}, {{getLoggedInUser()->full_name}}</span>
                                         </a>
-                                        <ul class="nav submenu" style="text-align: initial;">
+                                        <ul class="flex space-x-1 submenu" style="text-align: initial;">
                                             <li class="nav-item">
                                                 <a href="{{ dashboardURL() }}" data-turbo="false"
                                                    class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center">

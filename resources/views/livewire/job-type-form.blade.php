@@ -25,7 +25,7 @@
                                 type="text" 
                                 id="name" 
                                 wire:model="name" 
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 @error('name') border-red-500 @enderror"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 @error("name') border-red-500 @enderror"
                                 placeholder="{{ __('messages.job.job_type') }}"
                             >
                             @error('name')
@@ -36,14 +36,14 @@
                         <div class="mt-5 flex justify-end space-x-3">
                             <button 
                                 type="button" 
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 wire:click="closeModal"
                             >
                                 {{ __('messages.common.cancel') }}
                             </button>
                             <button 
                                 type="submit" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
                                 {{ $isEditing ? __('messages.common.update') : __('messages.common.save') }}
                             </button>

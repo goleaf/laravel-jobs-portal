@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Job Portal') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <title>{{ config('app.name', 'Job Portal') }}</title></head>
 <body>
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
             <div class="flex-1 -md-8">
                 <div class="text-center py-5">
@@ -20,7 +18,7 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title">For Job Seekers</h5>
                                     <p class="bg-white shadow rounded-lg overflow-hidden -text">Browse thousands of job opportunities</p>
-                                    <a href="{{ route('jobs.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary">Browse Jobs</a>
+                                    <a href="{{ route('jobs.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">Browse Jobs</a>
                                 </div>
                             </div>
                         </div>
@@ -29,15 +27,15 @@
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title">For Employers</h5>
                                     <p class="bg-white shadow rounded-lg overflow-hidden -text">Find the perfect candidates for your company</p>
-                                    <a href="{{ route('companies.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -success">Post a Job</a>
+                                    <a href="{{ route('companies.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -success">Post a Job</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="mt-4">
-                        <a href="{{ route('login') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary me-2">Login</a>
-                        <a href="{{ route('register') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary">Register</a>
+                        <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary me-2">Login</a>
+                        <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary">Register</a>
                     </div>
                 </div>
             </div>

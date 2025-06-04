@@ -399,20 +399,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         return view('admin.ownership_types.index');
     })->name('ownerShipType.index');
     
-    // Branding Sliders
-    Route::get('/branding-sliders', function () {
-        return view('admin.branding_sliders.index');
-    })->name('branding.sliders.index');
-    
-    // Header Sliders
-    Route::get('/header-sliders', function () {
-        return view('admin.header_sliders.index');
-    })->name('header.sliders.index');
-    
-    // Image Sliders
-    Route::get('/image-sliders', function () {
-        return view('admin.image_sliders.index');
-    })->name('image-sliders.index');
+    // Note: Branding, Header, and Image Sliders routes are defined later with controllers
 });
 
 // Location data routes (referenced in companies/create.blade.php)
@@ -761,30 +748,14 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.career_levels.index');
         })->name('career-levels.index');
         
-        Route::get('/branding/sliders', function () {
-            return view('admin.branding_sliders.index');
-        })->name('branding.sliders.index');
+        // Note: Sliders routes are defined earlier with controllers
         
-        Route::get('/header/sliders', function () {
-            return view('admin.header_sliders.index');
-        })->name('header.sliders.index');
+        // Note: CMS routes are defined earlier with controllers
         
-        Route::get('/image-sliders', function () {
-            return view('admin.image_sliders.index');
-        })->name('image-sliders.index');
-        
-        Route::get('/cms/services', function () {
-            return view('admin.cms_services.index');
-        })->name('cms.services.index');
-        
-        Route::get('/cms/about-us/service', function () {
-            return view('admin.cms_about_us.index');
-        })->name('cms.about-us.service');
-        
-        // Missing admin index route
+        // Admin dashboard route
         Route::get('/', function () {
             return view('admin.dashboard.index');
-        })->name('index');
+        })->name('dashboard.main');
     });
     
     // Utility routes for authenticated users
@@ -1243,23 +1214,9 @@ require __DIR__.'/language.php';
 | Adding routes that are still missing after first fix
 */
 
-// Admin edit route (missing from admin edit)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/{admin}/edit', function ($admin) {
-        return view('admin.admin.edit', compact('admin'));
-    })->name('admin.edit');
-});
+// Note: admin.edit route already defined earlier
 
-// Email template routes
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/email-template', function () {
-        return view('admin.email_templates.index');
-    })->name('email.template.index');
-    
-    Route::get('/admin/email-template/{template}/edit', function ($template) {
-        return view('admin.email_templates.edit', compact('template'));
-    })->name('email.template.edit');
-});
+// Note: Email template routes already defined earlier
 
 // Employer job management routes (without auth middleware for testing)
 Route::prefix('employer')->name('employer.')->group(function () {

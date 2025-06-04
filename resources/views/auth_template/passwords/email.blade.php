@@ -3,7 +3,7 @@
     Forgot Password
 @endsection
 @section('content')
-<div class="flex flex-column flex-column-fluid items-center justify-center p-0">
+<div class="flex flex-col flex-column-fluid items-center justify-center p-0">
     <div class="flex-1 -12 text-center">
         <a href="{{ route('front.home') }}" class="image mb-7 mb-sm-10" data-turbo="false">
             <img alt="Logo" src="{{ asset(getSettingValue('logo')) }}" class="img-fluid logo-fix-size">
@@ -13,7 +13,7 @@
         @include('flash::message')
         @include('front_web.layouts.errors')
         @if (session('status'))
-            <div class="alert p-4 rounded-md mb-4 -success">
+            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -success">
                 {{ session('status') }}
             </div>
         @endif
@@ -43,7 +43,7 @@
                     'type' => 'submit',
                     'class' => 'btn btn-primary'
                 ]) }}
-                <a href="{{ route('admin.login') }}" class="btn px-4 py-2 rounded font-medium transition-colors -secondary ms-3">Cancel</a>
+                <a href="{{ route('admin.login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary ms-3">Cancel</a>
             </div>
         @formClose()
     </div>

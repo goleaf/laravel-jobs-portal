@@ -1,7 +1,7 @@
 <div class="">
     <div class="pt-2 pb-0">
         <div class="flex overflow-auto">
-            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 flex-nowrap">
+            <ul class="flex space-x-1 nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 flex-nowrap">
                 <li class="nav-item">
                     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium text-active-primary me-6 {{ (isset($sectionName) && $sectionName =="general' || Request::is('settings*')) ? 'text-primary' : ''}}"
                        href="{{ route('admin.dashboard', ['section' => 'general']) }}">{{ __('messages.general') }}</a>

@@ -7,14 +7,14 @@
         </div>
         <div class="flex-1 -md-2 float-right mb-2">
             <input wire:model.debounce.100ms="searchByPost" type="search" id="searchByPost"
-                   placeholder=" {{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                   placeholder=" {{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
         </div>
     </div>
     @endif
     <div class="flex flex-wrap">
         @if( count($posts) > 0)
             @forelse($posts as $post)
-                <div class="w-full col-sm-6 md:w-6/12 col-lg-4 flex-1 -xl-3">
+                <div class="w-full col-sm-6 md:w-6/12 lg:w-4/12 px-2 flex-1 -xl-3">
                     <article class="article post-box hover-border">
                         <div class="article-header border-top-15">
                             <nav class="cd-stretchy-nav edit-content">
@@ -68,11 +68,11 @@
             @endforelse
         @else
             @if($searchByPost == null || empty($searchByPost))
-                <div class="col-lg-12 flex-1 -md-12 flex justify-center">
+                <div class="lg:w-full px-2 flex-1 -md-12 flex justify-center">
                     <h5>{{ __('messages.post.no_posts_available') }} </h5>
                 </div>
             @else
-                <div class="col-lg-12 flex-1 -md-12 flex justify-center">
+                <div class="lg:w-full px-2 flex-1 -md-12 flex justify-center">
                     <h5>{{ __('messages.post.no_posts_found') }} </h5>
                 </div>
             @endif

@@ -8,12 +8,12 @@
 {{-- @endsection --}}
 @section('content')
     <div class="apply-job-page">
-        <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gradient pt-15 pb-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-2"> @lang('web.job_details.apply_for_job')</h1>
+                            <h1 class="text-gray-600 mb-2"> @lang('web.job_details.apply_for_job')</h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
@@ -32,7 +32,7 @@
         </section>
 
         <section class="apply-job-section contact-section py-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="upper-box">
                     <div class="flex flex-wrap">
                         <div class="col-xl-8 flex-1 -md-10 mx-auto mb-4">
@@ -67,11 +67,11 @@
                         @include('flash::message')
                         <input type="hidden" value="{{ isset($job) ? $job->id : null }}" name="job_id">
                         <div class="flex flex-wrap">
-                            <div class="form-group col-lg-12 md:w-full flex-1 -sm-12">
+                            <div class="form-group lg:w-full px-2 md:w-full flex-1 -sm-12">
                                 <div class="response"></div>
                             </div>
 
-                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
                                 {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3']) }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::select('resume_id', $resumes, ($isJobDrafted ? $draftJobDetails->resume_id : ''), [
@@ -84,7 +84,7 @@
                                 ]) }}
                             </div>
 
-                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
                                 {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3']) }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::text('expected_salary', ($isJobDrafted ? $draftJobDetails->expected_salary : ''), [
@@ -107,27 +107,27 @@
                                 </div>
                             </div>
                             @if (getSettingValue('enable_google_recaptcha'))
-                                <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group mb-4 text-center">
+                                <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group mb-4 text-center">
                                     <div class="g-recaptcha flex justify-center"
                                         data-sitekey="{{ config('app.google_recaptcha_site_key') }}" name="g-recaptcha"
                                         id="g-recaptcha" required></div>
                                     <div id="g-recaptcha-error" required></div>
                                 </div>
                             @endif
-                            <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group text-center">
+                            <div class="lg:w-full px-2 md:w-full flex-1 -sm-12 form-group text-center">
                                 @if (!$isApplied)
                                     @if (!$isJobDrafted)
                                         {{ Form::button(__('web.common.save_as_draft'), [
                                             'class' => 'btn btn-primary btn-primary-register mx-2 save-draft',
                                             'id' => 'draftJobSave',
-                                            'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                            'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
                                         ]) }}
                                     @endif
                                     @if ($isActive && !$job->is_suspended)
                                         {{ Form::button(__('web.common.apply'), [
                                             'class' => 'btn btn-secondary mx-2 apply-job',
                                             'id' => 'applyJobSave',
-                                            'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                            'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
                                         ]) }}
                                     @endif
                                 @else

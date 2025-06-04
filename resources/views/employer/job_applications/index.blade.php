@@ -3,7 +3,7 @@
     {{ __('messages.job_applications') }}
 @endsection
 @section('content')
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             @include('flash::message')
             <livewire:job-application-table :job-id="$jobId"/>
             @include('employer.job_applications.job_stages_modal')

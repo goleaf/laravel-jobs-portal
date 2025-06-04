@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto -fluid">
+<div class="container mx-auto px-4 mx-auto -fluid">
     <div class="flex flex-wrap">
         <div class="flex-1 -12">
             <div class="bg-white shadow rounded-lg overflow-hidden">
@@ -64,7 +64,7 @@
                         </div>
                         
                         <div class="flex-1 -md-3 mb-4">
-                            <div class="bg-white shadow rounded-lg overflow-hidden bg-info text-white">
+                            <div class="bg-white shadow rounded-lg overflow-hidden bg-blue-500 text-white">
                                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="flex justify-between">
                                         <div>
@@ -86,37 +86,37 @@
                             <h4>{{ __('Quick Actions') }}</h4>
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.candidates.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
+                                    <a href="{{ route('admin.candidates.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
                                         <i class="fas fa-users"></i><br>
                                         {{ __('Manage Candidates') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.jobs.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success w-full">
+                                    <a href="{{ route('admin.jobs.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-success w-full">
                                         <i class="fas fa-briefcase"></i><br>
                                         {{ __('Manage Jobs') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('company.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-warning w-full">
+                                    <a href="{{ route('company.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-warning w-full">
                                         <i class="fas fa-building"></i><br>
                                         {{ __('Manage Companies') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.transactions.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-info w-full">
+                                    <a href="{{ route('admin.transactions.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-info w-full">
                                         <i class="fas fa-money-bill"></i><br>
                                         {{ __('Transactions') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.settings.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
+                                    <a href="{{ route('admin.settings.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
                                         <i class="fas fa-cog"></i><br>
                                         {{ __('Settings') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 -md-2 mb-3">
-                                    <a href="{{ route('admin.subscribers.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-dark w-full">
+                                    <a href="{{ route('admin.subscribers.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-dark w-full">
                                         <i class="fas fa-envelope"></i><br>
                                         {{ __('Subscribers') }}
                                     </a>

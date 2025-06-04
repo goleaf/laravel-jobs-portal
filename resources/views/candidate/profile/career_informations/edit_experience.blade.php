@@ -1,5 +1,5 @@
 @formOpen(['id' => 'editCVExperienceForm'])
-<div class="alert p-4 rounded-md mb-4 -danger hidden" id="editValidationErrorsBox">
+<div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -danger hidden" id="editValidationErrorsBox">
     <i class='fa-solid fa-face-frown me-4'></i>
 </div>
 <input type="hidden" id="experienceId">
@@ -31,14 +31,14 @@
         {{ Form::label('start_date', __('messages.candidate_profile.start_date').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
         <input type="text" name="start_date" id="editStartDate"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off"
+               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off"
                placeholder="{{__('messages.candidate.available_at')}}">
     </div>
     <div class="flex-1 -sm-6 mb-5">
         {{ Form::label('end_date', __('messages.candidate_profile.end_date').':', ['class' => 'form-label']) }}
         <span class="required hidden" id="editRequiredText"></span>
         <input type="text" name="available_at" id="editEndDate"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off"
+               class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{(getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white'}}" autocomplete="off"
                placeholder="{{__('messages.candidate_profile.end_date')}}">
     </div>
     <div class="flex-1 -sm-6 mb-0">
@@ -53,9 +53,9 @@
         {{ Form::textarea('description', null, ['class' => 'form-control','rows'=>'5','id' => 'editDescription']) }}
     </div>
 </div>
-<div class="flex justify-content-end">
-    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditExperienceSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) }}
+<div class="flex justify-end">
+    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnEditExperienceSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> Processing..."]) }}
     <button type="button" id="btnEditExperienceCancel"
-            class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
+            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
 @formClose()

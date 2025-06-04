@@ -5,12 +5,12 @@
 @section('content')
     <div class="register-page">
         <!-- start hero section -->
-        {{-- <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container mx-auto">
+        {{-- <section class="hero-section relative bg-color-light py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-3">
+                            <h1 class="text-gray-600 mb-3">
                                 {{ __('web.register_menu.employer') . ' ' . __('web.register') }}
                             </h1>
                             <nav aria-label="breadcrumb">
@@ -30,12 +30,12 @@
             </div>
         </section> --}}
 
-        <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gradient pt-15 pb-40">
+            <div class="container mx-auto px-4 mx-auto">
               <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                   <div class="hero-content">
-                    <h1 class="text-secondary mb-3">
+                    <h1 class="text-gray-600 mb-3">
                         {{ __('web.register_menu.employer') . ' ' . __('web.register') }}
                     </h1>
                     <nav aria-label="breadcrumb">
@@ -54,7 +54,7 @@
 
         <!-- start candidate login section -->
         <section class="py-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
                     <div class="col-xl-6 flex-1 -lg-8 mx-auto">
                         @include('flash::message')
@@ -63,12 +63,12 @@
                                 <div class="flex-1 -12 mb-4">
                                     <div class="form-group flex flex-wrap">
                                         <div class="col-sm-6 flex-1 -12 mb-3 mb-sm-0">
-                                            <a href="{{ route('candidate.register') }}" class="btn px-4 py-2 rounded font-medium transition-colors -light-primary block">
+                                            <a href="{{ route('candidate.register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -light-primary block">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
                                         <div class="col-sm-6 flex-1 -12">
                                             <a href="{{ route('employer.register') }}"
-                                                class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register block">
+                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register block">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                         ]) }}
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-6 position-relative">
+                                <div class="flex-1 -md-6 relative">
                                     <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerPassword', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3']) }}
                                         <span class="text-red-600">*</span>
@@ -125,12 +125,12 @@
                                             'required',
                                             'onkeypress' => 'return avoidSpace(event)'
                                         ]) }}
-                                        <span class="position-absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
+                                        <span class="absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-6 position-relative">
+                                <div class="flex-1 -md-6 relative">
                                     <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerConfirmPassword', __('web.common.confirm_password'), ['class' => 'fs-16 text-secondary mb-3']) }}
                                         <span class="text-red-600">*</span>
@@ -141,7 +141,7 @@
                                             'required',
                                             'onkeypress' => 'return avoidSpace(event)'
                                         ]) }}
-                                        <span class="position-absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
+                                        <span class="absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
                                     </div>
@@ -163,7 +163,7 @@
                             @if ($isGoogleReCaptchaEnabled)
                                 <div class="flex-1 -12">
                                     <div class="form-group mt10">
-                                        <div class="g-recaptcha flex justify-content-start"
+                                        <div class="g-recaptcha flex justify-start"
                                             id="gRecaptchaContainerCompanyRegistration"
                                             data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
                                         <div id="g-recaptcha-error"></div>
@@ -175,7 +175,7 @@
                                     'type' => 'submit',
                                     'class' => 'btn btn-secondary btn-secondary-login',
                                     'id' => 'btnEmployerSave',
-                                    'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')
+                                    'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
                                 ]) }}
                             </div>
                             @php
@@ -188,7 +188,7 @@
                                             !empty($envSetting['facebook_app_secret'] || config('services.facebook.client_secret')) &&
                                             !empty($envSetting['facebook_redirect'] || config('services.facebook.redirect')))
                                         <a href="{{ url('/login/facebook?type=2') }}"
-                                            class="btn facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                 class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook') }}
                                         </a>
                                     @endif
@@ -197,7 +197,7 @@
                                             !empty($envSetting['google_client_secret'] || config('services.google.client_secret')) &&
                                             !empty($envSetting['google_redirect'] || config('services.google.redirect')))
                                         <a href="{{ url('/login/google?type=2') }}"
-                                            class="btn google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                 class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google') }}
                                         </a>
                                     @endif
@@ -206,7 +206,7 @@
                                             !empty($envSetting['linkedin_client_secret'] || config('services.linkedin.client_secret')) &&
                                             !empty(config('services.linkedin.redirect')))
                                         <a href="{{ url('/login/linkedin?type=2') }}"
-                                            class="btn linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
                                                 class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin') }}
                                         </a>
                                     @endif

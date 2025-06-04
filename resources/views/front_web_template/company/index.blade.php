@@ -15,12 +15,12 @@
 
     <div class="companies-page">
         <!-- start hero section -->
-        <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gradient pt-15 pb-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-2">@lang('messages.companies')</h1>
+                            <h1 class="text-gray-600 mb-2">@lang('messages.companies')</h1>
                             <nav aria-label="breadcrumb ">
                                 <ol class="breadcrumb justify-center mb-4 pb-3">
                                     <li class="breadcrumb-item">

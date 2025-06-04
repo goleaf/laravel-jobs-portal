@@ -1,5 +1,5 @@
 <footer class="footer bg-gradient">
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-between">
             <div class="col-xxl-3 col-xl-4 flex-1 -lg-6 mb-xl-0 mb-5">
                 <div class="footer-logo">
@@ -28,7 +28,7 @@
                 @formClose()
             </div>
             <div class="col-xl-2 col-lg-5 flex-1 -md-6 mb-3 ps-xl-5">
-                <h3 class="mb-3 text-secondary fs-18">{{ __('web.footer.useful_links') }}</h3>
+                <h3 class="mb-3 text-gray-600 fs-18">{{ __('web.footer.useful_links') }}</h3>
                 <ul class="ps-0">
                     <li>
                         <a href="{{ url('/') }}"
@@ -44,8 +44,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-xl-2 col-lg-6 flex-1 -md-6 mb-3">
-                <h3 class="mb-3 text-secondary fs-18">{{ __('web.web_home.helpful_resources') }}</h3>
+            <div class="col-xl-2 lg:w-6/12 px-2 flex-1 -md-6 mb-3">
+                <h3 class="mb-3 text-gray-600 fs-18">{{ __('web.web_home.helpful_resources') }}</h3>
                 <ul class="ps-0">
                     <li>
                         <a href="{{ route('front.about.us') }}"
@@ -72,7 +72,7 @@
                 </ul>
             </div>
             <div class="col-xl-3 flex-1 -lg-5">
-                <h3 class="mb-3 text-secondary fs-18">{{ __('web.contact_us') }}</h3>
+                <h3 class="mb-3 text-gray-600 fs-18">{{ __('web.contact_us') }}</h3>
                 <div class="footer-info">
                     <div class="desc flex mb-3">
                         <div class="me-3 w-20">

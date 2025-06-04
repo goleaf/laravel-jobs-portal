@@ -1,24 +1,23 @@
 # Blade Route Analysis Summary
 
-**Generated:** 2025-06-04 01:07:07
+**Generated:** 2025-06-04 01:12:23
 
 ## 📊 Statistics
 
 | Metric | Count |
 |--------|-------|
-| Total Blade Files | 1078 |
+| Total Blade Files | 1083 |
 | Total Route References | 1049 |
 | Unique Routes | 171 |
-| Missing Routes | 10 |
-| Valid Routes | 1039 |
-| Success Rate | 99.05% |
+| Missing Routes | 9 |
+| Valid Routes | 1040 |
+| Success Rate | 99.14% |
 
 ## ❌ Missing Routes (Top 20)
 
 | Route Name | Occurrences | Files |
 |------------|-------------|-------|
 | `reported.jobs` | 1 | resources/views/layouts/sub_menu.blade.php |
-| `post.comments` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `salaryPeriod.index` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `functionalArea.index` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `salaryCurrency.index` | 1 | resources/views/layouts/sub_menu.blade.php |
@@ -42,7 +41,6 @@ Based on the missing routes, focus on these areas:
 
 ### Other Routes
 - `reported.jobs`
-- `post.comments`
 - `salaryPeriod.index`
 - `functionalArea.index`
 - `salaryCurrency.index`

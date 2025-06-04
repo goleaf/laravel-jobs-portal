@@ -8,12 +8,12 @@
 @section('content')
     <div class="About Us-page">
         <!-- start hero section -->
-        <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-gradient pt-15 pb-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-2">{{ __('web.about_us') }}</h1>
+                            <h1 class="text-gray-600 mb-2">{{ __('web.about_us') }}</h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
@@ -34,9 +34,9 @@
 
         <!-- start-about-section -->
         <div class="about-section pt-60 pb-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="about-infyjob">
-                    <h5 class="fs-18 text-secondary mb-3">{{ __('web.about_us') }}</h5>
+                    <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us') }}</h5>
                     <p class="fs-16 text-gray mb-0">
                         {!! getSettingValue('about_us') !!}
                     </p>
@@ -47,22 +47,22 @@
 
         <!-- start-how-it-works section -->
         <section class="how-it-works-section bg-gray-100 pt-100 pb-60">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
-                        <h2 class="text-secondary mb-0 d-inline-block">{{ __('web.about_us_menu.how_it_works') }}?</h2>
+                        <h2 class="text-gray-600 mb-0 inline-block">{{ __('web.about_us_menu.how_it_works') }}?</h2>
                     </div>
                 </div>
                 <div class="work-process">
                     <div class="flex flex-wrap justify-center">
                         <div class="flex-1 -xxl-10">
-                            <div class="flex flex-wrap justify-center position-relative">
+                            <div class="flex flex-wrap justify-center relative">
                                 <div class="flex-1 -lg-4 text-center px-xl-5 px-lg-4 mb-40">
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-4">
                                         <img src="{{ $settings['about_image_one'] }}" />
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 pt-lg-2">
-                                        <h5 class="fs-18 text-secondary">{{ $settings['about_title_one'] }}</h5>
+                                        <h5 class="fs-18 text-gray-600">{{ $settings['about_title_one'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_one'] }}
                                         </p>
@@ -73,7 +73,7 @@
                                         <img src="{{ $settings['about_image_two'] }}" />
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 pt-lg-2">
-                                        <h5 class="fs-18 text-secondary">{{ $settings['about_title_two'] }}</h5>
+                                        <h5 class="fs-18 text-gray-600">{{ $settings['about_title_two'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_two'] }}
                                         </p>
@@ -84,16 +84,16 @@
                                         <img src="{{ $settings['about_image_three'] }}" />
                                     </div>
                                     <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 pt-lg-2">
-                                        <h5 class="fs-18 text-secondary">{{ $settings['about_title_three'] }}</h5>
+                                        <h5 class="fs-18 text-gray-600">{{ $settings['about_title_three'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_three'] }}
                                         </p>
                                     </div>
                                 </div>
-                                <div class="arrow1 position-absolute d-lg-block hidden">
+                                <div class="arrow1 absolute lg:block hidden">
                                     <img src="{{ asset('img_template/arrow-1.png') }}" />
                                 </div>
-                                <div class="arrow2 position-absolute d-lg-block hidden">
+                                <div class="arrow2 absolute lg:block hidden">
                                     <img src="{{ asset('img_template/arrow-2.png') }}" />
                                 </div>
                             </div>
@@ -106,10 +106,10 @@
 
         <!-- start question-section -->
         {{-- <section class="question-section py-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
-                        <h2 class="text-secondary mb-0 d-inline-block">
+                        <h2 class="text-gray-600 mb-0 inline-block">
                             {{ __('web.about_us_menu.frequently_asked_questions') }}
                         </h2>
                     </div>
@@ -150,10 +150,10 @@
             </div>
         </section> --}}
         <section class="question-section py-100">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
-                        <h2 class="text-secondary mb-0 d-inline-block">
+                        <h2 class="text-gray-600 mb-0 inline-block">
                             {{ __('web.about_us_menu.frequently_asked_questions') }}
                         </h2>
                     </div>

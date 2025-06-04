@@ -4,16 +4,16 @@
         @if ($paginator->onFirstPage())
             <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
                 <span class="page-link" aria-hidden="true">
-                    <span class="hidden d-md-block">&lsaquo;</span>
-                    <span class="block d-md-none">@lang('pagination.previous')</span>
+                    <span class="hidden md:block">&lsaquo;</span>
+                    <span class="block md:hidden">@lang('pagination.previous')</span>
                 </span>
             </li>
         @else
             <li class="page-item">
                 <button type="button" class="page-link" wire:click="previousPage" rel="prev"
                         aria-label="@lang('pagination.previous')">
-                    <span class="hidden d-md-block" wire:click="gotoPage(1)">&lsaquo;</span>
-                    <span class="block d-md-none">@lang('pagination.previous')</span>
+                    <span class="hidden md:block" wire:click="gotoPage(1)">&lsaquo;</span>
+                    <span class="block md:hidden">@lang('pagination.previous')</span>
                 </button>
             </li>
         @endif
@@ -52,15 +52,15 @@
             <li class="page-item">
                 <button type="button" class="page-link" wire:click="nextPage({{$paginator->lastPage()}})" rel="next"
                         aria-label="@lang('pagination.next')">
-                    <span class="block d-md-none">@lang('pagination.next')</span>
-                    <span class="hidden d-md-block" wire:click="gotoPage({{$paginator->lastPage()}})">&rsaquo;</span>
+                    <span class="block md:hidden">@lang('pagination.next')</span>
+                    <span class="hidden md:block" wire:click="gotoPage({{$paginator->lastPage()}})">&rsaquo;</span>
                 </button>
             </li>
         @else
             <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
                 <span class="page-link" aria-hidden="true">
-                    <span class="block d-md-none">@lang('pagination.next')</span>
-                    <span class="hidden d-md-block">&rsaquo;</span>
+                    <span class="block md:hidden">@lang('pagination.next')</span>
+                    <span class="hidden md:block">&rsaquo;</span>
                 </span>
             </li>
         @endif

@@ -86,16 +86,16 @@
 <!--begin::Body-->
 <body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : '' }}>
 <!--begin::Main-->
-<div class="flex flex-column flex-root">
+<div class="flex flex-col flex-root">
     <div class="flex flex- flex flex-wrap flex-column-fluid">
-        <div class="flex flex-column flex- flex flex-wrap -fluid">
+        <div class="flex flex-col flex- flex flex-wrap -fluid">
             <header class="bg-gradient">
-                <nav class="navbar bg-white shadow-sm -expand-lg">
+                <nav class="bg-white shadow-sm border-b border-gray-200 bg-white shadow-sm -expand-lg">
                     <div class="flex items-center my-3 mx-5 ms-auto">
-                        <ul class="bg-white shadow-sm -nav flex justify-content-end align-items-lg-center w-full">
+                        <ul class="bg-white shadow-sm -nav flex justify-end align-items-lg-center w-full">
                             <li class="nav-item">
-                                <div class="dropdown">
-                                    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium btn text-white dropdown-toggle language-dropdown- px-4 py-2 rounded font-medium transition-colors px-4 py-2" type="button"
+                                <div class="relative inline-block text-left">
+                                    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out text-white inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 language-dropdown- px-4 py-2 rounded font-medium transition-colors px-4 py-2" type="button"
                                             aria-expanded="false">
                                         {{ getCurrentLanguageName() }}
                                     </a>
@@ -104,7 +104,7 @@
                                             <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : '' }}"
                                                 data-prefix-value="{{ $key }}">
                                                 <a href="javascript:void(0)"
-                                                    class="dropdown-item text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
+                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
                                                     @if (array_key_exists($key, \App\Models\User::LANGUAGES_IMAGE))
                                                         @foreach (\App\Models\User::LANGUAGES_IMAGE as $imageKey => $imageValue)
                                                             @if ($imageKey == $key)
@@ -127,12 +127,12 @@
                     </div>
                 </nav>
             </header>
-            <div class="content flex flex-column flex-column-fluid pt-7">
+            <div class="content flex flex-col flex-column-fluid pt-7">
                 <div class="flex flex-wrap flex-column-fluid">
                     @yield('content')
                 </div>
             </div>
-            <div class="container mx-auto -fluid">
+            <div class="container mx-auto px-4 mx-auto -fluid">
                 <footer class="border-top w-full pt-4 mt-7 text-center">
 {{--                    <p class="fs-6 text-gray-600">{{$settings['copy_right_text']}} <a href="{{route('front.home')}}" class="text-decoration-none">--}}
 {{--                            {{$settings['application_name']}}</a>--}}

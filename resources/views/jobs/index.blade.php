@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Jobs') }} - {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <title>{{ __('Jobs') }} - {{ config('app.name') }}</title></head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
-        <div class="container mx-auto">
+    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
+        <div class="container mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm -brand" href="{{ route('front.home') }}">{{ config('app.name') }}</a>
             <div class="bg-white shadow-sm -nav ms-auto">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
@@ -20,16 +18,16 @@
                     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('register') }}">{{ __('Register') }}</a>
                 @else
                     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
-                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium btn px-4 py-2 rounded font-medium transition-colors -link">{{ __('Logout') }}</button>
+                        <button type="submit" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -link">{{ __('Logout') }}</button>
                     </form>
                 @endguest
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto mt-5">
+    <div class="container mx-auto px-4 mx-auto mt-5">
         <div class="flex flex-wrap">
             <div class="flex-1 -md-12">
                 <h1>{{ __('Job Listings') }}</h1>
@@ -41,13 +39,13 @@
                         <form method="GET" action="{{ route('jobs.index') }}">
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -md-4">
-                                    <input type="text" name="search" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Job title or keywords...') }}" value="{{ request('search') }}">
+                                    <input type="text" name="search" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Job title or keywords...') }}" value="{{ request('search') }}">
                                 </div>
                                 <div class="flex-1 -md-3">
-                                    <input type="text" name="location" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Location...') }}" value="{{ request('location') }}">
+                                    <input type="text" name="location" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="{{ __('Location...') }}" value="{{ request('location') }}">
                                 </div>
                                 <div class="flex-1 -md-3">
-                                    <select name="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    <select name="category" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                                         <option value="">{{ __('All Categories') }}</option>
                                         <option value="technology">{{ __('Technology') }}</option>
                                         <option value="healthcare">{{ __('Healthcare') }}</option>
@@ -55,7 +53,7 @@
                                     </select>
                                 </div>
                                 <div class="flex-1 -md-2">
-                                    <button type="submit" class="btn px-4 py-2 rounded font-medium transition-colors -primary w-full">{{ __('Search') }}</button>
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary w-full">{{ __('Search') }}</button>
                                 </div>
                             </div>
                         </form>
@@ -76,8 +74,8 @@
                                     <small class="text-gray-500">{{ $i }} {{ __('days ago') }}</small>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="{{ route('jobs.show', $i) }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary">{{ __('View Details') }}</a>
-                                    <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary">{{ __('Save Job') }}</button>
+                                    <a href="{{ route('jobs.show', $i) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">{{ __('View Details') }}</a>
+                                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-secondary">{{ __('Save Job') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -107,9 +105,6 @@
                 </nav>
             </div>
         </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </div></body>
 </html>
 

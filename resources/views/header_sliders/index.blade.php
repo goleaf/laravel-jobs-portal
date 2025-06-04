@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto -fluid">
         @include('flash::message')
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             <div class="flex-1 -lg-9 mt-5">
                 <form method="post" id="searchIsActiveHeaderSlider">
                     @csrf
                     {{--                    <div--}}
-                    {{--                            class="col-lg-6 col-sm-12 flex items-center form-switch flex-1 -sm block">--}}
+                    {{--                            class="lg:w-6/12 px-2 col-sm-12 flex items-center form-switch flex-1 -sm block">--}}
                     {{--                        <label class="switch-label">--}}
                     {{--                            <input type="checkbox" name="is_active"--}}
                     {{--                                   class="searchIsActiveHeaderSlider flex items-center -input" {{ ($settings['slider_is_active'] == 1) ? 'checked' : '' }} >--}}
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="flex flex-column">
+        <div class="flex flex-col">
             <livewire:header-slider-table/>
         </div>
     </div>

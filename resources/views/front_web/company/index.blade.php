@@ -13,12 +13,12 @@
 @endsection
 @section('content')
     <div class="companies-page">
-        <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-color-light py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-2 mb-md-0 mb-sm-4 mb-3 pb-md-5 pb-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-md-3">
+                            <h1 class=" text-gray-600 mb-md-3">
                                 @lang('messages.companies')
                             </h1>
                             <nav aria-label="breadcrumb">

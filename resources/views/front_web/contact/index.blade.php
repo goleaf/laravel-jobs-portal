@@ -11,12 +11,12 @@
 @endsection
 @section('content')
     <div class="contactus-page">
-        <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container mx-auto">
+        <section class="hero-section relative bg-color-light py-40">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class="text-secondary mb-3">
+                            <h1 class="text-gray-600 mb-3">
                                 {{ __('web.contact_us') }}
                             </h1>
                             <nav aria-label="breadcrumb">
@@ -35,10 +35,10 @@
         </section>
 
         <section class="contact-us-section py-60 mb-5">
-            <div class="container mx-auto">
+            <div class="container mx-auto px-4 mx-auto">
                 <div class="contact-us bg-color-light">
                     <div class="flex flex-wrap">
-                        <div class="flex-1 -lg-4 d-lg-block hidden">
+                        <div class="flex-1 -lg-4 lg:block hidden">
                             <div class="contact-img ms-5 ps-xl-5 mt-5">
                                 <img src="{{asset('front_web/images/contact-page.png')}}">
                             </div>

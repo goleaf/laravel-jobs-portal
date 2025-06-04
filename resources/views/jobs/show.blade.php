@@ -3,13 +3,13 @@
 @section('title', 'Job Details')
 
 @section('content')
-<div class="container mx-auto py-5">
+<div class="container mx-auto px-4 mx-auto py-5">
     <div class="flex flex-wrap">
         <div class="flex-1 -lg-8">
             <!-- Job Header -->
             <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mb-4">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body p-4">
-                    <div class="flex align-items-start">
+                    <div class="flex items-start">
                         <div class="company-logo me-4">
                             <i class="fas fa-building fa-4x text-primary-600"></i>
                         </div>
@@ -19,7 +19,7 @@
                             <div class="job-meta mb-3">
                                 <span class="badge bg-primary-600 me-2"><i class="fas fa-map-marker-alt me-1"></i>New York, NY</span>
                                 <span class="badge bg-green-600 me-2"><i class="fas fa-clock me-1"></i>Full-time</span>
-                                <span class="badge bg-info me-2"><i class="fas fa-dollar-sign me-1"></i>$80k-$120k</span>
+                                <span class="badge bg-blue-500 me-2"><i class="fas fa-dollar-sign me-1"></i>$80k-$120k</span>
                                 <span class="badge bg-yellow-500"><i class="fas fa-calendar me-1"></i>Posted 3 days ago</span>
                             </div>
                             <p class="lead mb-0">Join our innovative team and help build cutting-edge software solutions that impact millions of users worldwide.</p>
@@ -93,10 +93,10 @@
                         <span class="badge bg-primary-600 p-2">Python</span>
                         <span class="badge bg-primary-600 p-2">SQL</span>
                         <span class="badge bg-primary-600 p-2">Git</span>
-                        <span class="badge bg-secondary p-2">AWS</span>
-                        <span class="badge bg-secondary p-2">Docker</span>
-                        <span class="badge bg-secondary p-2">REST APIs</span>
-                        <span class="badge bg-secondary p-2">Agile</span>
+                        <span class="badge bg-gray-600 p-2">AWS</span>
+                        <span class="badge bg-gray-600 p-2">Docker</span>
+                        <span class="badge bg-gray-600 p-2">REST APIs</span>
+                        <span class="badge bg-gray-600 p-2">Agile</span>
                     </div>
                 </div>
             </div>
@@ -125,7 +125,7 @@
                     </div>
                     
                     <div class="mt-3">
-                        <a href="{{ route('company.show', 1) }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary">
+                        <a href="{{ route('company.show', 1) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-primary">
                             <i class="fas fa-external-link-alt me-2"></i>View Company Profile
                         </a>
                     </div>
@@ -136,14 +136,14 @@
         <!-- Sidebar -->
         <div class="flex-1 -lg-4">
             <!-- Apply Card -->
-            <div class="card shadow-sm mb-4 apply- bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 shadow-sm mb-4 apply- bg-white shadow rounded-lg overflow-hidden">
                 <div class="bg-white shadow rounded-lg overflow-hidden -body text-center p-4">
                     <h5 class="mb-3">Ready to Apply?</h5>
                     <p class="text-gray-500 mb-4">Join our team and start your career journey with us!</p>
-                    <button class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg w-full mb-3" onclick="showApplyModal()">
+                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg w-full mb-3" onclick="showApplyModal()">
                         <i class="fas fa-paper-plane me-2"></i>Apply Now
                     </button>
-                    <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger w-full" onclick="toggleSaveJob()">
+                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -outline-danger w-full" onclick="toggleSaveJob()">
                         <i class="far fa-heart me-2"></i>Save Job
                     </button>
                 </div>
@@ -186,16 +186,16 @@
                 </div>
                 <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     <div class="flex gap-2">
-                        <button class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('facebook')">
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('facebook')">
                             <i class="fab fa-facebook-f"></i>
                         </button>
-                        <button class="btn btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('twitter')">
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('twitter')">
                             <i class="fab fa-twitter"></i>
                         </button>
-                        <button class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('linkedin')">
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('linkedin')">
                             <i class="fab fa-linkedin-in"></i>
                         </button>
-                        <button class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="copyJobLink()">
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="copyJobLink()">
                             <i class="fas fa-link"></i>
                         </button>
                     </div>
@@ -206,52 +206,52 @@
 </div>
 
 <!-- Apply Modal -->
-<div class="modal fade" id="applyModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+<div class="fixed inset-0 z-50 overflow-y-auto fade" id="applyModal" tabindex="-1">
+    <div class="flex items-center justify-center min-h-screen px-4 modal-lg">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
                 <h5 class="modal-title">Apply for Senior Software Developer</h5>
                 <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="px-6 py-4">
                 <form id="applyForm">
                     <div class="flex flex-wrap">
                         <div class="flex-1 -md-6 mb-3">
                             <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="firstName" required>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="firstName" required>
                         </div>
                         <div class="flex-1 -md-6 mb-3">
                             <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="lastName" required>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="lastName" required>
                         </div>
                     </div>
                     
                     <div class="flex flex-wrap">
                         <div class="flex-1 -md-6 mb-3">
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
-                            <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="email" required>
+                            <input type="email" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="email" required>
                         </div>
                         <div class="flex-1 -md-6 mb-3">
                             <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                            <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="phone" required>
+                            <input type="tel" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="phone" required>
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="resume" class="block text-sm font-medium text-gray-700 mb-1">Upload Resume *</label>
-                        <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="resume" accept=".pdf,.doc,.docx" required>
-                        <div class="form-text">Accepted formats: PDF, DOC, DOCX (Max 5MB)</div>
+                        <input type="file" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="resume" accept=".pdf,.doc,.docx" required>
+                        <div class="text-xs text-gray-500 mt-1">Accepted formats: PDF, DOC, DOCX (Max 5MB)</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="coverLetter" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
-                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="coverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="coverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -primary" onclick="submitApplication()">
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary" onclick="submitApplication()">
                     <i class="fas fa-paper-plane me-2"></i>Submit Application
                 </button>
             </div>

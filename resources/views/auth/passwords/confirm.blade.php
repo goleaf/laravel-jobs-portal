@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <div class="container mx-auto">
+    <div class="container mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
             <div class="flex-1 -md-8">
                 <div class="bg-white shadow rounded-lg overflow-hidden">
@@ -19,7 +19,7 @@
 
                                 <div class="flex-1 -md-6">
                                     <input id="password" type="password"
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" name="password"
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" name="password"
                                            required autocomplete="current-password">
 
                                     @error('password')
@@ -32,12 +32,12 @@
 
                             <div class="form-group flex flex-wrap mb-0">
                                 <div class="flex-1 -md-8 offset-md-4">
-                                    <button type="submit" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary">
                                         {{ __('messages.confirm_password') }}
                                     </button>
 
                                     @if (Route::has('password.request'))
-                                        <a class="btn px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
+                                        <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
                                             {{ __('messages.forgot_password') }}
                                         </a>
                                     @endif

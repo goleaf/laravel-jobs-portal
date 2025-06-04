@@ -7,8 +7,8 @@
 {{--    <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>--}}
 @endpush
 @section('content')
-    <div class="container mx-auto -fluid">
-        <div class="flex flex-column">
+    <div class="container mx-auto px-4 mx-auto -fluid">
+        <div class="flex flex-col">
             @include('flash::message')
             <livewire:city-table/>
         </div>

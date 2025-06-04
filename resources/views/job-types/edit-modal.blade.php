@@ -83,12 +83,12 @@
                     <button 
                         type="button" 
                         @click="show = false" 
-                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                         {{ __('messages.common.cancel') }}
                     </button>
                     <button 
                         type="submit" 
-                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-gray-300 border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                         {{ __('messages.common.update') }}
                     </button>
                 </div>

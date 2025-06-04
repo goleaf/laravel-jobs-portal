@@ -8,7 +8,7 @@
     </a>
     <a href="javascript:void(0)" 
        title="{{ __('messages.common.view') }}"
-       class="skill-show- px-4 py-2 rounded font-medium transition-colors text-info" 
+       class="skill-show- px-4 py-2 rounded font-medium transition-colors text-blue-500" 
        data-id="{{ $row->id }}" 
        data-bs-toggle="tooltip">
         <x-icons.view />

@@ -4,7 +4,7 @@
             <img src="{{ $row->candidate_url }}" alt="" class="user-img">
         </div>
     </a>
-    <div class="flex flex-column">
+    <div class="flex flex-col">
         <a href="{{ route('admin.candidates.show', $row->id) }}"
            class="mb-1 text-decoration-none fs-6">
             {{ $row->user->full_name }}

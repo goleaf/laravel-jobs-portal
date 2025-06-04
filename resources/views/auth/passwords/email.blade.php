@@ -3,7 +3,7 @@
     @lang('web.reset_password.forgot_password')
 @endsection
 @section('content')
-<div class="flex flex-column flex-column-fluid items-center justify-center p-0">
+<div class="flex flex-col flex-column-fluid items-center justify-center p-0">
     <div class="flex-1 -12 text-center">
         <a href="{{ route('front.home') }}" class="image mb-7 mb-sm-10" data-turbo="false">
             <img alt="Logo" src="{{ asset(getSettingValue('logo')) }}" class="img-fluid logo-fix-size">
@@ -11,7 +11,7 @@
     </div>
     <div class="width-540">
         @if (session('status'))
-            <div class="alert p-4 rounded-md mb-4 -success">
+            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 -success">
                 {{ session('status') }}
             </div>
         @endif
@@ -33,7 +33,7 @@
 
             <div class="flex justify-center">
                 {{ Form::submit(__('web.reset_password.email_password_reset_link'), ['class' => 'btn btn-primary']) }}
-                <a href="{{ route('front.home') }}" class="btn px-4 py-2 rounded font-medium transition-colors -secondary ms-3" data-turbo="false">@lang('web.reset_password.cancel')</a>
+                <a href="{{ route('front.home') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary ms-3" data-turbo="false">@lang('web.reset_password.cancel')</a>
             </div>
         @formClose()
     </div>

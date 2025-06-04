@@ -1,8 +1,8 @@
-<div class="flex flex-col">
+<div class="flex flex- flex-1">
     <label class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
         {{ $filter['title'] }}
     </label>
-    <div class="flex flex-col space-y-2">
+    <div class="flex flex- flex-1 space-y-2">
         @foreach($filter['options'] as $value => $label)
             <label class="inline-flex items-center">
                 <input 

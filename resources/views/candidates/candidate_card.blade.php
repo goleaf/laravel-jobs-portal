@@ -1,13 +1,13 @@
-<div class="col-xl-4 col-md-6 candidate-card">
+<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee position-relative mb-5 border-hover-primary employee-border fix-candidate-height">
         <div class="employee-listing-details">
-            <div class="d-flex employee-listing-description align-items-center justify-content-center flex-column">
+            <div class="flex employee-listing-description items-center justify-center flex-column">
                 <div class="pl-0 mb-2 employee-avatar">
                     <img src="{{ $candidate['candidate_url'] }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
-                <div class="mb-auto w-100">
-                    <div class="d-flex justify-content-center align-items-center w-100">
+                <div class="mb-auto w-full">
+                    <div class="flex justify-center items-center w-full">
                         <div>
                             <a href="{{ route('admin.candidates.show', $candidate['id']) }}"
                                class="employee-listing-title text-decoration-none">{{ $candidate['user']['first_name'] }}</a>
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="pt-0 pb-3 d-flex justify-content-around">
+        <div class="pt-0 pb-3 flex justify-content-around">
             <div>
                 <label class="custom-switch pl-0">
                     <input type="checkbox" name="Is Active"
@@ -46,7 +46,7 @@
             @else
                 <div>
                     <a title="{{ __('messages.common.resend_verification_mail') }}"
-                       class="btn btn-primary action-btn send-email-verification" data-id="{{ $candidate['id'] }}"
+                       class="btn bg-primary-600 text-white hover: bg-primary-600 -700 action- px-4 py-2 rounded font-medium transition-colors send-email-verification" data-id="{{ $candidate['id'] }}"
                        href="#">
                         <i class="fa fa-sync"></i>
                     </a>
@@ -55,14 +55,14 @@
             @endif
         </div>
 
-        <div class="employee-action-btn">
+        <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
             <a title="{{ __('messages.common.edit') }}"
-               class="btn btn-warning action-btn edit-action-btn edit-btn"
+               class="btn bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit-action-btn edit- px-4 py-2 rounded font-medium transition-colors"
                href="{{ route('admin.candidates.edit', $candidate['id']) }}">
                 <i class="fa fa-edit"></i>
             </a>
             <a title="{{ __('messages.common.delete') }}"
-               class="btn btn-danger action-btn delete-action-btn delete-btn" data-id="{{ $candidate['id'] }}"
+               class="btn bg-red-600 text-white hover:bg-red-700 action-btn delete-action-btn delete- px-4 py-2 rounded font-medium transition-colors" data-id="{{ $candidate['id'] }}"
                href="#">
                 <i class="fa fa-trash"></i>
             </a>

@@ -8,8 +8,8 @@
   "_tel-input-de5d0a2b.js": {
     "file": "assets/tel-input-de5d0a2b.js"
   },
-  "_third-party-0b3721a6.js": {
-    "file": "assets/third-party-0b3721a6.js"
+  "_third-party-0513fc45.js": {
+    "file": "assets/third-party-0513fc45.js"
   },
   "node_modules/intl-tel-input/build/img/flags.png": {
     "file": "assets/flags-0a012cf8.png",
@@ -29,6 +29,11 @@
     "isEntry": true,
     "src": "resources/assets/sass/pagination-fix.scss"
   },
+  "resources/css/app.css": {
+    "file": "assets/app-af4c19c3.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
   "resources/js/app.css": {
     "file": "assets/app-965a0b9c.css",
     "src": "resources/js/app.css"
@@ -41,9 +46,9 @@
     "css": [
       "assets/app-965a0b9c.css"
     ],
-    "file": "assets/app-a2a317d2.js",
+    "file": "assets/app-517b3f14.js",
     "imports": [
-      "_third-party-0b3721a6.js",
+      "_third-party-0513fc45.js",
       "_tel-input-de5d0a2b.js",
       "_pages-4af5382a.js"
     ],

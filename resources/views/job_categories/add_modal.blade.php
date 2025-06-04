@@ -4,13 +4,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">{{ __('messages.job_category.new_job_category') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close" data-bs-dismiss="modal">
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal">
                     <x-icons.close class="h-4 w-4" />
                 </button>
             </div>
             {!! Form::open(['id' => 'addJobCategoryForm']) !!}
             <div class="modal-body">
-                <div class="alert alert-danger d-none" id="jobCategoryValidationErrorsBox"></div>
+                <div class="alert p-4 rounded-md mb-4 -danger hidden" id="jobCategoryValidationErrorsBox"></div>
                 <div class="mb-5">
                     {!! Form::label('name', __('messages.job_category.name').':', ['class' => 'form-label']) !!}
                     <span class="required"></span>
@@ -20,20 +20,20 @@
                         'placeholder' => __('messages.job_category.name')
                     ]) !!}
                 </div>
-                <div class="mb-5 h-100">
+                <div class="mb-5 h-full">
                     {!! Form::label('description', __('messages.job_category.description').':', ['class' => 'form-label']) !!}
                     <span class="required"></span>
                     <div id="addJobCategoryDescriptionQuillData" class="job-category-description"></div>
                     {!! Form::hidden('description', null, ['id' => 'jobCategoryDescriptionValue']) !!}
                 </div>
-                <div class="col-xl-6 col-md-6 col-sm-12 mb-5" io-image-input="true">
+                <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5" io-image-input="true">
                     {!! Form::label('category_image', __('messages.common.category_image').':', ['class' => 'form-label']) !!}
                     <span data-bs-toggle="tooltip"
                           data-placement="top"
                           data-bs-original-title="{{ __('messages.setting.image_validation') }}">
                         <i class="fas fa-question-circle ml-1 general-question-mark"></i>
                     </span>
-                    <div class="d-block">
+                    <div class="block">
                         <div class="image-picker">
                             <div class="image previewImage" id="logoPreview"
                                  style="background-image: url({{ asset('front_web/images/job-categories.png') }})">

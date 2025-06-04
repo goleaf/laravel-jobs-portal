@@ -1,11 +1,11 @@
-<div class="row">
-    <div class="col-md-4">
+<div class="flex flex-wrap">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('title', __('messages.post.title').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <p class="fs-5 text-gray-800">{{html_entity_decode($post->title)}}</p>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('blog_category', __('messages.post_category.post_category').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <br>
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('attachment', __('messages.post.image').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <br>
@@ -32,13 +32,13 @@
             @endif
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('notes', __('messages.post.description').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <p class="fs-5 text-gray-800">{!! !empty($post->description)? nl2br($post->description): __('messages.common.n/a') !!}</p>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('created_at', __('messages.common.created_on').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <br>
@@ -47,7 +47,7 @@
                   class="fs-5 text-gray-800">{{ $post->created_at->diffForHumans() }}</span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="flex-1 -md-4">
         <div class="form-group">
             {{ Form::label('updated_at', __('messages.common.last_updated').':', ['class' => 'pb-2 fs-5 text-gray-600']) }}
             <br>

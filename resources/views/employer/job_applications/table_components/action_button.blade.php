@@ -33,7 +33,7 @@
 
 
 <div class="dropdown">
-    <a class="btn btn-primary btn-sm dropdown-toggle" id="actionDropDown" data-bs-toggle="dropdown"
+    <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -sm dropdown-toggle" id="actionDropDown" data-bs-toggle="dropdown"
        aria-expanded="false">
         {{__('messages.common.action')}}
     </a>
@@ -43,28 +43,28 @@
             <input type="hidden" name="data-job-id" value="{{$this->jobId}}" id="dataJobId">
             @if(!$isCompleted && !$isRejected)
                 @if(!$isShortlisted)
-                    <a href="javascript:void(0)" class="btn btn-sm dropdown-item job-application-short-list"
+                    <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item job-application-short-list"
                        data-id="{{$row->id}}">{{__('messages.common.shortlist')}}</a>
                 @else
                     @if(!$isJobExpiry)
-                        <a href="javascript:void(0)" class="btn btn-sm dropdown-item change-job-stage"
+                        <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item change-job-stage"
                            data-id="{{$row->id}}"
                            data-stage-id="{{$jobStageId}}">{{__('messages.job_stage.job_stage')}}</a>
                     @endif
                 @endif
                    
                 @if(!$isApplied)
-                    <a href="javascript:void(0)" class="btn btn-sm dropdown-item job-application-action-completed"
+                    <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item job-application-action-completed"
                        data-id="{{$row->id}}">{{__('messages.common.selected')}}</a>
                 @endif
-                <a href="javascript:void(0)" class="btn btn-sm dropdown-item job-application-action-decline"
+                <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item job-application-action-decline"
                    data-id="{{$row->id}}">{{__('messages.common.rejected')}}</a>
                 @if($isJobStage && !$isRejected && !$isJobExpiry)
                     <a data-turbo="false" href="{{route('employer.interview.slot.view', ['jobId'=>$this->jobId, 'jobApplicationId'=>$row->id])}}"
-                       class="btn btn-sm dropdown-item">{{__('messages.job_stage.slots')}}</a>
+                       class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item">{{__('messages.job_stage.slots')}}</a>
                 @endif
             @endif
-            <a href="javascript:void(0)" class="btn btn-sm dropdown-item job-application-action-delete"
+            <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -sm dropdown-item job-application-action-delete"
                data-id="{{$row->id}}">{{__('messages.common.delete')}}</a>
         </li>
     </ul>

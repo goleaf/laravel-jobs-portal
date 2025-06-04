@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center">
+<div class="flex justify-center">
     <?php
     $isJobClosed = false;
     $isJobPause = false;
@@ -17,7 +17,7 @@
     @if(!$isJobClosed)
         @if(!$isJobPause && !$isJobDraft)
             <a data-turbo="false" href="{{route('admin.job-applications.index', $row->id)}}" title="{{__('messages.job_applications') }}"
-               class="btn px-2 text-info fs-3 pe-0" data-bs-toggle="tooltip"
+               class="px-4 py-2 rounded font-medium transition-colors px-2 text-info fs-3 pe-0" data-bs-toggle="tooltip"
                data-placement="bottom">
         <span class="svg-icon svg-icon-3">
             <i class="fa fa-users"></i>
@@ -25,21 +25,21 @@
             </a>
             @endif
         <a href="{{route('admin.jobs.edit', $row->id)}}" title="{{__('messages.common.edit')}}"
-           class=" btn px-2 text-primary fs-3 pe-0 edit-btn" data-bs-toggle="tooltip"
+           class="btn px-2 text-primary-600 fs-3 pe-0 edit- px-4 py-2 rounded font-medium transition-colors" data-bs-toggle="tooltip"
            data-placement="bottom">
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
         @endif
 
         <a title="{{(__('messages.tooltip.copy_preview_link'))}}"
-           class="btn px-2 text-success fs-3 pe-0 action-btn copy-btn"
+           class="btn px-2 text-green-600 fs-3 pe-0 action-btn copy- px-4 py-2 rounded font-medium transition-colors"
            data-job-id="{{$row->job_id}}" data-bs-toggle="tooltip" data-placement="bottom">
         <span class="svg-icon svg-icon-3">
           <i class="fa fa-copy"></i>
         </span>
     </a>
         <a title="{{__('messages.common.delete')}} " data-id="{{ $row->id }}"
-           class="employer-job-delete-btn  btn px-2 text-danger fs-3 pe-0" data-bs-toggle="tooltip">
+           class="employer-job-delete-btn px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 pe-0" data-bs-toggle="tooltip">
             <i class="fa-solid fa-trash"></i>
         </a>
 </div>

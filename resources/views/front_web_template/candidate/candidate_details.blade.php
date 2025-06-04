@@ -8,31 +8,31 @@
 {{-- @dd($candidateDetails) --}}
 @section('content')
     {{-- <section class="hero-section position-relative bg-color py-40">
-        <div class="container">
-            <div class="row align-items-center justify-content-center ">
-                <div class="col-12">
-                    <div class="row align-items-lg-center mb-3">
-                        <div class="col-lg-1 col-sm-2 col-3">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap items-center justify-center">
+                <div class="flex-1 -12">
+                    <div class="flex flex-wrap align-items-lg-center mb-3">
+                        <div class="col-lg-1 col-sm-2 flex-1 -3">
                             <div class="candidate-profile-img mt-md-0 mt-3">
                                 <img
                                         src="{{ (!empty($candidateDetails->user->avatar)) ? $candidateDetails->user->avatar : asset('assets/img/infyom-logo.png') }}"
                                         alt="candidate profile">
                             </div>
                         </div>
-                        <div class="col-sm-10 col-9">
+                        <div class="col-sm-10 flex-1 -9">
                             <div class="hero-content ps-xl-0 ps-3">
                                 <h4 class="text-secondary mb-0">
                                     {{ html_entity_decode($candidateDetails->user->full_name) }}
                                 </h4>
-                                <div class="hero-desc d-flex align-items-center flex-wrap">
-                                    <div class="d-flex align-items-center me-4 pe-2">
+                                <div class="hero-desc flex items-center flex-wrap">
+                                    <div class="flex items-center me-4 pe-2">
                                         <i class="fa-solid fa-briefcase text-gray me-3 fs-18"></i>
                                         <p class="fs-14 text-gray mb-0">
                                             {{!empty($candidateDetails->functionalArea->name)? $candidateDetails->functionalArea->name : __('messages.common.n/a')}}</p>
                                     </div>
 
                                     @if (!empty($candidateDetails->user->country_name))
-                                        <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                        <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                             <i class="fa-solid fa-location-dot text-gray me-3 fs-18"></i>
                                             <p class="fs-14 text-gray mb-0">
                                                     <span>{{$candidateDetails->user->country_name}}
@@ -45,14 +45,14 @@
                                             </p>
                                         </div>
                                     @endif
-                                    <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                    <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                         <i class="fa-solid fa-envelope text-gray me-3 fs-18"></i>
                                         <p class="fs-14 text-gray mb-0">
                                             {{$candidateDetails->user->email}}
                                         </p>
                                     </div>
                                     @if ($candidateDetails->user->dob)
-                                        <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                        <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                             <i class="fa-solid fa-location-dot text-gray me-3 fs-18"></i>
                                             <p class="fs-14 text-gray mb-0">
                                                 {{ \Carbon\Carbon::parse($candidateDetails->user->dob)->translatedFormat('jS M, Y') }}
@@ -62,15 +62,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center flex-wrap">
+                        <div class="flex items-center flex-wrap">
                             @auth
                                 @role('Employer')
                                 <ul class="post-tags mt-3 ps-0">
                                     @if ($isReportedToCandidate)
-                                        <button class="btn btn-outline-danger reportToCompany reportToCandidate" disabled
+                                        <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate" disabled
                                         >{{ __('messages.candidate.already_reported') }}</button>
                                     @else
-                                        <button type="button" class="btn btn-outline-danger reportToCompany reportToCandidate"
+                                        <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompany reportToCandidate"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#reportToCandidateModal">
                                             {{ __('messages.candidate.reporte_to_candidate') }}
@@ -87,9 +87,9 @@
     </section>
 
     <section class="about-company-section py-60">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap">
+                <div class="flex-1 -lg-8">
                     <div class="mb-5">
                         <h5 class="fs-4 text-secondary mb-4">{{__('messages.candidate_profile.education')}}</h5>
                         <div class="job-description">
@@ -98,7 +98,7 @@
                                     <span class="name">{{ucfirst($candidateEducation->degreeLevel->name[0])}}</span>
                                     <div class="job-description-right">
                                         <h5 class="fs-18 text-gary mb-0">{{$candidateEducation->degreeLevel->name}}</h5>
-                                        <span class="text-primary"> {{ucfirst($candidateEducation->institute)}}</span>
+                                        <span class="text-primary-600"> {{ucfirst($candidateEducation->institute)}}</span>
                                         <span class="badge bg-secondary">{{ $candidateEducation->year }}</span>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
                                     <div class="job-description-right">
                                         <div class="info-box">
                                             <h5 class="fs-18 text-gary mb-0">{{$candidateExperience->experience_title}}</h5>
-                                            <span class="text-primary">{{ucfirst($candidateExperience->company)}}</span>
+                                            <span class="text-primary-600">{{ucfirst($candidateExperience->company)}}</span>
                                             <span class="badge bg-secondary"> {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }} - {{($candidateExperience->currently_working) ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="flex-1 -lg-4">
                     @include('front_web.candidate.candidate_detail_sidebar')
                 </div>
             </div>
@@ -138,14 +138,14 @@
     </section> --}}
 
     <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-12">
-                    <div class="d-flex align-items-md-center">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap items-center justify-center">
+                <div class="flex-1 -12">
+                    <div class="flex align-items-md-center">
                         <div class="me-4">
                             <div class="hero-img">
                                 <img src="{{ !empty($candidateDetails->user->avatar) ? $candidateDetails->user->avatar : asset('assets/img/infyom-logo.png') }}"
-                                    class="w-100 h-100 rounded-circle object-fit-cover" alt="company-details" />
+                                    class="w-full h-full rounded-circle object-fit-cover" alt="company-details" />
                             </div>
                         </div>
                         <div class="">
@@ -153,18 +153,18 @@
                                 <h4 class="text-secondary lh-base mb-2">
                                     {{ html_entity_decode($candidateDetails->user->full_name) }}</h4>
                                 <div class="hero-desc d-md-flex">
-                                    <div class="d-flex mb-1">
+                                    <div class="flex mb-1">
                                         <div class="me-3 w-20">
-                                            <x-icons.briefcase class="w-100" />
+                                            <x-icons.briefcase class="w-full" />
                                         </div>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ !empty($candidateDetails->functionalArea->name) ? $candidateDetails->functionalArea->name : __('messages.common.n/a') }}
                                         </p>
                                     </div>
                                     @if (!empty($candidateDetails->user->country_name))
-                                        <div class="d-flex mb-2">
+                                        <div class="flex mb-2">
                                             <div class="me-3 w-20">
-                                                <x-icons.location class="w-100" />
+                                                <x-icons.location class="w-full" />
                                             </div>
                                             <p class="fs-14 text-gray mb-0">
                                                 @if (!empty($candidateDetails->user->state_name))
@@ -176,14 +176,14 @@
                                             </p>
                                         </div>
                                     @endif
-                                    <div class="desc d-flex me-4 pe-2">
+                                    <div class="desc flex me-4 pe-2">
                                         <div class="me-3 w-20">
                                             <x-icons.email class="text-gray-500" />
                                         </div>
                                         <a href="#" class="fs-14 text-gray text-break">{{ $candidateDetails->user->email }}</a>
                                     </div>
                                     @if ($candidateDetails->user->dob)
-                                        <div class="desc d-flex ">
+                                        <div class="desc flex">
                                             <div class="me-3 w-20">
                                                 <x-icons.calendar class="text-gray-500" />
                                             </div>
@@ -202,9 +202,9 @@
     </section>
 
     <section class="job-details-section py-60 mb-sm-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap">
+                <div class="flex-1 -lg-8">
                     <div class="Job Description mb-lg-5 mb-4">
                         <h5 class="fs-18 text-secondary mb-4">{{ __('messages.candidate_profile.education') }}</h5>
                         <div class="job-description">
@@ -213,11 +213,11 @@
                                     <div class="job-description-right">
                                         <h5 class="fs-18 text-gary mb-0">{{ $candidateEducation->degreeLevel->name }}</h5>
                                         <span class="text-gray"> {{ ucfirst($candidateEducation->institute) }}</span>
-                                        <span class="badge bg-primary">{{ $candidateEducation->year }}</span>
+                                        <span class="badge bg-primary-600">{{ $candidateEducation->year }}</span>
                                     </div>
                                 </div>
                             @empty
-                                <div class="col-md-12 text-center text-gray">
+                                <div class="flex-1 -md-12 text-center text-gray">
                                     {{ __('messages.candidate.education_not_found') }}
                                 </div>
                             @endforelse
@@ -232,7 +232,7 @@
                                         <h5 class="fs-18 text-gary mb-3">{{ $candidateExperience->experience_title }}
                                         </h5>
                                         <span class="text-gray">{{ ucfirst($candidateExperience->company) }}</span>
-                                        <span class="badge bg-primary">
+                                        <span class="badge bg-primary-600">
                                             {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }}
                                             -
                                             {{ $candidateExperience->currently_working ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
@@ -243,13 +243,13 @@
                                 @endif
                             </div>
                         @empty
-                            <div class="col-md-12 text-center text-gray">
+                            <div class="flex-1 -md-12 text-center text-gray">
                                 {{ __('messages.candidate.experience_not_found') }}
                             </div>
                         @endforelse
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="flex-1 -lg-4">
                     @include('front_web_template.candidate.candidate_detail_sidebar')
                 </div>
             </div>
@@ -260,10 +260,10 @@
         @include('front_web_template.candidate.report_to_candidate_modal')
     @endrole
     @if (!empty($candidateDetails->user->facebook_url) || !empty($candidateDetails->user->twitter_url) || !empty($candidateDetails->user->google_plus_url) || !empty($candidateDetails->user->pinterest_url) || !empty($candidateDetails->user->linkedin_url))
-    <div class="col-12">
-        <div class="col-12 mb-40">
-            <div class="job-card card py-30">
-                <div class="row d-flex justify-content-lg-between">
+    <div class="flex-1 -12">
+        <div class="flex-1 -12 mb-40">
+            <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                <div class="flex flex-wrap flex justify-content-lg-between">
                     <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
                     <div class="mt-3">
                         @if (!empty($candidateDetails->user->facebook_url))

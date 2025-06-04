@@ -4,18 +4,18 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container mx-auto -fluid">
+        <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('messages.company.reported_employers') }}</h1>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ __('messages.company.reported_employers') }}</h3>
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden -header">
+                <h3 class="bg-white shadow rounded-lg overflow-hidden -title">{{ __('messages.company.reported_employers') }}</h3>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+            <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                <div class="w-full divide-y divide-gray-200 -responsive">
+                    <table class="table odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
                         <thead>
                             <tr>
                                 <th>{{ __('messages.common.id') }}</th>
@@ -31,7 +31,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="8" class="text-center py-4">
-                                    <div class="text-muted">
+                                    <div class="text-gray-500">
                                         <i class="fas fa-building fa-2x mb-2"></i>
                                         <p>{{ __('messages.common.no_data_available') }}</p>
                                         <small>{{ __('This feature is under development') }}</small>

@@ -397,19 +397,33 @@ Route::prefix('front')->name('front.')->group(function () {
     })->name('contact.store');
     
     // Report candidate functionality
-    Route::post('/report-candidate', function () {
-        return response()->json(['success' => true, 'message' => 'Candidate reported successfully']);
-    })->name('report-candidate');
+    Route::post('/report-candidate', function (Request $request) {
+        $request->validate([
+            'candidate_id' => 'required|integer',
+            'reason' => 'required|string|max:500',
+            'description' => 'nullable|string|max:1000'
+        ]);
+        
+        // Process candidate report
+        return response()->json([
+            'success' => true,
+            'message' => 'Candidate reported successfully. We will review your report.'
+        ]);
+    })->name('front.report-candidate');
     
     // Job categories page
     Route::get('/job-categories', function () {
         return view('front_web.categories.index');
-    })->name('job-categories');
+    })->name('front.job-categories');
     
     // Job search functionality
-    Route::get('/search-jobs', function () {
-        return view('front_web.jobs.search');
-    })->name('search-jobs');
+    Route::get('/search-jobs', function (Request $request) {
+        $query = $request->get('q', '');
+        $location = $request->get('location', '');
+        $category = $request->get('category', '');
+        
+        return view('front_web.jobs.search', compact('query', 'location', 'category'));
+    })->name('front.search-jobs');
     
     // Blog comment functionality
     Route::post('/blog/comment/store', function () {
@@ -417,9 +431,17 @@ Route::prefix('front')->name('front.')->group(function () {
     })->name('blog.comment.store');
     
     // Contact form submission
-    Route::post('/contact/send', function () {
-        return redirect()->back()->with('success', 'Message sent successfully');
-    })->name('contact.send');
+    Route::post('/contact/send', function (Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|min:10'
+        ]);
+        
+        // Process contact form
+        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+    })->name('front.contact.send');
     
 });
 

@@ -1,6 +1,6 @@
 <div>
-    <div class="d-flex flex-column">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="flex flex-column">
+        <div class="flex justify-between items-center mb-3">
             @if($showButtonOnHeader && !empty($buttonComponent))
                 @include($buttonComponent)
             @endif
@@ -10,7 +10,7 @@
                     <div class="input-group">
                         <input 
                             type="text" 
-                            class="form-control" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
                             placeholder="{{ __('messages.common.search') }}" 
                             wire:model.debounce.300ms="search"
                         >
@@ -22,8 +22,8 @@
             @endif
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
+        <div class="w-full divide-y divide-gray-200 -responsive">
+            <table class="table w-full divide-y divide-gray-200 -striped">
                 @if($showHeader)
                 <thead>
                     <tr>
@@ -73,7 +73,7 @@
         </div>
 
         @if($showPagination && $data->hasPages())
-            <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="flex justify-between items-center mt-3">
                 <div>
                     @if($data->total() > 0)
                         <span>{{ __('Showing') }}</span>
@@ -89,9 +89,9 @@
                 </div>
                 
                 @if($showPerPageOptions)
-                    <div class="d-flex align-items-center">
+                    <div class="flex items-center">
                         <span class="me-2">{{ __('Per page') }}:</span>
-                        <select class="form-select form-select-sm" wire:model="perPage">
+                        <select class="form-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" wire:model="perPage">
                             @foreach($perPageOptions as $option)
                                 <option value="{{ $option }}">{{ $option }}</option>
                             @endforeach

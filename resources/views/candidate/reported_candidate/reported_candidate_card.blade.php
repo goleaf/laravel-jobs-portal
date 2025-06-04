@@ -1,13 +1,13 @@
-<div class="col-xl-4 col-md-6 candidate-card">
+<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee position-relative mb-5 border-hover-primary employee-border">
         <div class="employee-listing-details">
-            <div class="d-flex employee-listing-description align-items-center justify-content-center flex-column">
+            <div class="flex employee-listing-description items-center justify-center flex-column">
                 <div class="pl-0 mb-2 employee-avatar">
                     <img src="{{ $reportedCandidate->candidate->candidate_url }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
-                <div class="mb-auto w-100 employee-data">
-                    <div class="d-flex justify-content-center align-items-center w-100">
+                <div class="mb-auto w-full employee-data">
+                    <div class="flex justify-center items-center w-full">
                         <div>
                             <span class="text-decoration-none text-color-gray">{{ $reportedCandidate->candidate->user->first_name }}</span>
                         </div>
@@ -23,12 +23,12 @@
                 </div>
             </div>
         </div>
-        <div class="employee-action-btn">
-            <a title="{{ __('messages.common.view') }}" class="btn btn-info action-btn view-note"
+        <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
+            <a title="{{ __('messages.common.view') }}" class="btn bg-blue-500 text-white hover:bg-blue-600 action- px-4 py-2 rounded font-medium transition-colors view-note"
                data-id="{{$reportedCandidate->id}}" href="#">
                 <i class="fas fa-eye"></i>
             </a>
-            <a title="{{ __('messages.common.delete') }}" class="btn btn-danger action-btn delete-btn"
+            <a title="{{ __('messages.common.delete') }}" class="btn bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
                data-id="{{$reportedCandidate->id}}" href="#">
                 <i class="fa fa-trash"></i>
             </a>

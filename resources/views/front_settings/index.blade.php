@@ -6,15 +6,15 @@
     <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="alert alert-danger d-none" id="validationErrorsBox">
+    <div class="alert p-4 rounded-md mb-4 -danger hidden" id="validationErrorsBox">
         <i class="fa-solid fa-face-frown me-5"></i>
     </div>
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             @include('layouts.errors')
-            <div class="card">
-                <div class="card-body">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     {{ Form::open(['route' => 'front.settings.update','files' => true,]) }}
                     @include('front_settings.fields')
                     {{ Form::close() }}

@@ -1,7 +1,7 @@
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+<div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="bg-white shadow rounded-lg overflow-hidden -header flex justify-between items-center">
         @if($showFilterOnHeader || $showButtonOnHeader)
-            <div class="d-flex flex-wrap">
+            <div class="flex flex-wrap">
                 @if($showFilterOnHeader && !empty($filterComponents))
                     <div class="me-3">
                         @foreach($filterComponents as $component)
@@ -20,10 +20,10 @@
             </div>
         @endif
 
-        <div class="d-flex align-items-center ms-auto">
-            <div class="d-flex align-items-center">
+        <div class="flex items-center ms-auto">
+            <div class="flex items-center">
                 <label for="paginate" class="me-2">{{ __('messages.common.showing') }}</label>
-                <select id="paginate" wire:model.live="perPage" class="form-select form-select-sm">
+                <select id="paginate" wire:model.live="perPage" class="form-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm">
                     @foreach($perPageOptions as $option)
                         <option value="{{ $option }}">{{ $option }}</option>
                     @endforeach
@@ -31,15 +31,15 @@
             </div>
 
             <div class="ms-3">
-                <input type="search" wire:model.live.debounce.{{ $searchDebounce }}ms="search" class="form-control form-control-sm" 
+                <input type="search" wire:model.live.debounce.{{ $searchDebounce }}ms="search" class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" 
                     placeholder="{{ __('messages.common.search') }}">
             </div>
         </div>
     </div>
 
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped align-middle mb-0">
+    <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
+        <div class="w-full divide-y divide-gray-200 -responsive">
+            <table class="table w-full divide-y divide-gray-200 -striped align-middle mb-0">
                 <thead>
                     <tr>
                         @foreach($columns as $column)
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <div class="card-footer d-flex justify-content-end">
+    <div class="bg-white shadow rounded-lg overflow-hidden -footer flex justify-content-end">
         {{ $results->links() }}
     </div>
 </div> 

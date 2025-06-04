@@ -1,14 +1,14 @@
 @include('livewire.table')
 
 @section('add-button')
-    <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+    <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
         <x-icons.add class="w-5 h-5 mr-2" />
         {{ __('language.add_language') }}
     </button>
 @endsection
 
 <div>
-    <div class="flex flex-col md:flex-row justify-between mb-4 space-y-4 md:space-y-0">
+    <div class="flex flex- flex-1 md:flex- flex flex-wrap justify-between mb-4 space-y-4 md:space-y-0">
         <!-- Search Box -->
         <div class="relative w-full md:w-1/3">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

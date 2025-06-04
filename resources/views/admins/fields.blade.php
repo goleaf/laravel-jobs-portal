@@ -1,28 +1,28 @@
-<div class="row">
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+<div class="flex flex-wrap">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('first_name',__('messages.candidate.first_name').':', ['class' => 'form-label ']) }}
         <span class="required"></span>
         {{ Form::text('first_name', null, ['class' => 'form-control','required', 'placeholder' => __('messages.candidate.first_name')]) }}
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('last_name',__('messages.candidate.last_name').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         {{ Form::text('last_name', null, ['class' => 'form-control','required', 'placeholder' => __('messages.candidate.last_name')]) }}
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('email',__('messages.candidate.email').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         {{ Form::text('email', null, ['class' => 'form-control','required', 'placeholder' => __('messages.candidate.email')]) }}
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-55 mobile-itel-width">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-55 mobile-itel-width">
         {{ Form::label('phone', __('messages.candidate.phone').':', ['class' => 'form-label ']) }}
         <br>
         {{ Form::tel('phone', null, ['class' => 'form-control d', 'onkeyup' => 'if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,"")','id'=>'phoneNumber','placeholder' => __('messages.inquiry.phone_no')])}}
         {{ Form::hidden('region_code',null,['id'=>'prefix_code']) }}
-        <p id="valid-msg" class="text-success d-none fw-400 fs-small mt-2">{{__('messages.phone.valid_number')}}</p>
-        <p id="error-msg" class="text-danger d-none fw-400 fs-small mt-2">{{__('messages.phone.invalid_number')}}</p>
+        <p id="valid-msg" class="text-green-600 hidden fw-400 fs-small mt-2">{{__('messages.phone.valid_number')}}</p>
+        <p id="error-msg" class="text-red-600 hidden fw-400 fs-small mt-2">{{__('messages.phone.invalid_number')}}</p>
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('password',__('messages.candidate.password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         {{ Form::password('password', [
@@ -32,7 +32,7 @@
             'placeholder' => __('messages.candidate.password')
         ]) }}
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label('cpassword',__('messages.candidate.conform_password').':', ['class' => 'form-label']) }}
         <span class="required"></span>
         {{ Form::password('cpassword', [
@@ -43,7 +43,7 @@
         ]) }}
     </div>
     {{ Form::label('Profile',__('messages.profile').':', ['class' => 'form-label']) }}
-    <div class="d-block">
+    <div class="block">
         <div class="image-picker">
             <div class="image previewImage" id="logoPreview"
                  style="background-image: url({{ asset('assets/img/infyom-logo.png') }})">
@@ -57,10 +57,10 @@
                 </span>
         </div>
     </div>
-    <div class="d-flex justify-content-end mt-5">
+    <div class="flex justify-content-end mt-5">
         {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary me-3']) }}
         <a href="{{ route('admin.admin.index') }}"
-           class="btn btn-secondary me-2">{{__('messages.common.cancel')}}</a>
+           class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{__('messages.common.cancel')}}</a>
     </div>
 </div>
 

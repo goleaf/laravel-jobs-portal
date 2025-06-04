@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="flex">
     <span class="badge bg-secondary">
         {{ \Carbon\Carbon::parse($row->created_at)->translatedFormat('jS M, Y') }}
     </span>

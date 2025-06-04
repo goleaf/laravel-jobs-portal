@@ -1,6 +1,6 @@
 @formOpen(['id' => 'editOnlineProfileForm'])
-<div class="row">
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+<div class="flex flex-wrap">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label(__('messages.company.facebook_url'), __('messages.company.facebook_url').':', ['class' => 'form-label']) }}
         <div class="input-group">
             <div class="input-group-text border-0">
@@ -9,7 +9,7 @@
             {{ Form::text('facebook_url',$user->facebook_url, ['class' => 'form-control','id'=>'facebookId','placeholder'=>'https://www.facebook.com']) }}
         </div>
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label(__('messages.company.twitter_url'), __('messages.company.twitter_url').':', ['class' => 'form-label']) }}
         <div class="input-group">
             <div class="input-group-text border-0">
@@ -18,7 +18,7 @@
             {{ Form::text('twitter_url', $user->twitter_url , ['class' => 'form-control ','id'=>'twitterId','placeholder'=>'https://www.twitter.com']) }}
         </div>
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label(__('messages.company.linkedin_url'), __('messages.company.linkedin_url').':', ['class' => 'form-label']) }}
         <div class="input-group">
             <div class="input-group-text border-0">
@@ -27,7 +27,7 @@
             {{ Form::text('linkedin_url', $user->linkedin_url, ['class' => 'form-control','id'=>'linkedinId','placeholder'=>'https://www.linkedin.com']) }}
         </div>
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label(__('messages.company.google_plus_url'), __('messages.company.google_plus_url').':', ['class' => 'form-label']) }}
         <div class="input-group">
             <div class="input-group-text border-0">
@@ -36,7 +36,7 @@
             {{ Form::text('google_plus_url', $user->google_plus_url, ['class' => 'form-control','id'=>'googlePlusId','placeholder'=>'https://www.plus.google.com']) }}
         </div>
     </div>
-    <div class="col-xl-6 col-md-6 col-sm-12 mb-5">
+    <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5">
         {{ Form::label(__('messages.company.pinterest_url'), __('messages.company.pinterest_url').':', ['class' => 'form-label']) }}
         <div class="input-group">
             <div class="input-group-text border-0">
@@ -46,9 +46,9 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-end">
+<div class="flex justify-content-end">
     {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'btn btn-primary me-3','id'=>'btnOnlineProfileSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) }}
     <button type="button" id="btnOnlineProfileCancel"
-            class="btn btn-secondary me-2">{{ __('messages.common.cancel') }}</button>
+            class="btn px-4 py-2 rounded font-medium transition-colors -secondary me-2">{{ __('messages.common.cancel') }}</button>
 </div>
 @formClose()

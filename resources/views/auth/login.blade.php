@@ -7,33 +7,33 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card shadow-sm mt-5">
-                    <div class="card-header text-center bg-primary text-white">
+<body class="bg-gray-100">
+    <div class="container mx-auto">
+        <div class="flex flex-wrap justify-center">
+            <div class="md:w-6/12 flex-1 -lg-4">
+                <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mt-5">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -header text-center bg-primary-600 text-white">
                         <h4 class="mb-0">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             {{ __('Login') }}
                         </h4>
                     </div>
-                    <div class="card-body">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
 
                         @if (session('status'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert bg-green-50 border border-green-200 text-green-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 {{ session('status') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
 
@@ -41,12 +41,12 @@
                             @csrf
                             
                             <div class="mb-3">
-                                <label for="email" class="form-label">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
                                     <i class="fas fa-envelope me-1"></i>
                                     {{ __('Email Address') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -60,12 +60,12 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
                                     <i class="fas fa-lock me-1"></i>
                                     {{ __('Password') }}
                                 </label>
                                 <input id="password" type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
                                        name="password" 
                                        required 
                                        autocomplete="current-password">
@@ -76,16 +76,16 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" 
+                            <div class="mb-3 flex items-center">
+                                <input class="flex items-center -input" type="checkbox" name="remember" id="remember" 
                                        {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
+                                <label class="flex items-center -label" for="remember">
                                     {{ __('Remember Me') }}
                                 </label>
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
                                     <i class="fas fa-sign-in-alt me-1"></i>
                                     {{ __('Login') }}
                                 </button>
@@ -94,7 +94,7 @@
 
                         <div class="mt-3 text-center">
                             @if (Route::has('password.request'))
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                <a class="btn px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
                             @endif
@@ -104,7 +104,7 @@
                         
                         <div class="text-center">
                             <p class="mb-2">{{ __("Don't have an account?") }}</p>
-                            <a href="{{ route('register') }}" class="btn btn-outline-success">
+                            <a href="{{ route('register') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success">
                                 <i class="fas fa-user-plus me-1"></i>
                                 {{ __('Register') }}
                             </a>

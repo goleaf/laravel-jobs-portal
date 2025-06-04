@@ -1,30 +1,30 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap">
+                <div class="col-lg-12 flex-1 -md-12">
                     @if(session()->has('message'))
-                        <div class="alert alert-success">
+                        <div class="alert p-4 rounded-md mb-4 -success">
                             {{ session('message') }}
                         </div>
                     @endif
                 </div>
-                <div class="col-lg-12 col-md-12">
+                <div class="col-lg-12 flex-1 -md-12">
                     @if(count($favouriteCompanies) > 0 || $searchByFavouriteCompanies != '')
-                        <div class="row mb-2 justify-content-end">
-                            <div class="col-md-3">
+                        <div class="flex flex-wrap mb-2 justify-content-end">
+                            <div class="flex-1 -md-3">
                                 <input wire:model.debounce.100ms="searchByFavouriteCompanies" type="search"
                                        id="searchByFavouriteCompanies"
                                        placeholder="{{ __('web.job_menu.search_followings') }}"
-                                       class="form-control search-box-placeholder">
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
                             </div>
                         </div>
                     @endif
                     @if(count($favouriteCompanies) > 0)
                         <div class="favorite-company-dashboard-box">
-                            <div class="row  position-relative">
+                            <div class="flex flex-wrap position-relative">
                                 @foreach($favouriteCompanies as $favouriteCompany)
-                                    <div class="col-12 col-sm-6 col-md-6 col-xl-4 favorite-job-details mb-5">
+                                    <div class="w-full col-sm-6 md:w-6/12 flex-1 -xl-4 favorite-job-details mb-5">
                                         <div class="hover-effect-favorite-company min-height-200 position-relative {{ $loop->odd ? 'blue-color' : 'black-color' }}">
                                             @if(!empty($favouriteCompany->company->no_of_offices))
                                             <div class="ribbon float-right ribbon-primary favorite-companies-ribbon">
@@ -32,12 +32,12 @@
                                             </div>
                                             @endif
                                             <div class="job-listing-details nopadding">
-                                                <div class="d-flex job-listing-description ">
+                                                <div class="flex job-listing-description">
                                                     <div class="pl-0 mb-auto float-left favourite-companies-avatar">
                                                         <img src="{{ $favouriteCompany->company->user->avatar }}"
                                                              class="img-responsive favorite-company-image mr-2">
                                                     </div>
-                                                    <div class="mb-auto w-100 favorite-company-data favourite-companies-data">
+                                                    <div class="mb-auto w-full favorite-company-data favourite-companies-data">
                                                         <h4 class="job-listing-favorite-company d-inline-flex mb-2">
                                                             {{ (!empty($favouriteCompany->company->user->first_name)) ? $favouriteCompany->company->user->first_name : __('messages.common.n/a')  }}
                                                         </h4>
@@ -58,7 +58,7 @@
                                                 </div>
                                             </div>
                                             <a title="Delete"
-                                               class="btn btn-danger action-btn delete-btn favorite-companies-delete"
+                                               class="btn bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors favorite-companies-delete"
                                                data-id="{{$favouriteCompany->id}}"
                                                href="#">
                                                 <i class="fa fa-trash"></i>
@@ -75,11 +75,11 @@
                         </div>
                         @else
                             @if($searchByFavouriteCompanies == null || empty($searchByFavouriteCompanies))
-                                <div class="col-lg-12 col-md-12 d-flex justify-content-center">
+                                <div class="col-lg-12 flex-1 -md-12 flex justify-center">
                                     <h5>{{ __('messages.job.no_following_companies_found') }} </h5>
                                 </div>
                             @else
-                                <div class="col-lg-12 col-md-12 d-flex justify-content-center mt-4">
+                                <div class="col-lg-12 flex-1 -md-12 flex justify-center mt-4">
                                     <h5>{{ __('messages.job.following_company_not_found') }} </h5>
                                 </div>
                             @endif

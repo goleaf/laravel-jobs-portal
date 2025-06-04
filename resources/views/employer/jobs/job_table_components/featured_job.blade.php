@@ -18,11 +18,11 @@
     @if(!$featured)
         @if($isFeaturedAvilabal && $isJobLive)
             @if ($row->status == 3)
-                <i class="font-20 fas fa-times-circle text-danger"></i>
+                <i class="font-20 fas fa-times-circle text-red-600"></i>
             @else
                 <a title="{{__('messages.front_settings.pay_to_get')}} {{__('messages.front_settings.make_featured')}}"
                    data-bs-toggle="tooltip" data-bs-placement="bottom"
-                   class="btn btn-info text-white btn-sm action-btn w-100 featured-job feature-btn"
+                   class="btn bg-blue-500 text-white hover:bg-blue-600 text-white px-3 py-1.5 text-sm action-btn w-full featured-job feature- px-4 py-2 rounded font-medium transition-colors"
                    data-id="{{$row->id}}">
                     {{__('messages.front_settings.make_featured')}}
                 </a>
@@ -30,17 +30,17 @@
         @endif
     @else
         @if ($row->status == 3)
-            <i class="font-20 fas fa-times-circle text-danger"></i>
+            <i class="font-20 fas fa-times-circle text-red-600"></i>
         @else
             <a title="{{__('messages.front_settings.expires_on')}} {{$expiryDate}}
-                    " data-bs-toggle="tooltip" class="btn btn-success text-white btn-sm action-btn w-100"
+                    " data-bs-toggle="tooltip" class="btn bg-green-600 text-white hover:bg-green-700 text-white px-3 py-1.5 text-sm action- px-4 py-2 rounded font-medium transition-colors w-full"
                data-id="{{encrypt($row->id)}}">
                 {{__('messages.front_settings.featured')}} <i class="far fa-check-circle pl-1"></i>
             </a>
         @endif
     @endif
 @else
-    <a class="btn btn-icon btn-danger action-btn"><i class="fas fa-times"></i></a>
+    <a class="btn btn-icon bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors"><i class="fas fa-times"></i></a>
 @endif
 
 
@@ -50,6 +50,6 @@
 {{--@endphp--}}
 {{--@if ($todayDate > $expiredDate)--}}
 {{--    <div class="badge badge-light-primary">--}}
-{{--        <i class="font-20 fas fa-times-circle text-danger"></i>--}}
+{{--        <i class="font-20 fas fa-times-circle text-red-600"></i>--}}
 {{--    </div>--}}
 {{--@endif--}}

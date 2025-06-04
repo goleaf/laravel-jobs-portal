@@ -30,9 +30,9 @@
     </style>
 </head>
 <body class="admin-login-bg">
-    <div class="container">
-        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
-            <div class="col-md-6 col-lg-4">
+    <div class="container mx-auto">
+        <div class="flex flex-wrap justify-center items-center" style="min-height: 100vh;">
+            <div class="md:w-6/12 flex-1 -lg-4">
                 <div class="text-center mb-4">
                     <a href="{{ route('front.home') }}" class="text-white text-decoration-none">
                         <i class="fas fa-briefcase fa-3x mb-3"></i>
@@ -40,32 +40,32 @@
                     </a>
                 </div>
 
-                <div class="card login-card">
-                    <div class="card-body p-4">
+                <div class="card login- bg-white shadow rounded-lg overflow-hidden">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body p-4">
                         <div class="text-center mb-4">
                             <div class="admin-badge">
                                 <i class="fas fa-shield-alt me-1"></i>
                                 {{ __('ADMIN ACCESS') }}
                             </div>
                             <h4 class="text-dark mb-0">{{ __('Admin Portal') }}</h4>
-                            <p class="text-muted">{{ __('Secure administrator login') }}</p>
+                            <p class="text-gray-500">{{ __('Secure administrator login') }}</p>
                         </div>
 
                         @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="alert bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
 
                         @if (session('status'))
-                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <div class="alert bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-md mb-4 -dismissible fade show" role="alert">
                                 {{ session('status') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
 
@@ -74,12 +74,12 @@
                             <input type="hidden" name="user_type" value="admin">
                             
                             <div class="mb-3">
-                                <label for="email" class="form-label">
-                                    <i class="fas fa-envelope me-1 text-primary"></i>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-envelope me-1 text-primary-600"></i>
                                     {{ __('Administrator Email') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                                       class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -94,18 +94,18 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">
-                                    <i class="fas fa-lock me-1 text-primary"></i>
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-lock me-1 text-primary-600"></i>
                                     {{ __('Password') }}
                                 </label>
                                 <div class="input-group">
                                     <input id="password" type="password" 
-                                           class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                                           class="form-control w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -lg @error("password') is-invalid @enderror" 
                                            name="password" 
                                            required 
                                            autocomplete="current-password"
                                            placeholder="{{ __('Enter your password') }}">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                    <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary" type="button" onclick="togglePassword()">
                                         <i class="fas fa-eye" id="passwordToggle"></i>
                                     </button>
                                 </div>
@@ -116,16 +116,16 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4 form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" 
+                            <div class="mb-4 flex items-center">
+                                <input class="flex items-center -input" type="checkbox" name="remember" id="remember" 
                                        {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
+                                <label class="flex items-center -label" for="remember">
                                     {{ __('Keep me signed in') }}
                                 </label>
                             </div>
 
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="submit" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg">
                                     <i class="fas fa-sign-in-alt me-1"></i>
                                     {{ __('Access Admin Panel') }}
                                 </button>
@@ -134,7 +134,7 @@
 
                         @if (Route::has('password.request'))
                             <div class="text-center">
-                                <a class="btn btn-link text-decoration-none" href="{{ route('password.request') }}">
+                                <a class="btn px-4 py-2 rounded font-medium transition-colors -link text-decoration-none" href="{{ route('password.request') }}">
                                     <i class="fas fa-key me-1"></i>
                                     {{ __('Forgot Password?') }}
                                 </a>
@@ -144,12 +144,12 @@
                         <hr class="my-4">
                         
                         <div class="text-center">
-                            <div class="d-flex justify-content-center align-items-center text-muted">
-                                <i class="fas fa-shield-check text-success me-2"></i>
+                            <div class="flex justify-center items-center text-gray-500">
+                                <i class="fas fa-shield-check text-green-600 me-2"></i>
                                 <small>{{ __('Secured by SSL encryption') }}</small>
                             </div>
                             <div class="mt-2">
-                                <a href="{{ route('front.home') }}" class="btn btn-outline-secondary btn-sm">
+                                <a href="{{ route('front.home') }}" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm">
                                     <i class="fas fa-arrow-left me-1"></i>
                                     {{ __('Back to Website') }}
                                 </a>
@@ -157,8 +157,8 @@
                         </div>
                     </div>
                     
-                    <div class="card-footer bg-light text-center">
-                        <small class="text-muted">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -footer bg-gray-100 text-center">
+                        <small class="text-gray-500">
                             {{ __('Admin access is restricted to authorized personnel only') }}
                         </small>
                     </div>

@@ -8,18 +8,18 @@
     <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             @include('layouts.errors')
-            <div class="alert alert-danger fs-4 text-white d-flex align-items-center d-none" id="validationErrorsBox">
+            <div class="alert p-4 rounded-md mb-4 -danger fs-4 text-white flex items-center hidden" id="validationErrorsBox">
                 <i class="fa-solid fa-face-frown me-5"></i>
             </div>
             <div class="mb-5 py-0">
                 @include("settings.setting_menu")
                 </div>
-            <div class="card">
-                <div class="card-body py-0">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body py-0">
                     @yield('section')
                 </div>
             </div>

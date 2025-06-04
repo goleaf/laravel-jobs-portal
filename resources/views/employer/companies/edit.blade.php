@@ -8,21 +8,21 @@
     <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
 @endpush
 @section('content')
-    <div class="d-flex flex-column">
-        <div class="row">
-            <div class="col-12">
+    <div class="flex flex-column">
+        <div class="flex flex-wrap">
+            <div class="flex-1 -12">
                 @include('layouts.errors')
                 @include('flash::message')
-                <div class="alert alert-danger  hide d-none" id="editValidationErrorsBox">
+                <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox">
                     <i class="fa-solid fa-face-frown me-5"></i>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 {{ Form::model($user, ['route' => ['company.update.form', $company->id], 'method' => 'put','id'=>'editCompanyForm']) }}
                 @if($isFeaturedEnable)
-                    <div class="d-flex justify-content-end">
+                    <div class="flex justify-content-end">
                         @if($company->activeFeatured)
                             <div class="badge badge-info d-inline-block rounded">
                                 {{ __('messages.front_settings.featured') }}
@@ -30,10 +30,10 @@
                                 {{ (new Carbon\Carbon($company->activeFeatured->end_time))->format('d/m/y') }}</div>
                         @else
                             @if($isFeaturedAvilabal)
-                                <a class="btn btn-info btn-sm"
+                                <a class="btn bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm"
                                    id="makeFeatured">{{ __('messages.front_settings.make_featured') }}</a>
                                 {{--                                @else--}}
-                                {{--                                    <button class="btn btn-info btn-sm" data-bs-toggle="tooltip"--}}
+                                {{--                                    <button class="btn bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded font-medium transition-colors -sm" data-bs-toggle="tooltip"--}}
                                 {{--                                            data-bs-placement="bottom"--}}
                                 {{--                                            title="{{ __('messages.front_settings.featured_employer_not_available') }}">--}}
                                 {{--                                        {{ __('messages.front_settings.make_featured') }}</button>--}}

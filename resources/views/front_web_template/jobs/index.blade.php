@@ -15,19 +15,19 @@
 @section('content')
     <div class="Find Jobs-page">
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-3">
+                            <h1 class="text-secondary mb-3">
                                 @lang('web.web_jobs.find_jobs')
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb  justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item "><a href="{{ route('front.home') }}"
                                             class="fs-18 text-gray">@lang('web.home') </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.jobs')
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.jobs')
                                     </li>
                                 </ol>
                             </nav>
@@ -38,24 +38,24 @@
         </section>
 
         <section class="latest-job-section py-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 px-lg-3">
-                        <div class="latest-job-left br-10 px-40 bg-light mb-40">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap">
+                    <div class="flex-1 -lg-4 px-lg-3">
+                        <div class="latest-job-left br-10 px-40 bg-gray-100 mb-40">
                             <form>
-                                <div class="form-group mb-md-4 mb-3 ">
-                                    <div class="d-flex mb-3 justify-content-between flex-wrap">
+                                <div class="form-group mb-md-4 mb-3">
+                                    <div class="flex mb-3 justify-between flex-wrap">
                                         <label for="" class="fs-16 text-secondary mb-3">@lang('web.web_jobs.search_by_keywords')</label>
                                         <button
-                                            class="btn btn-sm btn-primary btn-primary-register reset-filter mb-2 px-3 py-1 ms-1">{{ __('web.reset_filter') }}</button>
+                                            class="btn px-3 py-1.5 text-sm bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register reset-filter mb-2 px-3 py-1 ms-1">{{ __('web.reset_filter') }}</button>
                                     </div>
-                                    <input type="text" class="form-control fs-14 text-gray bg-white br-10 p-3" value="{{request()->input('keywords')}}"
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" value="{{request()->input('keywords')}}"
                                        name="listing-search" id="searchByLocation"
                                        placeholder="@lang('web.web_home.job_title_keywords_company')">
                                 </div>
-                                <div class="form-group mb-md-4 mb-3 ">
+                                <div class="form-group mb-md-4 mb-3">
                                     <label for="" class="fs-16 text-secondary mb-3">@lang('web.post_menu.categories')</label>
-                                    <select class="form-select fs-14 text-gray bg-white br-10 p-3" aria-label="None"
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" aria-label="None"
                                         data-live-search="true" data-size="5" name="search-categories"
                                         id="searchCategories">
                                         <option value="">@lang('web.job_menu.none')</option>
@@ -67,11 +67,11 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group mb-md-3 mb-3 ">
+                                <div class="form-group mb-md-3 mb-3">
                                     <label for="" class="fs-16 text-secondary ">
                                         @lang('messages.candidate.candidate_skill')</label>
                                     @if ($jobSkills->isNotEmpty())
-                                        <select class="form-select fs-14 text-gray bg-white br-10 p-3" aria-label="None"
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" aria-label="None"
                                             data-live-search="true" data-size="5" name="search-skills" id="searchSkill">
                                             <option value="">@lang('web.job_menu.none')</option>
                                             @foreach ($jobSkills as $key => $value)
@@ -82,9 +82,9 @@
                                         </select>
                                     @endif
                                 </div>
-                                <div class="form-group mb-md-4 mb-3 ">
+                                <div class="form-group mb-md-4 mb-3">
                                     <label for="" class="fs-16 text-secondary mb-3">@lang('messages.candidate.gender')</label>
-                                    <select class="form-select fs-14 text-gray bg-white br-10 p-3" aria-label="None"
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" aria-label="None"
                                         data-live-search="true" data-size="5" name="search-gender" id="searchGender">
                                         <option value="">@lang('web.job_menu.none')</option>
                                         @foreach ($genders as $key => $value)
@@ -94,10 +94,10 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group mb-md-4 mb-3 ">
+                                <div class="form-group mb-md-4 mb-3">
                                     <label for="" class="fs-16 text-secondary mb-3">@lang('messages.job.career_level')</label>
                                     @if ($functionalAreas->isNotEmpty())
-                                        <select class="form-select fs-14 text-gray bg-white br-10 p-3" aria-label="None"
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" aria-label="None"
                                             data-live-search="true" data-size="5" name="search-career-level"
                                             id="searchCareerLevel">
                                             <option value="">@lang('web.job_menu.none')</option>
@@ -109,10 +109,10 @@
                                         </select>
                                     @endif
                                 </div>
-                                <div class="form-group mb-md-4 mb-3 ">
+                                <div class="form-group mb-md-4 mb-3">
                                     <label for="" class="fs-16 text-secondary mb-3">@lang('messages.job.functional_area')</label>
                                     @if ($functionalAreas->isNotEmpty())
-                                        <select class="form-select fs-14 text-gray bg-white br-10 p-3" aria-label="None"
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3" aria-label="None"
                                             data-live-search="true" data-size="5" name="search-functional-area"
                                             id="searchFunctionalArea">
                                             <option value="">@lang('web.job_menu.none')</option>
@@ -125,34 +125,34 @@
                                     @endif
                                 </div>
                                 @if ($jobTypes->isNotEmpty())
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                    <div class="form-group mb-md-4 mb-3">
                                         <label for="" class="fs-16 text-secondary mb-3">
                                             @lang('web.job_menu.type')
                                         </label>
                                         @foreach ($jobTypes as $key => $jobType)
                                             @if ($jobType->jobs_count > 0)
                                                 @if (Str::length($jobType->name) < 50)
-                                                    <div class="form-group d-flex justify-content-between mb-2">
-                                                        <label class="form-check-label fs-14 text-gray mb-2"
+                                                    <div class="form-group flex justify-between mb-2">
+                                                        <label class="flex items-center -label fs-14 text-gray mb-2"
                                                             for="{{ $jobType->id }}">
                                                             {{ html_entity_decode($jobType->name) }}
                                                             {{ $jobType->jobs_count > 0 ? '(' . $jobType->jobs_count . ')' : '' }}
                                                         </label>
-                                                        <div class="form-check ">
-                                                            <input class="form-check-input jobType" type="checkbox"
+                                                        <div class="flex items-center">
+                                                            <input class="flex items-center -input jobType" type="checkbox"
                                                                 role="switch" name="job-type" id="{{ $jobType->id }}"
                                                                 value="{{ $jobType->id }}">
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <div class="form-group d-flex justify-content-between ">
-                                                        <label class="form-check-label fs-14 text-gray mb-2"
+                                                    <div class="form-group flex justify-between">
+                                                        <label class="flex items-center -label fs-14 text-gray mb-2"
                                                             for="{{ $jobType->id }}" data-toggle="tooltip"
                                                             data-placement="bottom" title="{{ $jobType->name }}">
                                                             {{ html_entity_decode(Str::limit($jobType->name, 50, '...')) }}
                                                         </label>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input jobType" type="checkbox"
+                                                        <div class="flex items-center">
+                                                            <input class="flex items-center -input jobType" type="checkbox"
                                                                 role="switch" name="job-type" id="{{ $jobType->id }}"
                                                                 value="{{ $jobType->id }}">
                                                         </div>
@@ -181,11 +181,11 @@
                         </form>
                         <div class="job-img mb-40">
                             <img src="{{ isset($advertise_image->value) ? $advertise_image->value : asset('front_web/images/job-img.png') }}"
-                                class="w-100">
+                                class="w-full">
                         </div>
                     </div>
-                    <div class="col-lg-8 px-lg-3">
-                        <div class="job-card">
+                    <div class="flex-1 -lg-8 px-lg-3">
+                        <div class="job- bg-white shadow rounded-lg overflow-hidden">
                             @livewire('job-search')
                         </div>
                     </div>

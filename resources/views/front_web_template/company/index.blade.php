@@ -16,18 +16,18 @@
     <div class="companies-page">
         <!-- start hero section -->
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6 text-center">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center">
                         <div class="hero-content">
                             <h1 class="text-secondary mb-2">@lang('messages.companies')</h1>
                             <nav aria-label="breadcrumb ">
-                                <ol class="breadcrumb justify-content-center mb-4 pb-3">
+                                <ol class="breadcrumb justify-center mb-4 pb-3">
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">@lang('web.home')
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
                                         @lang('messages.companies')
                                     </li>
                                 </ol>

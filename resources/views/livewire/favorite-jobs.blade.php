@@ -1,23 +1,23 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap">
+                <div class="col-lg-12 flex-1 -md-12">
                     @if(session()->has('message'))
-                        <div class="alert alert-success">
+                        <div class="alert p-4 rounded-md mb-4 -success">
                             {{ session('message') }}
                         </div>
                     @endif
                 </div>
-                <div class="col-lg-12 col-md-12">
+                <div class="col-lg-12 flex-1 -md-12">
                     @if(count($favouriteJobs) > 0 || $searchByJob != '' || $filterFavouriteJobs != '')
-                        <div class="row mb-2 justify-content-end">
-                            <div class="col-md-3">
+                        <div class="flex flex-wrap mb-2 justify-content-end">
+                            <div class="flex-1 -md-3">
                                 {{ Form::select('favourite-jobs', $jobStatus, null, ['class' => 'form-control ','id'=>'favouriteJobsId','placeholder' => __('messages.common.all'), 'wire:model' => "filterFavouriteJobs"]) }}
                             </div>
-                            <div class="col-md-3">
+                            <div class="flex-1 -md-3">
                                 <input wire:model.debounce.100ms="searchByJob" type="search" id="searchByJob"
-                                       placeholder="{{ __('web.job_menu.search_job') }}" class="form-control">
+                                       placeholder="{{ __('web.job_menu.search_job') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                             </div>
                         </div>
                     @endif
@@ -25,11 +25,11 @@
                         <div class="dashboard-box-favoutite-job margin-top-0">
                             <div class="content1 with-padding">
                                 @foreach($favouriteJobs as $favouriteJob)
-                                    <div class="row hover-effect position-relative">
+                                    <div class="flex flex-wrap hover-effect position-relative">
                                         <div class="ribbon float-right favorite-job-ribbon ribbon-{{ \App\Models\Job::STATUS_COLOR[$favouriteJob->job->status] }}">
                                             {{ \App\Models\Job::STATUS[$favouriteJob->job->status] }}
                                         </div>
-                                        <div class="col-12 d-flex favorite-job-details my-4">
+                                        <div class="flex-1 -12 flex favorite-job-details my-4">
                                             <div class="job-listing">
                                                 <div class="job-listing-details">
                                                     <div class="job-listing-description">
@@ -53,7 +53,7 @@
                                                                 </li>
                                                                 @if($favouriteJob->job->job_expiry_date < Carbon\Carbon::now())
                                                                     <li>
-                                                                        <i class="far fa-calendar-times text-danger"></i>
+                                                                        <i class="far fa-calendar-times text-red-600"></i>
                                                                         {{ __('messages.job.expires_on') }}
                                                                         : {{($favouriteJob->job->job_expiry_date)->format('d M, Y') }}
                                                                     </li>
@@ -83,11 +83,11 @@
                         </div>
                         @else
                             @if($searchByJob == null || empty($searchByJob))
-                                <div class="col-lg-12 col-md-12 d-flex justify-content-center mt-4">
+                                <div class="col-lg-12 flex-1 -md-12 flex justify-center mt-4">
                                     <h5>{{ __('messages.job.no_favourite_job_found') }} </h5>
                                 </div>
                             @else
-                                <div class="col-lg-12 col-md-12 d-flex justify-content-center mt-4">
+                                <div class="col-lg-12 flex-1 -md-12 flex justify-center mt-4">
                                     <h5>{{ __('messages.job.favourite_job_not_found') }} </h5>
                                 </div>
                             @endif

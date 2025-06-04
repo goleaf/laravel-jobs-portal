@@ -1,11 +1,11 @@
-<div class="d-flex justify-content-center">
+<div class="flex justify-center">
     <a title="{{__('messages.common.edit')}}
-            " class="btn px-2 text-primary fs-3 ps-0 image-slider-edit-btn"
+            " class="btn px-2 text-primary-600 fs-3 ps-0 image-slider-edit- px-4 py-2 rounded font-medium transition-colors"
        data-id={{ $row->id }} data-bs-toggle="tooltip">
         <i class="fa-solid fa-pen-to-square"></i>
     </a>
     <a title="{{__('messages.common.delete')}}" data-id="{{ $row->id }}"
-       class="image-slider-delete-btn btn px-2 text-danger fs-3 ps-0" data-bs-toggle="tooltip">
+       class="image-slider-delete-btn px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 ps-0" data-bs-toggle="tooltip">
         <i class="fa-solid fa-trash"></i>
     </a>
 </div>

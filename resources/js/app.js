@@ -9,7 +9,6 @@ import '../assets/js/currency.js';
 
 // Third-party libraries
 import 'jquery';
-import 'bootstrap';
 import 'slick-carousel';
 import 'intl-tel-input';
 import 'intl-tel-input/build/js/utils.js';

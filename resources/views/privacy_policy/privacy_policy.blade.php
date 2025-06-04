@@ -1,5 +1,5 @@
 {{ Form::open(['route' => 'privacy.policy.update', 'id' => 'policyTerms']) }}
-<div class="row">
+<div class="flex flex-wrap">
     <div class="my-6">
         {{ Form::label('privacy_policy', __('messages.setting.privacy_policy').':', ['class' => 'form-label']) }}
         <span class="required"></span>
@@ -9,7 +9,7 @@
         <br>
     </div>
 </div>
-<div class="row">
+<div class="flex flex-wrap">
     <div class="my-6">
         {{ Form::label('terms_conditions', __('messages.setting.terms_conditions').':', ['class' => 'form-label']) }}
         <span class="required"></span>
@@ -18,7 +18,7 @@
         {{ Form::hidden('terms_conditions', null, ['id' => 'termData']) }}
     </div>
 </div>
-<div class="d-flex justify-content-end">
+<div class="flex justify-content-end">
     {{ Form::submit(__('messages.common.save'), ['class' => 'btn btn-primary']) }}
     </div>
 {{ Form::close() }}

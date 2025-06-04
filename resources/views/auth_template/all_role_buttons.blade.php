@@ -1,20 +1,19 @@
-<div class="container px-5">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="row d-flex justify-content-center mb-5 mt-4">
+<div class="container mx-auto px-5">
+    <div class="flex flex-wrap">
+        <div class="flex-1 -lg-12">
+            <div class="flex flex-wrap flex justify-center mb-5 mt-4">
                 @if(Request::segment(1) =='admin')
-                    <div class="col-lg-6 mt-2">
-                        <a class="btn btn-primary d-block admin-login">Super Admin Login</a></div>
+                    <div class="flex-1 -lg-6 mt-2">
+                        <a class="btn px-4 py-2 rounded font-medium transition-colors -primary block admin-login">Super Admin Login</a></div>
                 @elseif(Request::segment(2) =='candidate-login')
-                    <div class="col-lg-6 mt-2">
-                        <a class="btn btn-primary d-block candidate-login">Candidate Login</a></div>
+                    <div class="flex-1 -lg-6 mt-2">
+                        <a class="btn px-4 py-2 rounded font-medium transition-colors -primary block candidate-login">Candidate Login</a></div>
                 @elseif(Request::segment(2) =='employee-login')
-                    <div class="col-lg-6 mt-2">
-                        <a class="btn btn-primary d-block employee-login">Employee Login</a></div>
+                    <div class="flex-1 -lg-6 mt-2">
+                        <a class="btn px-4 py-2 rounded font-medium transition-colors -primary block employee-login">Employee Login</a></div>
                 @endif
-                <div class="col-lg-6 mt-2">
-                    <a href="{{url('/')}}" class="btn
-                        btn-info d-block front-site">Front Site</a>                 
+                <div class="flex-1 -lg-6 mt-2">
+                    <a href="{{url('/')}}" class="btn px-4 py-2 rounded font-medium transition-colors -info block front-site">Front Site</a>                 
                 </div>
             </div>
         </div>

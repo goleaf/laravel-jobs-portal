@@ -4,13 +4,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">{{ __('messages.job_type.job_type_detail') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close"
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
             </div>
             {{ Form::open(['id' => 'showForm']) }}
             <div class="modal-body">
-                <div class="alert alert-danger  hide d-none" id="jobTypeValidationErrorsBox"></div>
+                <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="jobTypeValidationErrorsBox"></div>
                 <div class="mb-5">
                     {{ Form::label('name',__('messages.job_type.name').(':'), ['class' => 'form-label']) }}
                         <p id="showName" class="text-gray-600"></p>

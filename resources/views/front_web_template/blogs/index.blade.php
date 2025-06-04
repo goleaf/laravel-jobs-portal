@@ -9,18 +9,18 @@
     <div class="Blog-page">
         <!-- start hero section -->
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6 text-center">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center">
                         <div class="hero-content">
                             <h1 class="text-secondary mb-2">{{ __('messages.post.blog') }}</h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
                                         {{ __('messages.post.blog') }}
                                     </li>
                                 </ol>
@@ -33,30 +33,30 @@
         <!-- end hero section -->
         <!-- start blog-section -->
         <section class="mani-blog recent-blog-section pt-60 pb-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="blog-card">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap">
+                    <div class="flex-1 -lg-8">
+                        <div class="blog- bg-white shadow rounded-lg overflow-hidden">
                             @if (count($blogs) > 0)
                                 @foreach ($blogs as $blog)
                                     <div class="mb-40 {{ $loop->last ? '' : 'mb-40' }}">
-                                        <div class="card d-flex flex-md-row">
-                                            <div class="card-img-top position-relative">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden flex flex-md- flex flex-wrap">
+                                            <div class="bg-white shadow rounded-lg overflow-hidden -img-top position-relative">
                                                 <img src="{{ !empty($blog->blog_image_url) ? $blog->blog_image_url : asset('front_web/images/blog-1.png') }}"
-                                                    class="card-img-top" alt="Employee Motivation" />
+                                                    class="bg-white shadow rounded-lg overflow-hidden -img-top" alt="Employee Motivation" />
                                                 <div class="overlay position-absolute">
                                                     <a href="{{ route('front.posts.details', $blog->id) }}"
-                                                        class="btn text-white fs-16">
+                                                        class="px-4 py-2 rounded font-medium transition-colors text-white fs-16">
                                                         {{ __('web.post_menu.read_more') }}
                                                     </a>
                                                 </div>
                                             </div>
                                             <a href="{{ route('front.posts.details', $blog->id) }}">
-                                            <div class="card-body py-30 my-auto">
-                                                <h5 class="card-title fs-18 text-secondary">
+                                            <div class="bg-white shadow rounded-lg overflow-hidden -body py-30 my-auto">
+                                                <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 text-secondary">
                                                     {{ html_entity_decode($blog->title) }}
                                                 </h5>
-                                                <p class="card-text fs-14 text-gray text-break">
+                                                <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray text-break">
                                                     {!! !empty(strip_tags($blog->description))
                                                         ? Str::limit(strip_tags($blog->description), 150, '...')
                                                         : __('messages.common.n/a') !!}
@@ -76,7 +76,7 @@
                                     <span class="">{{ __('messages.post.no_posts_available') }}</span>
                                 </h6>
                             @endif
-                            <div class="mt-5 d-flex align-items-center justify-content-center">
+                            <div class="mt-5 flex items-center justify-center">
                                 {{ $blogs->withQueryString()->links() }}
                             </div>
                         </div>

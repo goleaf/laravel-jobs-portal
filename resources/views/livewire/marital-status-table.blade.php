@@ -1,12 +1,12 @@
 <div>
-    <div class="d-flex flex-column">
+    <div class="flex flex-column">
         <div>
             @if($this->showButtonOnHeader)
                 @include($this->buttonComponent)
             @endif
 
-            <div class="table-responsive">
-                <table class="table table-striped">
+            <div class="w-full divide-y divide-gray-200 -responsive">
+                <table class="table w-full divide-y divide-gray-200 -striped">
                     <thead>
                         <tr>
                             @foreach($columns as $column)
@@ -56,7 +56,7 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="flex justify-between items-center mt-3">
                 <div>
                     @if($rows->total() > 0)
                         <span>{{ __('Showing') }}</span>

@@ -4,21 +4,21 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container mx-auto -fluid">
+        <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('Transactions Management') }}</h1>
-            <a href="{{ route('admin.transactions.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.transactions.create') }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
                 <i class="fas fa-plus"></i> {{ __('Add Transaction') }}
             </a>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ __('All Transactions') }}</h3>
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden -header">
+                <h3 class="bg-white shadow rounded-lg overflow-hidden -title">{{ __('All Transactions') }}</h3>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+            <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                <div class="w-full divide-y divide-gray-200 -responsive">
+                    <table class="table odd:bg-gray-50 w-full divide-y divide-gray-200 -hover">
                         <thead>
                             <tr>
                                 <th>{{ __('ID') }}</th>
@@ -40,26 +40,26 @@
                                         @if($transaction->invoice_id)
                                             <span class="badge bg-info">{{ $transaction->invoice_id }}</span>
                                         @else
-                                            <span class="text-muted">N/A</span>
+                                            <span class="text-gray-500">N/A</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center">
+                                        <div class="flex items-center">
                                             @if($transaction->user->avatar_url)
                                                 <img src="{{ $transaction->user->avatar_url }}" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
                                             @else
-                                                <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                                <div class="bg-secondary rounded-circle me-2 flex items-center justify-center" style="width: 30px; height: 30px;">
                                                     <i class="fas fa-user text-white"></i>
                                                 </div>
                                             @endif
                                             <div>
                                                 <div class="fw-bold">{{ $transaction->user->full_name }}</div>
-                                                <small class="text-muted">{{ $transaction->user->email }}</small>
+                                                <small class="text-gray-500">{{ $transaction->user->email }}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="fw-bold text-success">
+                                        <span class="fw-bold text-green-600">
                                             ${{ number_format($transaction->amount, 2) }}
                                         </span>
                                     </td>
@@ -67,7 +67,7 @@
                                         @if($transaction->payment_type)
                                             <span class="badge bg-secondary">{{ ucfirst($transaction->payment_type) }}</span>
                                         @else
-                                            <span class="text-muted">N/A</span>
+                                            <span class="text-gray-500">N/A</span>
                                         @endif
                                     </td>
                                     <td>
@@ -75,22 +75,22 @@
                                             @case('approved')
                                             @case('paid')
                                             @case('completed')
-                                                <span class="badge bg-success">{{ __('Approved') }}</span>
+                                                <span class="badge bg-green-600">{{ __('Approved') }}</span>
                                                 @break
                                             @case('rejected')
                                             @case('failed')
-                                                <span class="badge bg-danger">{{ __('Rejected') }}</span>
+                                                <span class="badge bg-red-600">{{ __('Rejected') }}</span>
                                                 @break
                                             @case('pending')
-                                                <span class="badge bg-warning">{{ __('Pending') }}</span>
+                                                <span class="badge bg-yellow-500">{{ __('Pending') }}</span>
                                                 @break
                                             @default
-                                                <span class="badge bg-light text-dark">{{ ucfirst($transaction->status ?? 'Unknown') }}</span>
+                                                <span class="badge bg-gray-100 text-dark">{{ ucfirst($transaction->status ?? 'Unknown') }}</span>
                                         @endswitch
                                     </td>
                                     <td>
                                         @if($transaction->meta)
-                                            <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#metaModal{{ $transaction->id }}">
+                                            <button type="button" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" data-bs-toggle="modal" data-bs-target="#metaModal{{ $transaction->id }}">
                                                 <i class="fas fa-info-circle"></i> {{ __('View') }}
                                             </button>
                                             
@@ -100,7 +100,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">{{ __('Transaction Meta') }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <pre>{{ json_encode(json_decode($transaction->meta), JSON_PRETTY_PRINT) }}</pre>
@@ -109,24 +109,24 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="text-muted">No meta</span>
+                                            <span class="text-gray-500">No meta</span>
                                         @endif
                                     </td>
                                     <td>
                                         <small>{{ $transaction->created_at->format('M d, Y H:i') }}</small>
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="btn btn-sm btn-outline-info" title="{{ __('View') }}">
+                                        <div class="px-4 py-2 rounded font-medium transition-colors -group" role="group">
+                                            <a href="{{ route('admin.transactions.show', $transaction->id) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-info" title="{{ __('View') }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="btn btn-sm btn-outline-warning" title="{{ __('Edit') }}">
+                                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-warning" title="{{ __('Edit') }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="{{ __('Delete') }}">
+                                                <button type="submit" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -outline-danger" title="{{ __('Delete') }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -136,8 +136,8 @@
                             @empty
                                 <tr>
                                     <td colspan="9" class="text-center py-4">
-                                        <div class="text-muted">
-                                            <i class="fas fa-credit-card fa-2x mb-2"></i>
+                                        <div class="text-gray-500">
+                                            <i class="fas fa-credit- bg-white shadow rounded-lg overflow-hidden fa-2x mb-2"></i>
                                             <p>{{ __('No transactions found') }}</p>
                                         </div>
                                     </td>
@@ -148,7 +148,7 @@
                 </div>
 
                 @if($transactions->hasPages())
-                    <div class="d-flex justify-content-center mt-4">
+                    <div class="flex justify-center mt-4">
                         {{ $transactions->links() }}
                     </div>
                 @endif

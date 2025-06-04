@@ -86,16 +86,16 @@
 <!--begin::Body-->
 <body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : '' }}>
 <!--begin::Main-->
-<div class="d-flex flex-column flex-root">
-    <div class="d-flex flex-row flex-column-fluid">
-        <div class="d-flex flex-column flex-row-fluid">
+<div class="flex flex-column flex-root">
+    <div class="flex flex- flex flex-wrap flex-column-fluid">
+        <div class="flex flex-column flex- flex flex-wrap -fluid">
             <header class="bg-gradient">
-                <nav class="navbar navbar-expand-lg">
-                    <div class="d-flex align-items-center my-3 mx-5 ms-auto">
-                        <ul class="navbar-nav d-flex justify-content-end align-items-lg-center w-100">
+                <nav class="navbar bg-white shadow-sm -expand-lg">
+                    <div class="flex items-center my-3 mx-5 ms-auto">
+                        <ul class="bg-white shadow-sm -nav flex justify-content-end align-items-lg-center w-full">
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a class="nav-link btn text-white dropdown-toggle language-dropdown-btn px-4 py-2" type="button"
+                                    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium btn text-white dropdown-toggle language-dropdown- px-4 py-2 rounded font-medium transition-colors px-4 py-2" type="button"
                                             aria-expanded="false">
                                         {{ getCurrentLanguageName() }}
                                     </a>
@@ -104,7 +104,7 @@
                                             <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : '' }}"
                                                 data-prefix-value="{{ $key }}">
                                                 <a href="javascript:void(0)"
-                                                    class="dropdown-item text-gray d-flex align-items-center {{ checkLanguageSession() == $key ? 'active' : '' }}">
+                                                    class="dropdown-item text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
                                                     @if (array_key_exists($key, \App\Models\User::LANGUAGES_IMAGE))
                                                         @foreach (\App\Models\User::LANGUAGES_IMAGE as $imageKey => $imageValue)
                                                             @if ($imageKey == $key)
@@ -113,7 +113,7 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        <i class="fa fa-flag me-2 fs-7 text-danger" aria-hidden="true"
+                                                        <i class="fa fa-flag me-2 fs-7 text-red-600" aria-hidden="true"
                                                             style="width: 20px;"></i>
                                                     @endif
                                                     {{ $value }}
@@ -127,13 +127,13 @@
                     </div>
                 </nav>
             </header>
-            <div class="content d-flex flex-column flex-column-fluid pt-7">
-                <div class='d-flex flex-wrap flex-column-fluid'>
+            <div class="content flex flex-column flex-column-fluid pt-7">
+                <div class="flex flex-wrap flex-column-fluid">
                     @yield('content')
                 </div>
             </div>
-            <div class='container-fluid'>
-                <footer class="border-top w-100 pt-4 mt-7 text-center">
+            <div class="container mx-auto -fluid">
+                <footer class="border-top w-full pt-4 mt-7 text-center">
 {{--                    <p class="fs-6 text-gray-600">{{$settings['copy_right_text']}} <a href="{{route('front.home')}}" class="text-decoration-none">--}}
 {{--                            {{$settings['application_name']}}</a>--}}
 {{--                    </p>--}}

@@ -1,5 +1,5 @@
-<div class="col-lg-4">
-    <div class="Categories br-10 px-40 bg-light mb-40">
+<div class="flex-1 -lg-4">
+    <div class="Categories br-10 px-40 bg-gray-100 mb-40">
         <h5 class="fs-18 text-secondary mb-4">{{ __('web.post_menu.categories') }}</h5>
         @foreach ($blogCategories as $blogCategory)
             @if ($blogCategory->post_assign_categories_count > 0)
@@ -12,10 +12,10 @@
             @endif
         @endforeach
     </div>
-    <div class="recent-post-section br-10 px-40 bg-light">
+    <div class="recent-post-section br-10 px-40 bg-gray-100">
         <h5 class="fs-18 text-secondary mb-4">{{ __('web.web_blog.recent_posts') }}</h5>
         @foreach ($popularBlogs as $popularBlog)
-            <div class="recent-post d-flex mb-40">
+            <div class="recent-post flex mb-40">
                 <div class="img">
                     <a href="{{ route('front.posts.details',$popularBlog->id) }}">
                         <img src="{{ !empty($popularBlog->blog_image_url)?$popularBlog->blog_image_url:asset('assets/img/infyom-logo.png') }}" class="recent-post-img">

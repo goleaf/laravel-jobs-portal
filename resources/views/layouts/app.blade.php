@@ -42,20 +42,20 @@
 <!--begin::Body-->
 
 <body class="overflow-x-hidden">
-    <div class="d-flex flex-column flex-root vh-100">
-        <div class="d-flex flex-row flex-column-fluid">
+    <div class="flex flex-column flex-root vh-100">
+        <div class="flex flex- flex flex-wrap flex-column-fluid">
             @include('layouts.sidebar')
-            <div class="wrapper d-flex flex-column flex-row-fluid">
-                <div class='container-fluid d-flex align-items-stretch justify-content-between px-0'>
+            <div class="wrapper flex flex-column flex- flex flex-wrap -fluid">
+                <div class="container mx-auto -fluid flex align-items-stretch justify-between px-0">
                     @include('layouts.header')
                 </div>
-                <div class='content d-flex flex-column flex-column-fluid pt-7'>
+                <div class="content flex flex-column flex-column-fluid pt-7">
                     @yield('header_toolbar')
-                    <div class='d-flex flex-wrap flex-column-fluid'>
+                    <div class="flex flex-wrap flex-column-fluid">
                         @yield('content')
                     </div>
                 </div>
-                <div class='container-fluid'>
+                <div class="container mx-auto -fluid">
                     @include('layouts.footer')
                 </div>
             </div>

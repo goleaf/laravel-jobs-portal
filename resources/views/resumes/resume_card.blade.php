@@ -1,13 +1,13 @@
-<div class="col-xl-4 col-md-6 candidate-card">
+<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee position-relative mb-5 border-hover-primary employee-border">
         <div class="employee-listing-details">
-            <div class="d-flex employee-listing-description align-items-center justify-content-center flex-column">
+            <div class="flex employee-listing-description items-center justify-center flex-column">
                 <div class="pl-0 mb-2 employee-avatar">
                     <img src="{{ $candidateResume->candidate->candidate_url }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
-                <div class="mb-auto w-100 employee-data">
-                    <div class="d-flex justify-content-center align-items-center w-100">
+                <div class="mb-auto w-full employee-data">
+                    <div class="flex justify-center items-center w-full">
                         <div>
                             <span class="text-decoration-none text-color-gray one-line-ellip">{{ $candidateResume->candidate->user->full_name}}</span>
                         </div>

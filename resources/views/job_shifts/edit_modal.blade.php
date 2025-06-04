@@ -4,13 +4,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">{{ __('messages.job_shift.edit_job_shift') }}</h3>
-            <button type="button" aria-label="Close" class="btn-close"
+            <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                     data-bs-dismiss="modal">
             </button>
         </div>
         {{ Form::open(['id'=>'editJobShiftForm']) }}
         <div class="modal-body">
-            <div class="alert alert-danger  hide d-none" id="editValidationErrorsBox"></div>
+            <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="editValidationErrorsBox"></div>
             {{ Form::hidden('jobShiftId',null,['id'=>'jobShiftId']) }}
             <div class="mb-5">
                 {{ Form::label('shift',__('messages.job_shift.shift').(':'), ['class' => 'form-label']) }}
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer pt-0">
             {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'jobShiftEditSaveBtn','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-            <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
+            <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0"
                     id="btnEditCancel"
                     data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>

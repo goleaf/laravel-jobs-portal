@@ -66,7 +66,7 @@
 
 <body style="background-color: #edf2f7">
     <div style=" border-radius: 5px; padding: 15px; margin: 50px auto; width: 100%;">
-        <table class="table-class" style="background-color: #fff;">
+        <table class="w-full divide-y divide-gray-200 -class" style="background-color: #fff;">
             <tr>
                 <td>
                     <table width="100%">

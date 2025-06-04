@@ -3,14 +3,14 @@
     Register
 @endsection
 @section('content')
-    <div class="card card-primary">
-        <div class="card-header"><h4>Register</h4></div>
+    <div class="card bg-white shadow rounded-lg overflow-hidden -primary">
+        <div class="bg-white shadow rounded-lg overflow-hidden -header"><h4>Register</h4></div>
 
-        <div class="card-body pt-1">
+        <div class="bg-white shadow rounded-lg overflow-hidden -body pt-1">
             <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                 @csrf
                 @if ($errors->any())
-                    <div class="alert alert-danger p-0">
+                    <div class="alert p-4 rounded-md mb-4 -danger p-0">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -18,12 +18,12 @@
                         </ul>
                     </div>
                 @endif
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="flex flex-wrap">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
-                            <label for="first_name">First Name</label><span class="text-danger">*</span>
+                            <label for="first_name">First Name</label><span class="text-red-600">*</span>
                             <input id="firstName" type="text"
-                                   class="form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("first_name') ? ' is-invalid' : '' }}"
                                    name="first_name"
                                    tabindex="1" placeholder="Enter First Name" value="{{ old('first_name') }}"
                                    autofocus>
@@ -32,11 +32,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
                             <label for="last_name">Last Name</label>
                             <input id="lastName" type="text"
-                                   class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("last_name') ? ' is-invalid' : '' }}"
                                    name="last_name"
                                    tabindex="1" placeholder="Enter Last name" value="{{ old('last_name') }}"
                                    autofocus>
@@ -45,11 +45,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
-                            <label for="email">Email</label><span class="text-danger">*</span>
+                            <label for="email">Email</label><span class="text-red-600">*</span>
                             <input id="email" type="email"
-                                   class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("email') ? ' is-invalid' : '' }}"
                                    placeholder="Enter Email address" name="email" tabindex="1"
                                    value="{{ old('email') }}"
                                    required autofocus>
@@ -58,11 +58,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
                             <label for="phone">Phone</label>
                             <input id="phone" type="text"
-                                   class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("phone') ? ' is-invalid' : '' }}"
                                    placeholder="Enter Phone Number" name="phone" tabindex="1" value="{{ old('phone') }}"
                                    autofocus>
                             <div class="invalid-feedback">
@@ -70,32 +70,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
                             <label for="password" class="control-label">Password</label><span
-                                    class="text-danger">*</span>
+                                    class="text-red-600">*</span>
                             <input id="password" type="password"
-                                   class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("password') ? ' is-invalid': '' }}"
                                    placeholder="Set account password" name="password" tabindex="2" required>
                             <div class="invalid-feedback">
                                 {{ $errors->first('password') }}
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="flex-1 -md-6">
                         <div class="form-group">
                             <label for="password_confirmation" class="control-label">Confirm Password</label>
                             <input id="password_confirmation" type="password" placeholder="Confirm account password"
-                                   class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid': '' }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ $errors->has("password_confirmation') ? ' is-invalid': '' }}"
                                    name="password_confirmation" tabindex="2">
                             <div class="invalid-feedback">
                                 {{ $errors->first('password_confirmation') }}
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mt-4">
+                    <div class="flex-1 -md-12 mt-4">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                            <button type="submit" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-6 py-3 text-lg px-4 py-2 rounded font-medium transition-colors -block" tabindex="4">
                                 Register
                             </button>
                         </div>
@@ -104,7 +104,7 @@
             </form>
         </div>
     </div>
-    <div class="mt-5 text-muted text-center">
+    <div class="mt-5 text-gray-500 text-center">
         Already have an account? <a href="{{ route('login') }}">Sign In</a>
     </div>
 @endsection

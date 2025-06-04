@@ -8,11 +8,11 @@
     <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="d-flex flex-column">
+    <div class="flex flex-column">
         @include('layouts.errors')
 
-        <div class="card">
-            <div class="card-body">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 {{ Form::open(['route' => 'job.store','id' => 'createJobForm']) }}
                 @include('employer.jobs.fields')
                 {{ Form::close() }}

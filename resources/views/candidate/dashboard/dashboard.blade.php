@@ -7,9 +7,9 @@
 @endpush
 @section('content')
 @include('flash::message')
-<div class="card mb-5 mb-xl-10">
-    <div class="card-body pt-9 pb-0">
-        <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+<div class="bg-white shadow rounded-lg overflow-hidden mb-5 mb-xl-10">
+    <div class="bg-white shadow rounded-lg overflow-hidden -body pt-9 pb-0">
+        <div class="flex flex-wrap flex-sm-nowrap mb-3">
             <div class="me-7 mb-4">
                 <div class="">
                     <img height="150" width="150" src="{{ getCompanyLogo()}}" alt="image"
@@ -17,27 +17,27 @@
                 </div>
             </div>
             <div class="flex-grow-1">
-                <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
-                    <div class="d-flex flex-column">
-                        <div class="align-items-center mb-2">
+                <div class="flex justify-between align-items-start flex-wrap mb-2">
+                    <div class="flex flex-column">
+                        <div class="items-center mb-2">
                             <a class="text-gray-900 text-hover-primary fs-2 me-1 text-decoration-none">{{ html_entity_decode($user->full_name) }}</a>
                         </div>
                         <div class=" flex-wrap fs-6 mb-4 pe-2">
-                            <a class="d-flex align-items-center text-gray-600 text-hover-primary me-5 mb-2 text-decoration-none">
+                            <a class="flex items-center text-gray-600 text-hover-primary me-5 mb-2 text-decoration-none">
                                 <i class="fa fa-phone"></i>&nbsp;
                                 {{ !empty($user->phone) ?  $user->phone : __('messages.candidate_dashboard.no_not_available') }}
                             </a>
-                            <a class="d-flex align-items-center text-gray-600 text-hover-primary me-5 mb-2 text-decoration-none">
+                            <a class="flex items-center text-gray-600 text-hover-primary me-5 mb-2 text-decoration-none">
                                 <i class="fa-solid fa-location-dot fs-3 me-2"></i>
                                 {{ !empty($candidate->city_name) ?  $candidate->city_name. ', '  .$candidate->state_name . ', ' . $candidate->country_name : (!empty($candidate->country_id) ? $candidate->country_name :   __('messages.candidate_dashboard.location_information')) }}
                             </a>
-                            <a class="d-flex align-items-center text-gray-600 text-hover-primary mb-2 text-decoration-none">
+                            <a class="flex items-center text-gray-600 text-hover-primary mb-2 text-decoration-none">
                                 <i class="fa-solid fa-envelope  me-2"></i>
                                 {{ $user->email}}</a>
                         </div>
                     </div>
-                    <div class="d-flex my-4">
-                        <a href="{{ route('candidate.profile') }}" class="btn btn-sm btn-primary me-2">
+                    <div class="flex my-4">
+                        <a href="{{ route('candidate.profile') }}" class="btn px-3 py-1.5 text-sm px-4 py-2 rounded font-medium transition-colors -primary me-2">
                             {{ __('messages.user.edit_profile') }}
                         </a>
                     </div>
@@ -46,10 +46,10 @@
         </div>
     </div>
 </div>
-<div class="row g-5 g-xl-8">
-    <div class="col-xxl-4 col-xl-4 col-sm-6 widget">
-        <div class="bg-success shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-            <div class="bg-green-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+<div class="flex flex-wrap g-5 g-xl-8">
+    <div class="col-xxl-4 col-xl-4 flex-1 -sm-6 widget">
+        <div class="bg-green-600 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+            <div class="bg-green-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                 <i class="fa fa-eye text-white fs-1-xl"></i>
             </div>
             <div class="text-end text-white">
@@ -58,10 +58,10 @@
             </div>
         </div>
     </div>
-    <div class="col-xxl-4 col-xl-4 col-sm-6 widget">
+    <div class="col-xxl-4 col-xl-4 flex-1 -sm-6 widget">
         <a href="{{ route('favourite.companies') }}" class=" text-decoration-none">
-        <div class="bg-dark shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-            <div class="bg-gray-700 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+        <div class="bg-gray-800 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+            <div class="bg-gray-700 widget-icon rounded-10 me-2 flex items-center justify-center">
                 <i class="fas fa-users  fs-1-xl {{getLoggedInUser()->theme_mode ? 'text-muted' : 'text-white'}}"></i>
             </div>
             <div class="text-end text-light">
@@ -71,9 +71,9 @@
         </div>
         </a>
     </div>
-    <div class="col-xxl-4 col-xl-4 col-sm-6 widget">
-        <div class="bg-warning shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-            <div class="bg-yellow-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+    <div class="col-xxl-4 col-xl-4 flex-1 -sm-6 widget">
+        <div class="bg-yellow-500 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+            <div class="bg-yellow-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                 <i class="fa fa-briefcase fs-1-xl text-white"></i>
             </div>
             <div class="text-end text-white">

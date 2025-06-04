@@ -4,13 +4,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">{{ __('messages.noticeboard.new_noticeboard') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close"
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
             </div>
             {{ Form::open(['id'=>'addNoticeboardForm']) }}
             <div class="modal-body">
-                <div class="alert alert-danger fs-4 text-white d-flex align-items-center  d-none"
+                <div class="alert p-4 rounded-md mb-4 -danger fs-4 text-white flex items-center hidden"
                      id="salaryPeriodValidationErrorsBox">
                     <i class="fa-solid fa-face-frown me-5"></i>
                 </div>
@@ -29,8 +29,8 @@
                 <div class="mb-5">
                     {{ Form::label('status',__('messages.common.status').(':'), ['class' => 'form-label']) }}
                     <br>
-                    <div class="form-check form-switch mb-0">
-                        <input class="form-check-input is-active" name="is_active" type="checkbox"
+                    <div class="flex items-center form-switch mb-0">
+                        <input class="flex items-center -input is-active" name="is_active" type="checkbox"
                                value="1"
                                tabindex="8" id="active" checked>
                     </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="modal-footer pt-0">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'noticeboardSaveBtn','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
+                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0"
                         id="btnCancel"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
                 </div>

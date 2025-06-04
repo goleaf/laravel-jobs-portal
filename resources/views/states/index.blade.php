@@ -3,9 +3,9 @@
     {{ __('messages.state.states') }}
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="container mx-auto -fluid">
         @include('flash::message')
-        <div class="d-flex flex-column ">
+        <div class="flex flex-column">
             <livewire:state-table/>
         </div>
     </div>

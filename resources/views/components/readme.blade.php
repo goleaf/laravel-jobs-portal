@@ -17,7 +17,7 @@ Icons can be used in your Blade templates like this:
 By default, all icons have a width and height of `1.25rem` (w-5 h-5). You can customize this by passing a `class` attribute:
 
 ```blade
-<x-icons.briefcase class="w-6 h-6 text-primary" />
+<x-icons.briefcase class="w-6 h-6 text-primary-600" />
 ```
 
 ## Available Icons

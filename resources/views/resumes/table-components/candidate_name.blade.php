@@ -1,10 +1,10 @@
-<div class="d-flex align-items-center">
+<div class="flex items-center">
     <a>
         <div class="image image-mini image-circle me-3">
             <img src="{{ $row->candidate->candidate_url }}" alt="" class="user-img">
         </div>
     </a>
-    <div class="d-flex flex-column">
+    <div class="flex flex-column">
         {{ $row->candidate->user->full_name }}
     </div>
 </div>

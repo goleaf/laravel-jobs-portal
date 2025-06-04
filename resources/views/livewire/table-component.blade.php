@@ -1,7 +1,7 @@
 <div>
     <div class="bg-white shadow rounded-lg mb-6">
         <div class="px-4 py-5 sm:p-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+            <div class="flex flex- flex-1 md:flex- flex flex-wrap md:items-center md:justify-between mb-4">
                 <!-- Left side - Search and Per Page -->
                 <div class="flex items-center space-x-4 mb-4 md:mb-0">
                     <div class="relative">
@@ -78,7 +78,7 @@
                                                             id="{{ $filter['key'] }}_{{ $value }}"
                                                             wire:model.live="filters.{{ $filter['key'] }}" 
                                                             value="{{ $value }}"
-                                                            class="h-4 w-4 text-primary-600 border-gray-300 rounded"
+                                                            class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
                                                         >
                                                         <label for="{{ $filter['key'] }}_{{ $value }}" class="ml-2 text-sm text-gray-700">
                                                             {{ $label }}
@@ -153,12 +153,12 @@
             @if(count($filterPills) > 0)
             <div class="flex flex-wrap gap-2 mb-4">
                 @foreach($filterPills as $key => $pill)
-                <span class="inline-flex rounded-full items-center py-1 pl-3 pr-1 text-sm font-medium bg-primary-100 text-primary-800">
+                <span class="inline-flex rounded-full items-center py-1 pl-3 pr-1 text-sm font-medium bg-primary-600 -100 text-primary-600 -800">
                     {{ $pill['label'] }}: {{ $pill['value'] }}
                     <button 
                         wire:click="$set('filters.{{ $key }}', null)" 
                         type="button" 
-                        class="flex-shrink-0 ml-0.5 h-5 w-5 rounded-full inline-flex items-center justify-center text-primary-600 hover:bg-primary-200 hover:text-primary-800 focus:outline-none"
+                        class="flex-shrink-0 ml-0.5 h-5 w-5 rounded-full inline-flex items-center justify-center text-primary-600 hover: bg-primary-600 -200 hover: text-primary-600 -800 focus:outline-none"
                     >
                         <span class="sr-only">{{ __('Remove filter') }}</span>
                         <x-icons.close />
@@ -178,7 +178,7 @@
                                 <input 
                                     type="checkbox" 
                                     wire:model.live="selectAll"
-                                    class="h-4 w-4 text-primary-600 border-gray-300 rounded"
+                                    class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
                                 >
                             </th>
                             @endif
@@ -186,7 +186,7 @@
                             @foreach($columns as $column)
                             <th 
                                 scope="col" 
-                                class="table-head"
+                                class="w-full divide-y divide-gray-200 -head"
                                 @if($column['sortable'] ?? false)
                                     wire:click="sortBy('{{ $column['key'] }}')"
                                     style="cursor: pointer;"
@@ -223,18 +223,18 @@
                         @forelse($rows as $row)
                         <tr wire:key="{{ $row->id }}" class="hover:bg-gray-50">
                             @if(count($bulkActions) > 0)
-                            <td class="table-cell">
+                            <td class="w-full divide-y divide-gray-200 -cell">
                                 <input 
                                     type="checkbox" 
                                     wire:model.live="selected" 
                                     value="{{ $row->id }}"
-                                    class="h-4 w-4 text-primary-600 border-gray-300 rounded"
+                                    class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
                                 >
                             </td>
                             @endif
                             
                             @foreach($columns as $column)
-                            <td class="table-cell">
+                            <td class="w-full divide-y divide-gray-200 -cell">
                                 @if(isset($column['format']))
                                     {!! $column['format']($row) !!}
                                 @else
@@ -244,7 +244,7 @@
                             @endforeach
                             
                             @if(method_exists($this, 'getRowActions'))
-                            <td class="table-cell">
+                            <td class="w-full divide-y divide-gray-200 -cell">
                                 <div class="flex items-center space-x-3">
                                     @foreach($this->getRowActions($row) as $action)
                                     <button 

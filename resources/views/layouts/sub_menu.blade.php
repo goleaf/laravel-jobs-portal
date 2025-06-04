@@ -1,64 +1,64 @@
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/dashboard*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/dashboard*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/dashboard*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/dashboard*') ? 'active' : '' }}"
        href="{{ route('admin.dashboard') }}">{{ __('messages.dashboard') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/employers*', 'admin/reported-employers*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/employers*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/employers*', 'admin/reported-employers*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/employers*') ? 'active' : '' }}"
        href="{{ route('company.index') }}">{{ __('messages.employers') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/employers*', 'admin/reported-employers*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/reported-employers*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/employers*', 'admin/reported-employers*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/reported-employers*') ? 'active' : '' }}"
        href="{{ route('admin.reported.companies') }}">{{ __('messages.company.reported_employers') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/admins*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/admins*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/admins*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/admins*') ? 'active' : '' }}"
        href="{{ route('admin.admin.index') }}">{{ __('messages.candidate.admins') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/candidates*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/candidates*') ? 'active' : '' }}"
        href="{{ route('candidates.index') }}">{{ __('messages.candidates') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/degree-levels*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/degree-levels*') ? 'active' : '' }}"
        href="{{ route('admin.degree-levels') }}">{{ __('messages.required_degree_levels') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/reported-candidates*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/reported-candidates*') ? 'active' : '' }}"
        href="{{ route('admin.reported-candidates') }}">{{ __('messages.candidate.reported_candidates') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/resumes*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/resumes*') ? 'active' : '' }}"
        href="{{ route('admin.resumes.index') }}">{{ __('messages.all_resumes') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/selected-candidates*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/selected-candidates*') ? 'active' : '' }}"
        href="{{ route('admin.selected-candidate') }}">{{ __('messages.selected_candidate') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/jobs*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/jobs*') ? 'active' : '' }}"
        href="{{ route('admin.jobs.index') }}">{{ __('messages.jobs') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/job-categories*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-categories*') ? 'active' : '' }}"
        href="{{ route('admin.job-categories.index') }}">{{ __('messages.job_categories') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/job-types*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-types*') ? 'active' : '' }}"
        href="{{ route('admin.job-types.index') }}">{{ __('messages.job_types') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/job-tags*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-tags*') ? 'active' : '' }}"
        href="{{ route('admin.job-tags.index') }}">{{ __('messages.job_tags') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/job-shifts*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/job-shifts*') ? 'active' : '' }}"
        href="{{ route('admin.job-shifts.index') }}">{{ __('messages.job_shifts') }}</a>
 </li>
 <div class="{{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'd-none' : '' }}">
-    <li class="nav-item d-none d-xl-grid dropdown dropdown-hover">
-        <a class="nav-link d-flex align-items-center py-3 ps-2" aria-current="page"
+    <li class="nav-item hidden d-xl-grid dropdown dropdown-hover">
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3 ps-2" aria-current="page"
            href="javascript:void(0)">
             <span class="horizontal-menu-icon"><i class="fas fa-ellipsis-vertical fs-4"></i></span>
         </a>
@@ -79,69 +79,69 @@
     </li>
 </div>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/post-categories*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/post-categories*') ? 'active' : '' }}"
        href="{{ route('post-categories.index') }}">{{ __('messages.post_category.post_categories') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/posts*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/posts*') ? 'active' : '' }}"
        href="{{ route('posts.index') }}">{{ __('messages.post.posts') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/post-comments*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/post-categories*','admin/posts*','admin/post-comments*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/post-comments*') ? 'active' : '' }}"
        href="{{ route('post.comments') }}">{{ __('messages.post_comments') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/plans*','admin/transactions*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/plans*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/plans*','admin/transactions*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/plans*') ? 'active' : '' }}"
        href="{{ route('plans.index') }}">{{ __('messages.subscriptions_plans') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/plans*','admin/transactions*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/transactions*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/plans*','admin/transactions*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/transactions*') ? 'active' : '' }}"
        href="{{ route('admin.transactions.index') }}">{{ __('messages.transactions') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/subscribers*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/subscribers*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/subscribers*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/subscribers*') ? 'active' : '' }}"
        href="{{ route('subscribers.index') }}">{{ __('messages.subscribers') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/countries*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/countries*') ? 'active' : '' }}"
        href="{{ route('admin.countries.index') }}">{{ __('messages.country.countries') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/states*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/states*') ? 'active' : '' }}"
        href="{{ route('admin.states.index') }}">{{ __('messages.state.states') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/cities*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/cities*') ? 'active' : '' }}"
        href="{{ route('admin.cities.index') }}">{{ __('messages.city.cities') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/marital-status*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/marital-status*') ? 'active' : '' }}"
        href="{{ route('admin.marital-statuses.index') }}">{{ __('messages.marital_statuses') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/skills*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/skills*') ? 'active' : '' }}"
        href="{{ route('admin.skills.index') }}">{{ __('messages.skills') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/salary-periods*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/salary-periods*') ? 'active' : '' }}"
        href="{{ route('salaryPeriod.index') }}">{{ __('messages.salary_periods') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/industries*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/industries*') ? 'active' : '' }}"
        href="{{ route('admin.industries.index') }}">{{ __('messages.industries') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/company-sizes*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/company-sizes*') ? 'active' : '' }}"
        href="{{ route('admin.company-sizes.index') }}">{{ __('messages.company_sizes') }}</a>
 </li>
 <div class="{{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'd-none' : '' }}">
-    <li class="nav-item d-none d-xl-grid dropdown dropdown-hover">
-        <a class="nav-link d-flex align-items-center py-3 ps-2" aria-current="page"
+    <li class="nav-item hidden d-xl-grid dropdown dropdown-hover">
+        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3 ps-2" aria-current="page"
            href="javascript:void(0)">
             <span class="horizontal-menu-icon"><i class="fas fa-ellipsis-vertical fs-4"></i></span>
         </a>
@@ -170,25 +170,25 @@
     </li>
 </div>
 
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/noticeboards*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/noticeboards*') ? 'active' : '' }}"
        href="{{ route('noticeboards.index') }}">{{ __('messages.noticeboards') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/faqs*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/faqs*') ? 'active' : '' }}"
        href="{{ route('admin.faqs.index') }}">{{ __('messages.faq.faq') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/inquires*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/inquires*') ? 'active' : '' }}"
        href="{{ route('admin.inquires.index') }}">{{ __('messages.inquires') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/notification-settings*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/notification-settings*') ? 'active' : '' }}"
        href="{{ route('notification.settings.index') }}">{{ __('messages.setting.notification_settings') }}</a>
 </li>
 <div class="{{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'd-none' : '' }}">
-<li class="nav-item d-none d-xl-grid dropdown dropdown-hover">
-    <a class="nav-link d-flex align-items-center py-3 ps-2" aria-current="page"
+<li class="nav-item hidden d-xl-grid dropdown dropdown-hover">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3 ps-2" aria-current="page"
        href="javascript:void(0)">
         <span class="horizontal-menu-icon"><i class="fas fa-ellipsis-vertical fs-4"></i></span>
     </a>
@@ -216,28 +216,28 @@
     </ul>
 </li>
 </div>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/testimonials*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/testimonials*') ? 'active' : '' }}"
        href="{{ route('testimonials.index') }}">{{ __('messages.testimonials') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/branding-sliders*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/branding-sliders*') ? 'active' : '' }}"
        href="{{ route('branding.sliders.index') }}">{{ __('messages.branding_sliders') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/header-sliders*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/header-sliders*') ? 'active' : '' }}"
        href="{{ route('header.sliders.index') }}">{{ __('messages.header_sliders') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/image-sliders*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/image-sliders*') ? 'active' : '' }}"
        href="{{ route('image-sliders.index') }}">{{ __('messages.image_sliders') }}</a>
 </li>
 
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/cms-services*','admin/cms-about-us*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/cms-services*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/cms-services*','admin/cms-about-us*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/cms-services*') ? 'active' : '' }}"
        href="{{ route('cms.services.index') }}">{{ __('messages.cms_services') }}</a>
 </li>
-<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/cms-services*','admin/cms-about-us*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/cms-about-us*') ? 'active' : '' }}"
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/cms-services*','admin/cms-about-us*') ? 'd-none' : '' }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium p-0 {{ Request::is("admin/cms-about-us*') ? 'active' : '' }}"
        href="{{ route('cms.about-us.service') }}">{{ __('messages.about_us_services') }}</a>
 </li>

@@ -6,17 +6,17 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container-fluid">
+    <div class="container mx-auto -fluid">
         @include('flash::message')
-        <div class="d-flex flex-column">
-            <div class="col-lg-9 mt-5">
+        <div class="flex flex-column">
+            <div class="flex-1 -lg-9 mt-5">
                 <form method="post" id="searchIsActiveHeaderSlider">
                     @csrf
                     {{--                    <div--}}
-                    {{--                            class="col-lg-6 col-sm-12 form-check form-switch col-sm d-block">--}}
+                    {{--                            class="col-lg-6 col-sm-12 flex items-center form-switch flex-1 -sm block">--}}
                     {{--                        <label class="switch-label">--}}
                     {{--                            <input type="checkbox" name="is_active"--}}
-                    {{--                                   class="searchIsActiveHeaderSlider form-check-input" {{ ($settings['slider_is_active'] == 1) ? 'checked' : '' }} >--}}
+                    {{--                                   class="searchIsActiveHeaderSlider flex items-center -input" {{ ($settings['slider_is_active'] == 1) ? 'checked' : '' }} >--}}
                     {{--                            <span class=" switch-span"></span>--}}
                     {{--                        </label>--}}
                     {{--                        <span--}}
@@ -26,12 +26,12 @@
                     {{--                                        title="{{ __('messages.image_slider.message_title') }}"></i>--}}
                     {{--                           </span>--}}
                     {{--                    </div>--}}
-                    <div class="mb-5 d-flex align-items-center">
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input searchIsActiveHeaderSlider" type="checkbox"
+                    <div class="mb-5 flex items-center">
+                        <div class="flex items-center form-switch mb-0">
+                            <input class="flex items-center -input searchIsActiveHeaderSlider" type="checkbox"
                                    name="is_active" {{ ($settings['slider_is_active'] == 1) ? 'checked' : '' }}>
                         </div>
-                        <label class="form-label fs-5 text-gray-600 me-5 mb-0 mb-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1 fs-5 text-gray-600 me-5 mb-0 mb-1">
                             {{ __('messages.image_slider.message') }}
                             <span data-bs-toggle="tooltip"
                                   data-bs-original-title="{{ __('messages.image_slider.message_title') }}"><i
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="d-flex flex-column ">
+        <div class="flex flex-column">
             <livewire:header-slider-table/>
         </div>
     </div>

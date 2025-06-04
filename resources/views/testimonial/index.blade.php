@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container-fluid">
+    <div class="container mx-auto -fluid">
         @include('flash::message')
-        <div class="d-flex flex-column ">
+        <div class="flex flex-column">
             <livewire:testimonial-table/>
         </div>
         @include('testimonial.add_modal')

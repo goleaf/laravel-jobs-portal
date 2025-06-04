@@ -1,8 +1,8 @@
-<div class="col-lg-4 mt-lg-0 mt-md-5 mt-4 pt-md-0 pt-2">
-    <div class="col-12">
-        <div class="col-12 mb-40">
-            <div class="job-card card py-30">
-                <div class="row d-flex justify-content-lg-between">
+<div class="flex-1 -lg-4 mt-lg-0 mt-md-5 mt-4 pt-md-0 pt-2">
+    <div class="flex-1 -12">
+        <div class="flex-1 -12 mb-40">
+            <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                <div class="flex flex-wrap flex justify-content-lg-between">
                     <h5 class="fs-18 text-secondary mb-4 ">
                         {{ __('web.post_menu.categories') }}</h5>
                     @foreach($blogCategories as $blogCategory)
@@ -19,14 +19,14 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="col-12 mb-40">
-            <div class="job-card card py-30">
-                <div class="row d-flex justify-content-lg-between">
+    <div class="flex-1 -12">
+        <div class="flex-1 -12 mb-40">
+            <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                <div class="flex flex-wrap flex justify-content-lg-between">
                     <h5 class="fs-18 text-secondary mb-4 ">
                         {{ __('web.web_blog.recent_posts') }}</h5>
                     @foreach($popularBlogs as $popularBlog)
-                        <div class="recent-post d-flex {{$loop->last?'':'mb-40'}}">
+                        <div class="recent-post flex {{$loop->last?"':'mb-40'}}">
                             <div class="img ">
                                 <a href="{{ route('front.posts.details',$popularBlog->id) }}">
                                     <img src="{{ !empty($popularBlog->blog_image_url)?$popularBlog->blog_image_url:asset('assets/img/infyom-logo.png') }}" class="recent-post-img">

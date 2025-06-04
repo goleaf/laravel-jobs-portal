@@ -1,3 +1,3 @@
-<div class="badge bg-light-info">
+<div class="badge bg-gray-100 -info">
     {{ $row->allowed_jobs }}
 </div>

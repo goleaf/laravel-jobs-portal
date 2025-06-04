@@ -5,20 +5,20 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
+<div class="container mx-auto -fluid">
+    <div class="flex flex-wrap">
+        <div class="flex-1 -12">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h3>{{ __('Admin Dashboard') }}</h3>
                 </div>
-                <div class="card-body">
-                    <div class="row">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                    <div class="flex flex-wrap">
                         <!-- Statistics Cards -->
-                        <div class="col-md-3 mb-4">
-                            <div class="card bg-primary text-white">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
+                        <div class="flex-1 -md-3 mb-4">
+                            <div class="bg-white shadow rounded-lg overflow-hidden bg-primary-600 text-white">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                                    <div class="flex justify-between">
                                         <div>
                                             <h5>{{ __('Total Users') }}</h5>
                                             <h2>{{ \App\Models\User::count() }}</h2>
@@ -31,10 +31,10 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-3 mb-4">
-                            <div class="card bg-success text-white">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
+                        <div class="flex-1 -md-3 mb-4">
+                            <div class="bg-white shadow rounded-lg overflow-hidden bg-green-600 text-white">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                                    <div class="flex justify-between">
                                         <div>
                                             <h5>{{ __('Active Jobs') }}</h5>
                                             <h2>{{ \App\Models\Job::count() ?? 0 }}</h2>
@@ -47,10 +47,10 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-3 mb-4">
-                            <div class="card bg-warning text-white">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
+                        <div class="flex-1 -md-3 mb-4">
+                            <div class="bg-white shadow rounded-lg overflow-hidden bg-yellow-500 text-white">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                                    <div class="flex justify-between">
                                         <div>
                                             <h5>{{ __('Companies') }}</h5>
                                             <h2>{{ \App\Models\Company::count() ?? 0 }}</h2>
@@ -63,10 +63,10 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-3 mb-4">
-                            <div class="card bg-info text-white">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
+                        <div class="flex-1 -md-3 mb-4">
+                            <div class="bg-white shadow rounded-lg overflow-hidden bg-info text-white">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                                    <div class="flex justify-between">
                                         <div>
                                             <h5>{{ __('Applications') }}</h5>
                                             <h2>{{ \App\Models\JobApplication::count() ?? 0 }}</h2>
@@ -81,42 +81,42 @@
                     </div>
                     
                     <!-- Quick Actions -->
-                    <div class="row mt-4">
-                        <div class="col-12">
+                    <div class="flex flex-wrap mt-4">
+                        <div class="flex-1 -12">
                             <h4>{{ __('Quick Actions') }}</h4>
-                            <div class="row">
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('admin.candidates.index') }}" class="btn btn-outline-primary w-100">
+                            <div class="flex flex-wrap">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('admin.candidates.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary w-full">
                                         <i class="fas fa-users"></i><br>
                                         {{ __('Manage Candidates') }}
                                     </a>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('admin.jobs.index') }}" class="btn btn-outline-success w-100">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('admin.jobs.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success w-full">
                                         <i class="fas fa-briefcase"></i><br>
                                         {{ __('Manage Jobs') }}
                                     </a>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('company.index') }}" class="btn btn-outline-warning w-100">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('company.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-warning w-full">
                                         <i class="fas fa-building"></i><br>
                                         {{ __('Manage Companies') }}
                                     </a>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('admin.transactions.index') }}" class="btn btn-outline-info w-100">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('admin.transactions.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-info w-full">
                                         <i class="fas fa-money-bill"></i><br>
                                         {{ __('Transactions') }}
                                     </a>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('admin.settings.index') }}" class="btn btn-outline-secondary w-100">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('admin.settings.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-secondary w-full">
                                         <i class="fas fa-cog"></i><br>
                                         {{ __('Settings') }}
                                     </a>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <a href="{{ route('admin.subscribers.index') }}" class="btn btn-outline-dark w-100">
+                                <div class="flex-1 -md-2 mb-3">
+                                    <a href="{{ route('admin.subscribers.index') }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-dark w-full">
                                         <i class="fas fa-envelope"></i><br>
                                         {{ __('Subscribers') }}
                                     </a>
@@ -126,18 +126,18 @@
                     </div>
                     
                     <!-- Recent Activity -->
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
+                    <div class="flex flex-wrap mt-4">
+                        <div class="flex-1 -md-6">
+                            <div class="bg-white shadow rounded-lg overflow-hidden">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                                     <h5>{{ __('Recent Registrations') }}</h5>
                                 </div>
-                                <div class="card-body">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                                     <div class="list-group">
                                         @foreach(\App\Models\User::latest()->take(5)->get() as $user)
                                         <div class="list-group-item">
                                             <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>
-                                            <small class="text-muted">{{ $user->created_at->diffForHumans() }}</small>
+                                            <small class="text-gray-500">{{ $user->created_at->diffForHumans() }}</small>
                                         </div>
                                         @endforeach
                                     </div>
@@ -145,22 +145,22 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
+                        <div class="flex-1 -md-6">
+                            <div class="bg-white shadow rounded-lg overflow-hidden">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                                     <h5>{{ __('System Status') }}</h5>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-6">
+                                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                                    <div class="flex flex-wrap">
+                                        <div class="flex-1 -6">
                                             <div class="text-center">
-                                                <i class="fas fa-server fa-2x text-success"></i>
+                                                <i class="fas fa-server fa-2x text-green-600"></i>
                                                 <p class="mt-2">{{ __('System Online') }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="flex-1 -6">
                                             <div class="text-center">
-                                                <i class="fas fa-database fa-2x text-success"></i>
+                                                <i class="fas fa-database fa-2x text-green-600"></i>
                                                 <p class="mt-2">{{ __('Database Connected') }}</p>
                                             </div>
                                         </div>

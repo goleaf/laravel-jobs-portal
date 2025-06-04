@@ -3,9 +3,9 @@
     {{ __('messages.inquires') }}
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="container mx-auto -fluid">
         @include('flash::message')
-        <div class="d-flex flex-column ">
+        <div class="flex flex-column">
             <livewire:inquiries-table/>
         </div>
     </div>

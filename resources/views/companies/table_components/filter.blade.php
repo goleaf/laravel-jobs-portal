@@ -1,6 +1,6 @@
 <div class="ms-auto" wire:ignore>
-         <div class="dropdown d-flex align-items-center me-4 me-md-2">
-             <button class="btn btn btn-icon btn-primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
+         <div class="dropdown flex items-center me-4 me-md-2">
+             <button class="btn btn btn-icon px-4 py-2 rounded font-medium transition-colors -primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
                  id="companiesFilterBtn"data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                  <p class="text-center">
                      <i class='fas fa-filter'></i>
@@ -12,15 +12,15 @@
                  </div>
                  <div class="p-5">
                        <div class="mb-5">
-                                <label for="filterBtn" class="form-label">{{ __('messages.filter_name.featured_company') }}:</label>
+                                <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.filter_name.featured_company') }}:</label>
                                 {{ Form::select('featured',collect($filterHeads[0])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'featuredCompany']) }}
                        </div>
                      <div class="mb-5">
-                                <label for="filterBtn" class="form-label">{{__('messages.common.status')}}:</label>
+                                <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{__('messages.common.status')}}:</label>
                                 {{ Form::select('employee_status', collect($filterHeads[1])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2', 'data-control'=>"select2", 'id' => 'companyStatus']) }}
                             </div>
-                     <div class="d-flex justify-content-end">
-                         <button type="reset" class="btn btn-secondary"
+                     <div class="flex justify-content-end">
+                         <button type="reset" class="btn px-4 py-2 rounded font-medium transition-colors -secondary"
                              id="company-ResetFilter">{{ __('messages.common.reset') }}</button>
                      </div>
                  </div>

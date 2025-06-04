@@ -12,19 +12,19 @@
 @section('content')
     <div class="contactus-page">
         <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-3">
+                            <h1 class="text-secondary mb-3">
                                 {{ __('web.contact_us') }}
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb  justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item "><a href="{{ route('front.home') }}"
                                                                     class="fs-18 text-gray">{{ __('web.home') }} </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18"
+                                    <li class="breadcrumb-item text-primary-600 fs-18"
                                         aria-current="page">{{ __('web.contact_us') }}</li>
                                 </ol>
                             </nav>
@@ -35,27 +35,27 @@
         </section>
 
         <section class="contact-us-section py-60 mb-5">
-            <div class="container">
+            <div class="container mx-auto">
                 <div class="contact-us bg-color-light">
-                    <div class="row">
-                        <div class="col-lg-4 d-lg-block d-none">
+                    <div class="flex flex-wrap">
+                        <div class="flex-1 -lg-4 d-lg-block hidden">
                             <div class="contact-img ms-5 ps-xl-5 mt-5">
                                 <img src="{{asset('front_web/images/contact-page.png')}}">
                             </div>
                         </div>
-                        <div class="col-lg-8">
+                        <div class="flex-1 -lg-8">
                             @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.contact.send')])
                                 @csrf
                                 @include('flash::message')
                                 @include('front_web.layouts.errors')
-                                <div class="row">
-                                    <div class="form-group col-12">
+                                <div class="flex flex-wrap">
+                                    <div class="form-group flex-1 -12">
                                         <div class="response"></div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="flex-1 -md-6">
                                         <div class="form-group">
                                             {{ Form::label('name', __('web.web_contact.your_name').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary">*</span>
+                                            <span class="text-primary-600">*</span>
                                             {{ Form::text('name', old('name'), [
                                                 'class' => 'form-control fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.your_name'),
@@ -64,10 +64,10 @@
                                             ]) }}
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="flex-1 -md-6">
                                         <div class="form-group">
                                             {{ Form::label('email', __('web.web_contact.your_email').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary">*</span>
+                                            <span class="text-primary-600">*</span>
                                             {{ Form::email('email', old('email'), [
                                                 'class' => 'form-control fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.your_email'),
@@ -76,10 +76,10 @@
                                             ]) }}
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="flex-1 -md-6">
                                         <div class="form-group">
                                             {{ Form::label('subject', __('web.web_contact.subject').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary">*</span>
+                                            <span class="text-primary-600">*</span>
                                             {{ Form::text('subject', old('subject'), [
                                                 'class' => 'form-control fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.subject'),
@@ -88,7 +88,7 @@
                                             ]) }}
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="flex-1 -md-6">
                                         <div class="form-group">
                                             {{ Form::label('phone_no', __('web.web_contact.your_phone_no').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                             {{ Form::tel('phone_no', old('phone_no'), [
@@ -98,14 +98,14 @@
                                                 'id' => 'phoneNumber'
                                             ]) }}
                                             <input type="hidden" name="region_code" id="prefix_code">
-                                            <p id="valid-msg" class="text-success d-none fw-400 fs-small mt-2">{{ __('messages.phone.valid_number') }}</p>
-                                            <p id="error-msg" class="text-danger d-none fw-400 fs-small mt-2"></p>
+                                            <p id="valid-msg" class="text-green-600 hidden fw-400 fs-small mt-2">{{ __('messages.phone.valid_number') }}</p>
+                                            <p id="error-msg" class="text-red-600 hidden fw-400 fs-small mt-2"></p>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="flex-1 -md-12">
                                         <div class="form-group">
                                             {{ Form::label('message', __('web.web_contact.your_message').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary">*</span>
+                                            <span class="text-primary-600">*</span>
                                             {{ Form::textarea('message', old('message'), [
                                                 'class' => 'form-control fs-14 text-gray br-10',
                                                 'rows' => 5,
@@ -115,16 +115,16 @@
                                         </div>
                                     </div>
                                     @if(getSettingValue('enable_google_recaptcha'))
-                                    <div class="col-md-12">
-                                        <div class="g-recaptcha d-flex justify-content-center" id="gRecaptchaContainerCompanyRegistration"
+                                    <div class="flex-1 -md-12">
+                                        <div class="g-recaptcha flex justify-center" id="gRecaptchaContainerCompanyRegistration"
                                              data-sitekey="{{ config('app.google_recaptcha_site_key') }}"
                                              name="g-recaptcha"></div>
                                         <div id="g-recaptcha-error"></div>
                                     </div>
                                     @endif
                                 </div>
-                                <div class="row justify-content-center mt-4">
-                                    <div class="col-sm-6 text-center">
+                                <div class="flex flex-wrap justify-center mt-4">
+                                    <div class="flex-1 -sm-6 text-center">
                                         {{ Form::button(__('web.contact_us_menu.send_message'), [
                                             'type' => 'submit',
                                             'class' => 'btn btn-primary'

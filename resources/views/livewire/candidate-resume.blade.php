@@ -1,14 +1,14 @@
-<div class="employee-card">
-    <div class="row">
+<div class="employee- bg-white shadow rounded-lg overflow-hidden">
+    <div class="flex flex-wrap">
         @if(count($candidateResumes) > 0 || $searchByResume != '')
-            <div class="col-md-12">
-                <div class="row mb-3 justify-content-end flex-wrap">
+            <div class="flex-1 -md-12">
+                <div class="flex flex-wrap mb-3 justify-content-end flex-wrap">
                     <div>
                         <div class="selectgroup mr-4">
                             <input wire:model.debounce.100ms="searchByResume" id="searchByResume"
                                    type="search"
                                    autocomplete="off"
-                                   placeholder="{{ __('web.common.search') }}" class="form-control">
+                                   placeholder="{{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                         </div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
         @forelse($candidateResumes as $candidateResume)
                 @include('resumes.resume_card')
         @empty
-            <div class="col-md-12">
+            <div class="flex-1 -md-12">
                 <h5 class="text-black text-center">
                     @if ($searchByResume)
                         {{ __('messages.resumes.no_resume_found') }}
@@ -27,8 +27,8 @@
                 </h5>
             </div>
         @endforelse
-        <div class="col-md-12">
-            <div class="row mb-3 justify-content-end flex-wrap">
+        <div class="flex-1 -md-12">
+            <div class="flex flex-wrap mb-3 justify-content-end flex-wrap">
                 @if($candidateResumes->count() > 0)
                     {{$candidateResumes->links()}}
                 @endif

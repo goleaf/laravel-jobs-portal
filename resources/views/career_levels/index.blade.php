@@ -6,8 +6,8 @@
 {{--<link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column ">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             <livewire:career-level-table/>
         </div>

@@ -1,33 +1,33 @@
-<div class="col-lg-12 col-md-12">
+<div class="col-lg-12 flex-1 -md-12">
 {{--    @if(session()->has('message'))--}}
-{{--        <div class="alert alert-success">--}}
+{{--        <div class="alert p-4 rounded-md mb-4 -success">--}}
 {{--            {{ session('message') }}--}}
 {{--        </div>  --}}
 {{--    @endif--}}
     @if(count($appliedJobs) > 0 || $searchByAppliedJob != '' || $jobApplicationStatus != '')
-        <div class="row mb-3 justify-content-end">
-            <div class="col-md-3">
+        <div class="flex flex-wrap mb-3 justify-content-end">
+            <div class="flex-1 -md-3">
                 {{ Form::select('job-application-status', $jobApplicationStatusArr, null, ['class' => 'form-control','id'=>'jobApplicationStatus','placeholder' => __('messages.common.all'), 'wire:model' => "jobApplicationStatus"]) }}
             </div>
-            <div class="col-md-3">
+            <div class="flex-1 -md-3">
                 <input wire:model.debounce.100ms.live="searchByAppliedJob" type="search"
                        id="searchByAppliedJob"
                        placeholder="{{ __('web.job_menu.search_applied_job') }}"
-                       class="form-control search-box-placeholder">
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
             </div>
         </div>
     @endif
     @if(count($appliedJobs) > 0)
         <div class="content1 with-padding">
-            <div class="row mt-5 position-relative">
+            <div class="flex flex-wrap mt-5 position-relative">
                 @foreach($appliedJobs as $appliedJob)
-                   <div class="col-12 col-sm-6 col-md-6 col-xl-6 mb-4">
-                       <div class="h-100 shadow rounded card">
-                           <div class="card-body p-5">
-                               <div class="d-flex justify-content-end">
+                   <div class="w-full col-sm-6 md:w-6/12 flex-1 -xl-6 mb-4">
+                       <div class="h-full shadow rounded bg-white shadow rounded-lg overflow-hidden">
+                           <div class="bg-white shadow rounded-lg overflow-hidden -body p-5">
+                               <div class="flex justify-content-end">
                                    <div class="dropdown">
                                        <button type="button" title="{{__('messages.common.action')}}"
-                                               class="dropdown-toggle hide-arrow btn text-primary p-0"
+                                               class="dropdown-toggle hide-arrow px-4 py-2 rounded font-medium transition-colors text-primary-600 p-0"
                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                data-bs-boundary="viewport" aria-expanded="false">
                                            <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -41,19 +41,19 @@
                                             @if(\App\Models\JobApplicationSchedule::whereJobApplicationId($appliedJob->id)->exists() && !($appliedJob->status == \App\Models\JobApplication::REJECTED) && !($appliedJob->status == \App\Models\JobApplication::STATUS_APPLIED) && !($appliedJob->status == \App\Models\JobApplication::COMPLETE))
                                                 <li><a class="dropdown-item schedule-slot-book" href="javascript:void(0)"   data-id="{{ $appliedJob->id }}">{{ __('messages.job_stage.slots') }}</a></li>
                                             @endif
-                                            <li><a class="dropdown-item delete-btn remove-applied-jobs" href="javascript:void(0)" data-id="{{ $appliedJob->id }}">{{ __('messages.common.delete') }}</a></li>
+                                            <li><a class="dropdown-item delete- px-4 py-2 rounded font-medium transition-colors remove-applied-jobs" href="javascript:void(0)" data-id="{{ $appliedJob->id }}">{{ __('messages.common.delete') }}</a></li>
                                         </ul>
 
                                     </div>
                                 </div>
-                                <div class="d-flex">
+                                <div class="flex">
                                     <div class="mb-auto">
                                         <h4>
-                                            <i class="fas fa-briefcase fs-3 me-1 text-muted"></i> &nbsp;<a
+                                            <i class="fas fa-briefcase fs-3 me-1 text-gray-500"></i> &nbsp;<a
                                                     href="{{ route('front.job.details',$appliedJob->job->job_id) }}"
                                                     target="_blank" class="text-decoration-none">{{ Str::limit($appliedJob->job->job_title,25,'...') }}</a>
                                             <div
-                                                    class="ms-2 badge bg-light-{{ \App\Models\JobApplication::STATUS_COLOR[$appliedJob->status] }}">
+                                                    class="ms-2 badge bg-gray-100 -{{ \App\Models\JobApplication::STATUS_COLOR[$appliedJob->status] }}">
                                                 @if(\App\Models\JobApplication::STATUS[$appliedJob->status] == 'Drafted')
                                                     {{__('messages.common.drafted')}}
                                                 @elseif(\App\Models\JobApplication::STATUS[$appliedJob->status] == 'Applied')
@@ -69,19 +69,19 @@
                                             </div>
                                         </h4>
                                         <h4>
-                                            <i class="far fa-clock fs-3 me-1 text-muted"></i>
+                                            <i class="far fa-clock fs-3 me-1 text-gray-500"></i>
                                             &nbsp;<label
-                                                    class="text-muted mb-3">{{ __('messages.common.applied_on') }}
+                                                    class="text-gray-500 mb-3">{{ __('messages.common.applied_on') }}
                                                 :</label>
                                             {{ (!empty($appliedJob->created_at)) ? \Carbon\Carbon::parse($appliedJob->created_at)->translatedFormat('dS M, Y')  : __('messages.common.n/a') }}
                                         </h4>
                                         <h4>
-                                            <i class="fas fa-money-check-alt fs-3 me-1 text-muted"></i>
+                                            <i class="fas fa-money-check-alt fs-3 me-1 text-gray-500"></i>
                                             &nbsp;{{ (!empty($appliedJob->expected_salary)) ? number_format($appliedJob->expected_salary)   : __('messages.common.n/a') }} {{ $appliedJob->job->currency->currency_icon }}
                                         </h4>
                                         @isset($appliedJob->jobStage->name)
                                             <h4>
-                                                <i class="fab fa-usps fs-3 me-1 text-muted"></i>
+                                                <i class="fab fa-usps fs-3 me-1 text-gray-500"></i>
                                                 &nbsp;{{ $appliedJob->jobStage->name }}
                                             </h4>
                                         @endisset
@@ -92,7 +92,7 @@
                    </div>
                 @endforeach
             </div>
-            <div class="d-flex justify-content-center my-2">
+            <div class="flex justify-center my-2">
                 @if($appliedJobs->count() > 0)
                     {{ $appliedJobs->links() }}
                 @endif
@@ -100,11 +100,11 @@
         </div>
     @else
         @if($searchByAppliedJob == null || empty($searchByAppliedJob))
-        <div class="col-lg-12 col-md-12 d-flex justify-content-center my-9 job-titile">
+        <div class="col-lg-12 flex-1 -md-12 flex justify-center my-9 job-titile">
             <h5>{{ __('messages.job.no_applied_job_found') }} </h5>
         </div>
         @else
-        <div class="col-lg-12 col-md-12 d-flex justify-content-center my-9 job-titile">
+        <div class="col-lg-12 flex-1 -md-12 flex justify-center my-9 job-titile">
             <h5>{{ __('messages.job.applies_job_not_found') }} </h5>
         </div>
         @endif

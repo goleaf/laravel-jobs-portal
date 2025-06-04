@@ -11,15 +11,15 @@
             </div>
             {{ Form::open(['id' => 'showForm']) }}
             <div class="modal-body">
-                <div class="row details-page">
-                    <div class="form-group col-sm-12">
+                <div class="flex flex-wrap details-page">
+                    <div class="form-group flex-1 -sm-12">
                         <div class="employee-listing-details">
-                            <div class="d-flex employee-listing-description align-items-center justify-content-center flex-column">
+                            <div class="flex employee-listing-description items-center justify-center flex-column">
                                 <div class="pl-0 mb-2 employee-avatar">
                                     <span id="showImage"></span>
                                 </div>
-                                <div class="mb-auto w-100 employee-data">
-                                    <div class="d-flex justify-content-center align-items-center w-100">
+                                <div class="mb-auto w-full employee-data">
+                                    <div class="flex justify-center items-center w-full">
                                         <div>
                                             <label class="text-decoration-none text-color-gray" id="showName"></label>
                                         </div>

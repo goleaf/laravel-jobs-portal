@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}">
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col-xl-4 col-sm-6 widget">
+    <div class="flex flex-wrap">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
             <a href="{{ route('job.index') }}" class=" text-decoration-none">
-            <div class="bg-success shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                <div class="bg-green-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+            <div class="bg-green-600 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                <div class="bg-green-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="fas fa-briefcase text-white fs-1-xl fa-4x"></i>
                 </div>
                 <div class="text-end text-white">
@@ -20,10 +20,10 @@
             </div>
             </a>
         </div>
-        <div class="col-xl-4 col-sm-6 widget">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
             <a href="{{ route('job.index') }}" class=" text-decoration-none">
-            <div class="bg-primary shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                <div class="bg-cyan-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+            <div class="bg-primary-600 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                <div class="bg-cyan-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="far fa-clock text-white fs-1-xl fa-4x"></i>
                 </div>
                 <div class="text-end text-white">
@@ -33,10 +33,10 @@
             </div>
             </a>
         </div>
-        <div class="col-xl-4 col-sm-6 widget">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
             <a href="{{ route('job.index') }}" class=" text-decoration-none">
-            <div class="bg-warning shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                <div class="bg-yellow-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+            <div class="bg-yellow-500 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                <div class="bg-yellow-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="fas fa-pause-circle text-white fs-1-xl fa-4x"></i>
                 </div>
                 <div class="text-end text-white">
@@ -46,10 +46,10 @@
             </div>
             </a>
         </div>
-        <div class="col-xl-4 col-sm-6 widget">
-            <div class="bg-danger shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
+            <div class="bg-red-600 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                 <div
-                        class="bg-red-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                        class="bg-red-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="fas fa-window-close text-white fs-1-xl fa-4x"></i>
                 </div>
                 <div class="text-end text-white">
@@ -58,11 +58,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-sm-6 widget">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
             <a href="{{ route('followers.index') }}" class=" text-decoration-none">
-            <div class="bg-info shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
+            <div class="bg-info shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                 <div
-                        class="bg-blue-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                        class="bg-blue-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="far fa-user text-white fs-1-xl fa-4x"></i>
                 </div>
                 <div class="text-end text-white">
@@ -72,10 +72,10 @@
             </div>
             </a>
         </div>
-        <div class="col-xl-4 col-sm-6 widget">
-            <div class="bg-dark shadow-md rounded-10 p-xxl-10 px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
+        <div class="col-xl-4 flex-1 -sm-6 widget">
+            <div class="bg-gray-800 shadow-md rounded-10 p-xxl-10 px-5 py-10 flex items-center justify-between my-sm-3 my-2">
                 <div
-                        class="bg-gray-700 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                        class="bg-gray-700 widget-icon rounded-10 me-2 flex items-center justify-center">
                     <i class="fas fa-file fa-4x fs-1-xl {{getLoggedInUser()->theme_mode ? 'text-muted' : 'text-white'}}"></i>
                 </div>
                 <div class="text-end {{getLoggedInUser()->theme_mode ? 'text-muted' : 'text-white'}}">
@@ -85,26 +85,26 @@
             </div>
         </div>
     </div>
-    <div class="card card-xl-stretch mb-xl-8">
+    <div class="card bg-white shadow rounded-lg overflow-hidden -xl-stretch mb-xl-8">
         <!--begin::Header-->
-        <div class="card-header border-0 pt-5">
-            <h3 class="card-title align-items-start flex-column">
+        <div class="bg-white shadow rounded-lg overflow-hidden -header border-0 pt-5">
+            <h3 class="bg-white shadow rounded-lg overflow-hidden -title align-items-start flex-column">
                                     <span
-                                            class="card-label fs-3 mb-1">{{ __('messages.job_applications') }}</span>
+                                            class="bg-white shadow rounded-lg overflow-hidden -label fs-3 mb-1">{{ __('messages.job_applications') }}</span>
             </h3>
-            <div class="col-lg-8 col-md-8 col-sm-12">
-                <div class="row justify-content-end">
-                    <div class="col-lg-4 col-md-4 col-xl-3 col-sm-4 mt-3 mt-md-0 ">
-                        <div class="card-header-action w-100">
+            <div class="col-lg-8 md:w-8/12 flex-1 -sm-12">
+                <div class="flex flex-wrap justify-content-end">
+                    <div class="col-lg-4 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -header-action w-full">
                             {{  Form::select('jobs', $jobStatus, null, ['id' => 'jobStatus', 'class' => 'form-control status-filter', 'placeholder' => __('messages.flash.select_job')]) }}
                         </div>
                     </div>
-                    <div class="col-lg-4  col-md-4 col-xl-3 col-sm-4 mt-3 mt-md-0">
-                        <div class="card-header-action w-100">
+                    <div class="col-lg-4 md:w-4/12 col-xl-3 flex-1 -sm-4 mt-3 mt-md-0">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -header-action w-full">
                             {{  Form::select('gender', $gender, null, ['id' => 'gender', 'class' => 'form-control status-filter', 'placeholder' => __('messages.company.select_gender')]) }}
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-xl-4 col-sm-4 mt-0">
+                    <div class="col-lg-4 md:w-4/12 col-xl-4 flex-1 -sm-4 mt-0">
                         <div id="timeRange" class="time_range time_range_width w-30 border rounded-2 p-3">
                             <i class="far fa-calendar-alt"
                                aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
@@ -114,17 +114,17 @@
                 </div>
             </div>
         </div>
-        <div id="jobContainer" class="card-body">
+        <div id="jobContainer" class="bg-white shadow rounded-lg overflow-hidden -body">
             <canvas id="employerDashboardChart" width="400" height="400"></canvas>
         </div>
     </div>
-    <div class="row">
+    <div class="flex flex-wrap">
         <!--begin::Col-->
-        <div class="col-xl-6 ps-0">
+        <div class="flex-1 -xl-6 ps-0">
             <!--begin::Tables Widget 1-->
             <div class="mb-xl-8">
                 <!--begin::Header-->
-                <div class="d-flex justify-content-between border-0 pt-5">
+                <div class="flex justify-between border-0 pt-5">
                     <h3 class="align-items-start flex-column">
                         <span class="fs-3 mb-1">{{ __('messages.employer_menu.recent_jobs') }}</span>
                     </h3>
@@ -132,7 +132,7 @@
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span>
                          <a href="{{ route('job.index') }}"
-                            class="btn btn-info">{{ __('messages.common.view_more') }} <i
+                            class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                      class="fas fa-chevron-right"></i></a>
                     </span>
                     <!--end::Svg Icon-->
@@ -142,12 +142,12 @@
                 <!--begin::Body-->
                 <div class="py-3">
                     <!--begin::Table container-->
-                    <div class="table-responsive ">
+                    <div class="w-full divide-y divide-gray-200 -responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped align-middle gs-0 gy-5">
+                        <table class="table w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
                             <!--begin::Table head-->
                             <thead>
-                            <tr class="text-start text-muted  fs-7 text-uppercase gs-0">
+                            <tr class="text-start text-gray-500 fs-7 text-uppercase gs-0">
                                 <th class="">{{ __('messages.job.job_title') }}</th>
                                 <th class="">{{ __('messages.employer_menu.expires_on') }}</th>
                                 <th class="text-center">{{ __('messages.common.status') }}</th>
@@ -188,11 +188,11 @@
             <!--endW::Tables Widget 1-->
         </div>
         <!--end::Col-->
-        <div class="col-xl-6 pe-0">
+        <div class="flex-1 -xl-6 pe-0">
             <!--begin::Tables Widget 1-->
             <div class="mb-xl-8">
                 <!--begin::Header-->
-                <div class="d-flex justify-content-between border-0 pt-5">
+                <div class="flex justify-between border-0 pt-5">
                     <h3 class="align-items-start flex-column">
                         <span class=" fs-3 mb-1">{{ __('messages.employer_menu.recent_follower') }}</span>
                     </h3>
@@ -200,7 +200,7 @@
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span>
                          <a href="{{ route('followers.index') }}"
-                            class="btn btn-info">{{ __('messages.common.view_more') }} <i
+                            class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                      class="fas fa-chevron-right"></i></a>
                     </span>
                     <!--end::Svg Icon-->
@@ -210,15 +210,15 @@
                 <!--begin::Body-->
                 <div class="py-3">
                     <!--begin::Table container-->
-                    <div class="table-responsive ">
+                    <div class="w-full divide-y divide-gray-200 -responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped align-middle gs-0 gy-5">
+                        <table class="table w-full divide-y divide-gray-200 -striped align-middle gs-0 gy-5">
                             <!--begin::Table head-->
                             <thead>
-                            <tr class="text-start text-muted fs-7 text-uppercase gs-0">
+                            <tr class="text-start text-gray-500 fs-7 text-uppercase gs-0">
                                 <th class="">{{ __('messages.company.candidate_name') }}</th>
                                 <th class="">{{ __('messages.company.candidate_phone') }}</th>
-                                <th class=" text-center">{{ __('messages.company.candidate_email') }}</th>
+                                <th class="text-center">{{ __('messages.company.candidate_email') }}</th>
                             </tr>
                             </thead>
                             <!--end::Table head-->

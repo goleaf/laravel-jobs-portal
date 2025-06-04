@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto py-8 px-4">
+    <div class="container mx-auto mx-auto py-8 px-4">
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Icon Library</h1>
             <p class="text-gray-600">A reference for all available icon components</p>

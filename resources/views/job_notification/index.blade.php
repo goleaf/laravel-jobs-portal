@@ -3,14 +3,14 @@
     {{ __('messages.job_notification.job_notifications') }}
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="container mx-auto -fluid">
         @include('flash::message')
-        <div class="card">
-        <div class="card-header border-0 pt-6 justify-content-end">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="bg-white shadow rounded-lg overflow-hidden -header border-0 pt-6 justify-content-end">
                 <div class="ms-0 ms-md-2">
-                    <div class="dropdown d-flex align-items-center me-4 me-md-5">
+                    <div class="dropdown flex items-center me-4 me-md-5">
                         <button
-                                class="btn btn btn-icon btn-primary text-white dropdown-toggle hide-arrow ps-2 pe-0"
+                                class="btn btn btn-icon px-4 py-2 rounded font-medium transition-colors -primary text-white dropdown-toggle hide-arrow ps-2 pe-0"
                                 type="button" id="dropdownMenuButton1" data-bs-auto-close="outside"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             <i class='fas fa-filter'></i>
@@ -22,11 +22,11 @@
                             <div class="p-5">
 
                                 <div class="mb-5">
-                                    <label class="form-label fs-6 fw-bold">{{ __('messages.employers').':' }}</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1 fs-6 fw-bold">{{ __('messages.employers').':' }}</label>
                                     {{ Form::select('employers', $companies,null, ['id' => 'filter_employers', 'data-control' =>'select2', 'class' => 'form-select status-selector select2-hidden-accessible data-allow-clear="true"','placeholder' => __('messages.flash.select_employer')]) }}
                                 </div>
-                                <div class="d-flex justify-content-end">
-                                    <button class="btn btn-secondary"
+                                <div class="flex justify-content-end">
+                                    <button class="btn px-4 py-2 rounded font-medium transition-colors -secondary"
                                             id="resetJobNotificationFilter"
                                             >{{__('messages.common.reset')}}</button>
                                 </div>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
         </div>
-        <div class="card-body p-7">
+        <div class="bg-white shadow rounded-lg overflow-hidden -body p-7">
             {{ Form::open(['route' => 'job-notification.store','id' => 'createJobNotificationForm']) }}
             @include('job_notification.send_notification')
             {{ Form::close() }}

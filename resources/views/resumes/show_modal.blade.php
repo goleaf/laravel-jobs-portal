@@ -4,32 +4,32 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ __('messages.candidate.reported_candidate_detail') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close"
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
             </div>
             {{ Form::open(['id' => 'showForm']) }}
             <div class="modal-body">
-                <div class="alert alert-danger  hide d-none" id="maritalStatusValidationErrorsBox"></div>
-                <div class="row">
-                    <div class="col-sm-6">
+                <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="maritalStatusValidationErrorsBox"></div>
+                <div class="flex flex-wrap">
+                    <div class="flex-1 -sm-6">
                         {{ Form::label('image', __('messages.post.image').':', ['class' => 'form-label']) }}
                         <p id="showImage"></p>
                     </div>
-                    <div class="col-sm-6 mb-5">
+                    <div class="flex-1 -sm-6 mb-5">
                         {{ Form::label('candidate_name', __('messages.job_application.candidate_name').':', ['class' => 'form-label']) }}
                         <p id="showReportedCandidate"></p>
                     </div>
-                    <div class="col-sm-6 mb-5">
+                    <div class="flex-1 -sm-6 mb-5">
                         {{ Form::label('reported_by', __('messages.company.reported_by').':',['class' => 'form-label']) }}
                         <p id="showReportedBy"></p>
                     </div>
-                    <div class="col-sm-6 mb-5">
+                    <div class="flex-1 -sm-6 mb-5">
                         {{ Form::label('reported_on', __('messages.company.reported_on').':',['class' => 'form-label']) }}
                         <br>
                         {{ date('jS M, Y', `<p id="showReportedWhen"></p>` ) }}
                     </div>
-                    <div class="col-sm-12 mb-5">
+                    <div class="flex-1 -sm-12 mb-5">
                         {{ Form::label('notes', __('messages.company.notes').':',['class' => 'form-label']) }}
                         <p id="showReportedNote"></p>
                     </div>

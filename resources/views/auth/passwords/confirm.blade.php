@@ -1,25 +1,25 @@
 @extends('layouts.auth')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Confirm Password') }}</div>
+    <div class="container mx-auto">
+        <div class="flex flex-wrap justify-center">
+            <div class="flex-1 -md-8">
+                <div class="bg-white shadow rounded-lg overflow-hidden">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -header">{{ __('Confirm Password') }}</div>
 
-                    <div class="card-body">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         {{ __('Please confirm your password before continuing.') }}
 
                         <form method="POST" action="{{ route('password.confirm') }}">
                             @csrf
 
-                            <div class="form-group row">
+                            <div class="form-group flex flex-wrap">
                                 <label for="password"
-                                       class="col-md-4 col-form-label text-md-right">{{ __('messages.password') }}</label>
+                                       class="md:w-4/12 flex-1 - block text-sm font-medium text-gray-700 mb-1 text-md-right">{{ __('messages.password') }}</label>
 
-                                <div class="col-md-6">
+                                <div class="flex-1 -md-6">
                                     <input id="password" type="password"
-                                           class="form-control @error('password') is-invalid @enderror" name="password"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" name="password"
                                            required autocomplete="current-password">
 
                                     @error('password')
@@ -30,14 +30,14 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                            <div class="form-group flex flex-wrap mb-0">
+                                <div class="flex-1 -md-8 offset-md-4">
+                                    <button type="submit" class="btn px-4 py-2 rounded font-medium transition-colors -primary">
                                         {{ __('messages.confirm_password') }}
                                     </button>
 
                                     @if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        <a class="btn px-4 py-2 rounded font-medium transition-colors -link" href="{{ route('password.request') }}">
                                             {{ __('messages.forgot_password') }}
                                         </a>
                                     @endif

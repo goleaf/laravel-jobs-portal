@@ -4,13 +4,13 @@
 @endsection
 @section('content')
     @include('flash::message')
-    <div class="row justify-content-center">
+    <div class="flex flex-wrap justify-center">
         @foreach($plans as $plan)
-            <div class="col-xl-4 col-md-6 d-flex align-items-stretch">
-                <div class="card pricing-card text-center flex-fill">
-                    <div class="card-body px-xl-10 px-7 py-xl-14 py-10 d-flex flex-column">
+            <div class="col-xl-4 flex-1 -md-6 flex align-items-stretch">
+                <div class="card pricing- bg-white shadow rounded-lg overflow-hidden text-center flex-fill">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body px-xl-10 px-7 py-xl-14 py-10 flex flex-column">
                         <h3 class="text-gray-900 fs-2">{{ html_entity_decode($plan->name) }}</h3>
-                        <div class="d-flex justify-content-center mt-5">
+                        <div class="flex justify-center mt-5">
                             <h4 class="text-center mb-6 mt-2">
                                 <span class="fa-3x fw-bolder">{{ empty($plan->salaryCurrency->currency_icon)?'$':$plan->salaryCurrency->currency_icon }}{{ $plan->amount }}</span>
                                 <span class="h6 text-gray-800 ml-2">{{ __('messages.plan.per_month') }}</span>
@@ -34,35 +34,35 @@
                             <li>@if($plan->is_trial_plan)
                                     <i class="fa-solid fa-check me-3"></i>
                                 @else
-                                    <i class="fas fa-times text-danger me-3"></i>
+                                    <i class="fas fa-times text-red-600 me-3"></i>
                                 @endif
                                 {{ __('messages.plan.is_trial_plan') }}</li>
                             <li>@if(isset($subscription) && $subscription->plan_id == $plan->id)
-                                    <i class="fas fa-briefcase text-primary me-3"></i>
+                                    <i class="fas fa-briefcase text-primary-600 me-3"></i>
                                     {{ $jobsCount.' '.($jobsCount > 1 ? __('messages.plan.jobs_used') : __('messages.plan.job_used'))}}
                                 @endif</li>
                         </ul>
                         {{--                        @dd($subscription->plan_id == $plan->id)--}}
                         @if(isset($subscription) && $subscription->plan_id == $plan->id)
-                            <div class="d-flex justify-content-center">
+                            <div class="flex justify-center">
                                 @if($subscription->current_period_end <= date('Y-m-d H:i:s'))
                                     <a href="{{ route('payment-method-screen', $plan->id) }}"
                                        data-id="{{ $plan->id }}"
-                                       class="btn btn-warning pricing-plan-btn mt-auto align-self-center">
+                                       class="btn bg-yellow-500 text-white hover:bg-yellow-600 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center">
                                         {{ __('messages.plan.upgrade') }}
                                     </a>
                                 @else
                                     <a href="javascript:void(0)"
-                                       class="btn btn-success pricing-plan-btn mt-auto align-self-center">{{ __('messages.plan.current_plan') }} </a>
+                                       class="btn bg-green-600 text-white hover:bg-green-700 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center">{{ __('messages.plan.current_plan') }} </a>
                                 @endif
                                 @if($subscription->ststripe_statu != 'trialing')
                                     @if(isset($subscription->ends_at))
                                         <a href="javascript:void(0)"
-                                           class="btn btn-danger pricing-plan-btn mt-auto align-self-center subscription ms-3">{{ __('messages.plan.subscription_cancelled') }}</a>
+                                           class="btn bg-red-600 text-white hover:bg-red-700 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center subscription ms-3">{{ __('messages.plan.subscription_cancelled') }}</a>
                                     @else
                                         @if($subscription['name'] != 'Trial Plan')
                                             <a href="javascript:void(0)"
-                                               class="btn btn-danger pricing-plan-btn mt-auto align-self-center cancel-subscription ms-3">{{ __('messages.plan.cancel_subscription') }}</a>
+                                               class="btn bg-red-600 text-white hover:bg-red-700 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center cancel-subscription ms-3">{{ __('messages.plan.cancel_subscription') }}</a>
                                         @endif
                                     @endif
                                 @endif
@@ -70,17 +70,17 @@
                         @else
                             @if($plan->is_trial_plan)
                                 <a href="javascript:void(0)" data-id="{{ $plan->id }}"
-                                   class="btn btn-info pricing-plan-btn mt-auto align-self-center"
+                                   class="btn bg-blue-500 text-white hover:bg-blue-600 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center"
                                    style="pointer-events: none;">{{ __('messages.plan.is_trial_plan') }} </a>
                             @elseif(!empty(processingPlan($plan->id)) )
                                 <a
                                         data-id="{{ $plan->id }}"
-                                        class="btn btn-secondary pricing-plan-btn mt-auto align-self-center cursor-default"> {{ __('messages.plan.processing') }}</a>
+                                        class="btn bg-gray-500 text-white hover:bg-gray-600 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center cursor-default"> {{ __('messages.plan.processing') }}</a>
                             @else
                                 @if($activePlanId !== $plan->id)
                                     <a href="{{ route('payment-method-screen', $plan->id) }}"
                                        data-id="{{ $plan->id }}"
-                                       class="btn btn-info pricing-plan-btn mt-auto align-self-center"> {{ __('messages.plan.purchase') }}</a>
+                                       class="btn bg-blue-500 text-white hover:bg-blue-600 pricing-plan- px-4 py-2 rounded font-medium transition-colors mt-auto align-self-center"> {{ __('messages.plan.purchase') }}</a>
                                 @endif
                             @endif
                         @endif

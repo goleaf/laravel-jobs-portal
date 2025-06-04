@@ -11,7 +11,7 @@ $statusColor = [
     $statusArray = App\Models\JobApplication::STATUS;
 ?>
 
-<span class="badge bg-light-{{ $statusColor[$row->status] }}">
+<span class="badge bg-gray-100 -{{ $statusColor[$ flex flex-wrap ->status] }}">
     @if($statusArray[$row->status] == 'Drafted')
         {{__('messages.common.drafted')}}
     @elseif($statusArray[$row->status] == 'Applied')

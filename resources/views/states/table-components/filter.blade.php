@@ -1,6 +1,6 @@
 <div class="ms-auto" wire:ignore>
-    <div class="dropdown d-flex align-items-center me-4 me-md-2">
-        <button class="btn btn btn-icon btn-primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
+    <div class="dropdown flex items-center me-4 me-md-2">
+        <button class="btn btn btn-icon px-4 py-2 rounded font-medium transition-colors -primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
             id="countryFilterBtn"data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
             <p class="text-center">
                 <i class='fas fa-filter'></i>
@@ -12,11 +12,11 @@
             </div>
             <div class="p-5">
                 <div class="mb-5">
-                    <label for="state" class="form-label">{{ __('messages.job.country') }}:</label>
+                    <label for="state" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job.country') }}:</label>
                     {{ Form::select('country',['0' => 'Select Country'] + getCountries(), null, ['class' => 'form-select io-select2', 'id' => 'country', 'data-control' => 'select2']) }}
                 </div>
-                <div class="d-flex justify-content-end">
-                    <button type="reset" class="btn btn-secondary"
+                <div class="flex justify-content-end">
+                    <button type="reset" class="btn px-4 py-2 rounded font-medium transition-colors -secondary"
                         id="country-ResetFilter">{{ __('messages.common.reset') }}</button>
                 </div>
             </div>

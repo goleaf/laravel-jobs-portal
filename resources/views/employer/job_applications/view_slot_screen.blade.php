@@ -7,11 +7,11 @@
 @endpush
 @section('content')
     @include('flash::message')
-        <div class="d-flex flex-column">
+        <div class="flex flex-column">
             @include('layouts.errors')
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-end">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                    <div class="flex justify-content-end">
                         @php
                             $stageId = null;
                         @endphp
@@ -24,9 +24,9 @@
                             </div>
                         @endif
                         @if($isSelectedRejectedSlot > 0 || $isStageMatch)
-                            <div class="d-flex align-items-center me-4 me-md-5 form-btn schedule-interview">
+                            <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors schedule-interview">
                                 <a href="javascript:void(0)"
-                                   class="btn btn-primary addJobStageModal ms-2">
+                                   class="btn px-4 py-2 rounded font-medium transition-colors -primary addJobStageModal ms-2">
                                     {{ __('messages.common.add') }}
                                 </a>
                             </div>

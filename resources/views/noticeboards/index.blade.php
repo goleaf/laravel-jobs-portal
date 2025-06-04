@@ -6,8 +6,8 @@
     <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column ">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             <livewire:noticeboard-table/>
         </div>

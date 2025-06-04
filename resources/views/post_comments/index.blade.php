@@ -3,8 +3,8 @@
     {{ __('messages.post.comment') }}
 @endsection
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex flex-column ">
+<div class="container mx-auto -fluid">
+    <div class="flex flex-column">
         @include('flash::message')
         <livewire:post-comment-table />
         {{Form::hidden('userCurrentLanguage',getCurrentLanguageCode(),['id'=>'postCommentLanguage'])}}

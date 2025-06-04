@@ -6,12 +6,12 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             @include('layouts.errors')
-            <div class="card">
-                <div class="card-body">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     {{ Form::open(['route' => 'cms.about-us.update','files' => true,]) }}
                     @include('cms_services.about-edit')
                     {{ Form::close() }}

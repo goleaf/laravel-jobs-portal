@@ -3,7 +3,7 @@
     {{ __('messages.favourite_companies') }}
 @endsection
 @section('content')
-    <div class="d-flex flex-column ">
+    <div class="flex flex-column">
         <livewire:favourite-company-table/>
     </div>
 @endsection

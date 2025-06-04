@@ -1,4 +1,4 @@
-{{--  <ul class="dropdown-menu d-block position-relative w-100 job-search-dropdown" role="menu">
+{{--  <ul class="dropdown-menu block position-relative w-full job-search-dropdown" role="menu">
     @if(!empty($results))
         @foreach($results as $result)
             <li>{{ $result }}</li>

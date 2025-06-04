@@ -1,6 +1,6 @@
 # Blade Route Analysis Summary
 
-**Generated:** 2025-06-04 01:01:56
+**Generated:** 2025-06-04 01:07:07
 
 ## 📊 Statistics
 
@@ -8,22 +8,15 @@
 |--------|-------|
 | Total Blade Files | 1078 |
 | Total Route References | 1049 |
-| Unique Routes | 170 |
-| Missing Routes | 28 |
-| Valid Routes | 1021 |
-| Success Rate | 97.33% |
+| Unique Routes | 171 |
+| Missing Routes | 10 |
+| Valid Routes | 1039 |
+| Success Rate | 99.05% |
 
 ## ❌ Missing Routes (Top 20)
 
 | Route Name | Occurrences | Files |
 |------------|-------------|-------|
-| `front.report-candidate` | 4 | resources/views/front_web/candidate/candidate_details.blade.php, resources/views/front_web_template/candidate/candidate_details.blade.php, resources/views/front_web/candidate/candidate_details.blade.php... +1 more |
-| `front.job-categories` | 4 | resources/views/front_web/home/home.blade.php, resources/views/front_web_template/home/home.blade.php, resources/views/front_web/home/home.blade.php... +1 more |
-| `front.search-jobs` | 2 | resources/views/front_web/home/home.blade.php, resources/views/front_web/home/home.blade.php |
-| `front.contact.send` | 2 | resources/views/front_web/contact/index.blade.php, resources/views/front_web/contact/index.blade.php |
-| `admin.email-template.index` | 2 | resources/views/email_templates/edit.blade.php, resources/views/layouts/sub_menu.blade.php |
-| `notification.settings.index` | 2 | resources/views/notification_settings/fields.blade.php, resources/views/layouts/sub_menu.blade.php |
-| `cms.services.index` | 2 | resources/views/layouts/sub_menu.blade.php, resources/views/layouts/menu.blade.php |
 | `reported.jobs` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `post.comments` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `salaryPeriod.index` | 1 | resources/views/layouts/sub_menu.blade.php |
@@ -33,7 +26,7 @@
 | `branding.sliders.index` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `header.sliders.index` | 1 | resources/views/layouts/sub_menu.blade.php |
 | `image-sliders.index` | 1 | resources/views/layouts/sub_menu.blade.php |
-| `cms.about-us.service` | 1 | resources/views/layouts/sub_menu.blade.php |
+| `language.change` | 1 | resources/views/components/language-selector.blade.php |
 
 ## 🎯 Next Steps
 
@@ -47,18 +40,7 @@
 
 Based on the missing routes, focus on these areas:
 
-### Admin Routes
-- `admin.email-template.index`
-
-### Frontend Routes
-- `front.report-candidate`
-- `front.job-categories`
-- `front.search-jobs`
-- `front.contact.send`
-
 ### Other Routes
-- `notification.settings.index`
-- `cms.services.index`
 - `reported.jobs`
 - `post.comments`
 - `salaryPeriod.index`
@@ -67,5 +49,6 @@ Based on the missing routes, focus on these areas:
 - `ownerShipType.index`
 - `branding.sliders.index`
 - `header.sliders.index`
-- ... and 2 more
+- `image-sliders.index`
+- `language.change`
 

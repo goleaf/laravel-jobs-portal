@@ -1,28 +1,28 @@
-<div class="col-xl-3 col-lg-4 col-md-6 mb-40">
-    <div class="card py-30">
+<div class="col-xl-3 col-lg-4 flex-1 -md-6 mb-40">
+    <div class="bg-white shadow rounded-lg overflow-hidden py-30">
         @if($company->activeFeatured)
             <span><i class="fas fa-bookmark bookmark-class"></i></span>
         @endif
-        <div class="row align-items-center">
-            <div class="col-3">
-                <img src="{{ $company->company_url }}" class="card-img img-border" alt="">
+        <div class="flex flex-wrap items-center">
+            <div class="flex-1 -3">
+                <img src="{{ $company->company_url }}" class="bg-white shadow rounded-lg overflow-hidden -img img-border" alt="">
             </div>
-            <div class="col-9 px-3">
-                <div class="card-body p-0">
+            <div class="flex-1 -9 px-3">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body p-0">
                     <a href="{{ route('front.company.details', $company->unique_id) }}"
                        class="text-secondary primary-link-hover">
-                        <h5 class="card-title   fs-20 mb-0">
+                        <h5 class="bg-white shadow rounded-lg overflow-hidden -title   fs-20 mb-0">
                             {!! $company->user->first_name !!}</h5>
                     </a>
-                    <div class="d-flex">
+                    <div class="flex">
                         {{--                    @if(!empty($company->industry->name))--}}
-                        {{--                        <div class="desc d-flex mb-2">--}}
+                        {{--                        <div class="desc flex mb-2">--}}
                         {{--                            <i class="fa-solid fa-briefcase text-gray me-3 fs-18"></i>--}}
                         {{--                            <p class="fs-14 text-gray mb-0">{{$company->industry->name}}</p>--}}
                         {{--                        </div>--}}
                         {{--                    @endif--}}
                         @if(!empty($company->location) || !empty($company->location2))
-                            <div class="desc location-text d-flex">
+                            <div class="desc location-text flex">
                                 <i class="fa-solid fa-location-dot  me-1 mt-1 fs-18"></i>
                                 <span class="">
                                     {{-- {{ (isset($company->location)) ? html_entity_decode(Str::limit($company->location)) : __('messages.common.n/a') }}{{ (isset($company->location2)) ? ','.html_entity_decode(Str::limit($company->location2,10,'...')) : '' }}--}}
@@ -38,16 +38,16 @@
             $open_jobs = $company->jobs->where('status', App\Models\Job::STATUS_OPEN)->count()
         @endphp
             @if($open_jobs <= 0)
-                <div class="card-desc mt-3">
-                    <div class="desc d-flex mt-2">
+                <div class="bg-white shadow rounded-lg overflow-hidden -desc mt-3">
+                    <div class="desc flex mt-2">
                         <p class="jobs-position bg-gray fs-14 mb-0 me-3 text-secondary">
                             {{ __('web.no_positions') }}
                         </p>
                     </div>
                 </div>
             @else
-                <div class="card-desc mt-3">
-                    <div class="desc  d-flex mt-2">
+                <div class="bg-white shadow rounded-lg overflow-hidden -desc mt-3">
+                    <div class="desc flex mt-2">
                         <a href="{{ route('front.company.details', $company->unique_id) }}"
                            class="jobs-position  fs-14 mb-0 me-3">
                             {{ $open_jobs }} {{__('web.open_positions')}}

@@ -4,43 +4,43 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">{{ __('messages.user.edit_profile') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close"
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
             </div>
             @formOpen(['id'=>'editAdminProfileForm','files'=>true])
             <div class="modal-body">
-                {{--            <div class="alert alert-danger  hide d-none" id="profileErrorMsg"></div>--}}
+                {{--            <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="profileErrorMsg"></div>--}}
                 {{ Form::hidden('user_id',null,['id'=>'editUserId']) }}
                 {{csrf_field()}}
-                <div class="row">
-                <div class="form-group col-sm-6 mb-5">
+                <div class="flex flex-wrap">
+                <div class="form-group flex-1 -sm-6 mb-5">
                     {{ Form::label('first_name', __('messages.candidate.first_name').(':'), ['class' => 'form-label required']) }}
                     {{ Form::text('first_name', null, ['id'=>'firstName','class' => 'form-control form-control-solid','required', 'placeholder' => __('messages.candidate.first_name')]) }}
                 </div>
-                <div class="form-group col-sm-6 mb-5">
+                <div class="form-group flex-1 -sm-6 mb-5">
                     {{ Form::label('last_name',__('messages.candidate.last_name').(':'),['class' => 'form-label']) }}
                     {{ Form::text('last_name', null, ['id'=>'lastName','class' => 'form-control form-control-solid', 'placeholder' => __('messages.candidate.last_name')]) }}
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group col-sm-6 mb-5">
+            <div class="flex flex-wrap">
+                <div class="form-group flex-1 -sm-6 mb-5">
                     {{ Form::label('email', __('messages.candidate.email').(':'),['class' => 'required form-label']) }}
                     {{ Form::text('email', null, ['id'=>'userEmail','class' => 'form-control form-control-solid','required', 'placeholder' => __('messages.candidate.email')]) }}
                 </div>
-                <div class="form-group col-sm-6 mb-5 mobile-itel-width">
+                <div class="form-group flex-1 -sm-6 mb-5 mobile-itel-width">
                     {{ Form::label('phone',__('messages.candidate.phone').(':'),['class' => 'form-label ']) }}
-                    <div class="form-group col-sm-12 mb-5">
+                    <div class="form-group flex-1 -sm-12 mb-5">
                         {{ Form::tel('phone', null, ['class' => 'form-control form-control-solid','onkeyup' => 'if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,"")','id'=>'phoneNumber']) }}
                     </div>
                     {{ Form::hidden('region_code',null,['id'=>'profilePrefixCode']) }}
-                    <p id="valid-msg" class="text-success d-none fw-400 fs-small mt-2">{{__('messages.phone.valid_number')}}</p>
-                    <p id="error-msg" class="text-danger d-none fw-400 fs-small mt-2">{{__('messages.phone.invalid_number')}}</p>
+                    <p id="valid-msg" class="text-green-600 hidden fw-400 fs-small mt-2">{{__('messages.phone.valid_number')}}</p>
+                    <p id="error-msg" class="text-red-600 hidden fw-400 fs-small mt-2">{{__('messages.phone.invalid_number')}}</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xl-6 col-md-6 col-sm-12 mb-5" io-image-input="true">
-                    <div class="d-block mb-2">
+            <div class="flex flex-wrap">
+                <div class="col-xl-6 md:w-6/12 flex-1 -sm-12 mb-5" io-image-input="true">
+                    <div class="block mb-2">
                         {{__('messages.candidate.profile').':'}}
                         <span data-bs-toggle="tooltip"
                               data-placement="top"
@@ -48,7 +48,7 @@
         <i class="fas fa-question-circle ml-1  general-question-mark"></i>
 </span>
                     </div>
-                    <div class="d-block">
+                    <div class="block">
                         <div class="image-picker">
                             <div class="image previewImage" id="profilePicturePreview"
                                  style="background-image: url({{ asset('assets/img/infyom-logo.png') }})">
@@ -67,7 +67,7 @@
             </div>
             <div class="modal-footer pt-0">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'btnEditSave','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
+                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
             </div>
         @formClose()
@@ -81,13 +81,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">{{  __('messages.user_language.change_language') }}</h3>
-                <button type="button" aria-label="Close" class="btn-close"
+                <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors -close"
                         data-bs-dismiss="modal">
                 </button>
             </div>
             @formOpen(['id'=>'changeAdminLanguageForm'])
             <div class="modal-body">
-                <div class="alert alert-danger  hide d-none" id="editProfileValidationErrorsBox"></div>
+                <div class="alert p-4 rounded-md mb-4 -danger  hide hidden" id="editProfileValidationErrorsBox"></div>
                 {{csrf_field()}}
                 <div class="">
                     {{ Form::label('language',__('messages.user_language.language').(':'), ['class' => 'required form-label']) }}
@@ -96,7 +96,7 @@
                 </div>
                 <div class="modal-footer pt-0">
                     {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'btnLanguageChange','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-                    <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
+                    <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0"
                             id="btnEditCancel"
                             data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button>
                 </div>

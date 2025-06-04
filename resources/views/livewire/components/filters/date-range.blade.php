@@ -1,4 +1,4 @@
-<div class="flex flex-col">
+<div class="flex flex- flex-1">
     <label class="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
         {{ $filter['title'] }}
     </label>

@@ -1,5 +1,5 @@
 <!-- Form Helpers README -->
-<div class="container">
+<div class="container mx-auto">
     <h1>Form Helpers Documentation</h1>
     
     <h2>Introduction</h2>
@@ -69,7 +69,7 @@
             {{ Form::password('password', ['class' => 'form-control']) }}
         </div>
         
-        <div class="form-check">
+        <div class="flex items-center">
             {{ Form::checkbox('remember', 1, old('remember'), ['class' => 'form-check-input', 'id' => 'remember']) }}
             {{ Form::label('remember', 'Remember Me', ['class' => 'form-check-label']) }}
         </div>

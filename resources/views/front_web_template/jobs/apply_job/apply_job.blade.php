@@ -9,18 +9,18 @@
 @section('content')
     <div class="apply-job-page">
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
                             <h1 class="text-secondary mb-2"> @lang('web.job_details.apply_for_job')</h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item">
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
                                         @lang('web.job_details.apply_for_job')
                                     </li>
                                 </ol>
@@ -32,18 +32,18 @@
         </section>
 
         <section class="apply-job-section contact-section py-100">
-            <div class="container">
+            <div class="container mx-auto">
                 <div class="upper-box">
-                    <div class="row">
-                        <div class="col-xl-8 col-md-10 mx-auto mb-4">
-                            <div class="row mb-3">
-                                <div class="col-lg-2">
+                    <div class="flex flex-wrap">
+                        <div class="col-xl-8 flex-1 -md-10 mx-auto mb-4">
+                            <div class="flex flex-wrap mb-3">
+                                <div class="flex-1 -lg-2">
                                     <img src="{{ $job->company->company_url }}"
                                         class="mb-4 apply-img rounded-circle object-fit-cover">
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="flex-1 -lg-10">
                                     <h2 class="ml-3 mb-2">{{ __('web.apply_for_job.apply_for') }}</h2> <span
-                                        class="text-primary ml-3">{{ $job->job_title }}</span>
+                                        class="text-primary-600 ml-3">{{ $job->job_title }}</span>
                                 </div>
                             </div>
                             <h3 class="fs-4 mb-0">{{ __('web.apply_for_job.fill_details') }}</h3>
@@ -60,20 +60,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-8 col-md-10 mx-auto">
+                <div class="col-xl-8 flex-1 -md-10 mx-auto">
                     @formOpen(['id' => 'applyJobForm', 'class' => 'py-40 px-40 bg-gray'])
                         @csrf
                         @include('front_web.layouts.errors')
                         @include('flash::message')
                         <input type="hidden" value="{{ isset($job) ? $job->id : null }}" name="job_id">
-                        <div class="row">
-                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                        <div class="flex flex-wrap">
+                            <div class="form-group col-lg-12 md:w-full flex-1 -sm-12">
                                 <div class="response"></div>
                             </div>
 
-                            <div class="col-lg-6 col-md-12 col-sm-12 form-group mb-md-4 mb-3 ">
+                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
                                 {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3']) }}
-                                <span class="text-danger">*</span>
+                                <span class="text-red-600">*</span>
                                 {{ Form::select('resume_id', $resumes, ($isJobDrafted ? $draftJobDetails->resume_id : ''), [
                                     'class' => 'chosen-search-select form-select fs-14 text-gray bg-white br-10 p-3',
                                     'id' => 'resumeId',
@@ -84,9 +84,9 @@
                                 ]) }}
                             </div>
 
-                            <div class="col-lg-6 col-md-12 col-sm-12 form-group mb-md-4 mb-3 ">
+                            <div class="col-lg-6 md:w-full flex-1 -sm-12 form-group mb-md-4 mb-3">
                                 {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3']) }}
-                                <span class="text-danger">*</span>
+                                <span class="text-red-600">*</span>
                                 {{ Form::text('expected_salary', ($isJobDrafted ? $draftJobDetails->expected_salary : ''), [
                                     'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                     'id' => 'expected_salary',
@@ -96,7 +96,7 @@
                                 ]) }}
                             </div>
 
-                            <div class="col-md-12 mb-4">
+                            <div class="flex-1 -md-12 mb-4">
                                 <div class="form-group">
                                     {{ Form::label('notes', __('messages.apply_job.notes').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                     {{ Form::textarea('notes', ($isJobDrafted ? $draftJobDetails->notes : ''), [
@@ -107,14 +107,14 @@
                                 </div>
                             </div>
                             @if (getSettingValue('enable_google_recaptcha'))
-                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-4 text-center">
-                                    <div class="g-recaptcha d-flex justify-content-center"
+                                <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group mb-4 text-center">
+                                    <div class="g-recaptcha flex justify-center"
                                         data-sitekey="{{ config('app.google_recaptcha_site_key') }}" name="g-recaptcha"
                                         id="g-recaptcha" required></div>
                                     <div id="g-recaptcha-error" required></div>
                                 </div>
                             @endif
-                            <div class="col-lg-12 col-md-12 col-sm-12 form-group text-center">
+                            <div class="col-lg-12 md:w-full flex-1 -sm-12 form-group text-center">
                                 @if (!$isApplied)
                                     @if (!$isJobDrafted)
                                         {{ Form::button(__('web.common.save_as_draft'), [

@@ -4,12 +4,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ __('messages.candidate_profile.upload_resume') }}</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
             {{ Form::open(['id'=>'addCandidateResumeForm']) }}
             <div class="modal-body">
-                <div class="alert alert-danger hide d-none" id="validationErrorsBox">
+                <div class="alert p-4 rounded-md mb-4 -danger hide hidden" id="validationErrorsBox">
                     <i class='fa-solid fa-face-frown me-4'></i>
                 </div>
                 <div class="mb-5">
@@ -21,21 +21,21 @@
                     <div>
                         {{ Form::label('customFile',__('messages.common.choose_file').(':'), ['class' => 'form-label']) }}
                         <span class="required"></span>
-                        <input type="file" class="form-control custom-file-input" id="customFile" name="file" required>
+                        <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 custom-file-input" id="customFile" name="file" required>
                     </div>
                 </div>
                 <div>
                     {{ Form::label('is_default', __('messages.job_experience.is_default').':', ['class' => 'form-label']) }}
                     <br>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" name="is_default" type="checkbox"
+                    <div class="flex items-center form-switch">
+                        <input class="flex items-center -input" name="is_default" type="checkbox"
                                value="1" id="default">
                     </div>
                 </div>
             </div>
             <div class="modal-footer pt-0">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'btn btn-primary m-0','id' => 'candidateSaveBtn','data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> ".__('messages.common.process')]) }}
-                <button type="button" class="btn btn-secondary my-0 ms-5 me-0"
+                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary my-0 ms-5 me-0"
                         data-bs-dismiss="modal">{{ __('messages.common.cancel') }}
                 </button>
             </div>

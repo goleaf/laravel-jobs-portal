@@ -1,11 +1,11 @@
 {
-    "timestamp": "2025-06-04 01:01:56",
+    "timestamp": "2025-06-04 01:07:07",
     "statistics": {
         "total_blade_files": 1078,
         "total_route_references": 1049,
-        "unique_routes": 170,
-        "missing_routes": 28,
-        "valid_routes": 1021
+        "unique_routes": 171,
+        "missing_routes": 10,
+        "valid_routes": 1039
     },
     "existing_routes": [
         "debugbar.openhandler",
@@ -100,12 +100,20 @@
         "admin.jobs.show",
         "admin.jobs.edit",
         "admin.jobs.destroy",
+        "front.report-candidate",
+        "front.job-categories",
+        "front.search-jobs",
+        "front.contact.send",
+        "admin.email-template.index",
+        "notification.settings.index",
+        "cms.services.index",
+        "cms.about-us.service",
         "admin.transactions.index",
         "admin.transactions.create",
         "admin.transactions.show",
         "admin.transactions.edit",
         "admin.transactions.destroy",
-        "language.change",
+        "language.switch",
         "states-list",
         "cities-list",
         "countries-list",
@@ -171,7 +179,6 @@
         "admin.posts.create",
         "admin.posts.show",
         "admin.posts.edit",
-        "admin.post.comments",
         "admin.plans.index",
         "admin.countries.index",
         "admin.states.index",
@@ -206,6 +213,7 @@
         "admin.download-all-resume",
         "admin.selected-candidate",
         "admin.jobs.expiredJobs",
+        "admin.post.comments",
         "admin.marital-statuses.index",
         "admin.index",
         "manage-subscription.index",
@@ -302,66 +310,6 @@
     ],
     "missing_routes": [
         {
-            "route": "front.report-candidate",
-            "files": [
-                "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
-                "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
-                "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
-                "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php"
-            ],
-            "count": 4
-        },
-        {
-            "route": "front.job-categories",
-            "files": [
-                "resources\/views\/front_web\/home\/home.blade.php",
-                "resources\/views\/front_web_template\/home\/home.blade.php",
-                "resources\/views\/front_web\/home\/home.blade.php",
-                "resources\/views\/front_web_template\/home\/home.blade.php"
-            ],
-            "count": 4
-        },
-        {
-            "route": "front.search-jobs",
-            "files": [
-                "resources\/views\/front_web\/home\/home.blade.php",
-                "resources\/views\/front_web\/home\/home.blade.php"
-            ],
-            "count": 2
-        },
-        {
-            "route": "front.contact.send",
-            "files": [
-                "resources\/views\/front_web\/contact\/index.blade.php",
-                "resources\/views\/front_web\/contact\/index.blade.php"
-            ],
-            "count": 2
-        },
-        {
-            "route": "admin.email-template.index",
-            "files": [
-                "resources\/views\/email_templates\/edit.blade.php",
-                "resources\/views\/layouts\/sub_menu.blade.php"
-            ],
-            "count": 2
-        },
-        {
-            "route": "notification.settings.index",
-            "files": [
-                "resources\/views\/notification_settings\/fields.blade.php",
-                "resources\/views\/layouts\/sub_menu.blade.php"
-            ],
-            "count": 2
-        },
-        {
-            "route": "cms.services.index",
-            "files": [
-                "resources\/views\/layouts\/sub_menu.blade.php",
-                "resources\/views\/layouts\/menu.blade.php"
-            ],
-            "count": 2
-        },
-        {
             "route": "reported.jobs",
             "files": [
                 "resources\/views\/layouts\/sub_menu.blade.php"
@@ -425,9 +373,9 @@
             "count": 1
         },
         {
-            "route": "cms.about-us.service",
+            "route": "language.change",
             "files": [
-                "resources\/views\/layouts\/sub_menu.blade.php"
+                "resources\/views\/components\/language-selector.blade.php"
             ],
             "count": 1
         }
@@ -866,7 +814,7 @@
         {
             "route": "front.report-candidate",
             "file": "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -891,7 +839,7 @@
         {
             "route": "front.job-categories",
             "file": "resources\/views\/front_web\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -931,7 +879,7 @@
         {
             "route": "front.search-jobs",
             "file": "resources\/views\/front_web\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -1031,7 +979,7 @@
         {
             "route": "front.contact.send",
             "file": "resources\/views\/front_web\/contact\/index.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.home",
@@ -1861,7 +1809,7 @@
         {
             "route": "admin.email-template.index",
             "file": "resources\/views\/email_templates\/edit.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.posts.details",
@@ -1941,7 +1889,7 @@
         {
             "route": "front.report-candidate",
             "file": "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -1961,7 +1909,7 @@
         {
             "route": "front.job-categories",
             "file": "resources\/views\/front_web_template\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -2751,7 +2699,7 @@
         {
             "route": "notification.settings.index",
             "file": "resources\/views\/notification_settings\/fields.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "manage-subscription.index",
@@ -3021,7 +2969,7 @@
         {
             "route": "notification.settings.index",
             "file": "resources\/views\/layouts\/sub_menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "privacy.policy.index",
@@ -3041,7 +2989,7 @@
         {
             "route": "admin.email-template.index",
             "file": "resources\/views\/layouts\/sub_menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "admin.dashboard",
@@ -3071,12 +3019,12 @@
         {
             "route": "cms.services.index",
             "file": "resources\/views\/layouts\/sub_menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "cms.about-us.service",
             "file": "resources\/views\/layouts\/sub_menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "admin.dashboard",
@@ -3141,7 +3089,7 @@
         {
             "route": "cms.services.index",
             "file": "resources\/views\/layouts\/menu.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "components.icon-documentation",
@@ -3576,7 +3524,7 @@
         {
             "route": "language.change",
             "file": "resources\/views\/components\/language-selector.blade.php",
-            "exists": true
+            "exists": false
         },
         {
             "route": "front.home",
@@ -3604,7 +3552,7 @@
             "exists": true
         },
         {
-            "route": "language.change",
+            "route": "language.switch",
             "file": "resources\/views\/components\/language-switcher.blade.php",
             "exists": true
         },
@@ -4236,7 +4184,7 @@
         {
             "route": "front.report-candidate",
             "file": "resources\/views\/front_web\/candidate\/candidate_details.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -4261,7 +4209,7 @@
         {
             "route": "front.job-categories",
             "file": "resources\/views\/front_web\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -4301,7 +4249,7 @@
         {
             "route": "front.search-jobs",
             "file": "resources\/views\/front_web\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -4401,7 +4349,7 @@
         {
             "route": "front.contact.send",
             "file": "resources\/views\/front_web\/contact\/index.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.home",
@@ -4936,7 +4884,7 @@
         {
             "route": "front.report-candidate",
             "file": "resources\/views\/front_web_template\/candidate\/candidate_details.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",
@@ -4956,7 +4904,7 @@
         {
             "route": "front.job-categories",
             "file": "resources\/views\/front_web_template\/home\/home.blade.php",
-            "exists": false
+            "exists": true
         },
         {
             "route": "front.search.jobs",

@@ -3,24 +3,24 @@
 @section('title', 'Job Details')
 
 @section('content')
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-8">
+<div class="container mx-auto py-5">
+    <div class="flex flex-wrap">
+        <div class="flex-1 -lg-8">
             <!-- Job Header -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-start">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mb-4">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body p-4">
+                    <div class="flex align-items-start">
                         <div class="company-logo me-4">
-                            <i class="fas fa-building fa-4x text-primary"></i>
+                            <i class="fas fa-building fa-4x text-primary-600"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h1 class="h2 mb-2">Senior Software Developer</h1>
-                            <h5 class="text-muted mb-3"><i class="fas fa-building me-2"></i>TechCorp Solutions</h5>
+                            <h5 class="text-gray-500 mb-3"><i class="fas fa-building me-2"></i>TechCorp Solutions</h5>
                             <div class="job-meta mb-3">
-                                <span class="badge bg-primary me-2"><i class="fas fa-map-marker-alt me-1"></i>New York, NY</span>
-                                <span class="badge bg-success me-2"><i class="fas fa-clock me-1"></i>Full-time</span>
+                                <span class="badge bg-primary-600 me-2"><i class="fas fa-map-marker-alt me-1"></i>New York, NY</span>
+                                <span class="badge bg-green-600 me-2"><i class="fas fa-clock me-1"></i>Full-time</span>
                                 <span class="badge bg-info me-2"><i class="fas fa-dollar-sign me-1"></i>$80k-$120k</span>
-                                <span class="badge bg-warning"><i class="fas fa-calendar me-1"></i>Posted 3 days ago</span>
+                                <span class="badge bg-yellow-500"><i class="fas fa-calendar me-1"></i>Posted 3 days ago</span>
                             </div>
                             <p class="lead mb-0">Join our innovative team and help build cutting-edge software solutions that impact millions of users worldwide.</p>
                         </div>
@@ -29,11 +29,11 @@
             </div>
 
             <!-- Job Description -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mb-4">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Job Description</h5>
                 </div>
-                <div class="card-body">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     <h6>About the Role</h6>
                     <p>We are seeking a talented Senior Software Developer to join our growing engineering team. You will be responsible for designing, developing, and maintaining high-quality software applications using modern technologies and best practices.</p>
                     
@@ -81,18 +81,18 @@
             </div>
 
             <!-- Required Skills -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mb-4">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Required Skills</h5>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="badge bg-primary p-2">JavaScript</span>
-                        <span class="badge bg-primary p-2">React</span>
-                        <span class="badge bg-primary p-2">Node.js</span>
-                        <span class="badge bg-primary p-2">Python</span>
-                        <span class="badge bg-primary p-2">SQL</span>
-                        <span class="badge bg-primary p-2">Git</span>
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="badge bg-primary-600 p-2">JavaScript</span>
+                        <span class="badge bg-primary-600 p-2">React</span>
+                        <span class="badge bg-primary-600 p-2">Node.js</span>
+                        <span class="badge bg-primary-600 p-2">Python</span>
+                        <span class="badge bg-primary-600 p-2">SQL</span>
+                        <span class="badge bg-primary-600 p-2">Git</span>
                         <span class="badge bg-secondary p-2">AWS</span>
                         <span class="badge bg-secondary p-2">Docker</span>
                         <span class="badge bg-secondary p-2">REST APIs</span>
@@ -102,30 +102,30 @@
             </div>
 
             <!-- Company Information -->
-            <div class="card shadow-sm">
-                <div class="card-header">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h5 class="mb-0"><i class="fas fa-building me-2"></i>About TechCorp Solutions</h5>
                 </div>
-                <div class="card-body">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     <p>TechCorp Solutions is a leading technology company specializing in innovative software solutions for businesses worldwide. Founded in 2015, we have grown to over 500 employees across multiple offices globally.</p>
                     
-                    <div class="row mt-4">
-                        <div class="col-md-6">
+                    <div class="flex flex-wrap mt-4">
+                        <div class="flex-1 -md-6">
                             <div class="company-stat">
-                                <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                <i class="fas fa-users fa-2x text-primary-600 mb-2"></i>
                                 <h6>500+ Employees</h6>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="flex-1 -md-6">
                             <div class="company-stat">
-                                <i class="fas fa-calendar fa-2x text-primary mb-2"></i>
+                                <i class="fas fa-calendar fa-2x text-primary-600 mb-2"></i>
                                 <h6>Founded in 2015</h6>
                             </div>
                         </div>
                     </div>
                     
                     <div class="mt-3">
-                        <a href="{{ route('company.show', 1) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('company.show', 1) }}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary">
                             <i class="fas fa-external-link-alt me-2"></i>View Company Profile
                         </a>
                     </div>
@@ -134,27 +134,27 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="col-lg-4">
+        <div class="flex-1 -lg-4">
             <!-- Apply Card -->
-            <div class="card shadow-sm mb-4 apply-card">
-                <div class="card-body text-center p-4">
+            <div class="card shadow-sm mb-4 apply- bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body text-center p-4">
                     <h5 class="mb-3">Ready to Apply?</h5>
-                    <p class="text-muted mb-4">Join our team and start your career journey with us!</p>
-                    <button class="btn btn-primary btn-lg w-100 mb-3" onclick="showApplyModal()">
+                    <p class="text-gray-500 mb-4">Join our team and start your career journey with us!</p>
+                    <button class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -lg w-full mb-3" onclick="showApplyModal()">
                         <i class="fas fa-paper-plane me-2"></i>Apply Now
                     </button>
-                    <button class="btn btn-outline-danger w-100" onclick="toggleSaveJob()">
+                    <button class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger w-full" onclick="toggleSaveJob()">
                         <i class="far fa-heart me-2"></i>Save Job
                     </button>
                 </div>
             </div>
 
             <!-- Job Summary -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm mb-4">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Job Summary</h6>
                 </div>
-                <div class="card-body">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     <div class="summary-item mb-3">
                         <strong>Job ID:</strong> JOB-2024-001
                     </div>
@@ -180,22 +180,22 @@
             </div>
 
             <!-- Share Job -->
-            <div class="card shadow-sm">
-                <div class="card-header">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm">
+                <div class="bg-white shadow rounded-lg overflow-hidden -header">
                     <h6 class="mb-0"><i class="fas fa-share-alt me-2"></i>Share this Job</h6>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-outline-primary btn-sm flex-fill" onclick="shareJob('facebook')">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                    <div class="flex gap-2">
+                        <button class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('facebook')">
                             <i class="fab fa-facebook-f"></i>
                         </button>
-                        <button class="btn btn-outline-info btn-sm flex-fill" onclick="shareJob('twitter')">
+                        <button class="btn btn-outline-info px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('twitter')">
                             <i class="fab fa-twitter"></i>
                         </button>
-                        <button class="btn btn-outline-primary btn-sm flex-fill" onclick="shareJob('linkedin')">
+                        <button class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="shareJob('linkedin')">
                             <i class="fab fa-linkedin-in"></i>
                         </button>
-                        <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="copyJobLink()">
+                        <button class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm flex-fill" onclick="copyJobLink()">
                             <i class="fas fa-link"></i>
                         </button>
                     </div>
@@ -211,47 +211,47 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Apply for Senior Software Developer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="applyForm">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName" class="form-label">First Name *</label>
-                            <input type="text" class="form-control" id="firstName" required>
+                    <div class="flex flex-wrap">
+                        <div class="flex-1 -md-6 mb-3">
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="firstName" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName" class="form-label">Last Name *</label>
-                            <input type="text" class="form-control" id="lastName" required>
+                        <div class="flex-1 -md-6 mb-3">
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="lastName" required>
                         </div>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email Address *</label>
-                            <input type="email" class="form-control" id="email" required>
+                    <div class="flex flex-wrap">
+                        <div class="flex-1 -md-6 mb-3">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                            <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="email" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">Phone Number *</label>
-                            <input type="tel" class="form-control" id="phone" required>
+                        <div class="flex-1 -md-6 mb-3">
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                            <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="phone" required>
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="resume" class="form-label">Upload Resume *</label>
-                        <input type="file" class="form-control" id="resume" accept=".pdf,.doc,.docx" required>
+                        <label for="resume" class="block text-sm font-medium text-gray-700 mb-1">Upload Resume *</label>
+                        <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="resume" accept=".pdf,.doc,.docx" required>
                         <div class="form-text">Accepted formats: PDF, DOC, DOCX (Max 5MB)</div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="coverLetter" class="form-label">Cover Letter</label>
-                        <textarea class="form-control" id="coverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
+                        <label for="coverLetter" class="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="coverLetter" rows="4" placeholder="Tell us why you're interested in this position..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitApplication()">
+                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -primary" onclick="submitApplication()">
                     <i class="fas fa-paper-plane me-2"></i>Submit Application
                 </button>
             </div>

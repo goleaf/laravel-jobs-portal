@@ -9,17 +9,17 @@
             </div>
             {{ Form::open(['id' => 'showForm']) }}
             <div class="modal-body">
-                <div class="row details-page">
-                    <div class="col-sm-6">
+                <div class="flex flex-wrap details-page">
+                    <div class="flex-1 -sm-6">
                         {{ Form::label('name',__('messages.image_slider.image').':') }}<br>
                         <img src="" id="documentUrl" class="img-thumbnail thumbnail-preview" alt="image"/>
                         <label id="noDocument">{{ __('messages.n/a') }}</label>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="flex-1 -sm-6">
                         {{ Form::label('status',__('messages.common.status').':') }}<br>
                         <span id="showStatus"></span>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="flex-1 -sm-12">
                         {{ Form::label('description',__('messages.common.description').':') }}<br>
                     <div class="reported-note">
                         <span id="showDescription"></span>

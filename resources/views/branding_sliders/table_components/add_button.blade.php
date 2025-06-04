@@ -1,5 +1,5 @@
 <div class="menu-item">
-    <a type="button" class="btn btn-primary addBrandingSliderModal ">
+    <a type="button" class="btn px-4 py-2 rounded font-medium transition-colors -primary addBrandingSliderModal">
         {{ __('messages.common.add') }}
     </a>
 

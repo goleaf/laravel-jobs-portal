@@ -9,7 +9,7 @@
         {{ $label }}
     </label>
     
-    <div class="flex flex-col space-y-2">
+    <div class="flex flex- flex-1 space-y-2">
         <div class="flex items-center space-x-2">
             <div class="w-full">
                 <label for="filter-{{ $name }}-min" class="block text-xs font-medium text-gray-500 mb-1">

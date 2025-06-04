@@ -15,19 +15,19 @@
 @endsection
 @section('content')
     <div class="job-seekers-page">
-        <section class="hero-section position-relative bg-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+        <section class="hero-section position-relative bg-gray-100 py-40">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
                             <h1 class="text-secondary mb-3">
                                 @lang('web.post_menu.categories')
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item "><a href="{{route('front.home')}}" class="fs-18 text-gray">{{ __('web.home') }} </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.post_menu.categories')</li>
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.post_menu.categories')</li>
                                 </ol>
                             </nav>
                         </div>
@@ -37,42 +37,42 @@
         </section>
             @if(count($jobCategories) > 0)
                 <section class="popular-job-categories-section py-100">
-                    <div class="container">
-                        <div class="job-categories-card">
-                            <div class="row">
+                    <div class="container mx-auto">
+                        <div class="job-categories- bg-white shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-wrap">
                                 @foreach($jobCategories as $jobCategory)
-                                    <div class="col-lg-4 col-md-6 px-xl-3 mb-40">
-                                        <div class="card py-30">
-                                            <div class="row align-items-center">
-                                                <div class="col-3">
-                                                    <img src="{{$jobCategory->image_url}}" class="card-img" alt="...">
+                                    <div class="col-lg-4 flex-1 -md-6 px-xl-3 mb-40">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden py-30">
+                                            <div class="flex flex-wrap items-center">
+                                                <div class="flex-1 -3">
+                                                    <img src="{{$jobCategory->image_url}}" class="bg-white shadow rounded-lg overflow-hidden -img" alt="...">
                                                 </div>
-                                                <div class="col-8">
-                                                    <div class="card-body ps-xl-0 ps-lg-3">
+                                                <div class="flex-1 -8">
+                                                    <div class="bg-white shadow rounded-lg overflow-hidden -body ps-xl-0 ps-lg-3">
                                                         <a href="{{ route('front.search.jobs',array('categories'=> $jobCategory->id)) }}" class="text-secondary primary-link-hover">
-                                                            <h5 class="card-title fs-18">{{html_entity_decode($jobCategory->name)}}</h5>
+                                                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18">{{html_entity_decode($jobCategory->name)}}</h5>
                                                         </a>
-                                                        <p class="card-text fs-14 text-gray">
+                                                        <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray">
                                                             {{ (($jobCategory->jobs_count) ? $jobCategory->jobs_count : 0) .' '. __('web.open_positions')}}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 @if($jobCategory->is_featured)
-                                                    <div class="col-1 icon position-relative pe-0">
-                                                        <i class="text-primary fa-solid fa-bookmark"></i>
+                                                    <div class="flex-1 -1 icon position-relative pe-0">
+                                                        <i class="text-primary-600 fa-solid fa-bookmark"></i>
                                                     </div>
                                                 @endif
                                                 @if($jobCategory->jobs_count <= 0)
-                                                    <div class="card-desc mt-3">
-                                                        <div class="desc d-flex mt-2">
+                                                    <div class="bg-white shadow rounded-lg overflow-hidden -desc mt-3">
+                                                        <div class="desc flex mt-2">
                                                             <p class="jobs-position bg-gray fs-14 mb-0 me-3 text-secondary">
                                                                 {{ __('web.no_positions') }}
                                                             </p>
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <div class="card-desc mt-3">
-                                                        <div class="desc  d-flex mt-2">
+                                                    <div class="bg-white shadow rounded-lg overflow-hidden -desc mt-3">
+                                                        <div class="desc flex mt-2">
                                                             <a href="{{ route('front.search.jobs',array('categories'=> $jobCategory->id)) }}" class="jobs-position  fs-14 mb-0 me-3">
                                                                 {{ __('web.open_positions') }} ->
                                                             </a>

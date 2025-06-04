@@ -6,12 +6,10 @@
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.10",
-        "@types/bootstrap": "^5.2.10",
         "@types/jquery": "^3.5.32",
         "@types/node": "^22.15.29",
         "@vitejs/plugin-vue2": "^2.2.0",
         "axios": "^1.6.1",
-        "bootstrap": "^5.3.6",
         "jquery": "^3.2",
         "laravel-vite-plugin": "^0.8.0",
         "lodash": "^4.17.13",

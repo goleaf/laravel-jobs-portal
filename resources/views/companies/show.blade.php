@@ -3,22 +3,22 @@
     {{ __('messages.company.employer_details') }}
 @endsection
 @section('header_toolbar')
-    <div class="container-fluid">
-        <div class="d-md-flex align-items-center justify-content-between mb-5">
+    <div class="container mx-auto -fluid">
+        <div class="d-md-flex items-center justify-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
-                <a  href="{{ route('company.edit',$company->id) }}" class="btn btn-primary me-4">{{ __('messages.common.edit') }}</a>
-                <a href="{!! URL::previous() !!}" class="btn btn-outline-primary">{{ __('messages.common.back') }}</a>
+                <a  href="{{ route('company.edit',$company->id) }}" class="btn px-4 py-2 rounded font-medium transition-colors -primary me-4">{{ __('messages.common.edit') }}</a>
+                <a href="{!! URL::previous() !!}" class="btn px-4 py-2 rounded font-medium transition-colors -outline-primary">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>
 @endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                    <div class="flex flex-wrap">
                         @include('companies.show_fields')
                     </div>
                 </div>

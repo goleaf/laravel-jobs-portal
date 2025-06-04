@@ -10,15 +10,15 @@
     <link href="{{asset('front_web/scss/bootstrap.css')}}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="container con-404 vh-100 d-flex justify-content-center">
-    <div class="row justify-content-md-center d-block">
-        <div class="col-md-12 mt-5">
-            <img src="{{ asset('assets/img/404-error-image.png') }}" class="img-fluid img-404 mx-auto d-block">
+<div class="container mx-auto con-404 vh-100 flex justify-center">
+    <div class="flex flex-wrap justify-content-md-center block">
+        <div class="flex-1 -md-12 mt-5">
+            <img src="{{ asset('assets/img/404-error-image.png') }}" class="img-fluid img-404 mx-auto block">
         </div>
-        <div class="col-md-12 text-center error-page-404">
+        <div class="flex-1 -md-12 text-center error-page-404">
             <h2>{{ __('messages.something_missing') }}</h2>
             <p class="not-found-subtitle">{{ __('messages.page_not_found') }}.</p>
-            <a class="btn btn-primary back-btn mt-3" data-turbo="false" href="{{ url()->previous() }}" >{{ __('messages.go_back') }}</a>
+            <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 back- px-4 py-2 rounded font-medium transition-colors mt-3" data-turbo="false" href="{{ url()->previous() }}" >{{ __('messages.go_back') }}</a>
         </div>
     </div>
 </div>

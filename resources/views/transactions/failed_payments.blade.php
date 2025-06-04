@@ -5,12 +5,12 @@
 @section('content')
     <section class="section">
         <div class="section-body">
-            <div class="card shadow-danger">
-                <div class="card-body pt-0">
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-between flex-wrap">
-                            <div class="col-12 text-danger m-2">
-                                <div class="d-flex align-items-center">
+            <div class="bg-white shadow rounded-lg overflow-hidden shadow-danger">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body pt-0">
+                    <div class="flex flex-wrap">
+                        <div class="flex-1 -12 flex justify-between flex-wrap">
+                            <div class="flex-1 -12 text-red-600 m-2">
+                                <div class="flex items-center">
                                     <h6 class="mb-0">{{ __('messages.flash.payment_failed_try_again') }}</h6>
                                 </div>
                             </div>
@@ -18,8 +18,8 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex align-items-center justify-content-center">
-                <a class="btn btn-primary" href="{{ route('manage-subscription.index') }}">{{ __('messages.see_all_plans') }}</a>
+            <div class="flex items-center justify-center">
+                <a class="btn px-4 py-2 rounded font-medium transition-colors -primary" href="{{ route('manage-subscription.index') }}">{{ __('messages.see_all_plans') }}</a>
             </div>
         </div>
     </section>

@@ -3,15 +3,15 @@
     {{ __('messages.dashboard') }}
 @endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
-            <div class="row">
-                <div class="col-12 mb-4">
-                    <div class="row">
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
+            <div class="flex flex-wrap">
+                <div class="flex-1 -12 mb-4">
+                    <div class="flex flex-wrap">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('admin.candidates.index') }}" class=" text-decoration-none">
-                            <div class="bg-primary shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-cyan-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                            <div class="bg-primary-600 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-cyan-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-users fs-1-xl text-white"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -21,10 +21,10 @@
                             </div>
                             </a>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('company.index') }}" class=" text-decoration-none">
-                            <div class="bg-success shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-green-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                            <div class="bg-green-600 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-green-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-user-shield fs-1-xl text-white"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -34,10 +34,10 @@
                             </div>
                             </a>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('admin.jobs.index') }}" class=" text-decoration-none">
-                            <div class="bg-info shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-blue-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                            <div class="bg-info shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-blue-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-list-alt fs-1-xl text-white"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -47,10 +47,10 @@
                             </div>
                             </a>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('admin.jobs.index') }}" class=" text-decoration-none">
-                            <div class="bg-warning shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-yellow-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                            <div class="bg-yellow-500 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-yellow-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-brands fa-foursquare fs-1-xl text-white"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -60,10 +60,10 @@
                             </div>
                             </a>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('company.index') }}" class=" text-decoration-none">
-                                <div class="bg-secondary shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                    <div class="bg-gray-600 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                                <div class="bg-secondary shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                    <div class="bg-gray-600 widget-icon rounded-10 me-2 flex items-center justify-center">
                                         <i class="fa-solid fa-user-tag fs-1-xl text-white"></i>
                                     </div>
                                     <div class="text-end text-white">
@@ -73,9 +73,9 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
-                            <div class="bg-danger shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-red-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
+                            <div class="bg-red-600 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-red-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-money-check fs-1-xl text-white"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -84,9 +84,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
-                            <div class="bg-dark shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                <div class="bg-gray-700 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
+                            <div class="bg-gray-800 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                <div class="bg-gray-700 widget-icon rounded-10 me-2 flex items-center justify-center">
                                     <i class="fa-solid fa-money-check-alt fs-1-xl text-light"></i>
                                 </div>
                                 <div class="text-end text-white">
@@ -95,10 +95,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xxl-3 col-xl-4 col-sm-6 widget">
+                        <div class="col-xxl-3 col-xl-4 flex-1 -sm-6 widget">
                             <a href="{{ route('admin.transactions.index') }}" class=" text-decoration-none">
-                                <div class="bg-primary shadow-md rounded-10  px-5 py-10 d-flex align-items-center justify-content-between my-sm-3 my-2">
-                                    <div class="bg-cyan-300 widget-icon rounded-10 me-2 d-flex align-items-center justify-content-center">
+                                <div class="bg-primary-600 shadow-md rounded-10  px-5 py-10 flex items-center justify-between my-sm-3 my-2">
+                                    <div class="bg-cyan-300 widget-icon rounded-10 me-2 flex items-center justify-center">
                                         <i class="fa-solid fa-money-bill fs-1-xl text-white"></i>
                                     </div>
                                     <div class="text-end text-white">
@@ -110,19 +110,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-6 mb-7 col-12">
-                    <div class="card">
-                        <div class="card-header pb-0 px-10">
+                <div class="col-xxl-6 mb-7 flex-1 -12">
+                    <div class="bg-white shadow rounded-lg overflow-hidden">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -header pb-0 px-10">
                             <h3 class="mb-0 p-2">{{ __('messages.admin_dashboard.post_statistics') }}</h3>
                         </div>
-                        <div class="card-body pt-7" id="postStatisticsChartContainer">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -body pt-7" id="postStatisticsChartContainer">
                             <canvas id="postStatisticsChart" width="515" height="400"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-6 mb-7 col-12">
-                    <div class="card">
-                        <div class="card-header pb-0 px-10">
+                <div class="col-xxl-6 mb-7 flex-1 -12">
+                    <div class="bg-white shadow rounded-lg overflow-hidden">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -header pb-0 px-10">
                             <h3 class="mb-0">{{ __('messages.admin_dashboard.weekly_users') }}</h3>
                             <div id="timeRange" class="time_range time_range_width w-30 border rounded-2 p-2">
                                 <i class="far fa-calendar-alt"
@@ -130,25 +130,25 @@
                                         class="caret"></b>
                             </div>
                         </div>
-                        <div class="card-body pt-7" id="weeklyUserBarChartContainer">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -body pt-7" id="weeklyUserBarChartContainer">
                             <canvas id="weeklyUserBarChart" width="515" height="400"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- recent registered candidates starts -->
-                <div class="col-xxl-6 col-12 mb-7">
-                    <div class="d-flex justify-content-between pb-0">
+                <div class="col-xxl-6 flex-1 -12 mb-7">
+                    <div class="flex justify-between pb-0">
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_candidates') }}</h3>
                         <div class="">
                             <a href="{{ route('admin.candidates.index') }}"
-                               class="btn btn-info">{{ __('messages.common.view_more') }} <i
+                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
-                        <div class="table-responsive ">
-                            <table class="table table-striped mb-0">
+                        <div class="w-full divide-y divide-gray-200 -responsive">
+                            <table class="table w-full divide-y divide-gray-200 -striped mb-0">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.common.name') }}</th>
@@ -189,18 +189,18 @@
                 <!-- recent registered candidates ends -->
 
                 <!-- recent registered employers starts -->
-                <div class="col-xxl-6 col-12 mb-7">
-                    <div class="d-flex justify-content-between pb-0">
+                <div class="col-xxl-6 flex-1 -12 mb-7">
+                    <div class="flex justify-between pb-0">
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_employers') }}</h3>
                         <div>
                             <a href="{{ route('company.index') }}"
-                               class="btn btn-info">{{ __('messages.common.view_more') }} <i
+                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
-                        <div class="table-responsive ">
-                            <table class="table table-striped mb-0">
+                        <div class="w-full divide-y divide-gray-200 -responsive">
+                            <table class="table w-full divide-y divide-gray-200 -striped mb-0">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.common.name') }}</th>
@@ -252,18 +252,18 @@
                 <!-- recent registered employers ends -->
 
                 <!-- recent jobs starts -->
-                <div class="col-12">
-                    <div class="d-flex justify-content-between pb-0">
+                <div class="flex-1 -12">
+                    <div class="flex justify-between pb-0">
                         <h3 class="mb-0 mt-2">{{ __('messages.admin_dashboard.recent_jobs') }}</h3>
                         <div>
                             <a href="{{ route('admin.jobs.index') }}"
-                               class="btn btn-info">{{ __('messages.common.view_more') }} <i
+                               class="btn px-4 py-2 rounded font-medium transition-colors -info">{{ __('messages.common.view_more') }} <i
                                         class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="pt-7">
-                        <div class="table-responsive ">
-                            <table class="table table-striped">
+                        <div class="w-full divide-y divide-gray-200 -responsive">
+                            <table class="table w-full divide-y divide-gray-200 -striped">
                                 <thead>
                                 <tr class="">
                                     <th scope="col">{{ __('messages.job.job_title') }}</th>

@@ -32,23 +32,23 @@
 <script src="{{ mix('js/pages.js') }}"></script>
 
 <body class="overflow-x-hidden">
-    <div class="d-flex flex-column flex-root">
-        <div class="d-flex flex-column flex-column-fluid">
+    <div class="flex flex-column flex-root">
+        <div class="flex flex-column flex-column-fluid">
             <div class="header fixed-header">
                 @include('candidate.layouts.header')
             </div>
-            <div class="theme-wrapper d-flex flex-column flex-row-fluid">
-                <div class='d-flex flex-column flex-row-fluid'>
-                    <div class="d-flex flex-column flex-column-fluid pt-7">
+            <div class="theme-wrapper flex flex-column flex- flex flex-wrap -fluid">
+                <div class="flex flex-column flex- flex flex-wrap -fluid">
+                    <div class="flex flex-column flex-column-fluid pt-7">
                         <div class="content flex-column-fluid">
-                            <div class="container-fluid container-xxl">
+                            <div class="w-full container mx-auto -xxl">
                                 @yield('content')
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class='container-fluid container-xxl'>
+            <div class="w-full container mx-auto -xxl">
                 @include('layouts.footer')
             </div>
             @include('candidate_profile.edit_profile_modal')

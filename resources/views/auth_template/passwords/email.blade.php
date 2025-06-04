@@ -3,8 +3,8 @@
     Forgot Password
 @endsection
 @section('content')
-<div class="d-flex flex-column flex-column-fluid align-items-center justify-content-center p-0">
-    <div class="col-12 text-center">
+<div class="flex flex-column flex-column-fluid items-center justify-center p-0">
+    <div class="flex-1 -12 text-center">
         <a href="{{ route('front.home') }}" class="image mb-7 mb-sm-10" data-turbo="false">
             <img alt="Logo" src="{{ asset(getSettingValue('logo')) }}" class="img-fluid logo-fix-size">
         </a>
@@ -13,7 +13,7 @@
         @include('flash::message')
         @include('front_web.layouts.errors')
         @if (session('status'))
-            <div class="alert alert-success">
+            <div class="alert p-4 rounded-md mb-4 -success">
                 {{ session('status') }}
             </div>
         @endif
@@ -38,12 +38,12 @@
                 ]) }}
             </div>
 
-            <div class="d-flex justify-content-center">
+            <div class="flex justify-center">
                 {{ Form::button(__('Email Password Reset Link'), [
                     'type' => 'submit',
                     'class' => 'btn btn-primary'
                 ]) }}
-                <a href="{{ route('admin.login') }}" class="btn btn-secondary ms-3">Cancel</a>
+                <a href="{{ route('admin.login') }}" class="btn px-4 py-2 rounded font-medium transition-colors -secondary ms-3">Cancel</a>
             </div>
         @formClose()
     </div>

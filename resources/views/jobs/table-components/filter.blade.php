@@ -1,6 +1,6 @@
 <div class="ms-auto" wire:ignore>
-    <div class="dropdown d-flex align-items-center me-4 me-md-2">
-        <button class="btn btn btn-icon btn-primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
+    <div class="dropdown flex items-center me-4 me-md-2">
+        <button class="btn btn btn-icon px-4 py-2 rounded font-medium transition-colors -primary text-white dropdown-toggle hide-arrow ps-2 pe-0" type="button"
             id="jobsFilterBtn"data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
             <p class="text-center">
                 <i class='fas fa-filter'></i>
@@ -12,23 +12,23 @@
             </div>
             <div class="p-5">
                 <div class="mb-5">
-                    <label for="filterBtn" class="form-label">{{ __('messages.front_settings.featured_job') }}:</label>
+                    <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.front_settings.featured_job') }}:</label>
                     {{ Form::select('featured_job',collect($filterHeads[0][0])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'jobFeatured']) }}
                 </div>
                 <div class="mb-5">
-                    <label for="filterBtn" class="form-label">{{ __('messages.job.is_suspended') }}:</label>
+                    <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job.is_suspended') }}:</label>
                     {{ Form::select('is_suspended',collect($filterHeads[0][1])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'jobSuspended']) }}
                 </div>
                 <div class="mb-5">
-                    <label for="filterBtn" class="form-label">{{ __('messages.job.is_freelance') }}:</label>
+                    <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.job.is_freelance') }}:</label>
                     {{ Form::select('is_freelance',collect($filterHeads[0][2])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'Jobfreelance']) }}
                 </div>
                 <div class="mb-5">
-                    <label for="filterBtn" class="form-label">{{ __('messages.filter_name.job_status') }}:</label>
+                    <label for="filterBtn" class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.filter_name.job_status') }}:</label>
                     {{ Form::select('is_freelance',collect($filterHeads[0][3])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'JobStatus']) }}
                 </div>
-                <div class="d-flex justify-content-end">
-                    <button type="reset" class="btn btn-secondary"
+                <div class="flex justify-content-end">
+                    <button type="reset" class="btn px-4 py-2 rounded font-medium transition-colors -secondary"
                         id="job-ResetFilter">{{ __('messages.common.reset') }}</button>
                 </div>
             </div>

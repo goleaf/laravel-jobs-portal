@@ -6,21 +6,21 @@
     <div class="register-page">
         <!-- start hero section -->
         {{-- <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-3">
+                            <h1 class="text-secondary mb-3">
                                 {{ __('web.register_menu.employer') . ' ' . __('web.register') }}
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item ">
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">
                                             @lang('web.home')
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.register')
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.register')
                                     </li>
                                 </ol>
                             </nav>
@@ -31,18 +31,18 @@
         </section> --}}
 
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-              <div class="row align-items-center justify-content-center">
-                <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+              <div class="flex flex-wrap items-center justify-center">
+                <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                   <div class="hero-content">
-                    <h1 class=" text-secondary mb-3">
+                    <h1 class="text-secondary mb-3">
                         {{ __('web.register_menu.employer') . ' ' . __('web.register') }}
                     </h1>
                     <nav aria-label="breadcrumb">
-                      <ol class="breadcrumb  justify-content-center mb-0">
+                      <ol class="breadcrumb justify-center mb-0">
                         <li class="breadcrumb-item "><a href="{{ route('front.home') }}" class="fs-18 text-gray">@lang('web.home') </a>
                         </li>
-                        <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.register')</li>
+                        <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.register')</li>
                       </ol>
                     </nav>
                   </div>
@@ -54,21 +54,21 @@
 
         <!-- start candidate login section -->
         <section class="py-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-lg-8 mx-auto">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap">
+                    <div class="col-xl-6 flex-1 -lg-8 mx-auto">
                         @include('flash::message')
                         @formOpen(['id' => 'addEmployerNewForm', 'class' => 'py-40 px-40 bg-gray', 'method' => 'POST'])
-                            <div class="row">
-                                <div class="col-12 mb-4">
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 col-12 mb-3 mb-sm-0">
-                                            <a href="{{ route('candidate.register') }}" class="btn btn-light-primary d-block">
+                            <div class="flex flex-wrap">
+                                <div class="flex-1 -12 mb-4">
+                                    <div class="form-group flex flex-wrap">
+                                        <div class="col-sm-6 flex-1 -12 mb-3 mb-sm-0">
+                                            <a href="{{ route('candidate.register') }}" class="btn px-4 py-2 rounded font-medium transition-colors -light-primary block">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
-                                        <div class="col-sm-6 col-12">
+                                        <div class="col-sm-6 flex-1 -12">
                                             <a href="{{ route('employer.register') }}"
-                                                class="btn btn-primary btn-primary-register d-block">
+                                                class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register block">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
                                     </div>
@@ -78,10 +78,10 @@
                                     @include('layouts.errors')
                                 </div>
                                 {{ Form::hidden('type', '2') }}
-                                <div class="col-md-6">
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                <div class="flex-1 -md-6">
+                                    <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerFirstName', __('web.common.first_name'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                                        <span class="text-danger">*</span>
+                                        <span class="text-red-600">*</span>
                                         {{ Form::text('first_name', null, [
                                             'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'employerFirstName',
@@ -90,10 +90,10 @@
                                         ]) }}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                <div class="flex-1 -md-6">
+                                    <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerLastName', __('web.common.last_name'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                                        <span class="text-danger">*</span>
+                                        <span class="text-red-600">*</span>
                                         {{ Form::text('last_name', null, [
                                             'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'employerLastName',
@@ -102,10 +102,10 @@
                                         ]) }}
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                <div class="flex-1 -md-12">
+                                    <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerEmail', __('web.common.email'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                                        <span class="text-danger">*</span>
+                                        <span class="text-red-600">*</span>
                                         {{ Form::email('email', null, [
                                             'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'employerEmail',
@@ -114,10 +114,10 @@
                                         ]) }}
                                     </div>
                                 </div>
-                                <div class="col-md-6 position-relative">
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                <div class="flex-1 -md-6 position-relative">
+                                    <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerPassword', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                                        <span class="text-danger">*</span>
+                                        <span class="text-red-600">*</span>
                                         {{ Form::password('password', [
                                             'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'employerPassword',
@@ -125,15 +125,15 @@
                                             'required',
                                             'onkeypress' => 'return avoidSpace(event)'
                                         ]) }}
-                                        <span class="position-absolute d-flex align-items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register ">
+                                        <span class="position-absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-6 position-relative">
-                                    <div class="form-group mb-md-4 mb-3 ">
+                                <div class="flex-1 -md-6 position-relative">
+                                    <div class="form-group mb-md-4 mb-3">
                                         {{ Form::label('employerConfirmPassword', __('web.common.confirm_password'), ['class' => 'fs-16 text-secondary mb-3']) }}
-                                        <span class="text-danger">*</span>
+                                        <span class="text-red-600">*</span>
                                         {{ Form::password('password_confirmation', [
                                             'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'employerConfirmPassword',
@@ -141,36 +141,36 @@
                                             'required',
                                             'onkeypress' => 'return avoidSpace(event)'
                                         ]) }}
-                                        <span class="position-absolute d-flex align-items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register ">
+                                        <span class="position-absolute flex items-center top-0 mt-7 bottom-0 end-0 me-6 input-icon input-password-hide cursor-pointer text-gray-600 change-type change-type-register">
                                             <i class="fas fa-eye-slash"></i>
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 mb-4">
-                                <div class="form-check">
+                            <div class="flex-1 -12 mb-4">
+                                <div class="flex items-center">
                                     {{ Form::checkbox('privacyPolicy', '1', null, ['class' => 'form-check-input', 'id' => 'employerRemember']) }}
-                                    <label class="form-check-label" for="employerRemember">
+                                    <label class="flex items-center -label" for="employerRemember">
                                         @lang('messages.by_signing_up_you_agree_to_our')
                                         <a href="{{ route('terms.conditions.list') }}" target="_blank"
-                                            class="text-primary">{{ __('messages.setting.terms_conditions') }}</a>
+                                            class="text-primary-600">{{ __('messages.setting.terms_conditions') }}</a>
                                         &
                                         <a href="{{ route('privacy.policy.list') }}" target="_blank"
-                                            class="text-primary">{{ __('messages.setting.privacy_policy') }}</a>.
+                                            class="text-primary-600">{{ __('messages.setting.privacy_policy') }}</a>.
                                     </label>
                                 </div>
                             </div>
                             @if ($isGoogleReCaptchaEnabled)
-                                <div class="col-12">
+                                <div class="flex-1 -12">
                                     <div class="form-group mt10">
-                                        <div class="g-recaptcha d-flex justify-content-start"
+                                        <div class="g-recaptcha flex justify-content-start"
                                             id="gRecaptchaContainerCompanyRegistration"
                                             data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
                                         <div id="g-recaptcha-error"></div>
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-12 d-grid my-4">
+                            <div class="flex-1 -12 d-grid my-4">
                                 {{ Form::button(__('web.register_menu.create_account'), [
                                     'type' => 'submit',
                                     'class' => 'btn btn-secondary btn-secondary-login',
@@ -181,14 +181,14 @@
                             @php
                                 $envSetting = getEnvSetting();
                             @endphp
-                            <div class="col-12">
+                            <div class="flex-1 -12">
                                 <div class="d-grid">
                                     @if (
                                         !empty($envSetting['facebook_app_id'] || config('services.facebook.client_id')) &&
                                             !empty($envSetting['facebook_app_secret'] || config('services.facebook.client_secret')) &&
                                             !empty($envSetting['facebook_redirect'] || config('services.facebook.redirect')))
                                         <a href="{{ url('/login/facebook?type=2') }}"
-                                            class="btn facebook-btn d-flex align-items-center justify-content-center mb-3"><i
+                                            class="btn facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                 class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook') }}
                                         </a>
                                     @endif
@@ -197,7 +197,7 @@
                                             !empty($envSetting['google_client_secret'] || config('services.google.client_secret')) &&
                                             !empty($envSetting['google_redirect'] || config('services.google.redirect')))
                                         <a href="{{ url('/login/google?type=2') }}"
-                                            class="btn google-btn d-flex align-items-center justify-content-center mb-3"><i
+                                            class="btn google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
                                                 class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google') }}
                                         </a>
                                     @endif
@@ -206,7 +206,7 @@
                                             !empty($envSetting['linkedin_client_secret'] || config('services.linkedin.client_secret')) &&
                                             !empty(config('services.linkedin.redirect')))
                                         <a href="{{ url('/login/linkedin?type=2') }}"
-                                            class="btn linkedin-btn d-flex align-items-center justify-content-center"><i
+                                            class="btn linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
                                                 class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin') }}
                                         </a>
                                     @endif

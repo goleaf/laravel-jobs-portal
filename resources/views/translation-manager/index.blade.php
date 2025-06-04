@@ -6,12 +6,12 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
+    <div class="container mx-auto -fluid">
+        <div class="flex flex-column">
             @include('flash::message')
             @include('error')
-            <div class="card">
-                <div class="card-body">
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="bg-white shadow rounded-lg overflow-hidden -body">
                     {{ Form::open(['route' => 'translation-manager.update','method'=>'post']) }}
 
                     {{Form::hidden('language-name',$selectedLang,['id' => 'languageName'])}}

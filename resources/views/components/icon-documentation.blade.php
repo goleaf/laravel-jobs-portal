@@ -35,14 +35,14 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('front.home') }}">
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm -dark bg-primary-600">
+        <div class="container mx-auto">
+            <a class="bg-white shadow-sm -brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
             </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="{{ route('front.home') }}">
+            <div class="bg-white shadow-sm -nav ms-auto">
+                <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('front.home') }}">
                     <i class="fas fa-home me-1"></i>
                     {{ __('Home') }}
                 </a>
@@ -50,36 +50,36 @@
         </div>
     </nav>
 
-    <div class="container-fluid py-4">
-        <div class="row">
+    <div class="container mx-auto -fluid py-4">
+        <div class="flex flex-wrap">
             <!-- Sidebar with Search -->
-            <div class="col-md-3">
+            <div class="flex-1 -md-3">
                 <div class="search-box">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
+                    <div class="bg-white shadow rounded-lg overflow-hidden">
+                        <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                            <h5 class="bg-white shadow rounded-lg overflow-hidden -title">
                                 <i class="fas fa-search me-2"></i>
                                 {{ __('Icon Search') }}
                             </h5>
-                            <input type="text" class="form-control" id="iconSearch" placeholder="{{ __('Search icons...') }}">
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" id="iconSearch" placeholder="{{ __('Search icons...') }}">
                             
                             <hr>
                             
                             <h6>{{ __('Categories') }}</h6>
-                            <div class="btn-group-vertical d-grid gap-1" role="group">
-                                <button type="button" class="btn btn-outline-primary btn-sm category-filter" data-category="all">
+                            <div class="px-4 py-2 rounded font-medium transition-colors -group-vertical d-grid gap-1" role="group">
+                                <button type="button" class="btn btn-outline-primary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="all">
                                     {{ __('All Icons') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm category-filter" data-category="ui">
+                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="ui">
                                     {{ __('UI Icons') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm category-filter" data-category="business">
+                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="business">
                                     {{ __('Business') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm category-filter" data-category="social">
+                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="social">
                                     {{ __('Social Media') }}
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm category-filter" data-category="file">
+                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded font-medium transition-colors -sm category-filter" data-category="file">
                                     {{ __('Files & Docs') }}
                                 </button>
                             </div>
@@ -89,28 +89,28 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col-md-9">
+            <div class="flex-1 -md-9">
                 <div class="mb-4">
                     <h1 class="display-5 fw-bold">
-                        <i class="fas fa-icons text-primary me-3"></i>
+                        <i class="fas fa-icons text-primary-600 me-3"></i>
                         {{ __('Icon Documentation') }}
                     </h1>
-                    <p class="lead text-muted">
+                    <p class="lead text-gray-500">
                         {{ __('Complete reference of all available FontAwesome icons used in the job portal') }}
                     </p>
                 </div>
 
                 <!-- Usage Instructions -->
-                <div class="card mb-4">
-                    <div class="card-header">
+                <div class="bg-white shadow rounded-lg overflow-hidden mb-4">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -header">
                         <h5 class="mb-0">
                             <i class="fas fa-info-circle me-2"></i>
                             {{ __('How to Use Icons') }}
                         </h5>
                     </div>
-                    <div class="card-body">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         <p>{{ __('To use any icon in your Blade templates, simply copy the HTML code and paste it into your view:') }}</p>
-                        <div class="bg-light p-3 rounded">
+                        <div class="bg-gray-100 p-3 rounded">
                             <code>&lt;i class="fas fa-user"&gt;&lt;/i&gt; {{ __('User Icon') }}</code>
                         </div>
                         <p class="mt-3 mb-0">
@@ -122,7 +122,7 @@
                 </div>
 
                 <!-- Icon Grid -->
-                <div class="row" id="iconGrid">
+                <div class="flex flex-wrap" id="iconGrid">
                     
                     @php
                     $icons = [
@@ -187,17 +187,17 @@
                     @endphp
 
                     @foreach($icons as $iconData)
-                    <div class="col-md-4 col-lg-3 mb-3 icon-item" data-category="{{ $iconData['category'] }}" data-name="{{ strtolower($iconData['name']) }}">
-                        <div class="card h-100 icon-card">
-                            <div class="card-body text-center">
+                    <div class="md:w-4/12 flex-1 -lg-3 mb-3 icon-item" data-category="{{ $iconData['category'] }}" data-name="{{ strtolower($iconData['name']) }}">
+                        <div class="card h-full icon- bg-white shadow rounded-lg overflow-hidden">
+                            <div class="bg-white shadow rounded-lg overflow-hidden -body text-center">
                                 <div class="icon-preview">
                                     <i class="{{ $iconData['icon'] }}"></i>
                                 </div>
-                                <h6 class="card-title">{{ $iconData['name'] }}</h6>
+                                <h6 class="bg-white shadow rounded-lg overflow-hidden -title">{{ $iconData['name'] }}</h6>
                                 <div class="icon-code" onclick="copyToClipboard('{{ $iconData['icon'] }}')">
                                     <i class="{{ $iconData['icon'] }}"></i>
                                 </div>
-                                <small class="text-muted d-block mt-1">
+                                <small class="text-gray-500 block mt-1">
                                     {{ __('Click to copy') }}
                                 </small>
                             </div>
@@ -208,21 +208,21 @@
 
                 <!-- No Results Message -->
                 <div id="noResults" class="text-center py-5" style="display: none;">
-                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4 class="text-muted">{{ __('No icons found') }}</h4>
-                    <p class="text-muted">{{ __('Try adjusting your search terms or category filter') }}</p>
+                    <i class="fas fa-search fa-3x text-gray-500 mb-3"></i>
+                    <h4 class="text-gray-500">{{ __('No icons found') }}</h4>
+                    <p class="text-gray-500">{{ __('Try adjusting your search terms or category filter') }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Toast for Copy Confirmation -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast- container mx-auto position-fixed bottom-0 end-0 p-3">
         <div id="copyToast" class="toast" role="alert">
             <div class="toast-header">
-                <i class="fas fa-copy text-success me-2"></i>
+                <i class="fas fa-copy text-green-600 me-2"></i>
                 <strong class="me-auto">{{ __('Copied!') }}</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                <button type="button" class="px-4 py-2 rounded font-medium transition-colors -close" data-bs-dismiss="toast"></button>
             </div>
             <div class="toast-body">
                 {{ __('Icon code copied to clipboard') }}

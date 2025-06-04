@@ -1,39 +1,39 @@
 @php($notifications = getNotification(\App\Models\Notification::ADMIN))@php($notificationCount = $notifications->count())
-<header class='d-flex align-items-center justify-content-between flex-grow-1 header px-4 px-lg-7 px-xl-0'>
-    <button type="button" class="btn px-0 aside-menu-container__aside-menubar d-block d-xl-none sidebar-btn">
+<header class="flex items-center justify-between flex-grow-1 header px-4 px-lg-7 px-xl-0">
+    <button type="button" class="btn px-0 aside-menu-container__aside-menubar block d-xl-none sidebar- px-4 py-2 rounded font-medium transition-colors">
         <i class="fa-solid fa-bars fs-1"></i>
     </button>
-    <nav class="navbar navbar-expand-xl navbar-light top-navbar d-xl-flex d-block px-3 px-xl-0 py-4 py-xl-0 " id="nav-header">
-        <div class="container-fluid">
-            <div class="navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <nav class="navbar navbar-expand-xl navbar-light top- bg-white shadow-sm d-xl-flex block px-3 px-xl-0 py-4 py-xl-0" id="nav-header">
+        <div class="container mx-auto -fluid">
+            <div class="bg-white shadow-sm -collapse">
+                <ul class="bg-white shadow-sm -nav me-auto mb-2 mb-lg-0">
                     @include('layouts.sub_menu')
                 </ul>
             </div>
         </div>
     </nav>
-    <ul class="nav align-items-center">
+    <ul class="nav items-center">
         @if(getLoggedInUser()->theme_mode)
             <li class="px-sm-3 px-2">
                 <a data-turbo="false" href="{{ route('theme.mode') }}" title="Switch to Light Mode">
-                    <i class="fa-solid fa-sun text-primary fs-2"></i>
+                    <i class="fa-solid fa-sun text-primary-600 fs-2"></i>
                 </a>
             </li>
         @else
             <li class="px-sm-3 px-2">
                 <a data-turbo="false" href="{{ route('theme.mode') }}" title="Switch to Dark Mode">
-                    <i class="fa-solid fa-moon text-primary fs-2"></i>
+                    <i class="fa-solid fa-moon text-primary-600 fs-2"></i>
                 </a>
             </li>
         @endif
 
         <li class="px-sm-3 px-2">
-            <div class="dropdown custom-dropdown d-flex align-items-center py-4">
-                <button class="btn dropdown-toggle hide-arrow ps-2 pe-0 py-0 position-relative" type="button" id="dropdownMenuButton1"
+            <div class="dropdown custom-dropdown flex items-center py-4">
+                <button class="px-4 py-2 rounded font-medium transition-colors dropdown-toggle hide-arrow ps-2 pe-0 py-0 position-relative" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-bell text-primary fs-2"></i>
+                    <i class="fa-solid fa-bell text-primary-600 fs-2"></i>
                     @if($notificationCount > 0)
-                    <span class="position-absolute notification-count top-0 start-100 translate-middle badge badge-circle bg-danger" id="counter">
+                    <span class="position-absolute notification-count top-0 start-100 translate-middle badge badge-circle bg-red-600" id="counter">
                     {{ ($notificationCount) }}
                     <span class="visually-hidden">unread messages</span>
                     @endif
@@ -46,8 +46,8 @@
                     <div class="px-7 mt-5 inner-scroll height-270">
                         @if($notificationCount > 0)
                             @foreach($notifications as $notification)
-                                <div class="d-flex position-relative mb-5 readNotification cursor-pointer" data-id="{{ $notification->id }}" id="readNotification">
-                                    <span class="me-5 text-primary fs-2 icon-label">
+                                <div class="flex position-relative mb-5 readNotification cursor-pointer" data-id="{{ $notification->id }}" id="readNotification">
+                                    <span class="me-5 text-primary-600 fs-2 icon-label">
                                         <i class="{{ getNotificationIcon($notification->type) }}"></i></span>
                                     <div>
                                         <h5 class="text-gray-900 fs-6 mb-2">{{$notification->title}}</h5>
@@ -61,26 +61,26 @@
                                 <p>{{ __('messages.notification.empty_notifications') }}</p>
                             </div>
                         @endif
-                            <div class="empty-state fs-6 text-gray-800 fw-bold text-center mt-5 d-none"
+                            <div class="empty-state fs-6 text-gray-800 fw-bold text-center mt-5 hidden"
                                  data-height="400">
                                 <p>{{ __('messages.notification.empty_notifications') }}</p>
                             </div>
                     </div>
                     @if($notificationCount > 0)
                     <div class="text-center border-top p-4">
-                        <h5 class="text-primary mb-0 fs-5 cursor-pointer" id="readAllNotification">{{ __('messages.notification.mark_all_as_read') }}</h5>
+                        <h5 class="text-primary-600 mb-0 fs-5 cursor-pointer" id="readAllNotification">{{ __('messages.notification.mark_all_as_read') }}</h5>
                     </div>
                     @endif
                 </div>
             </div>
         </li>
         <li class="px-sm-3 px-2">
-            <div class="dropdown d-flex align-items-center py-4">
+            <div class="dropdown flex items-center py-4">
                 <div class="image image-circle image-mini">
                     <img src="{{ getLoggedInUser()->avatar }}"
                          class="img-fluid" alt="profile image">
                 </div>
-                <button class="btn dropdown-toggle ps-2 pe-0 hide-arrow" type="button" id="dropdownMenuButton1"
+                <button class="px-4 py-2 rounded font-medium transition-colors dropdown-toggle ps-2 pe-0 hide-arrow" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                     {{ getLoggedInUser()->full_name }}
                 </button>
@@ -123,7 +123,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item text-gray-900 d-flex" href="javascript:void(0)">
+                            <a class="dropdown-item text-gray-900 flex" href="javascript:void(0)">
                                 <span class="dropdown-icon me-4 text-gray-600">
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
@@ -139,7 +139,7 @@
             </div>
         </li>
         <li>
-            <button type="button" class="btn px-0 d-block d-xl-none header-btn pb-2">
+            <button type="button" class="btn px-0 block d-xl-none header- px-4 py-2 rounded font-medium transition-colors pb-2">
                 <i class="fa-solid fa-bars fs-1"></i>
             </button>
         </li>

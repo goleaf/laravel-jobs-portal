@@ -16,11 +16,11 @@
                                 style="position: relative;background-image: url({{ $headerSlider->header_slider_url }});height:624px;color: white; text-align: center;">
                             </div>
                         @endforeach
-                        <div class="hero-content-row row w-100">
-                            <div class="col-lg-6 text-center">
+                        <div class="hero-content-row flex flex-wrap w-full">
+                            <div class="flex-1 -lg-6 text-center">
                                 <div class="hero-contentt mt-lg-0 mt-md-5 my-4">
                                     <p class="fw-normal text-dark fs-50 mb-0">@lang('web.easy_to_find_your')</p>
-                                    <h1 class="fs-44 mb-md-4 mb-3 text-primary fw-bold">
+                                    <h1 class="fs-44 mb-md-4 mb-3 text-primary-600 fw-bold">
                                         {{ $cmsServices['home_title'] }}
                                     </h1>
                                     <p class="mb-4 fs-18 text-gray">
@@ -42,12 +42,12 @@
             </section>
         @else
             <section class="hero-section position-relative bg-gradient pt-100 pb-150">
-                <div class="container">
-                    <div class="row align-items-center flex-column-reverse flex-lg-row">
-                        <div class="col-lg-6 text-lg-start text-center">
+                <div class="container mx-auto">
+                    <div class="row items-center flex-column-reverse flex-lg- flex flex-wrap">
+                        <div class="flex-1 -lg-6 text-lg-start text-center">
                             <div class="hero-content mt-lg-0 mt-md-5 my-4">
                                 <p class="fw-normal fs-50 mb-0">@lang('web.easy_to_find_your')</p>
-                                <h1 class="fs-44 mb-md-4 mb-3 text-primary fw-bold">
+                                <h1 class="fs-44 mb-md-4 mb-3 text-primary-600 fw-bold">
                                     {{ $cmsServices['home_title'] }}
                                 </h1>
                                 <p class="mb-4 fs-18 text-gray pe-lg-5 me-xl-5">
@@ -57,9 +57,9 @@
 
                         </div>
                         @if ($settings->value == 0 || count($headerSliders) <= 0)
-                            <div class="col-lg-6 text-lg-end text-center">
+                            <div class="flex-1 -lg-6 text-lg-end text-center">
                                 <img src="{{ $cmsServices['home_banner'] ? asset($cmsServices['home_banner']) : asset('front_web/images/hero-img.png') }}"
-                                    alt="jobs-landing" class="hero-image img-fluid w-100" />
+                                    alt="jobs-landing" class="hero-image img-fluid w-full" />
                             </div>
                         @endif
                     </div>
@@ -71,13 +71,13 @@
 
         <!--start find-job section-->
         <section class="find-job-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xl-8 col-lg-10">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap justify-center">
+                    <div class="col-xl-8 flex-1 -lg-10">
                         <div class="find-job position-relative bg-white">
                             <form action="{{ route('front.search.jobs') }}" id='searchForm' method="get">
-                                <div class="row align-items-center justify-content-around m-0">
-                                    <div class="col-lg-5 br-2 ps-lg-4 px-20">
+                                <div class="flex flex-wrap items-center justify-content-around m-0">
+                                    <div class="flex-1 -lg-5 br-2 ps-lg-4 px-20">
                                         <h3 class="fs-16 text-secondary mb-0">@lang('web.home_menu.keywords')</h3>
                                         <input type="text" class="fs-14 text-gray mb-0" name="keywords"
                                             id="search-keywords" placeholder="@lang('web.web_home.job_title_keywords_company')" autocomplete="off" />
@@ -86,13 +86,13 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 br-2 ps-lg-4 px-20 pb-0 autocomplete-wrapper">
+                                    <div class="flex-1 -lg-4 br-2 ps-lg-4 px-20 pb-0 autocomplete-wrapper">
                                         <h3 class="fs-16 text-secondary mb-0">@lang('web.common.location')</h3>
                                         <input type="text" class="fs-14 text-gray mb-0 pb-4" name="location"
                                             id="search-location" placeholder="@lang('web.web_home.city_or_postcode')" />
                                     </div>
-                                    <div class="col-lg-3 text-center p-lg-3 px-20">
-                                        <button class="btn btn-primary btn-primary-register find-jobs-btn d-block p-0 px-2 pt-3 pb-3"
+                                    <div class="flex-1 -lg-3 text-center p-lg-3 px-20">
+                                        <button class="btn btn-primary bg-primary-600 text-white hover: bg-primary-600 -700 -register find-jobs- px-4 py-2 rounded font-medium transition-colors block p-0 px-2 pt-3 pb-3"
                                             style="width: 100%" type="submit">
                                             @lang('web.web_home.find_jobs')
                                         </button>
@@ -109,10 +109,10 @@
         <!-- start-companies-logo section -->
         @if (count($branding) > 0)
             <section class="comapnies-logo-section my-5">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="slick-slider" id="brandSlider">
                         @foreach ($branding as $brand)
-                            <div class="slide d-flex justify-content-center align-items-center m-4">
+                            <div class="slide flex justify-center items-center m-4">
                                 <img src="{{ $brand->branding_slider_url }}" alt="Branding Slider" class="img-fluid" />
                             </div>
                         @endforeach
@@ -129,11 +129,11 @@
                     <div class="carousel-inner">
                         @foreach ($imageSliders as $key => $imageSlider)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }} position-relative">
-                                <img src="{{ $imageSlider->image_slider_url }}" class="d-block w-100 slider-img"
+                                <img src="{{ $imageSlider->image_slider_url }}" class="block w-full slider-img"
                                     alt="..." />
                                 @if ($imageSlider->description)
-                                    <div class="row justify-content-center">
-                                        <div class="slider-img-desc col-10 text-center position-absolute">
+                                    <div class="flex flex-wrap justify-center">
+                                        <div class="slider-img-desc flex-1 -10 text-center position-absolute">
                                             <p class="text-white fs-16">
                                                 {!! Str::limit($imageSlider->description, 495, ' ...') !!}
                                             </p>
@@ -161,7 +161,7 @@
         <!-- start-popular-job-categories-section -->
         @if (count($jobCategories) > 0)
             <section class="popular-job-categories-section mb-80">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">
@@ -170,30 +170,30 @@
                         </div>
                     </div>
 
-                    <div class="job-categories-card">
-                        <div class="row">
+                    <div class="job-categories- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap">
                             @foreach ($jobCategories as $jobCategory)
-                                <div class="col-xl-3 col-lg-4 col-md-6 mb-40 px-xl-3">
-                                    <div class="card px-20">
-                                        <div class="card-img text-center mb-3">
-                                            <img src="{{ $jobCategory->image_url }}" class="h-100" alt="..." />
+                                <div class="col-xl-3 col-lg-4 flex-1 -md-6 mb-40 px-xl-3">
+                                    <div class="bg-white shadow rounded-lg overflow-hidden px-20">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden -img text-center mb-3">
+                                            <img src="{{ $jobCategory->image_url }}" class="h-full" alt="..." />
                                         </div>
-                                        <div class="card-body text-center">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden -body text-center">
                                             <a href="{{ route('front.search.jobs', ['categories' => $jobCategory->id]) }}"
                                                 class="text-secondary primary-link-hover">
-                                                <h5 class="card-title fs-18 text-secondary mb-0">
+                                                <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 text-secondary mb-0">
                                                     {{ html_entity_decode($jobCategory->name) }}</h5>
                                             </a>
-                                            {{-- <p class="card-text fs-14 text-gray text-primary">
+                                            {{-- <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray text-primary-600">
                                                 {{ ($jobCategory->jobs_count ? $jobCategory->jobs_count : 0) . ' open positions' }}
                                             </p> --}}
                                             @if ($jobCategory->jobs_count <= 0)
-                                                <p class="card-text fs-14 text-gray text-primary">
+                                                <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray text-primary-600">
                                                     {{ 'No positions' }}
                                                 </p>
                                             @else
                                                 <a href="{{ route('front.search.jobs', ['categories' => $jobCategory->id]) }}"
-                                                    class="card-text fs-14 text-gray text-primary">
+                                                    class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray text-primary-600">
                                                     {{ $jobCategory->jobs_count }} {{ 'open positions' }}
                                                 </a>
                                             @endif
@@ -203,8 +203,8 @@
 
                                 </div>
                             @endforeach
-                            <div class="col-12 text-center">
-                                <a href="{{ route('front.job-categories') }}" class="btn btn-primary btn-primary-register fs-14 mt-3">
+                            <div class="flex-1 -12 text-center">
+                                <a href="{{ route('front.job-categories') }}" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3">
                                     @lang('web.common.browse_all')
                                 </a>
                             </div>
@@ -217,15 +217,15 @@
 
         <!-- start latest-job-section -->
         @if (count($latestJobs) > 0)
-            <section class="latest-job-section py-100 bg-light">
-                <div class="container">
+            <section class="latest-job-section py-100 bg-gray-100">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">@lang('web.home_menu.latest_jobs')</h2>
                         </div>
                     </div>
-                    <div class="job-card">
-                        <div class="row">
+                    <div class="job- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap">
                             @if (
                                 \Illuminate\Support\Facades\Auth::check() && isset(auth()->user()->country_name) && isset($latestJobsEnable)
                                     ? $latestJobsEnable->value
@@ -236,22 +236,22 @@
                                             @include('front_web_template.common.job_card')
                                         @endif
                                     @endforeach
-                                    <div class="col-md-12 text-center">
+                                    <div class="flex-1 -md-12 text-center">
                                         <a href="{{ route('front.search.jobs') }}"
-                                            class="btn btn-primary btn-primary-register fs-14 mt-3">{{ __('web.common.browse_all') }}</a>
+                                            class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3">{{ __('web.common.browse_all') }}</a>
                                     </div>
                                 @else
-                                    <div class="col-md-12 text-center">
+                                    <div class="flex-1 -md-12 text-center">
                                         <a href="{{ route('front.search.jobs') }}"
-                                            class="btn btn-primary btn-primary-register fs-14 mt-3">{{ __('web.common.browse_all') }}</a>
+                                            class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3">{{ __('web.common.browse_all') }}</a>
                                     </div>
                                 @endif
                             @else
                                 @foreach ($latestJobs as $job)
                                     @include('front_web_template.common.job_card')
                                 @endforeach
-                                <div class="col-12 text-center">
-                                    <a href="{{ route('front.search.jobs') }}" class="btn btn-primary btn-primary-register fs-14 mt-3">
+                                <div class="flex-1 -12 text-center">
+                                    <a href="{{ route('front.search.jobs') }}" class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3">
                                         @lang('web.common.browse_all')
                                     </a>
                                 </div>
@@ -266,21 +266,21 @@
         <!-- start featured-job-section -->
         @if (count($featuredJobs))
             <section class="featured-job-section py-100">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">@lang('web.home_menu.featured_jobs')</h2>
                         </div>
                     </div>
-                    <div class="job-card">
-                        <div class="row">
+                    <div class="job- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap">
                             @foreach ($featuredJobs as $job)
                                 @include('front_web_template.common.job_card')
                             @endforeach
                         </div>
-                        <div class="row justify-content-center">
-                            <div class="col-12 text-center">
-                                <a class="btn btn-primary btn-primary-register fs-14 mt-3"
+                        <div class="flex flex-wrap justify-center">
+                            <div class="flex-1 -12 text-center">
+                                <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3"
                                     href="{{ route('front.search.jobs', ['is_featured' => true]) }}">
                                     @lang('web.common.browse_all')
                                 </a>
@@ -295,22 +295,22 @@
         <!-- start featured-company-section -->
         @if (count($featuredCompanies))
             <section class="featured-job-section py-80">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">@lang('web.home_menu.featured_companies')</h2>
                         </div>
                     </div>
-                    <div class="job-card">
-                        <div class="row">
+                    <div class="job- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap">
 
                             @foreach ($featuredCompanies->take(8) as $company)
                                 @include('front_web_template.common.company_card')
                             @endforeach
                         </div>
-                        <div class="row justify-content-center">
-                            <div class="col-12 text-center">
-                                <a class="btn btn-primary btn-primary-register fs-14 mt-3"
+                        <div class="flex flex-wrap justify-center">
+                            <div class="flex-1 -12 text-center">
+                                <a class="btn bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register fs-14 mt-3"
                                     href="{{ route('front.company.lists', ['is_featured' => true]) }}">
                                     @lang('web.common.browse_all')
                                 </a>
@@ -325,7 +325,7 @@
         <!-- start notice-section -->
         @if (count($notices) > 0)
             <section class="notice-section {{(count($latestJobs) > 0) ? (count($featuredJobs) > 0) ? 'mt-40' : 'mt-100 mb-100' : 'mb-100'}}">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="notice-content bg-gradient">
                         <div class="overflow-hidden mx-3">
                             <div class="section-heading text-center py-60">
@@ -334,9 +334,9 @@
                         </div>
                         <div class="autoscroller">
                             <div class="marquee">
-                                <div class="row justify-content-center">
+                                <div class="flex flex-wrap justify-center">
                                     @foreach ($notices as $key => $notice)
-                                        <div class="col-xl-10 col-11 position-relative mb-4">
+                                        <div class="col-xl-10 flex-1 -11 position-relative mb-4">
                                             <div class="notice-desc bg-white py-20 px-md-5 px-4">
                                                 <p class="text-secondary">
                                                     {!! nl2br(strip_tags($notice->description)) !!}
@@ -347,7 +347,7 @@
                                                 </p>
                                             </div>
                                             <span href="#"
-                                                class="btn-primary btn-primary-register position-absolute">{{ \Carbon\Carbon::parse($notice->created_at)->translatedFormat('jS M, Y') }}</span>
+                                                class="bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors -primary-register position-absolute">{{ \Carbon\Carbon::parse($notice->created_at)->translatedFormat('jS M, Y') }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -362,7 +362,7 @@
         <!-- start testimonial-section -->
         @if (count($testimonials) > 0)
             <section class="testimonial-section overflow-hidden  {{(count($notices) > 0) ? 'mb-100' : 'mt-80 mb-100'}}  {{(count($latestJobs) > 0) ? 'mt-80 mb-100' : ''}}">
-                <div class="container-fluid p-sm-0">
+                <div class="container mx-auto -fluid p-sm-0">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">@lang('web.home_menu.testimonials')</h2>
@@ -372,23 +372,23 @@
                         <div class="testimonial-slider">
                             @foreach ($testimonials as $testimonial)
                                 <div>
-                                    <div class="testimonial-card bg-light">
+                                    <div class="testimonial- bg-white shadow rounded-lg overflow-hidden bg-gray-100">
                                         <div class="desc">
                                             <p> {!! !empty(nl2br($testimonial->description)) ? nl2br($testimonial->description) : __('messages.common.n/a') !!} </p>
                                         </div>
                                         <div class="">
-                                            <div class="d-flex justify-content-between align-items-end">
-                                                <div class="d-flex align-items-center me-2">
+                                            <div class="flex justify-between align-items-end">
+                                                <div class="flex items-center me-2">
                                                     <div class="testimonial-profile me-3"> <img
                                                             src="{{ isset($testimonial->customer_image_url) ? $testimonial->customer_image_url : asset('assets/img/infyom-logo.png') }}"
-                                                            class="w-100 h-100 object-fit-cover" alt="profile"> </div>
+                                                            class="w-full h-full object-fit-cover" alt="profile"> </div>
                                                     <div class="profile-desc">
                                                         <h6 class="fs-18 mb-1">
                                                             {{ html_entity_decode($testimonial->customer_name) }} </h6>
                                                     </div>
                                                 </div>
                                                 <div class="text-end comma-img"> <img
-                                                        src="{{ asset('img_template/comma.png') }}" class="w-100"
+                                                        src="{{ asset('img_template/comma.png') }}" class="w-full"
                                                         alt="comma"> </div>
                                             </div>
                                         </div>
@@ -404,34 +404,34 @@
 
         <!-- start blog-section -->
         @if (count($recentBlog) > 0)
-            <section class="recent-blog-section pt-100 pb-60 bg-light">
-                <div class="container">
+            <section class="recent-blog-section pt-100 pb-60 bg-gray-100">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">@lang('messages.recent_blog')</h2>
                         </div>
                     </div>
-                    <div class="blog-card">
-                        <div class="row">
+                    <div class="blog- bg-white shadow rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap">
                             @foreach ($recentBlog as $post)
-                                <div class="col-lg-4 col-md-6 mb-40 px-xl-3">
-                                    <div class="card">
-                                        <div class="card-img-top position-relative">
+                                <div class="col-lg-4 flex-1 -md-6 mb-40 px-xl-3">
+                                    <div class="bg-white shadow rounded-lg overflow-hidden">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden -img-top position-relative">
                                             <img src="{{ empty($post->blog_image_url) ? asset('front_web/images/blog-1.png') : $post->blog_image_url }}"
-                                                class="card-img-top" alt="Employee Motivation" />
+                                                class="bg-white shadow rounded-lg overflow-hidden -img-top" alt="Employee Motivation" />
                                             <div class="overlay position-absolute">
                                                 <a href="{{ route('front.posts.details', $post->id) }}"
-                                                    class="btn text-white fs-16"> {{ __('web.post_menu.read_more') }} </a>
+                                                    class="px-4 py-2 rounded font-medium transition-colors text-white fs-16"> {{ __('web.post_menu.read_more') }} </a>
                                             </div>
                                         </div>
-                                        <div class="card-body px-20">
+                                        <div class="bg-white shadow rounded-lg overflow-hidden -body px-20">
                                             <a href="{{ route('front.posts.details', $post->id) }}"
                                                 class="text-secondary primary-link-hover">
-                                                <h5 class="card-title fs-18 text-secondary">
+                                                <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 text-secondary">
                                                     {{ html_entity_decode($post->title) }}
                                                 </h5>
                                             </a>
-                                            <p class="card-text fs-14 text-gray">
+                                            <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray">
                                                 {!! !empty($post->description)
                                                     ? Str::limit(strip_tags($post->description), 100, '...')
                                                     : __('messages.common.n/a') !!}
@@ -457,10 +457,10 @@
         <!-- end blog-section -->
 
         <!-- start-about-section -->
-        <section class="about-section py-60 bg-primary">
-            <div class="container">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-sm-3 col-6 text-center mb-sm-0 mb-4">
+        <section class="about-section py-60 bg-primary-600">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap justify-between items-center">
+                    <div class="col-sm-3 flex-1 -6 text-center mb-sm-0 mb-4">
                         <div class="about-desc">
                             <h3 class="text-white count">
                                 {{ $dataCounts['candidates'] }}
@@ -469,7 +469,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-6 text-center mb-sm-0 mb-4">
+                    <div class="col-sm-3 flex-1 -6 text-center mb-sm-0 mb-4">
                         <div class="about-desc">
                             <h3 class="text-white count">
                                 {{ $dataCounts['jobs'] }}
@@ -477,7 +477,7 @@
                             <p class="text-white fs-18 mb-0">@lang('messages.front_home.jobs')</p>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-6 text-center">
+                    <div class="col-sm-3 flex-1 -6 text-center">
                         <div class="about-desc">
                             <h3 class="text-white count">
                                 {{ $dataCounts['resumes'] }}
@@ -485,7 +485,7 @@
                             <p class="text-white fs-18 mb-0">@lang('messages.front_home.resumes')</p>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-6 text-center">
+                    <div class="col-sm-3 flex-1 -6 text-center">
                         <div class="about-desc">
                             <h3 class="text-white count">
                                 {{ $dataCounts['companies'] }}
@@ -501,7 +501,7 @@
         <!-- start pricing-packages-section -->
         @if (count($plans) > 0)
             <section class="pricing-packages-section pt-100 pb-60">
-                <div class="container">
+                <div class="container mx-auto">
                     <div class="overflow-hidden pb-60">
                         <div class="section-heading text-center">
                             <h2 class="text-secondary mb-0 d-inline-block">
@@ -518,16 +518,16 @@
                                     if ($key >= 1) { $isshoebtn = 1; }
                                 @endphp
                                     <div class="carousel-item position-relative {{ $key == 0 ? 'active' : '' }}">
-                                        <div class="row d-flex justify-content-center">
+                                        <div class="flex flex-wrap flex justify-center">
                                             @foreach ($plans as $plan)
-                                                <div class="pricing-packages-section-card col-lg-4 col-sm-6 px-xl-3">
-                                                    <div class="pricing-plan-card card bg-light shadow-none">
-                                                        <div class="card-body text-center p-0">
-                                                            <div class="card-body-top py-30">
-                                                                <p class="mb-2 text-primary fs-18 fw-bold">
+                                                <div class="pricing-packages-section- bg-white shadow rounded-lg overflow-hidden col-lg-4 flex-1 -sm-6 px-xl-3">
+                                                    <div class="pricing-plan-card bg-white shadow rounded-lg overflow-hidden bg-gray-100 shadow-none">
+                                                        <div class="bg-white shadow rounded-lg overflow-hidden -body text-center p-0">
+                                                            <div class="bg-white shadow rounded-lg overflow-hidden -body-top py-30">
+                                                                <p class="mb-2 text-primary-600 fs-18 fw-bold">
                                                                     {{ html_entity_decode(Str::limit($plan['name'], 50, '...')) }}
                                                                 </p>
-                                                                <div class="text-center d-flex justify-content-center">
+                                                                <div class="text-center flex justify-center">
                                                                     <h3 class="text-secondary mb-0">
                                                                         {{ empty($plan['salary_currency']['currency_icon']) ? '$' : $plan['salary_currency']['currency_icon'] }}{{ $plan['amount'] }}
                                                                     </h3>
@@ -535,9 +535,9 @@
                                                                         / {{ __('web.web_home.monthly') }}</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-body-bottom py-30">
+                                                            <div class="bg-white shadow rounded-lg overflow-hidden -body-bottom py-30">
                                                                 <div
-                                                                    class="text d-flex align-items-center justify-content-center mb-0">
+                                                                    class="text flex items-center justify-center mb-0">
                                                                     <div class="check-box me-3">
                                                                         <i class="fa-solid fa-check text-white fs-14"></i>
                                                                     </div>
@@ -547,19 +547,19 @@
                                                                 <div class="px-4 pt-2">
                                                                     @if (Auth::check() && Auth::user()->hasRole('Candidate'))
                                                                         <a href="#"
-                                                                            class="btn btn-light w-100 fs-14 mt-3 py-2 px-4"
+                                                                            class="btn px-4 py-2 rounded font-medium transition-colors -light w-full fs-14 mt-3 py-2 px-4"
                                                                             data-turbo="false">{{ __('messages.pricing_table.buy_plan') }}</a>
                                                                     @elseif(Auth::check() && Auth::user()->hasRole('Employer'))
                                                                         <a href="{{ route('manage-subscription.index') }}"
-                                                                            class="btn btn-light w-100 fs-14 mt-3 py-2 px-4"
+                                                                            class="btn px-4 py-2 rounded font-medium transition-colors -light w-full fs-14 mt-3 py-2 px-4"
                                                                             data-turbo="false">{{ __('messages.pricing_table.buy_plan') }}</a>
                                                                     @elseif(Auth::check() && Auth::user()->hasRole('Admin'))
                                                                         <a href="#"
-                                                                            class="btn btn-light w-100 fs-14 mt-3 py-2 px-4 d-none"
+                                                                            class="btn px-4 py-2 rounded font-medium transition-colors -light w-full fs-14 mt-3 py-2 px-4 hidden"
                                                                             data-turbo="false">{{ __('messages.pricing_table.buy_plan') }}</a>
                                                                     @else
                                                                         <a href="{{ route('employer.register') }}"
-                                                                            class="btn btn-light w-100 fs-14 mt-3 py-2 px-4"
+                                                                            class="btn px-4 py-2 rounded font-medium transition-colors -light w-full fs-14 mt-3 py-2 px-4"
                                                                             data-turbo="false">{{ __('messages.pricing_table.buy_plan') }}</a>
                                                                     @endif
                                                                 </div>
@@ -575,11 +575,11 @@
                             @if ($isshoebtn == 1)
                             <button class="carousel-control-prev about-control-prev" type="button"
                                 data-bs-target="#carouselExampleControlsabout" data-bs-slide="prev">
-                                <i class="icon fa-solid fa-arrow-left text-primary"></i>
+                                <i class="icon fa-solid fa-arrow-left text-primary-600"></i>
                             </button>
                             <button class="carousel-control-next about-control-next" type="button"
                                 data-bs-target="#carouselExampleControlsabout" data-bs-slide="next">
-                                <i class="icon fa-solid fa-arrow-right text-primary"></i>
+                                <i class="icon fa-solid fa-arrow-right text-primary-600"></i>
                             </button>
                             @endif
                         </div>

@@ -9,30 +9,30 @@
     <div class="company-details-page">
         <!-- start hero section -->
         <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center ">
-                    <div class="col-12">
-                        <div class="row align-items-lg-center mb-3">
-                            <div class="col-lg-1 col-sm-2 col-3">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -12">
+                        <div class="flex flex-wrap align-items-lg-center mb-3">
+                            <div class="col-lg-1 col-sm-2 flex-1 -3">
                                 <div class="company-profile-img mt-md-0 mt-3">
                                     <img src="{{ !empty($companyDetail->company_url) ? $companyDetail->company_url : asset('assets/img/infyom-logo.png') }}"
                                         alt="job_detail_logo">
                                 </div>
                             </div>
-                            <div class="col-sm-10 col-9">
+                            <div class="col-sm-10 flex-1 -9">
                                 <div class="hero-content ps-xl-0 ps-3">
                                     <h4 class="text-secondary mb-0">
                                         {{ html_entity_decode($companyDetail->user->full_name) }}
                                     </h4>
-                                    <div class="hero-desc d-flex align-items-center flex-wrap">
-                                        <div class="d-flex align-items-center me-4 pe-2">
+                                    <div class="hero-desc flex items-center flex-wrap">
+                                        <div class="flex items-center me-4 pe-2">
                                             <i class="fa-solid fa-briefcase text-gray me-3 fs-18"></i>
                                             <p class="fs-14 text-gray mb-0">
                                                 {{ !empty($companyDetail->industry->name) ? $companyDetail->industry->name : __('messages.common.n/a') }}
                                             </p>
                                         </div>
                                         {{-- @if (!empty($companyDetail->user->city_id) || !empty($companyDetail->user->state_id) || !empty($companyDetail->user->country_id))
-                                            <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                            <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                                 <i class="fa-solid fa-location-dot text-gray me-3 fs-18"></i>
                                                 <p class="text-gray fs-14 mb-0">
                                                     {{ isset($companyDetail->location) ? html_entity_decode($companyDetail->location) : __('messages.common.n/a') }}
@@ -41,13 +41,13 @@
                                             </div>
                                         @endif --}}
                                         @isset($companyDetail->user->phone)
-                                            <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                            <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                                 <i class="fa-solid fa-phone text-gray me-3 fs-18"></i>
                                                 <p class="fs-14 text-gray mb-0">
                                                     {{ $companyDetail->user->phone }}</p>
                                             </div>
                                         @endisset
-                                        <div class="desc d-flex align-items-center me-lg-4 me-2 pe-2">
+                                        <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                             <i class="fa-solid fa-envelope text-gray me-3 fs-18"></i>
                                             <p class="fs-14 text-gray mb-0">
                                                 {{ $companyDetail->user->email }}</p>
@@ -57,25 +57,25 @@
                             </div>
                         </div>
                         @role('Candidate')
-                            <div class="row align-items-lg-center">
+                            <div class="flex flex-wrap align-items-lg-center">
                                 <div class="hero-desc d-md-flex">
-                                    <div class="desc d-flex me-4 pe-2">
-                                        <a href="javascript:void(0)" class="btn btn-outline-success reportJobAbuse"
+                                    <div class="desc flex me-4 pe-2">
+                                        <a href="javascript:void(0)" class="btn px-4 py-2 rounded font-medium transition-colors -outline-success reportJobAbuse"
                                             data-favorite-user-id="{{ getLoggedInUserId() !== null ? getLoggedInUserId() : null }}"
                                             data-favorite-company_id="{{ $companyDetail->id }}" id="addToFavourite">
                                             <i class="favouriteIcon"></i>
                                             <span class="favouriteText"></span>
                                         </a>
                                     </div>
-                                    <div class="desc d-flex me-4 pe-2">
+                                    <div class="desc flex me-4 pe-2">
                                         @if ($isReportedToCompany)
-                                            <button type="button" class="btn btn-outline-danger reportToCompanyBtn" disabled
+                                            <button type="button" class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger reportToCompanyBtn" disabled
                                                 data-bs-toggle="modal" data-bs-target="#reportToCompanyModal">
                                                 {{ __('messages.candidate.already_reported') }}
                                             </button>
                                         @else
                                             <button data-bs-toggle="modal" data-bs-target="#reportToCompanyModal"
-                                                class="btn btn-outline-danger  reportToCompanyBtn {{ $isReportedToCompany ? 'disabled' : '' }}"
+                                                class="btn px-4 py-2 rounded font-medium transition-colors -outline-danger  reportToCompanyBtn {{ $isReportedToCompany ?"disabled' : '' }}"
                                                 {{ $isReportedToCompany ? 'style=pointer-events:none;' : '' }}>{{ __('messages.company.report_to_company') }}
                                             </button>
                                         @endif
@@ -91,9 +91,9 @@
 
         <!-- start about-comapany section -->
         <section class="about-company-section py-60">
-         <div class="container">
-             <div class="row">
-                 <div class="col-lg-8">
+         <div class="container mx-auto">
+             <div class="flex flex-wrap">
+                 <div class="flex-1 -lg-8">
                      <div class="about-company-left">
                          <h5 class="fs-18 text-secondary">@lang('web.web_company.about_company')</h5>
                          <div class="job-description mb-5 pb-lg-2">
@@ -102,31 +102,31 @@
                      </div>
 
                  </div>
-                 <div class="col-lg-4">
-                     <div class="col-12">
-                         <div class="col-12 mb-40">
-                             <div class="job-card card py-30">
-                                 <div class="row d-flex justify-content-lg-between">
-                                     <div class="col-5 mt-3">
-                                         <i class="fa-solid fa-cake-candles text-primary fs-4"></i>
-                                         <p class="details-page-card-text mb-0" >
+                 <div class="flex-1 -lg-4">
+                     <div class="flex-1 -12">
+                         <div class="flex-1 -12 mb-40">
+                             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                                 <div class="flex flex-wrap flex justify-content-lg-between">
+                                     <div class="flex-1 -5 mt-3">
+                                         <i class="fa-solid fa-cake-candles text-primary-600 fs-4"></i>
+                                         <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                                              @lang('web.web_jobs.founded_in')</p>
                                          <p class="text-secondary fs-14">
                                              {{!empty($companyDetail->established_in)? $companyDetail->established_in : __('messages.common.n/a')}}
                                          </p>
                                      </div>
-                                     <div class=" col-5 mt-3">
-                                         <i class="fa-regular fa-map text-primary fs-4"></i>
-                                         <p class="details-page-card-text mb-0">
+                                     <div class="flex-1 -5 mt-3">
+                                         <i class="fa-regular fa-map text-primary-600 fs-4"></i>
+                                         <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                              @lang('web.web_company.ownership')
                                          </p>
                                          <p class="text-secondary fs-14">
                                              {{!empty($companyDetail->ownerShipType->name)? $companyDetail->ownerShipType->name : __('messages.common.n/a')}}
                                          </p>
                                      </div>
-                                     <div class=" col-5 mt-3">
-                                         <i class="fa-solid fa-users text-primary fs-4"></i>
-                                         <p class="details-page-card-text mb-0" >
+                                     <div class="flex-1 -5 mt-3">
+                                         <i class="fa-solid fa-users text-primary-600 fs-4"></i>
+                                         <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                                              @lang('web.web_company.company_size')
                                          </p>
                                          <p class="text-secondary fs-14">
@@ -138,15 +138,15 @@
                              </div>
                          </div>
                      </div>
-                     <div class="col-12">
-                         <div class="col-12 mb-40">
-                             <div class="job-card card py-30">
-                                 <div class="row d-flex justify-content-lg-between">
+                     <div class="flex-1 -12">
+                         <div class="flex-1 -12 mb-40">
+                             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                                 <div class="flex flex-wrap flex justify-content-lg-between">
                                      @if($companyDetail->user->phone)
-                                         <div class="col-10 m-3 d-flex align-items-center">
-                                             <i class="fa-solid fa-phone text-primary fs-4"></i>
+                                         <div class="flex-1 -10 m-3 flex items-center">
+                                             <i class="fa-solid fa-phone text-primary-600 fs-4"></i>
                                              <div class="mx-3">
-                                                 <p class="details-page-card-text mb-0">
+                                                 <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.web_jobs.phone')
                                                  </p>
                                                  <p class="text-secondary fs-14 mb-0">
@@ -155,10 +155,10 @@
                                          </div>
                                          <hr>
                                      @endif
-                                     <div class="col-10 m-3 d-flex align-items-center">
-                                         <i class="fa-solid fa-location-dot text-primary fs-4"></i>
+                                     <div class="flex-1 -10 m-3 flex items-center">
+                                         <i class="fa-solid fa-location-dot text-primary-600 fs-4"></i>
                                          <div class="mx-3">
-                                             <p class="details-page-card-text mb-0">
+                                             <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                  @lang('web.common.location')
                                              </p>
                                              <p class="text-secondary fs-14 mb-0">
@@ -167,10 +167,10 @@
                                      </div>
                                      <hr>
                                      @isset($companyDetail->website)
-                                         <div class="col-10 m-3 d-flex align-items-center">
-                                             <i class="fa-solid fa-globe text-primary fs-4"></i>
+                                         <div class="flex-1 -10 m-3 flex items-center">
+                                             <i class="fa-solid fa-globe text-primary-600 fs-4"></i>
                                              <div class="mx-3">
-                                                 <p class="details-page-card-text mb-0">
+                                                 <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.common.location')
                                                  </p>
                                                  <p class="text-secondary fs-14 mb-0">
@@ -186,10 +186,10 @@
                                          </div>
                                          <hr>
                                      @endisset
-                                         <div class="col-10 m-3 d-flex align-items-center">
-                                             <i class="fa-regular fa-envelope text-primary fs-4"></i>
+                                         <div class="flex-1 -10 m-3 flex items-center">
+                                             <i class="fa-regular fa-envelope text-primary-600 fs-4"></i>
                                              <div class="mx-3">
-                                                 <p class="details-page-card-text mb-0">
+                                                 <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0">
                                                      @lang('web.common.email')
                                                  </p>
                                                  <p class="text-secondary fs-14 mb-0">
@@ -201,10 +201,10 @@
                          </div>
                      </div>
                      @if(isset($companyDetail->user->facebook_url) || isset($companyDetail->user->twitter_url) || isset($companyDetail->user->pinterest_url) || isset($companyDetail->user->google_plus_url) || isset($companyDetail->user->linkedin_url))
-                     <div class="col-12">
-                         <div class="col-12 mb-40">
-                             <div class="job-card card py-30">
-                                 <div class="row d-flex justify-content-lg-between">
+                     <div class="flex-1 -12">
+                         <div class="flex-1 -12 mb-40">
+                             <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+                                 <div class="flex flex-wrap flex justify-content-lg-between">
                                          <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
                                          <div class="mt-3">
                                              @if(isset($companyDetail->user->facebook_url))
@@ -244,38 +244,38 @@
                      <h5 class="fs-18 text-secondary mb-40">
                          {{ ($jobDetails->count() > 0 ) ? __('web.company_details.our_latest_jobs')  : __('web.home_menu.latest_job_not_available') }}
                      </h5>
-                     <div class="row">
+                     <div class="flex flex-wrap">
                          @foreach($jobDetails as $job)
-                             <div class="col-12 px-xl-3 mb-20">
-                                 <div class="card py-30 border-left-color ">
-                                     <div class="row position-relative">
-                                         <div class="col-xl-1 col-md-2 col-3 mb-md-0 mb-3">
-                                             <img src="{{$job->company->company_url}}" class="card-img" alt="">
+                             <div class="flex-1 -12 px-xl-3 mb-20">
+                                 <div class="bg-white shadow rounded-lg overflow-hidden py-30 border-left-color">
+                                     <div class="flex flex-wrap position-relative">
+                                         <div class="col-xl-1 md:w-2/12 flex-1 -3 mb-md-0 mb-3">
+                                             <img src="{{$job->company->company_url}}" class="bg-white shadow rounded-lg overflow-hidden -img" alt="">
                                          </div>
-                                         <div class="col-xl-10 col-md-9 col-sm-8 col-12">
-                                             <div class="card-body p-0 ps-xl-3">
+                                         <div class="col-xl-10 md:w-9/12 col-sm-8 flex-1 -12">
+                                             <div class="bg-white shadow rounded-lg overflow-hidden -body p-0 ps-xl-3">
                                                  <a href="{{route('front.job.details',$job['job_id']) }}"
                                                     class="text-secondary primary-link-hover">
-                                                     <h5 class="card-title fs-18 mb-0 d-inline-block">
+                                                     <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18 mb-0 d-inline-block">
                                                          {{ html_entity_decode(Str::limit($job['job_title'], 50)) }}
 
                                                      </h5>
                                                  </a>
                                                  @if(isset($job->jobShift->shift))
-                                                     <span class="text text-primary fs-12 mb-0 me-3">
+                                                     <span class="text text-primary-600 fs-12 mb-0 me-3">
                              {{$job->jobShift->shift}}
                              </span>
                                                  @endif
 
-                                                 <div class="col-xl-12">
-                                                     <div class="card-desc d-flex flex-wrap mt-2 ">
+                                                 <div class="flex-1 -xl-12">
+                                                     <div class="bg-white shadow rounded-lg overflow-hidden -desc flex flex-wrap mt-2">
 
-                                                         <div class="desc d-flex me-4">
+                                                         <div class="desc flex me-4">
                                                              <i class="fa-solid fa-location-dot text-gray me-3 fs-18"></i>
                                                              <p class="fs-14 text-gray mb-2">
                                                                  {{ (!empty($job->full_location)) ? $job->full_location : 'Location Info. not available.'}}</p>
                                                          </div>
-                                                         <div class="desc d-flex">
+                                                         <div class="desc flex">
                                      <span class="text-gray">
                                          {{$job->currency->currency_icon}}&nbsp</span>
                                                              <p class="fs-14 text-gray mb-2">
@@ -287,7 +287,7 @@
                                          </div>
                                          @if($job->activeFeatured)
                                              <div class="bookmark text-end position-absolute">
-                                                 <i class="text-primary fa-solid fa-bookmark"></i>
+                                                 <i class="text-primary-600 fa-solid fa-bookmark"></i>
                                              </div>
                                          @endif
                                      </div>
@@ -295,10 +295,10 @@
                              </div>
                          @endforeach
                          @if(($jobDetails->count() > 0 ))
-                             <div class="row justify-content-center">
-                                 <div class="col-8 text-center">
+                             <div class="flex flex-wrap justify-center">
+                                 <div class="flex-1 -8 text-center">
                                      <a href="{{ route('front.search.jobs',array('company'=> $companyDetail->id)) }}"
-                                        class="btn btn-primary mb-40 mt-lg-4">
+                                        class="btn px-4 py-2 rounded font-medium transition-colors -primary mb-40 mt-lg-4">
                                          @lang('web.common.show_all')</a>
                                  </div>
                              </div>

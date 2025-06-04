@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container mx-auto">
         <h1>Terms & Conditions</h1>
         <p>This is a placeholder terms and conditions page.</p>
         <p>Please read these terms and conditions carefully before using our service.</p>

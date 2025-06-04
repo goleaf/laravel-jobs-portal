@@ -11,7 +11,7 @@
         }
     }"
     @show-notification.window="add($event.detail.message, $event.detail.type)"
-    class="fixed top-5 right-5 z-50 flex flex-col space-y-3 w-80">
+    class="fixed top-5 right-5 z-50 flex flex- flex-1 space-y-3 w-80">
     
     <template x-for="notification in notifications" :key="notification.id">
         <div 

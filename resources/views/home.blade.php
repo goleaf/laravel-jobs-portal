@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('message.candidate.dashboard') }}</div>
+    <div class="container mx-auto">
+        <div class="flex flex-wrap justify-center">
+            <div class="flex-1 -md-8">
+                <div class="bg-white shadow rounded-lg overflow-hidden">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -header">{{ __('message.candidate.dashboard') }}</div>
 
-                    <div class="card-body">
+                    <div class="bg-white shadow rounded-lg overflow-hidden -body">
                         @if (session('status'))
-                            <div class="alert alert-success" role="alert">
+                            <div class="alert p-4 rounded-md mb-4 -success" role="alert">
                                 {{ session('status') }}
                             </div>
                         @endif

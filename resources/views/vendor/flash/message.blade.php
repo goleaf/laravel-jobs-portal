@@ -6,8 +6,8 @@
             'body'       => $message['message']
         ])
     @else
-        <div class="alert alert-{{ $message['level'] }} {{ $message['important'] ? 'alert-important' : '' }} custom-message bg-{{ $message['level'] }} border border-{{ $message['level'] }}">
-            <div class="d-flex text-white align-items-center">
+        <div class="alert p-4 rounded-md mb-4 -{{ $message["level'] }} {{ $message['important'] ? 'alert-important' : '' }} custom-message bg-{{ $message['level'] }} border border-{{ $message['level'] }}">
+            <div class="flex text-white items-center">
                 <i class="fa-solid  fa-face-smile me-4"></i>
                 <div>
                     <span class="text-white">{{ $message['message'] }}</span>

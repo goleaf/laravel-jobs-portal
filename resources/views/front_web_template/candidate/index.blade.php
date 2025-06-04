@@ -16,18 +16,18 @@
 @section('content')
     <div class="job-seekers-page">
         {{-- <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
                             <h1 class="text-secondary mb-3">
                                 @lang('web.job_seekers')
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item "><a href="{{route('front.home')}}" class="fs-18 text-gray">{{ __('web.home') }} </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.job_seekers')</li>
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.job_seekers')</li>
                                 </ol>
                             </nav>
                         </div>
@@ -40,19 +40,19 @@
         </section> --}}
 
         <section class="hero-section position-relative bg-gradient pt-15 pb-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-3">
+                            <h1 class="text-secondary mb-3">
                                 @lang('web.job_seekers')
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb  justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item "><a href="{{route('front.home')}}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18" aria-current="page">@lang('web.job_seekers')</li>
+                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">@lang('web.job_seekers')</li>
                                 </ol>
                             </nav>
                         </div>

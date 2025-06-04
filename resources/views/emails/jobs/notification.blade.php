@@ -75,7 +75,7 @@
 </head>
 <body style="background-color: #edf2f7">
 <div style=" border-radius: 5px; padding: 15px; margin: 50px auto; width: 100%;">
-    <table class="table-class" style="background-color: #fff;">
+    <table class="w-full divide-y divide-gray-200 -class" style="background-color: #fff;">
         <tr>
             <td>
                 <table width="100%">
@@ -103,7 +103,7 @@
                                         <a class="media-title mb-1"
                                            href="{{ route('front.job.details', $job->job_id) }}">{{ $job->job_title }}</a>
                                         <div class="text-time">{{ $job->created_at->diffForHumans() }}</div>
-                                        <div class="media-description text-muted">{!! html_entity_decode($job->description) !!}</div>
+                                        <div class="media-description text-gray-500">{!! html_entity_decode($job->description) !!}</div>
                                         <div class="media-links">
                                             <span>Expiry Date: {{ \Carbon\Carbon::parse($job->job_expiry_date)->translatedFormat('d-m-Y') }}</span>
                                         </div>

@@ -3,8 +3,8 @@
     Reset Password
 @endsection
 @section('content')
-    <div class="d-flex flex-column flex-column-fluid align-items-center justify-content-center p-4">
-        <div class="col-12 text-center">
+    <div class="flex flex-column flex-column-fluid items-center justify-center p-4">
+        <div class="flex-1 -12 text-center">
             <a href="{{ route('front.home') }}" class="image mb-7 mb-sm-10" data-turbo="false">
                 <img alt="Logo" src="{{ asset(getSettingValue('logo')) }}" class="img-fluid logo-fix-size">
             </a>
@@ -50,7 +50,7 @@
                 </div>
 
                 <!-- Confirm Password -->
-                <div class="fv-row mb-5">
+                <div class="fv- flex flex-wrap mb-5">
                     {{ Form::label('password_confirmation', 'Confirm Password', ['class' => 'form-label']) }}
                     {{ Form::password('password_confirmation', [
                         'class' => 'form-control form-control-solid' . ($errors->has('password_confirmation') ? ' is-invalid' : ''),

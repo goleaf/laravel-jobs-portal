@@ -9,20 +9,20 @@
     <div class="Blog-page">
         <!-- start hero section -->
         <section class="hero-section position-relative bg-color-light py-40">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-6  text-center mb-lg-0 mb-md-5 mb-sm-4 ">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-center">
+                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
-                            <h1 class=" text-secondary mb-3">
+                            <h1 class="text-secondary mb-3">
                                 {{ __('messages.post.blog') }}
                             </h1>
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb  justify-content-center mb-0">
+                                <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item ">
                                         <a href="{{ route('front.home') }}"
                                            class="fs-18 text-gray">{{ __('web.home') }}</a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary fs-18"
+                                    <li class="breadcrumb-item text-primary-600 fs-18"
                                         aria-current="page">{{ __('messages.post.blog') }}</li>
                                 </ol>
                             </nav>
@@ -34,34 +34,34 @@
         <!-- end hero section -->
         <!-- start blog-section -->
         <section class="recent-blog-section py-100 ">
-            <div class="container">
-                <div class="row ">
-                    <div class="col-lg-8">
-                        <div class="blog-card">
-                            <div class="row">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap">
+                    <div class="flex-1 -lg-8">
+                        <div class="blog- bg-white shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-wrap">
                                 @if(count($blogs) > 0)
                                     @foreach($blogs as $blog)
-                                        <div class="col-lg-12 {{$loop->last ?'':'mb-40'}}">
-                                            <div class="card d-flex flex-md-row">
-                                                <div class="card-img-top position-relative blog-detail-img">
+                                        <div class="flex-1 -lg-12 {{$loop->last ?"':'mb-40'}}">
+                                            <div class="bg-white shadow rounded-lg overflow-hidden flex flex-md- flex flex-wrap">
+                                                <div class="bg-white shadow rounded-lg overflow-hidden -img-top position-relative blog-detail-img">
                                                     <div class="inner-image">
                                                         <img src="{{ !empty($blog->blog_image_url) ? $blog->blog_image_url :asset('front_web/images/blog-1.png')  }}"
-                                                             class="card-img-top rounded-0" alt="Blog Image">
+                                                             class="bg-white shadow rounded-lg overflow-hidden -img-top rounded-0" alt="Blog Image">
                                                     </div>
                                                     <div class="overlay position-absolute">
-                                                        <a href="{{ route('front.posts.details',$blog->id) }}" class="btn text-white fs-16">
+                                                        <a href="{{ route('front.posts.details',$blog->id) }}" class="px-4 py-2 rounded font-medium transition-colors text-white fs-16">
                                                             {{ __('web.post_menu.read_more') }}
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="card-body py-30 my-auto">
+                                                <div class="bg-white shadow rounded-lg overflow-hidden -body py-30 my-auto">
                                                     <a href="{{ route('front.posts.details',$blog->id) }}"
                                                        class="text-secondary primary-link-hover">
-                                                        <h5 class="card-title fs-18">
+                                                        <h5 class="bg-white shadow rounded-lg overflow-hidden -title fs-18">
                                                             {{ html_entity_decode($blog->title) }}
                                                         </h5>
                                                     </a>
-                                                    <p class="card-text fs-14 text-gray">
+                                                    <p class="bg-white shadow rounded-lg overflow-hidden -text fs-14 text-gray">
                                                         {!! !empty(strip_tags($blog->description)) ? Str::limit(strip_tags($blog->description),150,'...') :__('messages.common.n/a') !!}
                                                     </p>
                                                     <span class="fs-14 text-gray">
@@ -78,7 +78,7 @@
                                         <span class="">{{ __('messages.post.no_posts_available') }}</span>
                                     </h6>
                                 @endif
-                                <div class="mt-5 d-flex align-items-center justify-content-center">
+                                <div class="mt-5 flex items-center justify-center">
                                     {{ $blogs->withQueryString()->links() }}
                                 </div>
                             </div>

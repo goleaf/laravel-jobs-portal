@@ -8,10 +8,10 @@
     <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="d-flex flex-column">
+    <div class="flex flex-column">
         @include('layouts.errors')
-        <div class="card">
-            <div class="card-body">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden -body">
                 {{ Form::model($job, ['route' => ['job.update', $job->id], 'method' => 'put', 'id' => 'editJobForm']) }}
                 @include('employer.jobs.edit_fields')
                 {{ Form::close() }}

@@ -13,7 +13,7 @@
     
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         @foreach($iconNames as $iconName)
-            <div class="flex flex-col items-center justify-center p-4 border rounded-lg hover:bg-gray-50">
+            <div class="flex flex- flex-1 items-center justify-center p-4 border rounded-lg hover:bg-gray-50">
                 <div class="flex items-center justify-center w-12 h-12 mb-2 rounded-full bg-gray-100">
                     @php $componentName = "icons.{$iconName}" @endphp
                     <x-dynamic-component :component="$componentName" class="w-6 h-6 text-blue-600" />

@@ -2,5 +2,5 @@
     {{ __('messages.common.n/a') }}
 @else
     <a href="{{route('download.image', $row->id)}}" class="downloadTestimonial" data-turbo="false"><i
-                class="fas fa-download text-primary fs-1" aria-hidden="true"></i></a>
+                class="fas fa-download text-primary-600 fs-1" aria-hidden="true"></i></a>
 @endif

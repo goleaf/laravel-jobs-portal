@@ -1,8 +1,8 @@
-<div class="col-xl-4 col-md-6 candidate-card">
+<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee position-relative mb-5 border-hover-primary employee-border">
         <div class="employee-listing-details">
-            <div class="d-flex employee-listing-description align-items-center justify-content-center flex-column">
-                <div class="w-100">
+            <div class="flex employee-listing-description items-center justify-center flex-column">
+                <div class="w-full">
                     <div class="text-left employee-data text-limit">
                         <span class="text-decoration-none text-color-gray">
                             {{ Str::limit($companySize->size,30) }}
@@ -11,12 +11,12 @@
                 </div>
             </div>
         </div>
-        <div class="employee-action-btn">
-            <a title="{{ __('messages.common.edit') }}" class="btn btn-warning action-btn edit-btn"
+        <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
+            <a title="{{ __('messages.common.edit') }}" class="btn bg-yellow-500 text-white hover:bg-yellow-600 action-btn edit- px-4 py-2 rounded font-medium transition-colors"
                data-id="{{$companySize->id}}" href="javascript:void(0)">
                 <i class="fa fa-edit"></i>
             </a>
-            <a title="{{ __('messages.common.delete') }}" class="btn btn-danger action-btn delete-btn"
+            <a title="{{ __('messages.common.delete') }}" class="btn bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
                data-id="{{$companySize->id}}" href="javascript:void(0)">
                 <i class="fa fa-trash"></i>
             </a>

@@ -1,6 +1,6 @@
 <div class="overflow-x-auto">
     <!-- Search and Filter Bar -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+    <div class="flex flex- flex-1 md:flex- flex flex-wrap justify-between items-center mb-4 gap-4">
         <!-- Left side: Search -->
         <div class="w-full md:w-1/3">
             <div class="relative">
@@ -17,7 +17,7 @@
         </div>
 
         <!-- Right side: Filters and per page -->
-        <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+        <div class="flex flex- flex-1 md:flex- flex flex-wrap items-center gap-3 w-full md:w-auto">
             <!-- Filters dropdown if any -->
             @if(count($filters) > 0)
                 <div class="relative w-full md:w-auto" x-data="{ open: false }">

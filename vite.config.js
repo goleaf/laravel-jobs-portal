@@ -15,6 +15,7 @@ function fileExists(path) {
 
 // Build list of input files that actually exist
 const inputFiles = [
+    'resources/css/app.css',
     'resources/js/app.js',
 ];
 
@@ -45,7 +46,6 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
             '~jquery': path.resolve(__dirname, 'node_modules/jquery'),
             '~select2': path.resolve(__dirname, 'node_modules/select2'),
             '~slick-carousel': path.resolve(__dirname, 'node_modules/slick-carousel'),
@@ -62,7 +62,6 @@ export default defineConfig({
                 manualChunks: {
                     'third-party': [
                         'jquery',
-                        'bootstrap',
                         'slick-carousel',
                         'chart.js',
                         'autonumeric',

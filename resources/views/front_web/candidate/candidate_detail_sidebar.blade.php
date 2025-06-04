@@ -1,7 +1,7 @@
 {{--<div class="job-desc-right br-10 px-40 bg-gray mb-40 mt-lg-0 mt-md-5 mt-4">--}}
-{{--    <div class="desc-box d-flex justify-content-between mb-2">--}}
-{{--        <div class="d-flex align-items-center mb-3">--}}
-{{--            <i class="fa-solid fa-calendar-days text-primary me-2 fs-18"></i>--}}
+{{--    <div class="desc-box flex justify-between mb-2">--}}
+{{--        <div class="flex items-center mb-3">--}}
+{{--            <i class="fa-solid fa-calendar-days text-primary-600 me-2 fs-18"></i>--}}
 {{--            <p class="fs-14 text-secondary mb-0">--}}
 {{--                {{__('messages.candidate_profile.education')}}:</p>--}}
 {{--        </div>--}}
@@ -10,9 +10,9 @@
 {{--    </div>--}}
 
 {{--    @if($candidateDetails->user->dob)--}}
-{{--        <div class="desc-box d-flex justify-content-between mb-2">--}}
-{{--            <div class="d-flex align-items-center mb-3">--}}
-{{--                <i class="fa-solid fa-clock text-primary me-2 fs-18"></i>--}}
+{{--        <div class="desc-box flex justify-between mb-2">--}}
+{{--            <div class="flex items-center mb-3">--}}
+{{--                <i class="fa-solid fa-clock text-primary-600 me-2 fs-18"></i>--}}
 {{--                <p class="fs-14 text-secondary mb-0">--}}
 {{--                    <i class="icon icon-expiry"></i>{{__('messages.candidate_profile.age')}}:</p>--}}
 {{--            </div>--}}
@@ -21,27 +21,27 @@
 {{--            </p>--}}
 {{--        </div>--}}
 {{--    @endif--}}
-{{--    <div class="desc-box d-flex justify-content-between mb-2">--}}
-{{--        <div class="d-flex align-items-center mb-3">--}}
-{{--            <i class="fa-solid fa-location-dot text-primary me-2 fs-18"></i>--}}
+{{--    <div class="desc-box flex justify-between mb-2">--}}
+{{--        <div class="flex items-center mb-3">--}}
+{{--            <i class="fa-solid fa-location-dot text-primary-600 me-2 fs-18"></i>--}}
 {{--            <p class="fs-14 text-secondary mb-0">{{__('messages.candidate.current_salary')}}:</p>--}}
 {{--        </div>--}}
 {{--        <p class="fs-14 text-gray text-end">--}}
 {{--            {{ !empty($candidateDetails->current_salary) ? $candidateDetails->current_salary : __('messages.common.n/a')}}--}}
 {{--        </p>--}}
 {{--    </div>--}}
-{{--    <div class="desc-box d-flex justify-content-between mb-2">--}}
-{{--        <div class="d-flex align-items-center mb-3">--}}
-{{--            <i class="fa-solid fa-briefcase text-primary me-2 fs-18"></i>--}}
+{{--    <div class="desc-box flex justify-between mb-2">--}}
+{{--        <div class="flex items-center mb-3">--}}
+{{--            <i class="fa-solid fa-briefcase text-primary-600 me-2 fs-18"></i>--}}
 {{--            <p class="fs-14 text-secondary mb-0"> <i class="icon icon-salary"></i>{{__('messages.candidate.expected_salary')}}:</p>--}}
 {{--        </div>--}}
 {{--        <p class="fs-14 text-gray text-end">--}}
 {{--            {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a') }}</p>--}}
 {{--    </div>--}}
 
-{{--        <div class="desc-box d-flex justify-content-between mb-2">--}}
-{{--            <div class="d-flex align-items-center mb-3">--}}
-{{--                <i class="fa-solid fa-briefcase text-primary me-2 fs-18"></i>--}}
+{{--        <div class="desc-box flex justify-between mb-2">--}}
+{{--            <div class="flex items-center mb-3">--}}
+{{--                <i class="fa-solid fa-briefcase text-primary-600 me-2 fs-18"></i>--}}
 {{--                <p class="fs-14 text-secondary mb-0"> <i class="icon icon-salary"></i><i class="icon icon-user-2"></i>{{__('messages.candidate.gender')}}:</p>--}}
 {{--            </div>--}}
 {{--            <p class="fs-14 text-gray text-end">--}}
@@ -104,47 +104,47 @@
 {{--    </div>--}}
 {{--</div>--}}
 {{--</div>--}}
-<div class="col-12">
-    <div class="col-12 mb-40">
-        <div class="job-card card py-30">
-            <div class="row d-flex justify-content-lg-between">
-                <div class="col-5 mt-3">
-                    <i class="fa-solid fa-calendar-days text-primary fs-4"></i>
-                    <p class="details-page-card-text mb-0" >
+<div class="flex-1 -12">
+    <div class="flex-1 -12 mb-40">
+        <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+            <div class="flex flex-wrap flex justify-content-lg-between">
+                <div class="flex-1 -5 mt-3">
+                    <i class="fa-solid fa-calendar-days text-primary-600 fs-4"></i>
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                         {{__('messages.candidate_profile.education')}}</p>
                     <p class="text-secondary fs-14">
                         {{!empty($candidateDetails->experience) ? $candidateDetails->experience.  ' '.__('messages.candidate_profile.years') : __('messages.common.n/a')}}
                     </p>
                 </div>
                 @if($candidateDetails->user->dob)
-                    <div class="col-5 mt-3">
-                        <i class="fa-solid fa-cake-candles text-primary fs-4"></i>
-                        <p class="details-page-card-text mb-0" >
+                    <div class="flex-1 -5 mt-3">
+                        <i class="fa-solid fa-cake-candles text-primary-600 fs-4"></i>
+                        <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                             {{__('messages.candidate_profile.age')}}</p>
                         <p class="text-secondary fs-14">
                             {{!empty($candidateDetails->user->dob) ?\Carbon\Carbon::parse($candidateDetails->user->dob)->age. ' '.__('messages.candidate_profile.years') : __('messages.common.n/a')}}
                         </p>
                     </div>
                 @endif
-                <div class="col-5 mt-3">
-                    <i class="fa-solid fa-wallet text-primary fs-4"></i>
-                    <p class="details-page-card-text mb-0" >
+                <div class="flex-1 -5 mt-3">
+                    <i class="fa-solid fa-wallet text-primary-600 fs-4"></i>
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                         {{__('messages.candidate.current_salary')}}</p>
                     <p class="text-secondary fs-14">
                         {{ !empty($candidateDetails->current_salary) ? $candidateDetails->current_salary : __('messages.common.n/a')}}
                     </p>
                 </div>
-                <div class="col-5 mt-3">
-                    <i class="fa-solid fa-wallet text-primary fs-4"></i>
-                    <p class="details-page-card-text mb-0" >
+                <div class="flex-1 -5 mt-3">
+                    <i class="fa-solid fa-wallet text-primary-600 fs-4"></i>
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                         {{__('messages.candidate.expected_salary')}}</p>
                     <p class="text-secondary fs-14">
                         {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a') }}
                     </p>
                 </div>
-                <div class="col-5 mt-3">
-                    <i class="fa-solid fa-venus text-primary fs-4"></i>
-                    <p class="details-page-card-text mb-0" >
+                <div class="flex-1 -5 mt-3">
+                    <i class="fa-solid fa-venus text-primary-600 fs-4"></i>
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
                         {{__('messages.candidate.gender')}}</p>
                     <p class="text-secondary fs-14">
                         @if($candidateDetails->user->gender == 0)
@@ -161,10 +161,10 @@
     </div>
 </div>
 @if(! empty($candidateDetails->user->facebook_url) || ! empty($candidateDetails->user->twitter_url) || ! empty($candidateDetails->user->google_plus_url) || ! empty($candidateDetails->user->pinterest_url) || ! empty($candidateDetails->user->linkedin_url))
-<div class="col-12">
-    <div class="col-12 mb-40">
-        <div class="job-card card py-30">
-            <div class="row d-flex justify-content-lg-between">
+<div class="flex-1 -12">
+    <div class="flex-1 -12 mb-40">
+        <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+            <div class="flex flex-wrap flex justify-content-lg-between">
                 <p class="fs-18 text-secondary">@lang('web.web_company.social_media')</p>
                 <div class="mt-3">
                     @if(! empty($candidateDetails->user->facebook_url))
@@ -192,12 +192,12 @@
     </div>
 </div>
 @endif
-<div class="col-12">
-    <div class="col-12 mb-40">
+<div class="flex-1 -12">
+    <div class="flex-1 -12 mb-40">
         
-        <div class="job-card card py-30">
+        <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
             <p class="fs-18 text-secondary">{{__('messages.professional_skills')}}</p>
-            <div class="row d-flex justify-content-lg-between">
+            <div class="flex flex-wrap flex justify-content-lg-between">
                 @if($candidateDetails->user->candidateSkill->count())
                     @foreach($candidateDetails->user->candidateSkill as $candidateSkill)
                         <li>

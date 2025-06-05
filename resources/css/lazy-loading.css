@@ -1,0 +1,296 @@
+/**
+ * Lazy Loading CSS - Performance Optimized Image Loading
+ */
+
+/* Base lazy image styles */
+[data-lazy] {
+  @apply block w-full h-auto;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
+  background-color: #f3f4f6;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Placeholder state */
+.lazy-placeholder {
+  @apply bg-gray-200;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Loading state */
+.lazy-loading {
+  @apply relative;
+}
+
+.lazy-loading::after {
+  @apply absolute inset-0 flex items-center justify-center;
+  content: '';
+  background: rgba(0, 0, 0, 0.1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4' class='opacity-25'/%3E%3Cpath fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' class='opacity-75'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px 24px;
+  animation: spin 1s linear infinite;
+}
+
+/* Loaded state */
+.lazy-loaded {
+  opacity: 1;
+  filter: none;
+}
+
+/* Error state */
+.lazy-error {
+  @apply bg-red-100 border-2 border-red-300 border-dashed;
+  opacity: 1;
+}
+
+.lazy-error::after {
+  @apply absolute inset-0 flex items-center justify-center text-red-500 text-sm;
+  content: 'Failed to load image';
+  background: rgba(254, 226, 226, 0.8);
+}
+
+/* Progressive loading blur effect */
+.lazy-progressive {
+  filter: blur(5px);
+  transform: scale(1.05);
+  transition: filter 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.lazy-progressive.lazy-loaded {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* Responsive image container */
+.responsive-image-container {
+  @apply relative overflow-hidden;
+  background: #f3f4f6;
+}
+
+.responsive-image-container img {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+/* Aspect ratio utilities for responsive images */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-photo {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+
+/* WebP support indicator (for debugging) */
+.webp-supported [data-webp] {
+  position: relative;
+}
+
+.webp-supported [data-webp]::before {
+  @apply absolute top-1 right-1 bg-green-500 text-white text-xs px-1 rounded;
+  content: 'WebP';
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.webp-supported [data-webp]:hover::before {
+  opacity: 1;
+}
+
+/* Performance indicators */
+.perf-indicator {
+  @apply absolute top-2 left-2 px-2 py-1 bg-black bg-opacity-50 text-white text-xs rounded;
+  font-family: monospace;
+  z-index: 10;
+}
+
+.perf-indicator.fast {
+  @apply bg-green-500;
+}
+
+.perf-indicator.medium {
+  @apply bg-yellow-500;
+}
+
+.perf-indicator.slow {
+  @apply bg-red-500;
+}
+
+/* Animation keyframes */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Image grid optimizations */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.image-grid .lazy-placeholder {
+  min-height: 200px;
+}
+
+/* Masonry layout support */
+.masonry-grid {
+  columns: 1;
+  column-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    columns: 2;
+  }
+}
+
+@media (min-width: 768px) {
+  .masonry-grid {
+    columns: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    columns: 4;
+  }
+}
+
+.masonry-grid .image-item {
+  @apply mb-4 break-inside-avoid;
+}
+
+/* Print styles */
+@media print {
+  [data-lazy],
+  .lazy-placeholder,
+  .lazy-loading {
+    opacity: 1 !important;
+    filter: none !important;
+    background: none !important;
+  }
+  
+  .lazy-placeholder::after,
+  .lazy-loading::after {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .lazy-placeholder {
+    @apply bg-gray-900 text-white;
+  }
+  
+  .lazy-error {
+    @apply bg-red-900 border-red-600 text-white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-lazy],
+  .lazy-placeholder,
+  .lazy-loading,
+  .lazy-loaded,
+  .lazy-progressive {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  [data-lazy] {
+    background-color: #374151;
+  }
+  
+  .lazy-placeholder {
+    @apply bg-gray-700;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+  }
+  
+  .lazy-loading::after {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Critical CSS for above-the-fold images */
+.critical-image {
+  opacity: 1 !important;
+  filter: none !important;
+  transition: none !important;
+}
+
+/* Intersection margin helpers */
+.lazy-margin-small {
+  margin: 25px;
+}
+
+.lazy-margin-medium {
+  margin: 50px;
+}
+
+.lazy-margin-large {
+  margin: 100px;
+} 

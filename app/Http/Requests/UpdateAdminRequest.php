@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateAdminRequest extends FormRequest
 {
@@ -12,65 +11,56 @@ class UpdateAdminRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->hasRole('Admin');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        $userId = $this->route('admin') ? $this->route('admin')->id : $this->route('id');
+        
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:admins,email,{id}',
-            'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|string|in:super_admin,admin',
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['nullable', 'string', 'min:8'],
+            'is_active' => ['boolean'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'dob' => ['nullable', 'date', 'before:today'],
+            'gender' => ['nullable', 'in:0,1'],
         ];
     }
 
     /**
-     * Get custom validation messages.
-     *
-     * @return array<string, string>
+     * Get custom messages for validator errors.
      */
     public function messages(): array
     {
         return [
-            'required' => 'The :attribute field is required.',
-            'email' => 'Please enter a valid email address.',
-            'unique' => 'This :attribute has already been taken.',
-            'min' => 'The :attribute must be at least :min characters.',
-            'max' => 'The :attribute may not be greater than :max characters.',
-            'confirmed' => 'The :attribute confirmation does not match.',
-            'exists' => 'The selected :attribute is invalid.',
-            'image' => 'The :attribute must be an image.',
-            'mimes' => 'The :attribute must be a file of type: :values.',
-            'numeric' => 'The :attribute must be a number.',
-            'date' => 'The :attribute is not a valid date.',
-            'after' => 'The :attribute must be a date after :date.',
-            'url' => 'The :attribute format is invalid.',
-            'boolean' => 'The :attribute field must be true or false.',
-            'array' => 'The :attribute must be an array.',
-            'accepted' => 'The :attribute must be accepted.',
+            'first_name.required' => __('validation_custom.user.first_name_required'),
+            'last_name.required' => __('validation_custom.user.last_name_required'),
+            'email.required' => __('validation_custom.user.email_required'),
+            'email.unique' => __('validation_custom.user.email_unique'),
+            'password.min' => __('validation_custom.user.password_min'),
+            'password.confirmed' => __('validation_custom.user.password_confirmed'),
+            'email.email' => 'Please enter a valid email address.',
+            'dob.before' => 'Date of birth must be before today.',
+            'gender.in' => 'Please select a valid gender option.',
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
-     *
-     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'email' => 'Email',
-            'password' => 'Password',
-            'role' => 'Role',
+            'first_name' => 'first name',
+            'last_name' => 'last name',
+            'dob' => 'date of birth',
         ];
     }
 
@@ -79,10 +69,8 @@ class UpdateAdminRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Add any data preparation logic here
-        // Example: Convert empty strings to null
         $this->merge([
-            // Add any automatic data transformations
+            'is_active' => $this->boolean('is_active', true),
         ]);
     }
 

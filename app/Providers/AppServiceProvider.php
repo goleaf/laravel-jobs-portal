@@ -6,9 +6,12 @@ use App\Console\Commands\ConsolidateTranslations;
 use App\Console\Commands\MigrateJsonTranslations;
 use App\Console\Commands\SynchronizeTranslations;
 use App\Livewire\LanguageTable;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -67,6 +70,9 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useTailwind();
         app()->useLangPath(base_path('lang'));
 
+        // Configure comprehensive rate limiting
+        $this->configureRateLimiting();
+
         // Register class aliases
         $this->registerClassAliases();
 
@@ -102,6 +108,91 @@ class AppServiceProvider extends ServiceProvider
         // Comment out Livewire components registration to prevent errors
         // Livewire::component('language-table', LanguageTable::class);
         // Add other Livewire components here
+    }
+
+    /**
+     * Configure comprehensive rate limiting for different operations.
+     */
+    protected function configureRateLimiting(): void
+    {
+        // API Rate Limiting - General API access
+        RateLimiter::for('api', function (Request $request) {
+            return $request->user()
+                ? Limit::perMinute(120)->by($request->user()->id)
+                : Limit::perMinute(60)->by($request->ip());
+        });
+
+        // Authentication Rate Limiting - Login attempts
+        RateLimiter::for('login', function (Request $request) {
+            return [
+                Limit::perMinute(10),
+                Limit::perMinute(3)->by($request->input('email')),
+            ];
+        });
+
+        // Registration Rate Limiting
+        RateLimiter::for('register', function (Request $request) {
+            return [
+                Limit::perMinute(5),
+                Limit::perDay(10)->by($request->ip()),
+            ];
+        });
+
+        // Password Reset Rate Limiting
+        RateLimiter::for('password-reset', function (Request $request) {
+            return [
+                Limit::perMinute(3),
+                Limit::perHour(10)->by($request->input('email')),
+            ];
+        });
+
+        // Job Search Rate Limiting
+        RateLimiter::for('job-search', function (Request $request) {
+            return $request->user()
+                ? Limit::perMinute(100)->by($request->user()->id)
+                : Limit::perMinute(30)->by($request->ip());
+        });
+
+        // Job Application Rate Limiting
+        RateLimiter::for('job-application', function (Request $request) {
+            return $request->user()
+                ? Limit::perDay(50)->by($request->user()->id)
+                : Limit::none();
+        });
+
+        // File Upload Rate Limiting
+        RateLimiter::for('uploads', function (Request $request) {
+            return $request->user()
+                ? Limit::perMinute(20)->by($request->user()->id)
+                : Limit::perMinute(5)->by($request->ip());
+        });
+
+        // Admin Operations Rate Limiting
+        RateLimiter::for('admin', function (Request $request) {
+            return $request->user() && $request->user()->hasRole('admin')
+                ? Limit::perMinute(200)->by($request->user()->id)
+                : Limit::none();
+        });
+
+        // Company Profile Update Rate Limiting
+        RateLimiter::for('company-updates', function (Request $request) {
+            return $request->user()
+                ? Limit::perHour(10)->by($request->user()->id)
+                : Limit::none();
+        });
+
+        // Email Verification Rate Limiting
+        RateLimiter::for('email-verification', function (Request $request) {
+            return [
+                Limit::perMinute(3),
+                Limit::perHour(10)->by($request->user()?->id ?: $request->ip()),
+            ];
+        });
+
+        // Global Application Rate Limiting
+        RateLimiter::for('global', function (Request $request) {
+            return Limit::perMinute(1000)->by($request->ip());
+        });
     }
 
     /**

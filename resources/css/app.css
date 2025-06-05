@@ -1,4 +1,5 @@
 @import './components/action-buttons.css';
+@import './lazy-loading.css';
 
 @tailwind base;
 @tailwind components;

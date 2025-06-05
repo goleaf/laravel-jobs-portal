@@ -73,6 +73,33 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => env('SECURITY_LOG_LEVEL', 'info'),
+            'days' => env('SECURITY_LOG_RETENTION_DAYS', 90),
+            'replace_placeholders' => true,
+            'permission' => 0600, // Restrict access to security logs
+        ],
+
+        'authentication' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/auth.log'),
+            'level' => env('AUTH_LOG_LEVEL', 'info'),
+            'days' => env('AUTH_LOG_RETENTION_DAYS', 60),
+            'replace_placeholders' => true,
+            'permission' => 0600,
+        ],
+
+        'audit' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/audit.log'),
+            'level' => env('AUDIT_LOG_LEVEL', 'info'),
+            'days' => env('AUDIT_LOG_RETENTION_DAYS', 365), // Keep audit logs for 1 year
+            'replace_placeholders' => true,
+            'permission' => 0600,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

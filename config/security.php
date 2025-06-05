@@ -1,0 +1,321 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This file contains security-related configuration options for the
+    | job portal application. These settings control authentication,
+    | authorization, rate limiting, and other security features.
+    |
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Security
+    |--------------------------------------------------------------------------
+    */
+
+    'authentication' => [
+        // Maximum failed login attempts before account lockout
+        'max_failed_attempts' => env('SECURITY_MAX_FAILED_ATTEMPTS', 5),
+        
+        // Account lockout duration in minutes
+        'lockout_duration' => env('SECURITY_LOCKOUT_DURATION', 30),
+        
+        // Require email verification for new accounts
+        'require_email_verification' => env('SECURITY_REQUIRE_EMAIL_VERIFICATION', true),
+        
+        // Password requirements
+        'password_min_length' => env('SECURITY_PASSWORD_MIN_LENGTH', 8),
+        'password_require_uppercase' => env('SECURITY_PASSWORD_REQUIRE_UPPERCASE', true),
+        'password_require_lowercase' => env('SECURITY_PASSWORD_REQUIRE_LOWERCASE', true),
+        'password_require_numbers' => env('SECURITY_PASSWORD_REQUIRE_NUMBERS', true),
+        'password_require_symbols' => env('SECURITY_PASSWORD_REQUIRE_SYMBOLS', true),
+        
+        // Two-factor authentication
+        'enable_2fa' => env('SECURITY_ENABLE_2FA', false),
+        'force_2fa_for_admin' => env('SECURITY_FORCE_2FA_FOR_ADMIN', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Session Security
+    |--------------------------------------------------------------------------
+    */
+
+    'session' => [
+        // Validate session security (IP, User Agent changes)
+        'validate_sessions' => env('SECURITY_VALIDATE_SESSIONS', true),
+        
+        // Allow IP address changes during session
+        'allow_ip_changes' => env('SECURITY_ALLOW_IP_CHANGES', false),
+        
+        // Allow user agent changes during session
+        'allow_user_agent_changes' => env('SECURITY_ALLOW_USER_AGENT_CHANGES', false),
+        
+        // Session timeout in minutes
+        'session_timeout' => env('SECURITY_SESSION_TIMEOUT', 120),
+        
+        // Force session regeneration after login
+        'regenerate_on_login' => env('SECURITY_REGENERATE_ON_LOGIN', true),
+        
+        // Notify users of suspicious activity
+        'notify_suspicious_activity' => env('SECURITY_NOTIFY_SUSPICIOUS_ACTIVITY', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limiting Configuration
+    |--------------------------------------------------------------------------
+    */
+
+    'rate_limiting' => [
+        // Global application rate limit per minute
+        'global_limit' => env('SECURITY_GLOBAL_RATE_LIMIT', 1000),
+        
+        // API rate limits
+        'api' => [
+            'authenticated_limit' => env('SECURITY_API_AUTH_LIMIT', 120),
+            'guest_limit' => env('SECURITY_API_GUEST_LIMIT', 60),
+        ],
+        
+        // Authentication rate limits
+        'auth' => [
+            'login_attempts' => env('SECURITY_LOGIN_RATE_LIMIT', 10),
+            'registration_attempts' => env('SECURITY_REGISTER_RATE_LIMIT', 5),
+            'password_reset_attempts' => env('SECURITY_PASSWORD_RESET_RATE_LIMIT', 3),
+        ],
+        
+        // Feature-specific rate limits
+        'features' => [
+            'job_search_limit' => env('SECURITY_JOB_SEARCH_LIMIT', 100),
+            'job_application_limit' => env('SECURITY_JOB_APPLICATION_LIMIT', 50),
+            'file_upload_limit' => env('SECURITY_FILE_UPLOAD_LIMIT', 20),
+            'email_verification_limit' => env('SECURITY_EMAIL_VERIFICATION_LIMIT', 3),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authorization & Permissions
+    |--------------------------------------------------------------------------
+    */
+
+    'authorization' => [
+        // Cache permission checks for performance
+        'cache_permissions' => env('SECURITY_CACHE_PERMISSIONS', true),
+        
+        // Permission cache duration in minutes
+        'permission_cache_duration' => env('SECURITY_PERMISSION_CACHE_DURATION', 15),
+        
+        // Default user role for new registrations
+        'default_user_role' => env('SECURITY_DEFAULT_USER_ROLE', 'candidate'),
+        
+        // Roles that require additional verification
+        'verified_roles' => ['employer', 'admin'],
+        
+        // Super admin role (bypasses all checks)
+        'super_admin_role' => env('SECURITY_SUPER_ADMIN_ROLE', 'super-admin'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Content Security Policy
+    |--------------------------------------------------------------------------
+    */
+
+    'csp' => [
+        'enabled' => env('SECURITY_CSP_ENABLED', true),
+        
+        'directives' => [
+            'default-src' => ["'self'"],
+            'script-src' => ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            'style-src' => ["'self'", "'unsafe-inline'"],
+            'img-src' => ["'self'", 'data:', 'https:'],
+            'font-src' => ["'self'", 'data:'],
+            'connect-src' => ["'self'"],
+            'frame-src' => ["'none'"],
+            'object-src' => ["'none'"],
+            'base-uri' => ["'self'"],
+            'form-action' => ["'self'"],
+        ],
+        
+        'report_uri' => env('SECURITY_CSP_REPORT_URI', null),
+        'report_only' => env('SECURITY_CSP_REPORT_ONLY', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security Headers
+    |--------------------------------------------------------------------------
+    */
+
+    'headers' => [
+        'x_content_type_options' => 'nosniff',
+        'x_frame_options' => 'DENY',
+        'x_xss_protection' => '1; mode=block',
+        'referrer_policy' => 'strict-origin-when-cross-origin',
+        'permissions_policy' => 'geolocation=(), microphone=(), camera=()',
+        
+        // HSTS (only on HTTPS)
+        'hsts' => [
+            'max_age' => 31536000, // 1 year
+            'include_subdomains' => true,
+            'preload' => false,
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | File Upload Security
+    |--------------------------------------------------------------------------
+    */
+
+    'file_upload' => [
+        // Maximum file size in bytes (default: 10MB)
+        'max_file_size' => env('SECURITY_MAX_FILE_SIZE', 10485760),
+        
+        // Allowed file types for resumes
+        'allowed_resume_types' => ['pdf', 'doc', 'docx'],
+        
+        // Allowed file types for images
+        'allowed_image_types' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        
+        // Scan uploaded files for malware
+        'scan_uploads' => env('SECURITY_SCAN_UPLOADS', false),
+        
+        // Store uploads outside web root
+        'secure_storage' => env('SECURITY_SECURE_STORAGE', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Security
+    |--------------------------------------------------------------------------
+    */
+
+    'api' => [
+        // Require API key for certain endpoints
+        'require_api_key' => env('SECURITY_REQUIRE_API_KEY', false),
+        
+        // API key header name
+        'api_key_header' => env('SECURITY_API_KEY_HEADER', 'X-API-Key'),
+        
+        // Enable API versioning
+        'enable_versioning' => env('SECURITY_API_VERSIONING', true),
+        
+        // Default API version
+        'default_version' => env('SECURITY_API_DEFAULT_VERSION', 'v1'),
+        
+        // CORS settings
+        'cors' => [
+            'allowed_origins' => explode(',', env('SECURITY_CORS_ALLOWED_ORIGINS', '*')),
+            'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            'allowed_headers' => ['Content-Type', 'Authorization', 'X-Requested-With'],
+            'max_age' => 86400, // 24 hours
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logging & Monitoring
+    |--------------------------------------------------------------------------
+    */
+
+    'logging' => [
+        // Log all security events
+        'log_security_events' => env('SECURITY_LOG_EVENTS', true),
+        
+        // Security log channel
+        'security_channel' => env('SECURITY_LOG_CHANNEL', 'security'),
+        
+        // Log failed authentication attempts
+        'log_failed_auth' => env('SECURITY_LOG_FAILED_AUTH', true),
+        
+        // Log authorization failures
+        'log_auth_failures' => env('SECURITY_LOG_AUTH_FAILURES', true),
+        
+        // Log rate limit violations
+        'log_rate_limits' => env('SECURITY_LOG_RATE_LIMITS', true),
+        
+        // Alert on suspicious activity
+        'alert_suspicious_activity' => env('SECURITY_ALERT_SUSPICIOUS_ACTIVITY', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Account Security
+    |--------------------------------------------------------------------------
+    */
+
+    'account' => [
+        // Require password confirmation for sensitive actions
+        'require_password_confirmation' => env('SECURITY_REQUIRE_PASSWORD_CONFIRMATION', true),
+        
+        // Password confirmation timeout in seconds
+        'password_confirmation_timeout' => env('SECURITY_PASSWORD_CONFIRMATION_TIMEOUT', 10800), // 3 hours
+        
+        // Force password change after certain period (days)
+        'force_password_change_after' => env('SECURITY_FORCE_PASSWORD_CHANGE_AFTER', null),
+        
+        // Prevent password reuse (number of previous passwords to check)
+        'prevent_password_reuse' => env('SECURITY_PREVENT_PASSWORD_REUSE', 5),
+        
+        // Account deletion requires confirmation
+        'require_deletion_confirmation' => env('SECURITY_REQUIRE_DELETION_CONFIRMATION', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Data Protection
+    |--------------------------------------------------------------------------
+    */
+
+    'data_protection' => [
+        // Encrypt sensitive data at rest
+        'encrypt_sensitive_data' => env('SECURITY_ENCRYPT_SENSITIVE_DATA', true),
+        
+        // Automatically anonymize old data (days)
+        'anonymize_data_after' => env('SECURITY_ANONYMIZE_DATA_AFTER', null),
+        
+        // Data retention period (days)
+        'data_retention_period' => env('SECURITY_DATA_RETENTION_PERIOD', 2555), // 7 years
+        
+        // PII fields that require special handling
+        'pii_fields' => [
+            'email', 'phone', 'address', 'ssn', 'date_of_birth',
+            'national_id', 'passport_number'
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Job Portal Specific Security
+    |--------------------------------------------------------------------------
+    */
+
+    'job_portal' => [
+        // Verify employer companies
+        'verify_employer_companies' => env('SECURITY_VERIFY_EMPLOYER_COMPANIES', true),
+        
+        // Moderate job postings
+        'moderate_job_postings' => env('SECURITY_MODERATE_JOB_POSTINGS', false),
+        
+        // Maximum job applications per day per user
+        'max_applications_per_day' => env('SECURITY_MAX_APPLICATIONS_PER_DAY', 10),
+        
+        // Prevent duplicate applications
+        'prevent_duplicate_applications' => env('SECURITY_PREVENT_DUPLICATE_APPLICATIONS', true),
+        
+        // Hide company information until application
+        'hide_company_info' => env('SECURITY_HIDE_COMPANY_INFO', false),
+        
+        // Require terms acceptance for job applications
+        'require_terms_acceptance' => env('SECURITY_REQUIRE_TERMS_ACCEPTANCE', true),
+    ],
+
+]; 

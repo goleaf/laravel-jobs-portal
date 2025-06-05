@@ -22,7 +22,10 @@ class Authenticate extends Middleware
     {
         $this->authenticate($request, $guards);
 
-        App::setLocale(getLoggedInUser()->language);
+        // Set locale based on authenticated user's language preference
+        if ($request->user() && isset($request->user()->language)) {
+            App::setLocale($request->user()->language);
+        }
 
         return $next($request);
     }

@@ -11,6 +11,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\GetCompaniesListsCompanyRequest;
+
+use App\Http\Requests\SaveFavouriteCompanyCompanyRequest;
+
+use App\Http\Requests\ReportToCompanyCompanyRequest;
+
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */
@@ -46,12 +52,12 @@ class CompanyController extends AppBaseController
     /**
      * @return Application|Factory|View
      */
-    public function getCompaniesLists(Request $request): View
+    public function getCompaniesLists(GetCompaniesListsCompanyRequest $request): View
     {
         return view('front_web_template.company.index');
     }
 
-    public function saveFavouriteCompany(Request $request): JsonResponse
+    public function saveFavouriteCompany(SaveFavouriteCompanyCompanyRequest $request): JsonResponse
     {
         $input = $request->all();
         $favouriteJob = $this->companyRepository->storeFavouriteJobs($input);
@@ -62,7 +68,7 @@ class CompanyController extends AppBaseController
         return $this->sendResponse($favouriteJob, __('messages.flash.unfollow_company'));
     }
 
-    public function reportToCompany(Request $request): JsonResponse
+    public function reportToCompany(ReportToCompanyCompanyRequest $request): JsonResponse
     {
         $input = $request->all();
         $this->companyRepository->storeReportToCompany($input);

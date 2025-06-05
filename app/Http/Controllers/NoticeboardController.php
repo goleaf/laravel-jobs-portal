@@ -70,7 +70,7 @@ class NoticeboardController extends AppBaseController
     /**
      * Update the specified Noticeboard in storage.
      */
-    public function update(UpdateNoticeboardRequest $request, Noticeboard $noticeboard): JsonResponse
+    public function update(UpdateNoticeboardUpdateNoticeboardRequest $request, Noticeboard $noticeboard): JsonResponse
     {
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;

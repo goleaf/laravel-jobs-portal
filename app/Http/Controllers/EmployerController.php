@@ -14,6 +14,10 @@ use Laracasts\Flash\Flash;
 /**
  * Class EmployerController
  */
+use App\Http\Requests\ChangePasswordEmployerRequest;
+
+use App\Http\Requests\ProfileUpdateEmployerRequest;
+
 class EmployerController extends AppBaseController
 {
     /** @var UserRepository */
@@ -24,7 +28,7 @@ class EmployerController extends AppBaseController
         $this->userRepository = $userRepo;
     }
 
-    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    public function changePassword(ChangePasswordChangePasswordEmployerRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -37,7 +41,7 @@ class EmployerController extends AppBaseController
         }
     }
 
-    public function profileUpdate(UpdateEmployerProfileRequest $request): JsonResponse
+    public function profileUpdate(UpdateEmployerProfileProfileUpdateEmployerRequest $request): JsonResponse
     {
         $input = $request->all();
 

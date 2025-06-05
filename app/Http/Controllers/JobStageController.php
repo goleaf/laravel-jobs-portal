@@ -75,7 +75,7 @@ class JobStageController extends AppBaseController
     /**
      * Update the specified JobStage in storage.
      */
-    public function update(UpdateJobStageRequest $request, JobStage $jobStage): JsonResponse
+    public function update(UpdateJobStageUpdateJobStageRequest $request, JobStage $jobStage): JsonResponse
     {
         $companyId = getLoggedInUser()->company->id;
         $jobStageId = JobStage::whereCompanyId($companyId)->pluck('id')->toArray();

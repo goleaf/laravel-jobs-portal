@@ -75,7 +75,7 @@ class JobCategoryController extends AppBaseController
      *
      * @return mixed
      */
-    public function update(UpdateJobCategoryRequest $request, JobCategory $jobCategory)
+    public function update(UpdateJobCategoryUpdateJobCategoryRequest $request, JobCategory $jobCategory)
     {
         $input = $request->all();
         $this->jobCategoryRepository->updateJobCategory($input, $jobCategory->id);

@@ -61,7 +61,7 @@ class CountryController extends AppBaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCountryRequest $request, Country $country): JsonResponse
+    public function update(UpdateCountryUpdateCountryRequest $request, Country $country): JsonResponse
     {
         $input = $request->all();
         $input['short_code'] = strtoupper($input['short_code']);

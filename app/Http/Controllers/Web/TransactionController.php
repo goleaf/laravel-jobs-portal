@@ -7,6 +7,10 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreTransactionRequest;
+
+use App\Http\Requests\UpdateTransactionRequest;
+
 class TransactionController extends Controller
 {
     /**
@@ -29,7 +33,7 @@ class TransactionController extends Controller
     /**
      * Store a newly created transaction
      */
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -63,7 +67,7 @@ class TransactionController extends Controller
     /**
      * Update the specified transaction
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTransactionRequest $request, string $id)
     {
         $transaction = Transaction::findOrFail($id);
         

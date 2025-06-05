@@ -22,6 +22,8 @@ use PayPalHttp\IOException;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 /** All Paypal Details class **/
+use App\Http\Requests\GetPaymentStatusPaypalRequest;
+
 class PaypalController extends Controller
 {
     private $_api_context;
@@ -101,7 +103,7 @@ class PaypalController extends Controller
         return redirect($order['links'][1]['href']);
     }
 
-    public function getPaymentStatus(Request $request): RedirectResponse
+    public function getPaymentStatus(GetPaymentStatusPaypalRequest $request): RedirectResponse
     {
         $clientId = ! empty(getEnvSetting()['paypal_client_id']) ? getEnvSetting()['paypal_client_id'] : config('paypal.paypal.client_id');
         $clientSecret = ! empty(getEnvSetting()['paypal_secret']) ? getEnvSetting()['paypal_secret'] : config('paypal.paypal.client_secret');

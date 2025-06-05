@@ -17,6 +17,8 @@ use Laracasts\Flash\Flash;
 /**
  * Class EmailTemplateController
  */
+use App\Http\Requests\UpdateEmailTemplateRequest;
+
 class EmailTemplateController extends Controller
 {
     /**
@@ -54,7 +56,7 @@ class EmailTemplateController extends Controller
     /**
      * @return Application|RedirectResponse|Redirector
      */
-    public function update(UpdateEMailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
+    public function update(UpdateEMailTemplateUpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
     {
         $input = $request->all();
 

@@ -15,6 +15,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
+use App\Http\Requests\ApplyJobJobApplicationRequest;
+
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */
@@ -42,7 +44,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @return mixed
      */
-    public function applyJob(ApplyJobRequest $request)
+    public function applyJob(ApplyJobApplyJobJobApplicationRequest $request)
     {
         $input = $request->all();
 

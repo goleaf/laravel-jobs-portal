@@ -58,7 +58,7 @@ class CareerLevelController extends AppBaseController
     /**
      * Update the specified CareerLevel in storage.
      */
-    public function update(UpdateCareerLevelRequest $request, CareerLevel $careerLevel): JsonResponse
+    public function update(UpdateCareerLevelUpdateCareerLevelRequest $request, CareerLevel $careerLevel): JsonResponse
     {
         $input = $request->all();
         $this->careerLevelRepository->update($input, $careerLevel->id);

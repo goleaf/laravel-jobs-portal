@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
+use App\Http\Requests\ChangeLanguageLanguageRequest;
+
 class LanguageController extends AppBaseController
 {
     /** @var LanguageRepository */
@@ -68,7 +70,7 @@ class LanguageController extends AppBaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLanguageRequest $request, Language $language): JsonResponse
+    public function update(UpdateLanguageUpdateLanguageRequest $request, Language $language): JsonResponse
     {
         $input = $request->all();
         $this->languageRepository->update($input, $language->id);
@@ -110,7 +112,7 @@ class LanguageController extends AppBaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function changeLanguage(Request $request, string $locale)
+    public function changeLanguage(ChangeLanguageLanguageRequest $request, string $locale)
     {
         $availableLocales = array_keys(config('app.available_locales', []));
 

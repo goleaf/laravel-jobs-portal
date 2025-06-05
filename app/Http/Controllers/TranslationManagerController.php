@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
+use App\Http\Requests\StoreTranslationManagerRequest;
+
+use App\Http\Requests\UpdateTranslationManagerRequest;
+
 class TranslationManagerController extends AppBaseController
 {
     /**
@@ -51,7 +55,7 @@ class TranslationManagerController extends AppBaseController
         return view('translation-manager.index', compact('selectedLang', 'selectedFile'))->with($data);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreTranslationManagerRequest $request): JsonResponse
     {
         //        return $this->sendError('This action is not allow in demo');
 
@@ -68,7 +72,7 @@ class TranslationManagerController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.language_added'));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateTranslationManagerRequest $request): RedirectResponse
     {
         //        Flash::error('This action is not allow in demo');
 

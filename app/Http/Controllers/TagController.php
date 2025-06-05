@@ -67,7 +67,7 @@ class TagController extends AppBaseController
      *
      * @param  Tag  $jobTag
      */
-    public function update(UpdateTagRequest $request, Tag $tag): JsonResponse
+    public function update(UpdateTagUpdateTagRequest $request, Tag $tag): JsonResponse
     {
         $input = $request->all();
         $this->jobTagRepository->update($input, $tag->id);

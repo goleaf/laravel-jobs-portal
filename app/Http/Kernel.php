@@ -24,6 +24,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\SecurityHeaders::class,
     ];
 
     /**
@@ -72,5 +73,12 @@ class Kernel extends HttpKernel
         'xss' => XSS::class,
         'setLanguage' => SetLanguage::class,
         'verified.user' => CheckUserIsVerified::class,
+        
+        // Enhanced Security Middleware
+        'enhanced.auth' => \App\Http\Middleware\EnhancedAuthenticate::class,
+        'enhanced.authz' => \App\Http\Middleware\EnhancedAuthorization::class,
+        'security.headers' => \App\Http\Middleware\SecurityHeaders::class,
+        'rate.limit.advanced' => \App\Http\Middleware\AdvancedRateLimit::class,
+        'performance.monitor' => \App\Http\Middleware\PerformanceMonitor::class,
     ];
 }

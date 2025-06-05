@@ -60,7 +60,7 @@ class CompanySizeController extends AppBaseController
     /**
      * Update the specified CompanySize in storage.
      */
-    public function update(UpdateCompanySizeRequest $request, CompanySize $companySize): JsonResponse
+    public function update(UpdateCompanySizeUpdateCompanySizeRequest $request, CompanySize $companySize): JsonResponse
     {
         $input = $request->all();
         $this->companySizeRepository->update($input, $companySize->id);

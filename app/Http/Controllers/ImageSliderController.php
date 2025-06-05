@@ -12,6 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\UpdateImageSliderRequest;
+
 class ImageSliderController extends AppBaseController
 {
     /** @var ImageSliderRepository */
@@ -60,7 +62,7 @@ class ImageSliderController extends AppBaseController
     /**
      * Update the specified ImageSlider in storage.
      */
-    public function update(Request $request, ImageSlider $imageSlider): JsonResponse
+    public function update(UpdateImageSliderRequest $request, ImageSlider $imageSlider): JsonResponse
     {
         $input = $request->all();
         $request->validate(

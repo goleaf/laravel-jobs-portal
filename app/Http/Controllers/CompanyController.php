@@ -29,6 +29,14 @@ use Laracasts\Flash\Flash;
 use Throwable;
 use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
 
+use App\Http\Requests\GetStatesCompanyRequest;
+
+use App\Http\Requests\GetCitiesCompanyRequest;
+
+use App\Http\Requests\UpdateCompanyCompanyRequest;
+
+use App\Http\Requests\ShowReportedCompanyNoteCompanyRequest;
+
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */
@@ -73,7 +81,7 @@ class CompanyController extends AppBaseController
      *
      * @throws \Throwable
      */
-    public function store(CreateCompanyRequest $request): RedirectResponse
+    public function store(CreateCompanyCreateCompanyRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;
@@ -123,7 +131,7 @@ class CompanyController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function update(Company $company, UpdateCompanyRequest $request): RedirectResponse
+    public function update(Company $company, UpdateCompanyUpdateCompanyRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;
@@ -175,7 +183,7 @@ class CompanyController extends AppBaseController
     /**
      * @return mixed
      */
-    public function getStates(Request $request)
+    public function getStates(GetStatesCompanyRequest $request)
     {
         $postal = $request->get('postal');
 
@@ -187,7 +195,7 @@ class CompanyController extends AppBaseController
     /**
      * @return mixed
      */
-    public function getCities(Request $request)
+    public function getCities(GetCitiesCompanyRequest $request)
     {
         $state = $request->get('state');
         $cities = getCities($state);
@@ -231,7 +239,7 @@ class CompanyController extends AppBaseController
      *
      * @return RedirectResponse|Redirector
      */
-    public function updateCompany(Company $company, UpdateCompanyRequest $request): RedirectResponse
+    public function updateCompany(Company $company, UpdateCompanyUpdateCompanyCompanyRequest $request): RedirectResponse
     {
         $input = $request->all();
 
@@ -282,7 +290,7 @@ class CompanyController extends AppBaseController
      * @param  ReportedToCompany  $reportedToCompany
      * @return mixed
      */
-    public function showReportedCompanyNote(Request $request)
+    public function showReportedCompanyNote(ShowReportedCompanyNoteCompanyRequest $request)
     {
         $data = $this->companyRepository->getReportedToCompany($request->reportedToCompany);
         $data['date'] = \Carbon\Carbon::parse($data->created_at)->formatLocalized('%d %b, %Y');

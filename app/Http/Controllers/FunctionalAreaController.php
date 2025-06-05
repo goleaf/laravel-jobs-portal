@@ -57,7 +57,7 @@ class FunctionalAreaController extends AppBaseController
     /**
      * Update the specified FunctionalArea in storage.
      */
-    public function update(UpdateFunctionalAreaRequest $request, FunctionalArea $functionalArea): JsonResponse
+    public function update(UpdateFunctionalAreaUpdateFunctionalAreaRequest $request, FunctionalArea $functionalArea): JsonResponse
     {
         $input = $request->all();
         $this->functionalAreaRepository->update($input, $functionalArea->id);

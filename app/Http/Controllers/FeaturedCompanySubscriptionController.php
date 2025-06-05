@@ -27,12 +27,16 @@ use App\Http\Requests\Company\UpdateCompanyRequest as CompanyUpdateRequest;
 /**
  * Class FeaturedCompanySubscriptionController
  */
+use App\Http\Requests\CreateSessionFeaturedCompanySubscriptionRequest;
+
+use App\Http\Requests\PaymentSuccessFeaturedCompanySubscriptionRequest;
+
 class FeaturedCompanySubscriptionController extends AppBaseController
 {
     /**
      * @throws ApiErrorException
      */
-    public function createSession(Request $request): JsonResponse
+    public function createSession(CreateSessionFeaturedCompanySubscriptionRequest $request): JsonResponse
     {
         $amount = FrontSetting::where('key', 'featured_companies_price')->first()->value;
         $companyId = $request->get('companyId');
@@ -76,7 +80,7 @@ class FeaturedCompanySubscriptionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function paymentSuccess(Request $request): RedirectResponse
+    public function paymentSuccess(PaymentSuccessFeaturedCompanySubscriptionRequest $request): RedirectResponse
     {
         $sessionId = $request->get('session_id');
 

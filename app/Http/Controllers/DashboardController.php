@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Requests\DashboardChartDataDashboardRequest;
+
+use App\Http\Requests\EmployerDashboardChartDashboardRequest;
+
 class DashboardController extends AppBaseController
 {
     /** @var DashboardRepository */
@@ -73,7 +77,7 @@ class DashboardController extends AppBaseController
         return view('dashboard.index');
     }
 
-    public function dashboardChartData(Request $request): JsonResponse
+    public function dashboardChartData(DashboardChartDataDashboardRequest $request): JsonResponse
     {
         $input = $request->all();
         $data['weeklyChartData'] = $this->dashboardRepository->getWeeklyChartData($input);
@@ -96,7 +100,7 @@ class DashboardController extends AppBaseController
         return view('employer.dashboard.index')->with($data);
     }
 
-    public function employerDashboardChart(Request $request): JsonResponse
+    public function employerDashboardChart(EmployerDashboardChartDashboardRequest $request): JsonResponse
     {
         $input = $request->all();
         $data = $this->dashboardRepository->getEmployerDashboardChartData($input);

@@ -10,6 +10,10 @@ use Illuminate\View\View;
 use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
+use App\Http\Requests\StoreJobTypeRequest;
+
+use App\Http\Requests\UpdateJobTypeRequest;
+
 class JobTypeController extends Controller
 {
 
@@ -28,7 +32,7 @@ class JobTypeController extends Controller
     /**
      * Store a newly created job type.
      */
-    public function store(JobStoreRequest $request): JsonResponse
+    public function store(JobStoreStoreJobTypeRequest $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:job_types',
@@ -74,7 +78,7 @@ class JobTypeController extends Controller
      *
      * @param  int  $id
      */
-    public function update(JobUpdateRequest $request, $id): JsonResponse
+    public function update(JobUpdateUpdateJobTypeRequest $request, $id): JsonResponse
     {
         $jobType = JobType::findOrFail($id);
 

@@ -25,6 +25,18 @@ use Laracasts\Flash\Flash;
 /**
  * Class UserController
  */
+use App\Http\Requests\ChangePasswordUserRequest;
+
+use App\Http\Requests\ProfileUpdateUserRequest;
+
+use App\Http\Requests\UpdateLanguageUserRequest;
+
+use App\Http\Requests\AdminCreateUserRequest;
+
+use App\Http\Requests\AdminStoreUserRequest;
+
+use App\Http\Requests\AdminUpdateUserRequest;
+
 class UserController extends AppBaseController
 {
     /** @var UserRepository */
@@ -35,7 +47,7 @@ class UserController extends AppBaseController
         $this->userRepository = $userRepo;
     }
 
-    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    public function changePassword(ChangePasswordChangePasswordUserRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -48,7 +60,7 @@ class UserController extends AppBaseController
         }
     }
 
-    public function profileUpdate(UpdateUserProfileRequest $request): JsonResponse
+    public function profileUpdate(UpdateUserProfileProfileUpdateUserRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -71,7 +83,7 @@ class UserController extends AppBaseController
         return $this->sendResponse($user, 'User retrieved successfully.');
     }
 
-    public function updateLanguage(Request $request): JsonResponse
+    public function updateLanguage(UpdateLanguageUserRequest $request): JsonResponse
     {
         $language = $request->get('language');
 
@@ -111,7 +123,7 @@ class UserController extends AppBaseController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function adminCreate(Request $request): View
+    public function adminCreate(AdminCreateUserRequest $request): View
     {
         return view('admins.create');
     }
@@ -119,7 +131,7 @@ class UserController extends AppBaseController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function adminStore(CreateAdminRequest $request): RedirectResponse
+    public function adminStore(CreateAdminAdminStoreUserRequest $request): RedirectResponse
     {
         $input = $request->all();
 
@@ -147,7 +159,7 @@ class UserController extends AppBaseController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function adminUpdate(User $user, UpdateAdminRequest $request): RedirectResponse
+    public function adminUpdate(User $user, UpdateAdminAdminUpdateUserRequest $request): RedirectResponse
     {
         $input = $request->all();
 

@@ -31,6 +31,24 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Http\Requests\Candidate\StoreCandidateRequest;
 use App\Http\Requests\Candidate\UpdateCandidateRequest;
 
+use App\Http\Requests\EditProfileCandidateRequest;
+
+use App\Http\Requests\UpdateProfileCandidateRequest;
+
+use App\Http\Requests\UpdateGeneralInformationCandidateRequest;
+
+use App\Http\Requests\UpdateOnlineProfileCandidateRequest;
+
+use App\Http\Requests\UploadResumeCandidateRequest;
+
+use App\Http\Requests\UpdateJobAlertCandidateRequest;
+
+use App\Http\Requests\ChangePasswordCandidateRequest;
+
+use App\Http\Requests\ProfileUpdateCandidateRequest;
+
+use App\Http\Requests\ChoosePreferenceCandidateRequest;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -49,7 +67,7 @@ class CandidateController extends AppBaseController
      *
      * @throws Exception
      */
-    public function editProfile(Request $request): View
+    public function editProfile(EditProfileCandidateRequest $request): View
     {
         /** @var User $user */
         $user = Auth::user();
@@ -130,7 +148,7 @@ class CandidateController extends AppBaseController
      *
      * @throws \Throwable
      */
-    public function updateProfile(CandidateUpdateProfileRequest $request): RedirectResponse
+    public function updateProfile(CandidateUpdateProfileUpdateProfileCandidateRequest $request): RedirectResponse
     {
         $this->candidateRepository->updateProfile($request->all());
 
@@ -142,7 +160,7 @@ class CandidateController extends AppBaseController
     /**
      * @throws \Throwable
      */
-    public function updateGeneralInformation(CandidateUpdateGeneralInformationRequest $request): JsonResponse
+    public function updateGeneralInformation(CandidateUpdateGeneralInformationUpdateGeneralInformationCandidateRequest $request): JsonResponse
     {
         $user = $this->candidateRepository->updateGeneralInformation($request->all());
         $user['candidateSkill'] = $user->candidateSkill()->pluck('name')->toArray();
@@ -153,7 +171,7 @@ class CandidateController extends AppBaseController
     /**
      * @throws \Throwable
      */
-    public function updateOnlineProfile(CandidateUpdateOnlineProfileRequest $request): JsonResponse
+    public function updateOnlineProfile(CandidateUpdateOnlineProfileUpdateOnlineProfileCandidateRequest $request): JsonResponse
     {
         $user = $this->candidateRepository->updateGeneralInformation($request->all());
         $user['onlineProfileLayout'] = view(
@@ -200,7 +218,7 @@ class CandidateController extends AppBaseController
     /**
      * @return mixed
      */
-    public function uploadResume(Request $request)
+    public function uploadResume(UploadResumeCandidateRequest $request)
     {
         $input = $request->all();
         $this->candidateRepository->uploadResume($input);
@@ -253,7 +271,7 @@ class CandidateController extends AppBaseController
     /**
      * @return RedirectResponse|Redirector
      */
-    public function updateJobAlert(Request $request): RedirectResponse
+    public function updateJobAlert(UpdateJobAlertCandidateRequest $request): RedirectResponse
     {
         $this->candidateRepository->updateJobAlerts($request->all());
         Flash::success(__('messages.flash.job_alert'));
@@ -261,7 +279,7 @@ class CandidateController extends AppBaseController
         return redirect(route('candidate.job.alert'));
     }
 
-    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    public function changePassword(ChangePasswordChangePasswordCandidateRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -284,7 +302,7 @@ class CandidateController extends AppBaseController
         return $this->sendResponse($user, __('messages.flash.candidate_retrieved'));
     }
 
-    public function profileUpdate(UpdateCandidateProfileRequest $request): JsonResponse
+    public function profileUpdate(UpdateCandidateProfileProfileUpdateCandidateRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -410,7 +428,7 @@ class CandidateController extends AppBaseController
         return $this->sendResponse($data, __('messages.flash.job_schedule_send'));
     }
 
-    public function choosePreference(JobApplication $jobApplication, Request $request): JsonResponse
+    public function choosePreference(JobApplication $jobApplication, ChoosePreferenceCandidateRequest $request): JsonResponse
     {
         if (! isset($request->rejectSlot)) {
             $request->validated(),

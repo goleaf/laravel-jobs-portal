@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\UpdateBrandingSliderRequest;
+
 class BrandingSliderController extends AppBaseController
 {
     /** @var BrandingSliderRepository */
@@ -57,7 +59,7 @@ class BrandingSliderController extends AppBaseController
     /**
      * Update the specified BrandingSlider in storage.
      */
-    public function update(Request $request, BrandingSliders $brandingSlider): JsonResponse
+    public function update(UpdateBrandingSliderRequest $request, BrandingSliders $brandingSlider): JsonResponse
     {
         $request->validate([
             'title' => 'required|max:150',

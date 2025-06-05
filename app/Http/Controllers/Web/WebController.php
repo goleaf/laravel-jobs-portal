@@ -13,6 +13,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Redirect;
 
+use App\Http\Requests\NewsLetterWebRequest;
+
 class WebController extends AppBaseController
 {
     /**
@@ -44,7 +46,7 @@ class WebController extends AppBaseController
     /**
      * @return mixed
      */
-    public function newsLetter(CreateNewsLetterRequest $request)
+    public function newsLetter(CreateNewsLetterNewsLetterWebRequest $request)
     {
         $input = $request->all();
 

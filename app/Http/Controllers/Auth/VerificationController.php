@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Requests\RedirectToVerificationRequest;
+
+use App\Http\Requests\VerifyVerificationRequest;
+
 class VerificationController extends Controller
 {
     /*
@@ -42,7 +46,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
     /**
      * @return string
      */
-    public function redirectTo(Request $request)
+    public function redirectTo(RedirectToVerificationRequest $request)
     {
         $user = User::find($request->route('id'));
         $user->update(['is_verified' => 1]);
@@ -92,7 +96,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
      *
      * @throws AuthorizationException
      */
-    public function verify(Request $request): RedirectResponse
+    public function verify(VerifyVerificationRequest $request): RedirectResponse
     {
         /** @var User $user */
         $user = User::find($request->id);

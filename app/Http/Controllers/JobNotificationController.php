@@ -17,6 +17,8 @@ use Laracasts\Flash\Flash;
 use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
+use App\Http\Requests\StoreJobNotificationRequest;
+
 class JobNotificationController extends AppBaseController
 {
     /**
@@ -40,7 +42,7 @@ class JobNotificationController extends AppBaseController
         return view('job_notification.index')->with($data);
     }
 
-    public function store(JobStoreRequest $request): RedirectResponse
+    public function store(JobStoreStoreJobNotificationRequest $request): RedirectResponse
     {
         $input = $request->all();
 

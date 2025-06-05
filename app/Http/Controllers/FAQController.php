@@ -65,7 +65,7 @@ class FAQController extends AppBaseController
     /**
      * Update the specified FAQ in storage.
      */
-    public function update(UpdateFAQRequest $request, FAQ $faq): JsonResponse
+    public function update(UpdateFAQUpdateFAQRequest $request, FAQ $faq): JsonResponse
     {
         $input = $request->all();
         $this->FAQRepository->update($input, $faq->id);

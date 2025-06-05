@@ -65,7 +65,7 @@ class PostCategoryController extends AppBaseController
     /**
      * Update the specified BlogCategory in storage.
      */
-    public function update(UpdatePostCategoryRequest $request, PostCategory $postCategory): JsonResponse
+    public function update(UpdatePostCategoryUpdatePostCategoryRequest $request, PostCategory $postCategory): JsonResponse
     {
         $input = $request->all();
 

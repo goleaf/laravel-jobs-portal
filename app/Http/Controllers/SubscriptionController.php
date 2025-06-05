@@ -27,6 +27,16 @@ use Stripe\Webhook;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use UnexpectedValueException;
 
+use App\Http\Requests\PurchaseSubscriptionSubscriptionRequest;
+
+use App\Http\Requests\PaymentSuccessSubscriptionRequest;
+
+use App\Http\Requests\CancelSubscriptionSubscriptionRequest;
+
+use App\Http\Requests\UpdateSubscriptionSubscriptionRequest;
+
+use App\Http\Requests\ChangeTransactionStatusSubscriptionRequest;
+
 class SubscriptionController extends AppBaseController
 {
     private $subscriptionRepository;
@@ -55,7 +65,7 @@ class SubscriptionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function purchaseSubscription(Request $request)
+    public function purchaseSubscription(PurchaseSubscriptionSubscriptionRequest $request)
     {
         $user = Auth::user();
         $pendingApproval = Transaction::where('user_id', $user->id)->where('is_approved', Transaction::PENDING)->first();
@@ -106,7 +116,7 @@ class SubscriptionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function paymentSuccess(Request $request): RedirectResponse
+    public function paymentSuccess(PaymentSuccessSubscriptionRequest $request): RedirectResponse
     {
         $sessionId = $request->get('session_id');
         if (empty($sessionId)) {
@@ -129,7 +139,7 @@ class SubscriptionController extends AppBaseController
         return view('transactions.failed_payments');
     }
 
-    public function cancelSubscription(Request $request): JsonResponse
+    public function cancelSubscription(CancelSubscriptionSubscriptionRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -172,7 +182,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @return bool
      */
-    public function updateSubscription(Request $request)
+    public function updateSubscription(UpdateSubscriptionSubscriptionRequest $request)
     {
         $envSetting = getEnvSetting();
         if (! empty($envSetting['stripe_webhook_key'])) {
@@ -259,7 +269,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @return mixed
      */
-    public function changeTransactionStatus(Request $request)
+    public function changeTransactionStatus(ChangeTransactionStatusSubscriptionRequest $request)
     {
         $input = $request->all();
         $approve_by = Auth::user()->id;

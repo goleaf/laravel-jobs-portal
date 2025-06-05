@@ -9,6 +9,14 @@ use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
 use App\Repositories\Candidates\CandidateProfileRepository;
 
+use App\Http\Requests\CreateExperienceCandidateProfileRequest;
+
+use App\Http\Requests\UpdateExperienceCandidateProfileRequest;
+
+use App\Http\Requests\CreateEducationCandidateProfileRequest;
+
+use App\Http\Requests\UpdateEducationCandidateProfileRequest;
+
 class CandidateProfileController extends AppBaseController
 {
     /** @var CandidateProfileRepository */
@@ -22,7 +30,7 @@ class CandidateProfileController extends AppBaseController
     /**
      * @return mixed
      */
-    public function createExperience(CreateCandidateExperienceRequest $request)
+    public function createExperience(CreateCandidateExperienceCreateExperienceCandidateProfileRequest $request)
     {
         $input = $request->all();
         if (! isset($input['currently_working'])) {
@@ -58,7 +66,7 @@ class CandidateProfileController extends AppBaseController
      */
     public function updateExperience(
         CandidateExperience $candidateExperience,
-        CreateCandidateExperienceRequest $request
+        CreateCandidateExperienceUpdateExperienceCandidateProfileRequest $request
     ) {
         $input = $request->all();
         $input['end_date'] = empty($input['end_date']) ? date('Y-m-d') : $input['end_date'];
@@ -94,7 +102,7 @@ class CandidateProfileController extends AppBaseController
     /**
      * @return mixed
      */
-    public function createEducation(CreateCandidateEducationRequest $request)
+    public function createEducation(CreateCandidateEducationCreateEducationCandidateProfileRequest $request)
     {
         $input = $request->all();
 
@@ -126,7 +134,7 @@ class CandidateProfileController extends AppBaseController
      *
      * @throws \Exception
      */
-    public function updateEducation(CandidateEducation $candidateEducation, CreateCandidateEducationRequest $request)
+    public function updateEducation(CandidateEducation $candidateEducation, CreateCandidateEducationUpdateEducationCandidateProfileRequest $request)
     {
         $input = $request->all();
         $data['id'] = $candidateEducation->id;

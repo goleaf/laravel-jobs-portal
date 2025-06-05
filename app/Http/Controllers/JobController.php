@@ -28,6 +28,14 @@ use Laracasts\Flash\Flash;
 use Throwable;
 use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 
+use App\Http\Requests\GetStatesJobRequest;
+
+use App\Http\Requests\GetCitiesJobRequest;
+
+use App\Http\Requests\StoreJobJobRequest;
+
+use App\Http\Requests\UpdateJobJobRequest;
+
 class JobController extends AppBaseController
 {
     /** @var JobRepository */
@@ -86,7 +94,7 @@ class JobController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function store(CreateJobRequest $request): RedirectResponse
+    public function store(CreateJobCreateJobRequest $request): RedirectResponse
     {
         try {
             $input = $request->validated();
@@ -185,7 +193,7 @@ class JobController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function update(Job $job, UpdateJobRequest $request): RedirectResponse
+    public function update(Job $job, UpdateJobUpdateJobRequest $request): RedirectResponse
     {
         try {
             // Authorization check
@@ -272,7 +280,7 @@ class JobController extends AppBaseController
     /**
      * Get states for a country with caching.
      */
-    public function getStates(Request $request)
+    public function getStates(GetStatesJobRequest $request)
     {
         $countryId = $request->get('postal');
 
@@ -286,7 +294,7 @@ class JobController extends AppBaseController
     /**
      * Get cities for a state with caching.
      */
-    public function getCities(Request $request)
+    public function getCities(GetCitiesJobRequest $request)
     {
         $stateId = $request->get('state');
 
@@ -418,7 +426,7 @@ class JobController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function storeJob(CreateJobRequest $request): RedirectResponse
+    public function storeJob(CreateJobStoreJobJobRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['hide_salary'] = (isset($input['hide_salary'])) ? 1 : 0;
@@ -464,7 +472,7 @@ class JobController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function updateJob(Job $job, UpdateJobRequest $request): RedirectResponse
+    public function updateJob(Job $job, UpdateJobUpdateJobJobRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['hide_salary'] = (isset($input['hide_salary'])) ? 1 : 0;

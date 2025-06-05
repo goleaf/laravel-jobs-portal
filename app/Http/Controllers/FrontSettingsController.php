@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
+use App\Http\Requests\UpdateFrontSettingsRequest;
+
 class FrontSettingsController extends AppBaseController
 {
     /**
@@ -26,7 +28,7 @@ class FrontSettingsController extends AppBaseController
         return view('front_settings.index', compact('frontSettings', 'currencies'));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateFrontSettingsRequest $request): RedirectResponse
     {
         $inputArr = $request->all();
 

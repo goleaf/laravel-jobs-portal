@@ -18,6 +18,12 @@ use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+use App\Http\Requests\SendContactEmailHomeRequest;
+
+use App\Http\Requests\ChangeLanguageHomeRequest;
+
+use App\Http\Requests\GetJobsSearchHomeRequest;
+
 class HomeController extends AppBaseController
 {
     /** @var WebHomeRepository */
@@ -59,7 +65,7 @@ class HomeController extends AppBaseController
     /**
      * @return Application|RedirectResponse|Redirector
      */
-    public function sendContactEmail(ContactFormRequest $request): RedirectResponse
+    public function sendContactEmail(ContactFormSendContactEmailHomeRequest $request): RedirectResponse
     {
         $inquiry = $this->homeRepository->storeInquires($request->all());
         Flash::success(__('messages.flash.thank_you_for_contacting_us'));
@@ -67,7 +73,7 @@ class HomeController extends AppBaseController
         return redirect(route('front.contact'));
     }
 
-    public function changeLanguage(Request $request): JsonResponse
+    public function changeLanguage(ChangeLanguageHomeRequest $request): JsonResponse
     {
         $language = $request->input('languageName');
 
@@ -87,7 +93,7 @@ class HomeController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function getJobsSearch(Request $request)
+    public function getJobsSearch(GetJobsSearchHomeRequest $request)
     {
         $searchTerm = strtolower($request->get('searchTerm'));
 

@@ -63,7 +63,7 @@ class StateController extends AppBaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStateRequest $request, State $state): JsonResponse
+    public function update(UpdateStateUpdateStateRequest $request, State $state): JsonResponse
     {
         $input = $request->all();
         $this->stateRepository->update($input, $state->id);

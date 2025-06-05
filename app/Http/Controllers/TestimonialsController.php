@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use App\Http\Requests\UpdateTestimonialsRequest;
+
 class TestimonialsController extends AppBaseController
 {
     /**
@@ -69,7 +71,7 @@ class TestimonialsController extends AppBaseController
      *
      * @return void
      */
-    public function update(UpdateTestimonialRequest $request, Testimonial $testimonial)
+    public function update(UpdateTestimonialUpdateTestimonialsRequest $request, Testimonial $testimonial)
     {
         $input = $request->all();
         $this->testimonialRepository->updateTestimonial($input, $testimonial->id);

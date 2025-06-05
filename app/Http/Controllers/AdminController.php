@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
+use App\Http\Requests\CreateAdminRequest;
+
+use App\Http\Requests\UpdateAdminRequest;
+
 class AdminController extends Controller
 {
     /**
@@ -33,7 +37,7 @@ class AdminController extends Controller
     /**
      * Store a newly created admin in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CreateAdminRequest $request): RedirectResponse
     {
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -74,7 +78,7 @@ class AdminController extends Controller
     /**
      * Update the specified admin in storage.
      */
-    public function update(Request $request, User $admin): RedirectResponse
+    public function update(UpdateAdminRequest $request, User $admin): RedirectResponse
     {
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',

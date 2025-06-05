@@ -62,7 +62,7 @@ class CityController extends AppBaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCityRequest $request, City $city): JsonResponse
+    public function update(UpdateCityUpdateCityRequest $request, City $city): JsonResponse
     {
         $input = $request->all();
         $this->cityRepository->update($input, $city->id);

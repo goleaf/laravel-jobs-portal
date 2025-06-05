@@ -56,7 +56,7 @@ class SettingController extends AppBaseController
     /**
      * @throws DotEnvException
      */
-    public function update(UpdateSettingRequest $request): RedirectResponse
+    public function update(UpdateSettingUpdateSettingRequest $request): RedirectResponse
     {
         $this->settingRepository->updateSetting($request->all());
         $language = $request->default_language;

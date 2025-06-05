@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
+use App\Http\Requests\UpdateNotificationSettingsRequest;
+
 class NotificationSettingsController extends Controller
 {
     /**
@@ -25,7 +27,7 @@ class NotificationSettingsController extends Controller
         return view('notification_settings.index', compact('notificationSetting'));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateNotificationSettingsRequest $request): RedirectResponse
     {
         $inputArr = $request->all();
         $notificationArray = array_fill_keys(array_keys(Arr::except($inputArr, ['_token'])), 1);

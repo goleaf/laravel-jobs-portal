@@ -10,12 +10,20 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+use App\Http\Requests\GetDashboardDataRealTimeRequest;
+
+use App\Http\Requests\UpdateApplicationStatusRealTimeRequest;
+
+use App\Http\Requests\GetWebSocketAuthRealTimeRequest;
+
+use App\Http\Requests\GetActivityFeedRealTimeRequest;
+
 class RealTimeController extends Controller
 {
     /**
      * Get real-time dashboard data
      */
-    public function getDashboardData(Request $request): JsonResponse
+    public function getDashboardData(GetDashboardDataRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
         
@@ -36,7 +44,7 @@ class RealTimeController extends Controller
     /**
      * Update job application status with real-time broadcasting
      */
-    public function updateApplicationStatus(Request $request, JobApplication $jobApplication): JsonResponse
+    public function updateApplicationStatus(UpdateApplicationStatusRealTimeRequest $request, JobApplication $jobApplication): JsonResponse
     {
         $request->validate([
             'status' => 'required|string|in:pending,reviewed,shortlisted,interview_scheduled,interview_completed,rejected,hired,withdrawn',
@@ -81,7 +89,7 @@ class RealTimeController extends Controller
     /**
      * Get WebSocket authentication token for private channels
      */
-    public function getWebSocketAuth(Request $request): JsonResponse
+    public function getWebSocketAuth(GetWebSocketAuthRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
         
@@ -111,7 +119,7 @@ class RealTimeController extends Controller
     /**
      * Get live activity feed
      */
-    public function getActivityFeed(Request $request): JsonResponse
+    public function getActivityFeed(GetActivityFeedRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
         $limit = $request->get('limit', 10);

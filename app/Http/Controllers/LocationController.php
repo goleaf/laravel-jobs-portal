@@ -8,6 +8,10 @@ use App\Models\City;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\GetStatesLocationRequest;
+
+use App\Http\Requests\GetCitiesLocationRequest;
+
 class LocationController extends AppBaseController
 {
     /**
@@ -23,7 +27,7 @@ class LocationController extends AppBaseController
     /**
      * Get states list based on country
      */
-    public function getStates(Request $request): JsonResponse
+    public function getStates(GetStatesLocationRequest $request): JsonResponse
     {
         $countryId = $request->get('country_id');
         
@@ -41,7 +45,7 @@ class LocationController extends AppBaseController
     /**
      * Get cities list based on state
      */
-    public function getCities(Request $request): JsonResponse
+    public function getCities(GetCitiesLocationRequest $request): JsonResponse
     {
         $stateId = $request->get('state_id');
         

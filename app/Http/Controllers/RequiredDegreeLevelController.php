@@ -66,7 +66,7 @@ class RequiredDegreeLevelController extends AppBaseController
     /**
      * Update the specified RequiredDegreeLevel in storage.
      */
-    public function update(UpdateRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
+    public function update(UpdateRequiredDegreeLevelUpdateRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
     {
         $input = $request->all();
         $this->requiredDegreeLevelRepository->update($input, $requiredDegreeLevel->id);

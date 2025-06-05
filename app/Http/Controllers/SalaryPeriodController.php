@@ -66,7 +66,7 @@ class SalaryPeriodController extends AppBaseController
     /**
      * Update the specified SalaryPeriod in storage.
      */
-    public function update(UpdateSalaryPeriodRequest $request, SalaryPeriod $salaryPeriod): JsonResponse
+    public function update(UpdateSalaryPeriodUpdateSalaryPeriodRequest $request, SalaryPeriod $salaryPeriod): JsonResponse
     {
         $input = $request->all();
         $this->salaryPeriodRepository->update($input, $salaryPeriod->id);

@@ -68,7 +68,7 @@ class JobShiftController extends AppBaseController
     /**
      * Update the specified JobShift in storage.
      */
-    public function update(UpdateJobShiftRequest $request, JobShift $jobShift): JsonResponse
+    public function update(UpdateJobShiftUpdateJobShiftRequest $request, JobShift $jobShift): JsonResponse
     {
         $input = $request->all();
         $this->jobShiftRepository->update($input, $jobShift->id);

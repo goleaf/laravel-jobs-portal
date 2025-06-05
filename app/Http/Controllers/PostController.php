@@ -19,6 +19,8 @@ use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use App\Http\Requests\StorePostRequest;
+
 class PostController extends AppBaseController
 {
     /** @var PostRepository */
@@ -57,7 +59,7 @@ class PostController extends AppBaseController
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function store(CreatePostRequest $request): RedirectResponse
+    public function store(CreatePostStorePostRequest $request): RedirectResponse
     {
         $input = $request->all();
 
@@ -96,7 +98,7 @@ class PostController extends AppBaseController
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function update(UpdatePostRequest $request, Post $post): RedirectResponse
+    public function update(UpdatePostUpdatePostRequest $request, Post $post): RedirectResponse
     {
         $input = $request->all();
 

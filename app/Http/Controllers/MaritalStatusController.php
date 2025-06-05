@@ -66,7 +66,7 @@ class MaritalStatusController extends AppBaseController
     /**
      * Update the specified MaritalStatus in storage.
      */
-    public function update(UpdateMaritalStatusRequest $request, MaritalStatus $maritalStatus): JsonResponse
+    public function update(UpdateMaritalStatusUpdateMaritalStatusRequest $request, MaritalStatus $maritalStatus): JsonResponse
     {
         $input = $request->all();
         $this->maritalStatusRepository->update($input, $maritalStatus->id);

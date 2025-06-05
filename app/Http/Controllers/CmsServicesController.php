@@ -14,6 +14,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 use Laracasts\Flash\Flash;
 
+use App\Http\Requests\AboutUsServiceCmsServicesRequest;
+
+use App\Http\Requests\UpdateCmsServicesRequest;
+
+use App\Http\Requests\AboutUsUpdateCmsServicesRequest;
+
 class CmsServicesController extends AppBaseController
 {
     public function index(Request $request): \Illuminate\View\View
@@ -26,14 +32,14 @@ class CmsServicesController extends AppBaseController
     /**
      * @return Application|Factory|View
      */
-    public function aboutUsService(Request $request): \Illuminate\View\View
+    public function aboutUsService(AboutUsServiceCmsServicesRequest $request): \Illuminate\View\View
     {
         $cmsServices = CmsServices::pluck('value', 'key')->toArray();
 
         return view('cms_services.about-us', compact('cmsServices'));
     }
 
-    public function update(CmsServiceRequest $request): RedirectResponse
+    public function update(CmsServiceUpdateCmsServicesRequest $request): RedirectResponse
     {
         $input = $request->all();
         $inputArr = Arr::except($input, ['_token']);
@@ -58,7 +64,7 @@ class CmsServicesController extends AppBaseController
         return Redirect::back();
     }
 
-    public function aboutUsUpdate(AboutusRequest $request): RedirectResponse
+    public function aboutUsUpdate(AboutusAboutUsUpdateCmsServicesRequest $request): RedirectResponse
     {
         $input = $request->all();
         $inputArr = Arr::except($input, ['_token']);

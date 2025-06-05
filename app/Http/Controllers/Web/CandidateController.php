@@ -11,6 +11,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\CreateCandidateRequest;
+
+use App\Http\Requests\UpdateCandidateRequest;
+
+use App\Http\Requests\GetCandidatesListsCandidateRequest;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -41,7 +47,7 @@ class CandidateController extends AppBaseController
     /**
      * Store a newly created candidate
      */
-    public function store(Request $request)
+    public function store(CreateCandidateRequest $request)
     {
         // Implementation for storing candidate
         return redirect()->route('admin.candidates.index')->with('success', 'Candidate created successfully');
@@ -68,7 +74,7 @@ class CandidateController extends AppBaseController
     /**
      * Update the specified candidate
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCandidateRequest $request, $id)
     {
         // Implementation for updating candidate
         return redirect()->route('admin.candidates.index')->with('success', 'Candidate updated successfully');
@@ -98,7 +104,7 @@ class CandidateController extends AppBaseController
     /**
      * @return Application|Factory|View
      */
-    public function getCandidatesLists(Request $request): View
+    public function getCandidatesLists(GetCandidatesListsCandidateRequest $request): View
     {
         return view('front_web_template.candidate.index');
     }

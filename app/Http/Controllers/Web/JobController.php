@@ -15,6 +15,16 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
+use App\Http\Requests\CreateJobRequest;
+
+use App\Http\Requests\UpdateJobRequest;
+
+use App\Http\Requests\SaveFavouriteJobJobRequest;
+
+use App\Http\Requests\ReportJobAbuseJobRequest;
+
+use App\Http\Requests\EmailJobToFriendJobRequest;
+
 class JobController extends AppBaseController
 {
     /** @var JobRepository */
@@ -56,7 +66,7 @@ class JobController extends AppBaseController
     /**
      * Store a newly created job (admin)
      */
-    public function store(Request $request)
+    public function store(CreateJobRequest $request)
     {
         // Implementation for storing job
         return redirect()->route('admin.jobs.index')->with('success', 'Job created successfully');
@@ -83,7 +93,7 @@ class JobController extends AppBaseController
     /**
      * Update the specified job (admin)
      */
-    public function update(Request $request, $id)
+    public function update(UpdateJobRequest $request, $id)
     {
         // Implementation for updating job
         return redirect()->route('admin.jobs.index')->with('success', 'Job updated successfully');
@@ -156,7 +166,7 @@ class JobController extends AppBaseController
         return view('front_web_template.jobs.job_details', compact('job', 'url'))->with($data);
     }
 
-    public function saveFavouriteJob(Request $request): JsonResponse
+    public function saveFavouriteJob(SaveFavouriteJobJobRequest $request): JsonResponse
     {
         $input = $request->all();
         $favouriteJob = $this->jobRepository->storeFavouriteJobs($input);
@@ -167,7 +177,7 @@ class JobController extends AppBaseController
         return $this->sendResponse($favouriteJob, __('messages.flash.fav_job_removed'));
     }
 
-    public function reportJobAbuse(Request $request): JsonResponse
+    public function reportJobAbuse(ReportJobAbuseJobRequest $request): JsonResponse
     {
         $input = $request->all();
         $this->jobRepository->storeReportJobAbuse($input);
@@ -175,7 +185,7 @@ class JobController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.job_abuse_reported'));
     }
 
-    public function emailJobToFriend(EmailJobToFriendRequest $request): JsonResponse
+    public function emailJobToFriend(EmailJobToFriendEmailJobToFriendJobRequest $request): JsonResponse
     {
         $input = $request->all();
         $this->jobRepository->emailJobToFriend($input);

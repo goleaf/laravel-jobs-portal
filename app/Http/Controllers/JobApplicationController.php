@@ -24,6 +24,30 @@ use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 /**
  * Class JobApplicationController
  */
+use App\Http\Requests\ChangeJobApplicationStatusJobApplicationRequest;
+
+use App\Http\Requests\DownloadMediaJobApplicationRequest;
+
+use App\Http\Requests\GetJobStageJobApplicationRequest;
+
+use App\Http\Requests\ChangeJobStageJobApplicationRequest;
+
+use App\Http\Requests\ViewSlotsScreenJobApplicationRequest;
+
+use App\Http\Requests\InterviewSlotStoreJobApplicationRequest;
+
+use App\Http\Requests\BatchSlotStoreJobApplicationRequest;
+
+use App\Http\Requests\EditSlotJobApplicationRequest;
+
+use App\Http\Requests\UpdateSlotJobApplicationRequest;
+
+use App\Http\Requests\SlotDestroyJobApplicationRequest;
+
+use App\Http\Requests\GetScheduleHistoryJobApplicationRequest;
+
+use App\Http\Requests\CancelSelectedSlotJobApplicationRequest;
+
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */
@@ -84,7 +108,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @return mixed
      */
-    public function changeJobApplicationStatus($id, $status, Request $request)
+    public function changeJobApplicationStatus($id, $status, ChangeJobApplicationStatusJobApplicationRequest $request)
     {
         $jobId = $request->get('jobId');
 
@@ -134,7 +158,7 @@ class JobApplicationController extends AppBaseController
      * @param  JobApplication  $jobApplication
      * @return Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function downloadMedia(Request $request)
+    public function downloadMedia(DownloadMediaJobApplicationRequest $request)
     {
         try {
             $jobApplicationId = $request->jobApplication;
@@ -159,14 +183,14 @@ class JobApplicationController extends AppBaseController
     //     *
     //     * @return JsonResponse
     //     */
-    //    public function getJobStage(Request $request)
+    //    public function getJobStage(GetJobStageJobApplicationRequest $request)
     //    {
     //        $jobApplication = JobApplication::findOrFail($request->get('jobApplicationId'));
     //
     //        return $this->sendResponse($jobApplication,'Job Stage retrieve successfully.');
     //    }
 
-    public function changeJobStage(Request $request): JsonResponse
+    public function changeJobStage(ChangeJobStageJobApplicationRequest $request): JsonResponse
     {
         $jobApplication = JobApplication::findOrFail($request->get('job_application_id'));
         $jobApplication->update(['job_stage_id' => $request->get('job_stage')]);
@@ -177,7 +201,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function viewSlotsScreen(Request $request): View
+    public function viewSlotsScreen(ViewSlotsScreenJobApplicationRequest $request): View
     {
         try {
             $applicationId = $request->route('jobApplicationId');
@@ -235,7 +259,7 @@ class JobApplicationController extends AppBaseController
         }
     }
 
-    public function interviewSlotStore($jobId, Request $request): JsonResponse
+    public function interviewSlotStore($jobId, InterviewSlotStoreJobApplicationRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -303,7 +327,7 @@ class JobApplicationController extends AppBaseController
         }
     }
 
-    public function batchSlotStore(Request $request): JsonResponse
+    public function batchSlotStore(BatchSlotStoreJobApplicationRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -341,7 +365,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @param  JobApplicationSchedule  $slot
      */
-    public function editSlot($jobId, Request $request): JsonResponse
+    public function editSlot($jobId, EditSlotJobApplicationRequest $request): JsonResponse
     {
         try {
             $slotId = $request->slot;
@@ -359,7 +383,7 @@ class JobApplicationController extends AppBaseController
         }
     }
 
-    public function updateSlot(Request $request, $jobId, JobApplicationSchedule $slot): JsonResponse
+    public function updateSlot(UpdateSlotJobApplicationRequest $request, $jobId, JobApplicationSchedule $slot): JsonResponse
     {
         $input = $request->all();
         if ($input['time'] != $slot->time) {
@@ -383,7 +407,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @param  JobApplicationSchedule  $slot
      */
-    public function slotDestroy($jobId, Request $request): JsonResponse
+    public function slotDestroy($jobId, SlotDestroyJobApplicationRequest $request): JsonResponse
     {
         try {
             $slotId = $request->slot;
@@ -407,7 +431,7 @@ class JobApplicationController extends AppBaseController
         }
     }
 
-    public function getScheduleHistory(Request $request): JsonResponse
+    public function getScheduleHistory(GetScheduleHistoryJobApplicationRequest $request): JsonResponse
     {
         $jobApplicationSchedules = JobApplicationSchedule::with('jobApplication.candidate')
             ->where('job_application_id', $request->get('jobApplicationId'));
@@ -432,7 +456,7 @@ class JobApplicationController extends AppBaseController
         return $this->sendResponse($data, __('messages.flash.job_schedule_send'));
     }
 
-    public function cancelSelectedSlot(Request $request): JsonResponse
+    public function cancelSelectedSlot(CancelSelectedSlotJobApplicationRequest $request): JsonResponse
     {
         if (empty($request->get('cancelSlotNote'))) {
             return $this->sendError(__('messages.flash.cancel_reason_require'));

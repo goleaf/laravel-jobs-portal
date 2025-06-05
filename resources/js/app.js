@@ -2,6 +2,7 @@ import './bootstrap';
 import '../css/app.css';
 import './realtime-dashboard';
 import './components/action-buttons.js';
+import './lazy-loading';
 
 // Import local packages
 import 'bootstrap';

@@ -13,6 +13,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
+use App\Http\Requests\BlogCommentStorePostRequest;
+
+use App\Http\Requests\BlogCommentUpdatePostRequest;
+
 class PostController extends AppBaseController
 {
     /** @var PostRepository */
@@ -63,7 +67,7 @@ class PostController extends AppBaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function blogCommentStore(int $blogId, CreateBlogCommentRequest $request): JsonResponse
+    public function blogCommentStore(int $blogId, CreateBlogCommentBlogCommentStorePostRequest $request): JsonResponse
     {
         $input = $request->all();
         $comment = $this->postRepository->createComment($blogId, $input);
@@ -91,7 +95,7 @@ class PostController extends AppBaseController
     /**
      * @return mixed
      */
-    public function blogCommentUpdate(CreateBlogCommentRequest $request, int $id)
+    public function blogCommentUpdate(CreateBlogCommentBlogCommentUpdatePostRequest $request, int $id)
     {
         $input = $request->except(['_token', 'comment-id']);
         $comment = PostComment::where('id', $id);

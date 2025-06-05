@@ -67,7 +67,7 @@ class OwnerShipTypeController extends AppBaseController
     /**
      * Update the specified OwnerShipType in storage.
      */
-    public function update(OwnerShipType $ownerShipType, UpdateOwnerShipTypeRequest $request): JsonResponse
+    public function update(OwnerShipType $ownerShipType, UpdateOwnerShipTypeUpdateOwnerShipTypeRequest $request): JsonResponse
     {
         $ownerShipType = $this->ownerShipTypeRepository->update($request->all(), $ownerShipType->id);
 

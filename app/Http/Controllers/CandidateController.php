@@ -26,6 +26,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+use App\Http\Requests\ReportCandidateCandidateRequest;
+
+use App\Http\Requests\ShowReportedCandiateNoteCandidateRequest;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -68,7 +72,7 @@ class CandidateController extends AppBaseController
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function store(CreateCandidateRequest $request): RedirectResponse
+    public function store(CreateCandidateCreateCandidateRequest $request): RedirectResponse
     {
         $input = $request->all();
         $candidate = $this->candidateRepository->store($input);
@@ -120,7 +124,7 @@ class CandidateController extends AppBaseController
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function update(Candidate $candidate, UpdateCandidateRequest $request): RedirectResponse
+    public function update(Candidate $candidate, UpdateCandidateUpdateCandidateRequest $request): RedirectResponse
     {
         $input = $request->all();
         if (empty($candidate)) {
@@ -174,7 +178,7 @@ class CandidateController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.status_update'));
     }
 
-    public function reportCandidate(Request $request): JsonResponse
+    public function reportCandidate(ReportCandidateCandidateRequest $request): JsonResponse
     {
         $input = $request->all();
         $this->candidateRepository->storeReportCandidate($input);
@@ -199,7 +203,7 @@ class CandidateController extends AppBaseController
      *
      * @throws Exception
      */
-    public function showReportedCandiateNote(Request $request)
+    public function showReportedCandiateNote(ShowReportedCandiateNoteCandidateRequest $request)
     {
         $data = $this->candidateRepository->getReportedToCandidate($request->reportedToCandidate);
         $data['date'] = \Carbon\Carbon::parse($data->created_at)->formatLocalized('%d %b, %Y');

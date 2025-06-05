@@ -28,12 +28,16 @@ use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 /**
  * Class FeaturedJobSubscriptionController
  */
+use App\Http\Requests\CreateSessionFeaturedJobSubscriptionRequest;
+
+use App\Http\Requests\PaymentSuccessFeaturedJobSubscriptionRequest;
+
 class FeaturedJobSubscriptionController extends AppBaseController
 {
     /**
      * @throws ApiErrorException
      */
-    public function createSession(Request $request): JsonResponse
+    public function createSession(CreateSessionFeaturedJobSubscriptionRequest $request): JsonResponse
     {
         $amount = FrontSetting::where('key', 'featured_jobs_price')->first()->value;
         $featuredListingCurrency = FrontSetting::where('key', 'currency')->first()->value;
@@ -89,7 +93,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function paymentSuccess(Request $request): RedirectResponse
+    public function paymentSuccess(PaymentSuccessFeaturedJobSubscriptionRequest $request): RedirectResponse
     {
         $sessionId = $request->get('session_id');
 

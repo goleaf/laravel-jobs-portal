@@ -16,6 +16,8 @@ use Illuminate\View\View;
 /**
  * Class HeaderSliderController
  */
+use App\Http\Requests\UpdateHeaderSliderRequest;
+
 class HeaderSliderController extends AppBaseController
 {
     /** @var HeaderSliderRepository */
@@ -67,7 +69,7 @@ class HeaderSliderController extends AppBaseController
     /**
      * Update the specified ImageSlider in storage.
      */
-    public function update(Request $request, HeaderSlider $headerSlider): JsonResponse
+    public function update(UpdateHeaderSliderRequest $request, HeaderSlider $headerSlider): JsonResponse
     {
         $input = $request->all();
         $request->validate(

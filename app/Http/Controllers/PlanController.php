@@ -80,7 +80,7 @@ class PlanController extends AppBaseController
     /**
      * Update the specified Plan in storage.
      */
-    public function update(UpdatePlanRequest $request, Plan $plan): JsonResponse
+    public function update(UpdatePlanUpdatePlanRequest $request, Plan $plan): JsonResponse
     {
         try {
             $input = $request->all();

@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
+use App\Http\Requests\RegisterRegisterRequest;
+
 class RegisterController extends AppBaseController
 {
     /** @var WebRegisterRepository */
@@ -43,7 +45,7 @@ class RegisterController extends AppBaseController
     /**
      * @throws \Throwable
      */
-    public function register(WebRegisterRequest $request): JsonResponse
+    public function register(WebRegisterRegisterRegisterRequest $request): JsonResponse
     {
         $input = $request->all();
         $this->webRegisterRepository->store($input);

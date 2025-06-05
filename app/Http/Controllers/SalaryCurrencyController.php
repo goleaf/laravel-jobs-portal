@@ -13,6 +13,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
+use App\Http\Requests\UpdateSalaryCurrencyRequest;
+
 class SalaryCurrencyController extends AppBaseController
 {
     /** @var SalaryCurrencyRepository */
@@ -44,7 +46,7 @@ class SalaryCurrencyController extends AppBaseController
         return $this->sendResponse($currency, __('messages.flash.salary_currency_edit'));
     }
 
-    public function update(updateSalaryCurrencyRequest $request, $currencyId): JsonResponse
+    public function update(updateSalaryCurrencyUpdateSalaryCurrencyRequest $request, $currencyId): JsonResponse
     {
         $input = $request->all();
         $this->salaryCurrencyRepository->update($input, $currencyId);

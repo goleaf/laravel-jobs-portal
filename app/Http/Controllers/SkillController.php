@@ -65,7 +65,7 @@ class SkillController extends AppBaseController
     /**
      * Update the specified Skill in storage.
      */
-    public function update(UpdateSkillRequest $request, Skill $skill): JsonResponse
+    public function update(UpdateSkillUpdateSkillRequest $request, Skill $skill): JsonResponse
     {
         $input = $request->all();
         $this->skillRepository->update($input, $skill->id);

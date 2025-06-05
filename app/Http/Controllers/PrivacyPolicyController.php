@@ -14,6 +14,8 @@ use Laracasts\Flash\Flash;
 /**
  * Class PrivacyPolicyController
  */
+use App\Http\Requests\UpdatePrivacyPolicyRequest;
+
 class PrivacyPolicyController extends AppBaseController
 {
     /** @var PrivacyPolicyRepository */
@@ -42,7 +44,7 @@ class PrivacyPolicyController extends AppBaseController
         return view('privacy_policy.index', compact('privacyPolicy'));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(UpdatePrivacyPolicyRequest $request): RedirectResponse
     {
         $input = $request->all();
         foreach ($input as $key => $value) {

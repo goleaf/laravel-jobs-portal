@@ -67,7 +67,7 @@ class IndustryController extends AppBaseController
     /**
      * Update the specified Industry in storage.
      */
-    public function update(UpdateIndustryRequest $request, Industry $industry): JsonResponse
+    public function update(UpdateIndustryUpdateIndustryRequest $request, Industry $industry): JsonResponse
     {
         $input = $request->all();
         $this->industryRepository->update($input, $industry->id);

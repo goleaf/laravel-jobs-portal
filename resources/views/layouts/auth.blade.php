@@ -1,3 +1,7 @@
+
+@push('styles')
+    @vite('resources/css/components/auth.css')
+@endpush
 @php
     $settings = settings();
     $lang = session()->get('languageName');
@@ -19,88 +23,31 @@
     <link href="{{ mix('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ mix('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ mix('assets/css/custom-auth.css') }}" rel="stylesheet">
-    {{ -- <link href="{{ mix('css/front-pages.css') }}" rel="stylesheet" type="text/css"> --}}
+    {{-- <link href="{{ mix('css/front-pages.css') }}" rel="stylesheet" type="text/css"> --}}
 
-    <style>
-        header .language-dropdown-menu {
-            min-width: 200px !important;
-            width: auto !important
-        }
-
-        @media(max-width: 991px) {
-            header .language-dropdown-menu {
-                width: 100% !important
-            }
-        }
-
-        header .language-dropdown-menu .dropdown-item {
-            font-weight: 500;
-            color: #777a7d;
-            padding: 8px 10px !important;
-            background-color: rgba(0, 0, 0, 0) !important
-        }
-
-        header .language-dropdown-menu .dropdown-item:active,
-        header .language-dropdown-menu .dropdown-item:hover {
-            background-color: rgba(0, 0, 0, 0) !important;
-            color: #1967d2 !important
-        }
-
-        header .language-dropdown-menu .dropdown-item .country-flag {
-            width: 20px
-        }
-        .language-dropdown-btn{
-            background-color: #1967d2;
-        }
-        .dropdown-toggle:after{
-            border: solid white;
-            border-width: 0 2px 2px 0;
-        }
-        .language-dropdown-menu {
-            position: absolute;
-            min-width: 200px;
-            width: auto;
-            padding: 10px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, .18);
-            height: auto;
-            display: inline-block;
-            top: 55px;
-            right: 0;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: .3s ease-in-out;
-        }
-
-        header .navbar .navbar-nav .nav-item:hover .language-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-        }
-    </style>
-{{ --    <link href="{{ asset('assets/plugins/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/>--}}
-{{ --    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css"/>--}}
+    
+{{-- <link href="{{ asset('assets/plugins/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/> --}}
+{{-- <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css"/> --}}
 <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 <body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : '' }}>
 <!--begin::Main-->
-<div class="flex flex-col flex-root">
+<div class="flex flex- flex-1 flex-root">
     <div class="flex flex- flex flex-wrap flex-column-fluid">
-        <div class="flex flex-col flex- flex flex-wrap fluid">
+        <div class="flex flex- flex-1 flex- flex flex-wrap fluid">
             <header class="bg-gradient">
-                <nav class="bg-white shadow-sm border-b border-gray-200 bg-white shadow-sm expand-lg">
+                <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow-sm expand-lg">
                     <div class="flex items-center my-3 mx-5 ms-auto">
                         <ul class="bg-white shadow-sm nav flex justify-end align-items-lg-center w-full">
-                            <li class="nav-item">
+                            <li class="">
                                 <div class="relative inline-block text-left">
-                                    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out text-white inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 language-dropdown- px-4 py-2 rounded font-medium transition-colors px-4 py-2" type="button"
+                                    <a class="rounded-md transition" type="button"
                                             aria-expanded="false">
                                         {{ getCurrentLanguageName() }}
                                     </a>
-                                    <ul class="language-dropdown-menu language-menu">
+                                    <ul class="language- relative inline-block text-left -menu language-menu">
                                         @foreach (getUserLanguages() as $key => $value)
                                             <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : '' }}"
                                                 data-prefix-value="{{ $key }}">
@@ -128,16 +75,16 @@
                     </div>
                 </nav>
             </header>
-            <div class="content flex flex-col flex-column-fluid pt-7">
+            <div class="content flex flex- flex-1 flex-column-fluid pt-7">
                 <div class="flex flex-wrap flex-column-fluid">
                     @yield('content')
                 </div>
             </div>
-            <div class="container mx-auto px-4 mx-auto fluid">
-                <footer class="border-top w-full pt-4 mt-7 text-center">
-{{ --                    <p class="fs-6 text-gray-600">{{$settings['copy_right_text'] }} <a href="{{ route('front.home') }}" class="text-decoration-none">--}}
-{{ --                            {{$settings['application_name'] }}</a>--}}
-{{ --                    </p>-- }}
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+                <footer class="border border border-gray-300 -gray-300 -top w-full pt-4 mt-7 text-center">
+{{-- <p class="fs-6 text-gray-600">{{$settings['copy_right_text'] }} <a href="{{ route('front.home') }}" class="text-decoration-none"> --}}
+{{-- {{$settings['application_name'] }}</a> --}}
+{{-- </p> --}}
                 </footer>
             </div>
         </div>
@@ -145,21 +92,14 @@
 </div>
 
 <script src="{{ mix('js/auth-third-party.js') }}"></script>
-<script data-turbo-eval="false">
-    let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}";
-    let currentFrontLang ="{{ session()->get('languageName') ?? 'en' }}";
-</script>
-<script>
-    $(document).ready(function () {
-        $('.alert').delay(5000).slideUp(300);
-        $('#loginBtn').click(function () {
-            $(this).addClass('disabled')
-        })
-    })
 
-</script>
+
 <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
 <script src="{{ asset('assets/js/auto_fill/auto_fill.js') }}"></script>
 </body>
 <!--end::Body-->
 </html>
+
+@push('scripts')
+    @vite('resources/js/components/auth.js')
+@endpush

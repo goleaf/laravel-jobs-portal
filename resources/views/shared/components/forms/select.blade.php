@@ -4,7 +4,7 @@
     'placeholder' => null,
     'value' => null,
     'options' => [],
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'multiple' => false,
     'error' => null,

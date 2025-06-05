@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Models\Setting;
 use App\Repositories\PrivacyPolicyRepository;
 use Illuminate\Contracts\View\Factory;
@@ -34,7 +35,7 @@ class PrivacyPolicyController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function index(Request $request): View
+    public function index(StoreRequest $request): View
     {
         $privacyPolicy = Setting::pluck('value', 'key')->toArray();
         //        $sectionName = ($request->section === null) ? 'privacy_policy' : $request->section;

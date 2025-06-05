@@ -130,15 +130,10 @@
     <div id="sidebar-overlay" class="lg:hidden fixed inset-0 z-40 bg-gray-600 bg-opacity-75 hidden" onclick="toggleSidebar()"></div>
 
     <!-- Scripts -->
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('admin-sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
-    </script>
+    
     @stack('scripts')
 </body>
 </html> 
+@push('scripts')
+    @vite('resources/js/components/admin-layout.js')
+@endpush

@@ -12,6 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreTagRequest;
+
+use App\Http\Requests\DeleteTagRequest;
+
 class TagController extends AppBaseController
 {
     /** @var JobTagRepository */

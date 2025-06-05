@@ -1,9 +1,9 @@
 <div class="lg:w-full px-2 flex-1 md-12">
-{{ --    @if(session()->has('message'))-- }}
-{{ --        <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 success">-- }}
-{{ --            {{ session('message') }}--}}
-{{ --        </div>  -- }}
-{{ --    @endif-- }}
+{{-- @if(session()->has('message')) --}}
+{{-- <div class="px-4 py-3 rounded-md border border border-gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 success"> --}}
+{{-- {{ session('message') }} --}}
+{{-- </div> --}}
+{{-- @endif --}}
     @if(count($appliedJobs) > 0 || $searchByAppliedJob != '' || $jobApplicationStatus != '')
         <div class="flex flex-wrap mb-3 justify-end">
             <div class="flex-1 md-3">
@@ -13,7 +13,7 @@
                 <input wire:model.debounce.100ms.live="searchByAppliedJob" type="search"
                        id="searchByAppliedJob"
                        placeholder="{{ __('web.job_menu.search_applied_job') }}"
-                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
+                       class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
             </div>
         </div>
     @endif
@@ -21,18 +21,18 @@
         <div class="content1 with-padding">
             <div class="flex flex-wrap mt-5 relative">
                 @foreach($appliedJobs as $appliedJob)
-                   <div class="w-full col-sm-6 md:w-6/12 flex-1 xl-6 mb-4">
-                       <div class="h-full shadow rounded bg-white shadow rounded-lg overflow-hidden">
-                           <div class="bg-white shadow rounded-lg overflow-hidden body p-5">
+                   <div class="w-full flex-1 -sm-6 md:w-6/12 flex-1 xl-6 mb-4">
+                       <div class="h-full shadow rounded bg-white shadow rounded -lg overflow-hidden">
+                           <div class="bg-white shadow rounded -lg overflow-hidden body p-5">
                                <div class="flex justify-end">
                                    <div class="relative inline-block text-left">
                                        <button type="button" title="{{ __('messages.common.action') }}"
-                                               class="inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hide-arrow px-4 py-2 rounded font-medium transition-colors text-primary-600 p-0"
+                                               class="inline-flex justify-center w-full rounded-md border border-gray-300 border border-gray-300 -gray-300 shadow-sm px-4 py-2 rounded font-medium transition-colors text-indigo-600 -600 p-0"
                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                data-bs-boundary="viewport" aria-expanded="false">
                                            <i class="fa-solid fa-ellipsis-vertical"></i>
                                        </button>
-                                       <ul class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 min-width-220 customDropdown"
+                                       <ul class="origin-top-right absolute right-0 mt-2 w-56 rounded -md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 min-width-220 customDropdown"
                                            aria-labelledby="dropdownMenuButton1" style="">
                                            <li><a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 apply-job-note"
                                                   href="javascript:void(0)"
@@ -41,7 +41,7 @@
                                             @if(\App\Models\JobApplicationSchedule::whereJobApplicationId($appliedJob->id)->exists() && !($appliedJob->status == \App\Models\JobApplication::REJECTED) && !($appliedJob->status == \App\Models\JobApplication::STATUS_APPLIED) && !($appliedJob->status == \App\Models\JobApplication::COMPLETE))
                                                 <li><a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 schedule-slot-book" href="javascript:void(0)"   data-id="{{ $appliedJob->id }}">{{ __('messages.job_stage.slots') }}</a></li>
                                             @endif
-                                            <li><a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 delete- px-4 py-2 rounded font-medium transition-colors remove-applied-jobs" href="javascript:void(0)" data-id="{{ $appliedJob->id }}">{{ __('messages.common.delete') }}</a></li>
+                                            <li><a class="block px-4 py-2 rounded font-medium transition-colors remove-applied-jobs" href="javascript:void(0)" data-id="{{ $appliedJob->id }}">{{ __('messages.common.delete') }}</a></li>
                                         </ul>
 
                                     </div>
@@ -50,10 +50,10 @@
                                     <div class="mb-auto">
                                         <h4>
                                             <i class="fas fa-briefcase fs-3 me-1 text-gray-500"></i> &nbsp;<a
-                                                    href="{{ route('front.job.details',$appliedJob->$job->job_id) }}"
+                                                    href="{{ route('front.',$appliedJob->$job->job_id) }}"
                                                     target="_blank" class="text-decoration-none">{{ Str::limit($appliedJob->$job->job_title,25,'...') }}</a>
                                             <div
-                                                    class="ms-2 badge bg-gray-100 -{{ \App\Models\JobApplication::STATUS_COLOR[$appliedJob->status] }}">
+                                                    class="ms-2 inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-gray-100 -{{ \App\Models\JobApplication::STATUS_COLOR[$appliedJob->status] }}">
                                                 @if(\App\Models\JobApplication::STATUS[$appliedJob->status] == 'Drafted')
                                                     {{ __('messages.common.drafted') }}
                                                 @elseif(\App\Models\JobApplication::STATUS[$appliedJob->status] == 'Applied')

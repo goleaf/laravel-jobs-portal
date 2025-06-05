@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 
 /**
  * Class WebHomeRepository
@@ -38,7 +38,7 @@ class WebHomeRepository
      */
     public function getTestimonials()
     {
-        return Testimonial::with('media')->orderBy('created_at', 'desc')
+        return Testimonial::orderBy('created_at', 'desc')
             ->take(5)
             ->get();
     }
@@ -55,9 +55,9 @@ class WebHomeRepository
             }
         )->count();
         $data['jobs'] = Job::whereStatus(Job::STATUS_OPEN)->where('status', '!=', Job::STATUS_DRAFT)->whereIsSuspended(Job::NOT_SUSPENDED)->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->count();
-        $data['resumes'] = Media::where('model_type', Candidate::class)->where('collection_name', Candidate::RESUME_PATH)
-            ->join('candidates', 'media.model_id', '=', 'candidates.id')
-            ->join('users', 'candidates.user_id', '=', 'users.id')->with('candidate.user')
+        $data['resumes'] = Candidate::whereNotNull('resume_path')
+            ->join('users', 'candidates.user_id', '=', 'users.id')
+            ->where('users.is_active', true)
             ->count();
         $data['companies'] = Company::with('user')->whereHas('user', function (Builder $query) {
             $query->where('is_active', '=', true);
@@ -103,7 +103,7 @@ class WebHomeRepository
 
     public function getAllJobCategories(): \Illuminate\Support\Collection
     {
-        return JobCategory::with('media', 'jobs')->withCount([
+        return JobCategory::with('jobs')->withCount([
             'jobs' => function (Builder $q) {
                 $q->whereStatus(Job::STATUS_OPEN)
                     ->where('status', '!=', Job::STATUS_DRAFT)
@@ -193,12 +193,10 @@ class WebHomeRepository
      */
     public function getImageSlider()
     {
-        $imageSliders = ImageSlider::with('media')
-            ->where('is_active', '=', 1)
+        $imageSliders = ImageSlider::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
             ->get();
-        $headerSliders = HeaderSlider::with('media')
-            ->where('is_active', '=', 1)
+        $headerSliders = HeaderSlider::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
             ->get();
         $settings = Setting::where('key', 'slider_is_active')->toBase()->first();
@@ -229,8 +227,7 @@ class WebHomeRepository
      */
     public function getBranding()
     {
-        return $branding = BrandingSliders::with('media')
-            ->where('is_active', '=', 1)
+        return $branding = BrandingSliders::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -243,9 +240,8 @@ class WebHomeRepository
         return $blog = Post::with(
             [
                 'postAssignCategories',
-                'media',
                 'user' => function ($query) {
-                    $query->without(['media', 'country', 'state', 'city']);
+                    $query->without(['country', 'state', 'city']);
                 },
             ]
         )->withCount('comments')

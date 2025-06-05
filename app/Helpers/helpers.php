@@ -134,4 +134,21 @@ if (!function_exists('numberFormatShort')) {
         
         return round($number / 1000000000, 1) . 'B';
     }
+}
+
+if (!function_exists('getCountries')) {
+    /**
+     * Get list of countries
+     * @return array
+     */
+    function getCountries()
+    {
+        try {
+            $countries = \App\Models\Country::orderBy('name')->pluck('name')->toArray();
+            return $countries;
+        } catch (\Exception $e) {
+            // Return empty array if countries table doesn't exist or error occurs
+            return [];
+        }
+    }
 } 

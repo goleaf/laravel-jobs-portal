@@ -6,8 +6,8 @@
     <title>{{ __('common.contact_us') }} - {{ config('app.name') }}</title></head>
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm dark bg-primary-600">
-        <div class="container mx-auto px-4 mx-auto">
+    <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -17,20 +17,20 @@
             </button>
             <div class="collapse bg-white shadow-sm collapse" id="navbarNav">
                 <ul class="bg-white shadow-sm nav ms-auto">
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('front.home') }}">{{ __('Home') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('front.home') }}">{{ __('Home') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('about-us') }}">{{ __('common.about_us') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('cms.about-us.service') }}">{{ __('common.about_us') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium active" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium active" href="{{ route('contact.submit') }}">{{ __('Contact') }}</a>
                     </li>
                 </ul>
             </div>
@@ -39,10 +39,10 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center">
-                    <h1 class="display-4 fw-bold text-primary-600">{{ __('common.contact_us') }}</h1>
+                    <h1 class="display-4 fw-bold text-indigo-600 -600">{{ __('common.contact_us') }}</h1>
                     <p class="lead">{{ __('We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.') }}</p>
                 </div>
             </div>
@@ -51,9 +51,9 @@
 
     <!-- Contact Form and Info Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             @if (session('success'))
-                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border-green-200 text-green-800 p-4 rounded-md mb-4 dismissible fade show" role="alert">
+                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border border border-gray-300 -gray-300 -green-200 text-green-800 p-4 rounded -md mb-4 dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
                     {{ session('success') }}
                     <button type="button" class="px-4 py-2 rounded font-medium transition-colors close" data-bs-dismiss="alert"></button>
@@ -63,16 +63,16 @@
             <div class="flex flex-wrap">
                 <!-- Contact Form -->
                 <div class="flex-1 lg-8">
-                    <div class="bg-white shadow rounded-lg overflow-hidden shadow-sm">
-                        <div class="bg-white shadow rounded-lg overflow-hidden header bg-primary-600 text-white">
+                    <div class="bg-white shadow rounded -lg overflow-hidden shadow-sm">
+                        <div class="bg-white shadow rounded -lg overflow-hidden header bg-indigo-600 -600 text-white">
                             <h4 class="mb-0">
                                 <i class="fas fa-envelope me-2"></i>
                                 {{ __('Send us a Message') }}
                             </h4>
                         </div>
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
                             @if ($errors->any())
-                                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 dismissible fade show" role="alert">
+                                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border border border-gray-300 -gray-300 -red-200 text-red-800 p-4 rounded -md mb-4 dismissible fade show" role="alert">
                                     <ul class="mb-0">
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
@@ -93,7 +93,7 @@
                                                 {{ __('First Name') }} <span class="text-red-600">*</span>
                                             </label>
                                             <input id="first_name" type="text" 
-                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
                                                    name="first_name" 
                                                    value="{{ old('first_name') }}" 
                                                    required>
@@ -110,7 +110,7 @@
                                                 {{ __('Last Name') }}
                                             </label>
                                             <input id="last_name" type="text" 
-                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
                                                    name="last_name" 
                                                    value="{{ old('last_name') }}">
                                             @error('last_name')
@@ -128,7 +128,7 @@
                                                 {{ __('Email Address') }} <span class="text-red-600">*</span>
                                             </label>
                                             <input id="email" type="email" 
-                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
                                                    name="email" 
                                                    value="{{ old('email') }}" 
                                                    required>
@@ -145,7 +145,7 @@
                                                 {{ __('Phone Number') }}
                                             </label>
                                             <input id="phone" type="tel" 
-                                                   class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
+                                                   class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
                                                    name="phone" 
                                                    value="{{ old('phone') }}">
                                             @error('phone')
@@ -161,7 +161,7 @@
                                         {{ __('common.subject') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input id="subject" type="text" 
-                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("subject') is-invalid @enderror" 
+                                           class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("subject') is-invalid @enderror" 
                                            name="subject" 
                                            value="{{ old('subject') }}" 
                                            required>
@@ -176,7 +176,7 @@
                                         {{ __('common.message') }} <span class="text-red-600">*</span>
                                     </label>
                                     <textarea id="message" 
-                                              class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("message') is-invalid @enderror" 
+                                              class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("message') is-invalid @enderror" 
                                               name="message" 
                                               rows="6" 
                                               required>{{ old('message') }}</textarea>
@@ -187,7 +187,7 @@
                                 </div>
 
                                 <div class="d-grid">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors lg">
+                                    <button type="submit" class="border border-gray-300 bg-transparent">
                                         <i class="fas fa-paper-plane me-1"></i>
                                         {{ __('common.send_message') }}
                                     </button>
@@ -202,16 +202,16 @@
                     <div class="flex flex-wrap">
                         <!-- Contact Details -->
                         <div class="flex-1 -12 mb-4">
-                            <div class="bg-white shadow rounded-lg overflow-hidden h-full">
-                                <div class="bg-white shadow rounded-lg overflow-hidden body">
-                                    <h5 class="bg-white shadow rounded-lg overflow-hidden title">
-                                        <i class="fas fa-info-circle text-primary-600 me-2"></i>
+                            <div class="bg-white shadow rounded -lg overflow-hidden h-full">
+                                <div class="bg-white shadow rounded -lg overflow-hidden body">
+                                    <h5 class="bg-white shadow rounded -lg overflow-hidden title">
+                                        <i class="fas fa-info-circle text-indigo-600 -600 me-2"></i>
                                         {{ __('Contact Information') }}
                                     </h5>
                                     
                                     <div class="mb-3">
                                         <div class="flex items-start">
-                                            <i class="fas fa-map-marker-alt text-primary-600 me-3 mt-1"></i>
+                                            <i class="fas fa-map-marker-alt text-indigo-600 -600 me-3 mt-1"></i>
                                             <div>
                                                 <h6 class="mb-1">{{ __('Address') }}</h6>
                                                 <p class="text-gray-500 mb-0">
@@ -225,7 +225,7 @@
 
                                     <div class="mb-3">
                                         <div class="flex items-center">
-                                            <i class="fas fa-phone text-primary-600 me-3"></i>
+                                            <i class="fas fa-phone text-indigo-600 -600 me-3"></i>
                                             <div>
                                                 <h6 class="mb-1">{{ __('Phone') }}</h6>
                                                 <p class="text-gray-500 mb-0">+1 (555) 123-4567</p>
@@ -235,7 +235,7 @@
 
                                     <div class="mb-3">
                                         <div class="flex items-center">
-                                            <i class="fas fa-envelope text-primary-600 me-3"></i>
+                                            <i class="fas fa-envelope text-indigo-600 -600 me-3"></i>
                                             <div>
                                                 <h6 class="mb-1">{{ __('Email') }}</h6>
                                                 <p class="text-gray-500 mb-0">contact@jobportal.com</p>
@@ -245,7 +245,7 @@
 
                                     <div class="mb-0">
                                         <div class="flex items-center">
-                                            <i class="fas fa-clock text-primary-600 me-3"></i>
+                                            <i class="fas fa-clock text-indigo-600 -600 me-3"></i>
                                             <div>
                                                 <h6 class="mb-1">{{ __('Business Hours') }}</h6>
                                                 <p class="text-gray-500 mb-0">
@@ -262,19 +262,19 @@
 
                         <!-- Quick Help -->
                         <div class="flex-1 -12 mb-4">
-                            <div class="bg-white shadow rounded-lg overflow-hidden bg-gray-100">
-                                <div class="bg-white shadow rounded-lg overflow-hidden body">
-                                    <h5 class="bg-white shadow rounded-lg overflow-hidden title">
-                                        <i class="fas fa-question-circle text-primary-600 me-2"></i>
+                            <div class="bg-white shadow rounded -lg overflow-hidden bg-gray-100">
+                                <div class="bg-white shadow rounded -lg overflow-hidden body">
+                                    <h5 class="bg-white shadow rounded -lg overflow-hidden title">
+                                        <i class="fas fa-question-circle text-indigo-600 -600 me-2"></i>
                                         {{ __('Need Quick Help?') }}
                                     </h5>
-                                    <p class="bg-white shadow rounded-lg overflow-hidden text">{{ __('Check out our frequently asked questions or browse our help center.') }}</p>
+                                    <p class="bg-white shadow rounded -lg overflow-hidden text">{{ __('Check out our frequently asked questions or browse our help center.') }}</p>
                                     <div class="d-grid gap-2">
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="rounded-md transition">
                                             <i class="fas fa-question me-1"></i>
                                             {{ __('FAQ') }}
                                         </a>
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-info px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="border border-gray-300 bg-transparent">
                                             <i class="fas fa-life-ring me-1"></i>
                                             {{ __('Help Center') }}
                                         </a>
@@ -285,20 +285,20 @@
 
                         <!-- Social Media -->
                         <div class="flex-1 -12">
-                            <div class="bg-white shadow rounded-lg overflow-hidden">
-                                <div class="bg-white shadow rounded-lg overflow-hidden body text-center">
-                                    <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Follow Us') }}</h5>
+                            <div class="bg-white shadow rounded -lg overflow-hidden">
+                                <div class="bg-white shadow rounded -lg overflow-hidden body text-center">
+                                    <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Follow Us') }}</h5>
                                     <div class="flex justify-center gap-3">
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="rounded-md transition">
                                             <i class="fab fa-facebook"></i>
                                         </a>
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-info px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="border border-gray-300 bg-transparent">
                                             <i class="fab fa-twitter"></i>
                                         </a>
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="rounded-md transition">
                                             <i class="fab fa-linkedin"></i>
                                         </a>
-                                        <a href="#" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-danger px-4 py-2 rounded font-medium transition-colors sm">
+                                        <a href="#" class="border border-gray-300 bg-transparent">
                                             <i class="fab fa-instagram"></i>
                                         </a>
                                     </div>
@@ -313,7 +313,7 @@
 
     <!-- Map Section (Optional) -->
     <section class="py-5 bg-gray-100">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center">
                     <h2 class="mb-4">{{ __('Find Us') }}</h2>
@@ -333,7 +333,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 md-6">
                     <h5>{{ config('app.name') }}</h5>
@@ -347,8 +347,8 @@
                         <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
                     </div>
                     <div class="mt-2">
-                        <a href="{{ route('privacy.policy.list') }}" class="text-white-50 me-3">{{ __('Privacy Policy') }}</a>
-                        <a href="{{ route('terms.conditions.list') }}" class="text-white-50">{{ __('Terms of Service') }}</a>
+                        <a href="{{ route('privacy.policy.list.index') }}" class="text-white -50 me-3">{{ __('Privacy Policy') }}</a>
+                        <a href="{{ route('terms.conditions.list.index') }}" class="text-white -50">{{ __('Terms of Service') }}</a>
                     </div>
                 </div>
             </div>

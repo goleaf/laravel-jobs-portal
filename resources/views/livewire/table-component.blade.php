@@ -1,9 +1,9 @@
 <div>
-    <div class="bg-white shadow rounded-lg mb-6">
+    <div class="bg-white shadow rounded -lg mb-6">
         <div class="px-4 py-5 sm:p-6">
             <div class="flex flex- flex-1 md:flex- flex flex-wrap md:items-center md:justify-between mb-4">
                 <!-- Left side - Search and Per Page -->
-                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <div class="flex items-center space-x-4 mb-4 md: mb-0">
                     <div class="relative">
                         <input
                             type="text"
@@ -46,10 +46,10 @@
                             x-transition:leave="transition ease-in duration-75"
                             x-transition:leave-start="transform opacity-100 scale-100"
                             x-transition:leave-end="transform opacity-0 scale-95"
-                            class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                            class="origin-top-right absolute right-0 mt-2 w-64 rounded -md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                             <div class="p-4 space-y-4">
-                                <div class="border-b pb-2 mb-2">
+                                <div class="border border border-gray-300 -gray-300 -b pb-2 mb-2">
                                     <h3 class="text-sm font-semibold text-gray-700 mb-2">{{ __('Filter by') }}</h3>
                                 </div>
                                 
@@ -78,7 +78,7 @@
                                                             id="{{ $filter['key'] }}_{{ $value }}"
                                                             wire:model.live="filters.{{ $filter['key'] }}" 
                                                             value="{{ $value }}"
-                                                            class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
+                                                            class="h-4 w-4 text-indigo-600 -600 -600 border border border-gray-300 -gray-300 -gray-300 rounded"
                                                         >
                                                         <label for="{{ $filter['key'] }}_{{ $value }}" class="ml-2 text-sm text-gray-700">
                                                             {{ $label }}
@@ -105,7 +105,7 @@
                                     </div>
                                 @endforeach
                                 
-                                <div class="flex justify-between pt-2 border-t">
+                                <div class="flex justify-between pt-2 border border border-gray-300 -gray-300 -t">
                                     <button 
                                         wire:click="resetFilters"
                                         type="button"
@@ -130,7 +130,7 @@
                         <div 
                             x-show="open" 
                             @click.away="open = false"
-                            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                            class="origin-top-right absolute right-0 mt-2 w-48 rounded -md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                             <div class="py-1">
                                 @foreach($bulkActions as $key => $action)
@@ -153,12 +153,12 @@
             @if(count($filterPills) > 0)
             <div class="flex flex-wrap gap-2 mb-4">
                 @foreach($filterPills as $key => $pill)
-                <span class="inline-flex rounded-full items-center py-1 pl-3 pr-1 text-sm font-medium bg-primary-600 -100 text-primary-600 -800">
+                <span class="inline-flex rounded -full items-center py-1 pl-3 pr-1 text-sm font-medium bg-indigo-600 -600 -100 text-indigo-600 -600 -800">
                     {{ $pill['label'] }}: {{ $pill['value'] }}
                     <button 
                         wire:click="$set('filters.{{ $key }}', null)" 
                         type="button" 
-                        class="flex-shrink-0 ml-0.5 h-5 w-5 rounded-full inline-flex items-center justify-center text-primary-600 hover: bg-primary-600 -200 hover: text-primary-600 -800 focus:outline-none"
+                        class="flex-shrink-0 ml-0.5 h-5 w-5 rounded -full inline-flex items-center justify-center text-indigo-600 -600 hover: bg-indigo-600 -600 -200 hover: text-indigo-600 -600 -800 focus:outline-none"
                     >
                         <span class="sr-only">{{ __('Remove filter') }}</span>
                         <x-icons.close />
@@ -178,7 +178,7 @@
                                 <input 
                                     type="checkbox" 
                                     wire:model.live="selectAll"
-                                    class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
+                                    class="h-4 w-4 text-indigo-600 -600 -600 border border border-gray-300 -gray-300 -gray-300 rounded"
                                 >
                             </th>
                             @endif
@@ -228,7 +228,7 @@
                                     type="checkbox" 
                                     wire:model.live="selected" 
                                     value="{{ $row->id }}"
-                                    class="h-4 w-4 text-primary-600 -600 border-gray-300 rounded"
+                                    class="h-4 w-4 text-indigo-600 -600 -600 border border border-gray-300 -gray-300 -gray-300 rounded"
                                 >
                             </td>
                             @endif

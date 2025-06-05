@@ -3,8 +3,8 @@
     {{ __('messages.ownership_types') }}
 @endsection
 @section('content')
-<div class="container mx-auto px-4 mx-auto fluid">
-    <div class="flex flex-col">
+<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="flex flex- flex-1">
         @include('flash::message')
         <livewire:ownership-type-table/>
     </div>
@@ -14,6 +14,6 @@
 @include('ownership_types.show_modal')
 {{ Form::hidden('ownershipTypeData',true,['id'=>'indexOwnershipTypeData']) }}
 @endsection
-{{ --@push('scripts')-- }}
-    {{ --    <script src="{{mix('assets/js/ownership_types/ownership_types.js') }}"></script>--}}
-{{ --@endpush-- }}
+{{-- @push('scripts') --}}
+    {{-- <script src="{{mix('assets/js/ownership_types/ownership_types.js') }}"></script> --}}
+{{-- @endpush --}}

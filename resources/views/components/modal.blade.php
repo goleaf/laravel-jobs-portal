@@ -1,3 +1,7 @@
+
+@push('styles')
+    @vite('resources/css/components/modal.css')
+@endpush
 @props([
     'id',
     'maxWidth' => '2xl'
@@ -54,6 +58,4 @@ $maxWidth = [
     </div>
 </div>
 
-<style>
-    [x-cloak] { display: none !important; }
-</style> 
+ 

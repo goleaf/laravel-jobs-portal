@@ -1,9 +1,9 @@
 <div id="showModal" class="fixed inset-0 z-50 overflow-y-auto fade" role="dialog" tabindex="-1" aria-hidden="true">
     <div class="flex items-center justify-center min-h-screen px-4">
         <!-- Modal content-->
-        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="modal-title">{{ __('messages.job.reported_jobs_detail') }}</h3>
+        <div class="bg-white rounded -lg shadow-xl max-w-lg w-full">
+            <div class="px-6 py-4 border-b border border-gray-300 -gray-200">
+                <h3 class="fixed inset-0 z-50 overflow-y-auto -title">{{ __('messages.job.reported_jobs_detail') }}</h3>
                 <button type="button" aria-label="Close" class="px-4 py-2 rounded font-medium transition-colors close"
                         data-bs-dismiss="modal">
                 </button>
@@ -18,7 +18,7 @@
                             {{ Form::label('company_image', __('messages.company.image').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                             <br>
                             <div class="image image-medium me-3">
-                                <img src="" id="documentUrl" class="testimonial-modal-img">
+                                <img src="" id="documentUrl" class="testimonial- fixed inset-0 z-50 overflow-y-auto -img">
                                 <label id="noDocument">{{ __('messages.n/a') }}</label>
                             </div>
                         </div>

@@ -1,11 +1,11 @@
 <div class="flex justify-center">
     <a href="javascript:void(0)" title="{{ __('messages.common.edit') }}"
-       class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-2 text-primary-600 fs-3 ps-0 subscription-edit- px-4 py-2 rounded font-medium transition-colors" data-id="{{ $row->id }}" data-bs-toggle="tooltip">
+       class="border border-gray-300 bg-transparent" data-id="{{ $flex flex-wrap -mx-4->id }}" data-bs-toggle="tooltip">
         <i class="fa-solid fa-pen-to-square"></i>
     </a>
-    @if(!$row->is_trial_plan == 1)
-        <button type="button" title="{{ __('messages.common.delete') }}" data-id="{{ $row->id }}"
-                class="subscription-delete-btn px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 pe-0 {{ $ flex flex-wrap ->active_subscriptions_count > 0 ?"disabled' : '' }}"
+    @if(!$flex flex-wrap -mx-4->is_trial_plan == 1)
+        <button type="button" title="{{ __('messages.common.delete') }}" data-id="{{ $flex flex-wrap -mx-4->id }}"
+                class="rounded flex-wrap rounded subscription-delete-inline-flex items-center px-4 py-2 font-medium transition-colors px-2 text-red-600 fs-3 pe-0 {{ $ flex ->active_subscriptions_count > 0 ?"disabled' : '' }}"
                 data-bs-toggle="tooltip">
             <i class="fa-solid fa-trash"></i>
         </button>

@@ -3,8 +3,8 @@
     {{ __('messages.salary_periods') }}
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
             <livewire:salary-period-table/>
         </div>
@@ -14,6 +14,6 @@
     @include('salary_periods.show_modal')
     {{ Form::hidden('salaryPeriodData',true,['id'=>'indexSalaryPeriodData']) }}
 @endsection
-{{ --@push('scripts')-- }}
-    {{ --    <script src="{{mix('assets/js/salary_periods/salary_periods.js') }}"></script>--}}
-{{ --@endpush-- }}
+{{-- @push('scripts') --}}
+    {{-- <script src="{{mix('assets/js/salary_periods/salary_periods.js') }}"></script> --}}
+{{-- @endpush --}}

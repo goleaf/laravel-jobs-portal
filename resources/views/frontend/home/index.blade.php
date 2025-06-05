@@ -17,7 +17,7 @@
                 
                 <!-- Search Form -->
                 <div class="max-w-4xl mx-auto">
-                    <form action="{{ route('jobs.index') }}" method="GET" class="bg-white rounded-lg p-4 shadow-lg">
+                    <form action="{{ route('jobs.index') }}" method="GET" class="bg-white rounded -lg p-4 shadow-lg">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <x-shared.components.forms.input
                                 name="keyword"
@@ -77,12 +77,12 @@
             @if(isset($featuredJobs) && $featuredJobs->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($featuredJobs as $job)
-                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <div class="rounded-md transition">
                             <div class="p-6">
                                 <div class="flex items-start space-x-4">
                                     <img src="{{ $job->company->logo_url ?? asset('images/default-company.png') }}" 
                                          alt="{{ $job->company->name }}" 
-                                         class="w-12 h-12 rounded-lg object-cover">
+                                         class="w-12 h-12 rounded -lg object-cover">
                                     <div class="flex-1 min-w-0">
                                         <h3 class="text-lg font-semibold text-gray-900 truncate">
                                             <a href="{{ route('jobs.show', $job->slug) }}" class="hover:text-blue-600">
@@ -109,7 +109,7 @@
                                 </div>
                                 
                                 <div class="mt-4 flex items-center justify-between">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-blue-100 text-blue-800">
                                         {{ $job->type }}
                                     </span>
                                     <span class="text-xs text-gray-500">
@@ -131,7 +131,7 @@
                 </div>
             @else
                 <div class="text-center py-12">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded -full mb-4">
                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
                         </svg>
@@ -155,9 +155,9 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach($categories as $category)
                         <a href="{{ route('jobs.index', ['category' => $category->slug]) }}" 
-                           class="group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-blue-300">
+                           class="rounded-md transition">
                             <div class="text-center">
-                                <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4 group-hover:bg-blue-200 transition-colors">
+                                <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded -lg mb-4 group-hover:bg-blue-200 transition-colors">
                                     @if($category->icon)
                                         {!! $category->icon !!}
                                     @else
@@ -186,7 +186,7 @@
             <h2 class="text-3xl font-bold text-white mb-4">{{ __('messages.ready_to_get_started') }}</h2>
             <p class="text-xl text-blue-100 mb-8">{{ __('messages.cta_subtitle') }}</p>
             
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <div class="flex flex- flex-1 sm:flex- flex flex-wrap justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <x-shared.components.forms.button
                     href="{{ route('candidate.register') }}"
                     variant="secondary"
@@ -198,7 +198,7 @@
                     href="{{ route('employer.register') }}"
                     variant="outline"
                     size="lg"
-                    class="border-white text-white hover:bg-white hover:text-blue-600">
+                    class="border border-gray-300 -white text-white hover: bg-white hover:text-blue-600">
                     {{ __('messages.post_jobs') }}
                 </x-shared.components.forms.button>
             </div>

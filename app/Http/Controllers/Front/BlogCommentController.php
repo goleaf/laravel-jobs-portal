@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
+use App\Http\Requests\StoreBlogCommentRequest;
+
 class BlogCommentController extends Controller
 {
     /**
      * Store a newly created blog comment.
      */
-    public function store(Request $request, $blog): JsonResponse
+    public function store(StoreBlogCommentRequest $request, $blog): JsonResponse
     {
         $request->validate([
             'comment' => 'required|string|max:1000',

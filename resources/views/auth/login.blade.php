@@ -54,8 +54,8 @@
             @endif
 
             <!-- Login Form -->
-            <x-ui.card class="mt-8">
-                <x-ui.card-body>
+            <x-ui.bg-white overflow-hidden shadow rounded-lg class="mt-8">
+                <x-ui.bg-white overflow-hidden shadow rounded-lg-body>
                     <form method="POST" action="{{ route('login.submit') }}" class="space-y-6">
                         @csrf
                         
@@ -131,8 +131,8 @@
                             </x-ui.link>
                         </div>
                     @endif
-                </x-ui.card-body>
-            </x-ui.card>
+                </x-ui.bg-white overflow-hidden shadow rounded-lg-body>
+            </x-ui.bg-white overflow-hidden shadow rounded-lg>
 
             <!-- Register Link -->
             <div class="text-center">

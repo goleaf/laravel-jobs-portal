@@ -15,11 +15,8 @@
 </div>
 
 @once
-<script>
-    function confirmDelete(id) {
-        if (confirm("{{ __('messages.common.delete_confirm') }}")) {
-            Livewire.emit('deleteJobType', id);
-        }
-    }
-</script>
+
 @endonce 
+@push('scripts')
+    @vite('resources/js/components/action-buttons.js')
+@endpush

@@ -27,23 +27,23 @@
 
 
 <body class="overflow-x-hidden">
-<div class="flex flex-col flex-root">
-    <div class="flex flex-col flex-column-fluid">
+<div class="flex flex- flex-1 flex-root">
+    <div class="flex flex- flex-1 flex-column-fluid">
         <div class="header fixed-header">
             @include('employer.layouts.header')
         </div>
-        <div class="theme-wrapper flex flex-col flex- flex flex-wrap fluid">
-            <div class="flex flex-col flex- flex flex-wrap fluid">
-                <div class="flex flex-col flex-column-fluid pt-7">
+        <div class="theme-wrapper flex flex- flex-1 flex- flex flex-wrap fluid">
+            <div class="flex flex- flex-1 flex- flex flex-wrap fluid">
+                <div class="flex flex- flex-1 flex-column-fluid pt-7">
                     <div class="content flex-column-fluid">
-                        <div class="w-full container mx-auto px-4 mx-auto xxl">
+                        <div class="w-full container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
                             @yield('content')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-full container mx-auto px-4 mx-auto xxl">
+        <div class="w-full container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
             @include('layouts.footer')
         </div>
         @include('employer_profile.edit_profile_modal')
@@ -52,37 +52,12 @@
 </div>
 {{ Form::hidden('employerProfileData',true,['id'=>'indexEmployerProfileData']) }}
 {{ Form::hidden('default-image-url', asset('assets/img/infyom-logo.png'), ['id' => 'defaultImageUrl']) }}
-<script data-turbo-eval="false">
-    var hostUrl = 'assets/';
-    let getLoggedInUserLang = '{{ getCurrentLanguageCode() }}';
-    let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}"
-    Lang.setLocale(getLoggedInUserLang);
-</script>
-<script>
-    $(document).ready(function () {
-        $('.alert').delay(5000).slideUp(300);
-    });
-    var stripe = '';
-    @if(!empty(getEnvSetting()['stripe_key']))
-         stripe = Stripe('{{ getEnvSetting()['stripe_key'] }}');
-    @elseif(config('services.stripe.key'))
-        stripe = Stripe('{{ config('services.stripe.key') }}');
-    @endif
 
-    //fix menu overflow under the responsive table
-    // hide menu on click... (This is a must because when we open a menu )
-    $(document).click(function (event) {
-        //hide all our dropdowns
-        $('.dropdown-menu[data-parent]').hide();
-    });
 
-    $('.table-responsive').on('show.bs.dropdown', function () {
-        $('.table-responsive').css("overflow","unset");
-    }).on('hide.bs.dropdown', function () {
-        $('.table-responsive').css("overflow","auto");
-    })
-
-</script>
 @stack('scripts')
 </body>
 </html>
+
+@push('scripts')
+    @vite('resources/js/components/app.js')
+@endpush

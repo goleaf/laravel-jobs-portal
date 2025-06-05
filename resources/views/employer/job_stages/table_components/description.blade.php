@@ -1,1 +1,1 @@
-{!! nl2br( \Illuminate\Support\Str::limit($row->description,190) ) !!}
+{{ nl2br( \Illuminate\Support\Str::limit($row->description,190) ) }}

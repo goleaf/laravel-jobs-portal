@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Http\Requests\CreateJobRequest;
 use App\Http\Requests\UpdateJobRequest;
 use App\Models\Country;
@@ -35,6 +36,10 @@ use App\Http\Requests\GetCitiesJobRequest;
 use App\Http\Requests\StoreJobJobRequest;
 
 use App\Http\Requests\UpdateJobJobRequest;
+
+use App\Http\Requests\StoreJobRequest;
+
+use App\Http\Requests\DeleteJobRequest;
 
 class JobController extends AppBaseController
 {
@@ -120,7 +125,7 @@ class JobController extends AppBaseController
                 
             Flash::success($message);
 
-            return redirect(route('job.index'));
+            return redirect(route('jobs.index'));
             
         } catch (Exception $e) {
             logger()->error('Job creation failed', [
@@ -169,7 +174,7 @@ class JobController extends AppBaseController
 
         // Status check
         if ($job->status == Job::STATUS_CLOSED) {
-            return redirect(route('job.index'))
+            return redirect(route('jobs.index'))
                 ->withErrors(__('messages.flash.close_job'));
         }
 
@@ -218,7 +223,7 @@ class JobController extends AppBaseController
 
             Flash::success(__('messages.flash.job_update'));
 
-            return redirect(route('job.index'));
+            return redirect(route('jobs.index'));
             
         } catch (Exception $e) {
             logger()->error('Job update failed', [
@@ -308,7 +313,7 @@ class JobController extends AppBaseController
     /**
      * Prepare job input data.
      */
-    private function prepareJobInput(array $input, Request $request): array
+    private function prepareJobInput(array $input, StoreRequest $request): array
     {
         $input['hide_salary'] = isset($input['hide_salary']) ? 1 : 0;
         $input['is_freelance'] = isset($input['is_freelance']) ? 1 : 0;

@@ -1,5 +1,5 @@
 @component('mail::message')
-    {{ -- Greeting -- }}
+    {{-- Greeting --}}
     @if (! empty($greeting))
         # {{ $greeting }}
     @else
@@ -10,13 +10,13 @@
         @endif
     @endif
 
-    {{ -- Intro Lines -- }}
+    {{-- Intro Lines --}}
     @foreach ($introLines as $line)
         {{ $line }}
 
     @endforeach
 
-    {{ -- Action Button -- }}
+    {{-- Action Button --}}
     @isset($actionText)
         <?php
         switch ($level) {
@@ -33,13 +33,13 @@
         @endcomponent
     @endisset
 
-    {{ -- Outro Lines -- }}
+    {{-- Outro Lines --}}
     @foreach ($outroLines as $line)
         {{ $line }}
 
     @endforeach
 
-    {{ -- Salutation -- }}
+    {{-- Salutation --}}
     @if (! empty($salutation))
         {{ $salutation }}
     @else
@@ -47,7 +47,7 @@
         {{ getAppName() }}
     @endif
 
-    {{ -- Subcopy -- }}
+    {{-- Subcopy --}}
     @isset($actionText)
         @slot('subcopy')
             @lang("If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".

@@ -1,5 +1,5 @@
 <!-- Form Helpers README -->
-<div class="container mx-auto px-4 mx-auto">
+<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
     <h1>Form Helpers Documentation</h1>
     
     <h2>Introduction</h2>
@@ -59,12 +59,12 @@
     <pre><code>
     @formOpen(['url' => route('login'), 'id' => 'login-form'])
         @csrf
-        <div class="form-group">
+        <div class="mb-4">
             {{ Form::label('email', 'Email Address:') }}
             {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
         
-        <div class="form-group">
+        <div class="mb-4">
             {{ Form::label('password', 'Password:') }}
             {{ Form::password('password', ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
@@ -91,7 +91,7 @@
     <h3>File Upload Example</h3>
     <pre><code>
     @formOpen(['url' => route('uploads.store'), 'method' => 'POST', 'files' => true])
-        <div class="form-group">
+        <div class="mb-4">
             {{ Form::label('document', 'Upload Document:') }}
             {{ Form::file('document', ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
@@ -111,7 +111,7 @@
     <h2>Working with Validation Errors</h2>
     <p>You can easily add error handling to your forms:</p>
     <pre><code>
-    <div class="form-group">
+    <div class="mb-4">
         {{ Form::label('email', 'Email:') }}
         {{ Form::email('email', old('email'), [
             'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ' . ($errors->has('email') ? 'is-invalid' : '')

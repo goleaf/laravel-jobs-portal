@@ -1,7 +1,7 @@
-<div class="col-xl-4 flex-1 md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
-    <div class="hover-effect-employee relative mb-5 border-hover-primary employee-border">
+<div class="flex-1 -xl-4 flex-1 md-6 candidate- bg-white shadow rounded -lg overflow-hidden">
+    <div class="hover-effect-employee relative mb-5 border-hover-primary employee- border border-gray-300">
         <div class="employee-listing-details">
-            <div class="flex employee-listing-description items-center justify-center flex-col">
+            <div class="flex employee-listing-description items-center justify-center flex- flex-1">
                 <div class="pl-0 mb-2 employee-avatar">
                     <img src="{{ $reportedJob->$job->$company->company_url }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
@@ -10,7 +10,7 @@
                     <div class="flex justify-center items-center w-full">
                         <div>
                             <label class="text-decoration-none text-color-gray">
-                                <a href=" {{ route('front.job.details') }}/{{ $reportedJob->$job->job_id }}"
+                                <a href=" {{ route('front.') }}/{{ $reportedJob->$job->job_id }}"
                                    class="text-decoration-none text-color-gray"
                                    target="_blank"> {{ $reportedJob->$job->job_title }}</a>
                             </label>
@@ -32,11 +32,11 @@
             </div>
         </div>
         <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
-            <button title="{{ __('messages.common.view') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 action- px-4 py-2 rounded font-medium transition-colors view-note"
+            <button title="{{ __('messages.common.view') }}" class="border border-gray-300 bg-transparent"
                data-id="{{ $reportedJob->id }}">
                 <i class="fas fa-eye"></i>
             </button>
-            <a title="{{ __('messages.common.delete') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
+            <a title="{{ __('messages.common.delete') }}" class="border border-gray-300 bg-transparent"
                data-id="{{ $reportedJob->id }}" href="javascript:void(0)">
                 <i class="fa fa-trash"></i>
             </a>

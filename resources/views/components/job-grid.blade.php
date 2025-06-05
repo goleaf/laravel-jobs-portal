@@ -1,3 +1,7 @@
+
+@push('styles')
+    @vite('resources/css/components/job-grid.css')
+@endpush
 @props([
     'jobs' => collect(),
     'layout' => 'default', // default, compact, detailed
@@ -54,7 +58,7 @@
                 {{ $emptyMessage ?? __('jobs.no_jobs_description') }}
             </p>
             <div class="mt-6">
-                <a href="{{ route('front.search.jobs') }}" 
+                <a href="{{ route('front.') }}" 
                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                     {{ __('jobs.browse_all_jobs') }}
                 </a>
@@ -63,28 +67,4 @@
     @endif
 </div>
 
-<style>
-.pagination-wrapper .pagination {
-    @apply flex justify-center space-x-1;
-}
-
-.pagination-wrapper .page-link {
-    @apply px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors duration-200;
-}
-
-.pagination-wrapper .page-link:first-child {
-    @apply rounded-l-md;
-}
-
-.pagination-wrapper .page-link:last-child {
-    @apply rounded-r-md;
-}
-
-.pagination-wrapper .page-item.active .page-link {
-    @apply bg-blue-600 border-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:border-blue-500;
-}
-
-.pagination-wrapper .page-item.disabled .page-link {
-    @apply text-gray-300 bg-gray-100 border-gray-300 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500;
-}
-</style> 
+ 

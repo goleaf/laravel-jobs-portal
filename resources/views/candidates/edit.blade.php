@@ -7,26 +7,26 @@
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/><link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
 @endpush
 @section('header_toolbar')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="d-md-flex items-center justify-between mb-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto fluid">
+        <div class="mb-5 md:flex items-center justify-between">
             <h1 class="mb-0">@yield('title')</h1>
-            <div class="text-end mt-4 mt-md-0">
+            <div class="mt-4 text-end mt-md-0">
                 <a href="{{ route('admin.candidates.index') }}"
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors outline-primary">{{ __('messages.common.back') }}</a>
+                   class="border border-gray-300 bg-transparent">{{ __('messages.common.back') }}</a>
             </div>
         </div>
     </div>
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
-            <div class="flex flex-wrap">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto fluid">
+        <div class="flex-1 px-4 flex flex-">
+            <div class="flex-wrap flex">
                 <div class="flex-1 -12">
                     @include('layouts.errors')
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
+                <div class="overflow-hidden shadow rounded bg-white -lg body">
                     {{ Form::model($user, ['route' => ['admin.candidates.update', $candidate->id], 'method' => 'put', 'id' => 'editCandidatesForm']) }}
 
                     @include('candidates.edit_fields')
@@ -47,14 +47,12 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        let isEdit = true;
-        var phoneNo ="{{ old('region_code').old('phone') }}";
-        let countryId = '{{ $candidate->$user->country_id }}';
-        let stateId = '{{ $candidate->$user->state_id }}';
-        let cityId = '{{ $candidate->$user->city_id }}';
-    </script>
+    
     <script src="{{ asset('assets/js/custom/input_price_format.js') }}"></script>
     <script src="{{ asset('assets/js/candidate/create-edit.js') }}"></script>
     <script src="{{ asset('assets/js/custom/phone-number-country-code.js') }}"></script>
+@endpush
+
+@push('scripts')
+    @vite('resources/js/components/edit.js')
 @endpush

@@ -2,21 +2,21 @@
 @section('title')
     {{ __('web.job_details.job_details') }}
 @endsection
-{{ -- @section('page_css') -- }}
-{{ --    <link href="{{asset('front_web/scss/job-details.css') }}" rel="stylesheet" type="text/css"> --}}
-{{ -- @endsection -- }}
+{{-- @section('page_css') --}}
+{{-- <link href="{{asset('front_web/scss/job-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{-- @endsection --}}
 @section('content')
     <div class="job-details-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -12">
                         <div class="flex align-items-md-center">
                             <div class="me-4">
                                 <div class="hero-img">
                                     <img src="{{ $job->$company->company_url }}"
-                                        class="w-full h-full rounded-circle object-fit-cover" alt="company-details" />
+                                        class="w-full h-full rounded -full object-fit-cover" alt="company-details" />
                                 </div>
                             </div>
                             <div class="">
@@ -25,18 +25,18 @@
                                         {{ html_entity_decode(Str::limit($job->job_title, 50, '...')) }}
                                         @role('Candidate')
                                             @if (!$isJobApplicationRejected)
-                                                <button class="px-4 py-2 rounded font-medium transition-colors p-0 ms-5"
+                                                <button class="transition duration-150 ease-in-out flex-1"
                                                     data-favorite-user-id="{{ getLoggedInUserId() !== null ? getLoggedInUserId() : null }}"
                                                     data-favorite-job-id="{{ $job->id }}" id="addToFavourite">
                                                     <span id="favorite">
                                                         <i
-                                                            class="{{ $isJobAddedToFavourite ? 'fa-solid fa-bookmark featured' : 'fa-regular fa-bookmark' }}  text-primary fs-18"></i>
+                                                            class="{{ $isJobAddedToFavourite ? 'fa-solid fa-bookmark featured' : 'fa-regular fa-bookmark' }} text-indigo-600 fs-18"></i>
                                                     </span>
                                                 </button>
                                             @endif
                                         @endrole
                                     </h4>
-                                    <div class="hero-desc d-md-flex">
+                                    <div class="hero-desc d-mflex">
                                         <div class="desc flex me-4 pe-2">
                                             <div class="me-3 w-20">
                                                 <x-icons.briefcase class="w-full" />
@@ -66,11 +66,11 @@
                                         <div class="hero-desc flex flex-wrap">
                                             @foreach ($job->jobsTag->pluck('name') as $value)
                                             <div class="desc flex {{ $loop->last ?"' : 'me-2 pe-2' }}">
-                                                <span class="tag-badge"
-                                                    style="background: rgba(25,103,210,.15);color: #1967d2!important;font-size: 12px!important;line-height: 15px;padding: 5px 20px;border-radius: 50px;margin-top: 10px;">
+                                                <span class="tag-inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium"
+                                                    style="background: rgba(25,103,210,.15);flex-1 px-4or: #1967d2!important;font-size: 12px!important;line-height: 15px;padding: 5px 20px;border-radius: 50px;margin-top: 10px;">
                                                     {{ $value }}</span>
-                                                    <span class="tag-badge"
-                                                    style="background: rgba(25,103,210,.15);color: #1967d2!important;font-size: 12px!important;line-height: 15px;padding: 5px 20px;border-radius: 50px;margin-top: 10px;">
+                                                    <span class="tag-inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium"
+                                                    style="background: rgba(25,103,210,.15);flex-1 px-4or: #1967d2!important;font-size: 12px!important;line-height: 15px;padding: 5px 20px;border-radius: 50px;margin-top: 10px;">
                                                     {{ $value }}</span>
                                             </div>
                                             @endforeach
@@ -82,26 +82,26 @@
                     </div>
                 </div>
                 <div class="flex gap-3 mt-sm-5 mt-4 flex-wrap">
-                    {{ -- <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors light">Register to Apply</button>
-                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors primary">Apply for Job</button> -- }}
+                    {{ -- <button class="border border-gray-300 bg-transparent">Register to Apply</button>
+                    <button class="border border-gray-300 bg-transparent">Apply for Job</button> -- }}
                     <div class="flex flex-wrap align-items-lg-center">
                         @auth
                             @role('Candidate')
                                 <div class="hero-desc flex flex-wrap">
                                     <div class="desc me-2 pe-2 mb-sm-0 mb-2">
-                                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register emailJobToFriend" data-bs-toggle="modal"
+                                        <button type="button" class="border border-gray-300 bg-transparent" data-bs-toggle="modal"
                                             data-bs-target="#emailJobToFriendModal">
                                             {{ __('web.job_details.email_to_friend') }}
                                         </button>
                                     </div>
                                     <div class="desc me-2 pe-2 mb-sm-0 mb-2">
                                         @if ($isJobReportedAsAbuse)
-                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register reportJobAbuse" disabled
+                                            <button type="button" class="border border-gray-300 bg-transparent" disabled
                                                 data-bs-toggle="modal" data-bs-target="#reportJobAbuseModal">
                                                 {{ __('messages.candidate.already_reported') }}
                                             </button>
                                         @else
-                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register reportJobAbuse" data-bs-toggle="modal"
+                                            <button type="button" class="border border-gray-300 bg-transparent" data-bs-toggle="modal"
                                                 data-bs-target="#reportJobAbuseModal">
                                                 {{ __('web.job_details.report_abuse') }}
                                             </button>
@@ -110,14 +110,14 @@
                                     <div class="desc me-2 pe-2 mb-sm-0 mb-2">
                                         @if (!$isApplied && !$isJobApplicationRejected && !$isJobApplicationCompleted && !$isJobApplicationShortlisted)
                                             @if ($isActive && !$job->is_suspended && \Carbon\Carbon::today()->toDateString() < $job->job_expiry_date->toDateString())
-                                                <button class="px-4 py-2 rounded font-medium transition-colors {{ $isJobDrafted ?"btn-primary' : 'btn-dark' }}"
+                                                <button class="transition duration-150 ease-in-out flex-1"inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200-dark' }}"
                                                     onclick="window.location='{{ route('show.apply-job-form', $job->job_id) }}'">
                                                     {{ $isJobDrafted ? __('web.job_details.edit_draft') : __('web.job_details.apply_for_job') }}
                                                 </button>
                                             @endif
                                         @else
                                             <button
-                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register ml-2">{{ __('web.job_details.already_applied') }}</button>
+                                                class="border border-gray-300 bg-transparent">{{ __('web.job_details.already_applied') }}</button>
                                         @endif
                                     </div>
                                 </div>
@@ -126,13 +126,13 @@
                             @if ($isActive && !$job->is_suspended && \Carbon\Carbon::today()->toDateString() < $job->job_expiry_date->toDateString())
                                 <div class="hero-desc flex flex-wrap">
                                     <div class="desc flex me-4 pe-2">
-                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register mb-3"
+                                        <button class="border border-gray-300 bg-transparent"
                                             onclick="window.location='{{ route('candidate.register') }}'">{{ __('web.job_details.register_to_apply') }}
                                         </button>
                                     </div>
                                     <div class="desc flex me-4 pe-2">
-                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register mb-3"
-                                            onclick="window.location='{{ route('front.candidate.login') }}'">
+                                        <button class="border border-gray-300 bg-transparent"
+                                            onclick="window.location='{{ route('candidate.') }}'">
                                             {{ __('web.job_details.apply_for_job') }}
                                         </button>
                                     </div>
@@ -147,12 +147,12 @@
 
         <!-- start job-details section -->
         <section class="job-details-section py-60 mb-sm-4">
-            <div class="container mx-auto px-4 mx-auto">
-                <div class="job- bg-white shadow rounded-lg overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
+                <div class="job- bg-white shadow rounded -lg overflow-hidden">
                     <div class="flex flex-wrap">
                         @if ($job->is_suspended || !$isActive)
                             <div class="md:w-full flex-1 sm-12">
-                                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 warning text-yellow-600 bg-transparent" role="alert">
+                                <div class="px-4 py-3 rounded-md border border border-gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 warning text-yellow-600 bg-transparent" role="rounded-md p-4">
                                     {{ __('web.job_details.job_is') }}
                                     <strong> {{ \App\Models\Job::STATUS[$job->status] }}.</strong>
                                 </div>
@@ -160,10 +160,10 @@
                         @endif
                         @if (Session::has('warning'))
                             <div class="md:w-full flex-1 sm-12">
-                                <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 warning" role="alert">
+                                <div class="px-4 py-3 rounded-md border border border-gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 warning" role="rounded-md p-4">
                                     {{ Session::get('warning') }}
-                                    <a href="{{ route('candidate.profile', ['section' => 'resume']) }}"
-                                        class="p-4 rounded-md mb-4 link ml-2">{{ __('web.job_details.click_here') }}</a>
+                                    <a href="{{ route('candidate.', ['section' => 'resume']) }}"
+                                        class="p-4 rounded -md mb-4 link ml-2">{{ __('web.job_details.click_here') }}</a>
                                     {{ __('web.job_details.to_upload_resume') }}
                                     .
                                 </div>
@@ -174,7 +174,7 @@
                                 <h5 class="fs-18 text-gray-600 mb-4">@lang('web.web_jobs.job_description')</h5>
                                 @if ($job->description)
                                     <p class="job-description">
-                                        {!! nl2br($job->description) !!}
+                                        {{ nl2br($job->description) }}
                                     </p>
                                 @else
                                     <p class="fs-16 text-gray mb-5 pb-lg-4">{{ __('messages.common.n/a') }}</p>
@@ -203,7 +203,7 @@
                                     <p class="fs-16 text-gray mb-5 pb-lg-4">{{ __('messages.common.n/a') }}</p>
                                 @endif
                             </div>
-                            <div class="share-job- px-4 py-2 rounded font-medium transition-colors">
+                            <div class="transition duration-150 ease-in-out flex-1">
                                 <p class="fs-14 text-gray-600 mb-2">@lang('web.web_jobs.share_this_job')</p>
                                 <div class="social-media flex">
                                     <div class="social-media-experiment flex">
@@ -232,23 +232,23 @@
                                 <h5 class="fs-18 text-gray-600 mb-4">@lang('web.apply_for_job.share_this_job'):</h5>
                                 <div class="social-media flex flex-wrap">
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode(url()->current()) }}"
-                                        target="_blank" class="social-media-item bg-primary-600 text-decoration-none me-2 mb-2">
+                                        target="_blank" class="social-media-item bg-indigo-600 -600 text-decoration-none me-2 mb-2">
                                         <x-icons.facebook class="w-5 h-5 text-white" />
                                     </a>
                                     <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ rawurlencode(url()->current()) }}&title={{ rawurlencode($job->job_title) }}"
-                                        target="_blank" class="social-media-item bg-primary-600 text-decoration-none me-2 mb-2">
+                                        target="_blank" class="social-media-item bg-indigo-600 -600 text-decoration-none me-2 mb-2">
                                         <x-icons.linkedin class="w-5 h-5 text-white" />
                                     </a>
                                     <a href="https://www.twitter.com/share?url={{ rawurlencode(url()->current()) }}&text={{ rawurlencode($job->job_title) }}"
-                                        target="_blank" class="social-media-item bg-primary-600 text-decoration-none me-2 mb-2">
+                                        target="_blank" class="social-media-item bg-indigo-600 -600 text-decoration-none me-2 mb-2">
                                         <x-icons.twitter class="w-5 h-5 text-white" />
                                     </a>
                                     <a href="https://plus.google.com/share?url={{ rawurlencode(url()->current()) }}"
-                                        target="_blank" class="social-media-item bg-primary-600 text-decoration-none me-2 mb-2">
+                                        target="_blank" class="social-media-item bg-indigo-600 -600 text-decoration-none me-2 mb-2">
                                         <x-icons.google-plus class="w-5 h-5 text-white" />
                                     </a>
                                     <a href="https://pinterest.com/pin/create/button/?url={{ rawurlencode(url()->current()) }}"
-                                        target="_blank" class="social-media-item bg-primary-600 text-decoration-none me-2 mb-2">
+                                        target="_blank" class="social-media-item bg-indigo-600 -600 text-decoration-none me-2 mb-2">
                                         <x-icons.pinterest class="w-5 h-5 text-white" />
                                     </a>
                                 </div>
@@ -387,7 +387,7 @@
                                         <ul>
                                             @foreach ($job->jobsSkill->pluck('name') as $key => $value)
                                                 <li
-                                                    class="fs-14 text-gray py-2 {{ $loop->last ? '' : 'me-4' }}">
+                                                    class="fs-14 text-gray py-2 {{ $loop->last ?"' : 'me-4' }}">
                                                     {{ html_entity_decode($value) }}</li>
                                             @endforeach
                                         </ul>
@@ -408,8 +408,8 @@
                                     <div class="desc ms-4">
                                         <p class="fs-18 text-gray-600 mb-0">
                                             {{ html_entity_decode($job->$company->$user->first_name) }}</p>
-                                        <a hred="{{ route('front.company.details', $job->$company->unique_id) }}"
-                                            class="fs-14 text-primary-600">@lang('web.web_jobs.view_company_profile')</a>
+                                        <a hred="{{ route('front.', $job->$company->unique_id) }}"
+                                            class="fs-14 text-indigo-600 -600">@lang('web.web_jobs.view_company_profile')</a>
                                     </div>
                                 </div>
                                 <div class="desc-box flex justify-between mb-4">
@@ -432,15 +432,15 @@
                                         </p>
                                     @endif
                                 </div>
-                                <a href="{{ route('front.company.details', $job->$company->unique_id) }}"
-                                    class="jobs-position flex-1 -12 inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors light">
+                                <a href="{{ route('front.', $job->$company->unique_id) }}"
+                                    class="border border-gray-300 bg-transparent">
                                     {{ __('web.companies_menu.opened_jobs') }} : {{ $jobsCount ? $jobsCount : 0 }}
                                 </a>
                                 @if ($job->$company->website)
-                                    <div class="bg-white shadow rounded-lg overflow-hidden desc mt-3">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden desc mt-3">
                                         <div class="desc flex mt-2">
                                             <a href="{{ $job->$company->website }}"
-                                                class="jobs-position fs-14 text-primary-600"
+                                                class="jobs-position fs-14 text-indigo-600-600"
                                                 target="_blank">{{ $job->$company->website }}</a>
                                         </div>
                                     </div>
@@ -455,26 +455,26 @@
                                 @foreach ($getRelatedJobs as $relatedJob)
                                     @if ($relatedJob->status != \App\Models\Job::STATUS_DRAFT)
                                         <div class="lg:w-4/12 px-2 flex-1 md-6 px-xl-3 mb-40">
-                                            <div class="bg-white shadow rounded-lg overflow-hidden py-30">
+                                            <div class="bg-white shadow rounded -lg overflow-hidden py-30">
                                                 @if (Str::length($relatedJob['job_title']) < 35)
-                                                    <a href="{{ route('front.job.details', $relatedJob['job_id']) }}"
+                                                    <a href="{{ route('front.', $relatedJob['job_id']) }}"
                                                         class="text-gray-600 primary-link-hover">
-                                                        <h5 class="bg-white shadow rounded-lg overflow-hidden title fs-20 mb-2">
+                                                        <h5 class="bg-white shadow rounded -lg overflow-hidden title fs-20 mb-2">
                                                             {{ html_entity_decode($relatedJob['job_title']) }}
                                                         </h5>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('front.job.details', $relatedJob['job_id']) }}"
-                                                        data-toggle="tooltip" data-placement="bottom" class="hover-color"
+                                                    <a href="{{ route('front.', $relatedJob['job_id']) }}"
+                                                        data-toggle="tooltip" data-placement="bottom" class="hover-flex-1 px-4or"
                                                         title="{{ html_entity_decode($relatedJob['job_title']) }}">
-                                                        <h5 class="bg-white shadow rounded-lg overflow-hidden title fs-20 mb-2">
+                                                        <h5 class="bg-white shadow rounded -lg overflow-hidden title fs-20 mb-2">
                                                             {{ Str::limit(html_entity_decode($relatedJob['job_title']), 30, '...') }}
                                                         </h5>
                                                     </a>
                                                 @endif
                                                 <div class="mt-2 flex flex-wrap items-center">
                                                     @if (isset($relatedJob->jobShift->shift))
-                                                        <span class="text text-primary-600 fs-12 mb-0 me-3 related-jobs">
+                                                        <span class="text text-indigo-600 -600 fs-12 mb-0 me-3 related-jobs">
                                                             {{ $relatedJob->jobShift->shift }}
                                                         </span>
                                                     @endif
@@ -483,24 +483,24 @@
                                                     <div class="flex items-center">
                                                         <div class="me-4">
                                                             <img src="{{ $relatedJob->$company->company_url }}"
-                                                                class="bg-white shadow rounded-lg overflow-hidden img" alt="..." />
+                                                                class="bg-white shadow rounded -lg overflow-hidden img" alt="..." />
                                                         </div>
                                                         <div class="">
-                                                            <div class="bg-white shadow rounded-lg overflow-hidden body p-0">
+                                                            <div class="bg-white shadow rounded -lg overflow-hidden body p-0">
                                                                 <a
-                                                                    href="{{ route('front.company.details', $relatedJob->$company->unique_id) }}">
-                                                                    <p class="bg-white shadow rounded-lg overflow-hidden title fs-18 mb-0 text-primary-600">
+                                                                    href="{{ route('front.', $relatedJob->$company->unique_id) }}">
+                                                                    <p class="bg-white shadow rounded -lg overflow-hidden title fs-18 mb-0 text-indigo-600 -600">
                                                                         {{ $relatedJob->$company->$user->first_name }}</p>
                                                                 </a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="icon relative pe-0">
-                                                        <i class="text-primary-600 fa-solid fa-bookmark"></i>
+                                                        <i class="text-indigo-600 -600 fa-solid fa-bookmark"></i>
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="bg-white shadow rounded-lg overflow-hidden desc flex flex-col justify-between h-full mt-4">
+                                                    class="bg-white shadow rounded -lg overflow-hidden desc flex flex- flex-1 justify-between h-full mt-4">
                                                     <div class="desc">
                                                         <div class="flex mb-1">
                                                             <div class="me-3 w-20">
@@ -528,8 +528,8 @@
                                 @if ($getRelatedJobs->count() > 0)
                                     <div class="flex flex-wrap justify-center">
                                         <div class="flex-1 -8 text-center">
-                                            <a href="{{ route('front.search.jobs', ['categories' => $relatedJob->jobCategory->id]) }}"
-                                                class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register mb-40 mt-lg-4">
+                                            <a href="{{ route('front.', ['categories' => $relatedJob->jobCategory->id]) }}"
+                                                class="border border-gray-300 bg-transparent">
                                                 @lang('web.common.show_all')</a>
                                         </div>
                                     </div>
@@ -550,13 +550,10 @@
     {{ Form::hidden('removeFromFavorite', __('web.job_details.remove_from_favorite'), ['id' => 'removeFromFavorite']) }}
     {{ Form::hidden('addToFavorites', __('web.job_details.add_to_favorite'), ['id' => 'addToFavorites']) }}
 @endsection
-{{ -- @section('page_scripts') -- }}
-{{ --    <script> -- }}
-{{ -- let addJobFavouriteUrl ="{{ route('save.favourite.job') }}"; --}}
-{{ -- let reportAbuseUrl ="{{ route('report.job.abuse') }}"; --}}
-{{ -- let emailJobToFriend ="{{ route('email.job') }}"; --}}
-{{ --        let isJobAddedToFavourite ="{{ $isJobAddedToFavourite }}"; --}}
-{{ -- let removeFromFavorite ="{{ __('web.job_details.remove_from_favorite') }}"; --}}
-{{ -- let addToFavorites ="{{ __('web.job_details.add_to_favorite') }}"; --}}
-{{ --    </script> -- }}
-{{ -- @endsection -- }}
+{{-- @section('page_scripts') --}}
+{{--  --}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/job_details.js')
+@endpush

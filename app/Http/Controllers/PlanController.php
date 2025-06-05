@@ -13,6 +13,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StorePlanRequest;
+
+use App\Http\Requests\DeletePlanRequest;
+
 class PlanController extends AppBaseController
 {
     /** @var*/

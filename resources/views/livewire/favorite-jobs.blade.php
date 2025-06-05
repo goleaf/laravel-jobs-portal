@@ -1,10 +1,10 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="lg:w-full px-2 flex-1 md-12">
                     @if(session()->has('message'))
-                        <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 success">
+                        <div class="px-4 py-3 rounded-md border border border border-gray-300 -gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 success">
                             {{ session('message') }}
                         </div>
                     @endif
@@ -17,7 +17,7 @@
                             </div>
                             <div class="flex-1 md-3">
                                 <input wire:model.debounce.100ms="searchByJob" type="search" id="searchByJob"
-                                       placeholder="{{ __('web.job_menu.search_job') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                       placeholder="{{ __('web.job_menu.search_job') }}" class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500">
                             </div>
                         </div>
                     @endif
@@ -33,11 +33,11 @@
                                             <div class="job-listing">
                                                 <div class="job-listing-details">
                                                     <div class="job-listing-description">
-                                                        <h4 class="job-listing-company d-inline-flex">
+                                                        <h4 class="job-listing-company inline -flex">
                                                             {{ html_entity_decode($favouriteJob->$job->$company->$user->first_name) }}
                                                         </h4>
                                                         <h3 class="job-listing-title margin-bottom-5">
-                                                            <a href="{{ route('front.job.details',$favouriteJob->$job->job_id) }}"
+                                                            <a href="{{ route('front.',$favouriteJob->$job->job_id) }}"
                                                                target="_blank">{{ $favouriteJob->$job->job_title }}</a>
                                                         </h3>
                                                         <div class="job-listing-footer">

@@ -36,7 +36,7 @@
     @stack('head')
 </head>
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex- flex-1">
         <!-- Header/Navigation -->
         @isset($header)
             <x-ui.header class="bg-white dark:bg-gray-800 shadow">
@@ -72,7 +72,7 @@
                 </div>
             @else
                 <!-- Content without Sidebar -->
-                <div class="container mx-auto px-4 py-6">
+                <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 py-6">
                     {{ $slot }}
                 </div>
             @endif

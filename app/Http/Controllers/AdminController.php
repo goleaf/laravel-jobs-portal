@@ -11,6 +11,10 @@ use App\Http\Requests\CreateAdminRequest;
 
 use App\Http\Requests\UpdateAdminRequest;
 
+use App\Http\Requests\StoreAdminRequest;
+
+use App\Http\Requests\DeleteAdminRequest;
+
 class AdminController extends Controller
 {
     /**

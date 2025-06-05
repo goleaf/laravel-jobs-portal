@@ -5,10 +5,10 @@
 @push('css')@endpush
 @section('content')
     @include('flash::message')
-        <div class="flex flex-col">
+        <div class="flex flex- flex-1">
             @include('layouts.errors')
-            <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="bg-white shadow rounded -lg overflow-hidden">
+                <div class="bg-white shadow rounded -lg overflow-hidden body">
                     <div class="flex justify-end">
                         @php
                             $stageId = null;
@@ -24,7 +24,7 @@
                         @if($isSelectedRejectedSlot > 0 || $isStageMatch)
                             <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors schedule-interview">
                                 <a href="javascript:void(0)"
-                                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors primary addJobStageModal ms-2">
+                                   class="border border-gray-300 bg-transparent">
                                     {{ __('messages.common.add') }}
                                 </a>
                             </div>
@@ -35,21 +35,17 @@
                 </div>
             </div>
             @include('employer.job_applications.schedule_interview_modal')
-{{ --            @include('employer.job_applications.templates.templates')-- }}
+{{-- @include('employer.job_applications.templates.templates') --}}
             @include('employer.job_applications.add_batch_slot_modal')
             @include('employer.job_applications.edit_batch_slot_modal')
         </div>
         {{ Form::hidden('indexEmployerJobSlot',true,['id'=>'indexEmployerJobSlot']) }}
 @endsection
 @push('scripts')
-    <script>
-        var interviewSlotStoreUrl ="{{ route('employer.interview.slot.store', ['jobId' => request()->route('jobId')]) }}";
-        var batchSlotStoreUrl ="{{ route('employer.batch.slot.store', ['jobId' => request()->route('jobId')]) }}";
-        var uniqueId = 1;
-        var JobApplicationId ="{{ request()->route('jobApplicationId') }}";
-        var getScheduleHistory ="{{ route('employer.schedule.history', ['jobId' => request()->route('jobId')]) }}";
-        var cancelSlotUrl ="{{ route('employer.slot.cancel', ['jobId' => request()->route('jobId')]) }}";
-        var jobApplicationUrl ="{{ url('employer/jobs/'.request()->route('jobId').'/applications') }}";
-    </script>{{ --    <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script>--}}
+    {{-- <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script> --}}
 @endpush
 
+
+@push('scripts')
+    @vite('resources/js/components/view_slot_screen.js')
+@endpush

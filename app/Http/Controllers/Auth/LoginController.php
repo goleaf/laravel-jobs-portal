@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\StoreRequest;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Auth;
@@ -67,7 +69,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
     /**
      * Send the response after the user was authenticated.
      */
-    protected function sendLoginResponse(Request $request): RedirectResponse
+    protected function sendLoginResponse(LoginRequest $request): RedirectResponse
     {
         $request->session()->regenerate();
 
@@ -107,7 +109,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
         return view('auth.passwords.email');
     }
 
-    protected function showResetPassword(Request $request)
+    protected function showResetPassword(StoreRequest $request)
     {
         return view('auth.passwords.reset', ['request' => $request]);
     }

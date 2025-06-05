@@ -15,6 +15,10 @@ use Illuminate\View\View;
 use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
+use App\Http\Requests\StoreJobCategoryRequest;
+
+use App\Http\Requests\DeleteJobCategoryRequest;
+
 class JobCategoryController extends AppBaseController
 {
     /** @var JobCategoryRepository */

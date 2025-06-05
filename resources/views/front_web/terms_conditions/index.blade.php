@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <section class="hero-section relative bg-gray-100 py-40">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                     <div class="hero-content">
@@ -15,7 +15,7 @@
                             <ol class="breadcrumb justify-center mb-0">
                                 <li class="breadcrumb-item"><a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}</a>
                                 </li>
-                                <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('messages.setting.terms_conditions') }}</li>
+                                <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">{{ __('messages.setting.terms_conditions') }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -24,7 +24,7 @@
         </div>
     </section>
 <div class="py-60">
-    <div class="container mx-auto px-4 mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="mb-40">
             <div class="terms-desc">
                 {!! nl2br($termsConditions) !!}
@@ -34,10 +34,11 @@
 </div>
 @endsection
 
-{{ --@section('scripts')-- }}
-{{ --    <script>-- }}
-{{ --        let registerSaveUrl ="{{ route('front.save.register') }}";--}}
-{{ --        let logInUrl ="{{ route('login') }}";--}}
-{{ --    </script>-- }}
-{{ --    <script src="{{asset('assets/js/front_register/front_register.js') }}"></script>--}}
-{{ --@endsection-- }}
+{{-- @section('scripts') --}}
+{{--  --}}
+{{-- <script src="{{asset('assets/js/front_register/front_register.js') }}"></script> --}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/index.js')
+@endpush

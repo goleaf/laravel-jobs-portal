@@ -4,18 +4,18 @@
 @endsection
 
 @section('content')
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="bg-white shadow rounded-lg overflow-hidden header">
-            <h3 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Job Alerts') }}</h3>
-            <div class="bg-white shadow rounded-lg overflow-hidden toolbar">
-                <a href="{{ route('candidate.job.alerts.create') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors primary">
+    <div class="overflow-hidden shadow rounded bg-white -lg">
+        <div class="overflow-hidden shadow rounded bg-white -lg header">
+            <h3 class="overflow-hidden shadow rounded bg-white -lg title">{{ __('Job Alerts') }}</h3>
+            <div class="overflow-hidden shadow rounded bg-white -lg toolbar">
+                <a href="{{ route('candidate.') }}" class="border border-gray-300 bg-transparent">
                     {{ __('Create Alert') }}
                 </a>
             </div>
         </div>
-        <div class="bg-white shadow rounded-lg overflow-hidden body">
-            <p>{{ __('Manage your job alerts here.') }}</p>
-            <!-- Job alerts content would go here -->
+        <div class="overflow-hidden shadow rounded bg-white -lg body">
+            <p>{{ __('Manage your job rounded-md p-4s here.') }}</p>
+            <!-- Job rounded-md p-4s content would go here -->
         </div>
     </div>
 @endsection 

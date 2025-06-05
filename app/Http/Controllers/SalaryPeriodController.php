@@ -13,6 +13,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreSalaryPeriodRequest;
+
+use App\Http\Requests\DeleteSalaryPeriodRequest;
+
 class SalaryPeriodController extends AppBaseController
 {
     /** @var SalaryPeriodRepository */

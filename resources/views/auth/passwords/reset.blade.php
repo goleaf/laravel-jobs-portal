@@ -17,7 +17,7 @@
             <h1 class="text-center mb-7">@lang('web.new_password.new_password')</h1>
             @formOpen(['url' => url('/password/reset'), 'method' => 'POST'])
                 @csrf
-                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                <input type="hidden" name="token" value="{{ $request->route('auth.verify_token') }}">
                 
                 <!-- Email -->
                 <div class="mb-sm-7 mb-4">
@@ -25,7 +25,7 @@
                     <span class="required"></span>
                     {{ Form::email('email', old('email'), [
                         'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid '.($errors->has('email') ? 'is-invalid' : ''),
-                        'required',
+                        'text-red-500',
                         'autofocus',
                         'autocomplete' => 'off',
                         'placeholder' => __('web.common.email')
@@ -43,7 +43,7 @@
                     <div class="mb-3 relative">
                         {{ Form::password('password', [
                             'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid '.($errors->has('password') ? 'is-invalid' : ''),
-                            'required',
+                            'text-red-500',
                             'autocomplete' => 'off',
                             'placeholder' => __('web.common.password')
                         ]) }}

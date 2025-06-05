@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
-            <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="bg-white shadow rounded -lg overflow-hidden">
+                <div class="bg-white shadow rounded -lg overflow-hidden body">
                     {{ Form::open(['route' => 'notification.settings.update']) }}
                     @include('notification_settings.fields')
                     {{ Form::close() }}

@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto fluid">
         @include('flash::message')
-        <div class="flex flex-col">
+        <div class="flex-1 px-4 flex flex-">
             <livewire:branding-sliders-table/>
         </div>
     </div>

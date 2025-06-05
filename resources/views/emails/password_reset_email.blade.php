@@ -78,7 +78,7 @@
                 <table width="100%">
                     <tr>
                         <td>
-                            {!! $body !!}
+                            {{ $body }}
                         </td>
                     </tr>
                 </table>

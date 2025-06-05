@@ -78,7 +78,7 @@
                 <table width="100%">
                     <tr>
                         <td>
-                            {!! $data['body'] !!}
+                            {{ $data['body'] }}
                         </td>
                     </tr>
                 </table>

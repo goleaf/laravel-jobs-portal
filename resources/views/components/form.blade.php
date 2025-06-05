@@ -6,7 +6,7 @@
 ])
 
 @php
-    $spoofedMethods = ['PUT', 'PATCH', 'DELETE'];
+    $spoofedMethods = ['PUT', 'PATCH', 'DELETE']);
     $method = strtoupper($method);
     $hasMethodField = in_array($method, $spoofedMethods);
 @endphp

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\Web\StoreRequest;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\EmailJobToFriendRequest;
 use App\Models\Job;
@@ -40,7 +41,7 @@ class JobController extends AppBaseController
      *
      * @return Application|Factory|View
      */
-    public function index(Request $request): View
+    public function index(StoreRequest $request): View
     {
         // Check if this is an admin request (based on route or user role)
         if ($request->route()->getPrefix() === 'admin' || (auth()->check() && auth()->user()->hasRole('Admin'))) {

@@ -26,10 +26,10 @@ Route::get('/test', function () {
 })->name('test');
 
 // Home route - aliased as both 'home' and 'front.home'
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
 
-// Add alias for front.home
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('front.home');
+// Add alias for front.home  
+Route::get('/', [App\Http\Controllers\Web\HomeController::class, 'index'])->name('front.home');
 
 // Authentication Routes
 Route::get('/login', function () {
@@ -165,10 +165,10 @@ Route::get('/posts', function () {
 
 Route::get('/job-listing', function () {
     return view('jobs.index');
-})->name('job.index');
+})->name('front.job.listing');
 
 // Company management routes
-Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
+Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('front.company.index');
 Route::get('/company/create', [App\Http\Controllers\CompanyController::class, 'create'])->name('company.create');
 
 // CRITICAL MISSING ROUTES - Adding routes that are referenced in blade files
@@ -1359,4 +1359,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     Route::get('/ownership-types', [App\Http\Controllers\Admin\OwnershipTypeController::class, 'index'])
         ->name('ownerShipType.index');
+});
+
+
+// Context7 Critical Missing Routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/candidates/create', [App\Http\Controllers\Web\CandidateController::class, 'create'])->name('candidates.create');
+    Route::get('/dashboard', function () { return view('admin.dashboard.index'); })->name('dashboard');
+});
+
+// Candidate Dashboard Routes
+Route::middleware(['auth'])->prefix('candidate')->name('candidate.')->group(function () {
+    Route::get('/dashboard', function () { return view('candidate.dashboard.dashboard'); })->name('dashboard');
+});
+
+// Employer Dashboard Routes
+Route::middleware(['auth'])->prefix('employer')->name('employer.')->group(function () {
+    Route::get('/dashboard', function () { return view('employer.dashboard.index'); })->name('dashboard');
 });

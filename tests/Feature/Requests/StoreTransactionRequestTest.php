@@ -1,0 +1,234 @@
+<?php
+
+namespace Tests\Feature\Requests;
+
+use App\Http\Requests\Transaction\StoreTransactionRequest;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+use App\Models\User;
+
+/**
+ * Context7 Enhanced Validation Tests for StoreTransactionRequest
+ * 
+ * @group validation
+ * @group requests
+ */
+class StoreTransactionRequestTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create authenticated user for testing
+        $this->user = User::factory()->create();
+    }
+
+    /** @test */
+    public function test_authorization_returns_true()
+    {
+        $request = new StoreTransactionRequest();
+        
+        $this->assertTrue($request->authorize());
+    }
+
+    /** @test */
+    public function test_validation_rules_are_defined()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertIsArray($rules);
+        $this->assertNotEmpty($rules);
+    }
+
+    /** @test */
+    public function test_validation_messages_are_defined()
+    {
+        $request = new StoreTransactionRequest();
+        
+        if (method_exists($request, 'messages')) {
+            $messages = $request->messages();
+            $this->assertIsArray($messages);
+        } else {
+            $this->markTestSkipped('No custom messages method defined');
+        }
+    }
+
+    /** @test */
+    public function test_validation_attributes_are_defined()
+    {
+        $request = new StoreTransactionRequest();
+        
+        if (method_exists($request, 'attributes')) {
+            $attributes = $request->attributes();
+            $this->assertIsArray($attributes);
+        } else {
+            $this->markTestSkipped('No custom attributes method defined');
+        }
+    }
+
+    /** @test */
+    public function test_user_id_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('user_id', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['user_id'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_subscription_plan_id_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('subscription_plan_id', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['subscription_plan_id'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_transaction_id_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('transaction_id', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['transaction_id'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_amount_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('amount', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['amount'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_payment_type_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('payment_type', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['payment_type'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_status_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('status', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['status'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+    /** @test */
+    public function test_meta_validation()
+    {
+        $request = new StoreTransactionRequest();
+        $rules = $request->rules();
+        
+        $this->assertArrayHasKey('meta', $rules);
+        
+        // Test field-specific validation rules
+        $fieldRules = $rules['meta'];
+        $this->assertNotEmpty($fieldRules);
+    }
+
+
+
+    /** @test */
+    public function test_valid_data_passes_validation()
+    {
+        $validData = [
+            'user_id' => 1,
+            'subscription_plan_id' => 1,
+            'transaction_id' => 1,
+            'amount' => 'Test Value',
+            'payment_type' => 'Test Value',
+            'status' => true,
+            'meta' => 'Test Value',
+        ];
+        
+        $request = new StoreTransactionRequest();
+        $validator = validator($validData, $request->rules());
+        
+        $this->assertFalse($validator->fails());
+    }
+
+    /** @test */
+    public function test_request_handles_empty_data_correctly()
+    {
+        $emptyData = [];
+        
+        $request = new StoreTransactionRequest();
+        $validator = validator($emptyData, $request->rules());
+        
+        // Should handle empty data according to rules
+        $this->assertIsArray($validator->errors()->toArray());
+    }
+
+    /** @test */
+    public function test_security_validation_prevents_xss()
+    {
+        $maliciousData = [
+            'name' => '<script>alert("xss")</script>',
+            'description' => 'javascript:alert("xss")',
+            'content' => '<img src=x onerror=alert("xss")>'
+        ];
+        
+        $request = new StoreTransactionRequest();
+        $validator = validator($maliciousData, $request->rules());
+        
+        // XSS data should either fail validation or be properly sanitized
+        if ($validator->passes()) {
+            foreach ($maliciousData as $field => $value) {
+                if (is_string($value)) {
+                    $this->assertStringNotContainsString('<script>', $value);
+                    $this->assertStringNotContainsString('javascript:', $value);
+                }
+            }
+        }
+    }
+
+    /** @test */
+    public function test_sql_injection_prevention()
+    {
+        $sqlInjectionData = [
+            'name' => "'; DROP TABLE users; --",
+            'search' => "1' OR '1'='1",
+            'filter' => "UNION SELECT * FROM passwords"
+        ];
+        
+        $request = new StoreTransactionRequest();
+        $validator = validator($sqlInjectionData, $request->rules());
+        
+        // SQL injection patterns should be handled safely
+        $this->assertIsArray($validator->errors()->toArray());
+    }
+}

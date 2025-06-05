@@ -4,7 +4,7 @@
              class="">
     </div>
     <div class="flex flex-col">
-        <a href="{{ route('front.job.details', $row->$job->job_id) }}" class="text-decoration-none"
+        <a href="{{ route('front.', $row->$job->job_id) }}" class="text-decoration-none"
            target="_blank">{{ $row->$job->job_title }}</a>
     </div>
 </div>

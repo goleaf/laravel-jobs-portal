@@ -2,14 +2,14 @@
 @section('title')
     {{ __('web.job_details.apply_for_job') }}
 @endsection
-{{ -- @section('page_css') -- }}
-{{ --    <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css') }}"> --}}
-{{ --        <link href="{{asset('front_web/scss/apply-details.css') }}" rel="stylesheet" type="text/css"> --}}
-{{ -- @endsection -- }}
+{{-- @section('page_css') --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css') }}"> --}}
+{{-- <link href="{{asset('front_web/scss/apply-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{-- @endsection --}}
 @section('content')
     <div class="apply-job-page">
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -20,7 +20,7 @@
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">
                                         @lang('web.job_details.apply_for_job')
                                     </li>
                                 </ol>
@@ -32,18 +32,18 @@
         </section>
 
         <section class="apply-job-section contact-section py-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="upper-box">
                     <div class="flex flex-wrap">
-                        <div class="col-xl-8 flex-1 md-10 mx-auto mb-4">
+                        <div class="flex-1 -xl-8 flex-1 md-10 mx-auto mb-4">
                             <div class="flex flex-wrap mb-3">
                                 <div class="flex-1 lg-2">
                                     <img src="{{ $job->$company->company_url }}"
-                                        class="mb-4 apply-img rounded-circle object-fit-cover">
+                                        class="mb-4 apply-img rounded -circle object-fit-cover">
                                 </div>
                                 <div class="flex-1 lg-10">
                                     <h2 class="ml-3 mb-2">{{ __('web.apply_for_job.apply_for') }}</h2> <span
-                                        class="text-primary-600 ml-3">{{ $job->job_title }}</span>
+                                        class="text-indigo-600 -600 ml-3">{{ $job->job_title }}</span>
                                 </div>
                             </div>
                             <h3 class="fs-4 mb-0">{{ __('web.apply_for_job.fill_details') }}</h3>
@@ -60,18 +60,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-8 flex-1 md-10 mx-auto">
+                <div class="flex-1 -xl-8 flex-1 md-10 mx-auto">
                     @formOpen(['id' => 'applyJobForm', 'class' => 'py-40 px-40 bg-gray'])
                         @csrf
                         @include('front_web.layouts.errors')
                         @include('flash::message')
                         <input type="hidden" value="{{ isset($job) ? $job->id : null }}" name="job_id">
                         <div class="flex flex-wrap">
-                            <div class="form-group lg:w-full px-2 md:w-full flex-1 sm-12">
+                            <div class="mb-4 lg:w-full px-2 md:w-full flex-1 sm-12">
                                 <div class="response"></div>
                             </div>
 
-                            <div class="lg:w-6/12 px-2 md:w-full flex-1 sm-12 form-group mb-md-4 mb-3">
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 sm-12 mb-4 mb-md-4 mb-3">
                                 {{ Form::label('resumeId', __('messages.apply_job.resume').':', ['class' => 'fs-16 text-secondary mb-3']) }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::select('resume_id', $resumes, ($isJobDrafted ? $draftJobDetails->resume_id : ''), [
@@ -84,7 +84,7 @@
                                 ]) }}
                             </div>
 
-                            <div class="lg:w-6/12 px-2 md:w-full flex-1 sm-12 form-group mb-md-4 mb-3">
+                            <div class="lg:w-6/12 px-2 md:w-full flex-1 sm-12 mb-4 mb-md-4 mb-3">
                                 {{ Form::label('expected_salary', __('messages.candidate.expected_salary').':', ['class' => 'fs-16 text-secondary mb-3']) }}
                                 <span class="text-red-600">*</span>
                                 {{ Form::text('expected_salary', ($isJobDrafted ? $draftJobDetails->expected_salary : ''), [
@@ -92,12 +92,12 @@
                                     'id' => 'expected_salary',
                                     'min' => '0',
                                     'max' => '9999999999',
-                                    'required'
+                                    'text-red-500'
                                 ]) }}
                             </div>
 
                             <div class="flex-1 md-12 mb-4">
-                                <div class="form-group">
+                                <div class="mb-4">
                                     {{ Form::label('notes', __('messages.apply_job.notes').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                     {{ Form::textarea('notes', ($isJobDrafted ? $draftJobDetails->notes : ''), [
                                         'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10',
@@ -107,27 +107,27 @@
                                 </div>
                             </div>
                             @if (getSettingValue('enable_google_recaptcha'))
-                                <div class="lg:w-full px-2 md:w-full flex-1 sm-12 form-group mb-4 text-center">
+                                <div class="lg:w-full px-2 md:w-full flex-1 sm-12 mb-4 mb-4 text-center">
                                     <div class="g-recaptcha flex justify-center"
                                         data-sitekey="{{ config('app.google_recaptcha_site_key') }}" name="g-recaptcha"
                                         id="g-recaptcha" required></div>
                                     <div id="g-recaptcha-error" required></div>
                                 </div>
                             @endif
-                            <div class="lg:w-full px-2 md:w-full flex-1 sm-12 form-group text-center">
+                            <div class="lg:w-full px-2 md:w-full flex-1 sm-12 mb-4 text-center">
                                 @if (!$isApplied)
                                     @if (!$isJobDrafted)
                                         {{ Form::button(__('web.common.save_as_draft'), [
                                             'class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors btn-primary-register mx-2 save-draft',
                                             'id' => 'draftJobSave',
-                                            'data-loading-text' =>"<span class="spinner-border spinner-border-sm"></span>".__('messages.common.process')
+                                            'data-loading-text' =>"<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded -full spinner- border border border-gray-300 -gray-300 -sm"></span>".__('messages.common.process')
                                         ]) }}
                                     @endif
                                     @if ($isActive && !$job->is_suspended)
                                         {{ Form::button(__('web.common.apply'), [
                                             'class' => 'rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors mx-2 apply-job',
                                             'id' => 'applyJobSave',
-                                            'data-loading-text' =>"<span class="spinner-border spinner-border-sm"></span>".__('messages.common.process')
+                                            'data-loading-text' =>"<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded -full spinner- border border border-gray-300 -gray-300 -sm"></span>".__('messages.common.process')
                                         ]) }}
                                     @endif
                                 @else
@@ -138,17 +138,18 @@
                             </div>
                         </div>
                     @formClose()
-                    {{ --                @endif -- }}
+                    {{-- @endif --}}
                 </div>
             </div>
         </section>
     </div>
 @endsection
-{{ -- @section('page_scripts') -- }}
-{{ --    <script> -- }}
-{{ --        let applyJobUrl ="{{ route('apply-job') }}"; --}}
-{{ --        let jobDetailsUrl ="{{ url('job-details') }}"; --}}
-{{ --    </script> -- }}
-{{ --    <script src="{{asset('assets/js/custom/input_price_format.js') }}"></script> --}}
-{{ --    <script src="{{ asset('assets/js/jobs/front/apply_job.js') }}"></script> --}}
-{{ -- @endsection -- }}
+{{-- @section('page_scripts') --}}
+{{--  --}}
+{{-- <script src="{{asset('assets/js/custom/input_price_format.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/js/jobs/front/apply_job.js') }}"></script> --}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/apply_job.js')
+@endpush

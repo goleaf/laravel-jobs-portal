@@ -1,19 +1,19 @@
+
+@push('styles')
+    @vite('resources/css/pages/index.css')
+@endpush
 @extends('front_web_template.layouts.app')
 @section('title')
     {{ __('web.contact_us') }}
 @endsection
 @section('page_css')
-    <style>
-        .iti {
-            display: block !important;
-        }
-    </style>
+    
 @endsection
 @section('content')
     <div class="Blog-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center">
                         <div class="hero-content">
@@ -24,7 +24,7 @@
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">
                                         {{ __('web.contact_us') }}
                                     </li>
                                 </ol>
@@ -38,7 +38,7 @@
 
         <!--start contact-us-section-->
         <section class="contact-us-section py-60 mb-5">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="contact-us bg-gray-100 br-10">
                     <div class="flex flex-wrap">
                         <div class="flex-1 lg-3 lg:block hidden text-end">
@@ -53,41 +53,41 @@
                                         {{ __('web.home_menu.contact_us') }}
                                     </h2>
                                 </div>
-                                @formOpen(['url' => route('front.contact.store'), 'id' => 'contactForm'])
+                                @formOpen(['url' => route('front.'), 'id' => 'contactForm'])
                                     @csrf
                                     <div class="flex flex-wrap">
                                         <div class="flex-1 md-6">
-                                            <div class="form-group mb-4">
+                                            <div class="mb-4 mb-4">
                                                 {{ Form::label('name', __('web.common.name').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::text('name', old('name'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.enter_your_name')]) }}
+                                                {{ Form::text('name', old('name'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'text-red-500', 'placeholder' => __('web.contact_menu.enter_your_name')]) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 md-6">
-                                            <div class="form-group mb-4">
+                                            <div class="mb-4 mb-4">
                                                 {{ Form::label('email', __('web.common.email').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'required', 'placeholder' => __('web.common.email')]) }}
+                                                {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'text-red-500', 'placeholder' => __('web.common.email')]) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 md-6">
-                                            <div class="form-group mb-4">
+                                            <div class="mb-4 mb-4">
                                                 {{ Form::label('subject', __('web.contact_menu.subject').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::text('subject', old('subject'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'required', 'placeholder' => __('web.contact_menu.subject')]) }}
+                                                {{ Form::text('subject', old('subject'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'text-red-500', 'placeholder' => __('web.contact_menu.subject')]) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 md-6">
-                                            <div class="form-group mb-4">
+                                            <div class="mb-4 mb-4">
                                                 {{ Form::label('phone_no', __('web.web_contact.phone_number').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 {{ Form::tel('phone_no', old('phone_no'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'placeholder' => __('web.web_contact.phone_number')]) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -12">
-                                            <div class="form-group mb-4">
+                                            <div class="mb-4 mb-4">
                                                 {{ Form::label('message', __('web.contact_menu.message').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                                 <span class="text-red-600">*</span>
-                                                {{ Form::textarea('message', old('message'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'rows' => 5, 'required', 'placeholder' => __('web.contact_menu.type_message')]) }}
+                                                {{ Form::textarea('message', old('message'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10', 'rows' => 5, 'text-red-500', 'placeholder' => __('web.contact_menu.type_message')]) }}
                                             </div>
                                         </div>
                                         <div class="flex-1 -12 mb-4">
@@ -108,15 +108,13 @@
         <!--end contact-us-section-->
     </div>
 @endsection
-<script>
-    var phoneNo ="{{ old('region_code') . old('phone_no') }}";
-</script>
-{{ -- @section('page_scripts') -- }}
-{{ --    <script> -- }}
-{{ --        let isEdit = false -- }}
-{{ --        var phoneNo ="{{ old('region_code').old('phone') }}" --}}
-{{ --        let utilsScript ="{{asset('assets/js/inttel/js/utils.min.js') }}" --}}
-{{ --    </script> -- }}
 
-{{ --    {{-- CDN JS removed - now using local assets -- }} --}}
-{{ -- @endsection -- }}
+{{-- @section('page_scripts') --}}
+{{--  --}}
+
+{{-- {{-- CDN JS removed - now using local assets --}} --}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/index.js')
+@endpush

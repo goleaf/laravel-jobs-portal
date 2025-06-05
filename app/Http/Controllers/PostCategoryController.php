@@ -12,6 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StorePostCategoryRequest;
+
+use App\Http\Requests\DeletePostCategoryRequest;
+
 class PostCategoryController extends AppBaseController
 {
     /** @var PostCategoryRepository */

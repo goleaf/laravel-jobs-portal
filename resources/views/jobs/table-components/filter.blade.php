@@ -1,6 +1,6 @@
 <div class="ms-auto" wire:ignore>
     <div class="relative inline-block text-left flex items-center me-4 me-md-2">
-        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-icon px-4 py-2 rounded font-medium transition-colors primary text-white inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hide-arrow ps-2 pe-0" type="button"
+        <button class="rounded-md transition" type="button"
             id="jobsFilterBtn"data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
             <p class="text-center">
                 <i class='fas fa-filter'></i>
@@ -28,7 +28,7 @@
                     {{ Form::select('is_freelance',collect($filterHeads[0][3])->sortBy('key')->toArray(),null,['class' => 'form-select io-select2 abc', 'data-control' => 'select2', 'id' => 'JobStatus']) }}
                 </div>
                 <div class="flex justify-end">
-                    <button type="reset" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary"
+                    <button type="reset" class="rounded-md transition"
                         id="job-ResetFilter">{{ __('messages.common.reset') }}</button>
                 </div>
             </div>

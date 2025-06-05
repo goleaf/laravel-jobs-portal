@@ -15,12 +15,8 @@ return new class extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->integer('is_approved')->after('status')->default('1');
         });
-
-        Artisan::call(
-            'db:seed',
-            ['--class' => 'DefaultCountryCodeSeeder', '--force' => true]
-        );
-    }
+        // Seeding removed - handled by separate seeders
+}
 
     /**
      * Reverse the migrations.

@@ -1,0 +1,7 @@
+/* privacy-policy Component Styles */
+/* Enhanced for TailwindCSS compatibility */
+
+body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+

@@ -15,6 +15,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreCareerLevelRequest;
+
+use App\Http\Requests\DeleteCareerLevelRequest;
+
 class CareerLevelController extends AppBaseController
 {
     /** @var CareerLevelRepository */

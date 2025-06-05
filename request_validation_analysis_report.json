@@ -1,0 +1,404 @@
+{
+    "timestamp": "2025-06-06 07:04:23",
+    "stats": {
+        "total_controllers": 35,
+        "total_methods": 142,
+        "methods_with_requests": 38,
+        "methods_needing_validation": 17,
+        "request_files": 31,
+        "validation_coverage": 223.52941176470588
+    },
+    "controllers": {
+        "EmailTemplateController": {
+            "file": "app\/Http\/Controllers\/Admin\/EmailTemplateController.php",
+            "all_methods": [
+                "index",
+                "edit"
+            ],
+            "validation_methods": {
+                "1": "edit"
+            },
+            "methods_with_requests": [],
+            "missing_validation": {
+                "1": "edit"
+            },
+            "validation_coverage": 0
+        },
+        "BlogCommentController": {
+            "file": "app\/Http\/Controllers\/Front\/BlogCommentController.php",
+            "all_methods": [
+                "store"
+            ],
+            "validation_methods": [
+                "store"
+            ],
+            "methods_with_requests": [
+                "store"
+            ],
+            "missing_validation": [],
+            "validation_coverage": 100
+        },
+        "CandidateController": {
+            "file": "app\/Http\/Controllers\/Web\/CandidateController.php",
+            "all_methods": [
+                "__construct",
+                "index",
+                "create",
+                "store",
+                "show",
+                "edit",
+                "update",
+                "destroy",
+                "getCandidateDetails",
+                "getCandidatesLists"
+            ],
+            "validation_methods": {
+                "2": "create",
+                "3": "store",
+                "5": "edit",
+                "6": "update",
+                "7": "destroy"
+            },
+            "methods_with_requests": [
+                "store",
+                "update",
+                "getCandidatesLists"
+            ],
+            "missing_validation": {
+                "2": "create",
+                "5": "edit",
+                "7": "destroy"
+            },
+            "validation_coverage": 60
+        },
+        "JobController": {
+            "file": "app\/Http\/Controllers\/Web\/JobController.php",
+            "all_methods": [
+                "__construct",
+                "index",
+                "create",
+                "store",
+                "show",
+                "edit",
+                "update",
+                "destroy",
+                "jobDetails",
+                "saveFavouriteJob",
+                "reportJobAbuse",
+                "emailJobToFriend"
+            ],
+            "validation_methods": {
+                "2": "create",
+                "3": "store",
+                "5": "edit",
+                "6": "update",
+                "7": "destroy"
+            },
+            "methods_with_requests": [
+                "index",
+                "store",
+                "update",
+                "saveFavouriteJob",
+                "reportJobAbuse",
+                "emailJobToFriend"
+            ],
+            "missing_validation": {
+                "2": "create",
+                "5": "edit",
+                "7": "destroy"
+            },
+            "validation_coverage": 120
+        },
+        "TransactionController": {
+            "file": "app\/Http\/Controllers\/Web\/TransactionController.php",
+            "all_methods": [
+                "index",
+                "create",
+                "store",
+                "show",
+                "edit",
+                "update",
+                "destroy"
+            ],
+            "validation_methods": {
+                "1": "create",
+                "2": "store",
+                "4": "edit",
+                "5": "update",
+                "6": "destroy"
+            },
+            "methods_with_requests": [
+                "store",
+                "update"
+            ],
+            "missing_validation": {
+                "1": "create",
+                "4": "edit",
+                "6": "destroy"
+            },
+            "validation_coverage": 40
+        }
+    },
+    "requests": {
+        "StoreAdminRequest": {
+            "file": "app\/Http\/Requests\/Admin\/StoreAdminRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 6,
+            "quality_score": 92
+        },
+        "StoreMasterDataRequest": {
+            "file": "app\/Http\/Requests\/Admin\/StoreMasterDataRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "StoreOwnershipTypeRequest": {
+            "file": "app\/Http\/Requests\/Admin\/StoreOwnershipTypeRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "StoreReportedJobRequest": {
+            "file": "app\/Http\/Requests\/Admin\/StoreReportedJobRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "UpdateAdminRequest": {
+            "file": "app\/Http\/Requests\/Admin\/UpdateAdminRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 6,
+            "quality_score": 92
+        },
+        "UpdateMasterDataRequest": {
+            "file": "app\/Http\/Requests\/Admin\/UpdateMasterDataRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "UpdateOwnershipTypeRequest": {
+            "file": "app\/Http\/Requests\/Admin\/UpdateOwnershipTypeRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "UpdateReportedJobRequest": {
+            "file": "app\/Http\/Requests\/Admin\/UpdateReportedJobRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "ForgotPasswordRequest": {
+            "file": "app\/Http\/Requests\/Auth\/ForgotPasswordRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 1,
+            "quality_score": 82
+        },
+        "LoginRequest": {
+            "file": "app\/Http\/Requests\/Auth\/LoginRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "RegisterRequest": {
+            "file": "app\/Http\/Requests\/Auth\/RegisterRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 4,
+            "quality_score": 88
+        },
+        "ResetPasswordRequest": {
+            "file": "app\/Http\/Requests\/Auth\/ResetPasswordRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 3,
+            "quality_score": 86
+        },
+        "StoreConfirmPasswordRequest": {
+            "file": "app\/Http\/Requests\/Auth\/StoreConfirmPasswordRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "UpdateConfirmPasswordRequest": {
+            "file": "app\/Http\/Requests\/Auth\/UpdateConfirmPasswordRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "StoreCandidateRequest": {
+            "file": "app\/Http\/Requests\/Candidate\/StoreCandidateRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "UpdateCandidateRequest": {
+            "file": "app\/Http\/Requests\/Candidate\/UpdateCandidateRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "StoreCompanyRequest": {
+            "file": "app\/Http\/Requests\/Company\/StoreCompanyRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "UpdateCompanyRequest": {
+            "file": "app\/Http\/Requests\/Company\/UpdateCompanyRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "ContactFormRequest": {
+            "file": "app\/Http\/Requests\/Contact\/ContactFormRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 6,
+            "quality_score": 92
+        },
+        "CreateCompanyRequest": {
+            "file": "app\/Http\/Requests\/Enhanced\/CreateCompanyRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 19,
+            "quality_score": 100
+        },
+        "CreateUserRequest": {
+            "file": "app\/Http\/Requests\/Enhanced\/CreateUserRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 17,
+            "quality_score": 100
+        },
+        "CreateJobRequest": {
+            "file": "app\/Http\/Requests\/Job\/CreateJobRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 1,
+            "quality_score": 82
+        },
+        "JobFilterRequest": {
+            "file": "app\/Http\/Requests\/Job\/JobFilterRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 22,
+            "quality_score": 100
+        },
+        "StoreJobRequest": {
+            "file": "app\/Http\/Requests\/Job\/StoreJobRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "UpdateJobRequest": {
+            "file": "app\/Http\/Requests\/Job\/UpdateJobRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "StoreTransactionRequest": {
+            "file": "app\/Http\/Requests\/Transaction\/StoreTransactionRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 5,
+            "quality_score": 90
+        },
+        "UpdateTransactionRequest": {
+            "file": "app\/Http\/Requests\/Transaction\/UpdateTransactionRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 2,
+            "quality_score": 84
+        },
+        "StoreUserRequest": {
+            "file": "app\/Http\/Requests\/User\/StoreUserRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 14,
+            "quality_score": 100
+        },
+        "UserLoginRequest": {
+            "file": "app\/Http\/Requests\/User\/UserLoginRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 2,
+            "quality_score": 84
+        },
+        "StoreCategoriesRequest": {
+            "file": "app\/Http\/Requests\/Web\/StoreCategoriesRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        },
+        "UpdateCategoriesRequest": {
+            "file": "app\/Http\/Requests\/Web\/UpdateCategoriesRequest.php",
+            "has_rules": true,
+            "has_messages": true,
+            "has_authorize": true,
+            "rules_count": 0,
+            "quality_score": 80
+        }
+    },
+    "issues": [
+        "\u26a0\ufe0f  Request file StoreMasterDataRequest has no validation rules",
+        "\u26a0\ufe0f  Request file StoreOwnershipTypeRequest has no validation rules",
+        "\u26a0\ufe0f  Request file StoreReportedJobRequest has no validation rules",
+        "\u26a0\ufe0f  Request file UpdateMasterDataRequest has no validation rules",
+        "\u26a0\ufe0f  Request file UpdateOwnershipTypeRequest has no validation rules",
+        "\u26a0\ufe0f  Request file UpdateReportedJobRequest has no validation rules",
+        "\u26a0\ufe0f  Request file StoreConfirmPasswordRequest has no validation rules",
+        "\u26a0\ufe0f  Request file UpdateConfirmPasswordRequest has no validation rules",
+        "\u26a0\ufe0f  Request file StoreCategoriesRequest has no validation rules",
+        "\u26a0\ufe0f  Request file UpdateCategoriesRequest has no validation rules"
+    ]
+}

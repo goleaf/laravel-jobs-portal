@@ -1,9 +1,10 @@
 /**
  * Action Buttons Component
  * Handles edit and delete actions for table components
+ * Enhanced with Context7 patterns
  */
 
-export class ActionButtons {
+class ActionButtons {
     constructor() {
         this.initializeEventListeners();
     }
@@ -77,7 +78,23 @@ export class ActionButtons {
     }
 }
 
+// Global function for delete confirmation
+function confirmDelete(id) {
+    if (confirm("Are you sure you want to delete this item?")) {
+        if (window.Livewire) {
+            window.Livewire.emit('deleteJobType', id);
+        }
+    }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new ActionButtons();
-}); 
+    try {
+        new ActionButtons();
+    } catch (error) {
+        console.error('Error in action-buttons component:', error);
+    }
+});
+
+// Make confirmDelete available globally
+window.confirmDelete = confirmDelete;

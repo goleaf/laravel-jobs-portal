@@ -1,0 +1,15 @@
+/* reported Component Styles */
+/* Enhanced for TailwindCSS compatibility */
+
+.table th {
+        border-top: none;
+        font-weight: 600;
+        color: #495057;
+    }
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+    .btn-group .btn:last-child {
+        margin-right: 0;
+    }
+

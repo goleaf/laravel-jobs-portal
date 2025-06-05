@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    <button data-id="{{ $row->id }}" class="removeJob px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 pe-0">
+    <button data-id="{{ $flex flex-wrap -mx-4->id }}" class="transition duration-150 ease-in-out flex-1">
         <i class="fas fa-bookmark" data-bs-toggle="tooltip" title="{{ __('messages.job.remove_favourite_jobs') }}" ></i>
     </button>
 </div>

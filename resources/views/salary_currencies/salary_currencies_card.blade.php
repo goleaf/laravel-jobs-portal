@@ -1,7 +1,7 @@
-<div class="col-xl-4 flex-1 md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
-    <div class="hover-effect-border relative mb-5 border-hover-primary employee-border">
+<div class="flex-1 -xl-4 flex-1 md-6 candidate- bg-white shadow rounded -lg overflow-hidden">
+    <div class="hover-effect-border relative mb-5 border-hover-primary employee- border border-gray-300">
         <div class="employee-listing-details">
-            <div class="flex employee-listing-description items-center justify-center flex-col">
+            <div class="flex employee-listing-description items-center justify-center flex- flex-1">
                 <div class="mb-auto w-full employee-data mt-4">
                     <div class="text-center">
                         <label class="employee-label">{{ __('messages.salary_currency.currency_name') }} :</label>

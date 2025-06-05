@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Models\EnvSetting;
 use App\Models\Language;
@@ -35,7 +36,7 @@ class SettingController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function index(Request $request): View
+    public function index(StoreRequest $request): View
     {
         $envData = $this->settingRepository->getEnvData();
         // $envData['mail']['MAIL_USERNAME'] = str_replace('"', '', $envData['mail']['MAIL_USERNAME']);

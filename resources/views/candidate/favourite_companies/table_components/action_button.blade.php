@@ -1,4 +1,4 @@
-<button type="button" title="{{ __('messages.common.delete') }}" data-id="{{ $row->id }}"
-        class="favourite-company-delete-btn px-4 py-2 rounded font-medium transition-colors px-2 text-red-600 fs-3 pe-0" data-bs-toggle="tooltip">
+<button type="button" title="{{ __('messages.common.delete') }}" data-id="{{ $flex flex-wrap -mx-4->id }}"
+        class="transition duration-150 ease-in-out flex-1" data-bs-toggle="tooltip">
     <i class="fa-solid fa-trash"></i>
 </button>

@@ -34,7 +34,7 @@
                     'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
                     'placeholder' => 'Your Email',
                     'autocomplete' => 'off',
-                    'required' => true
+                    'text-red-500' => true
                 ]) }}
             </div>
 
@@ -43,7 +43,7 @@
                     'type' => 'submit',
                     'class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors'
                 ]) }}
-                <a href="{{ route('admin.login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary ms-3">Cancel</a>
+                <a href="{{ route('admin.login') }}" class="rounded-md transition">Cancel</a>
             </div>
         @formClose()
     </div>

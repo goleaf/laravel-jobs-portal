@@ -18,10 +18,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Jobs API endpoint for testing
-Route::get('/jobs', function (Request $request) {
+/*
+|--------------------------------------------------------------------------
+| Context7 Authentication Routes
+|--------------------------------------------------------------------------
+*/
+require __DIR__.'/auth_context7.php';
+
+/*
+|--------------------------------------------------------------------------
+| Context7 API v1 Routes  
+|--------------------------------------------------------------------------
+*/
+require __DIR__.'/api_context7.php';
+
+// Legacy API endpoints for security testing
+Route::get('/jobs', function () {
     return response()->json([
-        'message' => 'Jobs endpoint',
-        'data' => []
-    ]);
-})->middleware('auth:api');
+        'message' => 'API endpoint requires authentication',
+        'status' => 'unauthorized'
+    ], 401);
+})->name('api.jobs.index');

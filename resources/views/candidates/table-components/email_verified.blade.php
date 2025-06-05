@@ -1,15 +1,18 @@
 <div class="flex justify-center">
     @if(!$row->user->email_verified_at)
         <label class="flex items-center form-switch form-switch-sm justify-center">
-            <input type="checkbox" name="Is isActive"
-                   class="flex items-center form-check-input is-email-verified is-candidate-email-verified" data-id="{{ $row->id }}">
+            <input type="checkbox" 
+                   name="email_verified" 
+                   class="email-verified-toggle focus:ring-indigo-500 h-4 w-4 text-indigo-600 border border-gray-300 -gray-300 rounded" 
+                   value="1" 
+                   data-id="{{ $row->id }}" 
+                   {{ ($row->user->email_verified_at) ? 'checked' : '' }}>
+            <span class="ml-2 text-sm text-gray-700">{{ __('messages.common.verified') }}</span>
         </label>
     @else
-        <div>
-            <a title="{{ __('messages.common.resend_verification_mail') }}"
-               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-icon text-primary-600 edit-btn px-4 py-2 rounded font-medium transition-colors send-email-verification" data-id="{{ $row->id }}">
-                <i title="{{ __('messages.common.resend_verification_mail') }}" class="fa fa-sync"></i>
-            </a>
+        <div class="border border-gray-300 bg-transparent">
+            <i class="fas fa-check-circle mr-1"></i>
+            {{ __('messages.common.verified') }}
         </div>
     @endif
 </div>

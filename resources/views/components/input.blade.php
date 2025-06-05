@@ -5,7 +5,7 @@
     'label' => null,
     'value' => null,
     'placeholder' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'autofocus' => false,
     'class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50',
@@ -20,24 +20,24 @@
 
 <div class="{{ $containerClass }}">
     @if($label)
-        {!! Form::label($name, $label, ['class' => 'block font-medium text-sm text-gray-700']) !!}
+        {{ Form::label($name, $label, ['class' => 'block font-medium text-sm text-gray-700']) !!}
     @endif
 
     @if($type === 'textarea')
-        {!! Form::textarea($name, $value, [
+        {{ Form::textarea($name, $value, [
             'id' => $id,
             'class' => $errors->has($name) ? $class . ' border-red-500' : $class,
             'placeholder' => $placeholder,
-            'required' => $required,
+            'text-red-500' => $required,
             'disabled' => $disabled,
             'autofocus' => $autofocus
         ]) !!}
     @else
-        {!! Form::$type($name, $value, [
+        {{ Form::$type($name, $value, [
             'id' => $id,
             'class' => $errors->has($name) ? $class . ' border-red-500' : $class,
             'placeholder' => $placeholder,
-            'required' => $required,
+            'text-red-500' => $required,
             'disabled' => $disabled,
             'autofocus' => $autofocus
         ]) !!}

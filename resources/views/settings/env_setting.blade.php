@@ -5,16 +5,16 @@
 @section('section')
     {{ Form::open(['route' => 'settings.update', 'id' => 'envUpdateForm']) }}
     {{ Form::hidden('sectionName', $sectionName) }}
-    <div class="flex flex-wrap mt-3">
-        {{ --        <div class="flex-1 md-12 flex justify-end">-- }}
-        {{ --            <label class="custom-switch mt-2">-- }}
-        {{ --                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input flex items-center input" id="enableEdit">-- }}
-        {{ --                <span class="custom-switch-indicator"></span>-- }}
-        {{ --                <span class="custom-switch-description fs-6 fw-bolder text-gray-700 mb-3 mt-5"-- }}
-        {{ --                      id="envUpdateText">{{ __('messages.setting.enable_edit') }}</span>--}}
-        {{ --            </label>-- }}
-        {{ --        </div>-- }}
-        <div class="flex-1 sm-6 mb-5">
+    <div class="flex-wrap mt-3 flex">
+        {{-- <div class="flex-1 md-12 flex justify-end"> --}}
+        {{-- <label class="mt-2 custom-switch"> --}}
+        {{-- <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input flex items-center input" id="enableEdit"> --}}
+        {{-- <span class="custom-switch-indicator"></span> --}}
+        {{-- <span class="mb-3 mt-5 custom-switch-description fs-6 fw-bolder text-gray-700" --}}
+        {{-- id="envUpdateText">{{ __('messages.setting.enable_edit') }}</span> --}}
+        {{-- </label> --}}
+        {{-- </div> --}}
+        <div class="mb-5 flex-1 sm-6">
             {{ Form::label('status', __('messages.setting.enable_edit'), ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
             <div class="flex items-center form-switch">
                 <input class="flex items-center input" name="custom-switch-checkbox" id="enableEdit"
@@ -23,9 +23,9 @@
             </div>
         </div>
         <div class="flex-1 sm-12 my-0">
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.facebook') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('facebook_app_id', __('messages.setting.facebook_app_id').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('facebook_app_id', (empty($envSetting['facebook_app_id'])) ? ($facebook['FACEBOOK_APP_ID'] ?? null) : $envSetting['facebook_app_id'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.facebook_app_id')]) }}
@@ -40,9 +40,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.pusher') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('pusher_app_id', __('messages.setting.pusher_app_id').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('pusher_app_id',(empty($envSetting['pusher_app_id'])) ? ($pusher['PUSHER_APP_ID'] ?? null) : $envSetting['pusher_app_id'] , ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.pusher_app_id')]) }}
@@ -61,9 +61,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.stripe') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('stripe_key', __('messages.setting.stripe_key').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('stripe_key',(empty($envSetting['stripe_key'])) ? ($stripe['STRIPE_KEY'] ?? null) : $envSetting['stripe_key'] , ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.stripe_key')]) }}
@@ -78,9 +78,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.paypal') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('paypal_client_id', __('messages.setting.paypal_client_id').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('paypal_client_id',(empty($envSetting['paypal_client_id'])) ? ($paypal['PAYPAL_CLIENT_ID'] ?? null) : $envSetting['paypal_client_id'] , ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.paypal_client_id')]) }}
@@ -90,7 +90,7 @@
                         {{ Form::text('paypal_secret',(empty($envSetting['paypal_secret'])) ? ($paypal['PAYPAL_SECRET'] ?? null) : $envSetting['paypal_secret'] , ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.paypal_secret')]) }}
                     </div>
                 </div>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                   <h5 class="mt-5"> {{ __('messages.setting.paystack') }}</h5>
                   <div class="flex-1 sm-6">
                       {{ Form::label('paystack_key', __('messages.setting.paystack_key').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
@@ -106,9 +106,9 @@
                        </div>
               </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.linkedin') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('linkedin_client_id', __('messages.setting.linkedin_client_id').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('linkedin_client_id',(empty($envSetting['linkedin_client_id'])) ? ($linkedIn['LINKEDIN_CLIENT_ID'] ?? null) : $envSetting['linkedin_client_id'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.linkedin_client_id')]) }}
@@ -120,9 +120,9 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.google') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
                         {{ Form::label('google_client_id', __('messages.setting.google_client_id').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 mt-5']) }}
                         {{ Form::text('google_client_id',(empty($envSetting['google_client_id'])) ? ($google['GOOGLE_CLIENT_ID'] ?? null) : $envSetting['google_client_id'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'disabled', 'placeholder' => __('messages.setting.google_client_id')]) }}
@@ -137,16 +137,16 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-hidden shadow rounded bg-white -lg">
                 <h5 class="mt-5">{{ __('messages.setting.cookie') }} :</h5>
-                <div class="flex flex-wrap">
+                <div class="flex-wrap flex">
                     <div class="flex-1 sm-6">
-                        <label class="mt-2 pl-0 flex items-center form-switch">
-                            {{ --                            <input type="checkbox" name="cookie_consent_enabled" class="custom-switch-input flex items-center input"-- }}
-                            {{ --                                   id="enableCookie"-- }}
-                            {{ --                                   {{ (!empty($cookie['COOKIE_CONSENT_ENABLED']) && filter_var($cookie['COOKIE_CONSENT_ENABLED'], FILTER_VALIDATE_BOOLEAN)) ? 'checked' : '' }} disabled>--}}
-                            {{ --                            -- }}
-                            <input class="flex items-center input mr-5" name="cookie_consent_enabled"
+                        <label class="pl-0 mt-2 flex items-center form-switch">
+                            {{-- <input type="checkbox" name="cookie_consent_enabled" class="custom-switch-input flex items-center input" --}}
+                            {{-- id="enableCookie" --}}
+                            {{-- {{ (!empty($cookie['COOKIE_CONSENT_ENABLED']) && filter_var($cookie['COOKIE_CONSENT_ENABLED'], FILTER_VALIDATE_BOOLEAN)) ? 'checked' : '' }} disabled> --}}
+                            {{--  --}}
+                            <input class="mr-5 flex items-center input" name="cookie_consent_enabled"
                                    id="enableCookie" type="checkbox"
                                    {{ isset($envSetting['cookie_consent_enabled']) && $envSetting['cookie_consent_enabled'] == true ? 'checked' : '' }} disabled>
                             <span class=""></span>
@@ -162,10 +162,10 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end mb-5 mt-5">
-                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3','id' => 'btnSaveEnvData', 'disabled']) }}
+            <div class="mb-5 mt-5 flex justify-end">
+                {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200SaveEnvData', 'disabled']) }}
                 <a href="{{ route('admin.dashboard', ['section' => 'env_setting']) }}"
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary me-2">{{ __('messages.common.cancel') }}</a>
+                   class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
             </div>
         </div>
     {{ Form::close() }}

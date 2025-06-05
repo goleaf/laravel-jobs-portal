@@ -25,10 +25,10 @@
 
 <div class="{{ $responsive ? 'overflow-x-auto' : '' }}">
     <div class="align-middle inline-block min-w-full">
-        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div class="shadow overflow-hidden border-b border border border-gray-300 -gray-300 -gray-200 sm: rounded -lg">
             @if($loading)
                 <div class="flex justify-center items-center py-8">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <div class="animate-spin rounded -full h-8 w-8 border-b-2 border border border-gray-300 -gray-300 -blue-600"></div>
                     <span class="ml-2 text-gray-600">{{ __('messages.loading') }}...</span>
                 </div>
             @else
@@ -37,7 +37,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 @foreach($headers as $header)
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider {{ $header['class'] ?? '' }}">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider {{ $header["class'] ?? '' }}">
                                         @if(isset($header['sortable']) && $header['sortable'])
                                             <button class="group inline-flex items-center text-left font-medium text-gray-500 hover:text-gray-700">
                                                 {{ $header['label'] ?? $header }}
@@ -67,12 +67,12 @@
                                     @if(is_array($row))
                                         @foreach($row as $cell)
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {!! $cell !!}
+                                                {{ $$cell }}
                                             </td>
                                         @endforeach
                                     @else
                                         <td colspan="{{ count($headers) + (!empty($actions) ? 1 : 0) }}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {!! $row !!}
+                                            {{ $$row }}
                                         </td>
                                     @endif
                                     
@@ -129,7 +129,7 @@
                         @else
                             <tr>
                                 <td colspan="{{ count($headers) + (!empty($actions) ? 1 : 0) }}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    <div class="flex flex-col items-center justify-center py-8">
+                                    <div class="flex flex- flex-1 items-center justify-center py-8">
                                         <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>

@@ -17,10 +17,7 @@ return new class extends Migration
             $table->foreign('last_change')->references('id')->on('users');
         });
 
-        Artisan::call(
-            'db:seed',
-            ['--class' => 'DefaultLastChangeBySeeder', '--force' => true]
-        );
+        // Seeding removed - handled by separate seeders
     }
 
     /**

@@ -15,6 +15,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 use App\Http\Requests\UpdateTestimonialsRequest;
 
+use App\Http\Requests\StoreTestimonialsRequest;
+
+use App\Http\Requests\DeleteTestimonialsRequest;
+
 class TestimonialsController extends AppBaseController
 {
     /**

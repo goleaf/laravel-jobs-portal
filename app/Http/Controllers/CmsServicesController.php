@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Http\Requests\AboutusRequest;
 use App\Http\Requests\CmsServiceRequest;
 use App\Models\CmsServices;
@@ -22,7 +23,7 @@ use App\Http\Requests\AboutUsUpdateCmsServicesRequest;
 
 class CmsServicesController extends AppBaseController
 {
-    public function index(Request $request): \Illuminate\View\View
+    public function index(StoreRequest $request): \Illuminate\View\View
     {
         $cmsServices = CmsServices::pluck('value', 'key')->toArray();
 

@@ -3,11 +3,11 @@
     {{ __('messages.career_levels') }}
 @endsection
 @push('css')
-{{ --<link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
+{{-- <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}"> --}}
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
             <livewire:career-level-table/>
         </div>
@@ -18,23 +18,9 @@
 @endsection
 
 @push('scripts')
-<script>
-    document.addEventListener('livewire:initialized', () => {
-        // Listening for the event to fill form when editing
-        Livewire.on('fillCareerLevelForm', data => {
-            document.getElementById('careerLevelId').value = data.id;
-            document.getElementById('editCareerLevel').value = data.levelName;
-        });
-        
-        // Success toast message
-        Livewire.on('showSuccessToast', ({message}) => {
-            displaySuccessMessage(message);
-        });
-        
-        // Error toast message
-        Livewire.on('showErrorToast', ({message}) => {
-            displayErrorMessage(message);
-        });
-    });
-</script>
+
+@endpush
+
+@push('scripts')
+    @vite('resources/js/components/index.js')
 @endpush

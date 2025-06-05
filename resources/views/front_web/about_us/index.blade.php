@@ -2,14 +2,14 @@
 @section('title')
     {{ __('messages.about_us') }}
 @endsection
-{{ --@section('page_css')-- }}
-{{ --    <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}">--}}
-{{ --@endsection-- }}
+{{-- @section('page_css') --}}
+{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}"> --}}
+{{-- @endsection --}}
 @section('content')
     <div class="About Us-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-color-light py-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -20,7 +20,7 @@
                                 <ol class="breadcrumb justify-center mb-0">
                                     <li class="breadcrumb-item"><a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}</a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">{{ __('web.about_us') }}</li>
+                                    <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">{{ __('web.about_us') }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -32,7 +32,7 @@
 
         <!-- start-about-section -->
         <div class="about-section py-60">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="about-infyjob mb-40">
                     <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us') }}</h5>
                     <p class="fs-16 text-gray">
@@ -45,7 +45,7 @@
 
         <!-- start-how-it-works section -->
         <section class="how-it-works-section bg-color-light py-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap justify-center">
                     <div class="flex-1 -12">
                         <div class="section-heading mx-xxl-0 mx-xl-3 mx-md-2 text-center">
@@ -63,7 +63,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
                                         <img src="{{ $settings['about_image_one'] }}" >
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body">
                                         <h6 class="fs-18 text-gray-600">
                                             {{ __('web.about_us_menu.step_1') }}</h6>
                                         <h5 class="fs-18 text-gray-600">
@@ -77,7 +77,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
                                         <img src="{{ $settings['about_image_two'] }}" >
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body">
                                         <h6 class="fs-18 text-gray-600">
                                             {{ __('web.about_us_menu.step_2') }}</h6>
                                         <h5 class="fs-18 text-gray-600">
@@ -90,7 +90,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-lg-4 mb-3">
                                         <img src="{{ $settings['about_image_three'] }}" >
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body">
                                         <h6 class="fs-18 text-gray-600">
                                             {{ __('web.about_us_menu.step_3') }}</h6>
                                         <h5 class="fs-18 text-gray-600">
@@ -115,7 +115,7 @@
 
         <!-- start question-section -->
         <section class="question-section py-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap justify-center">
                     <div class="flex-1 -8">
                         <div class="section-heading mx-xxl-5 text-center">
@@ -138,7 +138,7 @@
                                             </h2>
                                             <div id="collapse-{{ $key }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $key }}" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {!! nl2br( $faqList->description) !!}
+                                                    {{ nl2br( $faqList->description) }}
                                                 </div>
                                             </div>
                                         </div>

@@ -14,6 +14,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreIndustryRequest;
+
+use App\Http\Requests\DeleteIndustryRequest;
+
 class IndustryController extends AppBaseController
 {
     /** @var IndustryRepository */

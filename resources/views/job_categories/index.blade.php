@@ -13,19 +13,9 @@
 </x-app-layout>
 
 @push('scripts')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            Livewire.on('refresh', () => {
-                Livewire.dispatch('refresh');
-            });
-            
-            Livewire.on('success', (event) => {
-                window.dispatchEvent(new CustomEvent('success', { detail: event }));
-            });
-            
-            Livewire.on('error', (event) => {
-                window.dispatchEvent(new CustomEvent('error', { detail: event }));
-            });
-        });
-    </script>
+    
+@endpush
+
+@push('scripts')
+    @vite('resources/js/components/index.js')
 @endpush

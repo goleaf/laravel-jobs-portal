@@ -72,6 +72,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Configure comprehensive rate limiting
         $this->configureRateLimiting();
+        
+        // Configure Context7 database monitoring
+        $this->configureDatabaseMonitoring();
 
         // Register class aliases
         $this->registerClassAliases();
@@ -187,6 +190,36 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('global', function (Request $request) {
             return Limit::perMinute(1000)->by($request->ip());
         });
+    }
+
+    /**
+     * Configure Context7 database monitoring for performance optimization.
+     */
+    protected function configureDatabaseMonitoring(): void
+    {
+        // Context7 Pattern: Monitor slow queries for performance optimization
+        \DB::whenQueryingForLongerThan(500, function (\Illuminate\Database\Connection $connection, \Illuminate\Database\Events\QueryExecuted $event) {
+            \Log::warning('Context7: Slow query detected', [
+                'sql' => $event->sql,
+                'time' => $event->time . 'ms',
+                'connection' => $connection->getName(),
+                'bindings' => $event->bindings
+            ]);
+        });
+
+        // Context7 Pattern: Query listener for development debugging
+        if (config('app.debug')) {
+            \DB::listen(function (\Illuminate\Database\Events\QueryExecuted $query) {
+                if ($query->time > 1000) { // Over 1 second
+                    \Log::debug('Context7: Very slow query', [
+                        'sql' => $query->sql,
+                        'time' => $query->time . 'ms',
+                        'bindings' => $query->bindings,
+                        'raw_sql' => $query->toRawSql()
+                    ]);
+                }
+            });
+        }
     }
 
     /**

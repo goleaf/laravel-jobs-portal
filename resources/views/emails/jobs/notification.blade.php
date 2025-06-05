@@ -93,16 +93,16 @@
                 <table width="100%">
                     <tr>
                         <td>
-                            {!! $data['body'] !!}
+                            {{ $data['body'] }}
                             @foreach($data['jobs'] as $key => $job)
                                 <li class="media">
                                     <img alt="image" class="mr-3 rounded-circle" width="70"
                                          src="{{ $job->$company->company_url }}">
                                     <div class="media-body">
                                         <a class="media-title mb-1"
-                                           href="{{ route('front.job.details', $job->job_id) }}">{{ $job->job_title }}</a>
+                                           href="{{ route('front.', $job->job_id) }}">{{ $job->job_title }}</a>
                                         <div class="text-time">{{ $job->created_at->diffForHumans() }}</div>
-                                        <div class="media-description text-gray-500">{!! html_entity_decode($job->description) !!}</div>
+                                        <div class="media-description text-gray-500">{{ html_entity_decode($job->description) }}</div>
                                         <div class="media-links">
                                             <span>Expiry Date: {{ \Carbon\Carbon::parse($job->job_expiry_date)->translatedFormat('d-m-Y') }}</span>
                                         </div>

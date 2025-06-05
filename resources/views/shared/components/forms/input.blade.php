@@ -4,7 +4,7 @@
     'label' => null,
     'placeholder' => null,
     'value' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'readonly' => false,
     'autocomplete' => null,
@@ -58,7 +58,7 @@
     <div class="relative">
         @if($icon && $iconPosition === 'left')
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                {!! $icon !!}
+                {{ $icon }}
             </div>
         @endif
         
@@ -78,7 +78,7 @@
         
         @if($icon && $iconPosition === 'right')
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                {!! $icon !!}
+                {{ $icon }}
             </div>
         @endif
     </div>

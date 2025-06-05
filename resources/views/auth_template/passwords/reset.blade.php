@@ -24,7 +24,7 @@
                     <span class="required"></span>
                     {{ Form::email('email', old('email'), [
                         'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid' . ($errors->has('email') ? ' is-invalid' : ''),
-                        'required' => true,
+                        'text-red-500' => true,
                         'autofocus' => true,
                         'autocomplete' => 'off',
                         'placeholder' => 'Email'
@@ -34,13 +34,13 @@
                     </div>
                 </div>
 
-                {{ --Password-- }}
+                {{-- Password --}}
                 <div class="mb-sm-7 mb-4">
                     {{ Form::label('password', 'Password', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                     <div class="mb-3 relative">
                         {{ Form::password('password', [
                             'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid' . ($errors->has('password') ? ' is-invalid' : ''),
-                            'required' => true,
+                            'text-red-500' => true,
                             'autocomplete' => 'off'
                         ]) }}
                     </div>

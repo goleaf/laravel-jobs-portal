@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     @include('flash::message')
-    <div class="flex flex-col">
+    <div class="flex-1 px-4 flex flex-">
         @livewire('applied-jobs')
     </div>
     @include('candidate.applied_job.show_applied_jobs_modal')

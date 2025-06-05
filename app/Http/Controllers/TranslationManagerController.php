@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Repositories\TranslationManagerRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -34,7 +35,7 @@ class TranslationManagerController extends AppBaseController
      *
      * @return Application|Factory|RedirectResponse|View
      */
-    public function index(Request $request)
+    public function index(StoreRequest $request)
     {
         $selectedLang = $request->get('name', 'en');
         $selectedFile = $request->get('file', 'messages.php');

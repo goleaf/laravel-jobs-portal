@@ -2,14 +2,14 @@
 @section('title')
     {{ __('messages.about_us') }}
 @endsection
-{{ -- @section('page_css') -- }}
-{{ --    <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}"> --}}
-{{ -- @endsection -- }}
+{{-- @section('page_css') --}}
+{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}"> --}}
+{{-- @endsection --}}
 @section('content')
     <div class="About Us-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -20,7 +20,7 @@
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }}
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18" aria-current="page">
+                                    <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">
                                         {{ __('web.about_us') }}
                                     </li>
                                 </ol>
@@ -34,7 +34,7 @@
 
         <!-- start-about-section -->
         <div class="about-section pt-60 pb-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="about-infyjob">
                     <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us') }}</h5>
                     <p class="fs-16 text-gray mb-0">
@@ -47,7 +47,7 @@
 
         <!-- start-how-it-works section -->
         <section class="how-it-works-section bg-gray-100 pt-100 pb-60">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">{{ __('web.about_us_menu.how_it_works') }}?</h2>
@@ -61,7 +61,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-4">
                                         <img src="{{ $settings['about_image_one'] }}" />
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body p-0 pt-lg-2">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body p-0 pt-lg-2">
                                         <h5 class="fs-18 text-gray-600">{{ $settings['about_title_one'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_one'] }}
@@ -72,7 +72,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-4">
                                         <img src="{{ $settings['about_image_two'] }}" />
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body p-0 pt-lg-2">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body p-0 pt-lg-2">
                                         <h5 class="fs-18 text-gray-600">{{ $settings['about_title_two'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_two'] }}
@@ -83,7 +83,7 @@
                                     <div class="img bg-white mx-auto flex justify-center items-center mb-4">
                                         <img src="{{ $settings['about_image_three'] }}" />
                                     </div>
-                                    <div class="bg-white shadow rounded-lg overflow-hidden body p-0 pt-lg-2">
+                                    <div class="bg-white shadow rounded -lg overflow-hidden body p-0 pt-lg-2">
                                         <h5 class="fs-18 text-gray-600">{{ $settings['about_title_three'] }}</h5>
                                         <p class="fs-14 text-gray mb-0">
                                             {{ $settings['about_description_three'] }}
@@ -106,7 +106,7 @@
 
         <!-- start question-section -->
         {{ -- <section class="question-section py-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">
@@ -133,7 +133,7 @@
                                                 aria-labelledby="heading-{{ $key }}"
                                                 data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {!! nl2br($faqList->description) !!}
+                                                    {{ nl2br($faqList->description) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
             </div>
         </section> --}}
         <section class="question-section py-100">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">
@@ -178,7 +178,7 @@
                                                 data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     <p class="fs-14 text-gray">
-                                                        {!! nl2br($faqList->description) !!}
+                                                        {{ nl2br($faqList->description) }}
                                                     </p>
                                                 </div>
                                             </div>

@@ -2,24 +2,24 @@
 @section('title')
     {{ __('messages.candidate.candidate_details') }}
 @endsection
-{{ -- @section('page_css') -- }}
-{{ --    <link href="{{asset('front_web/scss/candidate-details.css') }}" rel="stylesheet" type="text/css"> --}}
-{{ -- @endsection -- }}
-{{ -- @dd($candidateDetails) -- }}
+{{-- @section('page_css') --}}
+{{-- <link href="{{asset('front_web/scss/candidate-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{-- @endsection --}}
+{{-- @dd($candidateDetails) --}}
 @section('content')
     {{ -- <section class="hero-section relative bg-color py-40">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex flex-wrap align-items-lg-center mb-3">
-                        <div class="lg:w-1/12 px-2 col-sm-2 flex-1 -3">
+                        <div class="lg:w-1/12 px-2 flex-1 -sm-2 flex-1 -3">
                             <div class="candidate-profile-img mt-md-0 mt-3">
                                 <img
                                         src="{{ (!empty($candidateDetails->$user->avatar)) ? $candidateDetails->$user->avatar : asset('assets/img/infyom-logo.png') }}"
                                         alt="candidate profile">
                             </div>
                         </div>
-                        <div class="col-sm-10 flex-1 -9">
+                        <div class="flex-1 -sm-10 flex-1 -9">
                             <div class="hero-content ps-xl-0 ps-3">
                                 <h4 class="text-gray-600 mb-0">
                                     {{ html_entity_decode($candidateDetails->$user->full_name) }}
@@ -67,10 +67,10 @@
                                 @role('Employer')
                                 <ul class="post-tags mt-3 ps-0">
                                     @if ($isReportedToCandidate)
-                                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors outline-danger reportToCompany reportToCandidate" disabled
+                                        <button class="border border-gray-300 bg-transparent" disabled
                                         >{{ __('messages.candidate.already_reported') }}</button>
                                     @else
-                                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors outline-danger reportToCompany reportToCandidate"
+                                        <button type="button" class="border border-gray-300 bg-transparent"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#reportToCandidateModal">
                                             {{ __('messages.candidate.reporte_to_candidate') }}
@@ -87,7 +87,7 @@
     </section>
 
     <section class="about-company-section py-60">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="mb-5">
@@ -98,8 +98,8 @@
                                     <span class="name">{{ ucfirst($candidateEducation->degreeLevel->name[0]) }}</span>
                                     <div class="job-description-right">
                                         <h5 class="fs-18 text-gary mb-0">{{ $candidateEducation->degreeLevel->name }}</h5>
-                                        <span class="text-primary-600"> {{ ucfirst($candidateEducation->institute) }}</span>
-                                        <span class="badge bg-gray-600">{{ $candidateEducation->year }}</span>
+                                        <span class="text-indigo-600 -600"> {{ ucfirst($candidateEducation->institute) }}</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-gray-600">{{ $candidateEducation->year }}</span>
                                     </div>
                                 </div>
                             @empty
@@ -116,12 +116,12 @@
                                     <div class="job-description-right">
                                         <div class="info-box">
                                             <h5 class="fs-18 text-gary mb-0">{{ $candidateExperience->experience_title }}</h5>
-                                            <span class="text-primary-600">{{ ucfirst($candidateExperience->company) }}</span>
-                                            <span class="badge bg-gray-600"> {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }} - {{ ($candidateExperience->currently_working) ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
+                                            <span class="text-indigo-600 -600">{{ ucfirst($candidateExperience->company) }}</span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-gray-600"> {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }} - {{ ($candidateExperience->currently_working) ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
                                         </div>
                                     </div>
                                     @if (!empty($candidateExperience->description))
-                                        <div class="mt-2">{!! Str::limit(nl2br($candidateExperience->description),300,'...') !!}</div>
+                                        <div class="mt-2">{{ Str::limit(nl2br($candidateExperience->description),300,'...') }}</div>
                                     @endif
                                 </div>
                             @empty
@@ -138,14 +138,14 @@
     </section> --}}
 
     <section class="hero-section relative bg-gradient pt-15 pb-40">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex align-items-md-center">
                         <div class="me-4">
                             <div class="hero-img">
                                 <img src="{{ !empty($candidateDetails->$user->avatar) ? $candidateDetails->$user->avatar : asset('assets/img/infyom-logo.png') }}"
-                                    class="w-full h-full rounded-circle object-fit-cover" alt="company-details" />
+                                    class="w-full h-full rounded -full object-fit-cover" alt="company-details" />
                             </div>
                         </div>
                         <div class="">
@@ -202,7 +202,7 @@
     </section>
 
     <section class="job-details-section py-60 mb-sm-4">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="Job Description mb-lg-5 mb-4">
@@ -213,7 +213,7 @@
                                     <div class="job-description-right">
                                         <h5 class="fs-18 text-gary mb-0">{{ $candidateEducation->degreeLevel->name }}</h5>
                                         <span class="text-gray"> {{ ucfirst($candidateEducation->institute) }}</span>
-                                        <span class="badge bg-primary-600">{{ $candidateEducation->year }}</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-indigo-600 -600">{{ $candidateEducation->year }}</span>
                                     </div>
                                 </div>
                             @empty
@@ -232,14 +232,14 @@
                                         <h5 class="fs-18 text-gary mb-3">{{ $candidateExperience->experience_title }}
                                         </h5>
                                         <span class="text-gray">{{ ucfirst($candidateExperience->company) }}</span>
-                                        <span class="badge bg-primary-600">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-indigo-600 -600">
                                             {{ \Carbon\Carbon::parse($candidateExperience->start_date)->format('Y') }}
                                             -
                                             {{ $candidateExperience->currently_working ? 'present' : \Carbon\Carbon::parse($candidateExperience->end_date)->format('Y') }}</span>
                                     </div>
                                 </div>
                                 @if (!empty($candidateExperience->description))
-                                    <div class="mt-2">{!! Str::limit(nl2br($candidateExperience->description), 300, '...') !!}</div>
+                                    <div class="mt-2">{{ Str::limit(nl2br($candidateExperience->description), 300, '...') }}</div>
                                 @endif
                             </div>
                         @empty
@@ -262,7 +262,7 @@
     @if (!empty($candidateDetails->$user->facebook_url) || !empty($candidateDetails->$user->twitter_url) || !empty($candidateDetails->$user->google_plus_url) || !empty($candidateDetails->$user->pinterest_url) || !empty($candidateDetails->$user->linkedin_url))
     <div class="flex-1 -12">
         <div class="flex-1 -12 mb-40">
-            <div class="job-card bg-white shadow rounded-lg overflow-hidden py-30">
+            <div class="job- bg-white overflow-hidden shadow rounded-lg bg-white shadow rounded -lg overflow-hidden py-30">
                 <div class="flex flex-wrap flex justify-content-lg-between">
                     <p class="fs-18 text-gray-600">@lang('web.web_company.social_media')</p>
                     <div class="mt-3">
@@ -302,8 +302,10 @@
     </div>
     @endif
 @endsection
-{{ -- @section('scripts') -- }}
-{{ --    <script> -- }}
-{{ --        let reportToCandidateUrl ="{{ route('front.report-candidate') }}" --}}
-{{ --    </script> -- }}
-{{ -- @endsection -- }}
+{{-- @section('scripts') --}}
+{{--  --}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/candidate_details.js')
+@endpush

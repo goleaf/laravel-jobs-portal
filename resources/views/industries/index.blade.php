@@ -3,8 +3,8 @@
     {{ __('messages.industries') }}
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
             <livewire:industries-table/>
         </div>
@@ -14,6 +14,6 @@
     @include('industries.show_modal')
     {{ Form::hidden('industries',true,['id'=>'indexIndustriesData']) }}
 @endsection
-{{ --@push('scripts')-- }}
-    {{ --    <script src="{{mix('assets/js/industries/industries.js') }}"></script>--}}
-{{ --@endpush-- }}
+{{-- @push('scripts') --}}
+    {{-- <script src="{{mix('assets/js/industries/industries.js') }}"></script> --}}
+{{-- @endpush --}}

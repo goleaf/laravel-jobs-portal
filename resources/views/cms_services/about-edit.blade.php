@@ -2,38 +2,38 @@
     <div class="flex-1 sm-4 mb-5">
         {{ Form::label('about_title_one', __('messages.cms_about.about_title_one').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::text('about_title_one', $cmsServices['about_title_one'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_one')]) }}
+        {{ Form::text('about_title_one', $cmsServices['about_title_one'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_one')]) }}
     </div>
 
 
     <div class="flex-1 sm-4 mb-5">
         {{ Form::label('about_title_two',__('messages.cms_about.about_title_two').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::text('about_title_two', $cmsServices['about_title_two'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_two')]) }}
+        {{ Form::text('about_title_two', $cmsServices['about_title_two'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_two')]) }}
 
     </div>
     <div class="flex-1 sm-4 mb-5">
         {{ Form::label('home_title_three', __('messages.cms_about.about_title_three').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::text('about_title_three', $cmsServices['about_title_three'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_three')]) }}
+        {{ Form::text('about_title_three', $cmsServices['about_title_three'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_title_three')]) }}
     </div>
 </div>
 <div class="flex flex-wrap">
     <div class="flex-1 sm-4 my-0 mb-5">
         {{ Form::label('about_description_title', __('messages.cms_about.about_desc_one').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::textarea('about_description_one', $cmsServices['about_description_one'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);', 'placeholder' => __('messages.cms_about.about_desc_one')]) }}
+        {{ Form::textarea('about_description_one', $cmsServices['about_description_one'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);', 'placeholder' => __('messages.cms_about.about_desc_one')]) }}
 
     </div>
     <div class="flex-1 sm-4 mb-5">
         {{ Form::label('about_description_title',  __('messages.cms_about.about_desc_two').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::textarea('about_description_two', $cmsServices['about_description_two'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_desc_two')]) }}
+        {{ Form::textarea('about_description_two', $cmsServices['about_description_two'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_desc_two')]) }}
     </div>
     <div class="flex-1 sm-4 mb-5">
         {{ Form::label('about_description_three',  __('messages.cms_about.about_desc_three').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{ Form::textarea('about_description_three', $cmsServices['about_description_three'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_desc_three')]) }}
+        {{ Form::textarea('about_description_three', $cmsServices['about_description_three'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','onkeypress' => 'return avoidSpace(event);','placeholder' => __('messages.cms_about.about_desc_three')]) }}
     </div>
 </div>
 <div class="flex flex-wrap">

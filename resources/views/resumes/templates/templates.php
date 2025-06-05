@@ -1,5 +1,5 @@
 <script id="allResumeActionTemplate" type="text/x-jsrender">
-<a title="<?php echo __('messages.common.delete') ?>" data-id="{{:id}}" class="delete-btn btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+<a title="<?php echo __('messages.common.delete') ?>" data-id="{{:id}}" class="delete-btn btn btn-icon btn- bg-gray-100 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -active-color-danger inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -sm">
         <span class="svg-icon svg-icon-3">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -10,6 +10,6 @@
 
 </script>
 <script id="resumeDownloadTemplate" type="text/x-jsrender">
- <a href="{{:downloadResume}}" class="download-link"><i class="fas fa-download download-margin text-primary fs-3"></i></a>
+ <a href="{{:downloadResume}}" class="download-link"><i class="fas fa-download download-margin text-indigo-600 fs-3"></i></a>
 
 </script>

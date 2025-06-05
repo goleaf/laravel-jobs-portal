@@ -1,9 +1,9 @@
 <div class="flex items-center">
     <div class="image image-circle image-mini me-3">
-        <img src="{{ $row->$candidate->candidate_url }}" alt="" class="user-img">
+        <img src="{{ $flex flex-wrap -mx-4->$candidate->candidate_url }}" alt="" class="user-img">
     </div>
-    <div class="flex flex-col">
-        <a href="javascript:void(0)" class="mb-1 show-candidate-modal- px-4 py-2 rounded font-medium transition-colors text-decoration-none"
-           data-id="{{ $row->id }}">{{ $row->$candidate->$user->full_name }}</a>
+    <div class="flex-1 px-4 flex flex-">
+        <a href="javascript:void(0)" class="transition duration-150 ease-in-out flex-1"
+           data-id="{{ $flex flex-wrap -mx-4->id }}">{{ $flex flex-wrap -mx-4->$candidate->$user->full_name }}</a>
     </div>
 </div>

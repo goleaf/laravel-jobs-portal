@@ -15,27 +15,27 @@
                         <!-- Desktop navigation -->
                         <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                             <a href="{{ route('home') }}" 
-                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('home') ? 'border-blue-500 text-gray-900' : '' }}">
+                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border border-gray-300 -b-2 text-sm font-medium {{ request()->routeIs("home') ? 'border-blue-500 text-gray-900' : '' }}">
                                 {{ __('messages.home') }}
                             </a>
                             
                             <a href="{{ route('jobs.index') }}" 
-                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('jobs.*') ? 'border-blue-500 text-gray-900' : '' }}">
+                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border border-gray-300 -b-2 text-sm font-medium {{ request()->routeIs("jobs.*') ? 'border-blue-500 text-gray-900' : '' }}">
                                 {{ __('messages.find_jobs') }}
                             </a>
                             
                             <a href="{{ route('companies.index') }}" 
-                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('companies.*') ? 'border-blue-500 text-gray-900' : '' }}">
+                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border border-gray-300 -b-2 text-sm font-medium {{ request()->routeIs("companies.*') ? 'border-blue-500 text-gray-900' : '' }}">
                                 {{ __('messages.companies') }}
                             </a>
                             
                             <a href="{{ route('candidates.index') }}" 
-                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('candidates.*') ? 'border-blue-500 text-gray-900' : '' }}">
+                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border border-gray-300 -b-2 text-sm font-medium {{ request()->routeIs("candidates.*') ? 'border-blue-500 text-gray-900' : '' }}">
                                 {{ __('messages.candidates') }}
                             </a>
                             
-                            <a href="{{ route('blog.index') }}" 
-                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {{ request()->routeIs('blog.*') ? 'border-blue-500 text-gray-900' : '' }}">
+                            <a href="{{ route('blog.') }}" 
+                               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border border-gray-300 -b-2 text-sm font-medium {{ request()->routeIs("blog.*') ? 'border-blue-500 text-gray-900' : '' }}">
                                 {{ __('messages.blog') }}
                             </a>
                         </div>
@@ -51,12 +51,12 @@
                                 </svg>
                                 {{ strtoupper(app()->getLocale()) }}
                             </button>
-                            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded -md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                 <div class="py-1">
-                                    <a href="{{ route('locale.change', 'en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
-                                    <a href="{{ route('locale.change', 'ar') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">العربية</a>
-                                    <a href="{{ route('locale.change', 'es') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Español</a>
-                                    <a href="{{ route('locale.change', 'fr') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Français</a>
+                                    <a href="{{ route('locale.change.index', 'en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
+                                    <a href="{{ route('locale.change.index', 'ar') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">العربية</a>
+                                    <a href="{{ route('locale.change.index', 'es') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Español</a>
+                                    <a href="{{ route('locale.change.index', 'fr') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Français</a>
                                 </div>
                             </div>
                         </div>
@@ -72,15 +72,15 @@
                         @else
                             <!-- User dropdown -->
                             <div class="relative" x-data="{ open: false }">
-                                <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <img class="h-8 w-8 rounded-full" src="{{ auth()->user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ auth()->user()->name }}">
+                                <button @click="open = !open" class="flex items-center text-sm rounded -full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <img class="h-8 w-8 rounded -full" src="{{ auth()->user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ auth()->user()->name }}">
                                     <span class="ml-2 text-gray-700">{{ auth()->user()->name }}</span>
                                     <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
                                 
-                                <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded -md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                     <div class="py-1">
                                         @if(auth()->user()->hasRole('candidate'))
                                             <a href="{{ route('candidate.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -96,11 +96,11 @@
                                             {{ __('messages.profile') }}
                                         </a>
                                         
-                                        <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <a href="{{ route('notification_settings.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             {{ __('messages.settings') }}
                                         </a>
                                         
-                                        <div class="border-t border-gray-100"></div>
+                                        <div class="border-t border border-gray-300 -gray-100"></div>
                                         
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
@@ -116,7 +116,7 @@
                     
                     <!-- Mobile menu button -->
                     <div class="sm:hidden flex items-center">
-                        <button x-data="{ open: false }" @click="open = !open" class="text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 p-2 rounded-md">
+                        <button x-data="{ open: false }" @click="open = !open" class="text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 p-2 rounded -md">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                                 <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -129,7 +129,7 @@
         
         <!-- Breadcrumbs -->
         @if(isset($breadcrumbs))
-            <div class="bg-gray-50 border-b">
+            <div class="bg-gray-50 border border-gray-300 -b">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                     <x-shared.components.navigation.breadcrumbs :breadcrumbs="$breadcrumbs" />
                 </div>
@@ -145,7 +145,7 @@
         <footer class="bg-gray-800">
             <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
                 <div class="xl:grid xl:grid-cols-3 xl:gap-8">
-                    <div class="space-y-8 xl:col-span-1">
+                    <div class="space-y-8 xl: flex-1 -span-1">
                         <img class="h-10" src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name') }}">
                         <p class="text-gray-300 text-base">
                             {{ __('messages.footer_description') }}
@@ -171,22 +171,22 @@
                             </a>
                         </div>
                     </div>
-                    <div class="mt-12 grid grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
+                    <div class="mt-12 grid grid-cols-2 gap-8 xl: mt-0 xl: flex-1 -span-2">
                         <div class="md:grid md:grid-cols-2 md:gap-8">
                             <div>
                                 <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">{{ __('messages.for_candidates') }}</h3>
                                 <ul class="mt-4 space-y-4">
-                                    <li><a href="{{ route('jobs.index') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.browse_jobs') }}</a></li>
-                                    <li><a href="{{ route('candidate.register') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.create_account') }}</a></li>
-                                    <li><a href="{{ route('companies.index') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.browse_companies') }}</a></li>
+                                    <li><a href="{{ route('jobs.index') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.browse_jobs') }}</a></li>
+                                    <li><a href="{{ route('candidate.register') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.create_account') }}</a></li>
+                                    <li><a href="{{ route('companies.index') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.browse_companies') }}</a></li>
                                 </ul>
                             </div>
-                            <div class="mt-12 md:mt-0">
+                            <div class="mt-12 md: mt-0">
                                 <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">{{ __('messages.for_employers') }}</h3>
                                 <ul class="mt-4 space-y-4">
-                                    <li><a href="{{ route('employer.register') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.post_job') }}</a></li>
-                                    <li><a href="{{ route('candidates.index') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.browse_candidates') }}</a></li>
-                                    <li><a href="{{ route('pricing') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.pricing') }}</a></li>
+                                    <li><a href="{{ route('employer.register') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.post_job') }}</a></li>
+                                    <li><a href="{{ route('candidates.index') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.browse_candidates') }}</a></li>
+                                    <li><a href="{{ route('pricing.payment_methods') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.pricing') }}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -194,23 +194,23 @@
                             <div>
                                 <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">{{ __('messages.company') }}</h3>
                                 <ul class="mt-4 space-y-4">
-                                    <li><a href="{{ route('about') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.about_us') }}</a></li>
-                                    <li><a href="{{ route('contact') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.contact_us') }}</a></li>
-                                    <li><a href="{{ route('blog.index') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.blog') }}</a></li>
+                                    <li><a href="{{ route('cms.about-us.service') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.about_us') }}</a></li>
+                                    <li><a href="{{ route('contact.submit') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.contact_us') }}</a></li>
+                                    <li><a href="{{ route('blog.') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.blog') }}</a></li>
                                 </ul>
                             </div>
-                            <div class="mt-12 md:mt-0">
+                            <div class="mt-12 md: mt-0">
                                 <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">{{ __('messages.legal') }}</h3>
                                 <ul class="mt-4 space-y-4">
-                                    <li><a href="{{ route('privacy') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.privacy_policy') }}</a></li>
-                                    <li><a href="{{ route('terms') }}" class="text-base text-gray-300 hover:text-white">{{ __('messages.terms_conditions') }}</a></li>
+                                    <li><a href="{{ route('privacy.index') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.privacy_policy') }}</a></li>
+                                    <li><a href="{{ route('terms.index') }}" class="text-base text-gray-300 hover: text-white">{{ __('messages.terms_conditions') }}</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-12 border-t border-gray-700 pt-8">
-                    <p class="text-base text-gray-400 xl:text-center">
+                <div class="mt-12 border-t border border-gray-300 -gray-700 pt-8">
+                    <p class="text-base text-gray-400 xl: text-center">
                         &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('messages.all_rights_reserved') }}
                     </p>
                 </div>

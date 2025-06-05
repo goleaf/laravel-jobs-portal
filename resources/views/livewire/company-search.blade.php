@@ -1,6 +1,6 @@
 <div>
     <section class="find-job-section">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap justify-between">
                 <div class="flex-1 -12">
                     <div class="find-job relative bg-white">
@@ -23,8 +23,8 @@
                                     wire:model.debounce.100ms.live="searchByIndustry" id="searchByIndustry"
                                     placeholder="@lang('web.web_company.search_by_industry')">
                             </div>
-                            <div class="col-xl-2 flex-1 lg-3 text-center p-xl-1 px-20">
-                                <a href="#" wire:click="resetFilter()" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors primary-register block pt-3 pb-3">{{ __('web.reset_filter') }}</a>
+                            <div class="flex-1 -xl-2 flex-1 lg-3 text-center p-xl-1 px-20">
+                                <a href="#" wire:click="resetFilter()" class="border border-gray-300 bg-transparent">{{ __('web.reset_filter') }}</a>
                             </div>
                         </div>
                     </div>
@@ -33,8 +33,8 @@
         </div>
     </section>
     <section class="latest-job-section py-20">
-        <div class="container mx-auto px-4 mx-auto">
-            <div class="job- bg-white shadow rounded-lg overflow-hidden">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="job- bg-white shadow rounded -lg overflow-hidden">
                 <div class="flex flex-wrap">
                     @forelse($companies as $company)
                         @include('front_web_template.common.company_card')

@@ -1,10 +1,10 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="lg:w-full px-2 flex-1 md-12">
                     @if(session()->has('message'))
-                        <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 success">
+                        <div class="px-4 py-3 rounded-md border border border border-gray-300 -gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 success">
                             {{ session('message') }}
                         </div>
                     @endif
@@ -16,7 +16,7 @@
                                 <input wire:model.debounce.100ms="searchByFavouriteCompanies" type="search"
                                        id="searchByFavouriteCompanies"
                                        placeholder="{{ __('web.job_menu.search_followings') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
+                                       class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 search-box-placeholder">
                             </div>
                         </div>
                     @endif
@@ -24,7 +24,7 @@
                         <div class="favorite-company-dashboard-box">
                             <div class="flex flex-wrap relative">
                                 @foreach($favouriteCompanies as $favouriteCompany)
-                                    <div class="w-full col-sm-6 md:w-6/12 flex-1 xl-4 favorite-job-details mb-5">
+                                    <div class="w-full flex-1 -sm-6 md:w-6/12 flex-1 xl-4 favorite-job-details mb-5">
                                         <div class="hover-effect-favorite-company min-height-200 relative {{ $loop->odd ?"blue-color' : 'black-color' }}">
                                             @if(!empty($favouriteCompany->$company->no_of_offices))
                                             <div class="ribbon float-right ribbon-primary favorite-companies-ribbon">
@@ -38,7 +38,7 @@
                                                              class="img-responsive favorite-company-image mr-2">
                                                     </div>
                                                     <div class="mb-auto w-full favorite-company-data favourite-companies-data">
-                                                        <h4 class="job-listing-favorite-company d-inline-flex mb-2">
+                                                        <h4 class="job-listing-favorite-company inline -flex mb-2">
                                                             {{ (!empty($favouriteCompany->$company->$user->first_name)) ? $favouriteCompany->$company->$user->first_name : __('messages.common.n/a') }}
                                                         </h4>
                                                         <h3 class="job-listing-title-favorite-company margin-bottom-5">
@@ -58,7 +58,7 @@
                                                 </div>
                                             </div>
                                             <a title="Delete"
-                                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors favorite-companies-delete"
+                                               class="border border-gray-300 bg-transparent"
                                                data-id="{{ $favouriteCompany->id }}"
                                                href="#">
                                                 <i class="fa fa-trash"></i>

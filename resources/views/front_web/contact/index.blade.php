@@ -1,18 +1,18 @@
+
+@push('styles')
+    @vite('resources/css/pages/index.css')
+@endpush
 @extends('front_web.layouts.app')
 @section('title')
     {{ __('web.contact_us') }}
 @endsection
 @section('page_css')
-    <style>
-        .iti {
-            display: block !important;
-        }
-    </style>
+    
 @endsection
 @section('content')
     <div class="contactus-page">
         <section class="hero-section relative bg-color-light py-40">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -24,7 +24,7 @@
                                     <li class="breadcrumb-item"><a href="{{ route('front.home') }}"
                                                                     class="fs-18 text-gray">{{ __('web.home') }} </a>
                                     </li>
-                                    <li class="breadcrumb-item text-primary-600 fs-18"
+                                    <li class="breadcrumb-item text-indigo-600-600 fs-18"
                                         aria-current="page">{{ __('web.contact_us') }}</li>
                                 </ol>
                             </nav>
@@ -35,7 +35,7 @@
         </section>
 
         <section class="contact-us-section py-60 mb-5">
-            <div class="container mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="contact-us bg-color-light">
                     <div class="flex flex-wrap">
                         <div class="flex-1 lg-4 lg:block hidden">
@@ -44,55 +44,55 @@
                             </div>
                         </div>
                         <div class="flex-1 lg-8">
-                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.contact.send')])
+                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.')])
                                 @csrf
                                 @include('flash::message')
                                 @include('front_web.layouts.errors')
                                 <div class="flex flex-wrap">
-                                    <div class="form-group flex-1 -12">
+                                    <div class="mb-4 flex-1 -12">
                                         <div class="response"></div>
                                     </div>
                                     <div class="flex-1 md-6">
-                                        <div class="form-group">
+                                        <div class="mb-4">
                                             {{ Form::label('name', __('web.web_contact.your_name').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary-600">*</span>
+                                            <span class="text-indigo-600 -600">*</span>
                                             {{ Form::text('name', old('name'), [
                                                 'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.your_name'),
                                                 'autocomplete' => 'off',
-                                                'required' => true
+                                                'text-red-500' => true
                                             ]) }}
                                         </div>
                                     </div>
                                     <div class="flex-1 md-6">
-                                        <div class="form-group">
+                                        <div class="mb-4">
                                             {{ Form::label('email', __('web.web_contact.your_email').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary-600">*</span>
+                                            <span class="text-indigo-600 -600">*</span>
                                             {{ Form::email('email', old('email'), [
                                                 'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.your_email'),
                                                 'autocomplete' => 'off',
-                                                'required' => true
+                                                'text-red-500' => true
                                             ]) }}
                                         </div>
                                     </div>
                                     <div class="flex-1 md-6">
-                                        <div class="form-group">
+                                        <div class="mb-4">
                                             {{ Form::label('subject', __('web.web_contact.subject').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary-600">*</span>
+                                            <span class="text-indigo-600 -600">*</span>
                                             {{ Form::text('subject', old('subject'), [
                                                 'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10',
                                                 'placeholder' => __('web.web_contact.subject'),
                                                 'autocomplete' => 'off',
-                                                'required' => true
+                                                'text-red-500' => true
                                             ]) }}
                                         </div>
                                     </div>
                                     <div class="flex-1 md-6">
-                                        <div class="form-group">
+                                        <div class="mb-4">
                                             {{ Form::label('phone_no', __('web.web_contact.your_phone_no').':', ['class' => 'fs-16 text-secondary mb-2']) }}
                                             {{ Form::tel('phone_no', old('phone_no'), [
-                                                'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10 d-block',
+                                                'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10 block',
                                                 'placeholder' => __('web.web_contact.phone_number'),
                                                 'autocomplete' => 'off',
                                                 'id' => 'phoneNumber'
@@ -103,14 +103,14 @@
                                         </div>
                                     </div>
                                     <div class="flex-1 md-12">
-                                        <div class="form-group">
+                                        <div class="mb-4">
                                             {{ Form::label('message', __('web.web_contact.your_message').':', ['class' => 'fs-16 text-secondary mb-2']) }}
-                                            <span class="text-primary-600">*</span>
+                                            <span class="text-indigo-600 -600">*</span>
                                             {{ Form::textarea('message', old('message'), [
                                                 'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray br-10',
                                                 'rows' => 5,
                                                 'placeholder' => __('web.web_contact.type_your_message'),
-                                                'required' => true
+                                                'text-red-500' => true
                                             ]) }}
                                         </div>
                                     </div>
@@ -139,15 +139,13 @@
         </section>
     </div>
 @endsection
-<script>
-    var phoneNo ="{{ old('region_code').old('phone_no') }}";
-</script>
-{{ --@section('page_scripts')-- }}
-{{ --    <script>-- }}
-{{ --        let isEdit = false-- }}
-{{ --        var phoneNo ="{{ old('region_code').old('phone') }}"--}}
-{{ --        let utilsScript ="{{asset('assets/js/inttel/js/utils.min.js') }}"--}}
-{{ --    </script>-- }}
 
-{{ --    {{-- CDN JS removed - now using local assets -- }}--}}
-{{ --@endsection-- }}
+{{-- @section('page_scripts') --}}
+{{--  --}}
+
+{{-- {{-- CDN JS removed - now using local assets --}}--}}
+{{-- @endsection --}}
+
+@push('scripts')
+    @vite('resources/js/pages/index.js')
+@endpush

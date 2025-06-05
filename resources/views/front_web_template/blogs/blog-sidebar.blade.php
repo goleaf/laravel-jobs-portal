@@ -4,7 +4,7 @@
         @foreach ($blogCategories as $blogCategory)
             @if ($blogCategory->post_assign_categories_count > 0)
                 <p>
-                    <a class="fs-14 text-gray" href="{{ route('front.blog.category', $blogCategory->id) }}">
+                    <a class="fs-14 text-gray" href="{{ route('front.', $blogCategory->id) }}">
                         {{ $blogCategory->post_assign_categories_count > 0 ? html_entity_decode($blogCategory->name) : '' }}
                         {{ $blogCategory->post_assign_categories_count > 0 ? '( ' . $blogCategory->post_assign_categories_count . ' )' : '' }}
                     </a>
@@ -17,13 +17,13 @@
         @foreach ($popularBlogs as $popularBlog)
             <div class="recent-post flex mb-40">
                 <div class="img">
-                    <a href="{{ route('front.posts.details',$popularBlog->id) }}">
+                    <a href="{{ route('front.',$popularBlog->id) }}">
                         <img src="{{ !empty($popularBlog->blog_image_url)?$popularBlog->blog_image_url:asset('assets/img/infyom-logo.png') }}" class="recent-post-img">
                     </a>
                 </div>
                 <div class="desc ms-4">
                     <p class="fs-14 text-gray-600 mb-0">
-                        <a href="{{ route('front.posts.details',$popularBlog->id) }}" class="fs-14 text-gray-600">
+                        <a href="{{ route('front.',$popularBlog->id) }}" class="fs-14 text-gray-600">
                             {{ html_entity_decode($popularBlog->title) }}
                         </a>
                     </p>

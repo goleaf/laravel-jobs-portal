@@ -15,6 +15,10 @@ use Illuminate\View\View;
 use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
 use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
+use App\Http\Requests\StoreJobShiftRequest;
+
+use App\Http\Requests\DeleteJobShiftRequest;
+
 class JobShiftController extends AppBaseController
 {
     /** @var JobShiftRepository */

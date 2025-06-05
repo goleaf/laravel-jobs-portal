@@ -1,3 +1,3 @@
-<div class="badge bg-gray-100 primary">
-        {{ $row->active_subscription }} 
+<div class="rounded inline-flex items-center px-2.5 py-0.5 -full text-xs font-medium bg-gray-100 primary">
+        {{ $flex flex-wrap -mx-4->active_subscription }} 
 </div>

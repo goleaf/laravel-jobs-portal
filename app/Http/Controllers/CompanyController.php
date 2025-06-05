@@ -37,6 +37,8 @@ use App\Http\Requests\UpdateCompanyCompanyRequest;
 
 use App\Http\Requests\ShowReportedCompanyNoteCompanyRequest;
 
+use App\Http\Requests\StoreCompanyRequest;
+
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */

@@ -12,6 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreNoticeboardRequest;
+
+use App\Http\Requests\DeleteNoticeboardRequest;
+
 class NoticeboardController extends AppBaseController
 {
     /** @var NoticeboardRepository */

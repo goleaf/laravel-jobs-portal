@@ -6,8 +6,8 @@
     <title>{{ __('common.about_us') }} - {{ config('app.name') }}</title></head>
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200 navbar-expand-lg bg-white shadow-sm dark bg-primary-600">
-        <div class="container mx-auto px-4 mx-auto">
+    <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -17,20 +17,20 @@
             </button>
             <div class="collapse bg-white shadow-sm collapse" id="navbarNav">
                 <ul class="bg-white shadow-sm nav ms-auto">
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('front.home') }}">{{ __('Home') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('front.home') }}">{{ __('Home') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium active" href="{{ route('about-us') }}">{{ __('common.about_us') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium active" href="{{ route('cms.about-us.service') }}">{{ __('common.about_us') }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                    <li class="">
+                        <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('contact.submit') }}">{{ __('Contact') }}</a>
                     </li>
                 </ul>
             </div>
@@ -39,10 +39,10 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center">
                 <div class="flex-1 lg-6">
-                    <h1 class="display-4 fw-bold text-primary-600">{{ __('About Our Job Portal') }}</h1>
+                    <h1 class="display-4 fw-bold text-indigo-600 -600">{{ __('About Our Job Portal') }}</h1>
                     <p class="lead">{{ __('Connecting talented professionals with amazing opportunities worldwide.') }}</p>
                 </div>
                 <div class="flex-1 lg-6">
@@ -54,7 +54,7 @@
 
     <!-- Mission Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8 mx-auto text-center">
                     <h2 class="mb-4">{{ __('Our Mission') }}</h2>
@@ -68,7 +68,7 @@
 
     <!-- Features Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center mb-5">
                     <h2>{{ __('Why Choose Us?') }}</h2>
@@ -77,35 +77,35 @@
             </div>
             <div class="flex flex-wrap">
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden h-full text-center">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
+                    <div class="bg-white shadow rounded -lg overflow-hidden h-full text-center">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
                             <div class="mb-3">
-                                <i class="fas fa-search fa-3x text-primary-600"></i>
+                                <i class="fas fa-search fa-3x text-indigo-600 -600"></i>
                             </div>
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Smart Job Search') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text">{{ __('Advanced search filters and AI-powered recommendations to find the perfect job match.') }}</p>
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Smart Job Search') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text">{{ __('Advanced search filters and AI-powered recommendations to find the perfect job match.') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden h-full text-center">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
+                    <div class="bg-white shadow rounded -lg overflow-hidden h-full text-center">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
                             <div class="mb-3">
-                                <i class="fas fa-users fa-3x text-primary-600"></i>
+                                <i class="fas fa-users fa-3x text-indigo-600 -600"></i>
                             </div>
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Quality Candidates') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text">{{ __('Access to verified, skilled professionals from various industries and backgrounds.') }}</p>
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Quality Candidates') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text">{{ __('Access to verified, skilled professionals from various industries and backgrounds.') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden h-full text-center">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
+                    <div class="bg-white shadow rounded -lg overflow-hidden h-full text-center">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
                             <div class="mb-3">
-                                <i class="fas fa-shield-alt fa-3x text-primary-600"></i>
+                                <i class="fas fa-shield-alt fa-3x text-indigo-600 -600"></i>
                             </div>
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Secure Platform') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text">{{ __('Your data is protected with enterprise-level security and privacy measures.') }}</p>
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Secure Platform') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text">{{ __('Your data is protected with enterprise-level security and privacy measures.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -115,36 +115,36 @@
 
     <!-- Stats Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap text-center">
                 <div class="flex-1 md-3 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden border-0">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h3 class="text-primary-600 fw-bold">10,000+</h3>
+                    <div class="bg-white shadow rounded -lg overflow-hidden border border border-gray-300 -gray-300 -0">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h3 class="text-indigo-600 -600 fw-bold">10,000+</h3>
                             <p class="mb-0">{{ __('Active Jobs') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-3 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden border-0">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h3 class="text-primary-600 fw-bold">5,000+</h3>
+                    <div class="bg-white shadow rounded -lg overflow-hidden border border border-gray-300 -gray-300 -0">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h3 class="text-indigo-600 -600 fw-bold">5,000+</h3>
                             <p class="mb-0">{{ __('Companies') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-3 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden border-0">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h3 class="text-primary-600 fw-bold">50,000+</h3>
+                    <div class="bg-white shadow rounded -lg overflow-hidden border border border-gray-300 -gray-300 -0">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h3 class="text-indigo-600 -600 fw-bold">50,000+</h3>
                             <p class="mb-0">{{ __('Job Seekers') }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-3 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden border-0">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h3 class="text-primary-600 fw-bold">95%</h3>
+                    <div class="bg-white shadow rounded -lg overflow-hidden border border border-gray-300 -gray-300 -0">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h3 class="text-indigo-600 -600 fw-bold">95%</h3>
                             <p class="mb-0">{{ __('Success Rate') }}</p>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
 
     <!-- Team Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center mb-5">
                     <h2>{{ __('Our Team') }}</h2>
@@ -164,43 +164,43 @@
             </div>
             <div class="flex flex-wrap">
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden text-center">
-                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded-lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('John Doe') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text text-gray-500">{{ __('CEO & Founder') }}</p>
+                    <div class="bg-white shadow rounded -lg overflow-hidden text-center">
+                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded -lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('John Doe') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text text-gray-500">{{ __('CEO & Founder') }}</p>
                             <div>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-twitter"></i></a>
-                                <a href="#" class="text-primary-600"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-indigo-600 -600"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden text-center">
-                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded-lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Jane Smith') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text text-gray-500">{{ __('CTO') }}</p>
+                    <div class="bg-white shadow rounded -lg overflow-hidden text-center">
+                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded -lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Jane Smith') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text text-gray-500">{{ __('CTO') }}</p>
                             <div>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-twitter"></i></a>
-                                <a href="#" class="text-primary-600"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-indigo-600 -600"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 md-4 mb-4">
-                    <div class="bg-white shadow rounded-lg overflow-hidden text-center">
-                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded-lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
-                        <div class="bg-white shadow rounded-lg overflow-hidden body">
-                            <h5 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('Mike Johnson') }}</h5>
-                            <p class="bg-white shadow rounded-lg overflow-hidden text text-gray-500">{{ __('Head of Marketing') }}</p>
+                    <div class="bg-white shadow rounded -lg overflow-hidden text-center">
+                        <img src="https://via.placeholder.com/200x200" class="bg-white shadow rounded -lg overflow-hidden img-top mx-auto mt-3" style="width: 150px; height: 150px; border-radius: 50%;" alt="Team Member">
+                        <div class="bg-white shadow rounded -lg overflow-hidden body">
+                            <h5 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('Mike Johnson') }}</h5>
+                            <p class="bg-white shadow rounded -lg overflow-hidden text text-gray-500">{{ __('Head of Marketing') }}</p>
                             <div>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" class="text-primary-600 me-2"><i class="fab fa-twitter"></i></a>
-                                <a href="#" class="text-primary-600"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-indigo-600 -600 me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-indigo-600 -600"><i class="fab fa-github"></i></a>
                             </div>
                         </div>
                     </div>
@@ -210,17 +210,17 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-5 bg-primary-600 text-white">
-        <div class="container mx-auto px-4 mx-auto text-center">
+    <section class="py-5 bg-indigo-600 -600 text-white">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto text-center">
             <h2 class="mb-4">{{ __('Ready to Get Started?') }}</h2>
             <p class="lead mb-4">{{ __('Join thousands of job seekers and employers who trust our platform') }}</p>
             <div class="flex flex-wrap justify-center">
                 <div class="flex-1 md-6">
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded font-medium transition-colors lg me-2">
+                    <a href="{{ route('register') }}" class="border border-gray-300 bg-transparent">
                         <i class="fas fa-user-plus me-1"></i>
                         {{ __('Join as Job Seeker') }}
                     </a>
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-outline-light px-4 py-2 rounded font-medium transition-colors lg">
+                    <a href="{{ route('register') }}" class="border border-gray-300 bg-transparent">
                         <i class="fas fa-building me-1"></i>
                         {{ __('Post a Job') }}
                     </a>
@@ -231,7 +231,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-4 mx-auto">
+        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 md-6">
                     <h5>{{ config('app.name') }}</h5>
@@ -245,8 +245,8 @@
                         <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
                     </div>
                     <div class="mt-2">
-                        <a href="{{ route('privacy.policy.list') }}" class="text-white-50 me-3">{{ __('Privacy Policy') }}</a>
-                        <a href="{{ route('terms.conditions.list') }}" class="text-white-50">{{ __('Terms of Service') }}</a>
+                        <a href="{{ route('privacy.policy.list.index') }}" class="text-white -50 me-3">{{ __('Privacy Policy') }}</a>
+                        <a href="{{ route('terms.conditions.list.index') }}" class="text-white -50">{{ __('Terms of Service') }}</a>
                     </div>
                 </div>
             </div>

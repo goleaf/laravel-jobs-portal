@@ -7,16 +7,16 @@
         </div>
         <div class="flex-1 md-2 float-right mb-2">
             <input wire:model.debounce.100ms="searchByPost" type="search" id="searchByPost"
-                   placeholder=" {{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                   placeholder=" {{ __('web.common.search') }}" class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500">
         </div>
     </div>
     @endif
     <div class="flex flex-wrap">
         @if( count($posts) > 0)
             @forelse($posts as $post)
-                <div class="w-full col-sm-6 md:w-6/12 lg:w-4/12 px-2 flex-1 xl-3">
-                    <article class="article post-box hover-border">
-                        <div class="article-header border-top-15">
+                <div class="w-full flex-1 -sm-6 md:w-6/12 lg:w-4/12 px-2 flex-1 xl-3">
+                    <article class="article post-box hover- border border border-gray-300 -gray-300">
+                        <div class="article-header border border border-gray-300 -gray-300 -top-15">
                             <nav class="cd-stretchy-nav edit-content">
                                 <a class="cd-nav-trigger" href="javascript:void(0)">
                                     <span aria-hidden="true"></span>
@@ -43,20 +43,20 @@
                                 </h2>
                             </div>
                         </div>
-                        <div class="article-details border-bottom-15">
-                            <div class="post-detail-category-badge">
+                        <div class="article-details border border border-gray-300 -gray-300 -bottom-15">
+                            <div class="post-detail-category- inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium">
                                 @foreach($post->postAssignCategories as $counter => $category)
                                     @if($counter < 1)
-                                        <span class="font-size-13px post-badge badge-pill {{ $counter }} badge-{{ getBadgeColor($loop->index) }}">{{ $category->name }}</span>
+                                        <span class="font-size-13px post-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill {{ $counter }} inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -{{ getBadgeColor($loop->index) }}">{{ $category->name }}</span>
                                     @elseif($counter == (count($post->postAssignCategories )) - 1)
-{{ --                                        <a href="javascript:void(0)"-- }}
-{{ --                                           class="font-size-13px  badge-pill badge-pill {{ $counter }} badge-{{ getBadgeColor($loop->index) }} text-decoration-none">More</a>--}}
-                                        <span class="font-size-13px post-badge badge-pill badge-danger text-decoration-none font-size-13px">{{"+" . $counter }}</span>
+{{-- <a href="javascript:void(0)" --}}
+{{-- class="font-size-13px  badge-pill inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill {{ $counter }} inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -{{ getBadgeColor($loop->index) }} text-decoration-none">More</a> --}}
+                                        <span class="font-size-13px post-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -danger text-decoration-none font-size-13px">{{"+" . $counter }}</span>
                                     @endif
                                 @endforeach
                             </div>
                             <div class="text-left line-height-20px blog-post-description">
-                                {!! !empty($post->description) ? $post->description : __('messages.common.n/a') !!}
+                                {{ !empty($post->description) ? $post->description : __('messages.common.n/a') }}
                             </div>
                             <div class="article-cta text-right">
                                 <small class="mb-0">{{ $post->created_at->diffForHumans() }}</small>

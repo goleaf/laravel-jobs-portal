@@ -30,6 +30,10 @@ use App\Http\Requests\ReportCandidateCandidateRequest;
 
 use App\Http\Requests\ShowReportedCandiateNoteCandidateRequest;
 
+use App\Http\Requests\StoreCandidateRequest;
+
+use App\Http\Requests\DeleteCandidateRequest;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */

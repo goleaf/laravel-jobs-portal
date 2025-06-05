@@ -33,7 +33,7 @@
 
 
 <div class="relative inline-block text-left">
-    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors sm inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50" id="actionDropDown" data-bs-toggle="dropdown"
+    <a class="rounded-md transition" id="actionDropDown" data-bs-toggle="dropdown"
        aria-expanded="false">
         {{ __('messages.common.action') }}
     </a>
@@ -43,28 +43,28 @@
             <input type="hidden" name="data-job-id" value="{{ $this->jobId }}" id="dataJobId">
             @if(!$isCompleted && !$isRejected)
                 @if(!$isShortlisted)
-                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 job-application-short-list"
+                    <a href="javascript:void(0)" class="rounded-md transition"
                        data-id="{{ $row->id }}">{{ __('messages.common.shortlist') }}</a>
                 @else
                     @if(!$isJobExpiry)
-                        <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 change-job-stage"
+                        <a href="javascript:void(0)" class="rounded-md transition"
                            data-id="{{ $row->id }}"
                            data-stage-id="{{ $jobStageId }}">{{ __('messages.job_stage.job_stage') }}</a>
                     @endif
                 @endif
                    
                 @if(!$isApplied)
-                    <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 job-application-action-completed"
+                    <a href="javascript:void(0)" class="rounded-md transition"
                        data-id="{{ $row->id }}">{{ __('messages.common.selected') }}</a>
                 @endif
-                <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 job-application-action-decline"
+                <a href="javascript:void(0)" class="rounded-md transition"
                    data-id="{{ $row->id }}">{{ __('messages.common.rejected') }}</a>
                 @if($isJobStage && !$isRejected && !$isJobExpiry)
-                    <a data-turbo="false" href="{{ route('employer.interview.slot.view', ['jobId'=>$this->jobId, 'jobApplicationId'=>$row->id]) }}"
-                       class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('messages.job_stage.slots') }}</a>
+                    <a data-turbo="false" href="{{ route('employer.', ['jobId'=>$this->jobId, 'jobApplicationId'=>$row->id]) }}"
+                       class="rounded-md transition">{{ __('messages.job_stage.slots') }}</a>
                 @endif
             @endif
-            <a href="javascript:void(0)" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors sm block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 job-application-action-delete"
+            <a href="javascript:void(0)" class="rounded-md transition"
                data-id="{{ $row->id }}">{{ __('messages.common.delete') }}</a>
         </li>
     </ul>

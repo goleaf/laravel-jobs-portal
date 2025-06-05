@@ -22,7 +22,7 @@
             @else
                 <a title="{{ __('messages.front_settings.pay_to_get') }} {{ __('messages.front_settings.make_featured') }}"
                    data-bs-toggle="tooltip" data-bs-placement="bottom"
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 text-white px-3 py-1.5 text-sm action-btn w-full featured-job feature- px-4 py-2 rounded font-medium transition-colors"
+                   class="border border-gray-300 bg-transparent"
                    data-id="{{ $row->id }}">
                     {{ __('messages.front_settings.make_featured') }}
                 </a>
@@ -32,23 +32,23 @@
         @if ($row->status == 3)
             <i class="font-20 fas fa-times-circle text-red-600"></i>
         @else
-            <a title="{{ __('messages.front_settings.expires_on') }} {{ $expiryDate }}" data-bs-toggle="tooltip" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-green-600 text-white hover:bg-green-700 text-white px-3 py-1.5 text-sm action- px-4 py-2 rounded font-medium transition-colors w-full"
+            <a title="{{ __('messages.front_settings.expires_on') }} {{ $expiryDate }}" data-bs-toggle="tooltip" class="border border-gray-300 bg-transparent"
                data-id="{{ encrypt($row->id) }}">
                 {{ __('messages.front_settings.featured') }} <i class="far fa-check-circle pl-1"></i>
             </a>
         @endif
     @endif
 @else
-    <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out btn-icon bg-red-600 text-white hover:bg-red-700 action- px-4 py-2 rounded font-medium transition-colors"><i class="fas fa-times"></i></a>
+    <a class="border border-gray-300 bg-transparent"><i class="fas fa-times"></i></a>
 @endif
 
 
-{{ --@php-- }}
-{{ --    $todayDate = Carbon\Carbon::now()->format('Do MMM, YYYY');-- }}
-{{ --    $expiredDate = Carbon\Carbon::parse($row->job_expiry_date)->isoFormat('Do MMM, YYYY');-- }}
-{{ --@endphp-- }}
-{{ --@if ($todayDate > $expiredDate)-- }}
-{{ --    <div class="badge badge-light-primary">-- }}
-{{ --        <i class="font-20 fas fa-times-circle text-red-600"></i>-- }}
-{{ --    </div>-- }}
-{{ --@endif-- }}
+{{-- @php --}}
+{{-- $todayDate = Carbon\Carbon::now()->format('Do MMM, YYYY'); --}}
+{{-- $expiredDate = Carbon\Carbon::parse($row->job_expiry_date)->isoFormat('Do MMM, YYYY'); --}}
+{{-- @endphp --}}
+{{-- @if ($todayDate > $expiredDate) --}}
+{{-- <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -light-primary"> --}}
+{{-- <i class="font-20 fas fa-times-circle text-red-600"></i> --}}
+{{-- </div> --}}
+{{-- @endif --}}

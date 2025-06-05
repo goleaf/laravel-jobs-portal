@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         @include('flash::message')
-        <div class="flex flex-col">
+        <div class="flex flex- flex-1">
             <livewire:testimonial-table/>
         </div>
         @include('testimonial.add_modal')
@@ -18,8 +18,10 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        let testimonialImageSaveUrl ="{{ route('download.image') }}";
-    </script>
-{{ --    <script src="{{mix('assets/js/testimonial/testimonial.js') }}"></script>--}}
+    
+{{-- <script src="{{mix('assets/js/testimonial/testimonial.js') }}"></script> --}}
+@endpush
+
+@push('scripts')
+    @vite('resources/js/components/index.js')
 @endpush

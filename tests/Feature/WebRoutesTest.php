@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Candidate;
+use App\Models\CmsServices;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,6 +16,21 @@ class WebRoutesTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create essential CMS services data required by home page
+        CmsServices::create(['key' => 'home_title', 'value' => 'Find Your Dream Job']);
+        CmsServices::create(['key' => 'home_description', 'value' => 'Discover opportunities with top companies.']);
+        CmsServices::create(['key' => 'home_banner', 'value' => 'front_web/images/hero-img.png']);
+        
+        // Create essential settings
+        Setting::create(['key' => 'slider_is_active', 'value' => '0']);
+        Setting::create(['key' => 'is_full_slider', 'value' => '0']);
+        Setting::create(['key' => 'is_slider_active', 'value' => '0']);
+    }
 
     /** @test */
     public function homepage_loads_successfully()

@@ -1,5 +1,5 @@
 <script id="reportedJobsTemplate" type="text/x-jsrender">
-<!-- <a data-id="{{:id}}" title="--><?php // echo __('messages.common.edit')?><!--" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 edit-btn">-->
+<!-- <a data-id="{{:id}}" title="--><?php // echo __('messages.common.edit')?><!--" class="btn btn-icon btn- bg-gray-100 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -active-color-primary px-3 py-1.5 text-xs me-1 edit- inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out">-->
 <!--        <span class="svg-icon svg-icon-3">-->
 <!--            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">-->
 <!--            <path d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />-->
@@ -8,11 +8,11 @@
 <!--        </span>-->
 <!--</a>-->
 
-<a  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 showModal" data-id={{:id}}" data-bs-toggle="tooltip" title="Show">
+<a  class="btn btn-icon btn- bg-gray-100 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -active-color-primary inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -sm me-1 showModal" data-id={{:id}}" data-bs-toggle="tooltip" title="Show">
         <i class="fas fa-eye fs-4"></i>
     </a>
 
-<a title="<?php echo __('messages.common.delete') ?>" data-id={{:id}}" class="delete-btn btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+<a title="<?php echo __('messages.common.delete') ?>" data-id={{:id}}" class="delete-btn btn btn-icon btn- bg-gray-100 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -active-color-danger inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out -sm">
         <span class="svg-icon svg-icon-3">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -25,8 +25,8 @@
 </script>
 
 <script id="isFeatured" type="text/x-jsrender">
-   <label class="form-check form-switch form-check-custom form-check-solid form-switch-sm justify-content-center">
-        <input type="checkbox" name="is_featured" class="form-check-input isFeatured" data-id="{{:id}}" {{:checked}}>
+   <label class="form-check form-switch flex items-center -custom flex items-center -solid form-switch-sm justify-center">
+        <input type="checkbox" name="is_featured" class="flex items-center -input isFeatured" data-id="{{:id}}" {{:checked}}>
         <span class="custom-switch-indicator"></span>
     </label>
 

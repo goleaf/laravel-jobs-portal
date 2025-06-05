@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
     <ul class="pagination" role="navigation">
-        {{ -- Previous Page Link -- }}
+        {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
                 <span class="page-link" aria-hidden="true">
@@ -18,9 +18,9 @@
             </li>
         @endif
 
-        {{ -- Pagination Elements -- }}
+        {{-- Pagination Elements --}}
         @foreach ($elements as $element)
-            {{ -- Array Of Links -- }}
+            {{-- Array Of Links --}}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
 
@@ -46,8 +46,8 @@
             @endif
         @endforeach
 
-        {{ -- Next Page Link -- }}
-        {{ --        {{ dd($paginator) }}--}}
+        {{-- Next Page Link --}}
+        {{-- {{ dd($paginator) }} --}}
         @if ($paginator->hasMorePages())
             <li class="page-item">
                 <button type="button" class="page-link" wire:click="nextPage({{ $paginator->lastPage() }})" rel="next"

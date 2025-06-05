@@ -5,7 +5,7 @@
     'label' => null,
     'placeholder' => null,
     'rows' => 3,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'readonly' => false,
     'autofocus' => false,

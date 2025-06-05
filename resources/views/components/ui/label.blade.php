@@ -1,6 +1,6 @@
 @props([
     'for' => '',
-    'required' => false,
+    'text-red-500' => false,
     'class' => ''
 ])
 

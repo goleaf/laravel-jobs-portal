@@ -13,6 +13,10 @@ use Illuminate\View\View;
 
 use App\Http\Requests\UpdateBrandingSliderRequest;
 
+use App\Http\Requests\DeleteBrandingSliderRequest;
+
+use App\Http\Requests\StoreBrandingSliderRequest;
+
 class BrandingSliderController extends AppBaseController
 {
     /** @var BrandingSliderRepository */

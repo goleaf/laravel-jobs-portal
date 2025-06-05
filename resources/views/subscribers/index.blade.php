@@ -6,13 +6,13 @@
         <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-<div class="container mx-auto px-4 mx-auto fluid">
-    <div class="flex flex-col">
+<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="flex flex- flex-1">
         @include('flash::message')
         <livewire:subscriber-table/>
     </div>
 </div>
 @endsection
-{{ --@push('scripts')-- }}
-{{ --    <script src="{{mix('assets/js/subscribers/subscribers.js') }}"></script>--}}
-{{ --@endpush-- }}
+{{-- @push('scripts') --}}
+{{-- <script src="{{mix('assets/js/subscribers/subscribers.js') }}"></script> --}}
+{{-- @endpush --}}

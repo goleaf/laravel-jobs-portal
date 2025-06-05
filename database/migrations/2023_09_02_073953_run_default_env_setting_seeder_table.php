@@ -10,8 +10,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Artisan::call('db:seed', ['--class' => 'DefaultEnvSettingSeeder', '--force' => true]);
-    }
+        // Seeding removed - handled by separate seeders
+}
 
     /**
      * Reverse the migrations.

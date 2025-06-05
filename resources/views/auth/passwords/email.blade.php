@@ -28,12 +28,12 @@
             <div class="mb-sm-7 mb-4">
                 {{ Form::label('email', __('web.common.email').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                 <span class="required"></span>
-                {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'placeholder' => __('web.reset_password.your_email'), 'required', 'autocomplete' => 'off']) }}
+                {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'placeholder' => __('web.reset_password.your_email'), 'text-red-500', 'autocomplete' => 'off']) }}
             </div>
 
             <div class="flex justify-center">
                 {{ Form::submit(__('web.reset_password.email_password_reset_link'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors']) }}
-                <a href="{{ route('front.home') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary ms-3" data-turbo="false">@lang('web.reset_password.cancel')</a>
+                <a href="{{ route('front.home') }}" class="rounded-md transition" data-turbo="false">@lang('web.reset_password.cancel')</a>
             </div>
         @formClose()
     </div>

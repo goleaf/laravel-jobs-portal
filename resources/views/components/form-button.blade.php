@@ -22,8 +22,7 @@
     $sizes = [
         'xs' => 'px-2.5 py-1.5 text-xs rounded',
         'sm' => 'px-3 py-2 text-sm leading-4 rounded-md',
-        'md' => 'px-4 py-2 text-sm rounded-md',
-        'lg' => 'px-4 py-2 text-base rounded-md',
+        'md' => 'px-4 py-2 text-base rounded-md',
         'xl' => 'px-6 py-3 text-base rounded-md',
     ];
     

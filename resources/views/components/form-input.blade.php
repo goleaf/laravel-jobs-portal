@@ -5,7 +5,7 @@
     'value' => null,
     'label' => null,
     'placeholder' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'readonly' => false,
     'autofocus' => false,

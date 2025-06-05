@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
@@ -48,6 +49,8 @@ use App\Http\Requests\GetScheduleHistoryJobApplicationRequest;
 
 use App\Http\Requests\CancelSelectedSlotJobApplicationRequest;
 
+use App\Http\Requests\DeleteJobApplicationRequest;
+
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */
@@ -68,7 +71,7 @@ class JobApplicationController extends AppBaseController
      *
      * @throws Exception
      */
-    public function index(int $jobId, Request $request): View
+    public function index(int $jobId, StoreRequest $request): View
     {
         $userId = Auth::user()->owner_id;
         $companyId = Job::whereCompanyId($userId)->pluck('id')->toArray();
@@ -92,7 +95,7 @@ class JobApplicationController extends AppBaseController
      *
      * @throws Exception
      */
-    public function destroy(JobApplication $jobApplication, Request $request): JsonResponse
+    public function destroy(JobApplication $jobApplication, DeleteJobApplicationRequest $request): JsonResponse
     {
         $jobId = $request->get('jobId');
         $jobCandidateId = JobApplication::whereJobId($jobId)->pluck('id')->toArray();

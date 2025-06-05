@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreCountryRequest;
+
+use App\Http\Requests\DeleteCountryRequest;
+
 class CountryController extends AppBaseController
 {
     /**

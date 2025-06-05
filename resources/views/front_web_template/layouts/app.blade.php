@@ -27,12 +27,10 @@
     @vite(['resources/js/app.js', 'resources/js/vendor.js'])
     <script src="https://js.stripe.com/v3/"></script>
     <script src="{{ mix('js/front-third-party.js') }}"></script>
-    {{ -- CDN JS removed - now using local assets -- }}
-    <script>
-        let siteKey ="{{ config('app.google_recaptcha_site_key') }}"
-    </script>
-    {{ -- <script src="{{ mix('js/front_pages.js') }}"></script> --}}
-    {{ -- <script src="{{ asset('assets/js/custom/custom.js') }}"></script> --}}
+    {{-- CDN JS removed - now using local assets --}}
+    
+    {{-- <script src="{{ mix('js/front_pages.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/custom/custom.js') }}"></script> --}}
 
     @yield('page_scripts')
     @foreach (googleJobSchema() as $jobSchema)
@@ -54,13 +52,13 @@
     @endif
 
     {{ Form::hidden('createNewLetterUrl', route('news-letter.create'), ['id' => 'createNewLetterUrl']) }}
-    <script data-turbo-eval="false">
-        let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}";
-        let currentFrontLang ="{{ session()->get('languageName') ?? 'en' }}";
-        Lang.setLocale(currentFrontLang);
-    </script>
+    
      <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
      <script src="{{ asset('assets/js/custom/helpers.js') }}"></script>
     </body>
 
 </html>
+
+@push('scripts')
+    @vite('resources/js/components/app.js')
+@endpush

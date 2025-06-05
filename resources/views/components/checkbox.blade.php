@@ -4,7 +4,7 @@
     'label' => null,
     'value' => 1,
     'checked' => false,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'class' => 'rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50',
     'containerClass' => 'mb-4 flex items-center',
@@ -17,15 +17,15 @@
 @endphp
 
 <div class="{{ $containerClass }}">
-    {!! Form::checkbox($name, $value, $checked, [
+    {{ Form::checkbox($name, $value, $checked, [
         'id' => $id,
         'class' => $errors->has($name) ? $class . ' border-red-500' : $class,
-        'required' => $required,
+        'text-red-500' => $required,
         'disabled' => $disabled
     ]) !!}
 
     @if($label)
-        {!! Form::label($name, $label, ['class' => 'ml-2 block text-sm text-gray-700']) !!}
+        {{ Form::label($name, $label, ['class' => 'ml-2 block text-sm text-gray-700']) !!}
     @endif
 
     @error($name)

@@ -1,25 +1,25 @@
 <script id="candidateExperienceTemplate" type="text/x-jsrender">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12 candidate-experience rounded shadow p-5 mb-5 card"
+  <div class="overflow-hidden shadow rounded-lg rounded p-5 mb-5 bg-white shadow md:w-full px-4 sm:w-full px-4 w-full px-4 flex-1 px-4 -lg-12 candidate-experience"
   data-experience-id="{{:candidateExperienceNumber}}" data-id="{{:id}}">
     <article class="article article-style-b">
         <div class="article-details">
-        <div class="d-flex justify-content-between">
+        <div class="justify-between flex">
             <div class="article-title">
-                <h4 class="text-primary">{{:title}}</h2>
-                <h6 class="text-muted">{{:company}}</h3>
+                <h4 class="text-indigo-600">{{:title}}</h2>
+                <h6 class="text-gray-500">{{:company}}</h3>
             </div>
             <div class="article-cta candidate-experience-edit-delete">
                                         <a href="javascript:void(0)"
-                                           class="edit-candidate-experience btn px-2 text-primary fs-3 ps-0"
+                                           class="rounded border border text-indigo-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 edit-candidate-experience px-2 fs-3 ps-0"
                                            title="Edit"
                                            data-id="{{:id}}"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <a href="javascript:void(0)"
-                                           class="delete-experience btn px-2 text-danger fs-3 pe-0"
+                                           class="rounded border border text-red-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 delete-experience px-2 fs-3 pe-0"
                                            title="Delete"
                                            data-id="{{:id}}"><i class="fa-solid fa-trash"></i></a>
                                     </div>
             </div>
-            <span class="text-muted">{{:startDateExperience}} - {{:endDateExperience}} | {{:country}}</span>
+            <span class="text-gray-500">{{:startDateExperience}} - {{:endDateExperience}} | {{:country}}</span>
             <p>{{:description}}</p>
         </div>
     </article>
@@ -29,32 +29,32 @@
 </script>
 
 <script id="candidateEducationTemplate" type="text/x-jsrender">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12 candidate-education shadow rounded p-5 mb-5 card" data-education-id="{{:candidateEducationNumber}}" data-id="{{:id}}">
+  <div class="overflow-hidden shadow rounded-lg rounded p-5 mb-5 bg-white shadow md:w-full px-4 sm:w-full px-4 w-full px-4 flex-1 px-4 -lg-12 candidate-education" data-education-id="{{:candidateEducationNumber}}" data-id="{{:id}}">
       <article class="article article-style-b">
           <div class="article-details">
-          <div class="d-flex justify-content-between">
+          <div class="justify-between flex">
               <div class="article-title">
-                  <h4 class="text-primary education-degree-level">{{:degreeLevel}}</h2>
-                  <h6 class="text-muted">{{:degreeTitle}}</h4>
+                  <h4 class="text-indigo-600 education-degree-level">{{:degreeLevel}}</h2>
+                  <h6 class="text-gray-500">{{:degreeTitle}}</h4>
               </div>
               <div class="article-cta candidate-education-edit-delete">
                                         <a href="javascript:void(0)"
-                                           class="btn px-2 text-primary fs-3 ps-0 edit-candidate-education"
+                                           class="rounded border border text-indigo-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 ps-0 edit-candidate-education"
                                            title="Edit"
                                            data-id="{{:id}}"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <a href="javascript:void(0)"
-                                           class="btn px-2 text-danger fs-3 pe-0 delete-education"
+                                           class="rounded border border text-red-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 pe-0 delete-education"
                                            title="Delete"
                                            data-id="{{:id}}"><i class="fa-solid fa-trash"></i></a>
                                     </div>
               </div>
-              <span class="text-muted">{{:year}} | {{:country}}</span>
+              <span class="text-gray-500">{{:year}} | {{:country}}</span>
               <p>{{:institute}}</p>
 <!--              <div class="article-cta candidate-education-edit-delete">-->
-<!--                  <a href="javascript:void(0)" class="btn btn-warning action-btn edit-education" title="Edit"-->
-<!--                     data-id="{{:id}}"><i class="fa fa-edit p-1"></i></a>-->
-<!--                  <a href="javascript:void(0)" class="btn btn-danger action-btn delete-education" title="Delete"-->
-<!--                     data-id="{{:id}}"><i class="fa fa-trash p-1"></i></a>-->
+<!--                  <a href="javascript:void(0)" class="rounded border rounded border border border inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-1/20 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 action- edit-education" title="Edit"-->
+<!--                     data-id="{{:id}}"><i class="p-1 fa fa-edit"></i></a>-->
+<!--                  <a href="javascript:void(0)" class="rounded border rounded border border border inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 action- delete-education" title="Delete"-->
+<!--                     data-id="{{:id}}"><i class="p-1 fa fa-trash"></i></a>-->
 <!--              </div>-->
           </div>
       </article>
@@ -64,27 +64,27 @@
 
 </script>
 <script id="CVcandidateExperienceTemplate" type="text/x-jsrender">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12 candidate-experience shadow rounded p-5 mb-5 card"
+  <div class="overflow-hidden shadow rounded-lg rounded p-5 mb-5 bg-white shadow md:w-full px-4 sm:w-full px-4 w-full px-4 flex-1 px-4 -lg-12 candidate-experience"
   data-experience-id="{{:candidateExperienceNumber}}" data-id="{{:id}}">
       <article class="article article-style-b">
-          <div class="article-details border-0">
-          <div class="d-flex justify-content-between">
+          <div class="border article-details -0">
+          <div class="justify-between flex">
               <div class="article-title">
-                  <h5 class="experience-title text-primary">{{:title}}</h5>
-                  <h6 class="text-muted">{{:company}}</h3>
+                  <h5 class="text-indigo-600 experience-title">{{:title}}</h5>
+                  <h6 class="text-gray-500">{{:company}}</h3>
               </div>
               <div class="article-cta candidate-experience-edit-delete">
                         <a href="javascript:void(0)"
-                           class="btn px-2 text-primary fs-3 ps-0 edit-experience"
+                           class="rounded border border text-indigo-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 ps-0 edit-experience"
                            title="Edit"
                            data-id="{{:id}}"> <i class="fa-solid fa-pen-to-square"></i></a>
                         <a href="javascript:void(0)"
-                           class=" btn px-2 text-danger fs-3 pe-0 btn-sm delete-experience"
+                           class="rounded border rounded border border border inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 text-red-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 pe-0 -sm delete-experience"
                            title="Delete"
                            data-id="{{:id}}"><i class="fa-solid fa-trash"></i></a>
                     </div>
               </div>
-              <span class="text-muted">{{:startDate}} - {{:endDate}} | {{:country}}</span>
+              <span class="text-gray-500">{{:startDate}} - {{:endDate}} | {{:country}}</span>
               <p class="fw-bold">{{:description}}</p>
           </div>
       </article>
@@ -94,28 +94,28 @@
 </script>
 
 <script id="CVcandidateEducationTemplate" type="text/x-jsrender">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12 candidate-education shadow rounded p-5 mb-5 card" data-education-id="{{:candidateEducationNumber}}" data-id="{{:id}}">
+  <div class="overflow-hidden shadow rounded-lg rounded p-5 mb-5 bg-white shadow md:w-full px-4 sm:w-full px-4 w-full px-4 flex-1 px-4 -lg-12 candidate-education" data-education-id="{{:candidateEducationNumber}}" data-id="{{:id}}">
         <article class="article article-style-b">
-            <div class="article-details border-0">
-              <div class="d-flex justify-content-between">
+            <div class="border article-details -0">
+              <div class="justify-between flex">
                 <div class="article-title">
-                    <h5 class="education-degree-level text-primary">{{:degreeLevel}}</h5>
-                    <h6 class="text-muted">{{:degreeTitle}}</h4>
+                    <h5 class="text-indigo-600 education-degree-level">{{:degreeLevel}}</h5>
+                    <h6 class="text-gray-500">{{:degreeTitle}}</h4>
                 </div>
                 <div class="article-cta candidate-education-edit-delete">
                         <a href="javascript:void(0)"
-                           class="btn px-2 text-primary fs-3 ps-0 edit-education"
+                           class="rounded border border text-indigo-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 ps-0 edit-education"
                            title="Edit"
                            data-id="{{:id}}">
                            <i class="fa-solid fa-pen-to-square"></i>
                       </a>
                         <a href="javascript:void(0)"
-                           class=" btn px-2 text-danger fs-3 pe-0 delete-education"
+                           class="rounded border border text-red-600 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 px-2 fs-3 pe-0 delete-education"
                            title="Delete"
                            data-id="{{:id}}"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
-                <span class="text-muted">{{:year}} | {{:country}}</span>
+                <span class="text-gray-500">{{:year}} | {{:country}}</span>
                 <p class="fw-bold">{{:institute}}</p>
             </div>
         </article>
@@ -126,8 +126,8 @@
 </script>
 
 <script id="resumeActionTemplate" type="text/x-jsrender">
- <a href="{{:downloadResume}}" class="download-link btn btn-icon btn-bg-light btn-active-color-primary btn-sm"><i class="fas fa-download download-margin"></i></a>
-<a title="<?php echo __('messages.common.delete') ?>" data-id="{{:id}}" class="delete-resume btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+ <a href="{{:downloadResume}}" class="rounded border rounded border rounded border rounded border rounded border border border border border border inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 bg-gray-100 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 download-link -icon - -active-flex-1 px-4or-primary -sm"><i class="fas fa-download download-margin"></i></a>
+<a title="<?php echo __('messages.common.delete') ?>" data-id="{{:id}}" class="rounded border rounded border rounded border rounded border rounded border border border border border border inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 bg-gray-100 inline-flex items-center px-4 py-2 -transparent text-sm font-medium -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200 delete-resume -icon - -active-flex-1 px-4or-danger -sm">
         <span class="svg-icon svg-icon-3">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

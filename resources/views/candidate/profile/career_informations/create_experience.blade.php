@@ -1,60 +1,60 @@
 @formOpen(['id' => 'addCVExperienceForm'])
-<div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 danger hidden" id="validationErrorsBox">
-    <i class='fa-solid fa-face-frown me-4'></i>
+<div class="rounded border p-4 mb-4 rounded border mb-4 border border-gray-300 -gray-300 px-4 py-3 -md -gray-300 -md danger hidden" id="validationErrorsBox">
+    <i class='flex-wrap fa-solid fa-face-fflex -mx-4n me-4'></i>
 </div>
-<div class="flex flex-wrap">
-    <div class="flex-1 sm-6 mb-5">
+<div class="flex-wrap flex">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('experience_title',__('messages.candidate_profile.experience_title').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
         <span class="required"></span>
-        {{ Form::text('experience_title', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','placeholder'=>__('messages.candidate_profile.experience_title')]) }}
+        {{ Form::text('experience_title', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','placeholder'=>__('messages.candidate_profile.experience_title')]) }}
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('company',__('messages.candidate_profile.company').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
         <span class="required"></span>
-        {{ Form::text('company', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','required','placeholder'=>__('messages.candidate_profile.company')]) }}
+        {{ Form::text('company', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','text-red-500','placeholder'=>__('messages.candidate_profile.company')]) }}
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('country', __('messages.company.country').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
         <span class="required"></span>
-        {{ Form::select('country_id', $data['countries'], null, ['id'=>'countryId','required','class' => 'form-select','placeholder' => __('messages.company.select_country'), 'data-modal-type' => 'experience']) }}
+        {{ Form::select('country_id', $data['countries'], null, ['id'=>'countryId','text-red-500','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','placeholder' => __('messages.company.select_country'), 'data-modal-type' => 'experience']) }}
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('state', __('messages.company.state').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
-        {{ Form::select('state_id', [], null, ['id'=>'stateId','class' => 'form-select','placeholder' => __('messages.company.select_state'), 'data-modal-type' => 'experience']) }}
+        {{ Form::select('state_id', [], null, ['id'=>'stateId','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','placeholder' => __('messages.company.select_state'), 'data-modal-type' => 'experience']) }}
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('city', __('messages.company.city').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
-        {{ Form::select('city_id', [], null, ['id'=>'cityId','class' => 'form-select ','placeholder' => __('messages.company.select_city')]) }}
+        {{ Form::select('city_id', [], null, ['id'=>'cityId','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ','placeholder' => __('messages.company.select_city')]) }}
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('start_date', __('messages.candidate_profile.start_date').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
         <span class="required"></span>
-        <input type="text" name="start_date" id="startDate" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.start_date') }}">
+        <input type="text" name="start_date" id="startDate" class="rounded border border border border border-gray-300 -gray-300 w-full px-3 py-2 -gray-300 -gray-300 -md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.start_date') }}">
     </div>
-    <div class="flex-1 sm-6 mb-5">
+    <div class="mb-5 flex-1 sm-6">
         {{ Form::label('end_date', __('messages.candidate_profile.end_date').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
         <span class="required" id="requiredText"></span>
 
-        <input type="text" name="end_date" id="endDate" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-light' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.end_date') }}">
+        <input type="text" name="end_date" id="endDate" class="rounded border border border border border-gray-300 -gray-300 w-full px-3 py-2 -gray-300 -gray-300 -md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.end_date') }}">
   
     </div>
-    <div class="flex-1 sm-6 mb-0 pt-3">
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('messages.candidate_profile.currently_working') }}</label>
-        <div class="flex-1 -6 pl-0">
+    <div class="pt-3 mb-0 flex-1 sm-6">
+        <label class="mb-1 block text-sm font-medium text-gray-700">{{ __('messages.candidate_profile.currently_working') }}</label>
+        <div class="pl-0 flex-1 -6">
             <label class="flex items-center form-switch form-switch-sm">
                 <input type="checkbox" name="currently_working" class="flex items-center input"
                        value="1" id="default">
             </label>
         </div>
     </div>
-    <div class="flex-1 sm-12 mb-5">
+    <div class="mb-5 flex-1 sm-12">
         {{ Form::label('description', __('messages.candidate_profile.description').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
-        {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','rows'=>'5','placeholder'=>__('messages.candidate_profile.description')]) }}
+        {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','flex flex-wrap -mx-4s'=>'5','placeholder'=>__('messages.candidate_profile.description')]) }}
     </div>
 </div>
 <div class="flex justify-end">
-    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3','id'=>'btnExperienceSave','data-loading-text'=>"<span class="spinner-border spinner-border-sm"></span> Processing..."]) }}
-    <button type="button" id="btnExperienceCancel"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary me-2">{{ __('messages.common.cancel') }}</button>
+    {{ Form::button(__('messages.common.save'), ['type'=>'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200ExperienceSave','data-loading-text'=>"<span class="rounded border border border border border border-gray-300 -gray-300 animate-spin -full -2 -gray-300 -t-blue-600 spinner- -sm"></span> Processing..."]) }}
+    <button type="button" id="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200ExperienceCancel"
+            class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</button>
 </div>
 @formClose()

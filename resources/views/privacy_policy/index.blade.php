@@ -6,13 +6,13 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
-            <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="bg-white shadow rounded -lg overflow-hidden">
+                <div class="bg-white shadow rounded -lg overflow-hidden body">
                     @include('privacy_policy.privacy_policy')
-                    {{ --                    @include('privacy_policy.terms_conditions')-- }}
+                    {{-- @include('privacy_policy.terms_conditions') --}}
                 </div>
             </div>
         </div>
@@ -21,5 +21,5 @@
     {{ Form::hidden('privacyPolicyData', $privacyPolicy['privacy_policy'], ['id' => 'privacyPolicyData']) }}
 @endsection
 @push('scripts')
-{{ --    <script src="{{ mix('assets/js/privacy_policy/privacy_policy.js') }}"></script>--}}
+{{-- <script src="{{ mix('assets/js/privacy_policy/privacy_policy.js') }}"></script> --}}
 @endpush

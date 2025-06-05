@@ -15,6 +15,10 @@ use Illuminate\View\View;
 
 use App\Http\Requests\UpdateSalaryCurrencyRequest;
 
+use App\Http\Requests\StoreSalaryCurrencyRequest;
+
+use App\Http\Requests\DeleteSalaryCurrencyRequest;
+
 class SalaryCurrencyController extends AppBaseController
 {
     /** @var SalaryCurrencyRepository */

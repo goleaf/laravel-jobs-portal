@@ -25,7 +25,7 @@
                         <img 
                             src="{{ $job->company->company_url }}" 
                             alt="{{ $job->company->name ?? __('jobs.company_logo') }}"
-                            class="w-12 h-12 rounded-lg object-cover ring-2 ring-gray-100 dark:ring-gray-700"
+                            class="w-12 h-12 rounded -lg object-cover ring-2 ring-gray-100 dark:ring-gray-700"
                             loading="lazy"
                         >
                     </div>
@@ -33,8 +33,8 @@
                 
                 <!-- Job Title and Company -->
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2">
-                        <a href="{{ route('front.job.details', $job->job_id) }}" 
+                    <h3 class="text-lg font-semibold text-gray-900 dark: text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2">
+                        <a href="{{ route('front.', $job->job_id) }}" 
                            class="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded">
                             {{ html_entity_decode($job->job_title) }}
                         </a>
@@ -48,7 +48,7 @@
                     
                     <!-- Job Type Badge -->
                     @if($job->jobShift && $job->jobShift->shift)
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mt-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mt-2">
                             {{ $job->jobShift->shift }}
                         </span>
                     @endif
@@ -58,7 +58,7 @@
             <!-- Featured Badge -->
             @if($featured || ($job->activeFeatured ?? false))
                 <div class="flex-shrink-0">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                         </svg>
@@ -126,15 +126,15 @@
         </div>
 
         <!-- Footer -->
-        <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark: border border border-gray-300 -gray-300 -gray-700">
             <!-- Posted Time -->
             <span class="text-sm text-gray-500 dark:text-gray-400">
                 {{ $job->created_at->diffForHumans() }}
             </span>
             
             <!-- Action Button -->
-            <a href="{{ route('front.job.details', $job->job_id) }}" 
-               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+            <a href="{{ route('front.', $job->job_id) }}" 
+               class="border border-gray-300 bg-transparent">
                 {{ __('jobs.view_details') }}
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

@@ -2,7 +2,7 @@
     'name',
     'id' => null,
     'label' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'accept' => null,
     'multiple' => false,

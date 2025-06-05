@@ -4,7 +4,7 @@
     'label' => null,
     'value' => '1',
     'checked' => false,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'error' => null,
     'class' => '',

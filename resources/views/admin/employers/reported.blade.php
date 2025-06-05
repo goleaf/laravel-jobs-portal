@@ -1,19 +1,23 @@
+
+@push('styles')
+    @vite('resources/css/admin/reported.css')
+@endpush
 @extends('layouts.app')
 @section('title')
     {{ __('messages.company.reported_employers') }}
 @endsection
 
 @section('content')
-    <div class="container mx-auto px-4 mx-auto fluid">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('messages.company.reported_employers') }}</h1>
         </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
-            <div class="bg-white shadow rounded-lg overflow-hidden header">
-                <h3 class="bg-white shadow rounded-lg overflow-hidden title">{{ __('messages.company.reported_employers') }}</h3>
+        <div class="bg-white shadow rounded -lg overflow-hidden">
+            <div class="bg-white shadow rounded -lg overflow-hidden header">
+                <h3 class="bg-white shadow rounded -lg overflow-hidden title">{{ __('messages.company.reported_employers') }}</h3>
             </div>
-            <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="bg-white shadow rounded -lg overflow-hidden body">
                 <div class="w-full divide-y divide-gray-200 responsive">
                     <table class="min-w-full divide-y divide-gray-200 odd:bg-gray-50 w-full divide-y divide-gray-200 hover">
                         <thead>
@@ -47,17 +51,5 @@
 @endsection
 
 @push('styles')
-<style>
-    .table th {
-        border-top: none;
-        font-weight: 600;
-        color: #495057;
-    }
-    .btn-group .btn {
-        margin-right: 2px;
-    }
-    .btn-group .btn:last-child {
-        margin-right: 0;
-    }
-</style>
+
 @endpush 

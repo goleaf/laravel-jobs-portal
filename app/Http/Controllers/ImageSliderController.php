@@ -14,6 +14,10 @@ use Illuminate\View\View;
 
 use App\Http\Requests\UpdateImageSliderRequest;
 
+use App\Http\Requests\DeleteImageSliderRequest;
+
+use App\Http\Requests\StoreImageSliderRequest;
+
 class ImageSliderController extends AppBaseController
 {
     /** @var ImageSliderRepository */

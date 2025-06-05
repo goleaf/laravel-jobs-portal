@@ -5,7 +5,7 @@
     'disabled' => false
 ])
 
-{!! Form::submit($value, [
+{{ Form::submit($value, [
     'name' => $name,
     'class' => $class,
     'disabled' => $disabled

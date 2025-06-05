@@ -1,7 +1,7 @@
 <div class="flex justify-center">
     <a href="javascript:void(0)" 
        title="{{ __('messages.common.edit') }}"
-       class="job-tag-edit-btn px-2 text-primary-600 edit- px-4 py-2 rounded font-medium transition-colors"
+       class="job-tag-edit-inline-flex items-center px-4 py-2 rounded font-medium transition-colors"
        data-id="{{ $row->id }}" 
        data-bs-toggle="tooltip">
         <x-icons.edit class="w-5 h-5" />

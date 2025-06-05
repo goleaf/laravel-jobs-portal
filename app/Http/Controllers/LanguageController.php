@@ -16,6 +16,10 @@ use Illuminate\View\View;
 
 use App\Http\Requests\ChangeLanguageLanguageRequest;
 
+use App\Http\Requests\StoreLanguageRequest;
+
+use App\Http\Requests\DeleteLanguageRequest;
+
 class LanguageController extends AppBaseController
 {
     /** @var LanguageRepository */

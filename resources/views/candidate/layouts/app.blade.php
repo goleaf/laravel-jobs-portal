@@ -29,36 +29,35 @@
 
 
 <body class="overflow-x-hidden">
-    <div class="flex flex-col flex-root">
-        <div class="flex flex-col flex-column-fluid">
+    <div class="flex-1 px-4 flex flex- flex-root">
+        <div class="flex-1 px-4 flex- flex-1 px-4 flex flex- -fluid">
             <div class="header fixed-header">
                 @include('candidate.layouts.header')
             </div>
-            <div class="theme-wrapper flex flex-col flex- flex flex-wrap fluid">
-                <div class="flex flex-col flex- flex flex-wrap fluid">
-                    <div class="flex flex-col flex-column-fluid pt-7">
-                        <div class="content flex-column-fluid">
-                            <div class="w-full container mx-auto px-4 mx-auto xxl">
+            <div class="flex-wrap flex-1 px-4 theme-wrapper flex flex- flex- flex fluid">
+                <div class="flex-wrap flex-1 px-4 flex flex- flex- flex fluid">
+                    <div class="flex-1 px-4 flex- flex-1 px-4 flex flex- -fluid pt-7">
+                        <div class="flex-1 px-4 flex- content -fluid">
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mx-auto px-4 mx-auto xxl">
                                 @yield('content')
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="w-full container mx-auto px-4 mx-auto xxl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mx-auto px-4 mx-auto xxl">
                 @include('layouts.footer')
             </div>
             @include('candidate_profile.edit_profile_modal')
             @include('candidate_profile.change_password_modal')
         </div>
     </div>
-    <script data-turbo-eval="false">
-        var hostUrl = 'assets/';
-        let getLoggedInUserLang = '{{ getCurrentLanguageCode() }}';
-        let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}"
-        Lang.setLocale(getLoggedInUserLang)
-    </script>
+    
     @stack('scripts')
 </body>
 
 </html>
+
+@push('scripts')
+    @vite('resources/js/components/app.js')
+@endpush

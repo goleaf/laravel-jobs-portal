@@ -7,10 +7,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Admin Dashboard</h1>
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark: text-white mb-6">Admin Dashboard</h1>
         
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="bg-white dark:bg-gray-800 rounded -lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Welcome, Admin!</h2>
             <p class="text-gray-600 dark:text-gray-400">This is a secure admin area accessible only to users with admin privileges.</p>
         </div>

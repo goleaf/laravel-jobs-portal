@@ -25,7 +25,7 @@
     <div class="separator my-5"></div>
     <div class="flex justify-end">
         {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3','id' => 'jobsSaveBtn']) }}
-        <a href="{{ route('notification.settings.index') }}"
-           class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary me-2">{{ __('messages.common.cancel') }}</a>
+        <a href="{{ route('notification.') }}"
+           class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
     </div>
 </div>

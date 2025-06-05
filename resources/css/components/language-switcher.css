@@ -1,0 +1,9 @@
+/* Component-specific styles */
+.language-switcher .flag-icon {
+    margin-right: 0.5rem;
+}
+.language-switcher .dropdown-item.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+

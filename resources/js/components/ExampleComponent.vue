@@ -1,11 +1,11 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
+    <div class="container mx-auto px-4 mx-auto px-4">
+        <div class="flex flex-wrap justify-center">
+            <div class="flex-1 -md-8">
+                <div class="bg-white overflow-hidden shadow rounded -lg">
+                    <div class="bg-white overflow-hidden shadow rounded -lg -header">Example Component</div>
 
-                    <div class="card-body">
+                    <div class="bg-white overflow-hidden shadow rounded -lg -body">
                         I'm an example component.
                     </div>
                 </div>

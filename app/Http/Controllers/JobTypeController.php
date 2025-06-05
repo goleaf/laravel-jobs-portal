@@ -14,6 +14,8 @@ use App\Http\Requests\StoreJobTypeRequest;
 
 use App\Http\Requests\UpdateJobTypeRequest;
 
+use App\Http\Requests\DeleteJobTypeRequest;
+
 class JobTypeController extends Controller
 {
 

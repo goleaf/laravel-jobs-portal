@@ -1,8 +1,8 @@
 <div class="fixed inset-0 z-50 overflow-y-auto fade" tabindex="-1" role="dialog" id="showModal">
     <div class="flex items-center justify-center min-h-screen px-4" role="document">
-        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h5 class="modal-title">
+        <div class="bg-white rounded -lg shadow-xl max-w-lg w-full">
+            <div class="px-6 py-4 border-b border border-gray-300 -gray-200">
+                <h5 class="fixed inset-0 z-50 overflow-y-auto -title">
                     <th scope="col">{{ __('messages.company.reported_employer_detail') }}</th>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -12,9 +12,9 @@
             {{ Form::open(['id' => 'showForm']) }}
             <div class="px-6 py-4">
                 <div class="flex flex-wrap details-page">
-                    <div class="form-group flex-1 sm-12">
+                    <div class="mb-4 flex-1 sm-12">
                         <div class="employee-listing-details">
-                            <div class="flex employee-listing-description items-center justify-center flex-col">
+                            <div class="flex employee-listing-description items-center justify-center flex- flex-1">
                                 <div class="pl-0 mb-2 employee-avatar">
                                     <span id="showImage"></span>
                                 </div>

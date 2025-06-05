@@ -12,7 +12,7 @@
                 <div class="px-4 space-y-2">
                     <!-- Dashboard -->
                     <a href="{{ route('admin.dashboard') }}" 
-                       class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dashboard') ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                       class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs("admin.dashboard') ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                         <svg class="mr-3 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                         </svg>
@@ -34,11 +34,11 @@
                         </button>
                         <div x-show="open" class="space-y-1 ml-8">
                             <a href="{{ route('admin.candidates.index') }}" 
-                               class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white {{ request()->routeIs('admin.candidates.*') ? 'text-white' : '' }}">
+                               class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white {{ request()->routeIs("admin.candidates.*') ? 'text-white' : '' }}">
                                 {{ __('messages.candidates') }}
                             </a>
-                            <a href="{{ route('admin.employers.index') }}" 
-                               class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white {{ request()->routeIs('admin.employers.*') ? 'text-white' : '' }}">
+                            <a href="{{ route('admin.') }}" 
+                               class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white {{ request()->routeIs("admin.employers.*') ? 'text-white' : '' }}">
                                 {{ __('messages.employers') }}
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                     
                     <!-- Jobs Management -->
                     <a href="{{ route('admin.jobs.index') }}" 
-                       class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.jobs.*') ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                       class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs("admin.jobs.*') ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                         <svg class="mr-3 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z" />
                         </svg>
@@ -68,11 +68,11 @@
                             </svg>
                         </button>
                         <div x-show="open" class="space-y-1 ml-8">
-                            <a href="{{ route('admin.settings.general') }}" 
+                            <a href="{{ route('admin.') }}" 
                                class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white">
                                 {{ __('messages.general_settings') }}
                             </a>
-                            <a href="{{ route('admin.settings.email') }}" 
+                            <a href="{{ route('admin.') }}" 
                                class="group flex items-center px-2 py-2 text-sm text-gray-300 hover:text-white">
                                 {{ __('messages.email_settings') }}
                             </a>
@@ -118,10 +118,10 @@
                             <div x-show="open" @click.away="open = false" 
                                  class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                 <div class="py-1">
-                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('admin.') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {{ __('messages.profile') }}
                                     </a>
-                                    <a href="{{ route('admin.settings.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('admin.') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {{ __('messages.settings') }}
                                     </a>
                                     <form method="POST" action="{{ route('logout') }}">

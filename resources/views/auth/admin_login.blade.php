@@ -1,33 +1,16 @@
+
+@push('styles')
+    @vite('resources/css/components/admin_login.css')
+@endpush
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('{{ __('auth.admin_login') }}') }} - {{ config('app.name') }}</title><style>
-        .admin-login-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .login-card {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            border: none;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-        }
-        .admin-badge {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-    </style>
+    <title>{{ __('{{ __('auth.admin_login') }}') }} - {{ config('app.name') }}</title>
 </head>
 <body class="admin-login-bg">
-    <div class="container mx-auto px-4 mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center items-center" style="min-height: 100vh;">
             <div class="md:w-6/12 flex-1 lg-4">
                 <div class="text-center mb-4">
@@ -37,10 +20,10 @@
                     </a>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 login- bg-white shadow rounded-lg overflow-hidden">
-                    <div class="bg-white shadow rounded-lg overflow-hidden body p-4">
+                <div class="bg-white rounded-lg shadow-md border border-gray-300 border border-gray-300 -gray-200 login- bg-white shadow rounded -lg overflow-hidden">
+                    <div class="bg-white shadow rounded -lg overflow-hidden body p-4">
                         <div class="text-center mb-4">
-                            <div class="admin-badge">
+                            <div class="admin- inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium">
                                 <i class="fas fa-shield-alt me-1"></i>
                                 {{ __('ADMIN ACCESS') }}
                             </div>
@@ -49,20 +32,20 @@
                         </div>
 
                         @if ($errors->any())
-                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border-red-200 text-red-800 p-4 rounded-md mb-4 dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-red-50 border border-gray-300 border border-gray-300 -red-200 text-red-800 p-4 rounded -md mb-4 dismissible fade show" role="rounded-md p-4">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
-                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors close" data-bs-dismiss="rounded-md p-4"></button>
                             </div>
                         @endif
 
                         @if (session('status'))
-                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-blue-50 border border-gray-300 border-blue-200 text-blue-800 p-4 rounded-md mb-4 dismissible fade show" role="alert">
+                            <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-blue-50 border border-gray-300 border border-gray-300 -blue-200 text-blue-800 p-4 rounded -md mb-4 dismissible fade show" role="rounded-md p-4">
                                 {{ session('status') }}
-                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors close" data-bs-dismiss="alert"></button>
+                                <button type="button" class="px-4 py-2 rounded font-medium transition-colors close" data-bs-dismiss="rounded-md p-4"></button>
                             </div>
                         @endif
 
@@ -72,11 +55,11 @@
                             
                             <div class="mb-3">
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-envelope me-1 text-primary-600"></i>
+                                    <i class="fas fa-envelope me-1 text-indigo-600 -600"></i>
                                     {{ __('Administrator Email') }}
                                 </label>
                                 <input id="email" type="email" 
-                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 lg @error("email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 lg @error("email') is-invalid @enderror" 
                                        name="email" 
                                        value="{{ old('email') }}" 
                                        required 
@@ -92,17 +75,17 @@
 
                             <div class="mb-3">
                                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-lock me-1 text-primary-600"></i>
+                                    <i class="fas fa-lock me-1 text-indigo-600 -600"></i>
                                     {{ __('{{ __('auth.password') }}') }}
                                 </label>
                                 <div class="flex">
                                     <input id="password" type="password" 
-                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 lg @error("password') is-invalid @enderror" 
+                                           class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 lg @error("password') is-invalid @enderror" 
                                            name="password" 
                                            required 
                                            autocomplete="current-password"
                                            placeholder="{{ __('Enter your password') }}">
-                                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors outline-secondary" type="button" onclick="togglePassword()">
+                                    <button class="border border-gray-300 bg-transparent" type="button" onclick="togglePassword()">
                                         <i class="fas fa-eye" id="passwordToggle"></i>
                                     </button>
                                 </div>
@@ -122,7 +105,7 @@
                             </div>
 
                             <div class="d-grid mb-3">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-primary-600 text-white hover: bg-primary-600 -700 px-4 py-2 rounded font-medium transition-colors lg">
+                                <button type="submit" class="border border-gray-300 bg-transparent">
                                     <i class="fas fa-sign-in-alt me-1"></i>
                                     {{ __('Access Admin Panel') }}
                                 </button>
@@ -131,7 +114,7 @@
 
                         @if (Route::has('password.request'))
                             <div class="text-center">
-                                <a class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors link text-decoration-none" href="{{ route('password.request') }}">
+                                <a class="border border-gray-300 bg-transparent" href="{{ route('password.request') }}">
                                     <i class="fas fa-key me-1"></i>
                                     {{ __('Forgot Password?') }}
                                 </a>
@@ -146,7 +129,7 @@
                                 <small>{{ __('Secured by SSL encryption') }}</small>
                             </div>
                             <div class="mt-2">
-                                <a href="{{ route('front.home') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white px-4 py-2 rounded font-medium transition-colors sm">
+                                <a href="{{ route('front.home') }}" class="rounded-md transition">
                                     <i class="fas fa-arrow-left me-1"></i>
                                     {{ __('Back to Website') }}
                                 </a>
@@ -154,7 +137,7 @@
                         </div>
                     </div>
                     
-                    <div class="bg-white shadow rounded-lg overflow-hidden footer bg-gray-100 text-center">
+                    <div class="bg-white shadow rounded -lg overflow-hidden footer bg-gray-100 text-center">
                         <small class="text-gray-500">
                             {{ __('Admin access is restricted to authorized personnel only') }}
                         </small>
@@ -162,34 +145,15 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <small class="text-white-50">
+                    <small class="text-white -50">
                         &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}
                     </small>
                 </div>
             </div>
         </div>
-    </div><script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordToggle = document.getElementById('passwordToggle');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordToggle.className = 'fas fa-eye-slash';
-            } else {
-                passwordInput.type = 'password';
-                passwordToggle.className = 'fas fa-eye';
-            }
-        }
-
-        // Auto-dismiss alerts after 5 seconds
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000);
-    </script>
+    </div>
 </body>
 </html> 
+@push('scripts')
+    @vite('resources/js/components/admin_login.js')
+@endpush

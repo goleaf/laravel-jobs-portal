@@ -142,7 +142,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
         Transaction::create($transaction);
         Flash::success(__('messages.flash.payment_success'));
 
-        return redirect(route('job.index'));
+        return redirect(route('jobs.index'));
     }
 
     /**
@@ -152,6 +152,6 @@ class FeaturedJobSubscriptionController extends AppBaseController
     {
         Flash::error(__('messages.flash.payment_not_complete'));
 
-        return redirect(route('job.index'));
+        return redirect(route('jobs.index'));
     }
 }

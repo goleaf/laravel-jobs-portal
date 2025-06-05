@@ -15,6 +15,10 @@ use Illuminate\View\View;
 use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest as CompanyUpdateRequest;
 
+use App\Http\Requests\StoreCompanySizeRequest;
+
+use App\Http\Requests\DeleteCompanySizeRequest;
+
 class CompanySizeController extends AppBaseController
 {
     /** @var CompanySizeRepository */

@@ -21,6 +21,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 use App\Http\Requests\StorePostRequest;
 
+use App\Http\Requests\DeletePostRequest;
+
 class PostController extends AppBaseController
 {
     /** @var PostRepository */

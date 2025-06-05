@@ -1,14 +1,14 @@
 <script id="blogTemplate" type="text/x-jsrender">
 
-<div class="comment-card card py-20 mb-40">
-    <div class="d-flex flex-sm-row justify-content-between align-items-start">
-        <div class="d-flex align-items-center me-2">
-            <div class="card-img me-4">
-                <img class="card-img" src="{{:image}}" alt="user-image">
+<div class="comment- bg-white overflow-hidden shadow rounded-lg bg-white overflow-hidden shadow rounded -lg py-20 mb-40">
+    <div class="flex flex-sm- flex flex-wrap justify-between items-start">
+        <div class="flex items-center me-2">
+            <div class="bg-white overflow-hidden shadow rounded -lg -img me-4">
+                <img class="bg-white overflow-hidden shadow rounded -lg -img" src="{{:image}}" alt="user-image">
             </div>
             <div class="">
-                <div class="card-body p-0">
-                    <h5 class="card-title w-100 fs-16 text-secondary text-break">
+                <div class="bg-white overflow-hidden shadow rounded -lg -body p-0">
+                    <h5 class="bg-white overflow-hidden shadow rounded -lg -title w-100 fs-16 text-gray-600 text-break">
                     {{:commentName}}
                     </h5>
                     <p class="fs-16 text-gray mb-0 text-break"
@@ -20,17 +20,17 @@
         </div>
         {{if user}}
         <div class="">
-            <div class="d-inline-flex ms-2 mt-2">
+            <div class="inline -flex ms-2 mt-2">
                 <a href="javascript:void(0)" title="{{ __('messages.common.edit') }}"
-                        class="edit-comment-btn action-btn" data-id="{{:id}}">
-                    <div class="badge text-primary py-2 ms-1" data-text="Edit Comment">
+                        class="edit-comment- inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out action- inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out" data-id="{{:id}}">
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium text-indigo-600 py-2 ms-1" data-text="Edit Comment">
                         <span class="fa fa-pencil"></span>
                     </div>
                 </a>
                 <a href="javascript:void(0)" title="{{ __('messages.common.delete') }}"
-                        class="action-btn delete-comment-btn float-right"
+                        class="action- inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out delete-comment- inline-flex items-center px-4 py-2 border border border border-gray-300 -gray-300 -transparent text-sm font-medium rounded -md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-150 ease-in-out float-right"
                         data-id="{{:id}}">
-                    <div class="badge text-danger py-2 ms-1" data-text="Delete Comment">
+                    <div class="inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium text-red-600 py-2 ms-1" data-text="Delete Comment">
                         <span class="fa fa-trash"></span>
                     </div>
                 </a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\Front;
 
+use App\Http\Requests\Auth\Front\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Company;
@@ -79,7 +80,7 @@ class LoginController extends Controller
         return view('front_web_template.auth.candidate_login');
     }
 
-    protected function sendLoginResponse(Request $request): RedirectResponse
+    protected function sendLoginResponse(LoginRequest $request): RedirectResponse
     {
         $type = $request->get('type');
         $request->session()->regenerate();

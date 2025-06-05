@@ -12,6 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Http\Requests\StoreFAQRequest;
+
+use App\Http\Requests\DeleteFAQRequest;
+
 class FAQController extends AppBaseController
 {
     /** @var FAQRepository */

@@ -15,12 +15,8 @@ return new class extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->unsignedBigInteger('plan_currency_id')->nullable();
         });
-
-        Artisan::call(
-            'db:seed',
-            ['--class' => 'DefaultTransactionCurrencySeeder', '--force' => true]
-        );
-    }
+        // Seeding removed - handled by separate seeders
+}
 
     /**
      * Reverse the migrations.

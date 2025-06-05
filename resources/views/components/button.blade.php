@@ -6,7 +6,7 @@
     'disabled' => false
 ])
 
-{!! Form::button($value ?? $slot, [
+{{ Form::button($value ?? $slot, [
     'type' => $type,
     'name' => $name,
     'class' => $class,

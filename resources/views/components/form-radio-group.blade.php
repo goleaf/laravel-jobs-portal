@@ -3,7 +3,7 @@
     'label' => null,
     'options' => [],
     'selected' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'error' => null,
     'class' => '',

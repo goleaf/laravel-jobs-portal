@@ -5,7 +5,7 @@
     'options' => [],
     'selected' => null,
     'placeholder' => null,
-    'required' => false,
+    'text-red-500' => false,
     'disabled' => false,
     'error' => null,
     'class' => '',

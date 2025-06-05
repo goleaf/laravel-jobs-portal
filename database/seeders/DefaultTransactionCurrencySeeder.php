@@ -14,6 +14,12 @@ class DefaultTransactionCurrencySeeder extends Seeder
     public function run(): void
     {
         $plan = Plan::groupBy('salary_currency_id')->selectRaw('salary_currency_id, count(*) as total')->pluck('total', 'salary_currency_id')->toArray();
+        
+        if (empty($plan)) {
+            // No plans exist, skip updating transactions
+            return;
+        }
+        
         $maxUsedPlan = max($plan);
         $currency_id = array_search($maxUsedPlan, $plan);
         Transaction::whereNull('plan_currency_id')->update(['plan_currency_id' => $currency_id]);

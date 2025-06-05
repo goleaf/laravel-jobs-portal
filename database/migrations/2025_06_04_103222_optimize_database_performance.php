@@ -41,8 +41,8 @@ return new class extends Migration
         // Add performance indexes for users table
         if (Schema::hasTable('users')) {
             Schema::table('users', function (Blueprint $table) {
-                if (!Schema::hasIndex('users', 'users_role_index')) {
-                    $table->index('role');
+                if (Schema::hasColumn('users', 'user_type') && !Schema::hasIndex('users', 'users_user_type_index')) {
+                    $table->index('user_type');
                 }
                 if (!Schema::hasIndex('users', 'users_created_at_index')) {
                     $table->index('created_at');
@@ -66,7 +66,7 @@ return new class extends Migration
         });
         
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['role']);
+            $table->dropIndex(['user_type']);
             $table->dropIndex(['created_at']);
         });
     }

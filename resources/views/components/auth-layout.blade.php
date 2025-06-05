@@ -33,7 +33,7 @@
     @stack('head')
 </head>
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+    <div class="min-h-screen flex flex- flex-1 sm:justify-center items-center pt-6 sm:pt-0">
         <!-- Logo -->
         <div class="mb-6">
             @isset($logo)
@@ -41,13 +41,13 @@
             @else
                 <a href="{{ route('home') }}" class="flex items-center justify-center">
                     <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name') }}" class="h-12 w-auto">
-                    <span class="ml-2 text-2xl font-bold text-gray-900 dark:text-white">{{ config('app.name') }}</span>
+                    <span class="ml-2 text-2xl font-bold text-gray-900 dark: text-white">{{ config('app.name') }}</span>
                 </a>
             @endisset
         </div>
 
         <!-- Auth Card -->
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm: rounded -lg">
             <!-- Flash Messages -->
             <x-flash-messages />
 
@@ -67,7 +67,7 @@
             @isset($footerLinks)
                 {{ $footerLinks }}
             @else
-                <div class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex flex- flex-1 sm:flex- flex flex-wrap items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm text-gray-600 dark:text-gray-400">
                     <a href="{{ route('home') }}" class="hover:text-gray-900 dark:hover:text-gray-100">
                         {{ __('auth.back_to_home') }}
                     </a>

@@ -18,6 +18,10 @@ use Illuminate\View\View;
  */
 use App\Http\Requests\UpdateHeaderSliderRequest;
 
+use App\Http\Requests\DeleteHeaderSliderRequest;
+
+use App\Http\Requests\StoreHeaderSliderRequest;
+
 class HeaderSliderController extends AppBaseController
 {
     /** @var HeaderSliderRepository */

@@ -6,15 +6,15 @@
     <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
-    <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 p-4 rounded-md mb-4 danger hidden" id="validationErrorsBox">
+    <div class="px-4 py-3 rounded-md border border border border-gray-300 -gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 danger hidden" id="validationErrorsBox">
         <i class="fa-solid fa-face-frown me-5"></i>
     </div>
-    <div class="container mx-auto px-4 mx-auto fluid">
-        <div class="flex flex-col">
+    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="flex flex- flex-1">
             @include('flash::message')
             @include('layouts.errors')
-            <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden body">
+            <div class="bg-white shadow rounded -lg overflow-hidden">
+                <div class="bg-white shadow rounded -lg overflow-hidden body">
                     {{ Form::open(['route' => 'front.settings.update','files' => true,]) }}
                     @include('front_settings.fields')
                     {{ Form::close() }}
@@ -23,6 +23,6 @@
         </div>
     </div>
 @endsection
-{{ --@push('scripts')-- }}
-{{ --    <script src="{{mix('assets/js/web/front_settings/front_settings.js') }}"></script>--}}
-{{ --@endpush-- }}
+{{-- @push('scripts') --}}
+{{-- <script src="{{mix('assets/js/web/front_settings/front_settings.js') }}"></script> --}}
+{{-- @endpush --}}

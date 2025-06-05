@@ -1,0 +1,26 @@
+/* Component-specific styles */
+.icon-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .icon-preview {
+            font-size: 2rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+        .icon-code {
+            background-color: #f8f9fa;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        .search-box {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+        }
+

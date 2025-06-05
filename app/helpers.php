@@ -29,3 +29,31 @@ if (!function_exists('lang_direction')) {
         return App\Helpers\LanguageHelper::getDirection($locale);
     }
 }
+
+if (!function_exists('getCountries')) {
+    /**
+     * Get list of countries
+     * @return array
+     */
+    function getCountries()
+    {
+        try {
+            $countries = \App\Models\Country::orderBy('name')->pluck('name')->toArray();
+            return $countries;
+        } catch (\Exception $e) {
+            // Return empty array if countries table doesn't exist or error occurs
+            return [];
+        }
+    }
+}
+
+if (!function_exists("getCountries")) {
+    function getCountries() {
+        try {
+            $countries = \App\Models\Country::orderBy("name")->pluck("name")->toArray();
+            return $countries;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+}

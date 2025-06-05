@@ -13,9 +13,9 @@
     <pre><code>
     @formOpen(['url' => route('posts.store'), 'method' => 'POST', 'files' => true])
         <!-- Form fields go here -->
-        {{ Form::text('title', null, ['class' => 'form-control', 'placeholder' => 'Enter title'])  }}
-        {{ Form::textarea('content', null, ['class' => 'form-control', 'rows' => 5])  }}
-        {{ Form::submit('Save', ['class' => 'btn btn-primary'])  }}
+        {{ Form::text('title', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'placeholder' => 'Enter title']) }}
+        {{ Form::textarea('content', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'rows' => 5]) }}
+        {{ Form::submit('Save', ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors']) }}
     @formClose()
     </code></pre>
 
@@ -60,42 +60,42 @@
     @formOpen(['url' => route('login'), 'id' => 'login-form'])
         @csrf
         <div class="form-group">
-            {{ Form::label('email', 'Email Address:')  }}
-            {{ Form::email('email', old('email'), ['class' => 'form-control'])  }}
+            {{ Form::label('email', 'Email Address:') }}
+            {{ Form::email('email', old('email'), ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
         
         <div class="form-group">
-            {{ Form::label('password', 'Password:')  }}
-            {{ Form::password('password', ['class' => 'form-control'])  }}
+            {{ Form::label('password', 'Password:') }}
+            {{ Form::password('password', ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
         
         <div class="flex items-center">
-            {{ Form::checkbox('remember', 1, old('remember'), ['class' => 'form-check-input', 'id' => 'remember'])  }}
-            {{ Form::label('remember', 'Remember Me', ['class' => 'form-check-label'])  }}
+            {{ Form::checkbox('remember', 1, old('remember'), ['class' => 'form-check-input', 'id' => 'remember']) }}
+            {{ Form::label('remember', 'Remember Me', ['class' => 'form-check-label']) }}
         </div>
         
-        {{ Form::submit('Login', ['class' => 'btn btn-primary'])  }}
+        {{ Form::submit('Login', ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors']) }}
     @formClose()
     </code></pre>
 
     <h3>Dropdown Select Example</h3>
     <pre><code>
-    {{ Form::label('country', 'Country:')  }}
+    {{ Form::label('country', 'Country:') }}
     {{ Form::select('country', [
         'us' => 'United States',
         'ca' => 'Canada',
         'mx' => 'Mexico'
-    ], null, ['class' => 'form-control', 'placeholder' => 'Select a country'])  }}
+    ], null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'placeholder' => 'Select a country']) }}
     </code></pre>
 
     <h3>File Upload Example</h3>
     <pre><code>
     @formOpen(['url' => route('uploads.store'), 'method' => 'POST', 'files' => true])
         <div class="form-group">
-            {{ Form::label('document', 'Upload Document:')  }}
-            {{ Form::file('document', ['class' => 'form-control'])  }}
+            {{ Form::label('document', 'Upload Document:') }}
+            {{ Form::file('document', ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']) }}
         </div>
-        {{ Form::submit('Upload', ['class' => 'btn btn-primary'])  }}
+        {{ Form::submit('Upload', ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors']) }}
     @formClose()
     </code></pre>
 
@@ -103,22 +103,22 @@
     <p>These form helpers work well with Bootstrap styling. Just add the appropriate Bootstrap classes to your form elements:</p>
     <pre><code>
     {{ Form::text('name', null, [
-        'class' => 'form-control',
+        'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
         'placeholder' => 'Enter your name'
-    ])  }}
+    ]) }}
     </code></pre>
 
     <h2>Working with Validation Errors</h2>
     <p>You can easily add error handling to your forms:</p>
     <pre><code>
     <div class="form-group">
-        {{ Form::label('email', 'Email:')  }}
+        {{ Form::label('email', 'Email:') }}
         {{ Form::email('email', old('email'), [
-            'class' => 'form-control ' . ($errors->has('email') ? 'is-invalid' : '')
-        ])  }}
+            'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ' . ($errors->has('email') ? 'is-invalid' : '')
+        ]) }}
         @if ($errors->has('email'))
             <div class="invalid-feedback">
-                {{ $errors->first('email')  }}
+                {{ $errors->first('email') }}
             </div>
         @endif
     </div>

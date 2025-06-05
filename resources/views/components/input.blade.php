@@ -18,7 +18,7 @@
     $value = old($name, $value);
 @endphp
 
-<div class="{{ $containerClass  }}">
+<div class="{{ $containerClass }}">
     @if($label)
         {!! Form::label($name, $label, ['class' => 'block font-medium text-sm text-gray-700']) !!}
     @endif
@@ -44,10 +44,10 @@
     @endif
 
     @error($name)
-        <p class="mt-1 text-sm text-red-600">{{ $message  }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
 
     @if($error)
-        <p class="mt-1 text-sm text-red-600">{{ $error  }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ $error }}</p>
     @endif
 </div> 

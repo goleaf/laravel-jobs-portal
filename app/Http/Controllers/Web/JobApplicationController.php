@@ -44,7 +44,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @return mixed
      */
-    public function applyJob(ApplyJobApplyJobJobApplicationRequest $request)
+    public function applyJob(ApplyJobJobApplicationRequest $request)
     {
         $input = $request->all();
 

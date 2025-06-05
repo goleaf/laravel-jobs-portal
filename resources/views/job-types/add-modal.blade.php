@@ -42,12 +42,12 @@
             <form id="addJobTypeForm" class="bg-white">
                 <!-- Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('messages.job_type.new_job_type')  }}</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('messages.job_type.new_job_type') }}</h3>
                     <button 
                         type="button" 
                         @click="show = false" 
                         class="text-gray-400 hover:text-gray-500">
-                        <span class="sr-only">{{ __('messages.common.close')  }}</span>
+                        <span class="sr-only">{{ __('messages.common.close') }}</span>
                         <x-icons.x class="h-6 w-6" />
                     </button>
                 </div>
@@ -58,7 +58,7 @@
                         <x-input
                             name="name"
                             id="name"
-                            label="{{ __('messages.job_type.name')  }} <span class='text-red-500'>*</span>"
+                            label="{{ __('messages.job_type.name') }} <span class='text-red-500'>*</span>"
                             required="true"
                         />
                         <div id="nameError" class="text-red-500 text-sm mt-1 hidden"></div>
@@ -67,7 +67,7 @@
                             type="textarea"
                             name="description"
                             id="description"
-                            label="{{ __('messages.job_type.description')  }}"
+                            label="{{ __('messages.job_type.description') }}"
                         />
                         <div id="descriptionError" class="text-red-500 text-sm mt-1 hidden"></div>
                         
@@ -75,12 +75,12 @@
                         <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
                             <x-button
                                 type="button"
-                                value="{{ __('messages.common.cancel')  }}"
+                                value="{{ __('messages.common.cancel') }}"
                                 @click="show = false"
                                 class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                             />
                             <x-submit-button
-                                value="{{ __('messages.common.save')  }}"
+                                value="{{ __('messages.common.save') }}"
                                 class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-gray-300 border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                             />
                         </div>

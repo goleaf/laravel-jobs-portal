@@ -15,10 +15,10 @@
                 <x-icons.success />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('success')  }}</p>
+                <p class="text-sm font-medium">{{ session('success') }}</p>
             </div>
             <div class="ml-auto pl-3">
-                <div class="-mx-1.5 -my-1.5">
+                <div class="-mx-1.5 my-1.5">
                     <button @click="show = false" class="inline-flex text-green-500 hover:bg-green-100 rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <span class="sr-only">Dismiss</span>
                         <x-icons.x class="h-5 w-5" />
@@ -46,10 +46,10 @@
                 <x-icons.error />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('error')  }}</p>
+                <p class="text-sm font-medium">{{ session('error') }}</p>
             </div>
             <div class="ml-auto pl-3">
-                <div class="-mx-1.5 -my-1.5">
+                <div class="-mx-1.5 my-1.5">
                     <button @click="show = false" class="inline-flex text-red-500 hover:bg-red-100 rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         <span class="sr-only">Dismiss</span>
                         <x-icons.x class="h-5 w-5" />
@@ -77,10 +77,10 @@
                 <x-icons.warning />
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium">{{ session('warning')  }}</p>
+                <p class="text-sm font-medium">{{ session('warning') }}</p>
             </div>
             <div class="ml-auto pl-3">
-                <div class="-mx-1.5 -my-1.5">
+                <div class="-mx-1.5 my-1.5">
                     <button @click="show = false" class="inline-flex text-yellow-500 hover:bg-yellow-100 rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         <span class="sr-only">Dismiss</span>
                         <x-icons.x class="h-5 w-5" />

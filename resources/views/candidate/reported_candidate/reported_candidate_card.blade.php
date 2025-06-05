@@ -1,34 +1,34 @@
-<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
+<div class="col-xl-4 flex-1 md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee relative mb-5 border-hover-primary employee-border">
         <div class="employee-listing-details">
             <div class="flex employee-listing-description items-center justify-center flex-col">
                 <div class="pl-0 mb-2 employee-avatar">
-                    <img src="{{ $reportedCandidate->$candidate->candidate_url  }}"
+                    <img src="{{ $reportedCandidate->$candidate->candidate_url }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
                 <div class="mb-auto w-full employee-data">
                     <div class="flex justify-center items-center w-full">
                         <div>
-                            <span class="text-decoration-none text-color-gray">{{ $reportedCandidate->$candidate->$user->first_name  }}</span>
+                            <span class="text-decoration-none text-color-gray">{{ $reportedCandidate->$candidate->$user->first_name }}</span>
                         </div>
                     </div>
                     <div class="text-center">
-                        <label class="employee-label">{{ __('messages.company.reported_by')  }} :</label>
-                        <label class="text-decoration-none text-color-gray">{{ $reportedCandidate->$user->first_name  }}</label>
+                        <label class="employee-label">{{ __('messages.company.reported_by') }} :</label>
+                        <label class="text-decoration-none text-color-gray">{{ $reportedCandidate->$user->first_name }}</label>
                     </div>
                     <div class="text-center">
-                        <label class="employee-label">{{ __('messages.company.reported_on')  }} :</label>
-                        <label class="text-decoration-none text-color-gray">{{ \Carbon\Carbon::parse($reportedCandidate->created_at)->formatLocalized('%d %b, %Y')  }}</label>
+                        <label class="employee-label">{{ __('messages.company.reported_on') }} :</label>
+                        <label class="text-decoration-none text-color-gray">{{ \Carbon\Carbon::parse($reportedCandidate->created_at)->formatLocalized('%d %b, %Y') }}</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="employee-action- px-4 py-2 rounded font-medium transition-colors">
-            <a title="{{ __('messages.common.view')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 action- px-4 py-2 rounded font-medium transition-colors view-note"
+            <a title="{{ __('messages.common.view') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 action- px-4 py-2 rounded font-medium transition-colors view-note"
                data-id="{{ $reportedCandidate->id }}" href="#">
                 <i class="fas fa-eye"></i>
             </a>
-            <a title="{{ __('messages.common.delete')  }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
+            <a title="{{ __('messages.common.delete') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out bg-red-600 text-white hover:bg-red-700 action-btn delete- px-4 py-2 rounded font-medium transition-colors"
                data-id="{{ $reportedCandidate->id }}" href="#">
                 <i class="fa fa-trash"></i>
             </a>

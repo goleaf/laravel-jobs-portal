@@ -1,21 +1,15 @@
-@props([
-    "type" => "info",
-    "dismissible" => false
+@props(["type" =>"info","dismissible" => false
 ])
 
 @php
-    $classes = [
-        "info" => "bg-blue-50 border-blue-200 text-blue-700",
-        "success" => "bg-green-50 border-green-200 text-green-700",
-        "warning" => "bg-yellow-50 border-yellow-200 text-yellow-700",
-        "danger" => "bg-red-50 border-red-200 text-red-700",
+    $classes = ["info" =>"bg-blue-50 border-blue-200 text-blue-700","success" =>"bg-green-50 border-green-200 text-green-700","warning" =>"bg-yellow-50 border-yellow-200 text-yellow-700","danger" =>"bg-red-50 border-red-200 text-red-700",
     ];
 @endphp
 
-<div {{ $attributes->merge(["class" => "px-4 py-3 rounded-md border mb-4 " . $classes[$type]])  }}>
+<div {{ $attributes->merge(["class" =>"px-4 py-3 rounded-md border mb-4" . $classes[$type]]) }}>
     <div class="flex">
         <div class="flex-1">
-            {{ $slot  }}
+            {{ $slot }}
         </div>
         @if($dismissible)
             <button type="button" class="ml-2 text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">

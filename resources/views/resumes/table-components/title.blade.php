@@ -1,1 +1,1 @@
-{{ $$row->custom_properties['title']  }}
+{{ $row->custom_properties['title'] }}

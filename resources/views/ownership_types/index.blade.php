@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.ownership_types')  }}
+    {{ __('messages.ownership_types') }}
 @endsection
 @section('content')
-<div class="container mx-auto px-4 mx-auto -fluid">
+<div class="container mx-auto px-4 mx-auto fluid">
     <div class="flex flex-col">
         @include('flash::message')
         <livewire:ownership-type-table/>

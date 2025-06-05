@@ -62,7 +62,7 @@ Route::post('/register', function (Illuminate\Http\Request $request) {
         'last_name' => ['nullable', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'phone' => ['nullable', 'string', 'max:20'],
-        'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
     ]);
 
     $user = App\Models\User::create([
@@ -177,6 +177,18 @@ Route::get('/company/create', [App\Http\Controllers\CompanyController::class, 'c
 Route::get('/admin/login', function () {
     return view('auth.admin_login');
 })->middleware('guest')->name('admin.login');
+
+// Admin Dashboard route (for security testing)
+Route::get('/admin/dashboard', function () {
+    $user = auth()->user();
+    $hasRole = $user ? $user->hasRole('admin') : false;
+    
+    if (!$hasRole) {
+        abort(403, 'Access denied. User does not have admin role.');
+    }
+    
+    return view('admin.dashboard');
+})->middleware(['auth'])->name('admin.dashboard');
 
 // Post storage route (referenced in components/forms/readme.blade.php)
 Route::post('/posts', function (Illuminate\Http\Request $request) {

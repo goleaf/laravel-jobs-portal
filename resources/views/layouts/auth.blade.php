@@ -7,19 +7,19 @@
 <!--begin::Head-->
 <head>
     <base href="../../../">
-    <title>@yield('title') | {{ getAppName()  }}</title>
+    <title>@yield('title') | {{ getAppName() }}</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="shortcut icon" href="{{ getSettingValue('favicon')  }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
     <!--begin::Fonts-->
-    <meta name="csrf-token" content="{{ csrf_token()  }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--end::Fonts-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css')  }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css') }}">
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
-    <link href="{{ mix('assets/css/style.css')  }}" rel="stylesheet">
-    <link href="{{ mix('css/plugins.css')  }}" rel="stylesheet">
-    <link href="{{ mix('assets/css/custom-auth.css')  }}" rel="stylesheet">
-    {{ -- <link href="{{ mix('css/front-pages.css')  }}" rel="stylesheet" type="text/css"> --}}
+    <link href="{{ mix('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/plugins.css') }}" rel="stylesheet">
+    <link href="{{ mix('assets/css/custom-auth.css') }}" rel="stylesheet">
+    {{ -- <link href="{{ mix('css/front-pages.css') }}" rel="stylesheet" type="text/css"> --}}
 
     <style>
         header .language-dropdown-menu {
@@ -85,39 +85,39 @@
 </head>
 <!--end::Head-->
 <!--begin::Body-->
-<body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : ''  }}>
+<body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : '' }}>
 <!--begin::Main-->
 <div class="flex flex-col flex-root">
     <div class="flex flex- flex flex-wrap flex-column-fluid">
-        <div class="flex flex-col flex- flex flex-wrap -fluid">
+        <div class="flex flex-col flex- flex flex-wrap fluid">
             <header class="bg-gradient">
-                <nav class="bg-white shadow-sm border-b border-gray-200 bg-white shadow-sm -expand-lg">
+                <nav class="bg-white shadow-sm border-b border-gray-200 bg-white shadow-sm expand-lg">
                     <div class="flex items-center my-3 mx-5 ms-auto">
-                        <ul class="bg-white shadow-sm -nav flex justify-end align-items-lg-center w-full">
+                        <ul class="bg-white shadow-sm nav flex justify-end align-items-lg-center w-full">
                             <li class="nav-item">
                                 <div class="relative inline-block text-left">
                                     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out text-white inline-flex justify-center w-full rounded-md border border-gray-300 border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 language-dropdown- px-4 py-2 rounded font-medium transition-colors px-4 py-2" type="button"
                                             aria-expanded="false">
-                                        {{ getCurrentLanguageName()  }}
+                                        {{ getCurrentLanguageName() }}
                                     </a>
                                     <ul class="language-dropdown-menu language-menu">
                                         @foreach (getUserLanguages() as $key => $value)
-                                            <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : ''  }}"
-                                                data-prefix-value="{{ $key  }}">
+                                            <li class="languageSelection {{ checkLanguageSession() == $key ? 'languageSelection-active' : '' }}"
+                                                data-prefix-value="{{ $key }}">
                                                 <a href="javascript:void(0)"
-                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : ''  }}">
+                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-gray flex items-center {{ checkLanguageSession() == $key ?"active' : '' }}">
                                                     @if (array_key_exists($key, \App\Models\User::LANGUAGES_IMAGE))
                                                         @foreach (\App\Models\User::LANGUAGES_IMAGE as $imageKey => $imageValue)
                                                             @if ($imageKey == $key)
                                                                 <img class="me-2 country-flag"
-                                                                    src="{{ asset($imageValue)  }}" />
+                                                                    src="{{ asset($imageValue) }}" />
                                                             @endif
                                                         @endforeach
                                                     @else
                                                         <i class="fa fa-flag me-2 fs-7 text-red-600" aria-hidden="true"
                                                             style="width: 20px;"></i>
                                                     @endif
-                                                    {{ $value  }}
+                                                    {{ $value }}
                                                 </a>
                                             </li>
                                         @endforeach
@@ -133,7 +133,7 @@
                     @yield('content')
                 </div>
             </div>
-            <div class="container mx-auto px-4 mx-auto -fluid">
+            <div class="container mx-auto px-4 mx-auto fluid">
                 <footer class="border-top w-full pt-4 mt-7 text-center">
 {{ --                    <p class="fs-6 text-gray-600">{{$settings['copy_right_text'] }} <a href="{{ route('front.home') }}" class="text-decoration-none">--}}
 {{ --                            {{$settings['application_name'] }}</a>--}}
@@ -144,10 +144,10 @@
     </div>
 </div>
 
-<script src="{{ mix('js/auth-third-party.js')  }}"></script>
+<script src="{{ mix('js/auth-third-party.js') }}"></script>
 <script data-turbo-eval="false">
-    let defaultCountryCodeValue = "{{ getSettingValue('default_country_code')  }}";
-    let currentFrontLang = "{{ session()->get('languageName') ?? 'en'  }}";
+    let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}";
+    let currentFrontLang ="{{ session()->get('languageName') ?? 'en' }}";
 </script>
 <script>
     $(document).ready(function () {
@@ -158,7 +158,7 @@
     })
 
 </script>
-<script src="{{ asset('assets/js/custom/custom.js')  }}"></script>
+<script src="{{ asset('assets/js/custom/custom.js') }}"></script>
 <script src="{{ asset('assets/js/auto_fill/auto_fill.js') }}"></script>
 </body>
 <!--end::Body-->

@@ -7,7 +7,7 @@
                 <div class="sm:flex sm:items-start">
                     <div class="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm: text-left">
                         <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
-                            {{ __('messages.language.edit_language')  }}
+                            {{ __('messages.language.edit_language') }}
                         </h3>
                         <div class="mt-4">
                             <form id="editLanguageForm">
@@ -17,36 +17,36 @@
                                 
                                 <div class="mb-4">
                                     <label for="editLanguage" class="block text-sm font-medium text-gray-700">
-                                        {{ __('messages.language.language')  }}
+                                        {{ __('messages.language.language') }}
                                         <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="language" id="editLanguage" required 
                                         class="mt-1 block w-full border border-gray-300 border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                        placeholder="{{ __('messages.language.language')  }}">
+                                        placeholder="{{ __('messages.language.language') }}">
                                 </div>
                                 
                                 <div class="mb-4">
                                     <label for="editIso" class="block text-sm font-medium text-gray-700">
-                                        {{ __('messages.language.iso_code')  }}
+                                        {{ __('messages.language.iso_code') }}
                                         <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="iso_code" id="editIso" required 
                                         class="mt-1 block w-full border border-gray-300 border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                        placeholder="{{ __('messages.language.iso_code')  }}">
+                                        placeholder="{{ __('messages.language.iso_code') }}">
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex- flex flex-wrap -reverse">
+            <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex- flex flex-wrap reverse">
                 <button type="button" id="btnEditSave" 
                     class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-primary-600 border border-gray-300 border-transparent rounded-md shadow-sm hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
-                    {{ __('messages.common.save')  }}
+                    {{ __('messages.common.save') }}
                 </button>
                 <button type="button" id="btnEditCancel"
                     class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                    {{ __('messages.common.cancel')  }}
+                    {{ __('messages.common.cancel') }}
                 </button>
             </div>
         </div>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale())  }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token()  }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Title -->
     <title>
         @isset($title)
-            {{ $title  }} - {{ __('admin.title')  }} - {{ config('app.name')  }}
+            {{ $title }} - {{ __('admin.title') }} - {{ config('app.name') }}
         @else
-            {{ __('admin.title')  }} - {{ config('app.name')  }}
+            {{ __('admin.title') }} - {{ config('app.name') }}
         @endisset
     </title>
 
@@ -38,13 +38,13 @@
         <aside id="admin-sidebar" class="w-64 bg-gray-800 dark:bg-gray-900 text-white flex flex-col fixed inset-y-0 left-0 z-50 lg:static lg:z-auto">
             <!-- Logo -->
             <div class="flex items-center justify-center h-16 bg-gray-900 dark:bg-gray-800">
-                <h2 class="text-xl font-bold">{{ __('admin.title')  }}</h2>
+                <h2 class="text-xl font-bold">{{ __('admin.title') }}</h2>
             </div>
 
             <!-- Navigation -->
             <nav class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
                 @isset($adminNavigation)
-                    {{ $adminNavigation  }}
+                    {{ $adminNavigation }}
                 @else
                     <x-admin-navigation />
                 @endisset
@@ -54,11 +54,11 @@
             <div class="p-4 border-t border-gray-700">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <img class="h-8 w-8 rounded-full" src="{{ auth()->user()->avatar ?? '/images/default-avatar.png'  }}" alt="{{ auth()->user()->name  }}">
+                        <img class="h-8 w-8 rounded-full" src="{{ auth()->user()->avatar ?? '/images/default-avatar.png' }}" alt="{{ auth()->user()->name }}">
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium">{{ auth()->user()->name  }}</p>
-                        <p class="text-xs text-gray-400">{{ __('admin.logged_in')  }}</p>
+                        <p class="text-sm font-medium">{{ auth()->user()->name }}</p>
+                        <p class="text-xs text-gray-400">{{ __('admin.logged_in') }}</p>
                     </div>
                 </div>
             </div>
@@ -80,14 +80,14 @@
                         <!-- Breadcrumbs -->
                         @isset($breadcrumbs)
                             <nav class="flex">
-                                {{ $breadcrumbs  }}
+                                {{ $breadcrumbs }}
                             </nav>
                         @endisset
 
                         <!-- Header Actions -->
                         <div class="flex items-center space-x-4">
                             @isset($headerActions)
-                                {{ $headerActions  }}
+                                {{ $headerActions }}
                             @endisset
 
                             <!-- Theme Switcher -->
@@ -97,7 +97,7 @@
                             <x-language-switcher />
 
                             <!-- Logout -->
-                            <form method="POST" action="{{ route('logout')  }}" class="inline">
+                            <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
                                 <button type="submit" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,11 +117,11 @@
             <main class="flex-1 p-6">
                 @isset($pageHeader)
                     <div class="mb-6">
-                        {{ $pageHeader  }}
+                        {{ $pageHeader }}
                     </div>
                 @endisset
 
-                {{ $slot  }}
+                {{ $slot }}
             </main>
         </div>
     </div>

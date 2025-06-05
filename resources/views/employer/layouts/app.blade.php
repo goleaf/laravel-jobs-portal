@@ -4,20 +4,20 @@
 <head>
     @include('google_analytics')
     <base href="../">
-    <title>@yield('title') | {{ getAppName()  }}</title>
+    <title>@yield('title') | {{ getAppName() }}</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="csrf-token" content="{{ csrf_token()  }}">
-    <link rel="shortcut icon" href="{{ getSettingValue('favicon')  }}"/><link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css')  }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}"/><link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css') }}">
     @if(getLoggedInUser()->theme_mode)
-        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom-dark.css')  }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.dark.css')  }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.dark.css')  }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom-dark.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.dark.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.dark.css') }}">
     @else
-        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')  }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css')  }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
     @endif
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css')  }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}">
     @livewireStyles
     @routes
     @livewireScripts
@@ -32,18 +32,18 @@
         <div class="header fixed-header">
             @include('employer.layouts.header')
         </div>
-        <div class="theme-wrapper flex flex-col flex- flex flex-wrap -fluid">
-            <div class="flex flex-col flex- flex flex-wrap -fluid">
+        <div class="theme-wrapper flex flex-col flex- flex flex-wrap fluid">
+            <div class="flex flex-col flex- flex flex-wrap fluid">
                 <div class="flex flex-col flex-column-fluid pt-7">
                     <div class="content flex-column-fluid">
-                        <div class="w-full container mx-auto px-4 mx-auto -xxl">
+                        <div class="w-full container mx-auto px-4 mx-auto xxl">
                             @yield('content')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-full container mx-auto px-4 mx-auto -xxl">
+        <div class="w-full container mx-auto px-4 mx-auto xxl">
             @include('layouts.footer')
         </div>
         @include('employer_profile.edit_profile_modal')
@@ -55,7 +55,7 @@
 <script data-turbo-eval="false">
     var hostUrl = 'assets/';
     let getLoggedInUserLang = '{{ getCurrentLanguageCode() }}';
-    let defaultCountryCodeValue = "{{ getSettingValue('default_country_code') }}"
+    let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}"
     Lang.setLocale(getLoggedInUserLang);
 </script>
 <script>
@@ -64,7 +64,7 @@
     });
     var stripe = '';
     @if(!empty(getEnvSetting()['stripe_key']))
-         stripe = Stripe('{{ getEnvSetting()['stripe_key']  }}');
+         stripe = Stripe('{{ getEnvSetting()['stripe_key'] }}');
     @elseif(config('services.stripe.key'))
         stripe = Stripe('{{ config('services.stripe.key') }}');
     @endif
@@ -77,9 +77,9 @@
     });
 
     $('.table-responsive').on('show.bs.dropdown', function () {
-        $('.table-responsive').css("overflow", "unset");
+        $('.table-responsive').css("overflow","unset");
     }).on('hide.bs.dropdown', function () {
-        $('.table-responsive').css("overflow", "auto");
+        $('.table-responsive').css("overflow","auto");
     })
 
 </script>

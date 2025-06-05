@@ -16,6 +16,21 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/home';
 
     /**
+     * The path to the admin dashboard.
+     */
+    public const ADMIN_HOME = '/admin/dashboard';
+
+    /**
+     * The path to the employer dashboard.
+     */
+    public const EMPLOYER_HOME = '/employer/dashboard';
+
+    /**
+     * The path to the candidate dashboard.
+     */
+    public const CANDIDATE_HOME = '/candidate/dashboard';
+
+    /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void

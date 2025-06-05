@@ -8,16 +8,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token()  }}">
-    <title>@yield('title') | {{ getAppName()  }}</title>
-    <link rel="shortcut icon" href="{{ getSettingValue('favicon')  }}" type="image/x-icon">
-    <link rel="icon" href="{{ getSettingValue('favicon')  }}" type="image/x-icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title') | {{ getAppName() }}</title>
+    <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
+    <link rel="icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
     @vite(['resources/css/app.css', 'resources/css/vendor.css'])
-    <link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css')  }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css')  }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 
-    <link href="{{ asset('assets/css/front-third-party.css')  }}" rel="stylesheet" type="text/css">
-    <link href="{{ mix('css/front-pages.css')  }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/front-third-party.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ mix('css/front-pages.css') }}" rel="stylesheet" type="text/css">
 
     @yield('page_css')
     @livewireStyles
@@ -26,22 +26,22 @@
     @livewireScripts
     @vite(['resources/js/app.js', 'resources/js/vendor.js'])
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="{{ mix('js/front-third-party.js')  }}"></script>
+    <script src="{{ mix('js/front-third-party.js') }}"></script>
     {{ -- CDN JS removed - now using local assets -- }}
     <script>
-        let siteKey = "{{ config('app.google_recaptcha_site_key')  }}"
+        let siteKey ="{{ config('app.google_recaptcha_site_key') }}"
     </script>
-    {{ -- <script src="{{ mix('js/front_pages.js')  }}"></script> --}}
-    {{ -- <script src="{{ asset('assets/js/custom/custom.js')  }}"></script> --}}
+    {{ -- <script src="{{ mix('js/front_pages.js') }}"></script> --}}
+    {{ -- <script src="{{ asset('assets/js/custom/custom.js') }}"></script> --}}
 
     @yield('page_scripts')
     @foreach (googleJobSchema() as $jobSchema)
         {!! nl2br($jobSchema) !!}
     @endforeach
-    <script src="{{ mix('js/front_pages.js')  }}"></script>
+    <script src="{{ mix('js/front_pages.js') }}"></script>
 </head>
 
-<body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : ''  }}>
+<body {{ $lang == 'pt' || $lang == 'fr' || $lang == 'es' ? 'languages' : '' }}>
     <span class="header-padding"></span>
     @include('front_web_template.layouts.header')
 
@@ -53,14 +53,14 @@
         @include('front_web_template.layouts.footer')
     @endif
 
-    {{ Form::hidden('createNewLetterUrl', route('news-letter.create'), ['id' => 'createNewLetterUrl'])  }}
+    {{ Form::hidden('createNewLetterUrl', route('news-letter.create'), ['id' => 'createNewLetterUrl']) }}
     <script data-turbo-eval="false">
-        let defaultCountryCodeValue = "{{ getSettingValue('default_country_code')  }}";
-        let currentFrontLang = "{{ session()->get('languageName') ?? 'en'  }}";
+        let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}";
+        let currentFrontLang ="{{ session()->get('languageName') ?? 'en' }}";
         Lang.setLocale(currentFrontLang);
     </script>
-     <script src="{{ asset('assets/js/custom/custom.js')  }}"></script>
-     <script src="{{ asset('assets/js/custom/helpers.js')  }}"></script>
+     <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
+     <script src="{{ asset('assets/js/custom/helpers.js') }}"></script>
     </body>
 
 </html>

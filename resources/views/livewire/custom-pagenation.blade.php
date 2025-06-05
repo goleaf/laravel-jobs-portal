@@ -30,11 +30,11 @@
 
                 <!--  Show active page else show the first and last two pages from current page.  -->
                     @if ($page == $paginator->currentPage())
-                        <li class="page-item active"><span class="page-link">{{ $page  }}</span></li>
+                        <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
                     @elseif ($page === $paginator->currentPage() + 1 || $page === $paginator->currentPage() + 2 || $page === $paginator->currentPage() - 1 || $page === $paginator->currentPage() - 2 || $page === $paginator->lastPage() || $page === 1)
                         <li class="page-item">
                             <button type="button" class="page-link web-pagination- px-4 py-2 rounded font-medium transition-colors"
-                                    wire:click="gotoPage({{ $page  }})">{{ $page  }}</button>
+                                    wire:click="gotoPage({{ $page }})">{{ $page }}</button>
                         </li>
                     @endif
 
@@ -47,7 +47,7 @@
         @endforeach
 
         {{ -- Next Page Link -- }}
-        {{ --        {{ dd($paginator)  }}--}}
+        {{ --        {{ dd($paginator) }}--}}
         @if ($paginator->hasMorePages())
             <li class="page-item">
                 <button type="button" class="page-link" wire:click="nextPage({{ $paginator->lastPage() }})" rel="next"

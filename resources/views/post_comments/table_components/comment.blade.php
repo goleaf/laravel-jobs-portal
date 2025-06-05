@@ -1,1 +1,1 @@
-{{ Str::limit($$row->comment,50)  }}
+{{ Str::limit($row->comment,50) }}

@@ -1,7 +1,7 @@
 @component('mail::message')
     {{ -- Greeting -- }}
     @if (! empty($greeting))
-        # {{ $greeting  }}
+        # {{ $greeting }}
     @else
         @if ($level === 'error')
             # @lang('Whoops!')
@@ -12,7 +12,7 @@
 
     {{ -- Intro Lines -- }}
     @foreach ($introLines as $line)
-        {{ $line  }}
+        {{ $line }}
 
     @endforeach
 
@@ -29,34 +29,33 @@
         }
         ?>
         @component('mail::button', ['url' => $actionUrl, 'color' => $color])
-            {{ $actionText  }}
+            {{ $actionText }}
         @endcomponent
     @endisset
 
     {{ -- Outro Lines -- }}
     @foreach ($outroLines as $line)
-        {{ $line  }}
+        {{ $line }}
 
     @endforeach
 
     {{ -- Salutation -- }}
     @if (! empty($salutation))
-        {{ $salutation  }}
+        {{ $salutation }}
     @else
         @lang('Regards'),<br>
-        {{ getAppName()  }}
+        {{ getAppName() }}
     @endif
 
     {{ -- Subcopy -- }}
     @isset($actionText)
         @slot('subcopy')
-            @lang(
-                "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
+            @lang("If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
                 'into your web browser:',
                 [
                     'actionText' => $actionText,
                 ]
-            ) <span class="break-all">[{{ $displayableActionUrl  }}]({{ $actionUrl  }})</span>
+            ) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
         @endslot
     @endisset
 @endcomponent

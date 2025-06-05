@@ -1,14 +1,14 @@
 <div class="flex items-center">
     <a>
         <div class="image image-circle image-mini me-3">
-            <img src="{{ $$row->avatar  }}" alt="" class="user-img">
+            <img src="{{ $row->avatar }}" alt="" class="user-img">
         </div>
     </a>
     <div class="flex flex-col">
         <a
            class="mb-1 text-decoration-none fs-6">
-            {{ $$row->full_name  }}
+            {{ $row->full_name }}
         </a>
-        <span class="fs-6">{{ $$row->email  }}</span>
+        <span class="fs-6">{{ $row->email }}</span>
     </div>
 </div>

@@ -1,6 +1,6 @@
 @extends('front_web.layouts.app')
 @section('title')
-    {{ __('web.register')  }}
+    {{ __('web.register') }}
 @endsection
 @section('content')
     <div class="register-page">
@@ -8,14 +8,14 @@
         <section class="hero-section relative bg-color-light py-40">
             <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
-                    <div class="flex-1 -lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
+                    <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
                             <h1 class="text-gray-600 mb-3">
-                                {{ __('web.register_menu.employer').' '.__('web.register')  }}
+                                {{ __('web.register_menu.employer').' '.__('web.register') }}
                             </h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
-                                    <li class="breadcrumb-item ">
+                                    <li class="breadcrumb-item">
                                         <a href="{{ route('front.home') }}" class="fs-18 text-gray">
                                             @lang('web.home')
                                         </a>
@@ -34,21 +34,21 @@
         <section class="py-100">
             <div class="container mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
-                    <div class="col-xl-6 flex-1 -lg-8 mx-auto">
+                    <div class="col-xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
-                        <form method="POST" action="{{ route('front.login')  }}" id="addEmployerNewForm"
+                        <form method="POST" action="{{ route('front.login') }}" id="addEmployerNewForm"
                               class="py-40 px-40 bg-gray">
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -12 mb-4">
                                     <div class="form-group flex flex-wrap">
                                         <div class="col-sm-6 flex-1 -12 mb-3 mb-sm-0">
                                             <a href="{{ route('candidate.register') }}"
-                                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -light-success block">
+                                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors light-success block">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
                                         <div class="col-sm-6 flex-1 -12">
-                                            <a href="{{ route('employer.register')  }}"
-                                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -success block">
+                                            <a href="{{ route('employer.register') }}"
+                                               class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors success block">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
                                     </div>
@@ -58,9 +58,9 @@
                                     @include('layouts.errors')
                                 </div>
                                 <input type="hidden" name="type" value="2"/>
-                                <div class="flex-1 -md-6 mb-4">
+                                <div class="flex-1 md-6 mb-4">
                                     <div class="form-group">
-                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.name')  }}
+                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.name') }}
                                             <span class="text-primary-600">*</span>
                                         </label>
                                         <input type="text" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10" name="first_name"
@@ -68,9 +68,9 @@
                                                required>
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-6 mb-4">
+                                <div class="flex-1 md-6 mb-4">
                                     <div class="form-group">
-                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.email')  }}
+                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.email') }}
                                             <span class="text-primary-600">*</span>
                                         </label>
                                         <input type="email" class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10" name="email"
@@ -78,21 +78,21 @@
                                                required>
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-6 mb-4">
+                                <div class="flex-1 md-6 mb-4">
                                     <div class="form-group">
-                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.password')  }}
+                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.password') }}
                                             <span class="text-red-600">*</span></label>
-                                        <input type="password" name="password" placeholder="{{ __('messages.password')  }}"
+                                        <input type="password" name="password" placeholder="{{ __('messages.password') }}"
                                                class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10" id="employerPassword"
                                                required onkeypress="return avoidSpace(event)">
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-6 mb-4">
+                                <div class="flex-1 md-6 mb-4">
                                     <div class="form-group">
-                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.confirm_password')  }}
+                                        <label for="" class="fs-16 text-gray-600 mb-2">{{ __('web.common.confirm_password') }}
                                             <span class="text-red-600">*</span></label>
                                         <input type="password" name="password_confirmation"
-                                               placeholder="{{ __('messages.company.confirm_password')  }}"
+                                               placeholder="{{ __('messages.company.confirm_password') }}"
                                                class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray br-10" id="employerConfirmPassword"
                                                required onkeypress="return avoidSpace(event)">
                                     </div>
@@ -100,14 +100,14 @@
                             </div>
                             <div class="flex-1 -12 mb-4">
                                 <div class="flex items-center">
-                                    <input type="checkbox" name="privacyPolicy" class="flex items-center -input" id="remember">
-                                    <label class="flex items-center -label" for="remember">
+                                    <input type="checkbox" name="privacyPolicy" class="flex items-center input" id="remember">
+                                    <label class="flex items-center label" for="remember">
                                         @lang('messages.by_signing_up_you_agree_to_our')
-                                        <a href="{{ route('terms.conditions.list')  }}"
-                                           target="_blank">{{ __('messages.setting.terms_conditions')  }}</a>
+                                        <a href="{{ route('terms.conditions.list') }}"
+                                           target="_blank">{{ __('messages.setting.terms_conditions') }}</a>
                                         &
-                                        <a href="{{ route('privacy.policy.list')  }}"
-                                           target="_blank">{{ __('messages.setting.privacy_policy')  }}</a>.
+                                        <a href="{{ route('privacy.policy.list') }}"
+                                           target="_blank">{{ __('messages.setting.privacy_policy') }}</a>.
                                     </label>
                                 </div>
                             </div>
@@ -115,14 +115,14 @@
                                 <div class="flex-1 -12">
                                     <div class="form-group mt10">
                                         <div class="g-recaptcha flex justify-center" id="gRecaptchaContainerCompanyRegistration"
-                                             data-sitekey="{{ config('app.google_recaptcha_site_key')  }}"></div>
+                                             data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
                                         <div id="g-recaptcha-error"></div>
                                     </div>
                                 </div>
                             @endif
                             <div class="flex-1 -12 d-grid my-4">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -secondary" id="btnEmployerSave" data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{ __('messages.common.process') }}">
-                                    {{ __('web.register_menu.create_account')  }}</button>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors secondary" id="btnEmployerSave" data-loading-text="<span class="spinner-border spinner-border-sm"></span> {{ __('messages.common.process') }}">
+                                    {{ __('web.register_menu.create_account') }}</button>
                             </div>
                             @php
                             $envSetting = getEnvSetting();
@@ -130,21 +130,21 @@
                             <div class="flex-1 -12">
                                 <div class="d-grid">
                                     @if(!empty(($envSetting['facebook_app_id']) || config('services.facebook.client_id')) && !empty(($envSetting['facebook_app_secret']) || config('services.facebook.client_secret')) && !empty(($envSetting['facebook_redirect']) || config('services.facebook.redirect')) )
-                                    <a href="{{ url('/login/facebook?type=2')  }}"
+                                    <a href="{{ url('/login/facebook?type=2') }}"
                                        class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
-                                                class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook')  }}
+                                                class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook') }}
                                     </a>
                                     @endif
                                     @if(!empty(($envSetting['google_client_id']) || config('services.google.client_id')) && !empty(($envSetting['google_client_secret']) || config('services.google.client_secret')) && !empty(($envSetting['google_redirect']) || config('services.google.redirect')) )
-                                    <a href="{{ url('/login/google?type=2')  }}"
+                                    <a href="{{ url('/login/google?type=2') }}"
                                        class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
-                                                class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google')  }}
+                                                class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google') }}
                                     </a>
                                     @endif
                                     @if(!empty(($envSetting['linkedin_client_id']) || config('services.linkedin.client_id')) && !empty(($envSetting['linkedin_client_secret']) || config('services.linkedin.client_secret')) && !empty(config('services.linkedin.redirect')) )
-                                    <a href="{{ url('/login/linkedin?type=2')  }}"
+                                    <a href="{{ url('/login/linkedin?type=2') }}"
                                        class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
-                                                class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin')  }}
+                                                class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin') }}
                                     </a>
                                     @endif
                                 </div>
@@ -161,9 +161,9 @@
 
 {{ --@section('page_scripts')-- }}
 {{ --    <script>-- }}
-{{ --        let registerSaveUrl = "{{ route('front.save.register')  }}";--}}
-{{ --        let employerLogInUrl = "{{ route('front.employee.login')  }}";--}}
-{{ --        let isGoogleReCaptchaEnabled = "{{ (boolean)$isGoogleReCaptchaEnabled  }}";--}}
+{{ --        let registerSaveUrl ="{{ route('front.save.register') }}";--}}
+{{ --        let employerLogInUrl ="{{ route('front.employee.login') }}";--}}
+{{ --        let isGoogleReCaptchaEnabled ="{{ (boolean)$isGoogleReCaptchaEnabled }}";--}}
 {{ --    </script>-- }}
 {{ --    @if($isGoogleReCaptchaEnabled)-- }}
 {{ --        {{-- CDN JS removed - now using local assets -- }}--}}

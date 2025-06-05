@@ -5,8 +5,8 @@
 ])
 
 <div class="flex items-center">
-    <button {{ $attributes  }} class="flex items-center text-left">
-        {{ $slot  }}
+    <button {{ $attributes }} class="flex items-center text-left">
+        {{ $slot }}
         
         @if(isset($column['sortable']) && $column['sortable'])
             <span class="ml-1 flex-shrink-0">

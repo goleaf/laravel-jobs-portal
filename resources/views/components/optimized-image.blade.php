@@ -16,7 +16,7 @@ $classes = $classes ?? '';
 $alt = $alt ?? '';
 
 // Generate cache key for image data
-$cacheKey = "optimized_image:" . md5($src . $quality . ($responsive ? 'resp' : '') . ($webp ? 'webp' : ''));
+$cacheKey ="optimized_image:" . md5($src . $quality . ($responsive ? 'resp' : '') . ($webp ? 'webp' : ''));
 
 // Get or generate optimized image data
 $imageData = $cacheService->remember($cacheKey, function() use ($imageService, $src, $responsive, $webp, $placeholder, $quality) {
@@ -38,7 +38,7 @@ $imageData = $cacheService->remember($cacheKey, function() use ($imageService, $
                 ];
             }
         } catch (\Exception $e) {
-            \Log::warning("WebP conversion failed for {$src}: " . $e->getMessage());
+            \Log::warning("WebP conversion failed for {$src}:" . $e->getMessage());
         }
     }
     
@@ -47,7 +47,7 @@ $imageData = $cacheService->remember($cacheKey, function() use ($imageService, $
         try {
             $data['responsive'] = $imageService->generateResponsive($src);
         } catch (\Exception $e) {
-            \Log::warning("Responsive generation failed for {$src}: " . $e->getMessage());
+            \Log::warning("Responsive generation failed for {$src}:" . $e->getMessage());
         }
     }
     
@@ -56,7 +56,7 @@ $imageData = $cacheService->remember($cacheKey, function() use ($imageService, $
         try {
             $data['placeholder'] = $imageService->generatePlaceholder($src);
         } catch (\Exception $e) {
-            \Log::warning("Placeholder generation failed for {$src}: " . $e->getMessage());
+            \Log::warning("Placeholder generation failed for {$src}:" . $e->getMessage());
         }
     }
     

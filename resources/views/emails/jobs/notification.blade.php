@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <style type="text/css">
@@ -75,13 +74,13 @@
 </head>
 <body style="background-color: #edf2f7">
 <div style=" border-radius: 5px; padding: 15px; margin: 50px auto; width: 100%;">
-    <table class="w-full divide-y divide-gray-200 -class" style="background-color: #fff;">
+    <table class="w-full divide-y divide-gray-200 class" style="background-color: #fff;">
         <tr>
             <td>
                 <table width="100%">
                     <tr>
                         <td>
-                            <img style="text-align: center;" src='{{ getLogoUrl()  }}'
+                            <img style="text-align: center;" src='{{ getLogoUrl() }}'
                                  alt="company logo"
                                  class="img-fluid main-logo">
                         </td>
@@ -98,14 +97,14 @@
                             @foreach($data['jobs'] as $key => $job)
                                 <li class="media">
                                     <img alt="image" class="mr-3 rounded-circle" width="70"
-                                         src="{{ $$job->$company->company_url }}">
+                                         src="{{ $job->$company->company_url }}">
                                     <div class="media-body">
                                         <a class="media-title mb-1"
-                                           href="{{ route('front.job.details', $$job->job_id)  }}">{{ $$job->job_title  }}</a>
-                                        <div class="text-time">{{ $$job->created_at->diffForHumans()  }}</div>
-                                        <div class="media-description text-gray-500">{!! html_entity_decode($$job->description) !!}</div>
+                                           href="{{ route('front.job.details', $job->job_id) }}">{{ $job->job_title }}</a>
+                                        <div class="text-time">{{ $job->created_at->diffForHumans() }}</div>
+                                        <div class="media-description text-gray-500">{!! html_entity_decode($job->description) !!}</div>
                                         <div class="media-links">
-                                            <span>Expiry Date: {{ \Carbon\Carbon::parse($$job->job_expiry_date)->translatedFormat('d-m-Y')  }}</span>
+                                            <span>Expiry Date: {{ \Carbon\Carbon::parse($job->job_expiry_date)->translatedFormat('d-m-Y') }}</span>
                                         </div>
                                     </div>
                                 </li>
@@ -125,8 +124,8 @@
                     <tr>
                         <td>
                             <p style="margin-bottom: 0;text-align: center; font-size: 13px;">
-                                <strong>&copy;2021 <a href="{{ config('app.url')  }}"
-                                                      class="company-name">{{ getAppName()  }}</a>.</strong>
+                                <strong>&copy;2021 <a href="{{ config('app.url') }}"
+                                                      class="company-name">{{ getAppName() }}</a>.</strong>
                                 {{ __('messages.all_rights_reserved') }}.
                             </p>
                     </tr>

@@ -1,6 +1,6 @@
 @extends('employer.layouts.app')
 @section('title')
-    {{ __('messages.job_stage.slots')  }}
+    {{ __('messages.job_stage.slots') }}
 @endsection
 @push('css')@endpush
 @section('content')
@@ -8,7 +8,7 @@
         <div class="flex flex-col">
             @include('layouts.errors')
             <div class="bg-white shadow rounded-lg overflow-hidden">
-                <div class="bg-white shadow rounded-lg overflow-hidden -body">
+                <div class="bg-white shadow rounded-lg overflow-hidden body">
                     <div class="flex justify-end">
                         @php
                             $stageId = null;
@@ -18,14 +18,14 @@
                                 $stageId = $lastStage->stage_id;
                             @endphp
                             <div class="w-1/4">
-                                {{ Form::select('stage_id', $jobStage, $lastStage->stage_id, ['id' => 'stages', 'class' => 'form-select status-filter w-100'])  }}
+                                {{ Form::select('stage_id', $jobStage, $lastStage->stage_id, ['id' => 'stages', 'class' => 'form-select status-filter w-100']) }}
                             </div>
                         @endif
                         @if($isSelectedRejectedSlot > 0 || $isStageMatch)
                             <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors schedule-interview">
                                 <a href="javascript:void(0)"
-                                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors -primary addJobStageModal ms-2">
-                                    {{ __('messages.common.add')  }}
+                                   class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-4 py-2 rounded font-medium transition-colors primary addJobStageModal ms-2">
+                                    {{ __('messages.common.add') }}
                                 </a>
                             </div>
                         @endif
@@ -43,13 +43,13 @@
 @endsection
 @push('scripts')
     <script>
-        var interviewSlotStoreUrl = "{{ route('employer.interview.slot.store', ['jobId' => request()->route('jobId')])  }}";
-        var batchSlotStoreUrl = "{{ route('employer.batch.slot.store', ['jobId' => request()->route('jobId')])  }}";
+        var interviewSlotStoreUrl ="{{ route('employer.interview.slot.store', ['jobId' => request()->route('jobId')]) }}";
+        var batchSlotStoreUrl ="{{ route('employer.batch.slot.store', ['jobId' => request()->route('jobId')]) }}";
         var uniqueId = 1;
-        var JobApplicationId = "{{ request()->route('jobApplicationId')  }}";
-        var getScheduleHistory = "{{ route('employer.schedule.history', ['jobId' => request()->route('jobId')])  }}";
-        var cancelSlotUrl = "{{ route('employer.slot.cancel', ['jobId' => request()->route('jobId')])  }}";
-        var jobApplicationUrl = "{{ url('employer/jobs/'.request()->route('jobId').'/applications') }}";
-    </script>{{ --    <script src="{{ asset('assets/js/job_applications/job_slots.js')  }}"></script>--}}
+        var JobApplicationId ="{{ request()->route('jobApplicationId') }}";
+        var getScheduleHistory ="{{ route('employer.schedule.history', ['jobId' => request()->route('jobId')]) }}";
+        var cancelSlotUrl ="{{ route('employer.slot.cancel', ['jobId' => request()->route('jobId')]) }}";
+        var jobApplicationUrl ="{{ url('employer/jobs/'.request()->route('jobId').'/applications') }}";
+    </script>{{ --    <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script>--}}
 @endpush
 

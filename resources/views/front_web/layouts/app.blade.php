@@ -7,21 +7,21 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token()  }}">
-        <title>@yield('title') | {{ getAppName()  }}</title>
-        <link rel="shortcut icon" href="{{ getSettingValue('favicon')  }}" type="image/x-icon">
-        <link rel="icon" href="{{ getSettingValue('favicon')  }}" type="image/x-icon">
-        <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css')  }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css')  }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>@yield('title') | {{ getAppName() }}</title>
+        <link rel="shortcut icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
+        <link rel="icon" href="{{ getSettingValue('favicon') }}" type="image/x-icon">
+        <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="{{ asset('front_web/css/jquery-ui.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 
         <link href="{{ asset('assets/css/front-third-party.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('css/front-pages.css')  }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('css/front-pages.css') }}" rel="stylesheet" type="text/css">
 
         @yield('page_css')
         @livewireStyles
         @routes
 {{ --        @livewireScripts-- }}
-        <script src="{{ asset('vendor/livewire/livewire.js')  }}"></script>
+        <script src="{{ asset('vendor/livewire/livewire.js') }}"></script>
         @include('livewire.livewire-turbo')
 
         <script {{ -- Turbo included via @vite(['resources/js/vendor.js']) -- }}
@@ -31,10 +31,10 @@
         <script src="{{ asset('js/front-third-party.js') }}"></script>
         {{ -- CDN JS removed - now using local assets -- }}
         <script>
-            let siteKey = "{{ config('app.google_recaptcha_site_key') }}"
+            let siteKey ="{{ config('app.google_recaptcha_site_key') }}"
         </script>
         <script src="{{ asset('js/front_pages.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom.js')  }}"></script>
+        <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
 
         @yield('page_scripts')
         @foreach(googleJobSchema() as $jobSchema)
@@ -56,7 +56,7 @@
     <!-- Footer End -->
     {{ Form::hidden('createNewLetterUrl',route('news-letter.create'),['id'=>'createNewLetterUrl']) }}
     <script data-turbo-eval="false">
-        let defaultCountryCodeValue = "{{ getSettingValue('default_country_code') }}"
+        let defaultCountryCodeValue ="{{ getSettingValue('default_country_code') }}"
     </script>
     </body>
 </html>

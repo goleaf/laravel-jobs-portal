@@ -1,6 +1,6 @@
 @extends('candidate.layouts.app')
 @section('title')
-    {{ __('messages.profile')  }}
+    {{ __('messages.profile') }}
 @endsection
 @section('content')
     @include('flash::message')

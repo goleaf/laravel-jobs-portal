@@ -3,7 +3,7 @@
 @section('add-button')
     <button id="addLanguageBtn" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover: bg-primary-600 -700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
         <x-icons.add class="w-5 h-5 mr-2" />
-        {{ __('language.add_language')  }}
+        {{ __('language.add_language') }}
     </button>
 @endsection
 
@@ -17,7 +17,7 @@
             <input type="text" 
                 wire:model.debounce.300ms="search" 
                 class="bg-gray-50 border border-gray-300 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" 
-                placeholder="{{ __('common.search')  }}">
+                placeholder="{{ __('common.search') }}">
             @if($search)
                 <button wire:click="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3">
                     <x-icons.close class="w-5 h-5 text-gray-500 hover:text-gray-900" />
@@ -29,7 +29,7 @@
         <div class="flex flex-wrap items-center justify-end gap-2">
             <div class="flex items-center space-x-2">
                 <label for="perPage" class="text-sm font-medium text-gray-700">
-                    {{ __('common.per_page')  }}:
+                    {{ __('common.per_page') }}:
                 </label>
                 <select id="perPage" 
                     wire:model="perPage"
@@ -55,8 +55,8 @@
                     @foreach($columns as $column)
                         <th scope="col" class="px-6 py-3">
                             @if(isset($column['sortable']) && $column['sortable'])
-                                <button wire:click="sortBy('{{ $column['field']  }}')" class="flex items-center">
-                                    {{ $column['label']  }}
+                                <button wire:click="sortBy('{{ $column['field'] }}')" class="flex items-center">
+                                    {{ $column['label'] }}
                                     
                                     @if($sortField === $column['field'])
                                         <span class="ml-1">
@@ -69,7 +69,7 @@
                                     @endif
                                 </button>
                             @else
-                                {{ $column['label']  }}
+                                {{ $column['label'] }}
                             @endif
                         </th>
                     @endforeach
@@ -78,7 +78,7 @@
             <tbody>
                 @if(count($items) > 0)
                     @foreach($items as $item)
-                        <tr class="bg-white border-b hover:bg-gray-50" wire:key="row-{{ $$item->id  }}">
+                        <tr class="bg-white border-b hover:bg-gray-50" wire:key="row-{{ $item->id }}">
                             @foreach($columns as $column)
                                 <td class="px-6 py-4">
                                     @if(isset($column['component']))
@@ -86,7 +86,7 @@
                                     @elseif(isset($column['format']))
                                         {!! $column['format']($item) !!}
                                     @else
-                                        {{ $$item->{$column['field']} }}
+                                        {{ $item->{$column['field']} }}
                                     @endif
                                 </td>
                             @endforeach
@@ -94,8 +94,8 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="{{ count($columns)  }}" class="px-6 py-4 text-center">
-                            {{ __('common.no_records')  }}
+                        <td colspan="{{ count($columns) }}" class="px-6 py-4 text-center">
+                            {{ __('common.no_records') }}
                         </td>
                     </tr>
                 @endif
@@ -105,6 +105,6 @@
 
     <!-- Pagination -->
     <div class="mt-4">
-        {{ $items->links()  }}
+        {{ $items->links() }}
     </div>
 </div> 

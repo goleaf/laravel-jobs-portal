@@ -1,13 +1,13 @@
-{{ --<link href="{{ mix('assets/css/style.css')  }}" rel="stylesheet" type="text/css"/>--}}
+{{ --<link href="{{ mix('assets/css/style.css') }}" rel="stylesheet" type="text/css"/>--}}
 <div class="aside-menu- container mx-auto px-4 mx-auto" id="sidebar">
     <!--begin::Brand-->
     <div class="aside-menu-container__aside-logo flex-column-auto">
-        <a data-turbo="false" href="{{ url('/')  }}" target="_blank" data-toggle="tooltip" data-placement="right"
+        <a data-turbo="false" href="{{ url('/') }}" target="_blank" data-toggle="tooltip" data-placement="right"
            class="text-decoration-none sidebar-logo image image-mini"
-           title="{{ getAppName()  }}">
-            <img src="{{ getLogoUrl()  }}"
+           title="{{ getAppName() }}">
+            <img src="{{ getLogoUrl() }}"
                  alt="Logo" width="70px" height="30px" alt="Logo" class="img-fluid new-logo-image"/>
-            <span class="bg-white shadow-sm -brand-name text-gray-900 text-decoration-none logo ps-2">{{ getAppName()  }}</span>
+            <span class="bg-white shadow-sm brand-name text-gray-900 text-decoration-none logo ps-2">{{ getAppName() }}</span>
         </a>
 
         <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out px-0 aside-menu-container__aside-menubar lg:block hidden sidebar- px-4 py-2 rounded font-medium transition-colors">

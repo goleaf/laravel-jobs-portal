@@ -1,5 +1,5 @@
 <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    PUBLIC"-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
@@ -66,13 +66,13 @@
 
 <body style="background-color: #edf2f7">
     <div style=" border-radius: 5px; padding: 15px; margin: 50px auto; width: 100%;">
-        <table class="w-full divide-y divide-gray-200 -class" style="background-color: #fff;">
+        <table class="w-full divide-y divide-gray-200 class" style="background-color: #fff;">
             <tr>
                 <td>
                     <table width="100%">
                         <tr>
                             <td>
-                                <img style="text-align: center;" src='{{ getLogoUrl()  }}' alt="company logo"
+                                <img style="text-align: center;" src='{{ getLogoUrl() }}' alt="company logo"
                                     class="img-fluid main-logo">
                             </td>
                         </tr>
@@ -96,8 +96,8 @@
                         <tr>
                             <td>
                                 <p style="margin-bottom: 0;text-align: center; font-size: 13px;">
-                                    <strong>&copy;2021 <a href="{{ config('app.url')  }}"
-                                            class="company-name">{{ getAppName()  }}</a>.</strong>
+                                    <strong>&copy;2021 <a href="{{ config('app.url') }}"
+                                            class="company-name">{{ getAppName() }}</a>.</strong>
                                     {{ __('messages.all_rights_reserved') }}.
                                 </p>
                         </tr>

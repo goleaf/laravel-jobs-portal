@@ -1,42 +1,42 @@
-                    <div class="col-xl-6 flex-1 -lg-8 mx-auto">
+                    <div class="col-xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
                         @formOpen(['id' => 'loginForm', 'class' => 'py-60 px-md-40 px-sm-20 px-30 bg-gray', 'method' => 'POST'])
                             @csrf
                             <div class="flex flex-wrap">
-                                <div class="flex-1 -md-12">
+                                <div class="flex-1 md-12">
                                     <div class="form-group mb-md-4 mb-3">
-                                        {{ Form::label('email', __('web.common.email'), ['class' => 'fs-16 text-secondary mb-3'])  }}
+                                        {{ Form::label('email', __('web.common.email'), ['class' => 'fs-16 text-secondary mb-3']) }}
                                         <span class="text-red-600">*</span>
                                         {{ Form::email('email', null, [
-                                            'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                            'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray bg-white br-10 p-3',
                                             'id' => 'email',
                                             'placeholder' => __('web.login_menu.enter_email_address'),
                                             'required'
-                                        ])  }}
+                                        ]) }}
                                     </div>
                                 </div>
-                                <div class="flex-1 -md-12 mb-3 relative">
+                                <div class="flex-1 md-12 mb-3 relative">
                                     <div class="flex justify-between">
-                                        {{ Form::label('password', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3'])  }}
-                                        <a href="{{ route('password.request')  }}"
-                                            class="text-primary-600 fs-16 mb-3">{{ __('web.login_menu.forget_password')  }}</a>
+                                        {{ Form::label('password', __('web.common.password'), ['class' => 'fs-16 text-secondary mb-3']) }}
+                                        <a href="{{ route('password.request') }}"
+                                            class="text-primary-600 fs-16 mb-3">{{ __('web.login_menu.forget_password') }}</a>
                                     </div>
                                     <span class="text-red-600">*</span>
                                     {{ Form::password('password', [
-                                        'class' => 'form-control fs-14 text-gray bg-white br-10 p-3',
+                                        'class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm fs-14 text-gray bg-white br-10 p-3',
                                         'id' => 'password',
                                         'placeholder' => __('web.login_menu.enter_password'),
                                         'required'
-                                    ])  }}
+                                    ]) }}
                                     <span class="absolute flex items-center top-0 mt-7 bottom-0 end-0 me-4 input-icon input-password-hide cursor-pointer text-gray-600 fs-14 change-type">
                                         <i class="fas fa-eye-slash"></i>
                                     </span>
                                 </div>
                                 <div class="flex-1 -12 mb-4">
                                     <div class="flex items-center">
-                                        {{ Form::checkbox('remember', '1', null, ['class' => 'form-check-input', 'id' => 'remember'])  }}
-                                        <label class="flex items-center -label" for="remember">
-                                            {{ __('web.login_menu.remember_me')  }}
+                                        {{ Form::checkbox('remember', '1', null, ['class' => 'form-check-input', 'id' => 'remember']) }}
+                                        <label class="flex items-center label" for="remember">
+                                            {{ __('web.login_menu.remember_me') }}
                                         </label>
                                     </div>
                                 </div>
@@ -44,7 +44,7 @@
                                     <div class="flex-1 -12">
                                         <div class="form-group mt10">
                                             <div class="g-recaptcha flex justify-center" id="gRecaptchaContainerCompanyRegistration"
-                                                data-sitekey="{{ config('app.google_recaptcha_site_key')  }}"></div>
+                                                data-sitekey="{{ config('app.google_recaptcha_site_key') }}"></div>
                                             <div id="g-recaptcha-error"></div>
                                         </div>
                                     </div>
@@ -52,15 +52,15 @@
                                 <div class="flex-1 -12 d-grid my-4">
                                     {{ Form::button(__('web.login_menu.login'), [
                                         'type' => 'submit',
-                                        'class' => 'btn btn-secondary btn-secondary-login',
+                                        'class' => 'rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors btn-secondary-login',
                                         'id' => 'loginBtn',
-                                        'data-loading-text' => "<span class="spinner-border spinner-border-sm"></span> ".__('messages.common.process')
-                                    ])  }}
+                                        'data-loading-text' =>"<span class="spinner-border spinner-border-sm"></span>".__('messages.common.process')
+                                    ]) }}
                                 </div>
                                 <div class="flex-1 -12 flex justify-center">
-                                    <span class="fs-16 me-1">{{ __('web.login_menu.new_on_website')  }}</span><a
-                                        href="{{ route('candidate.register')  }}"
-                                        class="text-primary-600 fs-16">{{ __('web.login_menu.create_an_account')  }}</a>
+                                    <span class="fs-16 me-1">{{ __('web.login_menu.new_on_website') }}</span><a
+                                        href="{{ route('candidate.register') }}"
+                                        class="text-primary-600 fs-16">{{ __('web.login_menu.create_an_account') }}</a>
                                 </div>
                                 @php
                                     $envSetting = getEnvSetting();
@@ -71,27 +71,27 @@
                                             !empty($envSetting['facebook_app_id'] || config('services.facebook.client_id')) &&
                                                 !empty($envSetting['facebook_app_secret'] || config('services.facebook.client_secret')) &&
                                                 !empty($envSetting['facebook_redirect'] || config('services.facebook.redirect')))
-                                            <a href="{{ url('/login/facebook')  }}"
+                                            <a href="{{ url('/login/facebook') }}"
                                                 class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out facebook- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
-                                                    class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook')  }}
+                                                    class="fa-brands fa-facebook-f fs-5 me-3"></i>{{ __('web.login_menu.login_via_facebook') }}
                                             </a>
                                         @endif
                                         @if (
                                             !empty($envSetting['google_client_id'] || config('services.google.client_id')) &&
                                                 !empty($envSetting['google_client_secret'] || config('services.google.client_secret')) &&
                                                 !empty($envSetting['google_redirect'] || config('services.google.redirect')))
-                                            <a href="{{ url('/login/google')  }}"
+                                            <a href="{{ url('/login/google') }}"
                                                 class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out google- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center mb-3"><i
-                                                    class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google')  }}
+                                                    class="fa-brands fa-google fs-5 me-3"></i>{{ __('web.login_menu.login_via_google') }}
                                             </a>
                                         @endif
                                         @if (
                                             !empty($envSetting['linkedin_client_id'] || config('services.linkedin.client_id')) &&
                                                 !empty($envSetting['linkedin_client_secret'] || config('services.linkedin.client_secret')) &&
                                                 !empty(config('services.linkedin.redirect')))
-                                            <a href="{{ url('/login/linkedin')  }}"
+                                            <a href="{{ url('/login/linkedin') }}"
                                                 class="inline-flex items-center px-4 py-2 border border-gray-300 border-transparent text-sm font-medium rounded-md transition duration-150 ease-in-out linkedin- px-4 py-2 rounded font-medium transition-colors flex items-center justify-center"><i
-                                                    class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin')  }}
+                                                    class="fa-brands fa-linkedin-in fs-5 me-3"></i>{{ __('web.login_menu.login_via_linkedin') }}
                                             </a>
                                         @endif
                                     </div>

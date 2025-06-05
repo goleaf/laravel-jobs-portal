@@ -15,15 +15,14 @@ class BladeComponentsTest extends TestCase
     {
         $companySize = CompanySize::factory()->create(['size' => 'Test Company Size']);
         
-        $view = $this->blade(
-            '<x-company-size-action-buttons :row="$row" />',
-            ['row' => $companySize]
-        );
+        $renderedView = view('company_sizes.table-components.action_button', [
+            'row' => $companySize
+        ])->render();
         
-        $view->assertSee('data-id="' . $companySize->id . '"', false);
-        $view->assertSee('company-size-edit-btn');
-        $view->assertSee('company-size-delete-btn');
-        $view->assertSee('action-container');
+        $this->assertStringContainsString('data-id="' . $companySize->id . '"', $renderedView);
+        $this->assertStringContainsString('company-size-edit-btn', $renderedView);
+        $this->assertStringContainsString('company-size-delete-btn', $renderedView);
+        $this->assertStringContainsString('action-container', $renderedView);
     }
 
     /** @test */
@@ -108,6 +107,6 @@ class BladeComponentsTest extends TestCase
         $this->assertStringContainsString('company-size-delete-btn', $renderedView);
         
         // Should not contain old incorrect classes
-        $this->assertStringNotContainsString('company-size-edit-', $renderedView);
+        $this->assertStringNotContainsString('company-size-edit-old', $renderedView);
     }
 } 

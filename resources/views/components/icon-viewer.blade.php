@@ -15,10 +15,10 @@
         @foreach($iconNames as $iconName)
             <div class="flex flex- flex-1 items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50">
                 <div class="flex items-center justify-center w-12 h-12 mb-2 rounded-full bg-gray-100">
-                    @php $componentName = "icons.{$iconName}" @endphp
+                    @php $componentName ="icons.{$iconName}" @endphp
                     <x-dynamic-component :component="$componentName" class="w-6 h-6 text-blue-600" />
                 </div>
-                <span class="text-sm text-gray-700">{{ $iconName  }}</span>
+                <span class="text-sm text-gray-700">{{ $iconName }}</span>
             </div>
         @endforeach
     </div>

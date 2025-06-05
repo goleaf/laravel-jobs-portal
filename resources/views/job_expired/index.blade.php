@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.expired_jobs')  }}
+    {{ __('messages.expired_jobs') }}
 @endsection
 @include('flash::message')
 @section('content')
-<div class="container mx-auto px-4 mx-auto -fluid">
+<div class="container mx-auto px-4 mx-auto fluid">
     <div class="flex flex-col">
         @include('flash::message')
         <livewire:job-expired-table />

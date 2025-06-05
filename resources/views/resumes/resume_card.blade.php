@@ -1,9 +1,9 @@
-<div class="col-xl-4 flex-1 -md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
+<div class="col-xl-4 flex-1 md-6 candidate- bg-white shadow rounded-lg overflow-hidden">
     <div class="hover-effect-employee relative mb-5 border-hover-primary employee-border">
         <div class="employee-listing-details">
             <div class="flex employee-listing-description items-center justify-center flex-col">
                 <div class="pl-0 mb-2 employee-avatar">
-                    <img src="{{ $candidateResume->$candidate->candidate_url  }}"
+                    <img src="{{ $candidateResume->$candidate->candidate_url }}"
                          class="img-responsive users-avatar-img employee-img mr-2">
                 </div>
                 <div class="mb-auto w-full employee-data">
@@ -13,14 +13,14 @@
                         </div>
                     </div>
                     <div class="text-center one-line-ellip">
-                        <label class="employee-label">{{ __('messages.faq.title')  }} :</label>
+                        <label class="employee-label">{{ __('messages.faq.title') }} :</label>
                         <span class="text-decoration-none text-color-gray">{{ $candidateResume->custom_properties['title'] }}</span>
                     </div>
                 </div>
             </div>
             <div class="download-resume">
                 <a href="{{ route('admin.download-all-resume') .'/'. $candidateResume->id }}"
-                   class="download-link"><i class="fas fa-download"></i> {{ __('messages.common.download')  }}</a>
+                   class="download-link"><i class="fas fa-download"></i> {{ __('messages.common.download') }}</a>
             </div>
         </div>
     </div>

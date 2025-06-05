@@ -11,7 +11,7 @@
                         <input 
                             type="text" 
                             class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" 
-                            placeholder="{{ __('messages.common.search')  }}" 
+                            placeholder="{{ __('messages.common.search') }}" 
                             wire:model.debounce.300ms="search"
                         >
                         <span class="px-3 py-2 bg-gray-50 border border-gray-300 border-gray-300 border-r-0 rounded-l-md text-gray-500">
@@ -22,24 +22,24 @@
             @endif
         </div>
 
-        <div class="w-full divide-y divide-gray-200 -responsive">
-            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 -striped">
+        <div class="w-full divide-y divide-gray-200 responsive">
+            <table class="min-w-full divide-y divide-gray-200 w-full divide-y divide-gray-200 striped">
                 @if($showHeader)
                 <thead>
                     <tr>
                         @foreach($columns as $column)
-                            <th class="{{ $column['headerClass'] ?? 'text-center'  }}">
+                            <th class="{{ $column['headerClass'] ?? 'text-center' }}">
                                 @if(isset($column['sortable']) && $column['sortable'])
-                                    <a href="#" wire:click.prevent="sortBy('{{ $column['field']  }}')">
-                                        {{ $column['label']  }}
+                                    <a href="#" wire:click.prevent="sortBy('{{ $column['field'] }}')">
+                                        {{ $column['label'] }}
                                         @if($sortField === $column['field'])
-                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down'  }}"></i>
+                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
                                         @else
                                             <i class="fas fa-sort" style="opacity: 0.4"></i>
                                         @endif
                                     </a>
                                 @else
-                                    {{ $column['label']  }}
+                                    {{ $column['label'] }}
                                 @endif
                             </th>
                         @endforeach
@@ -50,21 +50,21 @@
                     @forelse($data as $row)
                         <tr>
                             @foreach($columns as $column)
-                                <td class="{{ $column['cellClass'] ?? ''  }}">
+                                <td class="{{ $column['cellClass'] ?? '' }}">
                                     @if(isset($column['view']))
                                         @include($column['view'], ['row' => $row])
                                     @elseif(isset($column['format']))
                                         {!! $column['format']($row) !!}
                                     @elseif(isset($column['field']))
-                                        {{ $$row->{$column['field']} }}
+                                        {{ $row->{$column['field']} }}
                                     @endif
                                 </td>
                             @endforeach
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ count($columns)  }}" class="text-center">
-                                {{ __($emptyMessage)  }}
+                            <td colspan="{{ count($columns) }}" class="text-center">
+                                {{ __($emptyMessage) }}
                             </td>
                         </tr>
                     @endforelse
@@ -76,31 +76,31 @@
             <div class="flex justify-between items-center mt-3">
                 <div>
                     @if($data->total() > 0)
-                        <span>{{ __('Showing')  }}</span>
-                        <strong>{{ $data->firstItem()  }}</strong>
-                        <span>{{ __('to')  }}</span>
-                        <strong>{{ $data->lastItem()  }}</strong>
-                        <span>{{ __('of')  }}</span>
-                        <strong>{{ $data->total()  }}</strong>
-                        <span>{{ __('results')  }}</span>
+                        <span>{{ __('Showing') }}</span>
+                        <strong>{{ $data->firstItem() }}</strong>
+                        <span>{{ __('to') }}</span>
+                        <strong>{{ $data->lastItem() }}</strong>
+                        <span>{{ __('of') }}</span>
+                        <strong>{{ $data->total() }}</strong>
+                        <span>{{ __('results') }}</span>
                     @else
-                        <span>{{ __('No results found')  }}</span>
+                        <span>{{ __('No results found') }}</span>
                     @endif
                 </div>
                 
                 @if($showPerPageOptions)
                     <div class="flex items-center">
-                        <span class="me-2">{{ __('Per page')  }}:</span>
-                        <select class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 -sm" wire:model="perPage">
+                        <span class="me-2">{{ __('Per page') }}:</span>
+                        <select class="w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full px-3 py-2 border border-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 sm" wire:model="perPage">
                             @foreach($perPageOptions as $option)
-                                <option value="{{ $option  }}">{{ $option  }}</option>
+                                <option value="{{ $option }}">{{ $option }}</option>
                             @endforeach
                         </select>
                     </div>
                 @endif
                 
                 <div>
-                    {{ $data->links()  }}
+                    {{ $data->links() }}
                 </div>
             </div>
         @endif

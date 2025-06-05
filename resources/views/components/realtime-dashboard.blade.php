@@ -3,8 +3,8 @@
     {{ -- Header with Connection Status -- }}
     <div class="mb-8 flex justify-between items-center">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">{{ __('dashboard.realtime_dashboard')  }}</h1>
-            <p class="text-gray-600 mt-1">{{ __('dashboard.live_updates_description')  }}</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('dashboard.realtime_dashboard') }}</h1>
+            <p class="text-gray-600 mt-1">{{ __('dashboard.live_updates_description') }}</p>
         </div>
         
         <div class="flex items-center space-x-4">
@@ -13,7 +13,7 @@
                 <div id="connection-status" class="connection-status status-connecting" title="Connecting...">
                     <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
                 </div>
-                <span class="text-sm text-gray-600">{{ __('dashboard.connection_status')  }}</span>
+                <span class="text-sm text-gray-600">{{ __('dashboard.connection_status') }}</span>
             </div>
             
             {{ -- Refresh Button -- }}
@@ -21,7 +21,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                 </svg>
-                {{ __('dashboard.refresh')  }}
+                {{ __('dashboard.refresh') }}
             </button>
         </div>
     </div>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.total_applications')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.total_applications') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-total_applications">0</dd>
                             </dl>
                         </div>
@@ -58,7 +58,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.pending_applications')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.pending_applications') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-pending_applications">0</dd>
                             </dl>
                         </div>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.interviews_scheduled')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.interviews_scheduled') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-interviews_scheduled">0</dd>
                             </dl>
                         </div>
@@ -94,7 +94,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.successful_applications')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.successful_applications') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-successful_applications">0</dd>
                             </dl>
                         </div>
@@ -113,7 +113,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.active_jobs')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.active_jobs') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-active_jobs">0</dd>
                             </dl>
                         </div>
@@ -131,7 +131,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.total_applications')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.total_applications') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-total_applications">0</dd>
                             </dl>
                         </div>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.pending_reviews')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.pending_reviews') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-pending_reviews">0</dd>
                             </dl>
                         </div>
@@ -168,7 +168,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.scheduled_interviews')  }}</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('dashboard.scheduled_interviews') }}</dt>
                                 <dd class="text-lg font-medium text-gray-900" id="stat-scheduled_interviews">0</dd>
                             </dl>
                         </div>
@@ -185,21 +185,21 @@
             <div class="bg-white shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
                     <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                        {{ __('dashboard.recent_activity')  }}
+                        {{ __('dashboard.recent_activity') }}
                         <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" id="activity-live-indicator">
                             <span class="w-2 h-2 bg-green-400 rounded-full mr-1.5 animate-pulse"></span>
-                            {{ __('dashboard.live')  }}
+                            {{ __('dashboard.live') }}
                         </span>
                     </h3>
                     
                     <div id="activity-feed" class="space-y-4 max-h-96 overflow-y-auto">
                         {{ -- Activity items will be dynamically loaded here -- }}
                         <div class="flex items-center justify-center py-8 text-gray-500">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            {{ __('dashboard.loading_activities')  }}
+                            {{ __('dashboard.loading_activities') }}
                         </div>
                     </div>
                 </div>
@@ -211,27 +211,27 @@
             {{ -- System Health -- }}
             <div class="bg-white shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.system_health')  }}</h3>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.system_health') }}</h3>
                     
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">{{ __('dashboard.database')  }}</span>
+                            <span class="text-sm text-gray-600">{{ __('dashboard.database') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                {{ __('dashboard.healthy')  }}
+                                {{ __('dashboard.healthy') }}
                             </span>
                         </div>
                         
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">{{ __('dashboard.cache')  }}</span>
+                            <span class="text-sm text-gray-600">{{ __('dashboard.cache') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                {{ __('dashboard.healthy')  }}
+                                {{ __('dashboard.healthy') }}
                             </span>
                         </div>
                         
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">{{ __('dashboard.websockets')  }}</span>
+                            <span class="text-sm text-gray-600">{{ __('dashboard.websockets') }}</span>
                             <span id="websocket-status" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                {{ __('dashboard.connecting')  }}
+                                {{ __('dashboard.connecting') }}
                             </span>
                         </div>
                     </div>
@@ -241,12 +241,12 @@
             {{ -- Live Metrics -- }}
             <div class="bg-white shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.live_metrics')  }}</h3>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.live_metrics') }}</h3>
                     
                     <div class="space-y-4">
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <span class="text-sm text-gray-600">{{ __('dashboard.active_users')  }}</span>
+                                <span class="text-sm text-gray-600">{{ __('dashboard.active_users') }}</span>
                                 <span class="text-sm font-medium text-gray-900" id="metric-active-users">--</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -256,7 +256,7 @@
                         
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <span class="text-sm text-gray-600">{{ __('dashboard.system_load')  }}</span>
+                                <span class="text-sm text-gray-600">{{ __('dashboard.system_load') }}</span>
                                 <span class="text-sm font-medium text-gray-900" id="metric-system-load">--</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -266,7 +266,7 @@
                         
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <span class="text-sm text-gray-600">{{ __('dashboard.response_time')  }}</span>
+                                <span class="text-sm text-gray-600">{{ __('dashboard.response_time') }}</span>
                                 <span class="text-sm font-medium text-gray-900" id="metric-response-time">--</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -280,24 +280,24 @@
             {{ -- Quick Actions -- }}
             <div class="bg-white shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.quick_actions')  }}</h3>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('dashboard.quick_actions') }}</h3>
                     
                     <div class="space-y-3">
                         @if(auth()->user()->user_type === 'candidate')
-                            <a href="{{ route('jobs.index')  }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                {{ __('dashboard.browse_jobs')  }}
+                            <a href="{{ route('jobs.index') }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                {{ __('dashboard.browse_jobs') }}
                             </a>
                             
-                            <a href="{{ route('candidate.applications.index')  }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                {{ __('dashboard.my_applications')  }}
+                            <a href="{{ route('candidate.applications.index') }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                {{ __('dashboard.my_applications') }}
                             </a>
                         @else
-                            <a href="{{ route('employer.jobs.create')  }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                {{ __('dashboard.post_job')  }}
+                            <a href="{{ route('employer.jobs.create') }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                {{ __('dashboard.post_job') }}
                             </a>
                             
-                            <a href="{{ route('employer.applications.index')  }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                {{ __('dashboard.manage_applications')  }}
+                            <a href="{{ route('employer.applications.index') }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                {{ __('dashboard.manage_applications') }}
                             </a>
                         @endif
                     </div>
@@ -433,14 +433,14 @@
 
 {{ -- Load Real-time Dashboard JavaScript -- }}
 @push('scripts')
-<script src="{{ asset('js/realtime-dashboard.js')  }}"></script>
+<script src="{{ asset('js/realtime-dashboard.js') }}"></script>
 <script>
     // Global configuration for the dashboard
     window.APP_CONFIG = {
-        websocket_url: '{{ config("broadcasting.connections.pusher.options.host", "localhost:6001")  }}',
-        user_type: '{{ auth()->user()->user_type  }}',
-        user_id: {{ auth()->user()->id  }},
-        csrf_token: '{{ csrf_token()  }}'
+        websocket_url: '{{ config("broadcasting.connections.pusher.options.host","localhost:6001") }}',
+        user_type: '{{ auth()->user()->user_type }}',
+        user_id: {{ auth()->user()->id }},
+        csrf_token: '{{ csrf_token() }}'
     };
 </script>
 @endpush 

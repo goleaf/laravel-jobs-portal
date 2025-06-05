@@ -1,39 +1,39 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.image_sliders')  }}
+    {{ __('messages.image_sliders') }}
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto fluid">
         @include('flash::message')
         <div class="flex flex-col">
-            <div class="flex-1 -lg-12">
+            <div class="flex-1 lg-12">
                 <div class="flex flex-wrap">
-                    <div class="flex-1 -lg-12">
+                    <div class="flex-1 lg-12">
                         <form method="post" id="searchIsActive" class="d-lg-flex m-6">
                             @csrf
-                            <div class="lg:w-6/12 px-2 flex-1 -sm-12 mb-5 flex items-center">
+                            <div class="lg:w-6/12 px-2 flex-1 sm-12 mb-5 flex items-center">
                                 <div class="flex items-center form-switch mb-0">
-                                    <input class="flex items-center -input isFullSlider" type="checkbox"
-                                           name="is_active" {{ ($settings['is_full_slider'] == 1) ? 'checked' : ''  }}>
+                                    <input class="flex items-center input isFullSlider" type="checkbox"
+                                           name="is_active" {{ ($settings['is_full_slider'] == 1) ? 'checked' : '' }}>
                                 </div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 fs-5 text-gray-600 me-5 mb-0 mb-1">
-                                    {{ __('messages.image_slider.slider')  }}
+                                    {{ __('messages.image_slider.slider') }}
                                     <span data-bs-toggle="tooltip"
-                                          title="{{ __('messages.image_slider.slider_title')  }}">
+                                          title="{{ __('messages.image_slider.slider_title') }}">
                                         <i class="fas fa-question-circle ml-1"></i>
                                     </span>
 
                                 </label>
                             </div>
-                            <div class="lg:w-6/12 px-2 flex-1 -sm-12 mb-5 flex items-center">
+                            <div class="lg:w-6/12 px-2 flex-1 sm-12 mb-5 flex items-center">
                                 <div class="flex items-center form-switch mb-0">
-                                    <input class="flex items-center -input isSliderActive" type="checkbox"
-                                           name="is_active" {{ ($settings['is_slider_active'] == 1) ? 'checked' : ''  }}>
+                                    <input class="flex items-center input isSliderActive" type="checkbox"
+                                           name="is_active" {{ ($settings['is_slider_active'] == 1) ? 'checked' : '' }}>
                                 </div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1 fs-5 text-gray-600 me-5 mb-0 mb-1">
-                                    {{ __('messages.image_slider.slider_active')  }}
+                                    {{ __('messages.image_slider.slider_active') }}
                                     <span data-bs-toggle="tooltip"
-                                          title="{{ __('messages.image_slider.slider_active_title')  }}">
+                                          title="{{ __('messages.image_slider.slider_active_title') }}">
                                         <i class="fas fa-question-circle ml-1"></i></span>
                                 </label>
                             </div>

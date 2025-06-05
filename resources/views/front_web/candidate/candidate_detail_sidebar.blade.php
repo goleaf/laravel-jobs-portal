@@ -36,7 +36,7 @@
 {{ --            <p class="fs-14 text-gray-600 mb-0"> <i class="icon icon-salary"></i>{{__('messages.candidate.expected_salary') }}:</p>--}}
 {{ --        </div>-- }}
 {{ --        <p class="fs-14 text-gray text-end">-- }}
-{{ --            {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a')  }}</p>--}}
+{{ --            {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a') }}</p>--}}
 {{ --    </div>-- }}
 
 {{ --        <div class="desc-box flex justify-between mb-2">-- }}
@@ -60,23 +60,23 @@
 {{ --            <div class="widget-content">-- }}
 {{ --                <div class="social-links">-- }}
 {{ --                    @if(! empty($candidateDetails->$user->facebook_url))-- }}
-{{ --                        <a href="{{ (isset($candidateDetails->$user->facebook_url)) ? addLinkHttpUrl($candidateDetails->$user->facebook_url) : 'javascript:void(0)'  }}"--}}
+{{ --                        <a href="{{ (isset($candidateDetails->$user->facebook_url)) ? addLinkHttpUrl($candidateDetails->$user->facebook_url) : 'javascript:void(0)' }}"--}}
 {{ --                           target="_blank"><i class="fab fa-facebook-f me-2"></i></a>-- }}
 {{ --                    @endif-- }}
 {{ --                    @if(! empty($candidateDetails->$user->twitter_url))-- }}
-{{ --                        <a href="{{ (isset($candidateDetails->$user->twitter_url)) ? addLinkHttpUrl($candidateDetails->$user->twitter_url) : 'javascript:void(0)'  }}"--}}
+{{ --                        <a href="{{ (isset($candidateDetails->$user->twitter_url)) ? addLinkHttpUrl($candidateDetails->$user->twitter_url) : 'javascript:void(0)' }}"--}}
 {{ --                           target="_blank"><i class="fab fa-twitter me-2"></i></a>-- }}
 {{ --                    @endif-- }}
 {{ --                    @if(! empty($candidateDetails->$user->google_plus_url))-- }}
-{{ --                        <a href="{{ (isset($candidateDetails->$user->google_plus_url)) ? addLinkHttpUrl($candidateDetails->$user->google_plus_url) : 'javascript:void(0)'  }}"--}}
+{{ --                        <a href="{{ (isset($candidateDetails->$user->google_plus_url)) ? addLinkHttpUrl($candidateDetails->$user->google_plus_url) : 'javascript:void(0)' }}"--}}
 {{ --                           target="_blank"><i class="fab fa-google-plus-g me-2"></i></a>-- }}
 {{ --                    @endif-- }}
 {{ --                    @if(! empty($candidateDetails->$user->pinterest_url))-- }}
-{{ --                        <a href="{{ (isset($candidateDetails->$user->pinterest_url)) ? addLinkHttpUrl($candidateDetails->$user->pinterest_url) : 'javascript:void(0)'  }}"--}}
+{{ --                        <a href="{{ (isset($candidateDetails->$user->pinterest_url)) ? addLinkHttpUrl($candidateDetails->$user->pinterest_url) : 'javascript:void(0)' }}"--}}
 {{ --                           target="_blank"><i class="fab fa-pinterest-p me-2"></i></a>-- }}
 {{ --                    @endif-- }}
 {{ --                    @if(! empty($candidateDetails->$user->linkedin_url))-- }}
-{{ --                        <a href="{{ (isset($candidateDetails->$user->linkedin_url)) ? addLinkHttpUrl($candidateDetails->$user->linkedin_url) : 'javascript:void(0)'  }}"--}}
+{{ --                        <a href="{{ (isset($candidateDetails->$user->linkedin_url)) ? addLinkHttpUrl($candidateDetails->$user->linkedin_url) : 'javascript:void(0)' }}"--}}
 {{ --                           target="_blank"><i class="fab fa-linkedin-in me-2"></i></a>-- }}
 {{ --                    @endif-- }}
 {{ --                </div>-- }}
@@ -94,11 +94,11 @@
 {{ --            @if($candidateDetails->$user->candidateSkill->count())-- }}
 {{ --                @foreach($candidateDetails->$user->candidateSkill as $candidateSkill)-- }}
 {{ --                    <li>-- }}
-{{ --                        <a class="text-hover-primary text-gray cursor-default">{{ html_entity_decode($candidateSkill->name)  }}</a>--}}
+{{ --                        <a class="text-hover-primary text-gray cursor-default">{{ html_entity_decode($candidateSkill->name) }}</a>--}}
 {{ --                    </li>-- }}
 {{ --                @endforeach-- }}
 {{ --            @else-- }}
-{{ --                <h4 class="text-center">{{ __('messages.skill.no_skill_available')  }}</h4>--}}
+{{ --                <h4 class="text-center">{{ __('messages.skill.no_skill_available') }}</h4>--}}
 {{ --            @endif-- }}
 {{ --        </ul>-- }}
 {{ --    </div>-- }}
@@ -110,7 +110,7 @@
             <div class="flex flex-wrap flex justify-content-lg-between">
                 <div class="flex-1 -5 mt-3">
                     <i class="fa-solid fa-calendar-days text-primary-600 fs-4"></i>
-                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden text mb-0" >
                         {{ __('messages.candidate_profile.education') }}</p>
                     <p class="text-gray-600 fs-14">
                         {{ !empty($candidateDetails->experience) ? $candidateDetails->experience.  ' '.__('messages.candidate_profile.years') : __('messages.common.n/a') }}
@@ -119,7 +119,7 @@
                 @if($candidateDetails->$user->dob)
                     <div class="flex-1 -5 mt-3">
                         <i class="fa-solid fa-cake-candles text-primary-600 fs-4"></i>
-                        <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
+                        <p class="details-page- bg-white shadow rounded-lg overflow-hidden text mb-0" >
                             {{ __('messages.candidate_profile.age') }}</p>
                         <p class="text-gray-600 fs-14">
                             {{ !empty($candidateDetails->$user->dob) ?\Carbon\Carbon::parse($candidateDetails->$user->dob)->age. ' '.__('messages.candidate_profile.years') : __('messages.common.n/a') }}
@@ -128,7 +128,7 @@
                 @endif
                 <div class="flex-1 -5 mt-3">
                     <i class="fa-solid fa-wallet text-primary-600 fs-4"></i>
-                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden text mb-0" >
                         {{ __('messages.candidate.current_salary') }}</p>
                     <p class="text-gray-600 fs-14">
                         {{ !empty($candidateDetails->current_salary) ? $candidateDetails->current_salary : __('messages.common.n/a') }}
@@ -136,15 +136,15 @@
                 </div>
                 <div class="flex-1 -5 mt-3">
                     <i class="fa-solid fa-wallet text-primary-600 fs-4"></i>
-                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden text mb-0" >
                         {{ __('messages.candidate.expected_salary') }}</p>
                     <p class="text-gray-600 fs-14">
-                        {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a')  }}
+                        {{ !empty($candidateDetails->expected_salary) ? $candidateDetails->expected_salary : __('messages.common.n/a') }}
                     </p>
                 </div>
                 <div class="flex-1 -5 mt-3">
                     <i class="fa-solid fa-venus text-primary-600 fs-4"></i>
-                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden -text mb-0" >
+                    <p class="details-page- bg-white shadow rounded-lg overflow-hidden text mb-0" >
                         {{ __('messages.candidate.gender') }}</p>
                     <p class="text-gray-600 fs-14">
                         @if($candidateDetails->$user->gender == 0)
@@ -168,22 +168,22 @@
                 <p class="fs-18 text-gray-600">@lang('web.web_company.social_media')</p>
                 <div class="mt-3">
                     @if(! empty($candidateDetails->$user->facebook_url))
-                        <a href="{{ (isset($candidateDetails->$user->facebook_url)) ? addLinkHttpUrl($candidateDetails->$user->facebook_url) : 'javascript:void(0)'  }}" target="_blank"><i class="fab fa-facebook-f mx-2 fs-3"></i></a>
+                        <a href="{{ (isset($candidateDetails->$user->facebook_url)) ? addLinkHttpUrl($candidateDetails->$user->facebook_url) : 'javascript:void(0)' }}" target="_blank"><i class="fab fa-facebook-f mx-2 fs-3"></i></a>
                     @endif
                     @if(! empty($candidateDetails->$user->twitter_url))
-                        <a href="{{ (isset($candidateDetails->$user->twitter_url)) ? addLinkHttpUrl($candidateDetails->$user->twitter_url) : 'javascript:void(0)'  }}"
+                        <a href="{{ (isset($candidateDetails->$user->twitter_url)) ? addLinkHttpUrl($candidateDetails->$user->twitter_url) : 'javascript:void(0)' }}"
                            target="_blank"><i class="fab fa-twitter mx-2 fs-3"></i></a>
                     @endif
                     @if(! empty($candidateDetails->$user->google_plus_url))
-                        <a href="{{ (isset($candidateDetails->$user->google_plus_url)) ? addLinkHttpUrl($candidateDetails->$user->google_plus_url) : 'javascript:void(0)'  }}"
+                        <a href="{{ (isset($candidateDetails->$user->google_plus_url)) ? addLinkHttpUrl($candidateDetails->$user->google_plus_url) : 'javascript:void(0)' }}"
                            target="_blank"><i class="fab fa-google-plus-g mx-2 fs-3"></i></a>
                     @endif
                     @if(! empty($candidateDetails->$user->pinterest_url))
-                        <a href="{{ (isset($candidateDetails->$user->pinterest_url)) ? addLinkHttpUrl($candidateDetails->$user->pinterest_url) : 'javascript:void(0)'  }}"
+                        <a href="{{ (isset($candidateDetails->$user->pinterest_url)) ? addLinkHttpUrl($candidateDetails->$user->pinterest_url) : 'javascript:void(0)' }}"
                            target="_blank"><i class="fab fa-pinterest-p mx-2 fs-3"></i></a>
                     @endif
                     @if(! empty($candidateDetails->$user->linkedin_url))
-                        <a href="{{ (isset($candidateDetails->$user->linkedin_url)) ? addLinkHttpUrl($candidateDetails->$user->linkedin_url) : 'javascript:void(0)'  }}"
+                        <a href="{{ (isset($candidateDetails->$user->linkedin_url)) ? addLinkHttpUrl($candidateDetails->$user->linkedin_url) : 'javascript:void(0)' }}"
                            target="_blank"><i class="fab fa-linkedin-in mx-2 fs-3"></i></a>
                     @endif
                 </div>
@@ -201,11 +201,11 @@
                 @if($candidateDetails->$user->candidateSkill->count())
                     @foreach($candidateDetails->$user->candidateSkill as $candidateSkill)
                         <li>
-                            <a class="text-hover-primary text-gray cursor-default">{{ html_entity_decode($candidateSkill->name)  }}</a>
+                            <a class="text-hover-primary text-gray cursor-default">{{ html_entity_decode($candidateSkill->name) }}</a>
                         </li>
                     @endforeach
                 @else
-                    <h4 class="text-center">{{ __('messages.skill.no_skill_available')  }}</h4>
+                    <h4 class="text-center">{{ __('messages.skill.no_skill_available') }}</h4>
                 @endif
             </div>
         </div>

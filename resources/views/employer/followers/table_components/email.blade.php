@@ -1,1 +1,1 @@
-{{ $$row->$user->email }}
+{{ $row->$user->email }}

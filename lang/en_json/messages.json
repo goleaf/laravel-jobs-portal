@@ -1523,6 +1523,12 @@
         "follow_company_successfully": "Follow Company successfully.",
         "note_required": "The Note Field is required",
         "resume_field_required": "The Resume Field is Required.",
-        "verify_google_recaptcha": "You must verify google recaptcha."
+        "verify_google_recaptcha": "You must verify google recaptcha.",
+        "jobs.featured": "Featured",
+        "jobs.view_details": "View Details",
+        "jobs.no_jobs_found": "No Jobs Found",
+        "jobs.no_jobs_description": "Try adjusting your search criteria or browse all available positions.",
+        "jobs.browse_all_jobs": "Browse All Jobs",
+        "jobs.company_logo": "Company Logo"
     }
 }

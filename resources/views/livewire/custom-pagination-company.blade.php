@@ -22,18 +22,18 @@
         @endif
         {{ -- Pagination Elements -- }}
         @foreach ($elements as $element)
-            {{ -- "Three Dots" Separator -- }}
+            {{ --"Three Dots" Separator -- }}
             @if (is_string($element))
-                <li class="page-item disabled mt-1" aria-disabled="true">{{ $element  }}</li>
+                <li class="page-item disabled mt-1" aria-disabled="true">{{ $element }}</li>
             @endif
             {{ -- Array Of Links -- }}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
                     @if ($page == $paginator->currentPage())
-                        <li class="page-item"><a class="page-link active">{{ $page  }}</a></li>
+                        <li class="page-item"><a class="page-link active">{{ $page }}</a></li>
                     @else
                         <li class="page-item">
-                            <a wire:click="gotoPage({{ $page  }})" class="page-link text-gray">{{ $page  }}</a>
+                            <a wire:click="gotoPage({{ $page }})" class="page-link text-gray">{{ $page }}</a>
                         </li>
                     @endif
                 @endforeach
@@ -47,7 +47,7 @@
                     <span aria-hidden="true">
                         <i class="fa-solid fa-angle-right text-gray"></i>
                     </span>
-                    <span class="sr-only ">@lang('pagination.next')</span>
+                    <span class="sr-only">@lang('pagination.next')</span>
                 </a>
             </li>
         @else
@@ -55,7 +55,7 @@
                 <span aria-hidden="true">
                     <i class="fa-solid fa-angle-right text-gray pt-1"></i>
                 </span>
-                <span class="sr-only ">@lang('pagination.next')</span>
+                <span class="sr-only">@lang('pagination.next')</span>
             </li>
         @endif
     </ul>

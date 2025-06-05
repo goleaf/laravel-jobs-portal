@@ -1,6 +1,6 @@
 <div x-data="{ open: false }" class="relative">
     <button @click="open = !open" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">
-        <span>{{ config('app.available_locales')[app()->getLocale()] ?? 'English'  }}</span>
+        <span>{{ config('app.available_locales')[app()->getLocale()] ?? 'English' }}</span>
         <x-icons.chevron-down class="ml-1 w-5 h-5" />
     </button>
     
@@ -17,10 +17,10 @@
     >
         @foreach(config('app.available_locales') as $locale => $name)
             <a 
-                href="{{ route('language.switch', $locale)  }}" 
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 {{ app()->getLocale() === $locale ? 'bg-gray-100' : ''  }}"
+                href="{{ route('language.switch', $locale) }}" 
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 {{ app()->getLocale() === $locale ? 'bg-gray-100' : '' }}"
             >
-                {{ $name  }}
+                {{ $name }}
             </a>
         @endforeach
     </div>

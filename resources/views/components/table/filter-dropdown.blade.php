@@ -18,7 +18,7 @@
         aria-expanded="true"
         aria-haspopup="true"
     >
-        <span class="sr-only">{{ __('open_filter_menu')  }}</span>
+        <span class="sr-only">{{ __('open_filter_menu') }}</span>
         <x-icons.filter class="w-5 h-5" />
     </button>
 
@@ -37,15 +37,15 @@
         tabindex="-1"
     >
         @if($slot->isNotEmpty())
-            {{ $slot  }}
+            {{ $slot }}
         @else
             <div class="p-3">
                 <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('filter_by')  }}</label>
+                    <label class="block text-sm font-medium text-gray-700">{{ __('filter_by') }}</label>
                     <input
                         type="text"
-                        placeholder="{{ __('enter_value')  }}"
-                        wire:keydown.enter="applyFilter('{{ $column  }}',$event.target.value)"
+                        placeholder="{{ __('enter_value') }}"
+                        wire:keydown.enter="applyFilter('{{ $column }}',$event.target.value)"
                         @keydown.enter="close"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
@@ -56,14 +56,14 @@
                         @click="close"
                         class="inline-flex justify-center rounded-md border border-gray-300 border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        {{ __('cancel')  }}
+                        {{ __('cancel') }}
                     </button>
                     <button
                         type="button"
                         onclick="this.previousElementSibling.previousElementSibling.dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))"
                         class="inline-flex justify-center rounded-md border border-gray-300 border-transparent bg-indigo-600 px-2 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        {{ __('apply')  }}
+                        {{ __('apply') }}
                     </button>
                 </div>
             </div>

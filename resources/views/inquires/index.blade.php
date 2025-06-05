@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.inquires')  }}
+    {{ __('messages.inquires') }}
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto fluid">
         @include('flash::message')
         <div class="flex flex-col">
             <livewire:inquiries-table/>

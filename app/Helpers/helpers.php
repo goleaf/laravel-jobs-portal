@@ -110,4 +110,28 @@ if (!function_exists('truncateText')) {
     {
         return Str::limit($text, $length);
     }
+}
+
+if (!function_exists('numberFormatShort')) {
+    /**
+     * Format numbers in short format (1K, 1M, etc.)
+     * @param int|float $number
+     * @return string
+     */
+    function numberFormatShort($number)
+    {
+        if ($number < 1000) {
+            return (string) $number;
+        }
+        
+        if ($number < 1000000) {
+            return round($number / 1000, 1) . 'K';
+        }
+        
+        if ($number < 1000000000) {
+            return round($number / 1000000, 1) . 'M';
+        }
+        
+        return round($number / 1000000000, 1) . 'B';
+    }
 } 

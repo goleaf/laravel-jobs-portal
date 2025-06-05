@@ -1,2 +1,2 @@
-{{ $$row->$company->$user->phone ? $$row->$company->$user->phone : __('messages.n/a') }}
+{{ $row->$company->$user->phone ? $row->$company->$user->phone : __('messages.n/a') }}
 

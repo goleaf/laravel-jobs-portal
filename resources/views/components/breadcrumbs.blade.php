@@ -15,11 +15,11 @@
                         </svg>
                     @endif
                     @if(isset($breadcrumb['url']) && $index < count($breadcrumbs) - 1)
-                        <a href="{{ $breadcrumb['url']  }}" class="hover:text-blue-600 transition-colors">
-                            {{ $breadcrumb['name']  }}
+                        <a href="{{ $breadcrumb['url'] }}" class="hover:text-blue-600 transition-colors">
+                            {{ $breadcrumb['name'] }}
                         </a>
                     @else
-                        <span class="text-gray-900 font-medium">{{ $breadcrumb['name']  }}</span>
+                        <span class="text-gray-900 font-medium">{{ $breadcrumb['name'] }}</span>
                     @endif
                 </li>
             @endforeach

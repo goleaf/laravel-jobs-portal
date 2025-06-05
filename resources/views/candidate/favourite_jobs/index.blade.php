@@ -1,6 +1,6 @@
 @extends('candidate.layouts.app')
 @section('title')
-    {{ __('messages.favourite_jobs')  }}
+    {{ __('messages.favourite_jobs') }}
 @endsection
 @section('content')
     <div class="flex flex-col">

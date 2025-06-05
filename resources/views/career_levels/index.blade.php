@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('messages.career_levels')  }}
+    {{ __('messages.career_levels') }}
 @endsection
 @push('css')
-{{ --<link rel="stylesheet" href="{{ asset('css/header-padding.css')  }}">--}}
+{{ --<link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">--}}
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto -fluid">
+    <div class="container mx-auto px-4 mx-auto fluid">
         <div class="flex flex-col">
             @include('flash::message')
             <livewire:career-level-table/>

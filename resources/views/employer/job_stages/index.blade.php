@@ -1,6 +1,6 @@
 @extends('employer.layouts.app')
 @section('title')
-    {{ __('messages.job_stage.job_stage')  }}
+    {{ __('messages.job_stage.job_stage') }}
 @endsection
 @section('content')
     <div class="flex flex-col">

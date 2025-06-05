@@ -1,3 +1,3 @@
-<div class="badge bg-gray-100 -primary">
-    <div>{{ Carbon\Carbon::parse($$row->created_at)->translatedFormat('jS M Y')  }}</div>
+<div class="badge bg-gray-100 primary">
+    <div>{{ Carbon\Carbon::parse($row->created_at)->translatedFormat('jS M Y') }}</div>
 </div>

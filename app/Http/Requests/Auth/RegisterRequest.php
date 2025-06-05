@@ -4,6 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\NoMaliciousContent;
+use Illuminate\Validation\Rules\Password;
 
 /**
  * Request validation for AuthController::register
@@ -17,7 +18,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // TODO: Implement proper authorization logic based on user permissions
+        return true;
     }
 
     /**
@@ -27,14 +28,24 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        return {
-    "first_name": "required|string|max:255",
-    "last_name": "required|string|max:255",
-    "email": "required|email|unique:users,email",
-    "password": "required|string|min:8|confirmed",
-    "phone": "nullable|string|max:20",
-    "terms": "required|accepted"
-};
+        return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(config('security.authentication.password_min_length', 8))
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'terms' => ['required', 'accepted']
+        ];
     }
 
     /**
@@ -44,16 +55,21 @@ class RegisterRequest extends FormRequest
      */
     public function messages(): array
     {
-        return {
-    "first_name.required": "First name is required",
-    "last_name.required": "Last name is required",
-    "email.required": "Email is required",
-    "email.unique": "Email already exists",
-    "password.required": "Password is required",
-    "password.min": "Password must be at least 8 characters",
-    "password.confirmed": "Password confirmation does not match",
-    "terms.required": "You must accept the terms and conditions"
-};
+        return [
+            'first_name.required' => 'First name is required',
+            'last_name.required' => 'Last name is required',
+            'email.required' => 'Email is required',
+            'email.unique' => 'Email already exists',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least :min characters',
+            'password.confirmed' => 'Password confirmation does not match',
+            'password.mixed_case' => 'Password must contain both uppercase and lowercase letters',
+            'password.letters' => 'Password must contain letters',
+            'password.numbers' => 'Password must contain numbers',
+            'password.symbols' => 'Password must contain symbols',
+            'password.uncompromised' => 'The given password has appeared in a data breach. Please choose a different password.',
+            'terms.required' => 'You must accept the terms and conditions'
+        ];
     }
 
     /**
@@ -64,15 +80,10 @@ class RegisterRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'user.first_name' => 'first name',
-            'user.last_name' => 'last name',
-            'user.email' => 'email address',
-            'user.phone' => 'phone number',
-            'job_title' => 'job title',
-            'job_description' => 'job description',
-            'job_expiry_date' => 'job expiry date',
-            'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary'
+            'first_name' => 'first name',
+            'last_name' => 'last name',
+            'email' => 'email address',
+            'phone' => 'phone number',
         ];
     }
 
@@ -82,15 +93,15 @@ class RegisterRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Sanitize input data
-        if ($this->has('job_title')) {
+        if ($this->has('first_name')) {
             $this->merge([
-                'job_title' => strip_tags($this->job_title)
+                'first_name' => strip_tags($this->first_name)
             ]);
         }
         
-        if ($this->has('job_description')) {
+        if ($this->has('last_name')) {
             $this->merge([
-                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
+                'last_name' => strip_tags($this->last_name)
             ]);
         }
     }
@@ -104,15 +115,8 @@ class RegisterRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            // Add custom validation logic here
-            if ($this->has('salary_from') && $this->has('salary_to')) {
-                if ($this->salary_from > $this->salary_to) {
-                    $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
-                }
-            }
-            
             // Check for malicious content in text fields
-            foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
+            foreach (['first_name', 'last_name'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
                     $rule = new NoMaliciousContent();
                     if (!$rule->passes($field, $this->{$field})) {

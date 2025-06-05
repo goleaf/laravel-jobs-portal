@@ -1,0 +1,1221 @@
+=== COMPREHENSIVE BLADE TEMPLATE ANALYSIS ===
+
+Loading defined routes...
+Found 73 defined routes
+
+Analyzing: resources/views/required_degree_levels/index.blade.php
+Analyzing: resources/views/required_degree_levels/edit_modal.blade.php
+Analyzing: resources/views/required_degree_levels/table-components/created_at.blade.php
+Analyzing: resources/views/required_degree_levels/table-components/action_button.blade.php
+Analyzing: resources/views/required_degree_levels/table-components/add_button.blade.php
+Analyzing: resources/views/required_degree_levels/required_degree_level_card.blade.php
+Analyzing: resources/views/required_degree_levels/add_modal.blade.php
+Analyzing: resources/views/welcome.blade.php
+Analyzing: resources/views/candidates/index.blade.php
+Analyzing: resources/views/candidates/fields.blade.php
+Analyzing: resources/views/candidates/table-components/status.blade.php
+Analyzing: resources/views/candidates/table-components/email_verified.blade.php
+Analyzing: resources/views/candidates/table-components/last_change.blade.php
+Analyzing: resources/views/candidates/table-components/name_email.blade.php
+Analyzing: resources/views/candidates/table-components/available.blade.php
+Analyzing: resources/views/candidates/table-components/filter.blade.php
+Analyzing: resources/views/candidates/table-components/action_button.blade.php
+Analyzing: resources/views/candidates/table-components/add_button.blade.php
+Analyzing: resources/views/candidates/modals/career_levels.blade.php
+Analyzing: resources/views/candidates/modals/cities.blade.php
+Analyzing: resources/views/candidates/modals/languages.blade.php
+Analyzing: resources/views/candidates/modals/skills.blade.php
+Analyzing: resources/views/candidates/modals/industries.blade.php
+Analyzing: resources/views/candidates/modals/countries.blade.php
+Analyzing: resources/views/candidates/modals/marital_status.blade.php
+Analyzing: resources/views/candidates/modals/functional_areas.blade.php
+Analyzing: resources/views/candidates/modals/states.blade.php
+Analyzing: resources/views/candidates/candidate_card.blade.php
+Analyzing: resources/views/candidates/edit.blade.php
+Analyzing: resources/views/candidates/show_fields.blade.php
+Analyzing: resources/views/candidates/create.blade.php
+Analyzing: resources/views/candidates/show.blade.php
+Analyzing: resources/views/candidates/edit_fields.blade.php
+Analyzing: resources/views/candidate/applied_job/index.blade.php
+Analyzing: resources/views/candidate/applied_job/show_applied_jobs_modal.blade.php
+Analyzing: resources/views/candidate/applied_job/templates/templates.php
+Analyzing: resources/views/candidate/applied_job/schedule_slot_book.blade.php
+Analyzing: resources/views/candidate/dashboard/dashboard.blade.php
+Analyzing: resources/views/candidate/profile/cv_template.blade.php
+Analyzing: resources/views/candidate/profile/index.blade.php
+Analyzing: resources/views/candidate/profile/resume_table_components/created_at.blade.php
+Analyzing: resources/views/candidate/profile/resume_table_components/title.blade.php
+Analyzing: resources/views/candidate/profile/resume_table_components/action_button.blade.php
+Analyzing: resources/views/candidate/profile/resume_table_components/add_button.blade.php
+Analyzing: resources/views/candidate/profile/career-informations.blade.php
+Analyzing: resources/views/candidate/profile/modals/edit_education_modal.blade.php
+Analyzing: resources/views/candidate/profile/modals/add_education_modal.blade.php
+Analyzing: resources/views/candidate/profile/modals/cv_preview_model.blade.php
+Analyzing: resources/views/candidate/profile/modals/upload_resume_modal.blade.php
+Analyzing: resources/views/candidate/profile/modals/add_experience_modal.blade.php
+Analyzing: resources/views/candidate/profile/modals/edit_experience_modal.blade.php
+Analyzing: resources/views/candidate/profile/templates/templates.php
+Analyzing: resources/views/candidate/profile/cv-builder.blade.php
+Analyzing: resources/views/candidate/profile/general.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/create_education.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/edit_general.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/show_experience.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/edit_online_profile.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/show_education.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/show_online_profile.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/create_experience.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/edit_education.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/show_general.blade.php
+Analyzing: resources/views/candidate/profile/career_informations/edit_experience.blade.php
+Analyzing: resources/views/candidate/profile/resume.blade.php
+Analyzing: resources/views/candidate/profile/profile_menu.blade.php
+Analyzing: resources/views/candidate/layouts/header.blade.php
+Analyzing: resources/views/candidate/layouts/app.blade.php
+Analyzing: resources/views/candidate/layouts/sidebar.blade.php
+Analyzing: resources/views/candidate/reported_candidate/table-components/user_firstname.blade.php
+Analyzing: resources/views/candidate/reported_candidate/table-components/created_at.blade.php
+Analyzing: resources/views/candidate/reported_candidate/table-components/candidate_firstname.blade.php
+Analyzing: resources/views/candidate/reported_candidate/table-components/action_button.blade.php
+Analyzing: resources/views/candidate/reported_candidate/reported_candidates.blade.php
+Analyzing: resources/views/candidate/reported_candidate/reported_candidate_card.blade.php
+Analyzing: resources/views/candidate/reported_candidate/reported_candidate_show_modal.blade.php
+Analyzing: resources/views/candidate/reported_candidate/show_reported_candidate_modal.blade.php
+Analyzing: resources/views/candidate/favourite_companies/index.blade.php
+Analyzing: resources/views/candidate/favourite_companies/table_components/name.blade.php
+Analyzing: resources/views/candidate/favourite_companies/table_components/industry.blade.php
+Analyzing: resources/views/candidate/favourite_companies/table_components/offices.blade.php
+Analyzing: resources/views/candidate/favourite_companies/table_components/phone.blade.php
+Analyzing: resources/views/candidate/favourite_companies/table_components/action_button.blade.php
+Analyzing: resources/views/candidate/job_alert/edit.blade.php
+Analyzing: resources/views/candidate/job_alert/index.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/index.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/table_components/job_title.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/table_components/name.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/table_components/job_expiry_date.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/table_components/created_at.blade.php
+Analyzing: resources/views/candidate/favourite_jobs/table_components/action_button.blade.php
+Analyzing: resources/views/candidate/applications/index.blade.php
+Analyzing: resources/views/settings/about_us.blade.php
+Analyzing: resources/views/settings/index.blade.php
+Analyzing: resources/views/settings/env_setting.blade.php
+Analyzing: resources/views/settings/front_office_details.blade.php
+Analyzing: resources/views/settings/setting_menu.blade.php
+Analyzing: resources/views/settings/social_settings.blade.php
+Analyzing: resources/views/settings/general.blade.php
+Analyzing: resources/views/image_sliders/index.blade.php
+Analyzing: resources/views/image_sliders/show_modal.blade.php
+Analyzing: resources/views/image_sliders/edit_modal.blade.php
+Analyzing: resources/views/image_sliders/table_components/status.blade.php
+Analyzing: resources/views/image_sliders/table_components/image.blade.php
+Analyzing: resources/views/image_sliders/table_components/description.blade.php
+Analyzing: resources/views/image_sliders/table_components/filter.blade.php
+Analyzing: resources/views/image_sliders/table_components/action_button.blade.php
+Analyzing: resources/views/image_sliders/table_components/add_button.blade.php
+Analyzing: resources/views/image_sliders/add_modal.blade.php
+Analyzing: resources/views/image_sliders/image_slider_card.blade.php
+Analyzing: resources/views/blogs/index.blade.php
+Analyzing: resources/views/blogs/fields.blade.php
+Analyzing: resources/views/blogs/table_components/description.blade.php
+Analyzing: resources/views/blogs/table_components/title.blade.php
+Analyzing: resources/views/blogs/table_components/action_button.blade.php
+Analyzing: resources/views/blogs/table_components/add_button.blade.php
+Analyzing: resources/views/blogs/edit.blade.php
+Analyzing: resources/views/blogs/show_fields.blade.php
+Analyzing: resources/views/blogs/create.blade.php
+Analyzing: resources/views/blogs/show.blade.php
+Analyzing: resources/views/job_notification/index.blade.php
+Analyzing: resources/views/job_notification/send_notification.blade.php
+Analyzing: resources/views/job_notification/templates/templates.php
+Analyzing: resources/views/job_expired/index.blade.php
+Analyzing: resources/views/job_expired/table_components/expired_date.blade.php
+Analyzing: resources/views/job_expired/table_components/name.blade.php
+Analyzing: resources/views/job_expired/table_components/created_at.blade.php
+Analyzing: resources/views/job_expired/table_components/action_button.blade.php
+Analyzing: resources/views/loader.blade.php
+Analyzing: resources/views/blog_categories/index.blade.php
+Analyzing: resources/views/blog_categories/show_modal.blade.php
+Analyzing: resources/views/blog_categories/edit_modal.blade.php
+Analyzing: resources/views/blog_categories/table_components/name.blade.php
+Analyzing: resources/views/blog_categories/table_components/description.blade.php
+Analyzing: resources/views/blog_categories/table_components/action_button.blade.php
+Analyzing: resources/views/blog_categories/table_components/add_button.blade.php
+Analyzing: resources/views/blog_categories/add_modal.blade.php
+Analyzing: resources/views/blog_categories/post_category_card.blade.php
+Analyzing: resources/views/branding_sliders/index.blade.php
+Analyzing: resources/views/branding_sliders/edit_modal.blade.php
+Analyzing: resources/views/branding_sliders/table_components/status.blade.php
+Analyzing: resources/views/branding_sliders/table_components/title.blade.php
+Analyzing: resources/views/branding_sliders/table_components/filter.blade.php
+Analyzing: resources/views/branding_sliders/table_components/action_button.blade.php
+Analyzing: resources/views/branding_sliders/table_components/add_button.blade.php
+Analyzing: resources/views/branding_sliders/add_modal.blade.php
+Analyzing: resources/views/branding_sliders/branding_slider_card.blade.php
+Analyzing: resources/views/plans/index.blade.php
+Analyzing: resources/views/plans/edit_modal.blade.php
+Analyzing: resources/views/plans/table-components/amount.blade.php
+Analyzing: resources/views/plans/table-components/active_subscription.blade.php
+Analyzing: resources/views/plans/table-components/allowed_jobs.blade.php
+Analyzing: resources/views/plans/table-components/action_button.blade.php
+Analyzing: resources/views/plans/table-components/trial_plan.blade.php
+Analyzing: resources/views/plans/table-components/add_button.blade.php
+Analyzing: resources/views/plans/add_modal.blade.php
+Analyzing: resources/views/marital_status/index.blade.php
+Analyzing: resources/views/marital_status/show_modal.blade.php
+Analyzing: resources/views/marital_status/edit_modal.blade.php
+Analyzing: resources/views/marital_status/table-components/created_at.blade.php
+Analyzing: resources/views/marital_status/table-components/action_button.blade.php
+Analyzing: resources/views/marital_status/table-components/marital_status.blade.php
+Analyzing: resources/views/marital_status/table-components/add_button.blade.php
+Analyzing: resources/views/marital_status/marital_status_card.blade.php
+Analyzing: resources/views/marital_status/add_modal.blade.php
+Analyzing: resources/views/marital_status/templates/templates.php
+Analyzing: resources/views/front_web/candidate/index.blade.php
+Analyzing: resources/views/front_web/candidate/candidate_details.blade.php
+Analyzing: resources/views/front_web/candidate/candidate_detail_sidebar.blade.php
+Analyzing: resources/views/front_web/candidate/report_to_candidate_modal.blade.php
+Analyzing: resources/views/front_web/home/notices.blade.php
+Analyzing: resources/views/front_web/home/testimonials.blade.php
+Analyzing: resources/views/front_web/home/home.blade.php
+Analyzing: resources/views/front_web/home/job_search_results.blade.php
+Analyzing: resources/views/front_web/home/index.blade.php
+Analyzing: resources/views/front_web/blogs/index.blade.php
+Analyzing: resources/views/front_web/blogs/blogs_based_on_category.blade.php
+Analyzing: resources/views/front_web/blogs/blogs_details.blade.php
+Analyzing: resources/views/front_web/blogs/blog-sidebar.blade.php
+Analyzing: resources/views/front_web/blogs/templates/templates.php
+Analyzing: resources/views/front_web/contact/index.blade.php
+Analyzing: resources/views/front_web/auth/candidate_login.blade.php
+Analyzing: resources/views/front_web/auth/candidate_register.blade.php
+Analyzing: resources/views/front_web/auth/employer_login.blade.php
+Analyzing: resources/views/front_web/auth/employer_register.blade.php
+Analyzing: resources/views/front_web/terms_conditions/index.blade.php
+Analyzing: resources/views/front_web/common/company_card.blade.php
+Analyzing: resources/views/front_web/common/job_card.blade.php
+Analyzing: resources/views/front_web/layouts/header.blade.php
+Analyzing: resources/views/front_web/layouts/app.blade.php
+Analyzing: resources/views/front_web/layouts/footer.blade.php
+Analyzing: resources/views/front_web/layouts/errors.blade.php
+Analyzing: resources/views/front_web/about_us/index.blade.php
+Analyzing: resources/views/front_web/jobs/index.blade.php
+Analyzing: resources/views/front_web/jobs/apply_job/apply_job.blade.php
+Analyzing: resources/views/front_web/jobs/job_details.blade.php
+Analyzing: resources/views/front_web/jobs/report_job_modal.blade.php
+Analyzing: resources/views/front_web/jobs/email_to_friend.blade.php
+Analyzing: resources/views/front_web/categories/index.blade.php
+Analyzing: resources/views/front_web/privacy_policy/index.blade.php
+Analyzing: resources/views/front_web/company/index.blade.php
+Analyzing: resources/views/front_web/company/report_to_company_modal.blade.php
+Analyzing: resources/views/front_web/company/company_details.blade.php
+Analyzing: resources/views/auth/all_role_buttons.blade.php
+Analyzing: resources/views/auth/passwords/confirm.blade.php
+Analyzing: resources/views/auth/passwords/email.blade.php
+Analyzing: resources/views/auth/passwords/reset.blade.php
+Analyzing: resources/views/auth/emails/password.blade.php
+Analyzing: resources/views/auth/verify.blade.php
+Analyzing: resources/views/auth/login.blade.php
+Analyzing: resources/views/auth/register.blade.php
+Analyzing: resources/views/auth/admin_login.blade.php
+Analyzing: resources/views/company_sizes/index.blade.php
+Analyzing: resources/views/company_sizes/edit_modal.blade.php
+Analyzing: resources/views/company_sizes/table-components/created_at.blade.php
+Analyzing: resources/views/company_sizes/table-components/action_button.blade.php
+Analyzing: resources/views/company_sizes/table-components/add_button.blade.php
+Analyzing: resources/views/company_sizes/add_modal.blade.php
+Analyzing: resources/views/company_sizes/company_size_card.blade.php
+Analyzing: resources/views/company_sizes/templates/templates.php
+Analyzing: resources/views/functional_areas/index.blade.php
+Analyzing: resources/views/functional_areas/edit_modal.blade.php
+Analyzing: resources/views/functional_areas/table-components/created_at.blade.php
+Analyzing: resources/views/functional_areas/table-components/action_button.blade.php
+Analyzing: resources/views/functional_areas/table-components/add_button.blade.php
+Analyzing: resources/views/functional_areas/add_modal.blade.php
+Analyzing: resources/views/functional_areas/functional_area_card.blade.php
+Analyzing: resources/views/employer/followers/index.blade.php
+Analyzing: resources/views/employer/followers/table_components/name.blade.php
+Analyzing: resources/views/employer/followers/table_components/phone.blade.php
+Analyzing: resources/views/employer/followers/table_components/email.blade.php
+Analyzing: resources/views/employer/followers/table_components/available_at.blade.php
+Analyzing: resources/views/employer/job_stages/index.blade.php
+Analyzing: resources/views/employer/job_stages/show_modal.blade.php
+Analyzing: resources/views/employer/job_stages/edit_modal.blade.php
+Analyzing: resources/views/employer/job_stages/job_stages_card.blade.php
+Analyzing: resources/views/employer/job_stages/table_components/name.blade.php
+Analyzing: resources/views/employer/job_stages/table_components/description.blade.php
+Analyzing: resources/views/employer/job_stages/table_components/action_button.blade.php
+Analyzing: resources/views/employer/job_stages/table_components/add_button.blade.php
+Analyzing: resources/views/employer/job_stages/add_modal.blade.php
+Analyzing: resources/views/employer/dashboard/index.blade.php
+Analyzing: resources/views/employer/transactions/index.blade.php
+Analyzing: resources/views/employer/transactions/table_components/transaction_date.blade.php
+Analyzing: resources/views/employer/transactions/table_components/amount.blade.php
+Analyzing: resources/views/employer/transactions/table_components/invoice.blade.php
+Analyzing: resources/views/employer/layouts/header.blade.php
+Analyzing: resources/views/employer/layouts/app.blade.php
+Analyzing: resources/views/employer/layouts/sidebar.blade.php
+Analyzing: resources/views/employer/jobs/index.blade.php
+Analyzing: resources/views/employer/jobs/fields.blade.php
+Analyzing: resources/views/employer/jobs/table.blade.php
+Analyzing: resources/views/employer/jobs/reported_job_table_components/reported_on.blade.php
+Analyzing: resources/views/employer/jobs/reported_job_table_components/reported_by.blade.php
+Analyzing: resources/views/employer/jobs/reported_job_table_components/action_button.blade.php
+Analyzing: resources/views/employer/jobs/reported_job_table_components/reported_jobs.blade.php
+Analyzing: resources/views/employer/jobs/reported_jobs_templates/templates.php
+Analyzing: resources/views/employer/jobs/edit.blade.php
+Analyzing: resources/views/employer/jobs/reportedJobs_card.blade.php
+Analyzing: resources/views/employer/jobs/show_fields.blade.php
+Analyzing: resources/views/employer/jobs/show_reported_job_modal.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/status.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/job_title.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/job_applications.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/filter.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/expires_on.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/action_button.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/featured_job.blade.php
+Analyzing: resources/views/employer/jobs/job_table_components/add_button.blade.php
+Analyzing: resources/views/employer/jobs/create.blade.php
+Analyzing: resources/views/employer/jobs/show.blade.php
+Analyzing: resources/views/employer/jobs/edit_fields.blade.php
+Analyzing: resources/views/employer/jobs/reported_jobs.blade.php
+Analyzing: resources/views/employer/job_applications/index.blade.php
+Analyzing: resources/views/employer/job_applications/job_stages_modal.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/status.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/expected_salary.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/job_stage.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/edit_button.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/action_button.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/candidate_name.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/resume.blade.php
+Analyzing: resources/views/employer/job_applications/table_components/application_date.blade.php
+Analyzing: resources/views/employer/job_applications/add_batch_slot_modal.blade.php
+Analyzing: resources/views/employer/job_applications/edit_batch_slot_modal.blade.php
+Analyzing: resources/views/employer/job_applications/schedule_interview_modal.blade.php
+Analyzing: resources/views/employer/job_applications/view_slot_screen.blade.php
+Analyzing: resources/views/employer/companies/reported_company_table_components/reported_on.blade.php
+Analyzing: resources/views/employer/companies/reported_company_table_components/reported_by.blade.php
+Analyzing: resources/views/employer/companies/reported_company_table_components/action_button.blade.php
+Analyzing: resources/views/employer/companies/reported_company_table_components/employer_name.blade.php
+Analyzing: resources/views/employer/companies/reported_companies_table.blade.php
+Analyzing: resources/views/employer/companies/reported_companies_show_modal.blade.php
+Analyzing: resources/views/employer/companies/edit.blade.php
+Analyzing: resources/views/employer/companies/reported_companies.blade.php
+Analyzing: resources/views/employer/companies/reported_employee_card.blade.php
+Analyzing: resources/views/employer/companies/templates/templates.php
+Analyzing: resources/views/employer/companies/edit_fields.blade.php
+Analyzing: resources/views/employer/companies/show_reported_company_modal.blade.php
+Analyzing: resources/views/employer/applications/index.blade.php
+Analyzing: resources/views/salary_currencies/index.blade.php
+Analyzing: resources/views/salary_currencies/edit_modal.blade.php
+Analyzing: resources/views/salary_currencies/table-components/currency_icon.blade.php
+Analyzing: resources/views/salary_currencies/table-components/currency_code.blade.php
+Analyzing: resources/views/salary_currencies/table-components/action_button.blade.php
+Analyzing: resources/views/salary_currencies/table-components/add_button.blade.php
+Analyzing: resources/views/salary_currencies/salary_currencies_card.blade.php
+Analyzing: resources/views/salary_currencies/add_modal.blade.php
+Analyzing: resources/views/emails/contact/contact_us.blade.php
+Analyzing: resources/views/emails/verify_email.blade.php
+Analyzing: resources/views/emails/news_letter/news_letter.blade.php
+Analyzing: resources/views/emails/jobs/email_employer.blade.php
+Analyzing: resources/views/emails/jobs/email_job.blade.php
+Analyzing: resources/views/emails/jobs/notification.blade.php
+Analyzing: resources/views/emails/jobs/email_candidate.blade.php
+Analyzing: resources/views/emails/password_reset_email.blade.php
+Analyzing: resources/views/salary_periods/index.blade.php
+Analyzing: resources/views/salary_periods/show_modal.blade.php
+Analyzing: resources/views/salary_periods/edit_modal.blade.php
+Analyzing: resources/views/salary_periods/table-components/created_at.blade.php
+Analyzing: resources/views/salary_periods/table-components/period.blade.php
+Analyzing: resources/views/salary_periods/table-components/action_button.blade.php
+Analyzing: resources/views/salary_periods/table-components/add_button.blade.php
+Analyzing: resources/views/salary_periods/salary_period_card.blade.php
+Analyzing: resources/views/salary_periods/add_modal.blade.php
+Analyzing: resources/views/career_levels/index.blade.php
+Analyzing: resources/views/career_levels/edit_modal.blade.php
+Analyzing: resources/views/career_levels/table-components/created_at.blade.php
+Analyzing: resources/views/career_levels/table-components/action_button.blade.php
+Analyzing: resources/views/career_levels/table-components/add_button.blade.php
+Analyzing: resources/views/career_levels/career_level_card.blade.php
+Analyzing: resources/views/career_levels/add_modal.blade.php
+Analyzing: resources/views/translation-manager/index.blade.php
+Analyzing: resources/views/translation-manager/fields.blade.php
+Analyzing: resources/views/translation-manager/create.blade.php
+Analyzing: resources/views/email_templates/index.blade.php
+Analyzing: resources/views/email_templates/table-components/action_button.blade.php
+Analyzing: resources/views/email_templates/edit.blade.php
+Analyzing: resources/views/post_comments/index.blade.php
+Analyzing: resources/views/post_comments/table_components/username.blade.php
+Analyzing: resources/views/post_comments/table_components/post.blade.php
+Analyzing: resources/views/post_comments/table_components/comment.blade.php
+Analyzing: resources/views/post_comments/table_components/created_at.blade.php
+Analyzing: resources/views/post_comments/table_components/action_button.blade.php
+Analyzing: resources/views/post_comments/show_model.blade.php
+Analyzing: resources/views/industries/index.blade.php
+Analyzing: resources/views/industries/show_modal.blade.php
+Analyzing: resources/views/industries/edit_modal.blade.php
+Analyzing: resources/views/industries/table-components/name.blade.php
+Analyzing: resources/views/industries/table-components/description.blade.php
+Analyzing: resources/views/industries/table-components/action_button.blade.php
+Analyzing: resources/views/industries/table-components/add_button.blade.php
+Analyzing: resources/views/industries/add_modal.blade.php
+Analyzing: resources/views/industries/industry_card.blade.php
+Analyzing: resources/views/resumes/index.blade.php
+Analyzing: resources/views/resumes/show_modal.blade.php
+Analyzing: resources/views/resumes/table-components/title.blade.php
+Analyzing: resources/views/resumes/table-components/action_button.blade.php
+Analyzing: resources/views/resumes/table-components/candidate_name.blade.php
+Analyzing: resources/views/resumes/resume_card.blade.php
+Analyzing: resources/views/resumes/templates/templates.php
+Analyzing: resources/views/employer_profile/edit_profile_modal.blade.php
+Analyzing: resources/views/employer_profile/change_password_modal.blade.php
+Analyzing: resources/views/admins/index.blade.php
+Analyzing: resources/views/admins/fields.blade.php
+Analyzing: resources/views/admins/table_components/status.blade.php
+Analyzing: resources/views/admins/table_components/phone.blade.php
+Analyzing: resources/views/admins/table_components/name_email.blade.php
+Analyzing: resources/views/admins/table_components/action_button.blade.php
+Analyzing: resources/views/admins/table_components/add_button.blade.php
+Analyzing: resources/views/admins/edit.blade.php
+Analyzing: resources/views/admins/create.blade.php
+Analyzing: resources/views/admins/edit_fields.blade.php
+Analyzing: resources/views/front_web_template/candidate/index.blade.php
+Analyzing: resources/views/front_web_template/candidate/candidate_details.blade.php
+Analyzing: resources/views/front_web_template/candidate/candidate_detail_sidebar.blade.php
+Analyzing: resources/views/front_web_template/candidate/report_to_candidate_modal.blade.php
+Analyzing: resources/views/front_web_template/home/notices.blade.php
+Analyzing: resources/views/front_web_template/home/testimonials.blade.php
+Analyzing: resources/views/front_web_template/home/home.blade.php
+Analyzing: resources/views/front_web_template/home/job_search_results.blade.php
+Analyzing: resources/views/front_web_template/blogs/index.blade.php
+Analyzing: resources/views/front_web_template/blogs/blogs_based_on_category.blade.php
+Analyzing: resources/views/front_web_template/blogs/blogs_details.blade.php
+Analyzing: resources/views/front_web_template/blogs/blog-sidebar.blade.php
+Analyzing: resources/views/front_web_template/blogs/templates/templates.php
+Analyzing: resources/views/front_web_template/contact/index.blade.php
+Analyzing: resources/views/front_web_template/auth/candidate_login.blade.php
+Analyzing: resources/views/front_web_template/auth/candidate_register.blade.php
+Analyzing: resources/views/front_web_template/auth/employer_login.blade.php
+Analyzing: resources/views/front_web_template/auth/employer_register.blade.php
+Analyzing: resources/views/front_web_template/auth/login.blade.php
+Analyzing: resources/views/front_web_template/terms_conditions/index.blade.php
+Analyzing: resources/views/front_web_template/common/company_card.blade.php
+Analyzing: resources/views/front_web_template/common/job_card.blade.php
+Analyzing: resources/views/front_web_template/layouts/header.blade.php
+Analyzing: resources/views/front_web_template/layouts/app.blade.php
+Analyzing: resources/views/front_web_template/layouts/footer.blade.php
+Analyzing: resources/views/front_web_template/layouts/errors.blade.php
+Analyzing: resources/views/front_web_template/about_us/index.blade.php
+Analyzing: resources/views/front_web_template/jobs/index.blade.php
+Analyzing: resources/views/front_web_template/jobs/apply_job/apply_job.blade.php
+Analyzing: resources/views/front_web_template/jobs/job_details.blade.php
+Analyzing: resources/views/front_web_template/jobs/report_job_modal.blade.php
+Analyzing: resources/views/front_web_template/jobs/email_to_friend.blade.php
+Analyzing: resources/views/front_web_template/categories/index.blade.php
+Analyzing: resources/views/front_web_template/privacy_policy/index.blade.php
+Analyzing: resources/views/front_web_template/company/index.blade.php
+Analyzing: resources/views/front_web_template/company/report_to_company_modal.blade.php
+Analyzing: resources/views/front_web_template/company/company_details.blade.php
+Analyzing: resources/views/front_web_template/home.blade.php
+Analyzing: resources/views/error.blade.php
+Analyzing: resources/views/job_categories/index.blade.php
+Analyzing: resources/views/job_categories/show_modal.blade.php
+Analyzing: resources/views/job_categories/edit_modal.blade.php
+Analyzing: resources/views/job_categories/table_components/name.blade.php
+Analyzing: resources/views/job_categories/table_components/created_at.blade.php
+Analyzing: resources/views/job_categories/table_components/filter_button.blade.php
+Analyzing: resources/views/job_categories/table_components/filter.blade.php
+Analyzing: resources/views/job_categories/table_components/action_button.blade.php
+Analyzing: resources/views/job_categories/table_components/is_featured.blade.php
+Analyzing: resources/views/job_categories/table_components/add_button.blade.php
+Analyzing: resources/views/job_categories/job_categories_card.blade.php
+Analyzing: resources/views/job_categories/add_modal.blade.php
+Analyzing: resources/views/languages/index.blade.php
+Analyzing: resources/views/languages/edit_modal.blade.php
+Analyzing: resources/views/languages/table-components/iso_code.blade.php
+Analyzing: resources/views/languages/table-components/action_button.blade.php
+Analyzing: resources/views/languages/table-components/add_button.blade.php
+Analyzing: resources/views/languages/add_modal.blade.php
+Analyzing: resources/views/languages/language_card.blade.php
+Analyzing: resources/views/languages/action_buttons.blade.php
+Analyzing: resources/views/languages/iso_code.blade.php
+Analyzing: resources/views/languages/add_button.blade.php
+Analyzing: resources/views/exports/candidates.blade.php
+Analyzing: resources/views/faqs/index.blade.php
+Analyzing: resources/views/faqs/show_modal.blade.php
+Analyzing: resources/views/faqs/edit_modal.blade.php
+Analyzing: resources/views/faqs/faq_card.blade.php
+Analyzing: resources/views/faqs/table-components/created_at.blade.php
+Analyzing: resources/views/faqs/table-components/title.blade.php
+Analyzing: resources/views/faqs/table-components/action_button.blade.php
+Analyzing: resources/views/faqs/table-components/add_button.blade.php
+Analyzing: resources/views/faqs/add_modal.blade.php
+Analyzing: resources/views/dashboard/index.blade.php
+Analyzing: resources/views/dashboard/realtime.blade.php
+Analyzing: resources/views/notification_settings/index.blade.php
+Analyzing: resources/views/notification_settings/fields.blade.php
+Analyzing: resources/views/transactions/index.blade.php
+Analyzing: resources/views/transactions/failed_payments.blade.php
+Analyzing: resources/views/transactions/table-components/status.blade.php
+Analyzing: resources/views/transactions/table-components/owner_type.blade.php
+Analyzing: resources/views/transactions/table-components/amount.blade.php
+Analyzing: resources/views/transactions/table-components/transaction-approved-by.blade.php
+Analyzing: resources/views/transactions/table-components/created_at.blade.php
+Analyzing: resources/views/transactions/table-components/transaction-approved.blade.php
+Analyzing: resources/views/transactions/table-components/action_button.blade.php
+Analyzing: resources/views/livewire/blog-categories.blade.php
+Analyzing: resources/views/livewire/candidate-resume.blade.php
+Analyzing: resources/views/livewire/job-search.blade.php
+Analyzing: resources/views/livewire/reported-employee.blade.php
+Analyzing: resources/views/livewire/job-tags.blade.php
+Analyzing: resources/views/livewire/applied-jobs.blade.php
+Analyzing: resources/views/livewire/custom-pagenation-jobs.blade.php
+Analyzing: resources/views/livewire/faqs.blade.php
+Analyzing: resources/views/livewire/candidate-search.blade.php
+Analyzing: resources/views/livewire/marital-statuses.blade.php
+Analyzing: resources/views/livewire/followers.blade.php
+Analyzing: resources/views/livewire/cities.blade.php
+Analyzing: resources/views/livewire/salary-currencies.blade.php
+Analyzing: resources/views/livewire/job-shifts.blade.php
+Analyzing: resources/views/livewire/company-search.blade.php
+Analyzing: resources/views/livewire/subscriber.blade.php
+Analyzing: resources/views/livewire/ownership-types.blade.php
+Analyzing: resources/views/livewire/career-levels.blade.php
+Analyzing: resources/views/livewire/languages.blade.php
+Analyzing: resources/views/livewire/favourite-companies.blade.php
+Analyzing: resources/views/livewire/functional-areas.blade.php
+Analyzing: resources/views/livewire/reported-jobs.blade.php
+Analyzing: resources/views/livewire/branding-sliders.blade.php
+Analyzing: resources/views/livewire/noticeboards.blade.php
+Analyzing: resources/views/livewire/job-categories.blade.php
+Analyzing: resources/views/livewire/skills.blade.php
+Analyzing: resources/views/livewire/blog-post.blade.php
+Analyzing: resources/views/livewire/industries.blade.php
+Analyzing: resources/views/livewire/employers-search.blade.php
+Analyzing: resources/views/livewire/degree-level.blade.php
+Analyzing: resources/views/livewire/salary-periods.blade.php
+Analyzing: resources/views/livewire/custom-pagenation.blade.php
+Analyzing: resources/views/livewire/view-slot-screen.blade.php
+Analyzing: resources/views/livewire/countries.blade.php
+Analyzing: resources/views/livewire/reported-candidate.blade.php
+Analyzing: resources/views/livewire/image-sliders.blade.php
+Analyzing: resources/views/livewire/livewire-turbo.blade.php
+Analyzing: resources/views/livewire/header-sliders.blade.php
+Analyzing: resources/views/livewire/testimonials.blade.php
+Analyzing: resources/views/livewire/inquires.blade.php
+Analyzing: resources/views/livewire/job-types.blade.php
+Analyzing: resources/views/livewire/admin-candidate-search.blade.php
+Analyzing: resources/views/livewire/favorite-jobs.blade.php
+Analyzing: resources/views/livewire/company-size.blade.php
+Analyzing: resources/views/livewire/custom-pagination-company.blade.php
+Analyzing: resources/views/livewire/job-stage.blade.php
+Analyzing: resources/views/livewire/states.blade.php
+Analyzing: resources/views/livewire/marital-status-table.blade.php
+Analyzing: resources/views/livewire/base/table.blade.php
+Analyzing: resources/views/livewire/components/simple-table.blade.php
+Analyzing: resources/views/livewire/components/filters/select.blade.php
+Analyzing: resources/views/livewire/components/filters/date-range.blade.php
+Analyzing: resources/views/livewire/components/filters/checkbox.blade.php
+Analyzing: resources/views/livewire/components/filters/multiselect.blade.php
+Analyzing: resources/views/livewire/components/filters/daterange.blade.php
+Analyzing: resources/views/livewire/components/filters/numberrange.blade.php
+Analyzing: resources/views/livewire/components/data-table.blade.php
+Analyzing: resources/views/livewire/table.blade.php
+Analyzing: resources/views/livewire/job-table.blade.php
+Analyzing: resources/views/livewire/table-component.blade.php
+Analyzing: resources/views/livewire/filters/select.blade.php
+Analyzing: resources/views/livewire/filters/multiselect.blade.php
+Analyzing: resources/views/livewire/filters/date-range.blade.php
+Analyzing: resources/views/livewire/filters/date.blade.php
+Analyzing: resources/views/livewire/filters/multi-select.blade.php
+Analyzing: resources/views/livewire/filters/number-range.blade.php
+Analyzing: resources/views/livewire/job-type-form.blade.php
+Analyzing: resources/views/livewire/job-category-form.blade.php
+Analyzing: resources/views/livewire/job-category-table.blade.php
+Analyzing: resources/views/livewire/language-table.blade.php
+Analyzing: resources/views/livewire/datatable.blade.php
+Analyzing: resources/views/livewire/job-type-table.blade.php
+Analyzing: resources/views/layouts/auth.blade.php
+Analyzing: resources/views/layouts/header.blade.php
+Analyzing: resources/views/layouts/sub_menu.blade.php
+Analyzing: resources/views/layouts/action_template.php
+Analyzing: resources/views/layouts/search-component.blade.php
+Analyzing: resources/views/layouts/menu.blade.php
+Analyzing: resources/views/layouts/app.blade.php
+Analyzing: resources/views/layouts/footer.blade.php
+Analyzing: resources/views/layouts/errors.blade.php
+Analyzing: resources/views/layouts/sidebar.blade.php
+Analyzing: resources/views/layouts/navigation.blade.php
+Analyzing: resources/views/layouts/simple.blade.php
+Analyzing: resources/views/cities/index.blade.php
+Analyzing: resources/views/cities/edit_modal.blade.php
+Analyzing: resources/views/cities/table-components/filter.blade.php
+Analyzing: resources/views/cities/table-components/action_button.blade.php
+Analyzing: resources/views/cities/table-components/add_button.blade.php
+Analyzing: resources/views/cities/add_modal.blade.php
+Analyzing: resources/views/cities/city_card.blade.php
+Analyzing: resources/views/auth_template/all_role_buttons.blade.php
+Analyzing: resources/views/auth_template/register.blade.php
+Analyzing: resources/views/auth_template/passwords/confirm.blade.php
+Analyzing: resources/views/auth_template/passwords/email.blade.php
+Analyzing: resources/views/auth_template/passwords/reset.blade.php
+Analyzing: resources/views/auth_template/emails/password.blade.php
+Analyzing: resources/views/auth_template/verify.blade.php
+Analyzing: resources/views/auth_template/login.blade.php
+Analyzing: resources/views/noticeboards/index.blade.php
+Analyzing: resources/views/noticeboards/noticeboard_card.blade.php
+Analyzing: resources/views/noticeboards/show_modal.blade.php
+Analyzing: resources/views/noticeboards/edit_modal.blade.php
+Analyzing: resources/views/noticeboards/table-components/status.blade.php
+Analyzing: resources/views/noticeboards/table-components/description.blade.php
+Analyzing: resources/views/noticeboards/table-components/title.blade.php
+Analyzing: resources/views/noticeboards/table-components/action_button.blade.php
+Analyzing: resources/views/noticeboards/table-components/add_button.blade.php
+Analyzing: resources/views/noticeboards/add_modal.blade.php
+Analyzing: resources/views/front_settings/index.blade.php
+Analyzing: resources/views/front_settings/fields.blade.php
+Analyzing: resources/views/states/index.blade.php
+Analyzing: resources/views/states/edit_modal.blade.php
+Analyzing: resources/views/states/state_card.blade.php
+Analyzing: resources/views/states/table-components/filter.blade.php
+Analyzing: resources/views/states/table-components/action_button.blade.php
+Analyzing: resources/views/states/table-components/add_button.blade.php
+Analyzing: resources/views/states/add_modal.blade.php
+Analyzing: resources/views/testimonial/index.blade.php
+Analyzing: resources/views/testimonial/show_modal.blade.php
+Analyzing: resources/views/testimonial/edit_modal.blade.php
+Analyzing: resources/views/testimonial/table_components/download.blade.php
+Analyzing: resources/views/testimonial/table_components/customer_name.blade.php
+Analyzing: resources/views/testimonial/table_components/action_button.blade.php
+Analyzing: resources/views/testimonial/table_components/add_button.blade.php
+Analyzing: resources/views/testimonial/testimonial-card.blade.php
+Analyzing: resources/views/testimonial/add_modal.blade.php
+Analyzing: resources/views/job_shifts/index.blade.php
+Analyzing: resources/views/job_shifts/show_modal.blade.php
+Analyzing: resources/views/job_shifts/edit_modal.blade.php
+Analyzing: resources/views/job_shifts/table_components/name.blade.php
+Analyzing: resources/views/job_shifts/table_components/created_at.blade.php
+Analyzing: resources/views/job_shifts/table_components/action_button.blade.php
+Analyzing: resources/views/job_shifts/table_components/add_button.blade.php
+Analyzing: resources/views/job_shifts/job_shifts_card.blade.php
+Analyzing: resources/views/job_shifts/add_modal.blade.php
+Analyzing: resources/views/skills/index.blade.php
+Analyzing: resources/views/skills/show_modal.blade.php
+Analyzing: resources/views/skills/edit_modal.blade.php
+Analyzing: resources/views/skills/skill_card.blade.php
+Analyzing: resources/views/skills/table-components/name.blade.php
+Analyzing: resources/views/skills/table-components/created_at.blade.php
+Analyzing: resources/views/skills/table-components/action_button.blade.php
+Analyzing: resources/views/skills/table-components/add_button.blade.php
+Analyzing: resources/views/skills/add_modal.blade.php
+Analyzing: resources/views/skills/action_buttons.blade.php
+Analyzing: resources/views/skills/add_button.blade.php
+Analyzing: resources/views/ownership_types/index.blade.php
+Analyzing: resources/views/ownership_types/ownership_type_card.blade.php
+Analyzing: resources/views/ownership_types/show_modal.blade.php
+Analyzing: resources/views/ownership_types/edit_modal.blade.php
+Analyzing: resources/views/ownership_types/table-components/name.blade.php
+Analyzing: resources/views/ownership_types/table-components/description.blade.php
+Analyzing: resources/views/ownership_types/table-components/created_at.blade.php
+Analyzing: resources/views/ownership_types/table-components/action_button.blade.php
+Analyzing: resources/views/ownership_types/table-components/add_button.blade.php
+Analyzing: resources/views/ownership_types/add_modal.blade.php
+Analyzing: resources/views/inquires/index.blade.php
+Analyzing: resources/views/inquires/show_modal.blade.php
+Analyzing: resources/views/inquires/table-components/action_buttons.blade.php
+Analyzing: resources/views/inquires/inquiry_card.blade.php
+Analyzing: resources/views/inquires/show.blade.php
+Analyzing: resources/views/subscribers/index.blade.php
+Analyzing: resources/views/subscribers/subscriber_card.blade.php
+Analyzing: resources/views/subscribers/table-components/created_at.blade.php
+Analyzing: resources/views/subscribers/table-components/action_button.blade.php
+Analyzing: resources/views/job_tags/job_tags_card.blade.php
+Analyzing: resources/views/job_tags/index.blade.php
+Analyzing: resources/views/job_tags/show_modal.blade.php
+Analyzing: resources/views/job_tags/edit_modal.blade.php
+Analyzing: resources/views/job_tags/table_components/name.blade.php
+Analyzing: resources/views/job_tags/table_components/description.blade.php
+Analyzing: resources/views/job_tags/table_components/action_button.blade.php
+Analyzing: resources/views/job_tags/table_components/add_button.blade.php
+Analyzing: resources/views/job_tags/add_modal.blade.php
+Analyzing: resources/views/errors/404.blade.php
+Analyzing: resources/views/jobs/index.blade.php
+Analyzing: resources/views/jobs/fields.blade.php
+Analyzing: resources/views/jobs/table.blade.php
+Analyzing: resources/views/jobs/table-components/job_title.blade.php
+Analyzing: resources/views/jobs/table-components/expired_at.blade.php
+Analyzing: resources/views/jobs/table-components/is_suspended.blade.php
+Analyzing: resources/views/jobs/table-components/last_change.blade.php
+Analyzing: resources/views/jobs/table-components/action_buttons.blade.php
+Analyzing: resources/views/jobs/table-components/filter.blade.php
+Analyzing: resources/views/jobs/table-components/is_featured.blade.php
+Analyzing: resources/views/jobs/table-components/created_on.blade.php
+Analyzing: resources/views/jobs/table-components/add_button.blade.php
+Analyzing: resources/views/jobs/modals/job_shifts.blade.php
+Analyzing: resources/views/jobs/modals/career_levels.blade.php
+Analyzing: resources/views/jobs/modals/job_category.blade.php
+Analyzing: resources/views/jobs/modals/job_type.blade.php
+Analyzing: resources/views/jobs/modals/cities.blade.php
+Analyzing: resources/views/jobs/modals/salary_periods.blade.php
+Analyzing: resources/views/jobs/modals/skills.blade.php
+Analyzing: resources/views/jobs/modals/required_degree_levels.blade.php
+Analyzing: resources/views/jobs/modals/job_tags.blade.php
+Analyzing: resources/views/jobs/modals/countries.blade.php
+Analyzing: resources/views/jobs/modals/functional_areas.blade.php
+Analyzing: resources/views/jobs/modals/states.blade.php
+Analyzing: resources/views/jobs/edit.blade.php
+Analyzing: resources/views/jobs/show_fields.blade.php
+Analyzing: resources/views/jobs/create.blade.php
+Analyzing: resources/views/jobs/show.blade.php
+Analyzing: resources/views/jobs/edit_fields.blade.php
+Analyzing: resources/views/countries/index.blade.php
+Analyzing: resources/views/countries/edit_modal.blade.php
+Analyzing: resources/views/countries/table-components/short_code.blade.php
+Analyzing: resources/views/countries/table-components/phone_code.blade.php
+Analyzing: resources/views/countries/table-components/action_button.blade.php
+Analyzing: resources/views/countries/table-components/add_button.blade.php
+Analyzing: resources/views/countries/add_modal.blade.php
+Analyzing: resources/views/countries/country_card.blade.php
+Analyzing: resources/views/cms_services/index.blade.php
+Analyzing: resources/views/cms_services/about-edit.blade.php
+Analyzing: resources/views/cms_services/fields.blade.php
+Analyzing: resources/views/cms_services/about-us.blade.php
+Analyzing: resources/views/job_types/index.blade.php
+Analyzing: resources/views/job_types/show_modal.blade.php
+Analyzing: resources/views/job_types/edit_modal.blade.php
+Analyzing: resources/views/job_types/table_components/name.blade.php
+Analyzing: resources/views/job_types/table_components/created_at.blade.php
+Analyzing: resources/views/job_types/table_components/action_button.blade.php
+Analyzing: resources/views/job_types/table_components/add_button.blade.php
+Analyzing: resources/views/job_types/add_modal.blade.php
+Analyzing: resources/views/job_types/job_type_card.blade.php
+Analyzing: resources/views/selected_candidate/index.blade.php
+Analyzing: resources/views/selected_candidate/show_modal.blade.php
+Analyzing: resources/views/selected_candidate/table-components/status.blade.php
+Analyzing: resources/views/selected_candidate/table-components/candidate_first_name.blade.php
+Analyzing: resources/views/selected_candidate/table-components/employer_first_name.blade.php
+Analyzing: resources/views/selected_candidate/table-components/filter.blade.php
+Analyzing: resources/views/selected_candidate/table-components/action_button.blade.php
+Analyzing: resources/views/header_sliders/index.blade.php
+Analyzing: resources/views/header_sliders/edit_modal.blade.php
+Analyzing: resources/views/header_sliders/table_components/status.blade.php
+Analyzing: resources/views/header_sliders/table_components/image.blade.php
+Analyzing: resources/views/header_sliders/table_components/filter.blade.php
+Analyzing: resources/views/header_sliders/table_components/action_button.blade.php
+Analyzing: resources/views/header_sliders/table_components/add_button.blade.php
+Analyzing: resources/views/header_sliders/header_sliders_card.blade.php
+Analyzing: resources/views/header_sliders/add_modal.blade.php
+Analyzing: resources/views/pricing/index.blade.php
+Analyzing: resources/views/pricing/cancel_subscription_modal.blade.php
+Analyzing: resources/views/pricing/payment_methods.blade.php
+Analyzing: resources/views/google_analytics.blade.php
+Analyzing: resources/views/home.blade.php
+Analyzing: resources/views/companies/index.blade.php
+Analyzing: resources/views/companies/fields.blade.php
+Analyzing: resources/views/companies/table_components/status.blade.php
+Analyzing: resources/views/companies/table_components/email_verified.blade.php
+Analyzing: resources/views/companies/table_components/last_change.blade.php
+Analyzing: resources/views/companies/table_components/company_name.blade.php
+Analyzing: resources/views/companies/table_components/filter.blade.php
+Analyzing: resources/views/companies/table_components/action_button.blade.php
+Analyzing: resources/views/companies/table_components/is_featured.blade.php
+Analyzing: resources/views/companies/table_components/add_button.blade.php
+Analyzing: resources/views/companies/modals/company_sizes.blade.php
+Analyzing: resources/views/companies/modals/cities.blade.php
+Analyzing: resources/views/companies/modals/industries.blade.php
+Analyzing: resources/views/companies/modals/countries.blade.php
+Analyzing: resources/views/companies/modals/ownership_types.blade.php
+Analyzing: resources/views/companies/modals/states.blade.php
+Analyzing: resources/views/companies/edit.blade.php
+Analyzing: resources/views/companies/show_fields.blade.php
+Analyzing: resources/views/companies/create.blade.php
+Analyzing: resources/views/companies/companies_card.blade.php
+Analyzing: resources/views/companies/show.blade.php
+Analyzing: resources/views/companies/edit_fields.blade.php
+Analyzing: resources/views/candidate_profile/edit_profile_modal.blade.php
+Analyzing: resources/views/candidate_profile/change_password_modal.blade.php
+Analyzing: resources/views/vendor/flash/message.blade.php
+Analyzing: resources/views/vendor/flash/modal.blade.php
+Analyzing: resources/views/vendor/notifications/email.blade.php
+Analyzing: resources/views/vendor/livewire/tailwind.blade.php
+Analyzing: resources/views/vendor/pagination/tailwind.blade.php
+Analyzing: resources/views/privacy_policy/index.blade.php
+Analyzing: resources/views/privacy_policy/privacy_policy.blade.php
+Analyzing: resources/views/privacy_policy/section_menu.blade.php
+Analyzing: resources/views/privacy_policy/terms_conditions.blade.php
+Analyzing: resources/views/user_profile/edit_profile_modal.blade.php
+Analyzing: resources/views/user_profile/change_password_modal.blade.php
+Analyzing: resources/views/components/language-selector.blade.php
+Analyzing: resources/views/components/notification.blade.php
+Analyzing: resources/views/components/flash-messages.blade.php
+Analyzing: resources/views/components/translation-statusbar.blade.php
+Analyzing: resources/views/components/icons/filter.blade.php
+Analyzing: resources/views/components/icons/sort-asc.blade.php
+Analyzing: resources/views/components/icons/sort-desc.blade.php
+Analyzing: resources/views/components/icons/delete.blade.php
+Analyzing: resources/views/components/icons/view.blade.php
+Analyzing: resources/views/components/icons/add.blade.php
+Analyzing: resources/views/components/icons/loader.blade.php
+Analyzing: resources/views/components/icons/chevron-down.blade.php
+Analyzing: resources/views/components/icons/chevron-right.blade.php
+Analyzing: resources/views/components/icons/trash.blade.php
+Analyzing: resources/views/components/icons/building.blade.php
+Analyzing: resources/views/components/icons/sort.blade.php
+Analyzing: resources/views/components/icons/chevron-up.blade.php
+Analyzing: resources/views/components/icons/close.blade.php
+Analyzing: resources/views/components/icons/save.blade.php
+Analyzing: resources/views/components/icons/cancel.blade.php
+Analyzing: resources/views/components/icons/chevron-left.blade.php
+Analyzing: resources/views/components/icons/success.blade.php
+Analyzing: resources/views/components/icons/error.blade.php
+Analyzing: resources/views/components/icons/warning.blade.php
+Analyzing: resources/views/components/icons/alert.blade.php
+Analyzing: resources/views/components/icons/calendar-detailed.blade.php
+Analyzing: resources/views/components/icons/business-case.blade.php
+Analyzing: resources/views/components/icons/location-detailed.blade.php
+Analyzing: resources/views/components/icons/briefcase.blade.php
+Analyzing: resources/views/components/icons/functional-area.blade.php
+Analyzing: resources/views/components/icons/team-members.blade.php
+Analyzing: resources/views/components/icons/experience.blade.php
+Analyzing: resources/views/components/icons/salary.blade.php
+Analyzing: resources/views/components/icons/freelance.blade.php
+Analyzing: resources/views/components/icons/upload.blade.php
+Analyzing: resources/views/components/icons/check.blade.php
+Analyzing: resources/views/components/icons/calendar-candidate.blade.php
+Analyzing: resources/views/components/icons/gender.blade.php
+Analyzing: resources/views/components/icons/refresh.blade.php
+Analyzing: resources/views/components/icons/spinner.blade.php
+Analyzing: resources/views/components/icons/sun.blade.php
+Analyzing: resources/views/components/icons/moon.blade.php
+Analyzing: resources/views/components/icons/arrow-right.blade.php
+Analyzing: resources/views/components/icons/arrow-left.blade.php
+Analyzing: resources/views/components/icons/plus.blade.php
+Analyzing: resources/views/components/icons/home.blade.php
+Analyzing: resources/views/components/icons/cog.blade.php
+Analyzing: resources/views/components/icons/bell.blade.php
+Analyzing: resources/views/components/icons/globe.blade.php
+Analyzing: resources/views/components/icons/mail.blade.php
+Analyzing: resources/views/components/icons/graduation-cap.blade.php
+Analyzing: resources/views/components/icons/badge.blade.php
+Analyzing: resources/views/components/icons/document-text.blade.php
+Analyzing: resources/views/components/icons/remote-work.blade.php
+Analyzing: resources/views/components/icons/factory.blade.php
+Analyzing: resources/views/components/icons/star.blade.php
+Analyzing: resources/views/components/icons/resume.blade.php
+Analyzing: resources/views/components/icons/time-contract.blade.php
+Analyzing: resources/views/components/icons/language.blade.php
+Analyzing: resources/views/components/icons/handshake.blade.php
+Analyzing: resources/views/components/icons/chart.blade.php
+Analyzing: resources/views/components/icons/tag.blade.php
+Analyzing: resources/views/components/icons/office-building.blade.php
+Analyzing: resources/views/components/icons/status.blade.php
+Analyzing: resources/views/components/icons/user-group.blade.php
+Analyzing: resources/views/components/icons/notification.blade.php
+Analyzing: resources/views/components/icons/heart.blade.php
+Analyzing: resources/views/components/icons/share.blade.php
+Analyzing: resources/views/components/icons/chat.blade.php
+Analyzing: resources/views/components/icons/trophy.blade.php
+Analyzing: resources/views/components/icons/checkmark-circle.blade.php
+Analyzing: resources/views/components/icons/menu-alt-1.blade.php
+Analyzing: resources/views/components/icons/calendar-days.blade.php
+Analyzing: resources/views/components/icons/puzzle.blade.php
+Analyzing: resources/views/components/icons/question-mark-circle.blade.php
+Analyzing: resources/views/components/icons/clipboard-document-check.blade.php
+Analyzing: resources/views/components/icons/document-duplicate.blade.php
+Analyzing: resources/views/components/icons/x-mark.blade.php
+Analyzing: resources/views/components/icons/inbox.blade.php
+Analyzing: resources/views/components/icons/archive.blade.php
+Analyzing: resources/views/components/icons/building-storefront.blade.php
+Analyzing: resources/views/components/icons/pencil.blade.php
+Analyzing: resources/views/components/icons/camera.blade.php
+Analyzing: resources/views/components/icons/video-camera.blade.php
+Analyzing: resources/views/components/icons/download.blade.php
+Analyzing: resources/views/components/icons/shield-check.blade.php
+Analyzing: resources/views/components/icons/lock-closed.blade.php
+Analyzing: resources/views/components/icons/academic-cap.blade.php
+Analyzing: resources/views/components/icons/facebook.blade.php
+Analyzing: resources/views/components/icons/twitter.blade.php
+Analyzing: resources/views/components/icons/linkedin.blade.php
+Analyzing: resources/views/components/icons/instagram.blade.php
+Analyzing: resources/views/components/icons/pinterest.blade.php
+Analyzing: resources/views/components/icons/google-plus.blade.php
+Analyzing: resources/views/components/icons/location.blade.php
+Analyzing: resources/views/components/icons/email.blade.php
+Analyzing: resources/views/components/icons/calendar.blade.php
+Analyzing: resources/views/components/icons/clock.blade.php
+Analyzing: resources/views/components/icons/money.blade.php
+Analyzing: resources/views/components/icons/edit.blade.php
+Analyzing: resources/views/components/icons/user.blade.php
+Analyzing: resources/views/components/icons/search.blade.php
+Analyzing: resources/views/components/icons/x.blade.php
+Analyzing: resources/views/components/icons/eye.blade.php
+Analyzing: resources/views/components/icons/phone.blade.php
+Analyzing: resources/views/components/table/filterable-header.blade.php
+Analyzing: resources/views/components/table/filter-dropdown.blade.php
+Analyzing: resources/views/components/modal.blade.php
+Analyzing: resources/views/components/modal/header.blade.php
+Analyzing: resources/views/components/modal/footer.blade.php
+Analyzing: resources/views/components/modal/content.blade.php
+Analyzing: resources/views/components/button.blade.php
+Analyzing: resources/views/components/form.blade.php
+Analyzing: resources/views/components/input.blade.php
+Analyzing: resources/views/components/select.blade.php
+Analyzing: resources/views/components/checkbox.blade.php
+Analyzing: resources/views/components/radio.blade.php
+Analyzing: resources/views/components/submit-button.blade.php
+Analyzing: resources/views/components/form-input.blade.php
+Analyzing: resources/views/components/form-select.blade.php
+Analyzing: resources/views/components/form-textarea.blade.php
+Analyzing: resources/views/components/form-checkbox.blade.php
+Analyzing: resources/views/components/form-radio.blade.php
+Analyzing: resources/views/components/form-radio-group.blade.php
+Analyzing: resources/views/components/form-button.blade.php
+Analyzing: resources/views/components/form-file.blade.php
+Analyzing: resources/views/components/form-section.blade.php
+Analyzing: resources/views/components/theme-switch.blade.php
+Analyzing: resources/views/components/icon-viewer.blade.php
+Analyzing: resources/views/components/icon-documentation.blade.php
+Analyzing: resources/views/components/readme.blade.php
+Analyzing: resources/views/components/forms/readme.blade.php
+Analyzing: resources/views/components/app-layout.blade.php
+Analyzing: resources/views/components/language-switcher.blade.php
+Analyzing: resources/views/components/tailwind/alert.blade.php
+Analyzing: resources/views/components/tailwind/button.blade.php
+Analyzing: resources/views/components/tailwind/form-input.blade.php
+Analyzing: resources/views/components/tailwind/modal.blade.php
+Analyzing: resources/views/components/tailwind/table.blade.php
+Analyzing: resources/views/components/seo/meta.blade.php
+Analyzing: resources/views/components/meta-tags.blade.php
+Analyzing: resources/views/components/job-structured-data.blade.php
+Analyzing: resources/views/components/company-structured-data.blade.php
+Analyzing: resources/views/components/breadcrumbs.blade.php
+Analyzing: resources/views/components/realtime-dashboard.blade.php
+Analyzing: resources/views/components/layout.blade.php
+Analyzing: resources/views/components/admin-layout.blade.php
+Analyzing: resources/views/components/auth-layout.blade.php
+Analyzing: resources/views/components/ui/button.blade.php
+Analyzing: resources/views/components/ui/card.blade.php
+Analyzing: resources/views/components/ui/card-body.blade.php
+Analyzing: resources/views/components/ui/input.blade.php
+Analyzing: resources/views/components/ui/label.blade.php
+Analyzing: resources/views/components/ui/field.blade.php
+Analyzing: resources/views/components/ui/error.blade.php
+Analyzing: resources/views/components/ui/checkbox.blade.php
+Analyzing: resources/views/components/ui/link.blade.php
+Analyzing: resources/views/components/ui/text.blade.php
+Analyzing: resources/views/components/ui/heading.blade.php
+Analyzing: resources/views/components/ui/brand.blade.php
+Analyzing: resources/views/components/ui/separator.blade.php
+Analyzing: resources/views/components/ui/header.blade.php
+Analyzing: resources/views/components/ui/main.blade.php
+Analyzing: resources/views/components/ui/sidebar.blade.php
+Analyzing: resources/views/components/optimized-image.blade.php
+Analyzing: resources/views/job-types/action_buttons.blade.php
+Analyzing: resources/views/job-types/index.blade.php
+Analyzing: resources/views/job-types/add_modal.blade.php
+Analyzing: resources/views/job-types/edit_modal.blade.php
+Analyzing: resources/views/job-types/action-buttons.blade.php
+Analyzing: resources/views/job-types/add-modal.blade.php
+Analyzing: resources/views/job-types/edit-modal.blade.php
+Analyzing: resources/views/icons.blade.php
+Analyzing: resources/views/about.blade.php
+Analyzing: resources/views/contact.blade.php
+Analyzing: resources/views/admin/candidates/index.blade.php
+Analyzing: resources/views/admin/jobs/index.blade.php
+Analyzing: resources/views/admin/transactions/index.blade.php
+Analyzing: resources/views/admin/employers/reported.blade.php
+Analyzing: resources/views/admin/dashboard/index.blade.php
+Analyzing: resources/views/admin/email_templates/index.blade.php
+Analyzing: resources/views/admin/email_templates/edit.blade.php
+Analyzing: resources/views/admin/branding_sliders/index.blade.php
+Analyzing: resources/views/admin/header_sliders/index.blade.php
+Analyzing: resources/views/admin/image_sliders/index.blade.php
+Analyzing: resources/views/admin/reported_jobs/index.blade.php
+Analyzing: resources/views/admin/salary_periods/index.blade.php
+Analyzing: resources/views/admin/functional_areas/index.blade.php
+Analyzing: resources/views/admin/salary_currencies/index.blade.php
+Analyzing: resources/views/admin/ownership_types/index.blade.php
+Analyzing: resources/views/privacy-policy.blade.php
+Analyzing: resources/views/terms-conditions.blade.php
+Analyzing: resources/views/backend/layouts/app.blade.php
+Analyzing: resources/views/backend/dashboard/index.blade.php
+Analyzing: resources/views/frontend/layouts/app.blade.php
+Analyzing: resources/views/frontend/home/index.blade.php
+Analyzing: resources/views/shared/components/layout/base.blade.php
+Analyzing: resources/views/shared/components/flash-messages.blade.php
+Analyzing: resources/views/shared/components/navigation/breadcrumbs.blade.php
+Analyzing: resources/views/shared/components/forms/input.blade.php
+Analyzing: resources/views/shared/components/forms/button.blade.php
+Analyzing: resources/views/shared/components/forms/select.blade.php
+Analyzing: resources/views/shared/components/table/index.blade.php
+
+=== ANALYSIS SUMMARY ===
+Total files analyzed: 646
+Total errors: 691
+Total warnings: 1037
+Missing routes: 612
+
+Unused routes: 54
+
+=== CRITICAL ERRORS ===
+❌ Missing view file for @include: 'flash::message' (expected: flash::message.blade.php)
+❌ Missing route: 'jobs.index'
+❌ Missing route: 'companies.index'
+❌ Missing route: 'login'
+❌ Missing route: 'register'
+❌ Missing route: 'admin.candidates.index'
+❌ Missing route: 'admin.candidates.show'
+❌ Missing route: 'admin.candidates.edit'
+❌ Missing route: 'admin.candidates.create'
+❌ Missing route: 'candidates.export.excel'
+❌ Missing route: 'candidates.index'
+❌ Missing route: 'candidate.profile'
+❌ Missing route: 'favourite.companies'
+❌ Missing route: 'candidate.download-resume'
+❌ Missing route: 'candidate.experience.create'
+❌ Missing route: 'candidate.education.create'
+❌ Missing route: 'candidate.profile.edit'
+❌ Missing route: 'candidate.profile.general.update'
+❌ Missing route: 'candidate.profile.online.update'
+❌ Missing route: 'candidate.cv.template'
+❌ Missing route: 'theme.mode'
+❌ Missing route: 'favourite.jobs'
+❌ Missing route: 'candidate.applied.job'
+❌ Missing route: 'candidate.job.alert'
+❌ Missing route: 'candidate.job.alerts.create'
+❌ Missing route: 'front.job.details'
+❌ Missing route: 'admin.dashboard'
+❌ Missing route: 'posts.index'
+❌ Missing route: 'posts.show'
+❌ Missing route: 'posts.edit'
+❌ Missing route: 'admin.posts.create'
+❌ Missing route: 'download.post'
+❌ Missing route: 'admin.jobs.show'
+❌ Missing route: 'job-notification.index'
+❌ Missing route: 'admin.jobs.edit'
+❌ Missing route: 'front.report-candidate'
+❌ Missing route: 'front.search.jobs'
+❌ Missing route: 'front.job-categories'
+❌ Missing route: 'front.company.lists'
+❌ Missing route: 'front.posts.details'
+❌ Missing route: 'manage-subscription.index'
+❌ Missing route: 'employer.register'
+❌ Missing route: 'front.search-jobs'
+❌ Missing route: 'front.blog.comment.store'
+❌ Missing route: 'front.blog.category'
+❌ Missing route: 'front.contact.send'
+❌ Missing route: 'front.login'
+❌ Missing route: 'front.candidate.login'
+❌ Missing route: 'front.employee.login'
+❌ Missing route: 'password.request'
+❌ Missing route: 'front.save.register'
+❌ Missing route: 'candidate.register'
+❌ Missing route: 'terms.conditions.list'
+❌ Missing route: 'privacy.policy.list'
+❌ Missing route: 'front.company.details'
+❌ Missing route: 'front.candidate.lists'
+❌ Missing route: 'front.about.us'
+❌ Missing route: 'front.contact'
+❌ Missing route: 'front.post.lists'
+❌ Missing route: 'company.edit.form'
+❌ Missing route: 'job.index'
+❌ Missing route: 'followers.index'
+❌ Missing route: 'transactions.index'
+❌ Missing route: 'news-letter.create'
+❌ Missing route: 'apply-job'
+❌ Missing route: 'show.apply-job-form'
+❌ Missing route: 'save.favourite.job'
+❌ Missing route: 'report.job.abuse'
+❌ Missing route: 'email.job'
+❌ Missing route: 'save.favourite.company'
+❌ Missing route: 'report.to.company'
+❌ Missing route: 'password.confirm'
+❌ Missing route: 'password.email'
+❌ Missing route: 'token'
+❌ Missing route: 'verification.resend'
+❌ Missing route: 'login.submit'
+❌ Missing route: 'admin.login'
+❌ Missing route: 'front.candidate.details'
+❌ Missing route: 'employer.dashboard'
+❌ Missing route: 'admin.job-stages.index'
+❌ Missing route: 'admin.job-applications.index'
+❌ Missing route: 'admin.jobs.create'
+❌ Missing route: 'employer.job.stage.change'
+❌ Missing route: 'employer.interview.slot.view'
+❌ Missing route: 'employer.interview.slot.store'
+❌ Missing route: 'jobId'
+❌ Missing route: 'employer.batch.slot.store'
+❌ Missing route: 'jobApplicationId'
+❌ Missing route: 'employer.schedule.history'
+❌ Missing route: 'employer.slot.cancel'
+❌ Missing view file for @include: 'employer.job_applications.templates.templates' (expected: employer/job_applications/templates/templates.blade.php)
+❌ Missing route: 'admin.email-template.edit'
+❌ Missing route: 'admin.email-template.index'
+❌ Missing route: 'admin.download-all-resume'
+❌ Missing route: 'admin.admin.create'
+❌ Missing route: 'admin.admin.show'
+❌ Missing route: 'admin.admin.edit'
+❌ Missing route: 'admin.admin.destroy'
+❌ Missing route: 'admin.admin.index'
+❌ Missing route: 'admin.edit'
+❌ Missing route: 'admin.index'
+❌ Missing route: 'front.contact.store'
+❌ Missing route: 'admin.jobs.index'
+❌ Missing route: 'admin.transactions.index'
+❌ Missing route: 'notification.settings.index'
+❌ Missing view file for @include: 'candidates.candidate   _card' (expected: candidates/candidate   _card.blade.php)
+❌ Missing view file for @include: 'livewire.base-table' (expected: livewire/base-table.blade.php)
+❌ Missing route: 'admin.reported.companies'
+❌ Missing route: 'admin.degree-levels'
+❌ Missing route: 'admin.reported-candidates'
+❌ Missing route: 'admin.resumes.index'
+❌ Missing route: 'admin.selected-candidate'
+❌ Missing route: 'admin.job-categories.index'
+❌ Missing route: 'admin.job-types.index'
+❌ Missing route: 'admin.job-tags.index'
+❌ Missing route: 'admin.job-shifts.index'
+❌ Missing route: 'reported.jobs'
+❌ Missing route: 'admin.jobs.expiredJobs'
+❌ Missing route: 'post-categories.index'
+❌ Missing route: 'post.comments'
+❌ Missing route: 'plans.index'
+❌ Missing route: 'subscribers.index'
+❌ Missing route: 'admin.countries.index'
+❌ Missing route: 'admin.states.index'
+❌ Missing route: 'admin.cities.index'
+❌ Missing route: 'admin.marital-statuses.index'
+❌ Missing route: 'admin.skills.index'
+❌ Missing route: 'admin.industries.index'
+❌ Missing route: 'admin.company-sizes.index'
+❌ Missing route: 'admin.career-levels.index'
+❌ Missing route: 'admin.languages.index'
+❌ Missing route: 'noticeboards.index'
+❌ Missing route: 'admin.faqs.index'
+❌ Missing route: 'admin.inquires.index'
+❌ Missing route: 'privacy.policy.index'
+❌ Missing route: 'translation-manager.index'
+❌ Missing route: 'components.icon-documentation'
+❌ Missing route: 'icons.documentation'
+❌ Missing route: 'about-us'
+❌ Missing route: 'contact'
+❌ Missing route: 'download.image'
+❌ Missing route: 'admin.inquires.show'
+❌ Missing view file for @include: 'inquires.show_fields' (expected: inquires/show_fields.blade.php)
+❌ Missing route: 'logout'
+❌ Missing route: 'jobs.show'
+❌ Missing route: 'payment-method-screen'
+❌ Missing route: 'paypal-payment'
+❌ Missing route: 'manually-payment'
+❌ Missing route: 'paystack.payment'
+❌ Missing view file for @include: 'flash::modal' (expected: flash::modal.blade.php)
+❌ Missing route: 'language.switch'
+❌ Missing route: 'posts.store'
+❌ Missing route: 'uploads.store'
+❌ Missing route: 'candidate.applications.index'
+❌ Missing route: 'employer.jobs.create'
+❌ Missing route: 'employer.applications.index'
+❌ Missing route: 'privacy-policy'
+❌ Missing route: 'terms-conditions'
+❌ Missing route: 'contact.submit'
+❌ Missing route: 'admin.transactions.create'
+❌ Missing route: 'admin.transactions.show'
+❌ Missing route: 'admin.transactions.edit'
+❌ Missing route: 'admin.transactions.destroy'
+❌ Missing route: 'admin.settings.index'
+❌ Missing route: 'admin.subscribers.index'
+❌ Missing route: 'admin.employers.index'
+❌ Missing route: 'admin.settings.general'
+❌ Missing route: 'admin.settings.email'
+❌ Missing route: 'admin.profile'
+❌ Missing route: 'admin.users.index'
+❌ Missing route: 'admin.companies.index'
+❌ Missing route: 'admin.revenue.index'
+❌ Missing route: 'admin.users.show'
+❌ Missing route: 'admin.users.create'
+❌ Missing route: 'admin.companies.create'
+❌ Missing route: 'blog.index'
+❌ Missing route: 'locale.change'
+❌ Missing route: 'candidate.dashboard'
+❌ Missing route: 'profile.show'
+❌ Missing route: 'settings'
+❌ Missing route: 'pricing'
+❌ Missing route: 'about'
+❌ Missing route: 'privacy'
+❌ Missing route: 'terms'
+
+=== WARNINGS (First 10) ===
+⚠️  Bootstrap class 'row' found - Needs conversion to TailwindCSS
+⚠️  Bootstrap class 'btn-primary' found - Needs conversion to TailwindCSS
+⚠️  Bootstrap class 'form-group' found - Needs conversion to TailwindCSS
+⚠️  Bootstrap class 'form-control' found - Needs conversion to TailwindCSS
+⚠️  Bootstrap class 'col-' found - Needs conversion to TailwindCSS
+⚠️  JavaScript code found in blade file - Should be moved to separate JS file
+⚠️  Hardcoded URL found: 'candidate/candidate-experience' - Consider using route() helper
+⚠️  Hardcoded URL found: 'candidate' - Consider using route() helper
+⚠️  Hardcoded URL found: 'candidate/candidate-education' - Consider using route() helper
+⚠️  Bootstrap class 'btn-secondary' found - Needs conversion to TailwindCSS
+... and 1027 more warnings
+
+=== MISSING ROUTES ===
+🔍 Route 'jobs.index' in resources/views/welcome.blade.php (line 21)
+🔍 Route 'companies.index' in resources/views/welcome.blade.php (line 30)
+🔍 Route 'login' in resources/views/welcome.blade.php (line 37)
+🔍 Route 'register' in resources/views/welcome.blade.php (line 38)
+🔍 Route 'admin.candidates.index' in resources/views/candidates/fields.blade.php (line 266)
+🔍 Route 'admin.candidates.show' in resources/views/candidates/table-components/name_email.blade.php (line Unknown)
+🔍 Route 'admin.candidates.show' in resources/views/candidates/table-components/name_email.blade.php (line Unknown)
+🔍 Route 'admin.candidates.edit' in resources/views/candidates/table-components/action_button.blade.php (line Unknown)
+🔍 Route 'admin.candidates.create' in resources/views/candidates/table-components/add_button.blade.php (line 2)
+🔍 Route 'candidates.export.excel' in resources/views/candidates/table-components/add_button.blade.php (line 8)
+... and 602 more missing routes
+
+=== UNUSED ROUTES (First 10) ===
+🗑️  Route 'language.change' is defined but never used
+🗑️  Route 'countries-list' is defined but never used
+🗑️  Route 'countries.index' is defined but never used
+🗑️  Route 'states.index' is defined but never used
+🗑️  Route 'cities.index' is defined but never used
+🗑️  Route 'maritalStatus.index' is defined but never used
+🗑️  Route 'skills.index' is defined but never used
+🗑️  Route 'industry.index' is defined but never used
+🗑️  Route 'companySize.index' is defined but never used
+🗑️  Route 'companySize.store' is defined but never used
+... and 44 more unused routes
+
+=== FIX SUGGESTIONS ===
+
+1. MISSING ROUTES - Create these routes in routes/web.php:
+   Route::get('/jobs.index', [SomeController::class, 'method'])->name('jobs.index');
+   Route::get('/companies.index', [SomeController::class, 'method'])->name('companies.index');
+   Route::get('/login', [SomeController::class, 'method'])->name('login');
+   Route::get('/register', [SomeController::class, 'method'])->name('register');
+   Route::get('/admin.candidates.index', [SomeController::class, 'method'])->name('admin.candidates.index');
+
+2. CDN TO LOCAL MIGRATION:
+   - Run: npm install bootstrap tailwindcss
+   - Replace CDN links with @vite(['resources/css/app.css', 'resources/js/app.js'])
+   - Remove all external CDN references
+
+3. BOOTSTRAP TO TAILWIND CONVERSION:
+   - Replace 'container-fluid' with 'w-full max-w-none'
+   - Replace 'row' with 'flex flex-wrap'
+   - Replace 'col-*' with 'w-full md:w-*'
+   - Replace 'btn-primary' with 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+
+4. JAVASCRIPT/CSS CLEANUP:
+   - Move inline JavaScript to resources/js/
+   - Move inline CSS to resources/css/
+   - Use Vite for asset compilation
+
+5. COMPONENTS CREATION:
+   - Create reusable components for repeated UI elements
+   - Use @component directive for complex UI blocks
+   - Implement a consistent layout structure
+
+=== NEXT STEPS ===
+1. Fix critical route errors first
+2. Remove CDN dependencies
+3. Convert Bootstrap to TailwindCSS
+4. Create blade components
+5. Clean up unused routes
+
+=== COMPLETED ===
+
+📄 Results saved to blade_analysis_results.json

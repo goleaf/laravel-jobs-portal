@@ -2,222 +2,198 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EnhancedAuthenticate extends Middleware
 {
     /**
+     * Maximum failed login attempts before account lockout
+     */
+    const MAX_FAILED_ATTEMPTS = 5;
+
+    /**
+     * Account lockout duration in minutes
+     */
+    const LOCKOUT_DURATION = 30;
+
+    /**
      * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  ...$guards
+     * @return mixed
+     *
+     * @throws \Illuminate\Auth\AuthenticationException
      */
-    public function handle($request, Closure $next, ...$guards)
+    public function handle($request, $next, ...$guards)
     {
-        // Check for account lockout
-        if ($this->isAccountLocked($request)) {
-            return $this->handleAccountLocked($request);
+        // Check if user is attempting to login
+        if ($this->isLoginAttempt($request)) {
+            $this->checkAccountLockout($request);
         }
 
-        // Check session security
-        if ($this->shouldValidateSession($request)) {
-            $this->validateSessionSecurity($request);
+        // Call parent authentication
+        $response = parent::handle($request, $next, ...$guards);
+
+        // Check for suspicious activity if user is authenticated
+        if (Auth::check()) {
+            $this->checkSuspiciousActivity($request);
         }
 
-        // Continue with standard authentication
-        $this->authenticate($request, $guards);
-
-        // Log successful authentication
-        if ($request->user()) {
-            $this->logSecurityEvent('authentication_success', $request);
-        }
-
-        return $next($request);
+        return $response;
     }
 
     /**
-     * Check if account is locked due to failed attempts.
+     * Check if this is a login attempt
      */
-    protected function isAccountLocked(Request $request): bool
+    protected function isLoginAttempt(Request $request): bool
     {
-        $lockoutKey = 'lockout:' . $request->ip();
-        $attempts = Cache::get($lockoutKey, 0);
-        
-        return $attempts >= config('security.max_failed_attempts', 5);
+        return $request->isMethod('POST') && 
+               ($request->routeIs('login') || $request->is('*/login') || $request->is('login'));
     }
 
     /**
-     * Handle account lockout response.
+     * Check if account is locked out
      */
-    protected function handleAccountLocked(Request $request)
+    protected function checkAccountLockout(Request $request): void
     {
-        $lockoutKey = 'lockout:' . $request->ip();
-        $remainingTime = Cache::get($lockoutKey . ':time', 0);
+        $email = $request->input('email');
+        if (!$email) return;
+
+        $lockoutKey = 'login_lockout:' . $email;
+        $attemptsKey = 'login_attempts:' . $email;
+
+        // Check if account is currently locked
+        if (Cache::has($lockoutKey)) {
+            $lockoutTime = Cache::get($lockoutKey);
+            $remainingTime = Carbon::parse($lockoutTime)->addMinutes(self::LOCKOUT_DURATION)->diffInMinutes(now());
+            
+            Log::warning('Attempted login to locked account', [
+                'email' => $email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'remaining_lockout_minutes' => $remainingTime
+            ]);
+
+            abort(423, "Account is locked due to too many failed login attempts. Please try again in {$remainingTime} minutes.");
+        }
+    }
+
+    /**
+     * Record failed login attempt and check for lockout
+     */
+    public static function recordFailedAttempt(string $email, Request $request): void
+    {
+        $attemptsKey = 'login_attempts:' . $email;
+        $attempts = Cache::get($attemptsKey, 0) + 1;
         
-        $this->logSecurityEvent('account_locked', $request, [
-            'attempts' => Cache::get($lockoutKey, 0),
-            'remaining_time' => $remainingTime
+        // Store attempts for 1 hour
+        Cache::put($attemptsKey, $attempts, 3600);
+
+        Log::warning('Failed login attempt', [
+            'email' => $email,
+            'attempt_number' => $attempts,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent()
         ]);
 
-        if ($request->expectsJson()) {
-            return response()->json([
-                'error' => 'Account temporarily locked',
-                'message' => 'Too many failed login attempts. Please try again later.',
-                'retry_after' => $remainingTime
-            ], 429);
+        // Lock account if too many attempts
+        if ($attempts >= self::MAX_FAILED_ATTEMPTS) {
+            $lockoutKey = 'login_lockout:' . $email;
+            Cache::put($lockoutKey, now(), self::LOCKOUT_DURATION * 60);
+            Cache::forget($attemptsKey);
+
+            Log::critical('Account locked due to failed login attempts', [
+                'email' => $email,
+                'total_attempts' => $attempts,
+                'ip' => $request->ip(),
+                'lockout_duration_minutes' => self::LOCKOUT_DURATION
+            ]);
         }
-
-        return redirect()->route('login')->withErrors([
-            'email' => 'Account temporarily locked due to too many failed attempts. Please try again later.'
-        ]);
     }
 
     /**
-     * Check if session validation is needed.
+     * Clear failed attempts on successful login
      */
-    protected function shouldValidateSession(Request $request): bool
+    public static function clearFailedAttempts(string $email): void
     {
-        return $request->user() && 
-               config('security.validate_sessions', true) &&
-               !$request->is('api/*');
+        $attemptsKey = 'login_attempts:' . $email;
+        $lockoutKey = 'login_lockout:' . $email;
+        
+        Cache::forget($attemptsKey);
+        Cache::forget($lockoutKey);
     }
 
     /**
-     * Validate session security.
+     * Check for suspicious activity
      */
-    protected function validateSessionSecurity(Request $request): void
+    protected function checkSuspiciousActivity(Request $request): void
     {
-        $user = $request->user();
-        $sessionKey = 'session_security:' . $user->id;
-        $storedData = Cache::get($sessionKey);
+        $user = Auth::user();
+        if (!$user) return;
 
-        $currentData = [
+        $sessionKey = 'user_session:' . $user->id;
+        $lastSession = Cache::get($sessionKey, []);
+
+        $currentSession = [
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
-            'last_activity' => now()->timestamp
+            'timestamp' => now(),
+            'route' => $request->route()?->getName() ?? $request->path()
         ];
 
-        if ($storedData) {
-            // Check for suspicious activity
-            if ($this->detectSuspiciousActivity($storedData, $currentData)) {
-                $this->handleSuspiciousActivity($request, $user);
-                return;
+        // Check for IP address change
+        if (!empty($lastSession['ip']) && $lastSession['ip'] !== $currentSession['ip']) {
+            Log::warning('User IP address changed during session', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'old_ip' => $lastSession['ip'],
+                'new_ip' => $currentSession['ip'],
+                'time_since_last_request' => isset($lastSession['timestamp']) 
+                    ? Carbon::parse($lastSession['timestamp'])->diffInMinutes(now()) 
+                    : 'unknown'
+            ]);
+        }
+
+        // Check for user agent change
+        if (!empty($lastSession['user_agent']) && $lastSession['user_agent'] !== $currentSession['user_agent']) {
+            Log::warning('User agent changed during session', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'old_user_agent' => $lastSession['user_agent'],
+                'new_user_agent' => $currentSession['user_agent'],
+                'ip' => $currentSession['ip']
+            ]);
+        }
+
+        // Check for unusual time gaps (more than 12 hours)
+        if (!empty($lastSession['timestamp'])) {
+            $timeDiff = Carbon::parse($lastSession['timestamp'])->diffInHours(now());
+            if ($timeDiff > 12) {
+                Log::info('User session resumed after extended absence', [
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'hours_since_last_activity' => $timeDiff,
+                    'ip' => $currentSession['ip']
+                ]);
             }
         }
 
-        // Update session data
-        Cache::put($sessionKey, $currentData, now()->addHours(2));
-    }
-
-    /**
-     * Detect suspicious session activity.
-     */
-    protected function detectSuspiciousActivity(array $stored, array $current): bool
-    {
-        // Check for IP changes (unless configured to allow)
-        if (!config('security.allow_ip_changes', false) && $stored['ip'] !== $current['ip']) {
-            return true;
-        }
-
-        // Check for user agent changes
-        if (!config('security.allow_user_agent_changes', false) && $stored['user_agent'] !== $current['user_agent']) {
-            return true;
-        }
-
-        // Check for session hijacking patterns
-        $timeDiff = $current['last_activity'] - $stored['last_activity'];
-        if ($timeDiff < 0 || $timeDiff > 3600) { // 1 hour max gap
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Handle suspicious activity.
-     */
-    protected function handleSuspiciousActivity(Request $request, $user): void
-    {
-        $this->logSecurityEvent('suspicious_activity', $request, [
-            'user_id' => $user->id,
-            'reason' => 'Session validation failed'
-        ]);
-
-        // Force logout
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // Optional: Send security notification to user
-        if (config('security.notify_suspicious_activity', true)) {
-            // Queue notification email
-            // Mail::to($user)->queue(new SuspiciousActivityNotification());
-        }
-    }
-
-    /**
-     * Log security events.
-     */
-    protected function logSecurityEvent(string $event, Request $request, array $context = []): void
-    {
-        Log::channel('security')->info("Security Event: {$event}", array_merge([
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'url' => $request->fullUrl(),
-            'method' => $request->method(),
-            'user_id' => $request->user()?->id,
-            'timestamp' => now()->toISOString()
-        ], $context));
+        // Store current session info (expires in 2 hours)
+        Cache::put($sessionKey, $currentSession, 7200);
     }
 
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      */
-    protected function redirectTo($request): ?string
+    protected function redirectTo(Request $request): ?string
     {
         return $request->expectsJson() ? null : route('login');
-    }
-
-    /**
-     * Handle failed authentication attempt.
-     */
-    public function handleFailedAttempt(Request $request): void
-    {
-        $lockoutKey = 'lockout:' . $request->ip();
-        $attempts = Cache::get($lockoutKey, 0) + 1;
-        
-        Cache::put($lockoutKey, $attempts, now()->addMinutes(30));
-        
-        if ($attempts >= config('security.max_failed_attempts', 5)) {
-            Cache::put($lockoutKey . ':time', 1800, now()->addMinutes(30)); // 30 min lockout
-        }
-
-        $this->logSecurityEvent('authentication_failed', $request, [
-            'attempts' => $attempts,
-            'email' => $request->input('email')
-        ]);
-    }
-
-    /**
-     * Handle successful authentication.
-     */
-    public function handleSuccessfulAttempt(Request $request): void
-    {
-        // Clear lockout on successful login
-        $lockoutKey = 'lockout:' . $request->ip();
-        Cache::forget($lockoutKey);
-        Cache::forget($lockoutKey . ':time');
-
-        // Update last login
-        if ($user = $request->user()) {
-            $user->update([
-                'last_login_at' => now(),
-                'last_login_ip' => $request->ip()
-            ]);
-        }
-
-        $this->logSecurityEvent('login_success', $request);
     }
 } 

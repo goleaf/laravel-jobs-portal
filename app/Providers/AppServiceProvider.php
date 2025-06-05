@@ -111,39 +111,36 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure comprehensive rate limiting for different operations.
+     * Configure comprehensive rate limiting for security and performance.
      */
     protected function configureRateLimiting(): void
     {
-        // API Rate Limiting - General API access
+        // API Rate Limiting
         RateLimiter::for('api', function (Request $request) {
             return $request->user()
                 ? Limit::perMinute(120)->by($request->user()->id)
                 : Limit::perMinute(60)->by($request->ip());
         });
 
-        // Authentication Rate Limiting - Login attempts
+        // Login Attempts Rate Limiting
         RateLimiter::for('login', function (Request $request) {
             return [
-                Limit::perMinute(10),
-                Limit::perMinute(3)->by($request->input('email')),
+                Limit::perMinute(10)->by('global-login'),
+                Limit::perMinute(3)->by($request->string('email'))
             ];
         });
 
         // Registration Rate Limiting
-        RateLimiter::for('register', function (Request $request) {
+        RateLimiter::for('registration', function (Request $request) {
             return [
-                Limit::perMinute(5),
-                Limit::perDay(10)->by($request->ip()),
+                Limit::perMinute(5)->by($request->ip()),
+                Limit::perDay(10)->by($request->ip())
             ];
         });
 
         // Password Reset Rate Limiting
         RateLimiter::for('password-reset', function (Request $request) {
-            return [
-                Limit::perMinute(3),
-                Limit::perHour(10)->by($request->input('email')),
-            ];
+            return Limit::perMinute(3)->by($request->string('email'));
         });
 
         // Job Search Rate Limiting
@@ -154,39 +151,36 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Job Application Rate Limiting
-        RateLimiter::for('job-application', function (Request $request) {
+        RateLimiter::for('job-applications', function (Request $request) {
             return $request->user()
-                ? Limit::perDay(50)->by($request->user()->id)
-                : Limit::none();
+                ? Limit::perHour(20)->by($request->user()->id)
+                : Limit::perHour(5)->by($request->ip());
         });
 
         // File Upload Rate Limiting
-        RateLimiter::for('uploads', function (Request $request) {
+        RateLimiter::for('file-uploads', function (Request $request) {
             return $request->user()
-                ? Limit::perMinute(20)->by($request->user()->id)
-                : Limit::perMinute(5)->by($request->ip());
+                ? Limit::perMinute(10)->by($request->user()->id)
+                : Limit::perMinute(3)->by($request->ip());
         });
 
         // Admin Operations Rate Limiting
         RateLimiter::for('admin', function (Request $request) {
             return $request->user() && $request->user()->hasRole('admin')
-                ? Limit::perMinute(200)->by($request->user()->id)
-                : Limit::none();
+                ? Limit::perMinute(300)->by($request->user()->id)
+                : Limit::perMinute(10)->by($request->ip());
         });
 
-        // Company Profile Update Rate Limiting
+        // Company Updates Rate Limiting
         RateLimiter::for('company-updates', function (Request $request) {
             return $request->user()
-                ? Limit::perHour(10)->by($request->user()->id)
-                : Limit::none();
+                ? Limit::perHour(50)->by($request->user()->id)
+                : Limit::perHour(5)->by($request->ip());
         });
 
         // Email Verification Rate Limiting
         RateLimiter::for('email-verification', function (Request $request) {
-            return [
-                Limit::perMinute(3),
-                Limit::perHour(10)->by($request->user()?->id ?: $request->ip()),
-            ];
+            return Limit::perMinute(6)->by($request->user()?->id ?: $request->ip());
         });
 
         // Global Application Rate Limiting

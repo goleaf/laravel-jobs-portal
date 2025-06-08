@@ -25,6 +25,23 @@ Route::get('/test', function () {
     ]);
 })->name('test');
 
+/*
+|--------------------------------------------------------------------------
+| Locale/Language Routes
+|--------------------------------------------------------------------------
+|
+| Routes for handling language switching and locale management
+|
+*/
+
+Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
+    Route::post('/switch', [App\Http\Controllers\LocaleController::class, 'switch'])->name('switch');
+    Route::get('/available', [App\Http\Controllers\LocaleController::class, 'getAvailableLocales'])->name('available');
+    Route::get('/current', [App\Http\Controllers\LocaleController::class, 'getCurrentLocale'])->name('current');
+    Route::get('/check', [App\Http\Controllers\LocaleController::class, 'checkLocale'])->name('check');
+    Route::get('/rtl', [App\Http\Controllers\LocaleController::class, 'getRTLLanguages'])->name('rtl');
+});
+
 // Home route - aliased as both 'home' and 'front.home'
 Route::get('/', [App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
 
@@ -1521,3 +1538,229 @@ Route::name('privacypolicy.')->group(function () {
 Route::get('/universal-demo', function () {
     return view('universal-demo');
 })->name('universal.demo');
+
+/*
+|--------------------------------------------------------------------------
+| CRITICAL MISSING ROUTES FIX - ADMIN MANAGEMENT
+|--------------------------------------------------------------------------
+| These routes were identified as missing from blade file analysis
+| All routes follow Laravel best practices with proper middleware
+| Implementation based on blade_analysis_report.md findings
+*/
+
+// 🔥 CRITICAL PRIORITY: Admin Management Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Admin Dashboard Routes
+    Route::get('/', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/index', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('index');
+    Route::get('/stats', [App\Http\Controllers\Admin\AdminDashboardController::class, 'getStats'])->name('stats');
+    Route::get('/overview', [App\Http\Controllers\Admin\AdminDashboardController::class, 'getOverview'])->name('overview');
+    
+    // Admin Profile Management
+    Route::get('/edit', function () {
+        return view('admin.profile.edit');
+    })->name('edit');
+    
+    // Admin User Management (CRUD)
+    Route::resource('admin', App\Http\Controllers\Admin\AdminController::class, [
+        'names' => [
+            'index' => 'admin.index',
+            'create' => 'admin.create',
+            'store' => 'admin.store',
+            'show' => 'admin.show',
+            'edit' => 'admin.edit',
+            'update' => 'admin.update',
+            'destroy' => 'admin.destroy'
+        ]
+    ]);
+    
+    // Admin Status Toggle
+    Route::patch('/admin/{admin}/toggle-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleStatus'])->name('admin.toggle-status');
+    
+    // Email Template Management
+    Route::get('/email-templates/{template}/edit', function ($template) {
+        return view('admin.email_templates.edit', compact('template'));
+    })->name('email.template.edit');
+    
+    Route::get('/email-template', function () {
+        return view('admin.email_templates.index');
+    })->name('admin-email-template.index');
+    
+    Route::get('/email-template/edit/{template}', function ($template) {
+        return view('admin.email_templates.edit');
+    })->name('admin-email-template.edit');
+    
+    // Translation Manager
+    Route::get('/translation-manager', function () {
+        return view('admin.translation_manager.index');
+    })->name('translation-manager.index');
+    
+    // Candidates Management Routes
+    Route::get('/candidates/create', function () {
+        return view('admin.candidates.create');
+    })->name('candidates.create');
+    
+    Route::get('/candidates/{candidate}/edit', function ($candidate) {
+        return view('admin.candidates.edit');
+    })->name('candidates.edit');
+    
+    Route::get('/candidates/{candidate}', function ($candidate) {
+        return view('admin.candidates.show');
+    })->name('candidates.show');
+    
+    Route::get('/reported-candidates', function () {
+        return view('admin.candidates.reported');
+    })->name('reported-candidates');
+    
+    Route::get('/selected-candidate', function () {
+        return view('admin.selected_candidates.index');
+    })->name('selected-candidate');
+    
+    // System Settings
+    Route::get('/settings', function () {
+        return view('admin.settings.index');
+    })->name('settings.index');
+    
+    // Subscribers Management
+    Route::get('/subscribers', function () {
+        return view('admin.subscribers.index');
+    })->name('subscribers.index');
+    
+    // Job Management Routes
+    Route::get('/job-stages', function () {
+        return view('admin.job_stages.index');
+    })->name('job-stages.index');
+    
+    Route::get('/job-applications', function () {
+        return view('admin.job_applications.index');
+    })->name('job-applications.index');
+    
+    Route::get('/job-types', function () {
+        return view('admin.job_types.index');
+    })->name('job-types.index');
+    
+    Route::get('/job-tags', function () {
+        return view('admin.job_tags.index');
+    })->name('job-tags.index');
+    
+    Route::get('/job-shifts', function () {
+        return view('admin.job_shifts.index');
+    })->name('job-shifts.index');
+    
+    Route::get('/reported-jobs', function () {
+        return view('admin.jobs.reported');
+    })->name('reported.jobs');
+    
+    Route::get('/jobs/expired', function () {
+        return view('admin.jobs.expired');
+    })->name('jobs.expiredJobs');
+    
+    // Master Data Management Routes
+    Route::get('/degree-levels', function () {
+        return view('admin.degree_levels.index');
+    })->name('degree-levels');
+    
+    Route::get('/marital-statuses', function () {
+        return view('admin.marital_statuses.index');
+    })->name('marital-statuses.index');
+    
+    Route::get('/salary-periods', function () {
+        return view('admin.salary_periods.index');
+    })->name('salaryPeriod.index');
+    
+    Route::get('/industries', function () {
+        return view('admin.industries.index');
+    })->name('industries.index');
+    
+    Route::get('/company-sizes', function () {
+        return view('admin.company_sizes.index');
+    })->name('company-sizes.index');
+    
+    Route::get('/functional-areas', function () {
+        return view('admin.functional_areas.index');
+    })->name('functionalArea.index');
+    
+    Route::get('/career-levels', function () {
+        return view('admin.career_levels.index');
+    })->name('career-levels.index');
+    
+    Route::get('/salary-currencies', function () {
+        return view('admin.salary_currencies.index');
+    })->name('salaryCurrency.index');
+    
+    Route::get('/ownership-types', function () {
+        return view('admin.ownership_types.index');
+    })->name('ownerShipType.index');
+    
+    // Content Management Routes
+    Route::get('/post/comments', function () {
+        return view('admin.post_comments.index');
+    })->name('post.comments');
+    
+    // Branding & Sliders
+    Route::get('/branding/sliders', function () {
+        return view('admin.branding_sliders.index');
+    })->name('branding.sliders.index');
+    
+    Route::get('/header/sliders', function () {
+        return view('admin.header_sliders.index');
+    })->name('header.sliders.index');
+    
+    Route::get('/image-sliders', function () {
+        return view('admin.image_sliders.index');
+    })->name('image-sliders.index');
+    
+    // Notification Settings
+    Route::get('/notification/settings', function () {
+        return view('admin.notification_settings.index');
+    })->name('notification.settings.index');
+    
+    // File Management
+    Route::get('/download-all-resume', function () {
+        return response()->download(storage_path('app/all_resumes.zip'));
+    })->name('download-all-resume');
+    
+    // CMS Routes
+    Route::get('/cms/services', function () {
+        return view('admin.cms.services.index');
+    })->name('cms.services.index');
+    
+    Route::get('/cms/about-us', function () {
+        return view('admin.cms.about.index');
+    })->name('cms.about-us.index');
+});
+
+/*
+|--------------------------------------------------------------------------
+| API ROUTES FOR VUE.JS SPA
+|--------------------------------------------------------------------------
+| These API routes support the Vue.js SPA components
+*/
+
+Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('api.admin.')->group(function () {
+    // Dashboard API Routes
+    Route::get('/dashboard-stats', [App\Http\Controllers\Admin\AdminDashboardController::class, 'getStats']);
+    Route::get('/dashboard-overview', [App\Http\Controllers\Admin\AdminDashboardController::class, 'getOverview']);
+    
+    // Admin Management API
+    Route::apiResource('admins', App\Http\Controllers\Admin\AdminController::class);
+    Route::patch('/admins/{admin}/toggle-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleStatus']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Locale/Language Routes
+|--------------------------------------------------------------------------
+|
+| Routes for handling language switching and locale management
+|
+*/
+
+Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
+    Route::post('/switch', [App\Http\Controllers\LocaleController::class, 'switch'])->name('switch');
+    Route::get('/available', [App\Http\Controllers\LocaleController::class, 'getAvailableLocales'])->name('available');
+    Route::get('/current', [App\Http\Controllers\LocaleController::class, 'getCurrentLocale'])->name('current');
+    Route::get('/check', [App\Http\Controllers\LocaleController::class, 'checkLocale'])->name('check');
+    Route::get('/rtl', [App\Http\Controllers\LocaleController::class, 'getRTLLanguages'])->name('rtl');
+});

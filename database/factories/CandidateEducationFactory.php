@@ -3,6 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Candidate;
+use App\Models\RequiredDegreeLevel;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CandidateEducation>
@@ -17,15 +22,15 @@ class CandidateEducationFactory extends Factory
     public function definition(): array
     {
         return [
-            'candidate_id' => \App\Models\Candidate::factory(),
-            'degree_level_id' => random_int(1, 10),
+            'candidate_id' => Candidate::factory(),
+            'degree_level_id' => RequiredDegreeLevel::factory(),
             'degree_title' => $this->faker->jobTitle,
             'institute' => $this->faker->company,
             'result' => $this->faker->randomElement(['A', 'B', 'C', 'D', 'Pass', 'Distinction']),
             'year' => $this->faker->year,
-            'country_id' => random_int(1, 50),
-            'state_id' => random_int(1, 100),
-            'city_id' => random_int(1, 200),
+            'country_id' => Country::factory(),
+            'state_id' => State::factory(),
+            'city_id' => City::factory(),
         ];
     }
 }

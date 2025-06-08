@@ -27,10 +27,21 @@ class SalaryPeriodFactory extends Factory
      */
     public function definition(): array
     {
+        $periods = [
+            ['period' => 'Hourly', 'description' => 'Payment calculated per hour worked'],
+            ['period' => 'Daily', 'description' => 'Payment calculated per day worked'],
+            ['period' => 'Weekly', 'description' => 'Payment calculated per week worked'],
+            ['period' => 'Monthly', 'description' => 'Payment calculated per month worked'],
+            ['period' => 'Yearly', 'description' => 'Payment calculated per year worked'],
+            ['period' => 'Project-based', 'description' => 'Payment calculated per project completion']
+        ];
+        
+        $period = $this->faker->unique()->randomElement($periods);
+        
         return [
-            'period' => fake()->word(),
-            'description' => fake()->paragraph(),
-            'is_default' => fake()->word()
+            'period' => $period['period'],
+            'description' => $period['description'],
+            'is_default' => $this->faker->boolean(10) // 10% chance of being default
         ];
     }
 }

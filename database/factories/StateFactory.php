@@ -28,9 +28,8 @@ class StateFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => fake()->regexify('[A-Za-z]{5,20}')(),
             'country_id' => fake()->numberBetween(1, 100),
-            'name' => fake()->regexify('[A-Za-z]{5,20}')s(2, true)
+            'name' => fake()->state()
         ];
     }
 }

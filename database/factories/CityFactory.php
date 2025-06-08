@@ -19,7 +19,6 @@ class CityFactory extends Factory
         return [
             'name' => $this->faker->city,
             'state_id' => random_int(1, 100),
-            'is_active' => $this->faker->boolean(80),
         ];
     }
 }

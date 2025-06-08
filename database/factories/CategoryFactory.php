@@ -17,9 +17,10 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
-            'description' => $this->faker->sentence,
-            'is_active' => $this->faker->boolean(80),
+            'name' => $this->faker->jobTitle(),
+            'description' => $this->faker->sentence(),
+            'is_active' => $this->faker->boolean(80), // 80% chance of being active
+            'is_default' => $this->faker->boolean(10), // 10% chance of being default
         ];
     }
 }

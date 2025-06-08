@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,6 +51,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class JobApplication extends Model
 {
+    use HasFactory;
+    
     public $table = 'job_applications';
 
     protected $appends = ['resume_url'];

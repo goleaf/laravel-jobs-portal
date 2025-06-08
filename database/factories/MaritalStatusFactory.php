@@ -17,8 +17,9 @@ class MaritalStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'marital_status' => $this->faker->randomElement(["single", "married", "divorced", "widowed"]),
-            'is_active' => $this->faker->boolean(80),
+            'marital_status' => $this->faker->unique()->randomElement(["Single", "Married", "Divorced", "Widowed", "Separated", "In a relationship"]),
+            'description' => $this->faker->sentence(),
+            'is_default' => $this->faker->boolean(20),
         ];
     }
 }

@@ -141,5 +141,10 @@
             "rule-name": "custom-message"
         }
     },
-    "attributes": []
+    "attributes": [],
+    "validation.locale_not_supported": "The :locale locale is not supported",
+    "validation.invalid_locale": "Please provide a valid locale",
+    "validation.locale_required": "Locale is required",
+    "validation.locale_string": "Locale must be a string",
+    "validation.locale_size": "Locale must be exactly 2 characters"
 }

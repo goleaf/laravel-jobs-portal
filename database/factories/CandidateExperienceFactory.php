@@ -3,6 +3,10 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Candidate;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CandidateExperience>
@@ -17,14 +21,14 @@ class CandidateExperienceFactory extends Factory
     public function definition(): array
     {
         return [
-            'candidate_id' => \App\Models\Candidate::factory(),
+            'candidate_id' => Candidate::factory(),
             'experience_title' => $this->faker->jobTitle,
             'company' => $this->faker->company,
-            'country_id' => random_int(1, 50),
-            'state_id' => random_int(1, 100),
-            'city_id' => random_int(1, 200),
-            'start_date' => $this->faker->date,
-            'end_date' => $this->faker->date,
+            'country_id' => Country::factory(),
+            'state_id' => State::factory(), 
+            'city_id' => City::factory(),
+            'start_date' => $this->faker->date(),
+            'end_date' => $this->faker->optional()->date(),
             'currently_working' => $this->faker->boolean,
             'description' => $this->faker->paragraph,
         ];

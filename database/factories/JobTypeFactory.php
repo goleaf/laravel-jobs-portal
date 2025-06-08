@@ -32,7 +32,6 @@ class JobTypeFactory extends Factory
         return [
             'name' => fake()->unique()->randomElement($jobTypes),
             'description' => fake()->sentence(),
-            'is_active' => true,
             'is_default' => false,
         ];
     }

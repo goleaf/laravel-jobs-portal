@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\LanguageMiddleware::class,
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\LocaleMiddleware::class,
         ],
 
         'api' => [
@@ -73,6 +74,7 @@ class Kernel extends HttpKernel
         'xss' => XSS::class,
         'setLanguage' => SetLanguage::class,
         'verified.user' => CheckUserIsVerified::class,
+        'locale' => \App\Http\Middleware\LocaleMiddleware::class,
         
         // Enhanced Security Middleware
         'enhanced.auth' => \App\Http\Middleware\EnhancedAuthenticate::class,

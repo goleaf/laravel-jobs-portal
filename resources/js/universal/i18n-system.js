@@ -1,6 +1,6 @@
 /**
- * Universal Internationalization System
- * Dynamic Language Switching and Translation Management
+ * Universal Internationalization System - Enhanced
+ * Dynamic Language Switching and Translation Management with Laravel Integration
  */
 
 class UniversalI18nSystem {
@@ -9,6 +9,8 @@ class UniversalI18nSystem {
         this.translations = new Map();
         this.loadedLocales = new Set();
         this.rtlLocales = ['ar']; // Arabic requires RTL support
+        this.fallbackLocale = 'en';
+        this.apiEndpoint = '/locale';
         this.init();
     }
 
@@ -17,10 +19,22 @@ class UniversalI18nSystem {
         this.setupLanguageSwitchers();
         this.loadCurrentLocale();
         this.applyRTLDirection();
+        this.setupLaravelIntegration();
         console.log(`🌍 Universal I18n System initialized with locale: ${this.currentLocale}`);
     }
 
-    // Locale Management
+    // Laravel Integration
+    setupLaravelIntegration() {
+        // Get CSRF token for Laravel requests
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        
+        // Listen for Laravel locale changes
+        window.addEventListener('laravel-locale-changed', (event) => {
+            this.setLocale(event.detail.locale, false); // Don't send to server again
+        });
+    }
+
+    // Enhanced Locale Management
     getDefaultLocale() {
         // Check browser language preference
         const browserLang = navigator.language || navigator.userLanguage;
@@ -36,21 +50,65 @@ class UniversalI18nSystem {
         return localStorage.getItem('universal_locale');
     }
 
-    setLocale(locale) {
+    async setLocale(locale, updateServer = true) {
         if (this.currentLocale === locale) return Promise.resolve();
         
-        this.currentLocale = locale;
-        localStorage.setItem('universal_locale', locale);
-        
-        return this.loadLocale(locale).then(() => {
+        try {
+            // Update server if requested
+            if (updateServer) {
+                await this.updateServerLocale(locale);
+            }
+            
+            this.currentLocale = locale;
+            localStorage.setItem('universal_locale', locale);
+            
+            await this.loadLocale(locale);
             this.applyRTLDirection();
             this.updateLanguageSwitchers();
             this.updatePageContent();
             this.dispatchLanguageChange();
-        });
+            
+            // Show success notification
+            this.showNotification(
+                await this.translate('locale.switched_successfully', { language: await this.getLocaleDisplayName(locale) }),
+                'success'
+            );
+            
+        } catch (error) {
+            console.error('Failed to switch locale:', error);
+            this.showNotification(
+                await this.translate('locale.switch_failed'),
+                'error'
+            );
+            throw error;
+        }
     }
 
-    // Translation Loading
+    async updateServerLocale(locale) {
+        if (!this.csrfToken) {
+            console.warn('CSRF token not found, skipping server update');
+            return;
+        }
+
+        const response = await fetch(`${this.apiEndpoint}/switch`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': this.csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ locale })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to update server locale');
+        }
+
+        return response.json();
+    }
+
+    // Enhanced Translation Loading
     async loadLocale(locale) {
         if (this.loadedLocales.has(locale)) {
             return Promise.resolve();
@@ -64,12 +122,15 @@ class UniversalI18nSystem {
                 'forms',
                 'navigation',
                 'validation',
-                'common'
+                'common',
+                'locale',
+                'messages',
+                'jobs',
+                'admin'
             ];
 
             const translations = {};
-            
-            for (const file of files) {
+            const loadPromises = files.map(async (file) => {
                 try {
                     const response = await fetch(`/lang/${locale}_json/${file}.json`);
                     if (response.ok) {
@@ -79,7 +140,9 @@ class UniversalI18nSystem {
                 } catch (error) {
                     console.warn(`Failed to load ${file}.json for locale ${locale}:`, error);
                 }
-            }
+            });
+
+            await Promise.all(loadPromises);
 
             this.translations.set(locale, translations);
             this.loadedLocales.add(locale);
@@ -95,14 +158,20 @@ class UniversalI18nSystem {
         return this.loadLocale(this.currentLocale);
     }
 
-    // Translation Functions
-    translate(key, params = {}, locale = null) {
+    // Enhanced Translation Functions
+    async translate(key, params = {}, locale = null) {
         const targetLocale = locale || this.currentLocale;
+        
+        // Ensure locale is loaded
+        if (!this.loadedLocales.has(targetLocale)) {
+            await this.loadLocale(targetLocale);
+        }
+        
         const localeTranslations = this.translations.get(targetLocale);
         
         if (!localeTranslations) {
             console.warn(`Translations not loaded for locale: ${targetLocale}`);
-            return key;
+            return this.getFallbackTranslation(key, params);
         }
 
         // Support nested keys like 'dashboard.welcome' or 'forms.validation.required'
@@ -114,7 +183,7 @@ class UniversalI18nSystem {
                 value = value[k];
             } else {
                 console.warn(`Translation key not found: ${key} in locale ${targetLocale}`);
-                return key;
+                return this.getFallbackTranslation(key, params);
             }
         }
 
@@ -126,14 +195,25 @@ class UniversalI18nSystem {
         return value;
     }
 
+    async getFallbackTranslation(key, params = {}) {
+        if (this.currentLocale !== this.fallbackLocale) {
+            try {
+                return await this.translate(key, params, this.fallbackLocale);
+            } catch (error) {
+                console.warn(`Fallback translation failed for key: ${key}`);
+            }
+        }
+        return key; // Return key as last resort
+    }
+
     interpolate(template, params) {
         return template.replace(/\{(\w+)\}/g, (match, key) => {
             return params.hasOwnProperty(key) ? params[key] : match;
         });
     }
 
-    // Pluralization
-    plural(key, count, params = {}, locale = null) {
+    // Enhanced Pluralization
+    async plural(key, count, params = {}, locale = null) {
         const targetLocale = locale || this.currentLocale;
         const pluralRules = this.getPluralRules(targetLocale);
         const pluralForm = pluralRules.select(count);
@@ -141,14 +221,14 @@ class UniversalI18nSystem {
         const pluralKey = `${key}.${pluralForm}`;
         const fallbackKey = `${key}.other`;
         
-        let translation = this.translate(pluralKey, { ...params, count }, locale);
+        let translation = await this.translate(pluralKey, { ...params, count }, locale);
         
         if (translation === pluralKey) {
-            translation = this.translate(fallbackKey, { ...params, count }, locale);
+            translation = await this.translate(fallbackKey, { ...params, count }, locale);
         }
         
         if (translation === fallbackKey) {
-            translation = this.translate(key, { ...params, count }, locale);
+            translation = await this.translate(key, { ...params, count }, locale);
         }
         
         return translation;
@@ -163,7 +243,7 @@ class UniversalI18nSystem {
         }
     }
 
-    // RTL Support
+    // Enhanced RTL Support
     applyRTLDirection() {
         const isRTL = this.rtlLocales.includes(this.currentLocale);
         
@@ -178,77 +258,110 @@ class UniversalI18nSystem {
             document.body.classList.add('ltr');
             document.body.classList.remove('rtl');
         }
+
+        // Dispatch RTL change event
+        window.dispatchEvent(new CustomEvent('rtl-changed', {
+            detail: { isRTL, locale: this.currentLocale }
+        }));
     }
 
-    // DOM Updates
+    // Enhanced DOM Updates
     setupLanguageSwitchers() {
+        // Handle dropdown language switchers
         document.querySelectorAll('[data-language-switcher]').forEach(switcher => {
-            switcher.addEventListener('change', (e) => {
+            switcher.addEventListener('change', async (e) => {
                 const locale = e.target.value;
-                this.setLocale(locale);
+                await this.setLocale(locale);
             });
         });
 
+        // Handle button language switchers
         document.querySelectorAll('[data-language-option]').forEach(option => {
-            option.addEventListener('click', (e) => {
+            option.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const locale = option.getAttribute('data-language-option');
-                this.setLocale(locale);
+                await this.setLocale(locale);
+            });
+        });
+
+        // Handle form-based language switchers
+        document.querySelectorAll('[data-language-form]').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const locale = formData.get('locale');
+                if (locale) {
+                    await this.setLocale(locale);
+                }
             });
         });
     }
 
     updateLanguageSwitchers() {
-        // Update select dropdowns
+        // Update all language switcher elements
         document.querySelectorAll('[data-language-switcher]').forEach(switcher => {
-            switcher.value = this.currentLocale;
+            if (switcher.tagName === 'SELECT') {
+                switcher.value = this.currentLocale;
+            }
         });
 
         // Update language option buttons
         document.querySelectorAll('[data-language-option]').forEach(option => {
             const locale = option.getAttribute('data-language-option');
             if (locale === this.currentLocale) {
-                option.classList.add('active');
+                option.classList.add('active', 'selected');
+                option.setAttribute('aria-current', 'true');
             } else {
-                option.classList.remove('active');
+                option.classList.remove('active', 'selected');
+                option.removeAttribute('aria-current');
             }
         });
     }
 
-    updatePageContent() {
-        // Update elements with data-translate attributes
-        document.querySelectorAll('[data-translate]').forEach(element => {
+    async updatePageContent() {
+        // Update elements with data-translate attribute
+        const elements = document.querySelectorAll('[data-translate]');
+        
+        for (const element of elements) {
             const key = element.getAttribute('data-translate');
             const params = this.parseTranslateParams(element);
-            const translation = this.translate(key, params);
             
-            if (element.hasAttribute('data-translate-html')) {
-                element.innerHTML = translation;
-            } else {
-                element.textContent = translation;
+            try {
+                const translation = await this.translate(key, params);
+                
+                if (element.hasAttribute('data-translate-html')) {
+                    element.innerHTML = translation;
+                } else {
+                    element.textContent = translation;
+                }
+            } catch (error) {
+                console.warn(`Failed to translate element with key: ${key}`, error);
             }
-        });
+        }
 
-        // Update placeholders
-        document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+        // Update placeholder attributes
+        const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+        for (const element of placeholderElements) {
             const key = element.getAttribute('data-translate-placeholder');
-            const translation = this.translate(key);
-            element.setAttribute('placeholder', translation);
-        });
+            try {
+                const translation = await this.translate(key);
+                element.setAttribute('placeholder', translation);
+            } catch (error) {
+                console.warn(`Failed to translate placeholder with key: ${key}`, error);
+            }
+        }
 
-        // Update titles
-        document.querySelectorAll('[data-translate-title]').forEach(element => {
+        // Update title attributes
+        const titleElements = document.querySelectorAll('[data-translate-title]');
+        for (const element of titleElements) {
             const key = element.getAttribute('data-translate-title');
-            const translation = this.translate(key);
-            element.setAttribute('title', translation);
-        });
-
-        // Update aria-labels
-        document.querySelectorAll('[data-translate-aria]').forEach(element => {
-            const key = element.getAttribute('data-translate-aria');
-            const translation = this.translate(key);
-            element.setAttribute('aria-label', translation);
-        });
+            try {
+                const translation = await this.translate(key);
+                element.setAttribute('title', translation);
+            } catch (error) {
+                console.warn(`Failed to translate title with key: ${key}`, error);
+            }
+        }
     }
 
     parseTranslateParams(element) {
@@ -263,23 +376,26 @@ class UniversalI18nSystem {
         }
     }
 
-    // Language Detection
     setupLanguageDetection() {
-        // Listen for browser language changes
-        window.addEventListener('languagechange', () => {
-            const newLocale = this.getDefaultLocale();
-            if (newLocale !== this.currentLocale && !this.getStoredLocale()) {
-                this.setLocale(newLocale);
-            }
-        });
+        // Auto-detect language changes in browser
+        if ('language' in navigator) {
+            // Some browsers support language change detection
+            window.addEventListener('languagechange', () => {
+                const newLocale = this.getDefaultLocale();
+                if (newLocale !== this.currentLocale) {
+                    this.setLocale(newLocale);
+                }
+            });
+        }
     }
 
-    // Events
     dispatchLanguageChange() {
+        // Dispatch custom event for other components
         window.dispatchEvent(new CustomEvent('language-changed', {
-            detail: { 
+            detail: {
                 locale: this.currentLocale,
-                isRTL: this.rtlLocales.includes(this.currentLocale)
+                isRTL: this.isRTL(),
+                displayName: this.getLocaleDisplayName(this.currentLocale)
             }
         }));
     }
@@ -297,61 +413,117 @@ class UniversalI18nSystem {
         return ['en', 'ar', 'de', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'];
     }
 
-    getLocaleDisplayName(locale, displayLocale = null) {
-        const displayLang = displayLocale || this.currentLocale;
-        
-        const names = {
-            'en': { en: 'English', ar: 'الإنجليزية', de: 'Englisch', es: 'Inglés', fr: 'Anglais', pt: 'Inglês', ru: 'Английский', tr: 'İngilizce', zh: '英语' },
-            'ar': { en: 'Arabic', ar: 'العربية', de: 'Arabisch', es: 'Árabe', fr: 'Arabe', pt: 'Árabe', ru: 'Арабский', tr: 'Arapça', zh: '阿拉伯语' },
-            'de': { en: 'German', ar: 'الألمانية', de: 'Deutsch', es: 'Alemán', fr: 'Allemand', pt: 'Alemão', ru: 'Немецкий', tr: 'Almanca', zh: '德语' },
-            'es': { en: 'Spanish', ar: 'الإسبانية', de: 'Spanisch', es: 'Español', fr: 'Espagnol', pt: 'Espanhol', ru: 'Испанский', tr: 'İspanyolca', zh: '西班牙语' },
-            'fr': { en: 'French', ar: 'الفرنسية', de: 'Französisch', es: 'Francés', fr: 'Français', pt: 'Francês', ru: 'Французский', tr: 'Fransızca', zh: '法语' },
-            'pt': { en: 'Portuguese', ar: 'البرتغالية', de: 'Portugiesisch', es: 'Portugués', fr: 'Portugais', pt: 'Português', ru: 'Португальский', tr: 'Portekizce', zh: '葡萄牙语' },
-            'ru': { en: 'Russian', ar: 'الروسية', de: 'Russisch', es: 'Ruso', fr: 'Russe', pt: 'Russo', ru: 'Русский', tr: 'Rusça', zh: '俄语' },
-            'tr': { en: 'Turkish', ar: 'التركية', de: 'Türkisch', es: 'Turco', fr: 'Turc', pt: 'Turco', ru: 'Турецкий', tr: 'Türkçe', zh: '土耳其语' },
-            'zh': { en: 'Chinese', ar: 'الصينية', de: 'Chinesisch', es: 'Chino', fr: 'Chinois', pt: 'Chinês', ru: 'Китайский', tr: 'Çince', zh: '中文' }
+    async getLocaleDisplayName(locale, displayLocale = null) {
+        const displayNames = {
+            'en': { native: 'English', name: 'English' },
+            'ar': { native: 'العربية', name: 'Arabic' },
+            'de': { native: 'Deutsch', name: 'German' },
+            'es': { native: 'Español', name: 'Spanish' },
+            'fr': { native: 'Français', name: 'French' },
+            'pt': { native: 'Português', name: 'Portuguese' },
+            'ru': { native: 'Русский', name: 'Russian' },
+            'tr': { native: 'Türkçe', name: 'Turkish' },
+            'zh': { native: '中文', name: 'Chinese' }
         };
-        
-        return names[locale] && names[locale][displayLang] ? names[locale][displayLang] : locale.toUpperCase();
+
+        const localeData = displayNames[locale];
+        if (!localeData) return locale;
+
+        return displayLocale ? localeData.name : localeData.native;
     }
 
-    // Date and Number Formatting
+    // Enhanced Formatting
     formatDate(date, options = {}) {
-        return new Intl.DateTimeFormat(this.currentLocale, options).format(date);
+        try {
+            return new Intl.DateTimeFormat(this.currentLocale, options).format(date);
+        } catch (error) {
+            return new Intl.DateTimeFormat('en', options).format(date);
+        }
     }
 
     formatNumber(number, options = {}) {
-        return new Intl.NumberFormat(this.currentLocale, options).format(number);
+        try {
+            return new Intl.NumberFormat(this.currentLocale, options).format(number);
+        } catch (error) {
+            return new Intl.NumberFormat('en', options).format(number);
+        }
     }
 
     formatCurrency(amount, currency = 'USD', options = {}) {
-        return new Intl.NumberFormat(this.currentLocale, {
-            style: 'currency',
-            currency: currency,
-            ...options
-        }).format(amount);
+        try {
+            return new Intl.NumberFormat(this.currentLocale, {
+                style: 'currency',
+                currency,
+                ...options
+            }).format(amount);
+        } catch (error) {
+            return new Intl.NumberFormat('en', {
+                style: 'currency',
+                currency,
+                ...options
+            }).format(amount);
+        }
+    }
+
+    // Notification System
+    showNotification(message, type = 'info') {
+        // Try to use existing notification system
+        if (window.showToast) {
+            window.showToast(message, type);
+            return;
+        }
+
+        if (window.Swal) {
+            window.Swal.fire({
+                text: message,
+                icon: type,
+                timer: 3000,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        // Fallback to console
+        console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    // API Methods for external use
+    async getServerLocales() {
+        try {
+            const response = await fetch(`${this.apiEndpoint}/available`);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.warn('Failed to fetch server locales:', error);
+        }
+        return null;
+    }
+
+    async getCurrentServerLocale() {
+        try {
+            const response = await fetch(`${this.apiEndpoint}/current`);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.warn('Failed to fetch current server locale:', error);
+        }
+        return null;
     }
 }
 
-// Global translation helper functions
-window.__ = function(key, params = {}) {
-    if (window.UniversalI18n) {
-        return window.UniversalI18n.translate(key, params);
-    }
-    return key;
+// Global instance
+window.i18n = new UniversalI18nSystem();
+
+// Global helper functions
+window.__ = async function(key, params = {}) {
+    return await window.i18n.translate(key, params);
 };
 
-window.__n = function(key, count, params = {}) {
-    if (window.UniversalI18n) {
-        return window.UniversalI18n.plural(key, count, params);
-    }
-    return key;
+window.__n = async function(key, count, params = {}) {
+    return await window.i18n.plural(key, count, params);
 };
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    window.UniversalI18n = new UniversalI18nSystem();
-});
 
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {

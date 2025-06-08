@@ -27,9 +27,22 @@ class RequiredDegreeLevelFactory extends Factory
      */
     public function definition(): array
     {
+        $degrees = [
+            'High School Diploma',
+            'Associate Degree',
+            'Bachelor\'s Degree',
+            'Master\'s Degree',
+            'Doctoral Degree (PhD)',
+            'Professional Degree',
+            'Certificate Program',
+            'Diploma',
+            'Trade School',
+            'No Formal Education Required'
+        ];
+        
         return [
-            'name' => fake()->words(2, true),
-            'is_default' => fake()->word()
+            'name' => $this->faker->unique()->randomElement($degrees),
+            'is_default' => $this->faker->boolean(10) // 10% chance of being default
         ];
     }
 }

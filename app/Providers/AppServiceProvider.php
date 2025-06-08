@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
             ConsolidateTranslations::class,
         ]);
 
+        // Legacy Services
         $this->app->singleton(\App\Services\ProfileService::class);
         $this->app->singleton(\App\Services\BookmarkService::class);
         $this->app->singleton(\App\Services\SettingService::class);
@@ -55,6 +56,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\AuthService::class);
         $this->app->singleton(\App\Services\JobCategoryService::class);
         $this->app->singleton(\App\Services\SeoService::class);
+
+        // Universal Repository Pattern - Context7 Implementation (Phase 2)
+        // $this->app->singleton(\App\Repositories\JobRepository::class);
+        // $this->app->singleton(\App\Repositories\CompanyRepository::class);
+        // $this->app->singleton(\App\Repositories\CandidateRepository::class);
+        // $this->app->singleton(\App\Repositories\UserRepository::class);
+
+        // Universal Service Layer - Context7 Implementation (Phase 2)
+        // $this->app->singleton(\App\Services\UniversalJobService::class);
+        // $this->app->singleton(\App\Services\UniversalCompanyService::class);
+        // $this->app->singleton(\App\Services\UniversalCandidateService::class);
+        // $this->app->singleton(\App\Services\UniversalSearchService::class);
     }
 
     /**
@@ -227,13 +240,7 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerClassAliases(): void
     {
-        // These aliases can be used without importing the classes
-        if (! class_exists('Column')) {
-            class_alias(\App\Livewire\Column::class, 'Column');
-        }
-
-        if (! class_exists('Filter')) {
-            class_alias(\App\Livewire\Filter::class, 'Filter');
-        }
+        // Livewire class aliases removed as part of Vue3 migration
+        // Universal patterns will replace these with Vue3 components
     }
 }

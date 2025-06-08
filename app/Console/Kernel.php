@@ -21,24 +21,13 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        // Comment out heavy commands during testing
-        // $this->load(__DIR__.'/Commands');
+        // Load all commands
+        $this->load(__DIR__.'/Commands');
 
-        // Register only essential commands for testing
-        /*
+        // Register translation commands
         $this->commands([
-            \App\Console\Commands\ConsolidateTranslations::class,
-            \App\Console\Commands\CreateLithuanianTranslations::class,
-            \App\Console\Commands\ExtractSvgComponents::class,
-            \App\Console\Commands\ConvertRappasoftTables::class,
-            \App\Console\Commands\CleanupRappasoftReferences::class,
-            \App\Console\Commands\MigrateJsonTranslations::class,
-            \App\Console\Commands\ConvertSvgToComponents::class,
-            \App\Console\Commands\StandardizeTranslations::class,
-            \App\Console\Commands\StandardizeJavaScript::class,
-            \App\Console\Commands\MigrateFromSpatie::class,
+            \App\Console\Commands\ConvertBladeTranslations::class,
         ]);
-        */
 
         require base_path('routes/console.php');
     }

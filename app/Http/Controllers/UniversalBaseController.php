@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -172,7 +172,7 @@ abstract class UniversalBaseController extends Controller
      * @param array $additionalParams Additional parameters for cache key
      * @return string
      */
-    protected function generateCacheKey(StoreRequest $request, string $prefix, array $additionalParams = []): string
+    protected function generateCacheKey(FormRequest $request, string $prefix, array $additionalParams = []): string
     {
         $params = array_merge(
             $request->only(['page', 'per_page', 'sort', 'filter', 'search']),

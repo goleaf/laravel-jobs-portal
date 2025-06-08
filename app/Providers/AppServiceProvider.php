@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\ConsolidateTranslations;
-use App\Console\Commands\MigrateJsonTranslations;
-use App\Console\Commands\SynchronizeTranslations;
+// Temporarily removed problematic command imports
+// use App\Console\Commands\MigrateJsonTranslations;
+
+// Temporarily disabled command imports
+// use App\Console\Commands\ConsolidateTranslations;
+// use App\Console\Commands\SynchronizeTranslations;
 use App\Livewire\LanguageTable;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +28,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Cashier::ignoreMigrations(); - Removed for Laravel 12 compatibility
+        // Temporarily disabled command registrations to fix memory issues
+        /*
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                MigrateJsonTranslations::class,
+            ]);
+        }
+        */
 
         // Removed localization.js singleton for Laravel 12 compatibility
 
@@ -35,12 +46,11 @@ class AppServiceProvider extends ServiceProvider
         //            'app/DotenvEditor.php'
         //        );
 
-        // Register commands
-        $this->commands([
-            MigrateJsonTranslations::class,
-            SynchronizeTranslations::class,
-            ConsolidateTranslations::class,
-        ]);
+        // Temporarily disabled command registrations to fix memory issues
+        // $this->commands([
+        //     ConsolidateTranslations::class,
+        //     SynchronizeTranslations::class,
+        // ]);
 
         // Legacy Services
         $this->app->singleton(\App\Services\ProfileService::class);
@@ -75,13 +85,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (App::environment('production')) {
+        // Force HTTPS in production
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
-
+        
         Schema::defaultStringLength(191);
-        Paginator::useTailwind();
-        app()->useLangPath(base_path('lang'));
+        
+        Paginator::useBootstrap();
+        
+        // Disable resource wrapping
+        JsonResource::withoutWrapping();
+        
+        // Boot other services as needed
+        $this->bootCustomServices();
 
         // Configure comprehensive rate limiting
         $this->configureRateLimiting();
@@ -93,16 +110,14 @@ class AppServiceProvider extends ServiceProvider
         $this->registerClassAliases();
 
         // Register translation commands when running in console
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                \App\Console\Commands\MigrateJsonTranslations::class,
-                \App\Console\Commands\SynchronizeTranslations::class,
-                \App\Console\Commands\CheckTranslations::class,
-                \App\Console\Commands\CleanupTranslations::class,
-                \App\Console\Commands\ConsolidateTranslations::class,
-                \App\Console\Commands\CreateLithuanianTranslations::class,
-            ]);
-        }
+        // Temporarily disabled console command registrations
+        // if ($this->app->runningInConsole()) {
+        //     $this->commands([
+        //         \App\Console\Commands\CheckTranslations::class,
+        //         \App\Console\Commands\CleanupTranslations::class,
+        //         \App\Console\Commands\CreateLithuanianTranslations::class,
+        //     ]);
+        // }
 
         // Register Blade directives for translations
 
@@ -124,6 +139,14 @@ class AppServiceProvider extends ServiceProvider
         // Comment out Livewire components registration to prevent errors
         // Livewire::component('language-table', LanguageTable::class);
         // Add other Livewire components here
+    }
+
+    /**
+     * Boot custom application services
+     */
+    protected function bootCustomServices(): void
+    {
+        // Custom service bootstrapping logic
     }
 
     /**

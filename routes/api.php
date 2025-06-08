@@ -20,6 +20,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 /*
 |--------------------------------------------------------------------------
+| Context7 Multilingual API Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('locale')->group(function () {
+    Route::post('/', [\App\Http\Controllers\Api\LocaleController::class, 'setLocale'])->name('api.locale.set');
+    Route::get('/current', [\App\Http\Controllers\Api\LocaleController::class, 'getCurrentLocale'])->name('api.locale.current');
+    Route::get('/available', [\App\Http\Controllers\Api\LocaleController::class, 'getAvailableLocales'])->name('api.locale.available');
+    Route::get('/browser', [\App\Http\Controllers\Api\LocaleController::class, 'getBrowserLocale'])->name('api.locale.browser');
+    Route::get('/translations/{locale?}', [\App\Http\Controllers\Api\LocaleController::class, 'getTranslations'])->name('api.locale.translations');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Universal Authentication Routes
 |--------------------------------------------------------------------------
 */

@@ -12,8 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('cache:prune-stale-tags')->hourly();
-        $schedule->command('delete:expired-featured-company')->daily();
+        // Temporarily disabled to fix memory issues
+        // $schedule->command('cache:prune-stale-tags')->hourly();
+        // $schedule->command('delete:expired-featured-company')->daily();
     }
 
     /**
@@ -21,13 +22,13 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        // Load all commands
-        $this->load(__DIR__.'/Commands');
+        // Temporarily disable all command loading to fix memory issues
+        // $this->load(__DIR__.'/Commands');
 
-        // Register translation commands
-        $this->commands([
-            \App\Console\Commands\ConvertBladeTranslations::class,
-        ]);
+        // Temporarily disable all commands
+        // $this->commands([
+        //     \App\Console\Commands\ConvertBladeTranslations::class,
+        // ]);
 
         require base_path('routes/console.php');
     }

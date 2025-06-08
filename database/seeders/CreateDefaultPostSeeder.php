@@ -61,7 +61,8 @@ class CreateDefaultPostSeeder extends Seeder
                 'is_default' => 1,
             ],
         ];
-        $userId = User::whereEmail('admin@infyjobs.com')->pluck('id');
+        // Use the admin user we created (ID 1) or fallback to first user
+        $userId = User::where('email', 'admin@jobportal.com')->first()?->id ?? 1;
         Auth::loginUsingId($userId);
 
         foreach ($input as $data) {

@@ -80,8 +80,12 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('🚀 Starting Comprehensive All Tables Seeding...');
         
-        // Disable foreign key checks for seeding
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Disable foreign key checks for seeding (SQLite-compatible)
+        if (config('database.default') === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
         
         try {
             // Create storage directories
@@ -146,7 +150,11 @@ class ComprehensiveAllTablesSeeder extends Seeder
             throw $e;
         } finally {
             // Re-enable foreign key checks
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            if (config('database.default') === 'sqlite') {
+                DB::statement('PRAGMA foreign_keys = ON;');
+            } else {
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
         }
         
         $this->command->info('✅ Comprehensive All Tables Seeding Complete!');

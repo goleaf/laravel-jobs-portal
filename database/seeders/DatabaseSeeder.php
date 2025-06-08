@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Config;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,8 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Uncomment the line below to run the comprehensive seeder for all tables
-        $this->call(ComprehensiveAllTablesSeeder::class);
+        // Auto-detect database type and use appropriate seeder
+        $dbConnection = Config::get('database.default', 'mysql');
+        
+        if ($dbConnection === 'sqlite') {
+            $this->command->info('🗃️ SQLite database detected - using optimized seeder');
+            $this->call(SQLiteOptimizedSeeder::class);
+        } else {
+            $this->command->info('🗄️ MySQL/other database detected - using comprehensive seeder');
+            $this->call(ComprehensiveAllTablesSeeder::class);
+        }
         
         // Original individual seeders (commented out - uncomment as needed)
         /*

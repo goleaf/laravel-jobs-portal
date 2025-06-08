@@ -36,6 +36,10 @@ class WorkingDatabaseSeeder extends Seeder
             SettingsTableSeeder::class,
             EmailTemplateSeeder::class,
             
+            // Geographic data (for foreign key dependencies)
+            CountriesSeeder::class,
+            StatesSeeder::class,
+            
             // Job portal master data
             CreateDefaultIndustriesSeeder::class,
             CreateDefaultCareerLevelSeeder::class,
@@ -44,6 +48,7 @@ class WorkingDatabaseSeeder extends Seeder
             CreateDefaultJobTypeSeeder::class,
             CreateDefaultJobShiftSeeder::class,
             CreateDefaultSalaryPeriodSeeder::class,
+            SalaryCurrencySeeder::class,
             DefaultCompanySizeSeeder::class,
             CreateDefaultOwnerShipTypeSeeder::class,
             MaritalStatusTableSeeder::class,

@@ -17,9 +17,8 @@ class CmsServicesFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
-            'description' => $this->faker->paragraph,
-            'is_active' => $this->faker->boolean(80),
+            'key' => $this->faker->word,
+            'value' => $this->faker->paragraph,
         ];
     }
 }

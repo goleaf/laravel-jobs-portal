@@ -16,7 +16,7 @@ class CompanySizeTest extends TestCase
         $model = CompanySize::factory()->create();
         
         $this->assertInstanceOf(CompanySize::class, $model);
-        $this->assertDatabaseHas('companysizes', [
+        $this->assertDatabaseHas('company_sizes', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class CompanySizeTest extends TestCase
         $newData = CompanySize::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('companysizes', [
+        $this->assertDatabaseHas('company_sizes', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class CompanySizeTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('companysizes', [
+        $this->assertDatabaseMissing('company_sizes', [
             'id' => $modelId
         ]);
     }

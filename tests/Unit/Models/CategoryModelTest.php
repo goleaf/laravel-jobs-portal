@@ -30,11 +30,14 @@ class CategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_soft_deleted()
+    public function it_can_be_deleted()
     {
         $Category = Category::factory()->create();
+        $categoryId = $Category->id;
         $Category->delete();
         
-        $this->assertSoftDeleted($Category);
+        $this->assertDatabaseMissing('job_categories', [
+            'id' => $categoryId
+        ]);
     }
 }

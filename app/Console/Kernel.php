@@ -29,6 +29,11 @@ class Kernel extends ConsoleKernel
             \App\Console\Commands\ConvertBladeTranslations::class,
         ]);
 
+        // Add the TranslationCommand to the commands array
+        $this->commands = array_merge($this->commands, [
+            Commands\TranslationCommand::class,
+        ]);
+
         require base_path('routes/console.php');
     }
 }

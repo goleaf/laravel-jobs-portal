@@ -28,11 +28,9 @@ class SocialAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'provider' => fake()->word(),
-            'identifier' => fake()->word(),
-            'device_id' => fake()->numberBetween(1, 100),
-            'token' => fake()->word(),
-            'token_secret' => fake()->word()
+            'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs from our seeder
+            'provider' => fake()->randomElement(['google', 'facebook', 'twitter', 'linkedin', 'github']),
+            'provider_id' => fake()->uuid(), // Use UUID for provider ID
         ];
     }
 }

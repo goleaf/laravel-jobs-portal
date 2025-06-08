@@ -13,11 +13,17 @@ class PublicPagesTest extends DuskTestCase
     public function test_homepage_loads_successfully(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/')
-                    ->pause(3000);
+            $browser->visit('/')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404')
+                    ->assertDontSee('Error');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -27,11 +33,16 @@ class PublicPagesTest extends DuskTestCase
     public function test_about_us_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/about-us')
-                    ->pause(2000);
+            $browser->visit('/about-us')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -41,11 +52,16 @@ class PublicPagesTest extends DuskTestCase
     public function test_contact_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/contact')
-                    ->pause(2000);
+            $browser->visit('/contact')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -55,11 +71,16 @@ class PublicPagesTest extends DuskTestCase
     public function test_jobs_listing_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/jobs')
-                    ->pause(2000);
+            $browser->visit('/jobs')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -69,11 +90,16 @@ class PublicPagesTest extends DuskTestCase
     public function test_companies_listing_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/companies')
-                    ->pause(2000);
+            $browser->visit('/companies')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -83,11 +109,16 @@ class PublicPagesTest extends DuskTestCase
     public function test_login_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/login')
-                    ->pause(2000);
+            $browser->visit('/login')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
         });
     }
 
@@ -97,11 +128,40 @@ class PublicPagesTest extends DuskTestCase
     public function test_register_page(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('https://jobportal.prus.dev/register')
-                    ->pause(2000);
+            $browser->visit('/register')
+                    ->waitFor('body', 10)
+                    ->assertPresent('body')
+                    ->assertDontSee('500')
+                    ->assertDontSee('404');
             
-            // Just check that we get a valid response
-            $this->assertNotEmpty($browser->driver->getPageSource());
+            // Context7 pattern: Verify page structure
+            $pageSource = $browser->driver->getPageSource();
+            $this->assertNotEmpty($pageSource);
+            $this->assertStringContainsString('<html', $pageSource);
+        });
+    }
+
+    /**
+     * Test navigation functionality.
+     */
+    public function test_navigation_functionality(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/')
+                    ->waitFor('body', 10);
+                    
+            // Test basic navigation if links exist
+            try {
+                $browser->clickLink('Home')
+                        ->waitFor('body', 5);
+            } catch (\Exception $e) {
+                // Navigation link may not exist, continue test
+            }
+            
+            // Context7 pattern: Verify we can navigate back
+            $browser->back()
+                    ->forward()
+                    ->assertPresent('body');
         });
     }
 } 

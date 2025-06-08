@@ -16,7 +16,7 @@ class SalaryPeriodTest extends TestCase
         $model = SalaryPeriod::factory()->create();
         
         $this->assertInstanceOf(SalaryPeriod::class, $model);
-        $this->assertDatabaseHas('salaryperiods', [
+        $this->assertDatabaseHas('salary_periods', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class SalaryPeriodTest extends TestCase
         $newData = SalaryPeriod::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('salaryperiods', [
+        $this->assertDatabaseHas('salary_periods', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class SalaryPeriodTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('salaryperiods', [
+        $this->assertDatabaseMissing('salary_periods', [
             'id' => $modelId
         ]);
     }

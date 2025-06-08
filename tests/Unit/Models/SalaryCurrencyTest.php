@@ -16,7 +16,7 @@ class SalaryCurrencyTest extends TestCase
         $model = SalaryCurrency::factory()->create();
         
         $this->assertInstanceOf(SalaryCurrency::class, $model);
-        $this->assertDatabaseHas('salarycurrencies', [
+        $this->assertDatabaseHas('salary_currencies', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class SalaryCurrencyTest extends TestCase
         $newData = SalaryCurrency::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('salarycurrencies', [
+        $this->assertDatabaseHas('salary_currencies', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class SalaryCurrencyTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('salarycurrencies', [
+        $this->assertDatabaseMissing('salary_currencies', [
             'id' => $modelId
         ]);
     }

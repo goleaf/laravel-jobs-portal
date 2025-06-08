@@ -16,7 +16,7 @@ class RequiredDegreeLevelTest extends TestCase
         $model = RequiredDegreeLevel::factory()->create();
         
         $this->assertInstanceOf(RequiredDegreeLevel::class, $model);
-        $this->assertDatabaseHas('requireddegreelevels', [
+        $this->assertDatabaseHas('required_degree_levels', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class RequiredDegreeLevelTest extends TestCase
         $newData = RequiredDegreeLevel::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('requireddegreelevels', [
+        $this->assertDatabaseHas('required_degree_levels', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class RequiredDegreeLevelTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('requireddegreelevels', [
+        $this->assertDatabaseMissing('required_degree_levels', [
             'id' => $modelId
         ]);
     }

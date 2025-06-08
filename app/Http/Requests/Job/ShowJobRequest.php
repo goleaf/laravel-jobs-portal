@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Job;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Job;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -18,17 +20,19 @@ class ShowJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
-            return false;
+        $job = $this->route('job');
+        
+        // Admin can view any job
+        if (Auth::user()->hasRole('Admin')) {
+            return true;
         }
         
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
-        );
+        // Employers can view their own jobs
+        if (Auth::user()->hasRole('Employer')) {
+            return $job->company?->user_id === Auth::id();
+        }
+        
+        return false;
     }
 
     /**
@@ -38,11 +42,9 @@ class ShowJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Add specific validation rules based on method
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:1000'],
-            'is_active' => ['sometimes', 'boolean'],
+            'include' => 'sometimes|array',
+            'include.*' => 'string|in:company,applications,skills,tags,requirements',
+            'with_statistics' => 'sometimes|boolean',
             
             // Security validation
             'g-recaptcha-response' => [
@@ -63,6 +65,9 @@ class ShowJobRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'include.array' => __('jobs.validation.include_must_be_array'),
+            'include.*.in' => __('jobs.validation.include_invalid_relation'),
+            'with_statistics.boolean' => __('jobs.validation.with_statistics_boolean'),
             'name.required' => __('validation.name_required'),
             'name.max' => __('validation.name_max'),
             'email.email' => __('validation.email_invalid'),
@@ -78,6 +83,8 @@ class ShowJobRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            'include' => __('jobs.attributes.include'),
+            'with_statistics' => __('jobs.attributes.with_statistics'),
             'name' => __('validation.attributes.name'),
             'email' => __('validation.attributes.email'),
             'description' => __('validation.attributes.description'),
@@ -105,6 +112,27 @@ class ShowJobRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
+            $job = $this->route('job');
+            
+            // Check if job exists and is accessible
+            if (!$job instanceof Job) {
+                $validator->errors()->add('job', __('jobs.errors.not_found'));
+                return;
+            }
+            
+            // Check if job is deleted (soft deleted)
+            if ($job->trashed()) {
+                $validator->errors()->add('job', __('jobs.errors.deleted'));
+                return;
+            }
+            
+            // Employers can only view their own jobs unless job is published
+            if (Auth::user()->hasRole('Employer') && 
+                $job->company?->user_id !== Auth::id() && 
+                $job->status !== 'open') {
+                $validator->errors()->add('job', __('jobs.errors.not_accessible'));
+            }
+            
             if ($this->hasContext7ValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.conflict_detected'));
             }
@@ -157,5 +185,31 @@ class ShowJobRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Get validated data with processed includes.
+     */
+    public function getProcessedData(): array
+    {
+        $validated = $this->validated();
+        
+        return [
+            'includes' => $validated['include'] ?? [],
+            'with_statistics' => $validated['with_statistics'] ?? false,
+            'user_role' => Auth::user()->getRoleNames()->first(),
+            'can_view_sensitive' => $this->canViewSensitiveData(),
+        ];
+    }
+
+    /**
+     * Check if user can view sensitive job data.
+     */
+    private function canViewSensitiveData(): bool
+    {
+        $job = $this->route('job');
+        
+        return Auth::user()->hasRole('Admin') || 
+               ($job->company?->user_id === Auth::id());
     }
 }

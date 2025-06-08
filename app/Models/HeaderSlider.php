@@ -95,4 +95,149 @@ class HeaderSlider extends Model implements HasMedia
 
         return asset('assets/img/infyom-logo.png');
     }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'title' => 'string',
+            'sub_title' => 'string',
+            'description' => 'string',
+            'image_url' => 'string',
+            'button_text' => 'string',
+            'button_url' => 'string',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for active header sliders.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive header sliders.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for featured header sliders.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured header sliders.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for searching header sliders.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('sub_title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent header sliders.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old header sliders.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for ordering by sort order.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('title', 'asc');
+    }
+
+    /**
+     * Scope for sliders with images.
+     */
+    public function scopeWithImages($query)
+    {
+        return $query->whereNotNull('image_url')->where('image_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders with buttons.
+     */
+    public function scopeWithButtons($query)
+    {
+        return $query->whereNotNull('button_text')
+                    ->where('button_text', '!=', '')
+                    ->whereNotNull('button_url')
+                    ->where('button_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders without buttons.
+     */
+    public function scopeWithoutButtons($query)
+    {
+        return $query->where(function ($query) {
+            $query->whereNull('button_text')
+                  ->orWhere('button_text', '')
+                  ->orWhereNull('button_url')
+                  ->orWhere('button_url', '');
+        });
+    }
+
+    /**
+     * Scope for homepage sliders.
+     */
+    public function scopeHomepage($query)
+    {
+        return $query->active()->featured()->ordered();
+    }
+
+    /**
+     * Scope for sliders with subtitles.
+     */
+    public function scopeWithSubtitles($query)
+    {
+        return $query->whereNotNull('sub_title')->where('sub_title', '!=', '');
+    }
 }

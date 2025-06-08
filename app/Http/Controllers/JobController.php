@@ -13,6 +13,12 @@ use App\Models\ReportedJob;
 use App\Models\State;
 use App\Models\Transaction;
 use App\Repositories\JobRepository;
+use App\Http\Requests\Job\IndexJobRequest;
+use App\Http\Requests\Job\ShowJobRequest;
+use App\Http\Requests\Job\CreateJobRequest;
+use App\Http\Requests\Job\UpdateJobRequest;
+use App\Http\Resources\Job\JobIndexResource;
+use App\Http\Resources\Job\JobShowResource;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -42,9 +48,10 @@ class JobController extends AppBaseController
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexJobRequest $request): View
     {
         $statusArray = Job::STATUS_ARRAY;
+        $validated = $request->getValidatedWithDefaults();
 
         // Check job creation limit with caching
         $canCreateJob = cache()->remember(
@@ -57,7 +64,7 @@ class JobController extends AppBaseController
             Flash::error(__('messages.flash.job_create_limit'));
         }
 
-        return view('employer.jobs.index', compact('statusArray'));
+        return view('employer.jobs.index', compact('statusArray', 'validated'));
     }
 
     /**

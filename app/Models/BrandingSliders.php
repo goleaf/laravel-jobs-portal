@@ -89,6 +89,10 @@ class BrandingSliders extends Model implements HasMedia
     {
         return [
             'id' => 'integer',
+            'title' => 'string',
+            'description' => 'string',
+            'image_url' => 'string',
+            'link_url' => 'string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'sort_order' => 'integer',
@@ -122,11 +126,20 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     /**
-     * Scope for searching branding sliders by title.
+     * Scope for non-featured branding sliders.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for searching branding sliders.
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('title', 'like', "%{$term}%");
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -146,7 +159,15 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     /**
-     * Scope for alphabetically ordered branding sliders.
+     * Scope for ordering by sort order.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -154,11 +175,37 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     /**
-     * Scope for ordered by sort order.
+     * Scope for sliders with images.
      */
-    public function scopeOrdered($query)
+    public function scopeWithImages($query)
     {
-        return $query->orderBy('sort_order', 'asc');
+        return $query->whereNotNull('image_url')->where('image_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders with links.
+     */
+    public function scopeWithLinks($query)
+    {
+        return $query->whereNotNull('link_url')->where('link_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders without links.
+     */
+    public function scopeWithoutLinks($query)
+    {
+        return $query->where(function ($query) {
+            $query->whereNull('link_url')->orWhere('link_url', '');
+        });
+    }
+
+    /**
+     * Scope for homepage sliders.
+     */
+    public function scopeHomepage($query)
+    {
+        return $query->active()->featured()->ordered();
     }
 
     /**

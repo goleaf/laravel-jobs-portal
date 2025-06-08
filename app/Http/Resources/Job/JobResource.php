@@ -5,6 +5,12 @@ namespace App\Http\Resources\Job;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class JobResource
+ * 
+ * API resource for Job model with conditional field loading,
+ * performance optimization, and multilingual support.
+ */
 class JobResource extends JsonResource
 {
     /**
@@ -14,259 +20,338 @@ class JobResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $request->user();
+        $isOwner = $user && $this->company_id === optional($user->candidate)->company_id;
+        $isAdmin = $user && $user->hasRole('admin');
+        $isEmployer = $user && $user->hasRole('employer');
+
         return [
+            // Basic job information (always included)
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'description' => $this->description,
-            'excerpt' => $this->getExcerpt(),
-            
-            // Company Information
-            'company' => [
-                'id' => $this->company_id,
-                'name' => $this->company?->name,
-                'logo_url' => $this->company?->logo_url,
-                'slug' => $this->company?->slug,
-            ],
-            
-            // Job Details
-            'category' => [
-                'id' => $this->job_category_id,
-                'name' => $this->jobCategory?->name,
-            ],
-            'type' => [
-                'id' => $this->job_type_id,
-                'name' => $this->jobType?->name,
-            ],
-            'shift' => $this->when($this->job_shift_id, [
-                'id' => $this->job_shift_id,
-                'name' => $this->jobShift?->shift,
-            ]),
-            'career_level' => $this->when($this->career_level_id, [
-                'id' => $this->career_level_id,
-                'name' => $this->careerLevel?->level_name,
-            ]),
-            'functional_area' => $this->when($this->functional_area_id, [
-                'id' => $this->functional_area_id,
-                'name' => $this->functionalArea?->name,
-            ]),
-            
-            // Salary Information
-            'salary' => [
-                'from' => $this->when(!$this->hide_salary, $this->salary_from),
-                'to' => $this->when(!$this->hide_salary, $this->salary_to),
-                'currency' => $this->when($this->salary_currency_id, [
-                    'id' => $this->salary_currency_id,
-                    'name' => $this->salaryCurrency?->currency_name,
-                    'code' => $this->salaryCurrency?->currency_code,
-                    'icon' => $this->salaryCurrency?->currency_icon,
-                ]),
-                'period' => $this->when($this->salary_period_id, [
-                    'id' => $this->salary_period_id,
-                    'name' => $this->salaryPeriod?->period,
-                ]),
-                'formatted' => $this->getFormattedSalary(),
-                'is_hidden' => $this->hide_salary,
-            ],
-            
-            // Location Information
+            'description' => $this->when(
+                $request->has('include_description') || $request->routeIs('jobs.show'),
+                $this->description
+            ),
+            'status' => $this->status,
+            'is_active' => $this->is_active,
+            'is_featured' => $this->is_featured,
+            'is_urgent' => $this->is_urgent,
+
+            // Job categorization
+            'job_category' => $this->whenLoaded('jobCategory', function () {
+                return [
+                    'id' => $this->jobCategory->id,
+                    'name' => $this->jobCategory->name,
+                    'icon' => $this->jobCategory->icon,
+                    'color' => $this->jobCategory->color,
+                ];
+            }),
+
+            'job_type' => $this->whenLoaded('jobType', function () {
+                return [
+                    'id' => $this->jobType->id,
+                    'name' => $this->jobType->name,
+                    'is_remote_friendly' => $this->jobType->is_remote_friendly,
+                ];
+            }),
+
+            'job_shift' => $this->whenLoaded('jobShift', function () {
+                return [
+                    'id' => $this->jobShift->id,
+                    'shift' => $this->jobShift->shift,
+                    'start_time' => $this->jobShift->start_time,
+                    'end_time' => $this->jobShift->end_time,
+                    'is_flexible' => $this->jobShift->is_flexible,
+                ];
+            }),
+
+            'career_level' => $this->whenLoaded('careerLevel', function () {
+                return [
+                    'id' => $this->careerLevel->id,
+                    'level_name' => $this->careerLevel->level_name,
+                    'min_experience' => $this->careerLevel->min_experience,
+                    'max_experience' => $this->careerLevel->max_experience,
+                ];
+            }),
+
+            'degree_level' => $this->whenLoaded('degreeLevel', function () {
+                return [
+                    'id' => $this->degreeLevel->id,
+                    'name' => $this->degreeLevel->name,
+                    'level_order' => $this->degreeLevel->level_order,
+                    'years_required' => $this->degreeLevel->years_required,
+                ];
+            }),
+
+            // Company information
+            'company' => $this->whenLoaded('company', function () {
+                return [
+                    'id' => $this->company->id,
+                    'name' => $this->company->name,
+                    'slug' => $this->company->slug,
+                    'logo' => $this->company->logo_url,
+                    'website' => $this->company->website,
+                    'established_year' => $this->company->established_year,
+                    'company_size' => $this->whenLoaded('company.companySize', [
+                        'id' => $this->company->companySize->id ?? null,
+                        'size' => $this->company->companySize->size ?? null,
+                    ]),
+                    'industry' => $this->whenLoaded('company.industry', [
+                        'id' => $this->company->industry->id ?? null,
+                        'name' => $this->company->industry->name ?? null,
+                    ]),
+                ];
+            }),
+
+            // Location information
             'location' => [
-                'country' => [
-                    'id' => $this->country_id,
-                    'name' => $this->country?->name,
-                    'code' => $this->country?->short_code,
-                ],
-                'state' => $this->when($this->state_id, [
-                    'id' => $this->state_id,
-                    'name' => $this->state?->name,
+                'country' => $this->whenLoaded('country', [
+                    'id' => $this->country->id ?? null,
+                    'name' => $this->country->name ?? null,
+                    'iso2' => $this->country->iso2 ?? null,
                 ]),
-                'city' => $this->when($this->city_id, [
-                    'id' => $this->city_id,
-                    'name' => $this->city?->name,
+                'state' => $this->whenLoaded('state', [
+                    'id' => $this->state->id ?? null,
+                    'name' => $this->state->name ?? null,
                 ]),
-                'formatted' => $this->getFormattedLocation(),
-                'is_remote' => $this->is_remote ?? false,
+                'city' => $this->whenLoaded('city', [
+                    'id' => $this->city->id ?? null,
+                    'name' => $this->city->name ?? null,
+                ]),
+                'address' => $this->when($isOwner || $isAdmin, $this->address),
+                'is_remote' => $this->is_remote,
+                'remote_percentage' => $this->when($this->is_remote, $this->remote_percentage),
             ],
-            
-            // Job Requirements
+
+            // Salary information (conditional based on settings and permissions)
+            'salary' => $this->when(
+                !$this->hide_salary || $isOwner || $isAdmin,
+                [
+                    'salary_from' => $this->salary_from,
+                    'salary_to' => $this->salary_to,
+                    'currency' => $this->whenLoaded('salaryCurrency', [
+                        'id' => $this->salaryCurrency->id ?? null,
+                        'code' => $this->salaryCurrency->currency_code ?? null,
+                        'symbol' => $this->salaryCurrency->currency_symbol ?? null,
+                    ]),
+                    'salary_period' => $this->whenLoaded('salaryPeriod', [
+                        'id' => $this->salaryPeriod->id ?? null,
+                        'period' => $this->salaryPeriod->period ?? null,
+                    ]),
+                    'hide_salary' => $this->hide_salary,
+                    'is_negotiable' => $this->is_negotiable,
+                    'formatted_range' => $this->formatted_salary_range,
+                ]
+            ),
+
+            // Experience and requirements
             'requirements' => [
-                'experience' => $this->experience,
-                'degree_level' => $this->when($this->degree_level_id, [
-                    'id' => $this->degree_level_id,
-                    'name' => $this->degreeLevel?->name,
-                ]),
-                'position_count' => $this->position ?? 1,
+                'experience_required' => $this->experience,
+                'min_experience' => $this->min_experience,
+                'max_experience' => $this->max_experience,
                 'skills' => $this->whenLoaded('skills', function () {
                     return $this->skills->map(function ($skill) {
                         return [
                             'id' => $skill->id,
                             'name' => $skill->name,
+                            'proficiency_level' => $skill->pivot->proficiency_level ?? null,
+                            'is_required' => $skill->pivot->is_required ?? false,
                         ];
                     });
                 }),
+                'benefits' => $this->when(
+                    $request->has('include_benefits'),
+                    $this->benefits
+                ),
+                'other_requirements' => $this->when(
+                    $request->has('include_requirements'),
+                    $this->other_requirements
+                ),
             ],
-            
-            // Status and Flags
-            'status' => [
-                'is_active' => $this->is_active ?? true,
-                'is_featured' => $this->is_featured ?? false,
-                'is_freelance' => $this->is_freelance ?? false,
-                'is_suspended' => $this->is_suspended ?? false,
-                'is_expired' => $this->isExpired(),
-                'status_label' => $this->getStatusLabel(),
+
+            // Application information
+            'application' => [
+                'application_deadline' => $this->expired_at,
+                'is_expired' => $this->is_expired,
+                'days_until_expiry' => $this->days_until_expiry,
+                'total_positions' => $this->total_position,
+                'applications_count' => $this->when(
+                    $isOwner || $isAdmin || $request->has('include_stats'),
+                    $this->applications_count ?? $this->jobApplications()->count()
+                ),
+                'views_count' => $this->when(
+                    $isOwner || $isAdmin || $request->has('include_stats'),
+                    $this->views_count ?? 0
+                ),
+                'can_apply' => $this->can_apply,
+                'user_applied' => $this->when(
+                    $user && $user->candidate,
+                    $this->user_applied
+                ),
+                'user_favorited' => $this->when(
+                    $user && $user->candidate,
+                    $this->user_favorited
+                ),
             ],
-            
-            // Dates
-            'dates' => [
-                'created_at' => $this->created_at?->toISOString(),
-                'updated_at' => $this->updated_at?->toISOString(),
-                'expiry_date' => $this->expiry_date?->toISOString(),
-                'formatted_created_at' => $this->created_at?->format(__('formats.date_time')),
-                'formatted_expiry_date' => $this->expiry_date?->format(__('formats.date')),
-                'days_until_expiry' => $this->getDaysUntilExpiry(),
-                'time_ago' => $this->created_at?->diffForHumans(),
+
+            // SEO and metadata
+            'seo' => $this->when(
+                $request->has('include_seo'),
+                [
+                    'meta_title' => $this->meta_title,
+                    'meta_description' => $this->meta_description,
+                    'keywords' => $this->keywords,
+                    'og_image' => $this->og_image_url,
+                ]
+            ),
+
+            // Timestamps and admin data
+            'timestamps' => [
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'published_at' => $this->published_at,
+                'featured_until' => $this->when($this->is_featured, $this->featured_until),
             ],
-            
-            // Statistics
-            'statistics' => [
-                'applications_count' => $this->whenCounted('jobApplications'),
-                'views_count' => $this->views_count ?? 0,
-                'shares_count' => $this->shares_count ?? 0,
-            ],
-            
-            // Tags
-            'tags' => $this->whenLoaded('tags', function () {
-                return $this->tags->pluck('name');
-            }),
-            
-            // Permissions
-            'permissions' => [
-                'can_view' => $request->user()?->can('view', $this->resource) ?? true,
-                'can_update' => $request->user()?->can('update', $this->resource) ?? false,
-                'can_delete' => $request->user()?->can('delete', $this->resource) ?? false,
-                'can_apply' => $request->user()?->can('apply', $this->resource) ?? false,
-            ],
-            
-            // Links
-            'links' => [
-                'self' => route('api.jobs.show', $this->id),
-                'public' => route('jobs.show', $this->slug ?? $this->id),
-                'company' => route('api.companies.show', $this->company_id),
-                'applications' => route('api.jobs.applications', $this->id),
-                'apply' => route('api.jobs.apply', $this->id),
+
+            // Admin-only information
+            'admin_data' => $this->when(
+                $isAdmin || $isOwner,
+                [
+                    'status_history' => $this->when(
+                        $request->has('include_history'),
+                        $this->status_history
+                    ),
+                    'promotion_data' => [
+                        'is_promoted' => $this->is_promoted,
+                        'promotion_start_date' => $this->promotion_start_date,
+                        'promotion_end_date' => $this->promotion_end_date,
+                    ],
+                    'internal_notes' => $this->when(
+                        $isAdmin,
+                        $this->internal_notes
+                    ),
+                ]
+            ),
+
+            // Performance metrics (for analytics)
+            'metrics' => $this->when(
+                ($isOwner || $isAdmin) && $request->has('include_metrics'),
+                [
+                    'performance_score' => $this->performance_score,
+                    'click_through_rate' => $this->click_through_rate,
+                    'application_rate' => $this->application_rate,
+                    'quality_score' => $this->quality_score,
+                ]
+            ),
+
+            // Related data
+            'related' => $this->when(
+                $request->has('include_related'),
+                [
+                    'similar_jobs_count' => $this->similar_jobs_count,
+                    'company_other_jobs_count' => $this->company_other_jobs_count,
+                ]
+            ),
+
+            // API metadata
+            'meta' => [
+                'api_version' => '1.0',
+                'resource_type' => 'job',
+                'last_modified' => $this->updated_at,
+                'cache_key' => $this->cache_key,
+                'permissions' => [
+                    'can_edit' => $isOwner || $isAdmin,
+                    'can_delete' => $isOwner || $isAdmin,
+                    'can_feature' => $isOwner || $isAdmin,
+                    'can_view_applications' => $isOwner || $isAdmin,
+                    'can_apply' => $user && $user->candidate && $this->can_apply,
+                ],
             ],
         ];
     }
 
     /**
-     * Get job description excerpt.
+     * Get additional data that should be returned with the resource array.
      */
-    private function getExcerpt(int $length = 150): string
+    public function with(Request $request): array
     {
-        return \Str::limit(strip_tags($this->description), $length);
+        return [
+            'links' => [
+                'self' => route('api.jobs.show', $this->resource),
+                'apply' => $this->when(
+                    $request->user() && $request->user()->candidate,
+                    route('api.jobs.apply', $this->resource)
+                ),
+                'favorite' => $this->when(
+                    $request->user() && $request->user()->candidate,
+                    route('api.jobs.favorite', $this->resource)
+                ),
+                'company' => route('api.companies.show', $this->company_id),
+                'similar' => route('api.jobs.similar', $this->resource),
+            ],
+            'included' => $this->getIncludedRelationships($request),
+        ];
     }
 
     /**
-     * Get formatted salary range.
+     * Get included relationships based on request parameters.
      */
-    private function getFormattedSalary(): ?string
+    protected function getIncludedRelationships(Request $request): array
     {
-        if ($this->hide_salary || (!$this->salary_from && !$this->salary_to)) {
-            return __('jobs.salary.negotiable');
+        $included = [];
+        $includes = explode(',', $request->get('include', ''));
+
+        foreach ($includes as $include) {
+            switch (trim($include)) {
+                case 'company':
+                    $included['company'] = $this->whenLoaded('company');
+                    break;
+                case 'skills':
+                    $included['skills'] = $this->whenLoaded('skills');
+                    break;
+                case 'applications':
+                    if ($this->canViewApplications($request->user())) {
+                        $included['applications'] = $this->whenLoaded('jobApplications');
+                    }
+                    break;
+                case 'similar_jobs':
+                    $included['similar_jobs'] = $this->when(
+                        $request->has('include_similar'),
+                        $this->getSimilarJobs()
+                    );
+                    break;
+            }
         }
 
-        $currency = $this->salaryCurrency?->currency_icon ?? '$';
-        $period = $this->salaryPeriod?->period ?? __('jobs.salary.period.default');
-
-        if ($this->salary_from && $this->salary_to) {
-            return __('jobs.salary.range_format', [
-                'currency' => $currency,
-                'from' => number_format($this->salary_from),
-                'to' => number_format($this->salary_to),
-                'period' => $period,
-            ]);
-        }
-
-        if ($this->salary_from) {
-            return __('jobs.salary.from_format', [
-                'currency' => $currency,
-                'amount' => number_format($this->salary_from),
-                'period' => $period,
-            ]);
-        }
-
-        if ($this->salary_to) {
-            return __('jobs.salary.up_to_format', [
-                'currency' => $currency,
-                'amount' => number_format($this->salary_to),
-                'period' => $period,
-            ]);
-        }
-
-        return __('jobs.salary.negotiable');
+        return $included;
     }
 
     /**
-     * Get formatted location.
+     * Check if user can view job applications.
      */
-    private function getFormattedLocation(): string
+    protected function canViewApplications($user): bool
     {
-        $parts = array_filter([
-            $this->city?->name,
-            $this->state?->name,
-            $this->country?->name,
-        ]);
-
-        $location = implode(', ', $parts);
-
-        if ($this->is_remote ?? false) {
-            $location = __('jobs.location.remote') . ($location ? " ({$location})" : '');
+        if (!$user) {
+            return false;
         }
 
-        return $location ?: __('jobs.location.not_specified');
+        return $user->hasRole('admin') || 
+               ($user->candidate && $this->company_id === $user->candidate->company_id);
     }
 
     /**
-     * Check if job is expired.
+     * Get similar jobs (cached for performance).
      */
-    private function isExpired(): bool
+    protected function getSimilarJobs()
     {
-        return $this->expiry_date && $this->expiry_date->isPast();
-    }
-
-    /**
-     * Get status label.
-     */
-    private function getStatusLabel(): string
-    {
-        if ($this->is_suspended) {
-            return __('jobs.status.suspended');
-        }
-
-        if ($this->isExpired()) {
-            return __('jobs.status.expired');
-        }
-
-        if (!($this->is_active ?? true)) {
-            return __('jobs.status.inactive');
-        }
-
-        if ($this->is_featured) {
-            return __('jobs.status.featured');
-        }
-
-        return __('jobs.status.active');
-    }
-
-    /**
-     * Get days until expiry.
-     */
-    private function getDaysUntilExpiry(): ?int
-    {
-        if (!$this->expiry_date) {
-            return null;
-        }
-
-        return max(0, now()->diffInDays($this->expiry_date, false));
+        return cache()->remember(
+            "job_{$this->id}_similar",
+            3600,
+            function () {
+                return $this->resource->getSimilarJobs(5);
+            }
+        );
     }
 } 

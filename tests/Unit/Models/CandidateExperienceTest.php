@@ -16,7 +16,7 @@ class CandidateExperienceTest extends TestCase
         $model = CandidateExperience::factory()->create();
         
         $this->assertInstanceOf(CandidateExperience::class, $model);
-        $this->assertDatabaseHas('candidateexperiences', [
+        $this->assertDatabaseHas('candidate_experiences', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class CandidateExperienceTest extends TestCase
         $newData = CandidateExperience::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('candidateexperiences', [
+        $this->assertDatabaseHas('candidate_experiences', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class CandidateExperienceTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('candidateexperiences', [
+        $this->assertDatabaseMissing('candidate_experiences', [
             'id' => $modelId
         ]);
     }

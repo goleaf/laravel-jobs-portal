@@ -16,7 +16,7 @@ class JobApplicationScheduleTest extends TestCase
         $model = JobApplicationSchedule::factory()->create();
         
         $this->assertInstanceOf(JobApplicationSchedule::class, $model);
-        $this->assertDatabaseHas('jobapplicationschedules', [
+        $this->assertDatabaseHas('job_application_schedules', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class JobApplicationScheduleTest extends TestCase
         $newData = JobApplicationSchedule::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('jobapplicationschedules', [
+        $this->assertDatabaseHas('job_application_schedules', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class JobApplicationScheduleTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('jobapplicationschedules', [
+        $this->assertDatabaseMissing('job_application_schedules', [
             'id' => $modelId
         ]);
     }

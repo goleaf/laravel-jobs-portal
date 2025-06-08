@@ -140,11 +140,158 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+interface LoginCredentials {
+  email: string
+  password: string
+  role: string
+}
+
+interface DatabaseUser {
+  id: number
+  name: string
+  email: string
+  is_active: boolean
+  user_type: string
+}
+
 const emit = defineEmits<{
-  fillCredentials: [email: string]
+  fillCredentials: [credentials: LoginCredentials]
 }>()
 
-const fillCredentials = (email: string) => {
-  emit('fillCredentials', email)
+// Reactive state
+const expanded = ref(false)
+const databaseConnected = ref(false)
+const databaseUsers = ref<DatabaseUser[]>([])
+const lastCheck = ref('')
+
+// Predefined credentials based on seeders
+const credentials = ref<LoginCredentials[]>([
+  { email: 'admin@jobportal.com', password: 'password', role: 'admin' },
+  { email: 'john@example.com', password: 'password', role: 'employer' },
+  { email: 'jane@example.com', password: 'password', role: 'candidate' }
+])
+
+// Computed properties
+const statusClasses = computed(() => 
+  databaseConnected.value ? 'text-green-600' : 'text-red-600'
+)
+
+const statusDotClasses = computed(() => 
+  databaseConnected.value ? 'bg-green-500' : 'bg-red-500'
+)
+
+const statusText = computed(() => 
+  databaseConnected.value ? 'Connected' : 'Error'
+)
+
+// Methods
+const toggleExpanded = () => {
+  expanded.value = !expanded.value
 }
-</script> 
+
+const getCredentialClasses = (role: string) => {
+  const baseClasses = 'border-2 transition-all duration-200'
+  switch (role) {
+    case 'admin':
+      return `${baseClasses} border-red-200 hover:border-red-300 from-red-50 to-red-100 hover:from-red-100 hover:to-red-200`
+    case 'employer':
+      return `${baseClasses} border-blue-200 hover:border-blue-300 from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200`
+    case 'candidate':
+      return `${baseClasses} border-green-200 hover:border-green-300 from-green-50 to-green-100 hover:from-green-100 hover:to-green-200`
+    default:
+      return `${baseClasses} border-gray-200 hover:border-gray-300 from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200`
+  }
+}
+
+const getIconClasses = (role: string) => {
+  switch (role) {
+    case 'admin':
+      return 'bg-red-100 text-red-600'
+    case 'employer':
+      return 'bg-blue-100 text-blue-600'
+    case 'candidate':
+      return 'bg-green-100 text-green-600'
+    default:
+      return 'bg-gray-100 text-gray-600'
+  }
+}
+
+const fillCredentials = (credential: LoginCredentials) => {
+  emit('fillCredentials', credential)
+}
+
+const fillDatabaseUser = (user: DatabaseUser) => {
+  const role = user.user_type === 'candidate' ? 'candidate' : 
+               user.email.includes('admin') ? 'admin' : 'employer'
+  
+  emit('fillCredentials', {
+    email: user.email,
+    password: 'password',
+    role: role
+  })
+}
+
+const checkDatabaseConnection = async () => {
+  try {
+    // Try to fetch user information from API
+    const response = await fetch('/api/auth/login-info', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      if (data.success) {
+        databaseConnected.value = true
+        databaseUsers.value = data.users || []
+      } else {
+        throw new Error(data.message || 'API returned error')
+      }
+    } else {
+      throw new Error(`HTTP ${response.status}`)
+    }
+  } catch (error) {
+    console.warn('Database check failed, using fallback data:', error)
+    databaseConnected.value = false
+    
+    // Fallback to predefined users
+    databaseUsers.value = [
+      { id: 1, name: 'Admin User', email: 'admin@jobportal.com', is_active: true, user_type: 'admin' },
+      { id: 2, name: 'John Doe', email: 'john@example.com', is_active: true, user_type: 'employer' },
+      { id: 3, name: 'Jane Smith', email: 'jane@example.com', is_active: true, user_type: 'candidate' }
+    ]
+  } finally {
+    lastCheck.value = new Date().toLocaleTimeString()
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  checkDatabaseConnection()
+})
+</script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.75rem;
+}
+</style> 

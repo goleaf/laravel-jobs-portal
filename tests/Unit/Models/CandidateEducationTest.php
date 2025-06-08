@@ -16,7 +16,7 @@ class CandidateEducationTest extends TestCase
         $model = CandidateEducation::factory()->create();
         
         $this->assertInstanceOf(CandidateEducation::class, $model);
-        $this->assertDatabaseHas('candidateeducations', [
+        $this->assertDatabaseHas('candidate_educations', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class CandidateEducationTest extends TestCase
         $newData = CandidateEducation::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('candidateeducations', [
+        $this->assertDatabaseHas('candidate_educations', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class CandidateEducationTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('candidateeducations', [
+        $this->assertDatabaseMissing('candidate_educations', [
             'id' => $modelId
         ]);
     }

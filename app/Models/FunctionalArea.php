@@ -2,57 +2,357 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * Class FunctionalArea
  *
  * @version July 4, 2020, 7:26 am UTC
  *
- * @property string $name
  * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property bool $is_default
+ * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
+ * @property-read int|null $jobs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
+ * @property-read int|null $candidates_count
+ * @property-read mixed $usage_count
+ * @property-read mixed $formatted_usage_stats
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\FunctionalArea whereUpdatedAt($value)
+ * @method static Builder|FunctionalArea newModelQuery()
+ * @method static Builder|FunctionalArea newQuery()
+ * @method static Builder|FunctionalArea query()
+ * @method static Builder|FunctionalArea whereCreatedAt($value)
+ * @method static Builder|FunctionalArea whereId($value)
+ * @method static Builder|FunctionalArea whereName($value)
+ * @method static Builder|FunctionalArea whereDescription($value)
+ * @method static Builder|FunctionalArea whereIsDefault($value)
+ * @method static Builder|FunctionalArea whereIsActive($value)
+ * @method static Builder|FunctionalArea whereUpdatedAt($value)
+ * @method static Builder|FunctionalArea active()
+ * @method static Builder|FunctionalArea inactive()
+ * @method static Builder|FunctionalArea default()
+ * @method static Builder|FunctionalArea custom()
+ * @method static Builder|FunctionalArea withJobs()
+ * @method static Builder|FunctionalArea withActiveJobs()
+ * @method static Builder|FunctionalArea withCandidates()
+ * @method static Builder|FunctionalArea withActiveCandidates()
+ * @method static Builder|FunctionalArea search(string $term)
+ * @method static Builder|FunctionalArea popular(int $limit = 10)
+ * @method static Builder|FunctionalArea alphabetical()
+ * @method static Builder|FunctionalArea recent(int $days = 30)
+ * @method static Builder|FunctionalArea trending()
+ * @method static Builder|FunctionalArea minUsage(int $count = 1)
+ * @method static Builder|FunctionalArea highDemand(int $minJobs = 10)
  *
  * @mixin \Eloquent
  */
 class FunctionalArea extends Model
 {
-    use HasFactory;
-    
+    use HasFactory, LogsActivity;
+
+    public $table = 'functional_areas';
+
     /**
-     * Validation rules
+     * Default eager loading for performance
+     */
+    protected $with = [];
+
+    /**
+     * Validation rules with multilingual support
      *
      * @var array
      */
     public static $rules = [
         'name' => 'required|unique:functional_areas|max:150',
+        'description' => 'nullable|string|max:500',
+        'is_default' => 'boolean',
+        'is_active' => 'boolean',
     ];
-
-    public $table = 'functional_areas';
 
     public $fillable = [
         'name',
+        'description',
         'is_default',
+        'is_active',
+    ];
+
+    protected $appends = [
+        'usage_count',
+        'formatted_usage_stats'
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'is_default' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when functional area is updated
+        static::updated(function ($functionalArea) {
+            cache()->forget("functional_area.{$functionalArea->id}");
+            cache()->forget("functional_areas.popular");
+            cache()->forget("functional_areas.trending");
+            cache()->tags(['functional_areas', 'functional_area-' . $functionalArea->id])->flush();
+        });
+
+        // Clear cache when functional area is deleted
+        static::deleted(function ($functionalArea) {
+            cache()->forget("functional_area.{$functionalArea->id}");
+            cache()->forget("functional_areas.popular");
+            cache()->forget("functional_areas.trending");
+            cache()->tags(['functional_areas', 'functional_area-' . $functionalArea->id])->flush();
+        });
+    }
+
+    /**
+     * Activity log options
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'description', 'is_active', 'is_default'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Get total usage count.
+     */
+    public function getUsageCountAttribute(): int
+    {
+        return cache()->remember("functional_area.{$this->id}.usage_count", 3600, function () {
+            return $this->jobs_count + $this->candidates_count;
+        });
+    }
+
+    /**
+     * Get formatted usage statistics.
+     */
+    public function getFormattedUsageStatsAttribute(): array
+    {
+        return cache()->remember("functional_area.{$this->id}.formatted_usage_stats", 3600, function () {
+            return [
+                'jobs' => $this->jobs()->count(),
+                'candidates' => $this->candidates()->count(),
+                'total_usage' => $this->usage_count,
+                'demand_level' => $this->getDemandLevel(),
+            ];
+        });
+    }
+
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class, 'functional_area_id');
+    }
+
+    public function candidates(): HasMany
+    {
+        return $this->hasMany(Candidate::class, 'functional_area_id');
+    }
+
+    /**
+     * Scope for active functional areas.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive functional areas.
+     */
+    public function scopeInactive(Builder $query): Builder
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for default functional areas.
+     */
+    public function scopeDefault(Builder $query): Builder
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom functional areas.
+     */
+    public function scopeCustom(Builder $query): Builder
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope for functional areas with jobs.
+     */
+    public function scopeWithJobs(Builder $query): Builder
+    {
+        return $query->whereHas('jobs');
+    }
+
+    /**
+     * Scope for functional areas with active jobs.
+     */
+    public function scopeWithActiveJobs(Builder $query): Builder
+    {
+        return $query->whereHas('jobs', function ($q) {
+            $q->active();
+        });
+    }
+
+    /**
+     * Scope for functional areas with candidates.
+     */
+    public function scopeWithCandidates(Builder $query): Builder
+    {
+        return $query->whereHas('candidates');
+    }
+
+    /**
+     * Scope for functional areas with active candidates.
+     */
+    public function scopeWithActiveCandidates(Builder $query): Builder
+    {
+        return $query->whereHas('candidates', function ($q) {
+            $q->active();
+        });
+    }
+
+    /**
+     * Scope for searching functional areas by name.
+     */
+    public function scopeSearch(Builder $query, string $term): Builder
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for popular functional areas (with most jobs/candidates).
+     */
+    public function scopePopular(Builder $query, int $limit = 10): Builder
+    {
+        return $query->withCount(['jobs', 'candidates'])
+                    ->orderByDesc('jobs_count')
+                    ->orderByDesc('candidates_count')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetically ordered functional areas.
+     */
+    public function scopeAlphabetical(Builder $query): Builder
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for recent functional areas.
+     */
+    public function scopeRecent(Builder $query, int $days = 30): Builder
+    {
+        return $query->where('created_at', '>=', now()->subDays($days))
+                    ->orderByDesc('created_at');
+    }
+
+    /**
+     * Scope for trending functional areas.
+     */
+    public function scopeTrending(Builder $query): Builder
+    {
+        return $query->withCount([
+                        'jobs' => function ($q) {
+                            $q->where('created_at', '>=', now()->subDays(30));
+                        },
+                        'candidates' => function ($q) {
+                            $q->where('created_at', '>=', now()->subDays(30));
+                        }
+                    ])
+                    ->orderByDesc('jobs_count')
+                    ->orderByDesc('candidates_count');
+    }
+
+    /**
+     * Scope for functional areas with minimum usage.
+     */
+    public function scopeMinUsage(Builder $query, int $count = 1): Builder
+    {
+        return $query->withCount(['jobs', 'candidates'])
+                    ->havingRaw('(jobs_count + candidates_count) >= ?', [$count]);
+    }
+
+    /**
+     * Scope for high demand functional areas.
+     */
+    public function scopeHighDemand(Builder $query, int $minJobs = 10): Builder
+    {
+        return $query->withCount('jobs')
+                    ->having('jobs_count', '>=', $minJobs)
+                    ->orderByDesc('jobs_count');
+    }
+
+    /**
+     * Get demand level based on usage.
+     */
+    private function getDemandLevel(): string
+    {
+        $jobsCount = $this->jobs()->count();
+        
+        return match (true) {
+            $jobsCount >= 50 => __('functional_area.high_demand'),
+            $jobsCount >= 20 => __('functional_area.medium_demand'),
+            $jobsCount >= 5 => __('functional_area.low_demand'),
+            default => __('functional_area.minimal_demand')
+        };
+    }
+
+    /**
+     * Check if functional area is in high demand.
+     */
+    public function isHighDemand(): bool
+    {
+        return $this->jobs()->count() >= 20;
+    }
+
+    /**
+     * Get related functional areas.
+     */
+    public function getRelatedAreas(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    {
+        return cache()->remember("functional_area.{$this->id}.related", 3600, function () use ($limit) {
+            return static::where('id', '!=', $this->id)
+                          ->active()
+                          ->withCount('jobs')
+                          ->orderByDesc('jobs_count')
+                          ->limit($limit)
+                          ->get();
+        });
+    }
 }

@@ -46,16 +46,20 @@ class Language extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'language' => 'string',
-        'iso_code' => 'string',
-        'is_default' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     /**
      * Validation rules
@@ -73,5 +77,120 @@ class Language extends Model
     public function candidates(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'candidate_language');
+    }
+
+    /**
+     * Scope for active languages.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive languages.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for default languages.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom languages.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope for searching languages by name or ISO code.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('language', 'like', "%{$term}%")
+                    ->orWhere('iso_code', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for alphabetically ordered languages.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('language', 'asc');
+    }
+
+    /**
+     * Scope for languages with candidates.
+     */
+    public function scopeWithCandidates($query)
+    {
+        return $query->whereHas('candidates');
+    }
+
+    /**
+     * Scope for recent languages.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old languages.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular languages (most used by candidates).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('candidates')
+                    ->orderByDesc('candidates_count')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for featured languages.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for languages by ISO code.
+     */
+    public function scopeByIsoCode($query, string $code)
+    {
+        return $query->where('iso_code', $code);
+    }
+
+    /**
+     * Scope for European languages.
+     */
+    public function scopeEuropean($query)
+    {
+        return $query->whereIn('iso_code', ['en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru']);
+    }
+
+    /**
+     * Scope for major world languages.
+     */
+    public function scopeMajor($query)
+    {
+        return $query->whereIn('iso_code', ['en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr']);
     }
 }

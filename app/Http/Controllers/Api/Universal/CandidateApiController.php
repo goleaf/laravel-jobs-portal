@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\Api\Universal;
 
 use App\Http\Controllers\UniversalBaseController;
-use App\Models\Candidate;
+use App\Http\Requests\Api\Universal\IndexRequest;
+use App\Http\Requests\Api\Universal\ShowCandidateRequest;
+use App\Http\Requests\Api\Universal\StoreRequest;
+use App\Http\Requests\Api\Universal\UpdateRequest;
+use App\Http\Requests\Api\Universal\DestroyCandidateRequest;
 use App\Http\Resources\Universal\CandidateResource;
 use App\Http\Resources\Universal\CandidateCollection;
-use Illuminate\Http\Request;
+use App\Http\Resources\Universal\ShowCandidateResource;
+use App\Http\Resources\Universal\DestroyCandidateResource;
+use App\Models\Candidate;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -18,7 +24,7 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display a listing of the resource with caching
      */
-    public function index(StoreRequest $request): JsonResponse
+    public function index(IndexRequest $request): JsonResponse
     {
         try {
             $cacheKey = $this->generateCacheKey($request, 'candidate_index');
@@ -37,7 +43,7 @@ class CandidateApiController extends UniversalBaseController
             $candidates = $this->paginateWithCursor($query);
             
             return $this->jsonResponse([
-                'candidates' => new App\Http\Resources\Universal\CandidateCollection($candidates)
+                'candidates' => new CandidateCollection($candidates)
             ]);
             
         } catch (\Exception $e) {
@@ -50,7 +56,7 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching
      */
-    public function show($id): JsonResponse
+    public function show(ShowCandidateRequest $request, $id): JsonResponse
     {
         try {
             $candidate = $this->findCached(Candidate::class, $id, ['user']);
@@ -60,7 +66,7 @@ class CandidateApiController extends UniversalBaseController
             }
             
             return $this->jsonResponse([
-                'candidate' => new App\Http\Resources\Universal\CandidateResource($candidate)
+                'candidate' => new ShowCandidateResource($candidate)
             ]);
             
         } catch (\Exception $e) {
@@ -137,20 +143,28 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete
      */
-    public function destroy($id): JsonResponse
+    public function destroy(DestroyCandidateRequest $request, $id): JsonResponse
     {
         try {
             $candidate = Candidate::findOrFail($id);
             
             // Universal Pattern: Rate limited action
-            return $this->rateLimitedAction($request ?? request(), 'delete_candidate', function () use ($candidate) {
+            return $this->rateLimitedAction($request, 'delete_candidate', function () use ($candidate, $request) {
                 $this->executeTransaction(function () use ($candidate) {
                     $candidate->delete();
                 });
                 
                 $this->clearModelCache(Candidate::class, $candidate->id);
                 
-                return $this->jsonResponse([], 'Deleted successfully');
+                return $this->jsonResponse([
+                    'deletion' => new DestroyCandidateResource([
+                        'candidate_id' => $candidate->id,
+                        'reason' => $request->input('reason'),
+                        'cleanup_performed' => true,
+                        'applications_handled' => 'preserved',
+                        'files_removed' => []
+                    ])
+                ], 'Deleted successfully');
             });
             
         } catch (\Exception $e) {

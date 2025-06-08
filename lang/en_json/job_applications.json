@@ -1,0 +1,122 @@
+{
+    "job_applications": {
+        "salary": {
+            "not_specified": "Not specified",
+            "format": ":currency:amount :period",
+            "period": {
+                "default": "per month"
+            }
+        },
+        "availability": {
+            "immediate": "Immediate",
+            "one_day": "1 day",
+            "days": ":count days",
+            "weeks": ":count weeks",
+            "months": ":count months"
+        },
+        "status": {
+            "applied": "Applied",
+            "shortlisted": "Shortlisted",
+            "interviewed": "Interviewed",
+            "hired": "Hired",
+            "rejected": "Rejected"
+        },
+        "rating": {
+            "poor": "Poor",
+            "fair": "Fair",
+            "good": "Good",
+            "very_good": "Very Good",
+            "excellent": "Excellent"
+        },
+        "messages": {
+            "applied": "Application submitted successfully",
+            "shortlisted": "Candidate shortlisted successfully",
+            "interviewed": "Interview scheduled successfully",
+            "hired": "Candidate hired successfully",
+            "rejected": "Application rejected",
+            "not_found": "Application not found",
+            "unauthorized": "You are not authorized to perform this action"
+        }
+    },
+    "validation": {
+        "job_application": {
+            "job_id": {
+                "required": "Job selection is required",
+                "exists": "Selected job does not exist"
+            },
+            "resume_id": {
+                "exists": "Selected resume does not exist"
+            },
+            "cover_letter": {
+                "string": "Cover letter must be text",
+                "min": "Cover letter must be at least 50 characters",
+                "max": "Cover letter cannot exceed 2000 characters"
+            },
+            "expected_salary": {
+                "numeric": "Expected salary must be a number",
+                "min": "Expected salary cannot be negative",
+                "max": "Expected salary is too high"
+            },
+            "salary_currency_id": {
+                "exists": "Selected salary currency does not exist"
+            },
+            "salary_period_id": {
+                "exists": "Selected salary period does not exist"
+            },
+            "available_from": {
+                "date": "Available from date must be a valid date",
+                "after_or_equal": "Available from date cannot be in the past"
+            },
+            "notice_period": {
+                "integer": "Notice period must be a number",
+                "min": "Notice period cannot be negative",
+                "max": "Notice period cannot exceed 365 days"
+            },
+            "portfolio_url": {
+                "url": "Portfolio URL must be a valid URL",
+                "max": "Portfolio URL cannot exceed 255 characters"
+            },
+            "linkedin_url": {
+                "url": "LinkedIn URL must be a valid URL",
+                "max": "LinkedIn URL cannot exceed 255 characters"
+            },
+            "additional_info": {
+                "string": "Additional information must be text",
+                "max": "Additional information cannot exceed 1000 characters"
+            },
+            "terms_accepted": {
+                "required": "You must accept the terms and conditions",
+                "accepted": "You must accept the terms and conditions"
+            },
+            "privacy_accepted": {
+                "required": "You must accept the privacy policy",
+                "accepted": "You must accept the privacy policy"
+            },
+            "already_applied": "You have already applied for this job",
+            "job_inactive": "This job is no longer active",
+            "job_expired": "This job has expired",
+            "job_suspended": "This job is currently suspended",
+            "linkedin_url_invalid": "LinkedIn URL must be a valid LinkedIn profile link",
+            "salary_currency_required": "Salary currency is required when salary is specified",
+            "salary_period_required": "Salary period is required when salary is specified",
+            "notice_period_too_long": "Notice period cannot exceed 90 days"
+        }
+    },
+    "attributes": {
+        "job_application": {
+            "job": "Job",
+            "resume": "Resume",
+            "cover_letter": "Cover Letter",
+            "expected_salary": "Expected Salary",
+            "salary_currency": "Salary Currency",
+            "salary_period": "Salary Period",
+            "available_from": "Available From",
+            "notice_period": "Notice Period",
+            "portfolio_url": "Portfolio URL",
+            "linkedin_url": "LinkedIn Profile",
+            "additional_info": "Additional Information",
+            "terms_accepted": "Terms and Conditions",
+            "privacy_accepted": "Privacy Policy"
+        }
+    }
+} 

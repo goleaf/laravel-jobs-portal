@@ -146,5 +146,413 @@
     "validation.invalid_locale": "Please provide a valid locale",
     "validation.locale_required": "Locale is required",
     "validation.locale_string": "Locale must be a string",
-    "validation.locale_size": "Locale must be exactly 2 characters"
+    "validation.locale_size": "Locale must be exactly 2 characters",
+    "validation": {
+        "company_size": {
+            "size": {
+                "required": "Company size is required",
+                "string": "Company size must be a text value",
+                "max": "Company size cannot exceed 150 characters",
+                "unique": "This company size already exists",
+                "regex": "Company size format is invalid. Use format like '1-10', '11-50', '500+'"
+            },
+            "is_default": {
+                "boolean": "Default flag must be true or false"
+            },
+            "is_active": {
+                "boolean": "Active flag must be true or false"
+            }
+        },
+        "marital_status": {
+            "marital_status": {
+                "required": "Marital status is required",
+                "string": "Marital status must be a text value",
+                "max": "Marital status cannot exceed 150 characters",
+                "unique": "This marital status already exists"
+            },
+            "description": {
+                "string": "Description must be a text value",
+                "max": "Description cannot exceed 500 characters"
+            },
+            "is_default": {
+                "boolean": "Default flag must be true or false"
+            },
+            "is_active": {
+                "boolean": "Active flag must be true or false"
+            }
+        },
+        "salary_currency": {
+            "currency_name": {
+                "required": "Currency name is required",
+                "string": "Currency name must be a text value",
+                "unique": "This currency name already exists"
+            },
+            "currency_code": {
+                "required": "Currency code is required",
+                "min": "Currency code must be exactly 3 characters",
+                "max": "Currency code must be exactly 3 characters",
+                "unique": "This currency code already exists"
+            },
+            "currency_icon": {
+                "required": "Currency icon is required",
+                "unique": "This currency icon already exists"
+            }
+        },
+        "job": {
+            "title_required": "Job title is required",
+            "title_string": "Job title must be a valid text",
+            "title_min": "Job title must be at least 3 characters",
+            "title_max": "Job title cannot exceed 200 characters",
+            "title_format": "Job title contains invalid characters",
+            "description_required": "Job description is required",
+            "description_string": "Job description must be valid text",
+            "description_min": "Job description must be at least 50 characters",
+            "description_max": "Job description cannot exceed 5000 characters",
+            "requirement_required": "Job requirements are required",
+            "requirement_string": "Job requirements must be valid text",
+            "requirement_min": "Job requirements must be at least 20 characters",
+            "requirement_max": "Job requirements cannot exceed 3000 characters",
+            "category_required": "Job category is required",
+            "category_integer": "Job category must be a valid selection",
+            "category_exists": "Selected job category does not exist",
+            "type_required": "Job type is required",
+            "type_integer": "Job type must be a valid selection",
+            "type_exists": "Selected job type does not exist",
+            "career_level_required": "Career level is required",
+            "career_level_integer": "Career level must be a valid selection",
+            "career_level_exists": "Selected career level does not exist",
+            "functional_area_required": "Functional area is required",
+            "functional_area_integer": "Functional area must be a valid selection",
+            "functional_area_exists": "Selected functional area does not exist",
+            "shift_required": "Job shift is required",
+            "shift_integer": "Job shift must be a valid selection",
+            "shift_exists": "Selected job shift does not exist",
+            "degree_level_required": "Required degree level is required",
+            "degree_level_integer": "Degree level must be a valid selection",
+            "degree_level_exists": "Selected degree level does not exist",
+            "position_required": "Number of positions is required",
+            "position_integer": "Number of positions must be a valid number",
+            "position_min": "At least 1 position is required",
+            "position_max": "Cannot exceed 1000 positions",
+            "experience_required": "Experience requirement is required",
+            "experience_integer": "Experience must be a valid number",
+            "experience_min": "Experience cannot be negative",
+            "experience_max": "Experience cannot exceed 50 years",
+            "salary_from_required": "Minimum salary is required",
+            "salary_from_numeric": "Minimum salary must be a valid amount",
+            "salary_from_min": "Minimum salary cannot be negative",
+            "salary_from_max": "Minimum salary is too high",
+            "salary_to_required": "Maximum salary is required",
+            "salary_to_numeric": "Maximum salary must be a valid amount",
+            "salary_to_min": "Maximum salary cannot be negative",
+            "salary_to_max": "Maximum salary is too high",
+            "salary_to_gte": "Maximum salary must be greater than or equal to minimum salary",
+            "salary_currency_required": "Salary currency is required",
+            "salary_currency_integer": "Salary currency must be a valid selection",
+            "salary_currency_exists": "Selected salary currency does not exist",
+            "salary_period_required": "Salary period is required",
+            "salary_period_integer": "Salary period must be a valid selection",
+            "salary_period_exists": "Selected salary period does not exist",
+            "country_required": "Country is required",
+            "country_integer": "Country must be a valid selection",
+            "country_exists": "Selected country does not exist",
+            "state_required": "State/Province is required",
+            "state_integer": "State/Province must be a valid selection",
+            "state_exists": "Selected state/province does not exist",
+            "city_required": "City is required",
+            "city_integer": "City must be a valid selection",
+            "city_exists": "Selected city does not exist",
+            "expiry_date_required": "Job expiry date is required",
+            "expiry_date_date": "Job expiry date must be a valid date",
+            "expiry_date_after": "Job expiry date must be in the future",
+            "expiry_date_before": "Job expiry date cannot be more than 1 year from now",
+            "expiry_date_past": "Job expiry date cannot be in the past",
+            "status_required": "Job status is required",
+            "status_integer": "Job status must be a valid selection",
+            "status_in": "Selected job status is invalid",
+            "skills_array": "Job skills must be a valid list",
+            "skills_max": "Cannot select more than 20 skills",
+            "skill_integer": "Each skill must be a valid selection",
+            "skill_exists": "One or more selected skills do not exist",
+            "tags_array": "Job tags must be a valid list",
+            "tags_max": "Cannot select more than 10 tags",
+            "tag_integer": "Each tag must be a valid selection",
+            "tag_exists": "One or more selected tags do not exist",
+            "creation_limit_exceeded": "You have reached the maximum number of active jobs allowed by your subscription plan",
+            "salary_range_invalid": "Maximum salary must be greater than minimum salary",
+            "unauthorized_creation": "You are not authorized to create jobs",
+            "unauthorized_update": "You are not authorized to update this job",
+            "unauthorized_deletion": "You are not authorized to delete this job",
+            "cannot_reopen_closed": "Cannot reopen a closed job",
+            "has_active_applications": "This job has :count active applications. Use force delete to proceed.",
+            "featured_time_remaining": "This job still has featured time remaining. Use force delete to proceed.",
+            "not_found": "Job not found",
+            "force_delete_boolean": "Force delete must be true or false",
+            "reason_string": "Deletion reason must be valid text",
+            "reason_max": "Deletion reason cannot exceed 500 characters",
+            "reason_required_if": "Deletion reason is required when force deleting"
+        },
+        "salary_period": {
+            "period": {
+                "required": "Salary period is required",
+                "string": "Salary period must be a text value",
+                "max": "Salary period cannot exceed 150 characters",
+                "unique": "This salary period already exists"
+            },
+            "description": {
+                "string": "Description must be a text value",
+                "max": "Description cannot exceed 500 characters"
+            }
+        },
+        "transaction": {
+            "amount": {
+                "required": "Transaction amount is required",
+                "numeric": "Transaction amount must be a number",
+                "min": "Transaction amount must be greater than 0"
+            },
+            "invoice_id": {
+                "required": "Invoice ID is required",
+                "string": "Invoice ID must be a text value"
+            },
+            "status": {
+                "required": "Transaction status is required",
+                "integer": "Transaction status must be a number"
+            }
+        },
+        "faq": {
+            "title": {
+                "required": "FAQ title is required",
+                "string": "FAQ title must be a text value",
+                "max": "FAQ title cannot exceed 150 characters"
+            },
+            "description": {
+                "required": "FAQ description is required",
+                "string": "FAQ description must be a text value"
+            },
+            "category": {
+                "string": "FAQ category must be a text value",
+                "max": "FAQ category cannot exceed 100 characters"
+            }
+        },
+        "email_template": {
+            "template_name": {
+                "required": "Template name is required",
+                "string": "Template name must be a text value",
+                "unique": "This template name already exists"
+            },
+            "subject": {
+                "required": "Email subject is required",
+                "string": "Email subject must be a text value",
+                "max": "Email subject cannot exceed 150 characters"
+            },
+            "body": {
+                "required": "Email body is required",
+                "string": "Email body must be a text value"
+            }
+        },
+        "testimonial": {
+            "customer_name": {
+                "required": "Customer name is required",
+                "string": "Customer name must be a text value",
+                "max": "Customer name cannot exceed 150 characters"
+            },
+            "description": {
+                "string": "Description must be a text value"
+            },
+            "rating": {
+                "integer": "Rating must be a number",
+                "min": "Rating must be at least 1",
+                "max": "Rating cannot exceed 5"
+            },
+            "customer_image": {
+                "required": "Customer image is required",
+                "image": "Customer image must be a valid image file",
+                "mimes": "Customer image must be jpeg, jpg, or png format",
+                "max": "Customer image cannot exceed 2MB"
+            }
+        },
+        "job": {
+            "title_required": "Job title is required",
+            "title_string": "Job title must be a valid text",
+            "title_min": "Job title must be at least 3 characters",
+            "title_max": "Job title cannot exceed 200 characters",
+            "title_format": "Job title contains invalid characters",
+            
+            "description_required": "Job description is required",
+            "description_string": "Job description must be valid text",
+            "description_min": "Job description must be at least 50 characters",
+            "description_max": "Job description cannot exceed 5000 characters",
+            
+            "requirement_required": "Job requirements are required",
+            "requirement_string": "Job requirements must be valid text",
+            "requirement_min": "Job requirements must be at least 20 characters",
+            "requirement_max": "Job requirements cannot exceed 3000 characters",
+            
+            "category_required": "Job category is required",
+            "category_integer": "Job category must be a valid selection",
+            "category_exists": "Selected job category does not exist",
+            
+            "type_required": "Job type is required",
+            "type_integer": "Job type must be a valid selection",
+            "type_exists": "Selected job type does not exist",
+            
+            "career_level_required": "Career level is required",
+            "career_level_integer": "Career level must be a valid selection",
+            "career_level_exists": "Selected career level does not exist",
+            
+            "functional_area_required": "Functional area is required",
+            "functional_area_integer": "Functional area must be a valid selection",
+            "functional_area_exists": "Selected functional area does not exist",
+            
+            "shift_required": "Job shift is required",
+            "shift_integer": "Job shift must be a valid selection",
+            "shift_exists": "Selected job shift does not exist",
+            
+            "degree_level_required": "Required degree level is required",
+            "degree_level_integer": "Degree level must be a valid selection",
+            "degree_level_exists": "Selected degree level does not exist",
+            
+            "position_required": "Number of positions is required",
+            "position_integer": "Number of positions must be a valid number",
+            "position_min": "At least 1 position is required",
+            "position_max": "Cannot exceed 1000 positions",
+            
+            "experience_required": "Experience requirement is required",
+            "experience_integer": "Experience must be a valid number",
+            "experience_min": "Experience cannot be negative",
+            "experience_max": "Experience cannot exceed 50 years",
+            
+            "salary_from_required": "Minimum salary is required",
+            "salary_from_numeric": "Minimum salary must be a valid amount",
+            "salary_from_min": "Minimum salary cannot be negative",
+            "salary_from_max": "Minimum salary is too high",
+            
+            "salary_to_required": "Maximum salary is required",
+            "salary_to_numeric": "Maximum salary must be a valid amount",
+            "salary_to_min": "Maximum salary cannot be negative",
+            "salary_to_max": "Maximum salary is too high",
+            "salary_to_gte": "Maximum salary must be greater than or equal to minimum salary",
+            
+            "salary_currency_required": "Salary currency is required",
+            "salary_currency_integer": "Salary currency must be a valid selection",
+            "salary_currency_exists": "Selected salary currency does not exist",
+            
+            "salary_period_required": "Salary period is required",
+            "salary_period_integer": "Salary period must be a valid selection",
+            "salary_period_exists": "Selected salary period does not exist",
+            
+            "country_required": "Country is required",
+            "country_integer": "Country must be a valid selection",
+            "country_exists": "Selected country does not exist",
+            
+            "state_required": "State/Province is required",
+            "state_integer": "State/Province must be a valid selection",
+            "state_exists": "Selected state/province does not exist",
+            
+            "city_required": "City is required",
+            "city_integer": "City must be a valid selection",
+            "city_exists": "Selected city does not exist",
+            
+            "expiry_date_required": "Job expiry date is required",
+            "expiry_date_date": "Job expiry date must be a valid date",
+            "expiry_date_after": "Job expiry date must be in the future",
+            "expiry_date_before": "Job expiry date cannot be more than 1 year from now",
+            "expiry_date_past": "Job expiry date cannot be in the past",
+            
+            "status_required": "Job status is required",
+            "status_integer": "Job status must be a valid selection",
+            "status_in": "Selected job status is invalid",
+            
+            "skills_array": "Job skills must be a valid list",
+            "skills_max": "Cannot select more than 20 skills",
+            "skill_integer": "Each skill must be a valid selection",
+            "skill_exists": "One or more selected skills do not exist",
+            
+            "tags_array": "Job tags must be a valid list",
+            "tags_max": "Cannot select more than 10 tags",
+            "tag_integer": "Each tag must be a valid selection",
+            "tag_exists": "One or more selected tags do not exist",
+            
+            "creation_limit_exceeded": "You have reached the maximum number of active jobs allowed by your subscription plan",
+            "salary_range_invalid": "Maximum salary must be greater than minimum salary",
+            "unauthorized_creation": "You are not authorized to create jobs",
+            "unauthorized_update": "You are not authorized to update this job",
+            "unauthorized_deletion": "You are not authorized to delete this job",
+            "cannot_reopen_closed": "Cannot reopen a closed job",
+            "has_active_applications": "This job has :count active applications. Use force delete to proceed.",
+            "featured_time_remaining": "This job still has featured time remaining. Use force delete to proceed.",
+            "not_found": "Job not found",
+            
+            "force_delete_boolean": "Force delete must be true or false",
+            "reason_string": "Deletion reason must be valid text",
+            "reason_max": "Deletion reason cannot exceed 500 characters",
+            "reason_required_if": "Deletion reason is required when force deleting"
+        }
+    },
+    "form": {
+        "job": {
+            "title": "Job Title",
+            "description": "Job Description",
+            "requirement": "Job Requirements",
+            "category": "Job Category",
+            "type": "Job Type",
+            "career_level": "Career Level",
+            "functional_area": "Functional Area",
+            "shift": "Job Shift",
+            "degree_level": "Required Degree Level",
+            "position": "Number of Positions",
+            "experience": "Experience Required (Years)",
+            "salary_from": "Minimum Salary",
+            "salary_to": "Maximum Salary",
+            "salary_currency": "Salary Currency",
+            "salary_period": "Salary Period",
+            "country": "Country",
+            "state": "State/Province",
+            "city": "City",
+            "expiry_date": "Job Expiry Date",
+            "status": "Job Status",
+            "skills": "Required Skills",
+            "tags": "Job Tags",
+            "force_delete": "Force Delete",
+            "deletion_reason": "Deletion Reason"
+        }
+    },
+    "functional_area": {
+        "high_demand": "High Demand",
+        "medium_demand": "Medium Demand",
+        "low_demand": "Low Demand",
+        "minimal_demand": "Minimal Demand"
+    },
+    "industry": {
+        "dominant_presence": "Dominant Market Presence",
+        "strong_presence": "Strong Market Presence",
+        "moderate_presence": "Moderate Market Presence",
+        "emerging_presence": "Emerging Market Presence",
+        "minimal_presence": "Minimal Market Presence"
+    },
+    "job_type": {
+        "extremely_popular": "Extremely Popular",
+        "very_popular": "Very Popular",
+        "popular": "Popular",
+        "moderate": "Moderate",
+        "limited": "Limited",
+        "minimal": "Minimal",
+        "category": {
+            "full_time": "Full Time",
+            "part_time": "Part Time",
+            "contract": "Contract",
+            "freelance": "Freelance",
+            "internship": "Internship",
+            "remote": "Remote",
+            "other": "Other"
+        }
+    },
+    "career_level": {
+        "entry_level": "Entry Level",
+        "junior_level": "Junior Level",
+        "mid_level": "Mid Level",
+        "senior_level": "Senior Level",
+        "executive_level": "Executive Level",
+        "leadership_level": "Leadership Level"
+    }
 }

@@ -14,4 +14,4 @@ app.use(router)
 // Mount app
 app.mount('#app')
 
-console.log('🚀 Context7 Vue3 SPA initialized successfully!')
+console.log('🚀 Universal Vue3 SPA initialized successfully!')

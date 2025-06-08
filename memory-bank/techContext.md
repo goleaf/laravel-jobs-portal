@@ -1,4 +1,101 @@
-# Technical Context - Laravel Job Portal
+# TECH CONTEXT - JOB PORTAL
+
+## 🗄️ **DATABASE CONFIGURATION - CRITICAL**
+
+**⚠️ ALWAYS USE SQLITE - NO MYSQL EVER ⚠️**
+
+- **Database Type**: SQLite (file-based)
+- **Database File**: `database/database.sqlite`
+- **Connection**: `sqlite` driver in Laravel
+- **NO MySQL**: Never use MySQL commands, connections, or references
+- **Memory Efficiency**: SQLite prevents memory exhaustion issues
+- **Development Focus**: Lightweight, portable, no server dependencies
+
+## 🏗️ **LARAVEL ARCHITECTURE**
+
+### **Framework**
+- **Laravel Version**: 12.x
+- **PHP Version**: 8.3.15
+- **Environment**: Local development
+
+### **Frontend Stack**
+- **Vue.js**: 3.x with Composition API
+- **TypeScript**: Full type safety
+- **TailwindCSS**: Utility-first styling
+- **Vite**: Build tool and dev server
+- **Heroicons**: Icon library
+
+### **Authentication**
+- **Laravel Sanctum**: API token authentication
+- **Multi-user types**: Admin, Employer, Candidate
+- **Role-based access control**
+
+## 🔧 **DEVELOPMENT COMMANDS**
+
+### **Database Operations (SQLite Only)**
+```bash
+# Check database file exists
+ls -la database/database.sqlite
+
+# Run migrations
+php artisan migrate
+
+# Seed database
+php artisan db:seed
+
+# Check database with SQLite CLI
+sqlite3 database/database.sqlite "SELECT * FROM users LIMIT 5;"
+
+# Database status
+php artisan migrate:status
+```
+
+### **Build Commands**
+```bash
+# Install dependencies
+npm install
+
+# Development server
+npm run dev
+
+# Production build
+npm run build
+
+# Laravel serve
+php artisan serve
+```
+
+## 📊 **CURRENT PROJECT STATUS**
+
+### **Completed Features**
+- ✅ Vue 3 + TypeScript setup
+- ✅ TailwindCSS integration
+- ✅ Authentication system
+- ✅ LoginInfoBlock component
+- ✅ API endpoints for login info
+- ✅ Database migrations (SQLite)
+
+### **Active Development**
+- 🔄 Admin login info block integration
+- 🔄 Database connectivity testing
+- 🔄 User seeding verification
+
+## 🚨 **CRITICAL REMINDERS**
+
+1. **ALWAYS SQLite**: Never use MySQL commands or connections
+2. **Memory Management**: SQLite prevents PHP memory exhaustion
+3. **File-based DB**: Database is in `database/database.sqlite`
+4. **Vue 3 Components**: Use Composition API with TypeScript
+5. **TailwindCSS**: Use utility classes for styling
+
+## 🎯 **CURRENT TASK**
+
+**Building Admin Login Info Block**:
+- LoginInfoBlock Vue component ✅ Created
+- Integration with Login.vue ✅ Complete
+- Database connectivity testing ⚠️ In Progress (SQLite)
+- API endpoint testing ⚠️ Needs SQLite verification
+- User seeding verification ⚠️ Pending SQLite check
 
 ## Technology Stack
 

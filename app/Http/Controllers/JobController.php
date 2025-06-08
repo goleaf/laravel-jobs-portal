@@ -403,8 +403,10 @@ class JobController extends AppBaseController
     public function createJob(): View
     {
         $data = $this->jobRepository->prepareData();
-        $countries = Country::pluck('name', 'id');
-        $states = State::toBase()->pluck('name', 'id');
+        
+        // Use new scopes for better performance and filtering
+        $countries = Country::active()->alphabetical()->pluck('name', 'id');
+        $states = State::active()->alphabetical()->pluck('name', 'id');
 
         return view('jobs.create', compact('countries', 'states'))->with('data', $data);
     }
@@ -448,7 +450,8 @@ class JobController extends AppBaseController
         if (isset($job->state_id)) {
             $cities = getCities($job->state_id);
         }
-        $countries = Country::pluck('name', 'id');
+        // Use new scopes for active countries
+        $countries = Country::active()->alphabetical()->pluck('name', 'id');
 
         return view('jobs.edit', compact('data', 'job', 'cities', 'states', 'countries'));
     }
@@ -480,7 +483,14 @@ class JobController extends AppBaseController
      */
     public function showJobs(Job $job): View
     {
-        $job = Job::with('company.user')->whereId($job->id)->first();
+        // Use better eager loading and add scope support for future
+        $job = Job::with([
+            'company.user',
+            'jobCategory',
+            'jobType',
+            'careerLevel',
+            'functionalArea'
+        ])->whereId($job->id)->first();
 
         return view('jobs.show')->with('job', $job);
     }
@@ -494,7 +504,8 @@ class JobController extends AppBaseController
      */
     public function delete(Job $job)
     {
-        $jobAppliedCount = $job->appliedJobs()->where('status', JobApplication::STATUS_APPLIED)->count();
+        // Use new JobApplication scope for cleaner code
+        $jobAppliedCount = $job->appliedJobs()->pending()->count();
         if ($jobAppliedCount > 0) {
             return $this->sendError(__('messages.flash.job_apply_by_candidate'));
         }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCompanySizeRequest;
+use App\Http\Requests\UpdateCompanySizeRequest;
 use App\Models\Company;
 use App\Models\CompanySize;
 use App\Repositories\CompanySizeRepository;
@@ -10,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class CompanySizeController extends AppBaseController
 {
     /** @var CompanySizeRepository */
@@ -55,7 +58,7 @@ class CompanySizeController extends AppBaseController
     /**
      * Update the specified CompanySize in storage.
      */
-    public function update(UpdateCompanySizeUpdateCompanySizeRequest $request, CompanySize $companySize): JsonResponse
+    public function update(UpdateCompanySizeRequest $request, CompanySize $companySize): JsonResponse
     {
         $input = $request->all();
         $this->companySizeRepository->update($input, $companySize->id);

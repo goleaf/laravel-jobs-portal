@@ -63,15 +63,18 @@ class Setting extends Model
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'key' => 'string',
-        'value' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     /**
      * @return mixed
@@ -102,4 +105,85 @@ class Setting extends Model
         '16' => '#0B4141',
         '17' => '#3F6844',
     ];
+
+    /**
+     * Scope for settings by key.
+     */
+    public function scopeByKey($query, string $key)
+    {
+        return $query->where('key', $key);
+    }
+
+    /**
+     * Scope for settings by key pattern.
+     */
+    public function scopeByKeyPattern($query, string $pattern)
+    {
+        return $query->where('key', 'like', $pattern);
+    }
+
+    /**
+     * Scope for global settings.
+     */
+    public function scopeGlobal($query)
+    {
+        return $query->whereNotIn('key', [
+            'user_preference',
+            'candidate_setting',
+            'employer_setting'
+        ]);
+    }
+
+    /**
+     * Scope for user-specific settings.
+     */
+    public function scopeUserSpecific($query)
+    {
+        return $query->whereIn('key', [
+            'user_preference',
+            'candidate_setting',
+            'employer_setting'
+        ]);
+    }
+
+    /**
+     * Scope for theme settings.
+     */
+    public function scopeTheme($query)
+    {
+        return $query->where('key', 'like', 'theme_%')
+                    ->orWhere('key', 'like', 'color_%')
+                    ->orWhere('key', 'like', 'logo_%');
+    }
+
+    /**
+     * Scope for email settings.
+     */
+    public function scopeEmail($query)
+    {
+        return $query->where('key', 'like', 'email_%')
+                    ->orWhere('key', 'like', 'mail_%')
+                    ->orWhere('key', 'like', 'smtp_%');
+    }
+
+    /**
+     * Scope for social media settings.
+     */
+    public function scopeSocialMedia($query)
+    {
+        return $query->where('key', 'like', 'social_%')
+                    ->orWhere('key', 'like', 'facebook_%')
+                    ->orWhere('key', 'like', 'twitter_%')
+                    ->orWhere('key', 'like', 'linkedin_%');
+    }
+
+    /**
+     * Scope for payment settings.
+     */
+    public function scopePayment($query)
+    {
+        return $query->where('key', 'like', 'payment_%')
+                    ->orWhere('key', 'like', 'stripe_%')
+                    ->orWhere('key', 'like', 'paypal_%');
+    }
 }

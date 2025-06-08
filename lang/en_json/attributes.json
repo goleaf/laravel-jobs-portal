@@ -1,0 +1,58 @@
+{
+    "attributes": {
+        "company_size": {
+            "size": "Company Size",
+            "is_default": "Default",
+            "is_active": "Active Status"
+        },
+        "marital_status": {
+            "marital_status": "Marital Status",
+            "description": "Description",
+            "is_default": "Default",
+            "is_active": "Active Status"
+        },
+        "salary_currency": {
+            "currency_name": "Currency Name",
+            "currency_code": "Currency Code",
+            "currency_icon": "Currency Symbol",
+            "is_default": "Default Currency",
+            "is_active": "Active Status"
+        },
+        "salary_period": {
+            "period": "Salary Period",
+            "description": "Description",
+            "is_default": "Default Period",
+            "is_active": "Active Status"
+        },
+        "transaction": {
+            "amount": "Amount",
+            "invoice_id": "Invoice ID",
+            "status": "Status",
+            "user_id": "User",
+            "is_approved": "Approval Status"
+        },
+        "faq": {
+            "title": "Title",
+            "description": "Description",
+            "category": "Category",
+            "is_active": "Active Status",
+            "is_featured": "Featured"
+        },
+        "email_template": {
+            "template_name": "Template Name",
+            "subject": "Subject",
+            "body": "Email Body",
+            "variables": "Variables",
+            "is_active": "Active Status",
+            "is_default": "Default Template"
+        },
+        "testimonial": {
+            "customer_name": "Customer Name",
+            "description": "Testimonial",
+            "rating": "Rating",
+            "customer_image": "Customer Photo",
+            "is_active": "Active Status",
+            "is_featured": "Featured"
+        }
+    }
+} 

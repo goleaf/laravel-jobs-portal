@@ -1,0 +1,119 @@
+{
+    "jobs": {
+        "salary": {
+            "negotiable": "Negotiable",
+            "period": {
+                "default": "per month"
+            },
+            "range_format": ":currency:from - :currency:to :period",
+            "from_format": "From :currency:amount :period",
+            "up_to_format": "Up to :currency:amount :period"
+        },
+        "location": {
+            "remote": "Remote",
+            "not_specified": "Location not specified"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "featured": "Featured",
+            "suspended": "Suspended",
+            "expired": "Expired"
+        },
+        "messages": {
+            "created": "Job posted successfully",
+            "updated": "Job updated successfully",
+            "deleted": "Job deleted successfully",
+            "not_found": "Job not found",
+            "expired": "This job has expired",
+            "suspended": "This job is currently suspended",
+            "application_submitted": "Your application has been submitted successfully",
+            "already_applied": "You have already applied for this job"
+        }
+    },
+    "validation": {
+        "job": {
+            "title": {
+                "required": "Job title is required",
+                "string": "Job title must be text",
+                "max": "Job title cannot exceed 255 characters"
+            },
+            "description": {
+                "required": "Job description is required",
+                "string": "Job description must be text",
+                "min": "Job description must be at least 50 characters"
+            },
+            "company_id": {
+                "required": "Company is required",
+                "exists": "Selected company does not exist"
+            },
+            "job_category_id": {
+                "required": "Job category is required",
+                "exists": "Selected job category does not exist"
+            },
+            "job_type_id": {
+                "required": "Job type is required",
+                "exists": "Selected job type does not exist"
+            },
+            "salary_from": {
+                "numeric": "Minimum salary must be a number",
+                "min": "Minimum salary cannot be negative",
+                "max": "Minimum salary is too high"
+            },
+            "salary_to": {
+                "numeric": "Maximum salary must be a number",
+                "gte": "Maximum salary must be greater than or equal to minimum salary"
+            },
+            "country_id": {
+                "required": "Country is required",
+                "exists": "Selected country does not exist"
+            },
+            "expiry_date": {
+                "date": "Expiry date must be a valid date",
+                "after": "Expiry date must be in the future"
+            },
+            "position": {
+                "integer": "Number of positions must be a number",
+                "min": "Number of positions must be at least 1",
+                "max": "Number of positions cannot exceed 999"
+            },
+            "skills": {
+                "array": "Skills must be a list",
+                "exists": "One or more selected skills do not exist"
+            },
+            "job_tags": {
+                "array": "Job tags must be a list",
+                "string": "Each job tag must be text",
+                "max": "Each job tag cannot exceed 50 characters"
+            },
+            "company_unauthorized": "You are not authorized to create jobs for this company",
+            "salary_range_invalid": "Maximum salary must be greater than minimum salary",
+            "expiry_date_too_far": "Expiry date cannot be more than 1 year in the future"
+        }
+    },
+    "attributes": {
+        "job": {
+            "title": "Job Title",
+            "description": "Job Description",
+            "company": "Company",
+            "category": "Job Category",
+            "type": "Job Type",
+            "shift": "Job Shift",
+            "career_level": "Career Level",
+            "functional_area": "Functional Area",
+            "salary_from": "Minimum Salary",
+            "salary_to": "Maximum Salary",
+            "salary_currency": "Salary Currency",
+            "salary_period": "Salary Period",
+            "country": "Country",
+            "state": "State",
+            "city": "City",
+            "experience": "Experience Required",
+            "degree_level": "Degree Level",
+            "position": "Number of Positions",
+            "expiry_date": "Application Deadline",
+            "skills": "Required Skills",
+            "tags": "Job Tags"
+        }
+    }
+} 

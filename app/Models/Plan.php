@@ -79,16 +79,25 @@ class Plan extends Model
     ];
 
     /**
-     * @var array
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    protected $casts = [
-        'name' => 'string',
-        'stripe_plan_id' => 'string',
-        'allowed_jobs' => 'integer',
-        'amount' => 'double',
-        'is_trial_plan' => 'boolean',
-        'salary_currency_id' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'allowed_jobs' => 'integer',
+            'amount' => 'decimal:2',
+            'is_trial_plan' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'salary_currency_id' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
 
     public function activeSubscriptions(): HasMany
     {
@@ -99,5 +108,102 @@ class Plan extends Model
     public function salaryCurrency(): BelongsTo
     {
         return $this->belongsTo(SalaryCurrency::class, 'salary_currency_id', 'id');
+    }
+
+    /**
+     * Scope for active plans.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for trial plans.
+     */
+    public function scopeTrial($query)
+    {
+        return $query->where('is_trial_plan', true);
+    }
+
+    /**
+     * Scope for paid plans.
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('is_trial_plan', false)
+                    ->where('amount', '>', 0);
+    }
+
+    /**
+     * Scope for free plans.
+     */
+    public function scopeFree($query)
+    {
+        return $query->where('amount', 0);
+    }
+
+    /**
+     * Scope for featured plans.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for plans by price range.
+     */
+    public function scopeByPriceRange($query, ?float $minPrice = null, ?float $maxPrice = null)
+    {
+        if ($minPrice !== null) {
+            $query->where('amount', '>=', $minPrice);
+        }
+        
+        if ($maxPrice !== null) {
+            $query->where('amount', '<=', $maxPrice);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope for plans by job allowance.
+     */
+    public function scopeByJobAllowance($query, int $minJobs, ?int $maxJobs = null)
+    {
+        $query->where('allowed_jobs', '>=', $minJobs);
+        
+        if ($maxJobs !== null) {
+            $query->where('allowed_jobs', '<=', $maxJobs);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope for popular plans (with most subscriptions).
+     */
+    public function scopePopular($query, int $limit = 5)
+    {
+        return $query->withCount('activeSubscriptions')
+                    ->orderByDesc('active_subscriptions_count')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for plans ordered by price.
+     */
+    public function scopeOrderByPrice($query, string $direction = 'asc')
+    {
+        return $query->orderBy('amount', $direction);
+    }
+
+    /**
+     * Scope for plans with active subscriptions.
+     */
+    public function scopeWithActiveSubscriptions($query)
+    {
+        return $query->whereHas('activeSubscriptions');
     }
 }

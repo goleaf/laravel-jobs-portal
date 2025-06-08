@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Models\Job;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
@@ -18,17 +19,17 @@ class DeleteJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
-            return false;
-        }
+        $job = $this->route('job');
         
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
-        );
+        return auth()->check() && 
+               auth()->user()->is_active &&
+               $job &&
+               (
+                   // Admin can delete any job
+                   auth()->user()->hasRole('admin') ||
+                   // Employer can delete their own company's job
+                   (auth()->user()->hasRole('employer') && $job->company_id === auth()->user()->company?->id)
+               );
     }
 
     /**
@@ -38,36 +39,28 @@ class DeleteJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Add specific validation rules based on method
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:1000'],
-            'is_active' => ['sometimes', 'boolean'],
-            
-            // Security validation
-            'g-recaptcha-response' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (config('app.recaptcha_enabled', false) && empty($value)) {
-                        $fail(__('validation.recaptcha_required'));
-                    }
-                },
+            'force_delete' => [
+                'boolean'
             ],
+            'reason' => [
+                'nullable',
+                'string',
+                'max:500',
+                'required_if:force_delete,true'
+            ]
         ];
     }
 
     /**
-     * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Get custom validation messages with multilanguage support.
      */
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.name_required'),
-            'name.max' => __('validation.name_max'),
-            'email.email' => __('validation.email_invalid'),
-            'email.max' => __('validation.email_max'),
-            'description.max' => __('validation.description_max'),
+            'force_delete.boolean' => __('validation.job.force_delete_boolean'),
+            'reason.string' => __('validation.job.reason_string'),
+            'reason.max' => __('validation.job.reason_max'),
+            'reason.required_if' => __('validation.job.reason_required_if'),
         ];
     }
 
@@ -78,10 +71,8 @@ class DeleteJobRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => __('validation.attributes.name'),
-            'email' => __('validation.attributes.email'),
-            'description' => __('validation.attributes.description'),
-            'is_active' => __('validation.attributes.is_active'),
+            'force_delete' => __('form.job.force_delete'),
+            'reason' => __('form.job.deletion_reason'),
         ];
     }
 
@@ -92,9 +83,7 @@ class DeleteJobRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => strtolower(trim($this->email ?? '')),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'force_delete' => $this->boolean('force_delete'),
         ]);
     }
 
@@ -105,40 +94,46 @@ class DeleteJobRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
-            }
+            $job = $this->route('job');
             
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
+            if (!$job) {
+                $validator->errors()->add('job', __('validation.job.not_found'));
+                return;
+            }
+
+            // Check if job has active applications
+            $activeApplicationsCount = $job->jobApplications()
+                                          ->whereIn('status', [
+                                              \App\Models\JobApplication::STATUS_APPLIED,
+                                              \App\Models\JobApplication::STATUS_IN_PROGRESS,
+                                              \App\Models\JobApplication::STATUS_COMPLETED
+                                          ])
+                                          ->count();
+
+            if ($activeApplicationsCount > 0 && !$this->force_delete) {
+                $validator->errors()->add('general', __('validation.job.has_active_applications', [
+                    'count' => $activeApplicationsCount
+                ]));
+            }
+
+            // Check if job is featured and still has time left
+            if ($job->is_featured && !$this->force_delete) {
+                $featuredRecord = $job->activeFeatured;
+                if ($featuredRecord && $featuredRecord->end_date > now()) {
+                    $validator->errors()->add('general', __('validation.job.featured_time_remaining'));
+                }
             }
         });
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Get error messages for failed authorization.
      */
-    private function hasContext7ValidationConflicts(): bool
+    protected function failedAuthorization(): void
     {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Context7 Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
+        throw new \Illuminate\Auth\Access\AuthorizationException(
+            __('validation.job.unauthorized_deletion')
+        );
     }
 
     /**

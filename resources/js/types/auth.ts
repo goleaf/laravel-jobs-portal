@@ -1,5 +1,5 @@
 /**
- * Context7 Authentication Types
+ * Universal Authentication Types
  * TypeScript definitions for authentication system
  */
 

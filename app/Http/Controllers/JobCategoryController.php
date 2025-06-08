@@ -31,9 +31,29 @@ class JobCategoryController extends AppBaseController
     public function index(): View
     {
         $featured = JobCategory::FEATURED;
-        $jobCategories = JobCategory::all();
+        
+        // Use new scopes for better performance - only get active categories
+        $jobCategories = JobCategory::active()->alphabetical()->get();
 
         return view('job_categories.index', compact('featured', 'jobCategories'));
+    }
+
+    /**
+     * Get category statistics using new scopes
+     */
+    public function getCategoryStats(): JsonResponse
+    {
+        $stats = [
+            'total_categories' => JobCategory::count(),
+            'active_categories' => JobCategory::active()->count(),
+            'featured_categories' => JobCategory::featured()->count(),
+            'categories_with_jobs' => JobCategory::withJobs()->count(),
+            'categories_with_active_jobs' => JobCategory::withActiveJobs()->count(),
+            'popular_categories' => JobCategory::popular(5)->get(['id', 'name']),
+            'recent_categories' => JobCategory::recent(30)->count(),
+        ];
+
+        return $this->sendResponse($stats, 'Category statistics retrieved successfully.');
     }
 
     /**

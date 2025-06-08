@@ -32,7 +32,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Testimonial extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, HasFactory;
 
     public const PATH = 'testimonials';
 
@@ -54,17 +54,6 @@ class Testimonial extends Model implements HasMedia
     ];
 
     /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'customer_name' => 'string',
-        'description' => 'string',
-    ];
-
-    /**
      * @var array
      */
     protected $appends = ['customer_image_url'];
@@ -81,5 +70,95 @@ class Testimonial extends Model implements HasMedia
         }
 
         return asset('assets/img/infyom-logo.png');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'rating' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for active testimonials.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for featured testimonials.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for testimonials by rating.
+     */
+    public function scopeByRating($query, int $rating)
+    {
+        return $query->where('rating', $rating);
+    }
+
+    /**
+     * Scope for high rated testimonials (4+ stars).
+     */
+    public function scopeHighRated($query)
+    {
+        return $query->where('rating', '>=', 4);
+    }
+
+    /**
+     * Scope for searching testimonials.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('customer_name', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent testimonials.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for testimonials with images.
+     */
+    public function scopeWithImage($query)
+    {
+        return $query->whereHas('media');
+    }
+
+    /**
+     * Scope for random testimonials.
+     */
+    public function scopeRandom($query, int $limit = 5)
+    {
+        return $query->inRandomOrder()->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetically ordered testimonials.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('customer_name', 'asc');
     }
 }

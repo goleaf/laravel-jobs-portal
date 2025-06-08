@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCareerLevelRequest;
+use App\Http\Requests\UpdateCareerLevelRequest;
 use App\Models\Candidate;
 use App\Models\CareerLevel;
 use App\Models\Job;
@@ -12,6 +14,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class CareerLevelController extends AppBaseController
 {
     /** @var CareerLevelRepository */
@@ -35,6 +38,9 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Store a newly created CareerLevel in storage.
+     *
+     * @param CreateCareerLevelRequest $request
+     * @return JsonResponse
      */
     public function store(CreateCareerLevelRequest $request): JsonResponse
     {
@@ -46,6 +52,9 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Show the form for editing the specified CareerLevel.
+     *
+     * @param CareerLevel $careerLevel
+     * @return JsonResponse
      */
     public function edit(CareerLevel $careerLevel): JsonResponse
     {
@@ -54,8 +63,12 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Update the specified CareerLevel in storage.
+     *
+     * @param UpdateCareerLevelRequest $request
+     * @param CareerLevel $careerLevel
+     * @return JsonResponse
      */
-    public function update(UpdateCareerLevelUpdateCareerLevelRequest $request, CareerLevel $careerLevel): JsonResponse
+    public function update(UpdateCareerLevelRequest $request, CareerLevel $careerLevel): JsonResponse
     {
         $input = $request->all();
         $this->careerLevelRepository->update($input, $careerLevel->id);
@@ -66,6 +79,8 @@ class CareerLevelController extends AppBaseController
     /**
      * Remove the specified CareerLevel from storage.
      *
+     * @param CareerLevel $careerLevel
+     * @return JsonResponse
      *
      * @throws Exception
      */

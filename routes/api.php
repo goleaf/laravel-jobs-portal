@@ -15,7 +15,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+
+/*
+|--------------------------------------------------------------------------
+| Login Information API Routes (for Vue components)
+|--------------------------------------------------------------------------
+*/
+Route::prefix("auth")->group(function () {
+    Route::get("/login-info", [\App\Http\Controllers\Api\AuthController::class, "getLoginInfo"])->name("api.auth.login-info");
+    Route::post("/verify-credentials", [\App\Http\Controllers\Api\AuthController::class, "verifyCredentials"])->name("api.auth.verify-credentials");
+});
     return $request->user();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Login Information API Routes (for Vue components)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('auth')->group(function () {
+    Route::get('/login-info', [\App\Http\Controllers\Api\AuthController::class, 'getLoginInfo'])->name('api.auth.login-info');
+    Route::post('/verify-credentials', [\App\Http\Controllers\Api\AuthController::class, 'verifyCredentials'])->name('api.auth.verify-credentials');
 });
 
 /*

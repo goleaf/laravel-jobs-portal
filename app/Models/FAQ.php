@@ -47,13 +47,91 @@ class FAQ extends Model
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'title' => 'string',
-        'description' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for active FAQs.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for featured FAQs.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for searching FAQs by title or description.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recently created FAQs.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular FAQs (by views if column exists).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetically ordered FAQs.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('title', 'asc');
+    }
+
+    /**
+     * Scope for by category if exists.
+     */
+    public function scopeByCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope for ordering by creation date.
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for oldest FAQs.
+     */
+    public function scopeOldest($query)
+    {
+        return $query->orderBy('created_at', 'asc');
+    }
 }

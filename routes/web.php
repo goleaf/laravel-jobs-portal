@@ -12,10 +12,7 @@ use Illuminate\Support\Facades\Hash;
 | All routes now serve Vue3 SPA - Blade files removed
 */
 
-// SPA Route - catch all routes and serve Vue3 app
-Route::get('/{any}', function () {
-    return view('app');
-})->where('any', '.*');
+// SPA Route - catch all routes and serve Vue3 app (MOVED TO BOTTOM)
 Route::get('/test', function () {
     return response()->json([
         'status' => 'ok',
@@ -1761,3 +1758,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('import/{locale}', [App\Http\Controllers\TranslationManagerController::class, 'import'])->name('import');
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| SPA CATCH-ALL ROUTE - MUST BE LAST
+|--------------------------------------------------------------------------
+| This route catches all unmatched routes and serves the Vue.js SPA
+| CRITICAL: This MUST be the last route to avoid interfering with API routes
+*/
+
+// SPA Route - catch all routes and serve Vue3 app (MOVED TO BOTTOM TO AVOID API CONFLICTS)
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
+// SPA Route - catch all routes and serve Vue3 app (MOVED TO BOTTOM TO AVOID API CONFLICTS)
+Route::get('/{any}', function () { return view('app'); })->where('any', '.*');

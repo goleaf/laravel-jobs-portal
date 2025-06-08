@@ -63,6 +63,27 @@ class Notification extends Model
         'read_at' => 'datetime',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'type' => 'integer',
+            'notification_for' => 'integer',
+            'user_id' => 'integer',
+            'is_read' => 'boolean',
+            'is_active' => 'boolean',
+            'meta' => 'array',
+            'read_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     const CANDIDATE = 1;
 
     const EMPLOYER = 2;
@@ -119,5 +140,127 @@ class Notification extends Model
         if (! empty($this->type)) {
             return self::notificationType[$this->type];
         }
+    }
+
+    /**
+     * Get the user that owns the notification.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Scope for unread notifications.
+     */
+    public function scopeUnread($query)
+    {
+        return $query->whereNull('read_at');
+    }
+
+    /**
+     * Scope for read notifications.
+     */
+    public function scopeRead($query)
+    {
+        return $query->whereNotNull('read_at');
+    }
+
+    /**
+     * Scope for active notifications.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for notifications by type.
+     */
+    public function scopeByType($query, int $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    /**
+     * Scope for notifications for specific audience.
+     */
+    public function scopeForAudience($query, int $audience)
+    {
+        return $query->where('notification_for', $audience);
+    }
+
+    /**
+     * Scope for candidate notifications.
+     */
+    public function scopeForCandidates($query)
+    {
+        return $query->where('notification_for', self::CANDIDATE);
+    }
+
+    /**
+     * Scope for employer notifications.
+     */
+    public function scopeForEmployers($query)
+    {
+        return $query->where('notification_for', self::EMPLOYER);
+    }
+
+    /**
+     * Scope for admin notifications.
+     */
+    public function scopeForAdmins($query)
+    {
+        return $query->where('notification_for', self::ADMIN);
+    }
+
+    /**
+     * Scope for recent notifications.
+     */
+    public function scopeRecent($query, int $days = 7)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old notifications.
+     */
+    public function scopeOld($query, int $days = 30)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for searching notifications.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('text', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for job application notifications.
+     */
+    public function scopeJobApplications($query)
+    {
+        return $query->whereIn('type', [
+            self::JOB_APPLICATION_SUBMITTED,
+            self::CANDIDATE_SELECTED_FOR_JOB,
+            self::CANDIDATE_REJECTED_FOR_JOB,
+            self::CANDIDATE_SHORTLISTED_FOR_JOB
+        ]);
+    }
+
+    /**
+     * Scope for system notifications.
+     */
+    public function scopeSystem($query)
+    {
+        return $query->whereIn('type', [
+            self::NEW_EMPLOYER_REGISTERED,
+            self::NEW_CANDIDATE_REGISTERED,
+            self::EMPLOYER_PURCHASE_PLAN
+        ]);
     }
 }

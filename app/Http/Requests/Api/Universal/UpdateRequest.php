@@ -13,7 +13,24 @@ class UpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Authorization handled by middleware
+        if (!auth()->check()) {
+            return false;
+        }
+
+        // Admin can update any resource
+        if (auth()->user()->hasRole('admin')) {
+            return true;
+        }
+
+        // Try to get the resource from the route
+        $resource = $this->getRouteResource();
+        
+        if (!$resource) {
+            return false;
+        }
+
+        // Check if user owns the resource
+        return $this->userOwnsResource($resource);
     }
 
     /**
@@ -22,55 +39,87 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|max:255',
-            'description' => 'sometimes|string|max:1000',
-            'status' => 'sometimes|boolean',
+            'name' => 'sometimes|required|string|max:255',
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|string|max:2000',
+            'status' => 'sometimes|string|in:active,inactive,draft,published,pending,closed,expired',
             'is_active' => 'sometimes|boolean',
+            'is_featured' => 'sometimes|boolean',
+            'is_verified' => 'sometimes|boolean',
+            'sort_order' => 'sometimes|integer|min:0',
+            'metadata' => 'sometimes|array',
+            'tags' => 'sometimes|array',
+            'tags.*' => 'string|max:50',
+            'notes' => 'sometimes|string|max:1000',
+            'external_id' => 'sometimes|string|max:100',
+            'reference' => 'sometimes|string|max:100',
+            'version' => 'sometimes|string|max:20',
+            'last_modified_by' => 'sometimes|integer|exists:users,id',
         ];
     }
 
     /**
-     * Get custom validation messages.
+     * Get custom messages for validator errors.
      */
     public function messages(): array
     {
         return [
-            'name.string' => 'The name must be a valid string.',
-            'name.max' => 'The name must not exceed 255 characters.',
-            'email.email' => 'The email must be a valid email address.',
-            'email.max' => 'The email must not exceed 255 characters.',
-            'description.string' => 'The description must be a valid string.',
-            'description.max' => 'The description must not exceed 1000 characters.',
-            'status.boolean' => 'The status must be true or false.',
-            'is_active.boolean' => 'The is_active field must be true or false.',
+            'name.required' => 'Name is required when provided.',
+            'name.max' => 'Name cannot exceed 255 characters.',
+            'title.required' => 'Title is required when provided.',
+            'title.max' => 'Title cannot exceed 255 characters.',
+            'description.max' => 'Description cannot exceed 2000 characters.',
+            'status.in' => 'Status must be one of: active, inactive, draft, published, pending, closed, expired.',
+            'is_active.boolean' => 'Active status must be true or false.',
+            'is_featured.boolean' => 'Featured status must be true or false.',
+            'is_verified.boolean' => 'Verified status must be true or false.',
+            'sort_order.integer' => 'Sort order must be a valid integer.',
+            'sort_order.min' => 'Sort order cannot be negative.',
+            'metadata.array' => 'Metadata must be provided as an array.',
+            'tags.array' => 'Tags must be provided as an array.',
+            'tags.*.max' => 'Each tag cannot exceed 50 characters.',
+            'notes.max' => 'Notes cannot exceed 1000 characters.',
+            'external_id.max' => 'External ID cannot exceed 100 characters.',
+            'reference.max' => 'Reference cannot exceed 100 characters.',
+            'version.max' => 'Version cannot exceed 20 characters.',
+            'last_modified_by.exists' => 'The specified user does not exist.',
         ];
     }
 
     /**
-     * Get custom attribute names for validation errors.
+     * Get custom attributes for validator errors.
      */
     public function attributes(): array
     {
         return [
             'name' => 'name',
-            'email' => 'email address',
+            'title' => 'title',
             'description' => 'description',
             'status' => 'status',
             'is_active' => 'active status',
+            'is_featured' => 'featured status',
+            'is_verified' => 'verified status',
+            'sort_order' => 'sort order',
+            'metadata' => 'metadata',
+            'tags' => 'tags',
+            'notes' => 'notes',
+            'external_id' => 'external ID',
+            'reference' => 'reference',
+            'version' => 'version',
+            'last_modified_by' => 'last modified by',
         ];
     }
 
     /**
-     * Handle a failed validation attempt for API requests.
+     * Handle a failed validation attempt.
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
             response()->json([
                 'success' => false,
-                'message' => 'The given data was invalid.',
-                'errors' => $validator->errors(),
+                'message' => 'Resource update validation failed',
+                'errors' => $validator->errors()
             ], 422)
         );
     }
@@ -80,24 +129,126 @@ class UpdateRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Convert string booleans to actual booleans
-        if ($this->has('status')) {
+        // Update slug if name or title is being updated
+        if (($this->has('name') || $this->has('title')) && !$this->has('slug')) {
             $this->merge([
-                'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                'slug' => \Str::slug($this->name ?: $this->title)
             ]);
         }
 
-        if ($this->has('is_active')) {
+        // Convert boolean strings
+        foreach (['is_active', 'is_featured', 'is_verified'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                ]);
+            }
+        }
+
+        // Clean and format tags
+        if ($this->has('tags') && is_array($this->tags)) {
             $this->merge([
-                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                'tags' => array_filter(array_map('trim', $this->tags))
             ]);
         }
 
-        // Ensure email is lowercase if provided
-        if ($this->has('email')) {
-            $this->merge([
-                'email' => strtolower(trim($this->email)),
-            ]);
+        // Set last modified by current user
+        $this->merge([
+            'last_modified_by' => auth()->id()
+        ]);
+
+        // Clean external_id and reference
+        foreach (['external_id', 'reference', 'version'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => trim($this->$field)
+                ]);
+            }
         }
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate metadata structure if provided
+            if ($this->has('metadata') && is_array($this->metadata)) {
+                $maxMetadataSize = 10; // Maximum number of metadata fields
+                if (count($this->metadata) > $maxMetadataSize) {
+                    $validator->errors()->add('metadata', "Metadata cannot have more than {$maxMetadataSize} fields.");
+                }
+
+                // Validate metadata values
+                foreach ($this->metadata as $key => $value) {
+                    if (!is_string($key) || strlen($key) > 50) {
+                        $validator->errors()->add('metadata', 'Metadata keys must be strings with maximum 50 characters.');
+                    }
+                    if (!is_scalar($value) && !is_null($value)) {
+                        $validator->errors()->add('metadata', 'Metadata values must be scalar or null.');
+                    }
+                }
+            }
+
+            // Validate tags if provided
+            if ($this->has('tags') && is_array($this->tags)) {
+                $maxTags = 20; // Maximum number of tags
+                if (count($this->tags) > $maxTags) {
+                    $validator->errors()->add('tags', "Cannot have more than {$maxTags} tags.");
+                }
+            }
+        });
+    }
+
+    /**
+     * Get the resource from the route
+     */
+    private function getRouteResource()
+    {
+        // Try common route parameter names
+        $paramNames = ['candidate', 'company', 'job', 'user', 'skill', 'application', 'id'];
+        
+        foreach ($paramNames as $param) {
+            if ($this->route($param)) {
+                return $this->route($param);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if the authenticated user owns the resource
+     */
+    private function userOwnsResource($resource): bool
+    {
+        $userId = auth()->id();
+
+        // Check various ownership patterns
+        if (isset($resource->user_id)) {
+            return $resource->user_id === $userId;
+        }
+
+        if (isset($resource->created_by)) {
+            return $resource->created_by === $userId;
+        }
+
+        if (isset($resource->owner_id)) {
+            return $resource->owner_id === $userId;
+        }
+
+        // For User model
+        if ($resource instanceof \App\Models\User) {
+            return $resource->id === $userId;
+        }
+
+        // For Company model (through user relationship)
+        if (isset($resource->company) && isset($resource->company->user_id)) {
+            return $resource->company->user_id === $userId;
+        }
+
+        // Default to false if no ownership pattern matches
+        return false;
     }
 } 

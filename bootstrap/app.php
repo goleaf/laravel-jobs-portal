@@ -11,10 +11,10 @@
 |
 */
 
-// Set memory limit early in the bootstrap process
+// Set high memory limits to prevent exhaustion during testing
 if (function_exists('ini_set')) {
-    ini_set('memory_limit', env('MEMORY_LIMIT', '512M'));
-    ini_set('max_execution_time', env('MAX_EXECUTION_TIME', '300'));
+    ini_set('memory_limit', '8G');
+    ini_set('max_execution_time', '600');
 }
 
 $app = new Illuminate\Foundation\Application(

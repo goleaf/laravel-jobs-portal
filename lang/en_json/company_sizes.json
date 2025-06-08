@@ -1,0 +1,30 @@
+{
+    "company_sizes": {
+        "display_format": ":size employees",
+        "employee_range": ":size employee range",
+        "categories": {
+            "small": "Small Company",
+            "medium": "Medium Company", 
+            "large": "Large Company",
+            "other": "Other Size"
+        },
+        "collection": {
+            "total_message": "Total :count company sizes available",
+            "active_message": ":count active company sizes",
+            "empty_message": "No company sizes found"
+        },
+        "statistics": {
+            "most_popular": "Most popular: :size (:count companies)",
+            "least_popular": "Least popular: :size (:count companies)",
+            "newest": "Newest: :size (added :date)",
+            "oldest": "Oldest: :size (added :date)"
+        },
+        "messages": {
+            "created": "Company size created successfully",
+            "updated": "Company size updated successfully",
+            "deleted": "Company size deleted successfully",
+            "not_found": "Company size not found",
+            "cannot_delete": "Cannot delete company size with associated companies"
+        }
+    }
+} 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateSalaryCurrencyRequest;
+use App\Http\Requests\UpdateSalaryCurrencyRequest;
 use App\Models\Candidate;
 use App\Models\Job;
 use App\Models\Plan;
@@ -10,6 +12,7 @@ use App\Repositories\SalaryCurrencyRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+
 class SalaryCurrencyController extends AppBaseController
 {
     /** @var SalaryCurrencyRepository */
@@ -21,6 +24,8 @@ class SalaryCurrencyController extends AppBaseController
     }
 
     /**
+     * Display a listing of the resource.
+     *
      * @return Factory|View
      */
     public function index(): View
@@ -28,6 +33,12 @@ class SalaryCurrencyController extends AppBaseController
         return view('salary_currencies.index');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param CreateSalaryCurrencyRequest $request
+     * @return JsonResponse
+     */
     public function store(CreateSalaryCurrencyRequest $request): JsonResponse
     {
         $input = $request->all();
@@ -36,12 +47,25 @@ class SalaryCurrencyController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.salary_currency_store'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param SalaryCurrency $currency
+     * @return JsonResponse
+     */
     public function edit(SalaryCurrency $currency): JsonResponse
     {
         return $this->sendResponse($currency, __('messages.flash.salary_currency_edit'));
     }
 
-    public function update(updateSalaryCurrencyUpdateSalaryCurrencyRequest $request, $currencyId): JsonResponse
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param UpdateSalaryCurrencyRequest $request
+     * @param int $currencyId
+     * @return JsonResponse
+     */
+    public function update(UpdateSalaryCurrencyRequest $request, $currencyId): JsonResponse
     {
         $input = $request->all();
         $this->salaryCurrencyRepository->update($input, $currencyId);
@@ -49,6 +73,12 @@ class SalaryCurrencyController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.salary_currency_update'));
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param SalaryCurrency $currency
+     * @return JsonResponse
+     */
     public function destroy(SalaryCurrency $currency): JsonResponse
     {
         $model = [

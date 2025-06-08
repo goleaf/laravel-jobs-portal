@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Models\Job;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
@@ -18,17 +19,7 @@ class CreateJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
-        );
+        return $this->user()->can('create', Job::class);
     }
 
     /**
@@ -38,12 +29,33 @@ class CreateJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Add specific validation rules based on method
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:1000'],
-            'is_active' => ['sometimes', 'boolean'],
-            
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|min:50',
+            'company_id' => 'required|integer|exists:companies,id',
+            'job_category_id' => 'required|integer|exists:job_categories,id',
+            'job_type_id' => 'required|integer|exists:job_types,id',
+            'job_shift_id' => 'nullable|integer|exists:job_shifts,id',
+            'career_level_id' => 'nullable|integer|exists:career_levels,id',
+            'functional_area_id' => 'nullable|integer|exists:functional_areas,id',
+            'salary_from' => 'nullable|numeric|min:0|max:999999999.99',
+            'salary_to' => 'nullable|numeric|min:0|max:999999999.99|gte:salary_from',
+            'salary_currency_id' => 'nullable|integer|exists:salary_currencies,id',
+            'salary_period_id' => 'nullable|integer|exists:salary_periods,id',
+            'country_id' => 'required|integer|exists:countries,id',
+            'state_id' => 'nullable|integer|exists:states,id',
+            'city_id' => 'nullable|integer|exists:cities,id',
+            'is_freelance' => 'sometimes|boolean',
+            'is_suspended' => 'sometimes|boolean',
+            'is_featured' => 'sometimes|boolean',
+            'hide_salary' => 'sometimes|boolean',
+            'experience' => 'nullable|string|max:255',
+            'degree_level_id' => 'nullable|integer|exists:required_degree_levels,id',
+            'position' => 'nullable|integer|min:1|max:999',
+            'expiry_date' => 'nullable|date|after:today',
+            'skills' => 'nullable|array',
+            'skills.*' => 'integer|exists:skills,id',
+            'job_tags' => 'nullable|array',
+            'job_tags.*' => 'string|max:50',
             // Security validation
             'g-recaptcha-response' => [
                 'nullable',
@@ -63,11 +75,35 @@ class CreateJobRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.name_required'),
-            'name.max' => __('validation.name_max'),
-            'email.email' => __('validation.email_invalid'),
-            'email.max' => __('validation.email_max'),
-            'description.max' => __('validation.description_max'),
+            'title.required' => __('validation.job.title.required'),
+            'title.string' => __('validation.job.title.string'),
+            'title.max' => __('validation.job.title.max'),
+            'description.required' => __('validation.job.description.required'),
+            'description.string' => __('validation.job.description.string'),
+            'description.min' => __('validation.job.description.min'),
+            'company_id.required' => __('validation.job.company_id.required'),
+            'company_id.exists' => __('validation.job.company_id.exists'),
+            'job_category_id.required' => __('validation.job.job_category_id.required'),
+            'job_category_id.exists' => __('validation.job.job_category_id.exists'),
+            'job_type_id.required' => __('validation.job.job_type_id.required'),
+            'job_type_id.exists' => __('validation.job.job_type_id.exists'),
+            'salary_from.numeric' => __('validation.job.salary_from.numeric'),
+            'salary_from.min' => __('validation.job.salary_from.min'),
+            'salary_from.max' => __('validation.job.salary_from.max'),
+            'salary_to.numeric' => __('validation.job.salary_to.numeric'),
+            'salary_to.gte' => __('validation.job.salary_to.gte'),
+            'country_id.required' => __('validation.job.country_id.required'),
+            'country_id.exists' => __('validation.job.country_id.exists'),
+            'expiry_date.date' => __('validation.job.expiry_date.date'),
+            'expiry_date.after' => __('validation.job.expiry_date.after'),
+            'position.integer' => __('validation.job.position.integer'),
+            'position.min' => __('validation.job.position.min'),
+            'position.max' => __('validation.job.position.max'),
+            'skills.array' => __('validation.job.skills.array'),
+            'skills.*.exists' => __('validation.job.skills.exists'),
+            'job_tags.array' => __('validation.job.job_tags.array'),
+            'job_tags.*.string' => __('validation.job.job_tags.string'),
+            'job_tags.*.max' => __('validation.job.job_tags.max'),
         ];
     }
 
@@ -78,10 +114,27 @@ class CreateJobRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => __('validation.attributes.name'),
-            'email' => __('validation.attributes.email'),
-            'description' => __('validation.attributes.description'),
-            'is_active' => __('validation.attributes.is_active'),
+            'title' => __('attributes.job.title'),
+            'description' => __('attributes.job.description'),
+            'company_id' => __('attributes.job.company'),
+            'job_category_id' => __('attributes.job.category'),
+            'job_type_id' => __('attributes.job.type'),
+            'job_shift_id' => __('attributes.job.shift'),
+            'career_level_id' => __('attributes.job.career_level'),
+            'functional_area_id' => __('attributes.job.functional_area'),
+            'salary_from' => __('attributes.job.salary_from'),
+            'salary_to' => __('attributes.job.salary_to'),
+            'salary_currency_id' => __('attributes.job.salary_currency'),
+            'salary_period_id' => __('attributes.job.salary_period'),
+            'country_id' => __('attributes.job.country'),
+            'state_id' => __('attributes.job.state'),
+            'city_id' => __('attributes.job.city'),
+            'experience' => __('attributes.job.experience'),
+            'degree_level_id' => __('attributes.job.degree_level'),
+            'position' => __('attributes.job.position'),
+            'expiry_date' => __('attributes.job.expiry_date'),
+            'skills' => __('attributes.job.skills'),
+            'job_tags' => __('attributes.job.tags'),
         ];
     }
 
@@ -92,10 +145,20 @@ class CreateJobRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => strtolower(trim($this->email ?? '')),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'is_freelance' => $this->boolean('is_freelance', false),
+            'is_suspended' => $this->boolean('is_suspended', false),
+            'is_featured' => $this->boolean('is_featured', false),
+            'hide_salary' => $this->boolean('hide_salary', false),
+            'position' => $this->input('position', 1),
         ]);
+
+        // Clean salary values
+        if ($this->has('salary_from')) {
+            $this->merge(['salary_from' => str_replace(',', '', $this->input('salary_from'))]);
+        }
+        if ($this->has('salary_to')) {
+            $this->merge(['salary_to' => str_replace(',', '', $this->input('salary_to'))]);
+        }
     }
 
     /**
@@ -105,40 +168,29 @@ class CreateJobRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
+            // Check if user can create jobs for this company
+            if ($this->input('company_id')) {
+                $company = \App\Models\Company::find($this->input('company_id'));
+                if ($company && !$this->user()->can('createJobFor', $company)) {
+                    $validator->errors()->add('company_id', __('validation.job.company_unauthorized'));
+                }
             }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
+
+            // Validate salary range logic
+            if ($this->input('salary_from') && $this->input('salary_to')) {
+                if ($this->input('salary_from') > $this->input('salary_to')) {
+                    $validator->errors()->add('salary_to', __('validation.job.salary_range_invalid'));
+                }
+            }
+
+            // Validate expiry date is reasonable (not more than 1 year)
+            if ($this->input('expiry_date')) {
+                $expiryDate = \Carbon\Carbon::parse($this->input('expiry_date'));
+                if ($expiryDate->gt(now()->addYear())) {
+                    $validator->errors()->add('expiry_date', __('validation.job.expiry_date_too_far'));
+                }
             }
         });
-    }
-
-    /**
-     * Context7 Pattern: Enhanced business logic validation
-     */
-    private function hasContext7ValidationConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Context7 Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     /**
@@ -157,5 +209,15 @@ class CreateJobRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Get error messages for failed authorization.
+     */
+    protected function failedAuthorization(): void
+    {
+        throw new \Illuminate\Auth\Access\AuthorizationException(
+            __('validation.job.unauthorized_creation')
+        );
     }
 }

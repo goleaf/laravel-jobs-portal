@@ -20,7 +20,7 @@ class UpdateCompanySizeRequest extends FormRequest
      */
     public function rules(): array
     {
-        $companySizeId = $this->route('companySize')->id ?? $this->route('companySize');
+        $companySizeId = $this->route('companySize')->id ?? $this->route('company_size');
         
         return [
             'size' => [
@@ -29,6 +29,14 @@ class UpdateCompanySizeRequest extends FormRequest
                 'max:255',
                 Rule::unique('company_sizes', 'size')->ignore($companySizeId),
                 'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/'
+            ],
+            'is_active' => [
+                'sometimes',
+                'boolean'
+            ],
+            'is_default' => [
+                'sometimes',
+                'boolean'
             ],
         ];
     }
@@ -39,11 +47,13 @@ class UpdateCompanySizeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'size.required' => __('Company size is required'),
-            'size.string' => __('Company size must be a valid text'),
-            'size.max' => __('Company size must not exceed 255 characters'),
-            'size.unique' => __('This company size already exists'),
-            'size.regex' => __('Company size contains invalid characters'),
+            'size.required' => __('validation.required', ['attribute' => __('Company Size')]),
+            'size.string' => __('validation.string', ['attribute' => __('Company Size')]),
+            'size.max' => __('validation.max.string', ['attribute' => __('Company Size'), 'max' => 255]),
+            'size.unique' => __('validation.unique', ['attribute' => __('Company Size')]),
+            'size.regex' => __('validation.regex', ['attribute' => __('Company Size')]),
+            'is_active.boolean' => __('validation.boolean', ['attribute' => __('Active Status')]),
+            'is_default.boolean' => __('validation.boolean', ['attribute' => __('Default Status')]),
         ];
     }
 
@@ -54,7 +64,35 @@ class UpdateCompanySizeRequest extends FormRequest
     {
         return [
             'size' => __('Company Size'),
+            'is_active' => __('Active Status'),
+            'is_default' => __('Default Status'),
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Convert string boolean values to actual booleans
+        if ($this->has('is_active')) {
+            $this->merge([
+                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
+        }
+
+        if ($this->has('is_default')) {
+            $this->merge([
+                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
+        }
+
+        // Trim and clean the size field
+        if ($this->has('size')) {
+            $this->merge([
+                'size' => trim($this->size)
+            ]);
+        }
     }
 
     /**
@@ -66,12 +104,25 @@ class UpdateCompanySizeRequest extends FormRequest
             throw new \Illuminate\Http\Exceptions\HttpResponseException(
                 response()->json([
                     'success' => false,
-                    'message' => __('Validation failed'),
+                    'message' => __('validation.failed'),
                     'errors' => $validator->errors()
                 ], 422)
             );
         }
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // Additional business logic validation
+            if ($this->is_default && $this->is_active === false) {
+                $validator->errors()->add('is_active', __('Default company sizes must be active'));
+            }
+        });
     }
 }

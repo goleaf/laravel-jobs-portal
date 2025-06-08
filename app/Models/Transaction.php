@@ -79,19 +79,25 @@ class Transaction extends Model
     const REJECTED = 2;
 
     /**
-     * @var array
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public $casts = [
-        'user_id' => 'integer',
-        'owner_id' => 'integer',
-        'amount' => 'float',
-        'invoice_id' => 'string',
-        'owner_type' => 'string',
-        'is_approved' => 'integer',
-        'status' => 'integer',
-        'approved_id' => 'integer',
-        'plan_currency_id' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'owner_id' => 'integer',
+            'amount' => 'decimal:2',
+            'is_approved' => 'boolean',
+            'status' => 'integer',
+            'approved_id' => 'integer',
+            'plan_currency_id' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     protected $appends = ['type_name'];
 
@@ -135,5 +141,126 @@ class Transaction extends Model
     public function salaryCurrency(): BelongsTo
     {
         return $this->belongsTo(SalaryCurrency::class, 'plan_currency_id', 'id');
+    }
+
+    /**
+     * Scope for approved transactions.
+     */
+    public function scopeApproved($query)
+    {
+        return $query->where('is_approved', true);
+    }
+
+    /**
+     * Scope for pending transactions.
+     */
+    public function scopePending($query)
+    {
+        return $query->where('is_approved', false);
+    }
+
+    /**
+     * Scope for transactions by status.
+     */
+    public function scopeByStatus($query, int $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    /**
+     * Scope for transactions by user.
+     */
+    public function scopeByUser($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope for transactions by amount range.
+     */
+    public function scopeByAmountRange($query, float $min, float $max)
+    {
+        return $query->whereBetween('amount', [$min, $max]);
+    }
+
+    /**
+     * Scope for recent transactions.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for today's transactions.
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    /**
+     * Scope for this week's transactions.
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    }
+
+    /**
+     * Scope for this month's transactions.
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Scope for featured company transactions.
+     */
+    public function scopeFeaturedCompany($query)
+    {
+        return $query->where('owner_type', Company::class);
+    }
+
+    /**
+     * Scope for featured job transactions.
+     */
+    public function scopeFeaturedJob($query)
+    {
+        return $query->where('owner_type', Job::class);
+    }
+
+    /**
+     * Scope for subscription transactions.
+     */
+    public function scopeSubscription($query)
+    {
+        return $query->where('owner_type', Subscription::class);
+    }
+
+    /**
+     * Scope for high value transactions.
+     */
+    public function scopeHighValue($query, float $threshold = 1000)
+    {
+        return $query->where('amount', '>=', $threshold);
+    }
+
+    /**
+     * Scope for transactions by payment method.
+     */
+    public function scopeByPaymentMethod($query, int $method)
+    {
+        return $query->where('status', $method);
+    }
+
+    /**
+     * Scope for revenue summary.
+     */
+    public function scopeRevenue($query)
+    {
+        return $query->approved()->sum('amount');
     }
 }

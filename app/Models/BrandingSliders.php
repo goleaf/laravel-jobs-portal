@@ -81,13 +81,107 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'title' => 'string',
-        'is_active' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for active branding sliders.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive branding sliders.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for featured branding sliders.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for searching branding sliders by title.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent branding sliders.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old branding sliders.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for alphabetically ordered branding sliders.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('title', 'asc');
+    }
+
+    /**
+     * Scope for ordered by sort order.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc');
+    }
+
+    /**
+     * Scope for branding sliders with media.
+     */
+    public function scopeWithMedia($query)
+    {
+        return $query->whereHas('media');
+    }
+
+    /**
+     * Scope for random branding sliders.
+     */
+    public function scopeRandom($query, int $limit = 5)
+    {
+        return $query->inRandomOrder()->limit($limit);
+    }
+
+    /**
+     * Scope for popular branding sliders.
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->limit($limit);
+    }
 }

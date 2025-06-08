@@ -3,8 +3,16 @@
 namespace App\Http\Controllers\Api\Universal;
 
 use App\Http\Controllers\UniversalBaseController;
+use App\Http\Requests\Api\Universal\LoginRequest;
+use App\Http\Requests\Api\Universal\UserRequest;
+use App\Http\Requests\Api\Universal\LogoutRequest;
+use App\Http\Requests\Api\Universal\LogoutAllRequest;
+use App\Http\Requests\Api\Universal\TokensRequest;
+use App\Http\Resources\Universal\LoginResource;
+use App\Http\Resources\Universal\AuthUserResource;
+use App\Http\Resources\Universal\LogoutResource;
+use App\Http\Resources\Universal\TokenCollection;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -21,12 +29,6 @@ class TokenController extends UniversalBaseController
     public function login(LoginRequest $request): JsonResponse
     {
         try {
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-                'device_name' => 'required|string|max:255',
-            ]);
-
             $user = User::where('email', $request->email)->first();
 
             if (!$user || !Hash::check($request->password, $user->password)) {
@@ -44,7 +46,7 @@ class TokenController extends UniversalBaseController
                 'profile:update'
             ]);
 
-            return $this->jsonResponse([
+            $data = [
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -52,7 +54,11 @@ class TokenController extends UniversalBaseController
                 ],
                 'token' => $token->plainTextToken,
                 'abilities' => $token->accessToken->abilities,
-            ], 'Authentication successful');
+                'device_name' => $request->device_name,
+            ];
+
+            return response()->json((new LoginResource($data))->toArray($request))
+                ->setStatusCode(200);
 
         } catch (ValidationException $e) {
             return $this->errorResponse('Invalid credentials', 401, $e->errors());
@@ -66,22 +72,13 @@ class TokenController extends UniversalBaseController
     /**
      * Universal Pattern: Get authenticated user details
      */
-    public function user(StoreRequest $request): JsonResponse
+    public function user(UserRequest $request): JsonResponse
     {
         try {
             $user = $request->user();
             
-            return $this->jsonResponse([
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'email_verified_at' => $user->email_verified_at,
-                    'created_at' => $user->created_at,
-                ],
-                'token_abilities' => $user->currentAccessToken()?->abilities ?? [],
-                'token_name' => $user->currentAccessToken()?->name,
-            ], 'User details retrieved');
+            return response()->json((new AuthUserResource($user))->toArray($request))
+                ->setStatusCode(200);
 
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve user', 500, [], [
@@ -93,13 +90,23 @@ class TokenController extends UniversalBaseController
     /**
      * Universal Pattern: Logout and revoke token
      */
-    public function logout(StoreRequest $request): JsonResponse
+    public function logout(LogoutRequest $request): JsonResponse
     {
         try {
+            // Get current token info before deletion
+            $currentToken = $request->user()->currentAccessToken();
+            $remainingTokens = $request->user()->tokens()->count() - 1;
+            
             // Revoke current token
-            $request->user()->currentAccessToken()->delete();
+            $currentToken->delete();
 
-            return $this->jsonResponse([], 'Logged out successfully');
+            $data = [
+                'revoked_token' => true,
+                'remaining_tokens' => $remainingTokens,
+            ];
+
+            return response()->json((new LogoutResource($data))->toArray($request))
+                ->setStatusCode(200);
 
         } catch (\Exception $e) {
             return $this->errorResponse('Logout failed', 500, [], [
@@ -111,7 +118,7 @@ class TokenController extends UniversalBaseController
     /**
      * Universal Pattern: Revoke all tokens
      */
-    public function logoutAll(StoreRequest $request): JsonResponse
+    public function logoutAll(LogoutAllRequest $request): JsonResponse
     {
         try {
             // Revoke all tokens for the user
@@ -132,10 +139,21 @@ class TokenController extends UniversalBaseController
     /**
      * Universal Pattern: List user tokens
      */
-    public function tokens(StoreRequest $request): JsonResponse
+    public function tokens(TokensRequest $request): JsonResponse
     {
         try {
-            $tokens = $request->user()->tokens()->get()->map(function ($token) {
+            $query = $request->user()->tokens();
+
+            // Apply filters
+            if ($request->boolean('active_only')) {
+                $query->whereNotNull('last_used_at');
+            }
+
+            // Apply sorting
+            $query->orderBy($request->input('sort_by', 'created_at'), $request->input('sort_direction', 'desc'));
+
+            // Apply limit
+            $tokens = $query->limit($request->input('limit', 20))->get()->map(function ($token) {
                 return [
                     'id' => $token->id,
                     'name' => $token->name,
@@ -145,9 +163,8 @@ class TokenController extends UniversalBaseController
                 ];
             });
 
-            return $this->jsonResponse([
-                'tokens' => $tokens
-            ], 'Tokens retrieved successfully');
+            return response()->json((new TokenCollection($tokens))->toArray($request))
+                ->setStatusCode(200);
 
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve tokens', 500, [], [

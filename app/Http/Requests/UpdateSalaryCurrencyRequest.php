@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Request validation for SalaryCurrencyController::edit
@@ -16,7 +17,7 @@ class UpdateSalaryCurrencyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // TODO: Implement proper authorization logic
+        return auth()->check() && auth()->user()->hasRole(['admin', 'super_admin']);
     }
 
     /**
@@ -26,9 +27,36 @@ class UpdateSalaryCurrencyRequest extends FormRequest
      */
     public function rules(): array
     {
+        $currencyId = $this->route('currency')->id ?? $this->route('currencyId');
+        
         return [
-            'name' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
+            'currency_name' => [
+                'required',
+                'string',
+                'max:150',
+                Rule::unique('salary_currencies', 'currency_name')->ignore($currencyId)
+            ],
+            'currency_code' => [
+                'required',
+                'string',
+                'size:3',
+                'uppercase',
+                Rule::unique('salary_currencies', 'currency_code')->ignore($currencyId)
+            ],
+            'currency_icon' => [
+                'required',
+                'string',
+                'max:10',
+                Rule::unique('salary_currencies', 'currency_icon')->ignore($currencyId)
+            ],
+            'is_default' => [
+                'sometimes',
+                'boolean'
+            ],
+            'is_active' => [
+                'sometimes',
+                'boolean'
+            ],
         ];
     }
 
@@ -40,11 +68,24 @@ class UpdateSalaryCurrencyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'required' => __('validation.required'),
-            'email' => __('validation.email'),
-            'string' => __('validation.string'),
-            'max' => __('validation.max'),
-            'min' => __('validation.min'),
+            'currency_name.required' => __('validation.required', ['attribute' => __('validation.attributes.currency_name')]),
+            'currency_name.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_name')]),
+            'currency_name.max' => __('validation.max.string', ['attribute' => __('validation.attributes.currency_name'), 'max' => 150]),
+            'currency_name.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_name')]),
+            
+            'currency_code.required' => __('validation.required', ['attribute' => __('validation.attributes.currency_code')]),
+            'currency_code.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_code')]),
+            'currency_code.size' => __('validation.size.string', ['attribute' => __('validation.attributes.currency_code'), 'size' => 3]),
+            'currency_code.uppercase' => __('validation.uppercase', ['attribute' => __('validation.attributes.currency_code')]),
+            'currency_code.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_code')]),
+            
+            'currency_icon.required' => __('validation.required', ['attribute' => __('validation.attributes.currency_icon')]),
+            'currency_icon.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_icon')]),
+            'currency_icon.max' => __('validation.max.string', ['attribute' => __('validation.attributes.currency_icon'), 'max' => 10]),
+            'currency_icon.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_icon')]),
+            
+            'is_default.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_default')]),
+            'is_active.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_active')]),
         ];
     }
 
@@ -56,7 +97,11 @@ class UpdateSalaryCurrencyRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            // Add custom attribute names for better error messages
+            'currency_name' => __('validation.attributes.currency_name'),
+            'currency_code' => __('validation.attributes.currency_code'),
+            'currency_icon' => __('validation.attributes.currency_icon'),
+            'is_default' => __('validation.attributes.is_default'),
+            'is_active' => __('validation.attributes.is_active'),
         ];
     }
 
@@ -65,7 +110,18 @@ class UpdateSalaryCurrencyRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Add any data preparation logic here
+        if ($this->has('currency_code')) {
+            $this->merge([
+                'currency_code' => strtoupper($this->currency_code),
+            ]);
+        }
+
+        // Handle default currency logic
+        if ($this->boolean('is_default')) {
+            $this->merge([
+                'is_default' => true,
+            ]);
+        }
     }
 
     /**
@@ -78,7 +134,16 @@ class UpdateSalaryCurrencyRequest extends FormRequest
      */
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator): void
     {
-        // Custom validation failure handling if needed
+        if ($this->expectsJson()) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'success' => false,
+                    'message' => __('validation.failed'),
+                    'errors' => $validator->errors()
+                ], 422)
+            );
+        }
+
         parent::failedValidation($validator);
     }
 }

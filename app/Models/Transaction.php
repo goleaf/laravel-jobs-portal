@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * App\Models\Transaction
@@ -40,7 +43,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
     /**
      * @var string
      */
@@ -262,5 +265,277 @@ class Transaction extends Model
     public function scopeRevenue($query)
     {
         return $query->approved()->sum('amount');
+    }
+
+    /**
+     * Activity log options
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'amount', 'payment_method', 'payment_gateway', 'failure_reason'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Get financial summary.
+     */
+    public function getFinancialSummaryAttribute(): array
+    {
+        return [
+            'gross_amount' => $this->amount,
+            'gateway_fee' => $this->gateway_fee,
+            'net_amount' => $this->net_amount,
+            'currency' => $this->currency,
+            'formatted_gross' => $this->formatted_amount,
+            'formatted_net' => $this->formatCurrency($this->net_amount),
+            'tax_amount' => $this->calculateTax(),
+            'commission_rate' => $this->getCommissionRate(),
+        ];
+    }
+
+    /**
+     * Get formatted amount with currency.
+     */
+    public function getFormattedAmountAttribute(): string
+    {
+        return $this->formatCurrency($this->amount);
+    }
+
+    /**
+     * Get payment status badge information.
+     */
+    public function getPaymentStatusBadgeAttribute(): array
+    {
+        return match ($this->status) {
+            'pending' => ['color' => 'yellow', 'text' => __('transaction.status.pending')],
+            'processing' => ['color' => 'blue', 'text' => __('transaction.status.processing')],
+            'completed' => ['color' => 'green', 'text' => __('transaction.status.completed')],
+            'failed' => ['color' => 'red', 'text' => __('transaction.status.failed')],
+            'cancelled' => ['color' => 'gray', 'text' => __('transaction.status.cancelled')],
+            'refunded' => ['color' => 'orange', 'text' => __('transaction.status.refunded')],
+            'partial_refund' => ['color' => 'orange', 'text' => __('transaction.status.partial_refund')],
+            default => ['color' => 'gray', 'text' => __('transaction.status.unknown')]
+        };
+    }
+
+    /**
+     * Get processing time in seconds.
+     */
+    public function getProcessingTimeAttribute(): ?int
+    {
+        if (!$this->processed_at) {
+            return null;
+        }
+
+        return $this->created_at->diffInSeconds($this->processed_at);
+    }
+
+    /**
+     * Calculate gateway fee.
+     */
+    public function getGatewayFeeAttribute(): float
+    {
+        $feeRates = [
+            'paypal' => 0.029, // 2.9%
+            'stripe' => 0.029, // 2.9%
+            'razorpay' => 0.025, // 2.5%
+            'paystack' => 0.015, // 1.5%
+            'mollie' => 0.025, // 2.5%
+            'flutterwave' => 0.014, // 1.4%
+        ];
+
+        $rate = $feeRates[$this->payment_gateway] ?? 0.03;
+        $fixedFee = 0.30; // Fixed fee in USD equivalent
+
+        return ($this->amount * $rate) + $fixedFee;
+    }
+
+    /**
+     * Calculate net amount after fees.
+     */
+    public function getNetAmountAttribute(): float
+    {
+        return max(0, $this->amount - $this->gateway_fee);
+    }
+
+    /**
+     * Get transaction category.
+     */
+    public function getTransactionCategoryAttribute(): string
+    {
+        if ($this->type === 'refund') {
+            return __('transaction.category.refund');
+        }
+
+        if ($this->plan_id) {
+            return __('transaction.category.subscription');
+        }
+
+        if ($this->amount >= 1000) {
+            return __('transaction.category.enterprise');
+        }
+
+        if ($this->amount >= 100) {
+            return __('transaction.category.premium');
+        }
+
+        return __('transaction.category.standard');
+    }
+
+    /**
+     * Format currency amount.
+     */
+    public function formatCurrency(float $amount): string
+    {
+        $symbol = match (strtoupper($this->currency)) {
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            'JPY' => '¥',
+            'CNY' => '¥',
+            'INR' => '₹',
+            'CAD' => 'C$',
+            'AUD' => 'A$',
+            default => $this->currency . ' '
+        };
+
+        return $symbol . number_format($amount, 2);
+    }
+
+    /**
+     * Calculate tax amount.
+     */
+    public function calculateTax(): float
+    {
+        $taxRates = [
+            'USD' => 0.08, // 8% average US tax
+            'EUR' => 0.21, // 21% VAT
+            'GBP' => 0.20, // 20% VAT
+            'CAD' => 0.13, // 13% HST
+        ];
+
+        $rate = $taxRates[strtoupper($this->currency)] ?? 0.0;
+        return $this->amount * $rate;
+    }
+
+    /**
+     * Get commission rate for this transaction.
+     */
+    public function getCommissionRate(): float
+    {
+        if ($this->plan_id) {
+            return 0.05; // 5% for subscriptions
+        }
+
+        return 0.03; // 3% for one-time payments
+    }
+
+    /**
+     * Check if transaction can be refunded.
+     */
+    public function canBeRefunded(): bool
+    {
+        return $this->status === 'completed' &&
+               $this->refunded_at === null &&
+               $this->created_at->diffInDays(now()) <= 30; // 30-day refund window
+    }
+
+    /**
+     * Process refund.
+     */
+    public function processRefund(float $amount = null): bool
+    {
+        if (!$this->canBeRefunded()) {
+            return false;
+        }
+
+        $refundAmount = $amount ?? $this->amount;
+        
+        if ($refundAmount > $this->amount) {
+            return false;
+        }
+
+        $this->update([
+            'refund_amount' => $refundAmount,
+            'refunded_at' => now(),
+            'status' => $refundAmount == $this->amount ? 'refunded' : 'partial_refund'
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Get transaction analytics.
+     */
+    public static function getAnalytics(array $filters = []): array
+    {
+        $query = static::query();
+
+        // Apply filters
+        if (isset($filters['date_from'])) {
+            $query->where('created_at', '>=', $filters['date_from']);
+        }
+        
+        if (isset($filters['date_to'])) {
+            $query->where('created_at', '<=', $filters['date_to']);
+        }
+
+        return [
+            'total_revenue' => $query->completed()->sum('amount'),
+            'total_transactions' => $query->count(),
+            'average_transaction' => $query->completed()->avg('amount') ?? 0,
+            'success_rate' => $query->count() > 0 ? ($query->completed()->count() / $query->count()) * 100 : 0,
+            'refund_rate' => $query->completed()->count() > 0 ? ($query->refunded()->count() / $query->completed()->count()) * 100 : 0,
+            'top_gateways' => $query->completed()
+                ->select('payment_gateway', \DB::raw('COUNT(*) as count, SUM(amount) as revenue'))
+                ->groupBy('payment_gateway')
+                ->orderByDesc('revenue')
+                ->limit(5)
+                ->get(),
+            'monthly_trend' => $query->completed()
+                ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as revenue, COUNT(*) as count')
+                ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+                ->orderByRaw('YEAR(created_at), MONTH(created_at)')
+                ->get()
+        ];
+    }
+
+    /**
+     * Get fraud score based on transaction patterns.
+     */
+    public function getFraudScore(): float
+    {
+        $score = 0;
+
+        // High amount transactions
+        if ($this->amount > 5000) {
+            $score += 30;
+        }
+
+        // Multiple failed attempts from same user recently
+        $recentFailures = static::byUser($this->user_id)
+            ->failed()
+            ->where('created_at', '>=', now()->subHours(24))
+            ->count();
+        
+        $score += min(40, $recentFailures * 10);
+
+        // Unusual payment method for user
+        $userUsualMethod = static::byUser($this->user_id)
+            ->completed()
+            ->select('payment_method', \DB::raw('COUNT(*) as count'))
+            ->groupBy('payment_method')
+            ->orderByDesc('count')
+            ->first();
+        
+        if ($userUsualMethod && $userUsualMethod->payment_method !== $this->payment_method) {
+            $score += 20;
+        }
+
+        // Geographic anomalies could be added here with IP tracking
+
+        return min(100, $score);
     }
 }

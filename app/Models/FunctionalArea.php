@@ -100,8 +100,11 @@ class FunctionalArea extends Model
     {
         return [
             'id' => 'integer',
-            'is_default' => 'boolean',
+            'name' => 'string',
+            'description' => 'string',
             'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -214,17 +217,15 @@ class FunctionalArea extends Model
      */
     public function scopeWithJobs(Builder $query): Builder
     {
-        return $query->whereHas('jobs');
+        return $query->has('jobs');
     }
 
     /**
-     * Scope for functional areas with active jobs.
+     * Scope for functional areas without jobs.
      */
-    public function scopeWithActiveJobs(Builder $query): Builder
+    public function scopeWithoutJobs(Builder $query): Builder
     {
-        return $query->whereHas('jobs', function ($q) {
-            $q->active();
-        });
+        return $query->doesntHave('jobs');
     }
 
     /**
@@ -232,21 +233,11 @@ class FunctionalArea extends Model
      */
     public function scopeWithCandidates(Builder $query): Builder
     {
-        return $query->whereHas('candidates');
+        return $query->has('candidates');
     }
 
     /**
-     * Scope for functional areas with active candidates.
-     */
-    public function scopeWithActiveCandidates(Builder $query): Builder
-    {
-        return $query->whereHas('candidates', function ($q) {
-            $q->active();
-        });
-    }
-
-    /**
-     * Scope for searching functional areas by name.
+     * Scope for searching functional areas.
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
@@ -255,18 +246,41 @@ class FunctionalArea extends Model
     }
 
     /**
-     * Scope for popular functional areas (with most jobs/candidates).
+     * Scope for recent functional areas.
+     */
+    public function scopeRecent(Builder $query, int $days = 30): Builder
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old functional areas.
+     */
+    public function scopeOld(Builder $query, int $days = 365): Builder
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular functional areas (with most jobs).
      */
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
-        return $query->withCount(['jobs', 'candidates'])
-                    ->orderByDesc('jobs_count')
-                    ->orderByDesc('candidates_count')
+        return $query->withCount('jobs')
+                    ->orderBy('jobs_count', 'desc')
                     ->limit($limit);
     }
 
     /**
-     * Scope for alphabetically ordered functional areas.
+     * Scope for ordered functional areas.
+     */
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical(Builder $query): Builder
     {
@@ -274,12 +288,23 @@ class FunctionalArea extends Model
     }
 
     /**
-     * Scope for recent functional areas.
+     * Scope for technology areas.
      */
-    public function scopeRecent(Builder $query, int $days = 30): Builder
+    public function scopeTechnology(Builder $query): Builder
     {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+        return $query->where('name', 'like', '%technology%')
+                    ->orWhere('name', 'like', '%IT%')
+                    ->orWhere('name', 'like', '%software%');
+    }
+
+    /**
+     * Scope for business areas.
+     */
+    public function scopeBusiness(Builder $query): Builder
+    {
+        return $query->where('name', 'like', '%business%')
+                    ->orWhere('name', 'like', '%management%')
+                    ->orWhere('name', 'like', '%admin%');
     }
 
     /**

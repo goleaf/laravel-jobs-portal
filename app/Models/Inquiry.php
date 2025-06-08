@@ -55,16 +55,139 @@ class Inquiry extends Model
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'email' => 'string',
-        'phone_no' => 'string',
-        'subject' => 'string',
-        'message' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'email' => 'string',
+            'phone_no' => 'string',
+            'subject' => 'string',
+            'message' => 'string',
+            'is_read' => 'boolean',
+            'is_resolved' => 'boolean',
+            'priority' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for read inquiries.
+     */
+    public function scopeRead($query)
+    {
+        return $query->where('is_read', true);
+    }
+
+    /**
+     * Scope for unread inquiries.
+     */
+    public function scopeUnread($query)
+    {
+        return $query->where('is_read', false);
+    }
+
+    /**
+     * Scope for resolved inquiries.
+     */
+    public function scopeResolved($query)
+    {
+        return $query->where('is_resolved', true);
+    }
+
+    /**
+     * Scope for unresolved inquiries.
+     */
+    public function scopeUnresolved($query)
+    {
+        return $query->where('is_resolved', false);
+    }
+
+    /**
+     * Scope for high priority inquiries.
+     */
+    public function scopeHighPriority($query)
+    {
+        return $query->where('priority', '>=', 8);
+    }
+
+    /**
+     * Scope for medium priority inquiries.
+     */
+    public function scopeMediumPriority($query)
+    {
+        return $query->whereBetween('priority', [4, 7]);
+    }
+
+    /**
+     * Scope for low priority inquiries.
+     */
+    public function scopeLowPriority($query)
+    {
+        return $query->where('priority', '<=', 3);
+    }
+
+    /**
+     * Scope for searching inquiries.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('email', 'like', "%{$term}%")
+                    ->orWhere('subject', 'like', "%{$term}%")
+                    ->orWhere('message', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent inquiries.
+     */
+    public function scopeRecent($query, int $days = 7)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old inquiries.
+     */
+    public function scopeOld($query, int $days = 30)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for inquiries by email.
+     */
+    public function scopeByEmail($query, string $email)
+    {
+        return $query->where('email', $email);
+    }
+
+    /**
+     * Scope for urgent inquiries.
+     */
+    public function scopeUrgent($query)
+    {
+        return $query->where('priority', 10);
+    }
+
+    /**
+     * Scope for pending inquiries (unread and unresolved).
+     */
+    public function scopePending($query)
+    {
+        return $query->where('is_read', false)->where('is_resolved', false);
+    }
+
+    /**
+     * Scope for ordering by priority.
+     */
+    public function scopeByPriority($query)
+    {
+        return $query->orderBy('priority', 'desc')->orderBy('created_at', 'asc');
+    }
 }

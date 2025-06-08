@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Hash;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
+| Context7 Level 4 Complex System Transformation
+| All routes now serve Vue3 SPA - Blade files removed
 */
 
-// Simple test route that doesn't require views
+// SPA Route - catch all routes and serve Vue3 app
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
 Route::get('/test', function () {
     return response()->json([
         'status' => 'ok',

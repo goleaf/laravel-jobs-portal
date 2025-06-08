@@ -1,0 +1,143 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Job;
+use App\Http\Resources\JobResource;
+use App\Http\Requests\Api\StoreJobRequest;
+use App\Http\Requests\Api\UpdateJobRequest;
+
+/**
+ * Context7 API Controller for Job
+ * Generated for Level 4 Complex System Transformation
+ * RESTful API following Laravel 12 best practices
+ */
+class JobApiController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $query = Job::query();
+        
+        // Apply filters
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        
+        if ($request->has('status')) {
+            $query->where('is_active', $request->boolean('status'));
+        }
+        
+        // Pagination
+        $perPage = min($request->integer('per_page', 15), 100);
+        $data = $query->paginate($perPage);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Job list retrieved successfully',
+            'data' => JobResource::collection($data->items()),
+            'pagination' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'per_page' => $data->perPage(),
+                'total' => $data->total(),
+            ]
+        ]);
+    }
+
+    /**
+     * Store a newly created resource.
+     */
+    public function store(StoreJobRequest $request): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+            $item = Job::create($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Job created successfully',
+                'data' => new JobResource($item)
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create job',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id): JsonResponse
+    {
+        try {
+            $item = Job::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Job retrieved successfully',
+                'data' => new JobResource($item)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Job not found',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+    /**
+     * Update the specified resource.
+     */
+    public function update(UpdateJobRequest $request, $id): JsonResponse
+    {
+        try {
+            $item = Job::findOrFail($id);
+            $data = $request->validated();
+            $item->update($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Job updated successfully',
+                'data' => new JobResource($item)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update job',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource.
+     */
+    public function destroy($id): JsonResponse
+    {
+        try {
+            $item = Job::findOrFail($id);
+            $item->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Job deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete job',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+}

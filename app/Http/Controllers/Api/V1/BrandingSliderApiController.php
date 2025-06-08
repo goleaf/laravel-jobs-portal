@@ -1,0 +1,143 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\BrandingSlider;
+use App\Http\Resources\BrandingSliderResource;
+use App\Http\Requests\Api\StoreBrandingSliderRequest;
+use App\Http\Requests\Api\UpdateBrandingSliderRequest;
+
+/**
+ * Context7 API Controller for BrandingSlider
+ * Generated for Level 4 Complex System Transformation
+ * RESTful API following Laravel 12 best practices
+ */
+class BrandingSliderApiController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $query = BrandingSlider::query();
+        
+        // Apply filters
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        
+        if ($request->has('status')) {
+            $query->where('is_active', $request->boolean('status'));
+        }
+        
+        // Pagination
+        $perPage = min($request->integer('per_page', 15), 100);
+        $data = $query->paginate($perPage);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'BrandingSlider list retrieved successfully',
+            'data' => BrandingSliderResource::collection($data->items()),
+            'pagination' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'per_page' => $data->perPage(),
+                'total' => $data->total(),
+            ]
+        ]);
+    }
+
+    /**
+     * Store a newly created resource.
+     */
+    public function store(StoreBrandingSliderRequest $request): JsonResponse
+    {
+        try {
+            $data = $request->validated();
+            $item = BrandingSlider::create($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'BrandingSlider created successfully',
+                'data' => new BrandingSliderResource($item)
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create brandingslider',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id): JsonResponse
+    {
+        try {
+            $item = BrandingSlider::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'BrandingSlider retrieved successfully',
+                'data' => new BrandingSliderResource($item)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'BrandingSlider not found',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+    /**
+     * Update the specified resource.
+     */
+    public function update(UpdateBrandingSliderRequest $request, $id): JsonResponse
+    {
+        try {
+            $item = BrandingSlider::findOrFail($id);
+            $data = $request->validated();
+            $item->update($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'BrandingSlider updated successfully',
+                'data' => new BrandingSliderResource($item)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update brandingslider',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource.
+     */
+    public function destroy($id): JsonResponse
+    {
+        try {
+            $item = BrandingSlider::findOrFail($id);
+            $item->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'BrandingSlider deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete brandingslider',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+}

@@ -35,11 +35,11 @@ Route::get('/test', function () {
 */
 
 Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
-    Route::post('/switch', [App\Http\Controllers\LocaleController::class, 'switch'])->name('switch');
-    Route::get('/available', [App\Http\Controllers\LocaleController::class, 'getAvailableLocales'])->name('available');
-    Route::get('/current', [App\Http\Controllers\LocaleController::class, 'getCurrentLocale'])->name('current');
-    Route::get('/check', [App\Http\Controllers\LocaleController::class, 'checkLocale'])->name('check');
-    Route::get('/rtl', [App\Http\Controllers\LocaleController::class, 'getRTLLanguages'])->name('rtl');
+    Route::post('switch', [App\Http\Controllers\LocaleController::class, 'switch'])->name('switch');
+    Route::get('current', [App\Http\Controllers\LocaleController::class, 'current'])->name('current');
+    Route::get('available', [App\Http\Controllers\LocaleController::class, 'available'])->name('available');
+    Route::get('translations/{locale?}', [App\Http\Controllers\LocaleController::class, 'translations'])->name('translations');
+    Route::post('clear-cache', [App\Http\Controllers\LocaleController::class, 'clearCache'])->name('clear-cache');
 });
 
 // Home route - aliased as both 'home' and 'front.home'
@@ -1748,19 +1748,16 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('api.admin.')->g
     Route::patch('/admins/{admin}/toggle-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleStatus']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Locale/Language Routes
-|--------------------------------------------------------------------------
-|
-| Routes for handling language switching and locale management
-|
-*/
-
-Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
-    Route::post('/switch', [App\Http\Controllers\LocaleController::class, 'switch'])->name('switch');
-    Route::get('/available', [App\Http\Controllers\LocaleController::class, 'getAvailableLocales'])->name('available');
-    Route::get('/current', [App\Http\Controllers\LocaleController::class, 'getCurrentLocale'])->name('current');
-    Route::get('/check', [App\Http\Controllers\LocaleController::class, 'checkLocale'])->name('check');
-    Route::get('/rtl', [App\Http\Controllers\LocaleController::class, 'getRTLLanguages'])->name('rtl');
+// Enhanced Translation Management (Admin only)
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::group(['prefix' => 'translations', 'as' => 'translations.'], function () {
+        Route::get('/', [App\Http\Controllers\TranslationManagerController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\TranslationManagerController::class, 'store'])->name('store');
+        Route::put('/', [App\Http\Controllers\TranslationManagerController::class, 'update'])->name('update');
+        Route::get('statistics', [App\Http\Controllers\TranslationManagerController::class, 'statistics'])->name('statistics');
+        Route::get('missing/{locale}', [App\Http\Controllers\TranslationManagerController::class, 'missing'])->name('missing');
+        Route::post('sync/{locale}', [App\Http\Controllers\TranslationManagerController::class, 'sync'])->name('sync');
+        Route::post('export/{locale}', [App\Http\Controllers\TranslationManagerController::class, 'export'])->name('export');
+        Route::post('import/{locale}', [App\Http\Controllers\TranslationManagerController::class, 'import'])->name('import');
+    });
 });

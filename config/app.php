@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'memory_limit' => env('MEMORY_LIMIT', '512M'),
+    'memory_limit' => env('MEMORY_LIMIT', '8G'),
 
     /*
     |--------------------------------------------------------------------------

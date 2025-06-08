@@ -21,13 +21,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        // Load all commands
-        $this->load(__DIR__.'/Commands');
-
-        // Register translation commands
-        $this->commands([
-            \App\Console\Commands\ConvertBladeTranslations::class,
-        ]);
+        // Temporarily disable command loading to prevent memory issues
+        // $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

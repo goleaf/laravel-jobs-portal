@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use App\Services\TranslationService;
 use App\Helpers\LanguageHelper;
 use App\Console\Commands\TranslationCommand;

@@ -7,7 +7,7 @@
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -39,7 +39,7 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center">
                     <h1 class="display-4 fw-bold text-indigo-600 -600">{{ __('common.contact_us') }}</h1>
@@ -51,7 +51,7 @@
 
     <!-- Contact Form and Info Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             @if (session('success'))
                 <div class="px-4 py-3 rounded-md border border-gray-300 mb-4 bg-green-50 border border-gray-300 border border border-gray-300 -gray-300 -green-200 text-green-800 p-4 rounded -md mb-4 dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
@@ -313,7 +313,7 @@
 
     <!-- Map Section (Optional) -->
     <section class="py-5 bg-gray-100">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center">
                     <h2 class="mb-4">{{ __('Find Us') }}</h2>
@@ -333,7 +333,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 md-6">
                     <h5>{{ config('app.name') }}</h5>

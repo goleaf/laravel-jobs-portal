@@ -17,11 +17,98 @@ use App\Models\SalaryCurrency;
 use App\Models\OwnerShipType;
 use App\Models\Language;
 use Illuminate\View\View;
-use App\Http\Requests\Admin\StoreAdminRequest;
-use App\Http\Requests\Admin\UpdateAdminRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\Admin\StoreMasterDataRequest;
+use App\Http\Requests\Admin\UpdateMasterDataRequest;
 
 class MasterDataController extends AppBaseController
 {
+    /**
+     * Display a listing of the master data
+     */
+    public function index(Request $request): View
+    {
+        $data = []; // Placeholder for actual data
+        $searchTerm = $request->get('search', '');
+        
+        return view('masterdata.index', [
+            'data' => $data,
+            'searchTerm' => $searchTerm
+        ]);
+    }
+
+    /**
+     * Show the form for creating new master data
+     */
+    public function create(): View
+    {
+        return view('masterdata.create');
+    }
+
+    /**
+     * Store a newly created master data record
+     */
+    public function store(StoreMasterDataRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        
+        // Placeholder for actual storage logic
+        // $masterData = MasterData::create($validated);
+        
+        return redirect()
+            ->route('masterdata.index')
+            ->with('success', 'Master data created successfully.');
+    }
+
+    /**
+     * Display the specified master data
+     */
+    public function show($id): View
+    {
+        // Placeholder for actual show logic
+        return view('masterdata.show', ['id' => $id]);
+    }
+
+    /**
+     * Show the form for editing master data
+     */
+    public function edit($id): View
+    {
+        // Placeholder for actual edit logic
+        return view('masterdata.edit', ['id' => $id]);
+    }
+
+    /**
+     * Update the specified master data
+     */
+    public function update(UpdateMasterDataRequest $request, $id): RedirectResponse
+    {
+        $validated = $request->validated();
+        
+        // Placeholder for actual update logic
+        // $masterData = MasterData::findOrFail($id);
+        // $masterData->update($validated);
+        
+        return redirect()
+            ->route('masterdata.index')
+            ->with('success', 'Master data updated successfully.');
+    }
+
+    /**
+     * Remove the specified master data
+     */
+    public function destroy($id): RedirectResponse
+    {
+        // Placeholder for actual deletion logic
+        // $masterData = MasterData::findOrFail($id);
+        // $masterData->delete();
+        
+        return redirect()
+            ->route('masterdata.index')
+            ->with('success', 'Master data deleted successfully.');
+    }
+
     /**
      * Display countries listing
      */

@@ -33,7 +33,7 @@
 @endsection
 @push('scripts')
     
-{{-- <script src="{{mix('assets/js/blogs/create-edit.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/blogs/create-edit.js') "></script> -- }}
 @endpush
 
 

@@ -7,14 +7,14 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Form Request for storing JobStage
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for storing JobStage
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreJobStageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Context7 Pattern: Authorization check
+     * Universal Pattern: Authorization check
      */
     public function authorize(): bool
     {
@@ -23,7 +23,7 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation rules
+     * Universal Pattern: Comprehensive validation rules
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -39,7 +39,7 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -54,7 +54,7 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -68,7 +68,7 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Universal Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -82,12 +82,12 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Universal Pattern: Enhanced validation logic
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            // Context7 Pattern: Additional business logic validation
+            // Universal Pattern: Additional business logic validation
             if ($this->hasConflictingData()) {
                 $validator->errors()->add('name', __('validation.conflicting_data'));
             }
@@ -95,7 +95,7 @@ class StoreJobStageRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Custom business logic check
+     * Universal Pattern: Custom business logic check
      */
     private function hasConflictingData(): bool
     {
@@ -105,7 +105,7 @@ class StoreJobStageRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling
+     * Universal Pattern: Enhanced error handling
      */
     protected function failedValidation(Validator $validator): void
     {

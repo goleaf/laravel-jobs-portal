@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Comprehensive Blade Syntax Fixer - Context7
+ * Comprehensive Blade Syntax Fixer - Universal
  * Fixes critical syntax errors in blade files
  */
 
@@ -16,7 +16,7 @@ class BladeSyntaxFixer
 
     public function __construct()
     {
-        echo "🔧 COMPREHENSIVE BLADE SYNTAX FIXER - Context7\n";
+        echo "🔧 COMPREHENSIVE BLADE SYNTAX FIXER - Universal\n";
         echo "=" . str_repeat("=", 50) . "\n";
         echo "🎯 Fixing critical syntax errors in blade files\n\n";
         

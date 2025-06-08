@@ -238,7 +238,16 @@
         "seems_message": "Похоже, вам не разрешен доступ к этой записи.",
         "no_found_record": "Совпадающих записей не найдено",
         "default_language": "Язык по умолчанию",
-        "select_language": "Выберите язык"
+        "select_language": "Выберите язык",
+        "confirm_delete": "Are you sure you want to delete this item?",
+        "remove": "Remove",
+        "closed": "Closed",
+        "view_public_profile": "View Public Профиль",
+        "removed": "removed",
+        "has_been_removed": "has been removed.",
+        "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+        "filter": "Фильтр",
+        "this_week": "The Week"
     },
     "phone": {
         "invalid_number": "Неправильный номер",
@@ -315,7 +324,8 @@
         "feature_employers_incomes": "Рекомендуемые доходы работодателей",
         "subscription_incomes": "Доходы от подписки",
         "weekly_users": "Еженедельные пользователи",
-        "post_statistics": "Статистика сообщений"
+        "post_statistics": "Статистика сообщений",
+        "featured_employers_incomes": "Featured Employers Incomes"
     },
     "job_category": {
         "new_job_category": "новый работа категория",
@@ -394,14 +404,18 @@
         "google_redirect": "Google Redirect",
         "configuration_update": "Обновление конфигурации",
         "update_application_configuration": "Вы собираетесь обновить значения конфигурации приложения, хотите продолжить?",
-        "image_validation": "Изображение должно быть размером 90 x 60 пикселей."
+        "image_validation": "Изображение должно быть размером 90 x 60 пикселей.",
+        "term_conditions": "Term & Conditons",
+        "current_version": "Current Version"
     },
     "tooltip": {
         "change_app_logo": "Изменить логотип приложения",
         "change_image": "Изменить изображение",
         "change_home_banner": "Изменить домашний баннер",
         "copy_preview_link": "Скопировать ссылку для предварительного просмотра",
-        "change_favicon": "Изменить значок"
+        "change_favicon": "Изменить значок",
+        "change_category_image": "Change category image",
+        "change_profile": "Change Профиль"
     },
     "company_size": {
         "new_company_size": "новый Компания Размер",
@@ -445,7 +459,8 @@
         "size": "Размер",
         "action": "действие",
         "no_salary_period_found": "Период заработной платы не найден",
-        "no_salary_period_available": "Период заработной платы недоступен"
+        "no_salary_period_available": "Период заработной платы недоступен",
+        "salary_period": "Salary Period"
     },
     "job_shift": {
         "new_job_shift": "новый работа сдвиг",
@@ -652,7 +667,8 @@
         "user_name": "имя пользователя",
         "logout": "Выйти",
         "required_field_messages": "Пожалуйста, заполните все обязательные поля.",
-        "password_invalid": "Текущий пароль недействителен."
+        "password_invalid": "Текущий пароль недействителен.",
+        "profile_picture": "Профиль Picture"
     },
     "salary_currency": {
         "new_salary_currency": "Новая валюта зарплаты",
@@ -719,7 +735,9 @@
         "favourite_company": "Любимая компания",
         "favourite_job": "Любимая работа",
         "subscriber": "Подписчик",
-        "please_enter_salary_range_to_greater_than_salary_range_from": "Пожалуйста, введите диапазон окладов до больше, чем диапазон окладов от."
+        "please_enter_salary_range_to_greater_than_salary_range_from": "Пожалуйста, введите диапазон окладов до больше, чем диапазон окладов от.",
+        "view_drafted_job": "View Drafted Job",
+        "expired_job": "Expired job"
     },
     "candidate": {
         "new_admin": "Новый администратор",
@@ -777,7 +795,10 @@
         "reported_candidate": "Зарегистрированный кандидат",
         "reported_employer": "Сообщенный работодатель",
         "employee": "Работник",
-        "expired_job": "Вакансия с истекшим сроком действия"
+        "expired_job": "Вакансия с истекшим сроком действия",
+        "select_candidate": "Select Candidate",
+        "in_years": "In Years",
+        "0": "Employee"
     },
     "candidate_dashboard": {
         "location_information": "Информация о местоположении недоступна.",
@@ -985,7 +1006,8 @@
         "pay_with_paypal": "Оплата с PayPal",
         "pay_with_manually": "Оплатить вручную",
         "pay_with_stack": "платить стопкой",
-        "upgrade": "Обновление"
+        "upgrade": "Обновление",
+        "active_subscription": "Active Subscriptions"
     },
     "transaction": {
         "plan_name": "Nome do Plano",
@@ -1469,6 +1491,64 @@
         "follow_company_successfully": "Следуйте за компанией успешно.",
         "note_required": "Поле примечания обязательно",
         "resume_field_required": "Поле резюме обязательно для заполнения.",
-        "verify_google_recaptcha": "Вам следует проверить Google Recaptcha."
-    }
+        "verify_google_recaptcha": "Вам следует проверить Google Recaptcha.",
+        "jobs": {
+            "featured": "Featured",
+            "view_details": "View Details",
+            "no_jobs_found": "No Вакансии Found",
+            "no_jobs_description": "Try adjusting your Поиск criteria or browse all available positions.",
+            "browse_all_jobs": "Browse All Вакансии",
+            "company_logo": "Company Logo"
+        }
+    },
+    "messages": {
+        "company_profile": "Профиль компании",
+        "company_details": "Детали компании",
+        "company_overview": "Обзор компании",
+        "company_jobs": "Вакансии компании",
+        "company_size_detail": "Размер компании",
+        "company_location": "Местоположение компании",
+        "company_website": "Веб-сайт компании",
+        "company_founded": "Основана",
+        "about_company": "О компании",
+        "company_employees": "Employees"
+    },
+    "language-name": "en",
+    "fileName": "messages.php",
+    "Company size is required": "Company size is required",
+    "Company size must be a valid text": "Company size must be a valid text",
+    "Company size must not exceed 255 characters": "Company size must not exceed 255 characters",
+    "This company size already exists": "This company size already exists",
+    "Company size contains invalid characters": "Company size contains invalid characters",
+    "Company Size": "Company Size",
+    "Validation failed": "Validation failed",
+    "Edit company size": "Edit company size",
+    "Delete company size": "Delete company size",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "term_conditions": "Term & Conditons",
+    "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+    "no_keyword_found": "No Keyword Found",
+    "comments": "Comments",
+    "password_reset": "Click here to reset your password",
+    "reset_password": "Reset Password",
+    "enter_email_reset_password": "Enter your email to reset your password",
+    "new_password": "Set a New Password",
+    "admin_login": "Admin Войти",
+    "super_admin_login": "Super Admin Войти",
+    "candidate_login": "Candidate Войти",
+    "employer_login": "Employee Войти",
+    "front_site": "Front Site",
+    "sign_in": "Войти",
+    "already_have_an_account": "Already have an account",
+    "n\/a": "N\/A",
+    "unread_messages": "Unread Messages",
+    "processing": "Processing...",
+    "pdf": "PDF",
+    "not_immediate_available": "Not Immediate Available",
+    "immediate_available": "Immediate Available",
+    "something_missing": "Opps! Something's missing...",
+    "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+    "go_back": "Back to Previous Page",
+    "company_subscription": "Company Subscription"
 }

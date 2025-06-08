@@ -13,7 +13,7 @@
     </a>
 </li>
 <li class="flex space-x-8-item {{ Request::is("admin/admin*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.') }}">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.dashboard') }}">
         <span class="aside-menu-icon pe-3"><i class="fa-solid fa-user-tie"></i></span>
         <span class="aside-menu-title">{{ __('messages.candidate.admins') }}</span>
     </a>
@@ -44,9 +44,9 @@
     </a>
 </li>
 {{-- Temporarily disabled - post-categories route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/post-categories*','admin/posts*','admin/post-comments*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('post-categories.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/post-categories*','admin/posts*','admin/post-comments*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('post-categories.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="far fa-list-alt"></i></span>
         <span class="aside-menu-title">{{ __('messages.blogs') }}</span>
         <span class="hidden">{{ __('messages.post_category.post_categories') }}</span>
@@ -56,9 +56,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - plans route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/plans*','admin/transactions*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('plans.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/plans*','admin/transactions*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('plans.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="fab fa-bandcamp"></i></span>
         <span class="aside-menu-title">{{ __('messages.plan.subscriptions') }}</span>
         <span class="hidden">{{ __('messages.post_comments') }}</span>
@@ -67,9 +67,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - subscribers route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/subscribers*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('subscribers.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/subscribers*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('subscribers.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-bell"></i></span>
         <span class="aside-menu-title">{{ __('messages.subscribers') }}</span>
         <span class="hidden">{{ __('messages.subscribers') }}</span>
@@ -79,9 +79,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - countries route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/countries*','admin/states*','admin/cities*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/countries*','admin/states*','admin/cities*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.dashboard')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-globe-americas"></i></span>
         <span class="aside-menu-title">{{ __('messages.country.countries') }}</span>
         <span class="hidden">{{ __('messages.country.countries') }}</span>
@@ -92,9 +92,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - maritalStatus route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('admin.dashboard')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-life-ring"></i></span>
         <span class="aside-menu-title">{{ __('messages.general') }}</span>
         <span class="hidden">{{ __('messages.marital_statuses') }}</span>
@@ -112,9 +112,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - noticeboards route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('noticeboards.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('noticeboards.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-sticky-note"></i></span>
         <span class="aside-menu-title">{{ __('messages.cms') }}</span>
         <span class="hidden">{{ __('messages.noticeboards') }}</span>
@@ -131,9 +131,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - testimonials route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('testimonials.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/testimonials*','admin/branding-sliders*','admin/header-sliders*','admin/image-sliders*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('testimonials.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-sticky-note"></i></span>
         <span class="aside-menu-title">{{ __('messages.cms_sliders') }}</span>
         <span class="hidden">{{ __('messages.testimonials') }}</span>
@@ -145,9 +145,9 @@
 </li>
 --}}
 {{-- Temporarily disabled - cms.services route not implemented yet --}}
-{{ --
-<li class="flex space-x-8-item {{ Request::is("admin/cms-services*','admin/cms-about-us*') ? 'active' : '' }}">
-    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('cms.services.index') }}">
+{{  --
+<li class="flex space-x-8-item  Request::is("admin/cms-services*','admin/cms-about-us*') ? 'active' : '' ">
+    <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page" href="{{ route('cms.services.index')  }}">
         <span class="aside-menu-icon pe-3"><i class="fas fa-sticky-note"></i></span>
         <span class="aside-menu-title">{{ __('messages.front_cms') }}</span>
         <span class="hidden">{{ __('messages.cms_services') }}</span>

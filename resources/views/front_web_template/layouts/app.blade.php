@@ -29,8 +29,8 @@
     <script src="{{ mix('js/front-third-party.js') }}"></script>
     {{-- CDN JS removed - now using local assets --}}
     
-    {{-- <script src="{{ mix('js/front_pages.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/custom.js') }}"></script> --}}
+    {{ -- <script src=" mix('js/front_pages.js') "></script> -- }}
+    {{ -- <script src=" asset('assets/js/custom/custom.js') "></script> -- }}
 
     @yield('page_scripts')
     @foreach (googleJobSchema() as $jobSchema)

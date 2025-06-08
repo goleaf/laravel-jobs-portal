@@ -3,7 +3,7 @@
     {{ __('web.job_details.job_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/job-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/job-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="job-details-page">
@@ -110,14 +110,14 @@
                             @else
                                 @if ($isActive && !$job->is_suspended && \Carbon\Carbon::today()->toDateString() < $job->job_expiry_date->toDateString())
                                     <div class="hero-desc flex flex-wrap">
-                                        {{ -- <div class="desc flex me-4 pe-2">
+                                        {{  -- <div class="desc flex me-4 pe-2">
                                             <button class="border border-gray-300 bg-transparent"
-                                                onclick="window.location='{{ route('candidate.register') }}'">{{ __('web.job_details.register_to_apply') }}
+                                                onclick="window.location=' route('candidate.register') '">{{ __('web.job_details.register_to_apply')  }}
                                             </button>
                                         </div> --}}
                                         <div class="desc flex me-4 pe-2">
                                             <button class="border border-gray-300 bg-transparent"
-                                                onclick="window.location='{{ route('candidate.') }}'">
+                                                onclick="window.location='{{ route('candidate.dashboard') }}'">
                                                 {{ __('web.job_details.apply_for_job') }}
                                             </button>
                                         </div>

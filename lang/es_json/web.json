@@ -127,7 +127,9 @@
         "click_here": "Haga clic aquí",
         "to_upload_resume": "para subir currículum",
         "register_to_apply": "Registrarse para postularse",
-        "location_information_not_available": "Información de ubicación no disponible."
+        "location_information_not_available": "Información de ubicación no disponible.",
+        "career_level": "Career Level",
+        "functional_area": "Functional Area"
     },
     "apply_for_job": {
         "apply_for": "Solicitar",
@@ -138,13 +140,15 @@
         "due_to_our_continued_growth": "Debido a nuestro continuo crecimiento, estamos contratando un nuevo puesto de",
         "or_words_to_that_effect": "o palabras en ese sentido",
         "already_applied": "Ya aplicado",
-        "share_this_job": "Comparte este trabajo"
+        "share_this_job": "Comparte este trabajo",
+        "expected_salary": "Expected Salary"
     },
     "companies_menu": {
         "search_companies": "Buscar empresas",
         "opened_jobs": "Trabajo abierto",
         "Featured": "Destacado",
-        "no_company_found": "No se encontró empresa"
+        "no_company_found": "No se encontró empresa",
+        "featured": "Featured"
     },
     "candidates_menu": {
         "search_candidates": "Buscar candidatos",
@@ -159,7 +163,8 @@
         "unfollow": "Dejar de seguir",
         "report_to_company": "Informar a la empresa",
         "our_latest_jobs": "Nuestros últimos trabajos",
-        "Processing": "Procesando ..."
+        "Processing": "Procesando ...",
+        "processing": "Processing..."
     },
     "about_us_menu": {
         "how_it_works": "Cómo funciona",
@@ -257,7 +262,8 @@
         "view_company_profile": "Ver perfil de la empresa",
         "founded_in": "Fundado en",
         "phone": "Teléfono",
-        "Skill_Experience": "Habilidad y experiencia"
+        "Skill_Experience": "Habilidad y experiencia",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Buscar empresa",
@@ -307,5 +313,35 @@
         "reset_password": "Restablecer la contraseña",
         "new_password": "Establecer Nueva Contraseña",
         "set_new_password": "Establecer una Nueva Contraseña"
+    },
+    "web": {
+        "welcome": "Bienvenido a nuestro portal de empleos",
+        "find_job": "Encuentra el trabajo de tus sueños",
+        "post_job": "Publicar un trabajo",
+        "welcome_title": "Encontrar trabajos, contratar talento",
+        "welcome_subtitle": "Conectando buscadores de empleo con empleadores",
+        "for_job_seekers": "Para buscadores de empleo",
+        "for_employers": "Para empleadores",
+        "search_jobs": "Buscar trabajos",
+        "browse_companies": "Explorar empresas",
+        "latest_jobs": "Últimos trabajos",
+        "featured_companies": "Empresas destacadas"
+    },
+    "nav": {
+        "home": "Inicio",
+        "jobs": "Trabajos",
+        "companies": "Empresas",
+        "candidates": "Candidatos",
+        "about": "Acerca de",
+        "contact": "Contacto",
+        "login": "Iniciar sesión",
+        "register": "Registrarse",
+        "dashboard": "Panel de control",
+        "profile": "Perfil",
+        "logout": "Cerrar sesión",
+        "find_jobs": "Buscar trabajos",
+        "post_job": "Publicar trabajo",
+        "browse_companies": "Explorar empresas",
+        "admin_panel": "Panel de administración"
     }
 }

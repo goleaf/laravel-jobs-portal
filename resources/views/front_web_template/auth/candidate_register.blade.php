@@ -7,7 +7,7 @@
         <!-- start hero section -->
 
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
               <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                   <div class="hero-content">
@@ -30,7 +30,7 @@
 
         <!-- start candidate login section -->
         <section class="py-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
                     <div class="flex-1 -xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
@@ -201,8 +201,8 @@
 {{-- @section('page_scripts') --}}
 {{--  --}}
 {{-- @if ($isGoogleReCaptchaEnabled) --}}
-{{-- {{-- CDN JS removed - now using local assets --}} --}}
-{{-- <script src="{{asset('assets/js/front_register/google-recaptcha.js') }}"></script> --}}
+{{ -- -- CDN JS removed - now using local assets -- -- }}
+{{ -- <script src="asset('assets/js/front_register/google-recaptcha.js') "></script> -- }}
 {{-- @endif --}}
 {{-- @endsection --}}
 

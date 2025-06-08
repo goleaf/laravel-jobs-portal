@@ -1,0 +1,506 @@
+// Universal Modern Component Styles
+// Modern TailwindCSS Components with Dark Mode Support
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Base Layer - Theme Variables
+@layer base {
+  :root {
+    --color-primary-50: theme('colors.primary.50');
+    --color-primary-500: theme('colors.primary.500');
+    --color-primary-600: theme('colors.primary.600');
+    --color-primary-700: theme('colors.primary.700');
+    
+    --shadow-sm: theme('boxShadow.sm');
+    --shadow-md: theme('boxShadow.md');
+    --shadow-lg: theme('boxShadow.lg');
+    --shadow-xl: theme('boxShadow.xl');
+  }
+
+  .dark {
+    --color-primary-50: theme('colors.primary.900');
+    --color-primary-500: theme('colors.primary.400');
+    --color-primary-600: theme('colors.primary.300');
+    --color-primary-700: theme('colors.primary.200');
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    @apply bg-gray-50 dark:bg-gray-900;
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .user-is-tabbing *:focus {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+}
+
+// Components Layer
+@layer components {
+  
+  // Button Components
+  .btn {
+    @apply inline-flex items-center justify-center;
+    @apply px-4 py-2 border border-transparent;
+    @apply text-sm font-medium rounded-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply transition-all duration-200 ease-in-out;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    
+    &.btn-primary {
+      @apply bg-primary-600 text-white;
+      @apply hover:bg-primary-700 focus:ring-primary-500;
+      @apply dark:bg-primary-500 dark:hover:bg-primary-600;
+    }
+    
+    &.btn-secondary {
+      @apply bg-white text-gray-700 border-gray-300;
+      @apply hover:bg-gray-50 focus:ring-primary-500;
+      @apply dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600;
+      @apply dark:hover:bg-gray-700;
+    }
+    
+    &.btn-success {
+      @apply bg-green-600 text-white;
+      @apply hover:bg-green-700 focus:ring-green-500;
+    }
+    
+    &.btn-warning {
+      @apply bg-yellow-600 text-white;
+      @apply hover:bg-yellow-700 focus:ring-yellow-500;
+    }
+    
+    &.btn-danger {
+      @apply bg-red-600 text-white;
+      @apply hover:bg-red-700 focus:ring-red-500;
+    }
+    
+    // Sizes
+    &.btn-sm {
+      @apply px-3 py-2 text-sm;
+    }
+    
+    &.btn-lg {
+      @apply px-6 py-3 text-lg;
+    }
+    
+    // Loading state
+    &.loading {
+      @apply cursor-not-allowed;
+      
+      .loading-spinner {
+        @apply animate-spin -ml-1 mr-2 h-4 w-4;
+      }
+    }
+    
+    // Ripple effect
+    &.btn-ripple {
+      @apply relative overflow-hidden;
+      
+      .ripple {
+        @apply absolute bg-white/30 rounded-full pointer-events-none;
+        animation: ripple 0.6s linear;
+        transform: scale(0);
+      }
+    }
+  }
+
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+  
+  // Card Components
+  .card {
+    @apply bg-white dark:bg-gray-800;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply rounded-lg shadow-sm;
+    @apply transition-all duration-200;
+    
+    &.card-hover {
+      @apply hover:shadow-md hover:-translate-y-1;
+      @apply cursor-pointer;
+    }
+    
+    .card-header {
+      @apply px-6 py-4 border-b border-gray-200 dark:border-gray-700;
+      
+      .card-title {
+        @apply text-lg font-semibold text-gray-900 dark:text-white;
+      }
+      
+      .card-subtitle {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+      }
+    }
+    
+    .card-body {
+      @apply px-6 py-4;
+    }
+    
+    .card-footer {
+      @apply px-6 py-4 border-t border-gray-200 dark:border-gray-700;
+      @apply bg-gray-50 dark:bg-gray-700/50;
+    }
+  }
+  
+  // Form Components
+  .form-group {
+    @apply mb-4;
+    
+    &.error {
+      .form-label {
+        @apply text-red-600 dark:text-red-400;
+      }
+      
+      .form-input {
+        @apply border-red-500 focus:ring-red-500;
+      }
+      
+      .form-error {
+        @apply block text-sm text-red-600 dark:text-red-400 mt-1;
+      }
+    }
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
+    
+    .required {
+      @apply text-red-500;
+    }
+  }
+  
+  .form-input {
+    @apply block w-full px-3 py-2;
+    @apply border border-gray-300 dark:border-gray-600;
+    @apply rounded-md shadow-sm;
+    @apply bg-white dark:bg-gray-700;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply placeholder-gray-400 dark:placeholder-gray-500;
+    @apply focus:ring-primary-500 focus:border-primary-500;
+    @apply transition-colors duration-200;
+    
+    &:disabled {
+      @apply bg-gray-100 dark:bg-gray-800;
+      @apply cursor-not-allowed opacity-60;
+    }
+  }
+  
+  .form-select {
+    @apply form-input;
+  }
+  
+  .form-textarea {
+    @apply form-input;
+    @apply resize-vertical min-h-[100px];
+  }
+  
+  // Floating Labels
+  .floating-label {
+    @apply relative;
+    
+    input, textarea {
+      @apply form-input pt-6 pb-2;
+      
+      &:focus + label,
+      &:not(:placeholder-shown) + label {
+        top: 0.25rem;
+        font-size: 0.75rem;
+        color: theme('colors.primary.600');
+      }
+    }
+    
+    label {
+      @apply absolute left-3 top-3 text-gray-500 dark:text-gray-400;
+      @apply transition-all duration-200 pointer-events-none;
+    }
+    
+    .dark input:focus + label,
+    .dark input:not(:placeholder-shown) + label {
+      color: theme('colors.primary.400');
+    }
+  }
+  
+  // Modal Components
+  .modal {
+    @apply fixed inset-0 z-50 hidden;
+    @apply bg-black bg-opacity-50 backdrop-blur-sm;
+    @apply flex items-center justify-center p-4;
+    
+    &.active {
+      @apply block;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal-dialog {
+      @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl;
+      @apply w-full max-w-md mx-auto;
+      @apply transform transition-all duration-300;
+      animation: slideUp 0.3s ease-out;
+    }
+    
+    .modal-header {
+      @apply px-6 py-4 border-b border-gray-200 dark:border-gray-700;
+      @apply flex items-center justify-between;
+      
+      .modal-title {
+        @apply text-lg font-semibold text-gray-900 dark:text-white;
+      }
+    }
+    
+    .modal-body {
+      @apply px-6 py-4;
+    }
+    
+    .modal-footer {
+      @apply px-6 py-4 border-t border-gray-200 dark:border-gray-700;
+      @apply flex items-center justify-end space-x-3;
+      @apply bg-gray-50 dark:bg-gray-700/50;
+    }
+  }
+  
+  // Dropdown Components
+  .dropdown {
+    @apply relative inline-block;
+    
+    .dropdown-menu {
+      @apply absolute right-0 mt-2 w-48 origin-top-right;
+      @apply bg-white dark:bg-gray-800 rounded-md shadow-lg;
+      @apply border border-gray-200 dark:border-gray-700;
+      @apply py-1 z-50;
+      @apply hidden;
+      
+      &.active {
+        @apply block;
+        animation: slideDown 0.2s ease-out;
+      }
+      
+      .dropdown-item {
+        @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300;
+        @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+        @apply transition-colors duration-150;
+        
+        &:focus {
+          @apply bg-gray-100 dark:bg-gray-700 outline-none;
+        }
+        
+        &.active {
+          @apply bg-primary-100 text-primary-900;
+          @apply dark:bg-primary-900/20 dark:text-primary-100;
+        }
+      }
+    }
+  }
+  
+  // Navigation Components
+  .navbar {
+    @apply bg-white dark:bg-gray-800 shadow-sm;
+    @apply border-b border-gray-200 dark:border-gray-700;
+    @apply transition-all duration-300;
+    
+    &.navbar-scroll {
+      &.scrolled {
+        @apply shadow-md backdrop-blur-md;
+        @apply bg-white/95 dark:bg-gray-800/95;
+      }
+      
+      &.nav-hidden {
+        @apply -translate-y-full;
+      }
+    }
+    
+    .navbar-brand {
+      @apply text-xl font-bold text-gray-900 dark:text-white;
+    }
+    
+    .nav-link {
+      @apply text-gray-600 dark:text-gray-400;
+      @apply hover:text-gray-900 dark:hover:text-white;
+      @apply px-3 py-2 rounded-md transition-colors duration-200;
+      
+      &.active {
+        @apply text-primary-600 dark:text-primary-400;
+        @apply bg-primary-100 dark:bg-primary-900/20;
+      }
+    }
+  }
+  
+  // Dashboard Components
+  .dashboard-card {
+    @apply card p-6;
+    
+    .metric-value {
+      @apply text-3xl font-bold text-gray-900 dark:text-white;
+    }
+    
+    .metric-label {
+      @apply text-sm text-gray-500 dark:text-gray-400;
+    }
+    
+    .metric-change {
+      @apply text-sm font-medium;
+      
+      &.positive {
+        @apply text-green-600 dark:text-green-400;
+      }
+      
+      &.negative {
+        @apply text-red-600 dark:text-red-400;
+      }
+    }
+  }
+  
+  .progress-bar {
+    @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2;
+    
+    .progress-fill {
+      @apply h-2 bg-primary-600 rounded-full transition-all duration-1000 ease-out;
+      width: 0%;
+    }
+  }
+  
+  // Alert Components
+  .alert {
+    @apply p-4 rounded-md border-l-4;
+    
+    &.alert-info {
+      @apply bg-blue-50 border-blue-400 text-blue-800;
+      @apply dark:bg-blue-900/20 dark:border-blue-400 dark:text-blue-300;
+    }
+    
+    &.alert-success {
+      @apply bg-green-50 border-green-400 text-green-800;
+      @apply dark:bg-green-900/20 dark:border-green-400 dark:text-green-300;
+    }
+    
+    &.alert-warning {
+      @apply bg-yellow-50 border-yellow-400 text-yellow-800;
+      @apply dark:bg-yellow-900/20 dark:border-yellow-400 dark:text-yellow-300;
+    }
+    
+    &.alert-danger {
+      @apply bg-red-50 border-red-400 text-red-800;
+      @apply dark:bg-red-900/20 dark:border-red-400 dark:text-red-300;
+    }
+  }
+  
+  // Badge Components
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full;
+    @apply text-xs font-medium;
+    
+    &.badge-primary {
+      @apply bg-primary-100 text-primary-800;
+      @apply dark:bg-primary-900/20 dark:text-primary-300;
+    }
+    
+    &.badge-success {
+      @apply bg-green-100 text-green-800;
+      @apply dark:bg-green-900/20 dark:text-green-300;
+    }
+    
+    &.badge-warning {
+      @apply bg-yellow-100 text-yellow-800;
+      @apply dark:bg-yellow-900/20 dark:text-yellow-300;
+    }
+    
+    &.badge-danger {
+      @apply bg-red-100 text-red-800;
+      @apply dark:bg-red-900/20 dark:text-red-300;
+    }
+    
+    &.badge-gray {
+      @apply bg-gray-100 text-gray-800;
+      @apply dark:bg-gray-700 dark:text-gray-300;
+    }
+  }
+  
+  // Table Components
+  .table-responsive {
+    @apply overflow-x-auto shadow ring-1 ring-black ring-opacity-5 rounded-lg;
+    
+    table {
+      @apply min-w-full divide-y divide-gray-300 dark:divide-gray-700;
+      
+      thead {
+        @apply bg-gray-50 dark:bg-gray-800;
+        
+        th {
+          @apply px-6 py-3 text-left text-xs font-medium;
+          @apply text-gray-500 dark:text-gray-400 uppercase tracking-wider;
+        }
+      }
+      
+      tbody {
+        @apply bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700;
+        
+        td {
+          @apply px-6 py-4 whitespace-nowrap text-sm;
+          @apply text-gray-900 dark:text-gray-100;
+        }
+      }
+    }
+  }
+}
+
+// Utilities Layer
+@layer utilities {
+  .modal-open {
+    @apply overflow-hidden;
+  }
+  
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  .glass {
+    @apply backdrop-blur-md bg-white/80 dark:bg-gray-800/80;
+    @apply border border-white/20 dark:border-gray-700/50;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}

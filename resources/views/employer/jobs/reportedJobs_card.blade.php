@@ -10,7 +10,7 @@
                     <div class="flex justify-center items-center w-full">
                         <div>
                             <label class="text-decoration-none text-color-gray">
-                                <a href=" {{ route('front.') }}/{{ $reportedJob->$job->job_id }}"
+                                <a href=" {{ route('front.home') }}/{{ $reportedJob->$job->job_id }}"
                                    class="text-decoration-none text-color-gray"
                                    target="_blank"> {{ $reportedJob->$job->job_title }}</a>
                             </label>

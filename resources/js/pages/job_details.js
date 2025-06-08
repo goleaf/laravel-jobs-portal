@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // job_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let addJobFavouriteUrl ="{{ route('save.favourite.job.index') }}"; --}}
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // job_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let addJobFavouriteUrl ="{{ route('save.favourite.job.index') }}"; --}}

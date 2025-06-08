@@ -17,7 +17,13 @@ class IndustryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->randomElement([
+                'Technology', 'Healthcare', 'Finance', 'Education', 'Manufacturing',
+                'Retail', 'Consulting', 'Media', 'Real Estate', 'Hospitality',
+                'Automotive', 'Energy', 'Construction', 'Agriculture', 'Transportation'
+            ]),
+            'description' => $this->faker->paragraph(3),
+            'is_default' => $this->faker->boolean(20), // 20% chance of being default
         ];
     }
 }

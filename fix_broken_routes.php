@@ -4,7 +4,7 @@
  * Broken Routes Fix Script
  * Identifies and fixes broken routes in blade templates
  * 
- * Based on Context7 Laravel routing best practices
+ * Based on Universal Laravel routing best practices
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -18,7 +18,7 @@ class RouteFixer
     
     public function __construct()
     {
-        echo "🛣️ Starting Route Fix using Context7 Laravel Routing Patterns...\n\n";
+        echo "🛣️ Starting Route Fix using Universal Laravel Routing Patterns...\n\n";
         $this->loadKnownRoutes();
     }
     
@@ -230,7 +230,7 @@ class RouteFixer
     private function generateRouteReport()
     {
         echo str_repeat("=", 70) . "\n";
-        echo "🛣️ ROUTE FIXES COMPLETED - CONTEXT7 PATTERNS APPLIED\n";
+        echo "🛣️ ROUTE FIXES COMPLETED - UNIVERSAL PATTERNS APPLIED\n";
         echo str_repeat("=", 70) . "\n\n";
         
         echo "📊 ROUTE FIX SUMMARY:\n";
@@ -267,7 +267,7 @@ class RouteFixer
             echo "\n";
         }
         
-        echo "📋 CONTEXT7 ROUTING BEST PRACTICES APPLIED:\n";
+        echo "📋 UNIVERSAL ROUTING BEST PRACTICES APPLIED:\n";
         echo "✅ Named routes: route('resource.action') pattern\n";
         echo "✅ RESTful routing: .index, .show, .create, .edit patterns\n";
         echo "✅ Namespace separation: admin.*, front.*, employer.* patterns\n";

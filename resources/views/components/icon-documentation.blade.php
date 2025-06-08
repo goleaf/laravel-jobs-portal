@@ -12,7 +12,7 @@
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -26,7 +26,7 @@
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid py-4">
         <div class="flex flex-wrap">
             <!-- Sidebar with Search -->
             <div class="flex-1 md-3">
@@ -193,7 +193,7 @@
     </div>
 
     <!-- Toast for Copy Confirmation -->
-    <div class="toast- container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fixed bottom-0 end-0 p-3">
+    <div class="toast- max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fixed bottom-0 end-0 p-3">
         <div id="copyToast" class="toast" role="alert">
             <div class="toast-header">
                 <i class="fas fa-copy text-green-600 me-2"></i>

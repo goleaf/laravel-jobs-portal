@@ -36,14 +36,14 @@
             <div class="flex flex- flex-1 flex- flex flex-wrap fluid">
                 <div class="flex flex- flex-1 flex-column-fluid pt-7">
                     <div class="content flex-column-fluid">
-                        <div class="w-full container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
+                        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
                             @yield('content')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-full container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl">
             @include('layouts.footer')
         </div>
         @include('employer_profile.edit_profile_modal')

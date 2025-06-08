@@ -2,7 +2,7 @@
 
 /**
  * Generate Comprehensive Validation Tests for Request Classes
- * Context7 Enhanced Testing Patterns
+ * Universal Enhanced Testing Patterns
  */
 
 require 'vendor/autoload.php';
@@ -91,7 +91,7 @@ use Tests\TestCase;
 use App\Models\User;
 
 /**
- * Context7 Enhanced Validation Tests for {$className}
+ * Universal Enhanced Validation Tests for {$className}
  * 
  * @group validation
  * @group requests

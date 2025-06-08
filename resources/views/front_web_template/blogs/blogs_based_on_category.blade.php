@@ -3,21 +3,21 @@
     {{ __('web.post_of') . html_entity_decode($blogCategory[$categoryId]) }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/blog.css') }}"> --}}
+{{ -- <link rel="stylesheet" href=" asset('front_web/scss/blog.css') "> -- }}
 {{-- @endsection --}}
 @section('content')
-    {{ -- <section class="hero-section relative bg-gray-100 py-40">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+    {{  -- <section class="hero-section relative bg-gray-100 py-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                     <div class="hero-content">
                         <h1 class="text-gray-600 mb-3">
-                            {{ __('web.post_of').html_entity_decode($blogCategory[$categoryId]) }}
+                             __('web.post_of').html_entity_decode($blogCategory[$categoryId]) 
                         </h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb justify-center mb-0">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('front.home') }}"
+                                    <a href="{{ route('front.home')  }}"
                                        class="fs-18 text-gray">{{ __('web.home') }}</a>
                                 </li>
                                 <li class="breadcrumb-item text-indigo-600-600 fs-18"
@@ -30,7 +30,7 @@
         </div>
     </section>
     <section class="recent-blog-section py-100">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="blog- bg-white shadow rounded -lg overflow-hidden">
@@ -85,7 +85,7 @@
         </div>
     </section> --}}
     <section class="hero-section relative bg-gradient pt-15 pb-40">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center">
                     <div class="hero-content">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="mani-blog recent-blog-section pt-60 pb-60">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="blog- bg-white shadow rounded -lg overflow-hidden">

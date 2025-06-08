@@ -5,7 +5,7 @@
 @section('content')
 
     <section class="hero-section relative bg-gradient pt-15 pb-40">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                     <div class="hero-content">
@@ -28,7 +28,7 @@
     </section>
 
     <div class="privacy-policy-section pt-60 pb-100">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="about-infyjob">
                 <h5 class="fs-18 text-gray-600 mb-3">{{ __('messages.setting.terms_conditions') }}</h5>
                 <p class="fs-16 text-gray mb-0">
@@ -41,7 +41,7 @@
 
 {{-- @section('scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/front_register/front_register.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/front_register/front_register.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

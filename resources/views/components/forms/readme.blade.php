@@ -1,5 +1,5 @@
 <!-- Form Helpers README -->
-<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
     <h1>Form Helpers Documentation</h1>
     
     <h2>Introduction</h2>

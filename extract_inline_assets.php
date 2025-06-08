@@ -4,7 +4,7 @@
  * Inline Asset Extraction Script
  * Extracts inline CSS/JS from blade templates to separate files
  * 
- * Based on Context7 Laravel asset management best practices
+ * Based on Universal Laravel asset management best practices
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -18,7 +18,7 @@ class InlineAssetExtractor
     
     public function __construct()
     {
-        echo "📦 Starting Inline Asset Extraction using Context7 Patterns...\n\n";
+        echo "📦 Starting Inline Asset Extraction using Universal Patterns...\n\n";
         $this->ensureDirectories();
     }
     

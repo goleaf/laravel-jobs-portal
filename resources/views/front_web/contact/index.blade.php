@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="flex-1 lg-8">
-                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.')])
+                            @formOpen(['id' => 'formContact', 'name' => 'frm-contact', 'class' => 'py-40 pe-lg-5 px-4', 'method' => 'POST', 'url' => route('front.home')])
                                 @csrf
                                 @include('flash::message')
                                 @include('front_web.layouts.errors')
@@ -143,7 +143,7 @@
 {{-- @section('page_scripts') --}}
 {{--  --}}
 
-{{-- {{-- CDN JS removed - now using local assets --}}--}}
+{{ -- -- CDN JS removed - now using local assets ---- }}
 {{-- @endsection --}}
 
 @push('scripts')

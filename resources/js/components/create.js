@@ -9,7 +9,7 @@ let isEdit = false;
 
 });
 // create Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var phoneNo ="{{ old('region_code').old('phone') }}";
 

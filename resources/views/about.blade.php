@@ -7,7 +7,7 @@
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">
                 <i class="fas fa-briefcase me-2"></i>
                 {{ config('app.name') }}
@@ -39,7 +39,7 @@
 
     <!-- Hero Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center">
                 <div class="flex-1 lg-6">
                     <h1 class="display-4 fw-bold text-indigo-600 -600">{{ __('About Our Job Portal') }}</h1>
@@ -54,7 +54,7 @@
 
     <!-- Mission Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8 mx-auto text-center">
                     <h2 class="mb-4">{{ __('Our Mission') }}</h2>
@@ -68,7 +68,7 @@
 
     <!-- Features Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center mb-5">
                     <h2>{{ __('Why Choose Us?') }}</h2>
@@ -115,7 +115,7 @@
 
     <!-- Stats Section -->
     <section class="py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap text-center">
                 <div class="flex-1 md-3 mb-4">
                     <div class="bg-white shadow rounded -lg overflow-hidden border border border-gray-300 -gray-300 -0">
@@ -155,7 +155,7 @@
 
     <!-- Team Section -->
     <section class="bg-gray-100 py-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-12 text-center mb-5">
                     <h2>{{ __('Our Team') }}</h2>
@@ -211,7 +211,7 @@
 
     <!-- Call to Action -->
     <section class="py-5 bg-indigo-600 -600 text-white">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto text-center">
             <h2 class="mb-4">{{ __('Ready to Get Started?') }}</h2>
             <p class="lead mb-4">{{ __('Join thousands of job seekers and employers who trust our platform') }}</p>
             <div class="flex flex-wrap justify-center">
@@ -231,7 +231,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 md-6">
                     <h5>{{ config('app.name') }}</h5>

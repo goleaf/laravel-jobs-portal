@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let enableEditText ="{{ __('messages.setting.enable_edit') }}"; --}}
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let getEmployerJobs ="{{ url('admin/employer-jobs') }}";
         let jobDetails ="{{ url('admin/jobs') }}";
@@ -47,7 +47,7 @@ let getEmployerJobs ="{{ url('admin/employer-jobs') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- var statusArray = JSON.parse('@json($statusArray)'); --}}
@@ -59,7 +59,7 @@ let getEmployerJobs ="{{ url('admin/employer-jobs') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 document.addEventListener('livewire:initialized', () => {
         // Listening for the event to fill form when editing
@@ -85,7 +85,7 @@ document.addEventListener('livewire:initialized', () => {
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 document.addEventListener('livewire:initialized', () => {
             Livewire.on('refresh', () => {
@@ -107,7 +107,7 @@ document.addEventListener('livewire:initialized', () => {
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let testimonialImageSaveUrl ="{{ route('download.image') }}";
 
@@ -117,7 +117,7 @@ let testimonialImageSaveUrl ="{{ route('download.image') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 document.addEventListener('livewire:initialized', () => {
             Livewire.on('refresh', () => {

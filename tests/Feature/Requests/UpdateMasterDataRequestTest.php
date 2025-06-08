@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 
 /**
- * Context7 Enhanced Validation Tests for UpdateMasterDataRequest
+ * Universal Enhanced Validation Tests for UpdateMasterDataRequest
  * 
  * @group validation
  * @group requests

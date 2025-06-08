@@ -58,5 +58,5 @@
     {{ Form::hidden('header-extension-message',__('messages.image_slider.image_extension_message'),['id' => 'imageExtensionMessage']) }}
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/image_slider/image_slider.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/image_slider/image_slider.js') "></script> -- }}
 {{-- @endpush --}}

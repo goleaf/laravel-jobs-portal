@@ -4,7 +4,7 @@
  * Bootstrap to TailwindCSS Migration Script
  * Migrates Bootstrap classes to TailwindCSS in blade templates
  * 
- * Based on Context7 TailwindCSS best practices and Laravel patterns
+ * Based on Universal TailwindCSS best practices and Laravel patterns
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -217,7 +217,7 @@ class BootstrapToTailwindMigrator
     
     public function __construct()
     {
-        echo "🎨 Starting Bootstrap to TailwindCSS Migration using Context7 Patterns...\n\n";
+        echo "🎨 Starting Bootstrap to TailwindCSS Migration using Universal Patterns...\n\n";
     }
     
     /**

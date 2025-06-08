@@ -8,11 +8,11 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/employers*', 'admin/reported-employers*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/reported-employers*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.company.reported_employers') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.company.reported_employers') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/admins*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/admins*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.candidate.admins') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.candidate.admins') }}</a>
 </li>
 
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'hidden' : '' }}">
@@ -21,19 +21,19 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/degree-levels*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.required_degree_levels') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.required_degree_levels') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/reported-candidates*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.candidate.reported_candidates') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.candidate.reported_candidates') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/resumes*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.all_resumes') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.all_resumes') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/candidates*','admin/degree-levels*','admin/reported-candidates*','admin/resumes*','admin/selected-candidates*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/selected-candidates*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.selected_candidate') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.selected_candidate') }}</a>
 </li>
 
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}">
@@ -42,19 +42,19 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/job-categories*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.job_categories') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.job_categories') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/job-types*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.job_types') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.job_types') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/job-tags*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.job_tags') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.job_tags') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/job-shifts*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.job_shifts') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.job_shifts') }}</a>
 </li>
 <div class="{{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? ' hidden ' : '' }}">
     <li class="hidden d-xl-grid relative inline-block text-left relative inline-block text-left -hover">
@@ -69,11 +69,11 @@
             </li>
             <li>
                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/job-notification*') ? 'active' : '' }} {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}"
-                   href="{{ route('notification.') }}">{{ __('messages.job_notification.job_notifications') }}</a>
+                   href="{{ route('jobnotification.index') }}">{{ __('messages.job_notification.job_notifications') }}</a>
             </li>
             <li>
                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/expired-jobs*') ? 'active' : '' }} {{ !Request::is('admin/jobs*','admin/job-categories*','admin/job-types*','admin/job-tags*','admin/job-shifts*','admin/reported-jobs*','admin/job-notification*','admin/expired-jobs*') ? 'hidden' : '' }}"
-                   href="{{ route('admin.') }}">{{ __('messages.expired_jobs') }}</a>
+                   href="{{ route('admin.dashboard') }}">{{ __('messages.expired_jobs') }}</a>
             </li>
         </ul>
     </li>
@@ -98,7 +98,7 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/plans*','admin/transactions*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/transactions*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.transactions') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.transactions') }}</a>
 </li>
 
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/subscribers*') ? 'hidden' : '' }}">
@@ -108,24 +108,24 @@
 
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/countries*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.country.countries') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.country.countries') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/states*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.state.states') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.state.states') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is("admin/countries*','admin/states*','admin/cities*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/cities*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.city.cities') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.city.cities') }}</a>
 </li>
 
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/marital-status*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.marital_statuses') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.marital_statuses') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/skills*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.skills') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.skills') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/salary-periods*') ? 'active' : '' }}"
@@ -133,11 +133,11 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/industries*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.industries') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.industries') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/company-sizes*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.company_sizes') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.company_sizes') }}</a>
 </li>
 <div class="{{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? ' hidden ' : '' }}">
     <li class="hidden d-xl-grid relative inline-block text-left relative inline-block text-left -hover">
@@ -152,7 +152,7 @@
             </li>
             <li>
                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/career-levels*') ? 'active' : '' }} {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}"
-                   href="{{ route('admin.') }}">{{ __('messages.career_levels') }}</a>
+                   href="{{ route('admin.dashboard') }}">{{ __('messages.career_levels') }}</a>
             </li>
             <li>
                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/salary-currencies*') ? 'active' : '' }} {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}"
@@ -164,7 +164,7 @@
             </li>
             <li>
                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/languages*') ? 'active' : '' }} {{ !Request::is('admin/marital-status*','admin/skills*','admin/salary-periods*','admin/industries*','admin/company-sizes*','admin/functional-areas*','admin/career-levels*','admin/salary-currencies*','admin/ownership-types*','admin/languages*') ? 'hidden' : '' }}"
-                   href="{{ route('admin.') }}">{{ __('messages.languages') }}</a>
+                   href="{{ route('admin.dashboard') }}">{{ __('messages.languages') }}</a>
             </li>
         </ul>
     </li>
@@ -176,15 +176,15 @@
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/faqs*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.faq.faq') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.faq.faq') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/inquires*') ? 'active' : '' }}"
-       href="{{ route('admin.') }}">{{ __('messages.inquires') }}</a>
+       href="{{ route('admin.dashboard') }}">{{ __('messages.inquires') }}</a>
 </li>
 <li class="flex space-x-8-item relative mx-xl-3 mt-3 mb-xl-0 {{ !Request::is("admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}">
     <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium p-0 {{ Request::is("admin/notification-settings*') ? 'active' : '' }}"
-       href="{{ route('notification.') }}">{{ __('messages.setting.notification_settings') }}</a>
+       href="{{ route('jobnotification.index') }}">{{ __('messages.setting.notification_settings') }}</a>
 </li>
 <div class="{{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? ' hidden ' : '' }}">
 <li class="hidden d-xl-grid relative inline-block text-left relative inline-block text-left -hover">
@@ -201,13 +201,13 @@
             <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/front-settings*') ? 'active' : '' }} {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}"
                href="{{ route('admin.dashboard') }}">{{ __('messages.setting.front_settings') }}</a>
         </li>
-        {{ -- <li>
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/translation-manager*') ? 'active' : '' }} {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/translation-manager*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}"
+        {{  -- <li>
+            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  Request::is("admin/translation-manager*') ? 'active' : ''  {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/translation-manager*','admin/email-template*','admin/settings*') ? 'hidden' : ''  }}"
                href="{{ route('translation-manager.index') }}">{{ __('messages.translation_manager') }}</a>
         </li> --}}
         <li>
             <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/email-template*') ? 'active' : '' }} {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}"
-               href="{{ route('admin.') }}">{{ __('messages.email_templates') }}</a>
+               href="{{ route('admin.dashboard') }}">{{ __('messages.email_templates') }}</a>
         </li>
         <li>
             <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ Request::is("admin/settings*') ? 'active' : '' }} {{ !Request::is('admin/noticeboards*','admin/faqs*','admin/inquires*','admin/notification-settings*','admin/privacy-policy*','admin/front-settings*','admin/email-template*','admin/settings*') ? 'hidden' : '' }}"

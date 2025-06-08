@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\User;
 
 /**
- * Context7 Test for RedisHealthController
- * Implements Laravel 12 testing best practices with Context7 MCP patterns
+ * Universal Test for RedisHealthController
+ * Implements Laravel 12 testing best practices with Universal MCP patterns
  */
 class RedisHealthControllerTest extends TestCase
 {
@@ -21,12 +21,12 @@ class RedisHealthControllerTest extends TestCase
     {
         parent::setUp();
         
-        // Context7 Pattern: Create test user with appropriate permissions
+        // Universal Pattern: Create test user with appropriate permissions
         $this->user = User::factory()->create();
     }
 
     /**
-     * Context7 Pattern: Test index/home functionality
+     * Universal Pattern: Test index/home functionality
      */
     public function test_index_displays_correctly(): void
     {
@@ -38,7 +38,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test guest access when appropriate
+     * Universal Pattern: Test guest access when appropriate
      */
     public function test_guest_can_access_public_pages(): void
     {
@@ -49,7 +49,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test authenticated access
+     * Universal Pattern: Test authenticated access
      */
     public function test_authenticated_user_access(): void
     {
@@ -61,7 +61,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test create form display (if applicable)
+     * Universal Pattern: Test create form display (if applicable)
      */
     public function test_create_displays_form(): void
     {
@@ -73,7 +73,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test store functionality (if applicable)
+     * Universal Pattern: Test store functionality (if applicable)
      */
     public function test_store_creates_new_record(): void
     {
@@ -92,7 +92,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test validation requirements
+     * Universal Pattern: Test validation requirements
      */
     public function test_store_validates_required_fields(): void
     {
@@ -104,7 +104,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test show functionality (if applicable)
+     * Universal Pattern: Test show functionality (if applicable)
      */
     public function test_show_displays_record(): void
     {
@@ -118,7 +118,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test edit form display (if applicable)
+     * Universal Pattern: Test edit form display (if applicable)
      */
     public function test_edit_displays_form(): void
     {
@@ -129,7 +129,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test update functionality (if applicable)
+     * Universal Pattern: Test update functionality (if applicable)
      */
     public function test_update_modifies_record(): void
     {
@@ -146,7 +146,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test delete functionality (if applicable)
+     * Universal Pattern: Test delete functionality (if applicable)
      */
     public function test_destroy_deletes_record(): void
     {
@@ -158,7 +158,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test authorization middleware
+     * Universal Pattern: Test authorization middleware
      */
     public function test_unauthorized_access_is_prevented(): void
     {
@@ -169,7 +169,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test with invalid data
+     * Universal Pattern: Test with invalid data
      */
     public function test_handles_invalid_input_gracefully(): void
     {
@@ -186,7 +186,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test search functionality (if applicable)
+     * Universal Pattern: Test search functionality (if applicable)
      */
     public function test_search_functionality(): void
     {
@@ -200,7 +200,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test pagination (if applicable)
+     * Universal Pattern: Test pagination (if applicable)
      */
     public function test_pagination_works_correctly(): void
     {
@@ -211,7 +211,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test CSRF protection
+     * Universal Pattern: Test CSRF protection
      */
     public function test_csrf_protection_is_enforced(): void
     {
@@ -223,7 +223,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test rate limiting (if applicable)
+     * Universal Pattern: Test rate limiting (if applicable)
      */
     public function test_rate_limiting_prevents_abuse(): void
     {
@@ -238,7 +238,7 @@ class RedisHealthControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test error handling
+     * Universal Pattern: Test error handling
      */
     public function test_handles_server_errors_gracefully(): void
     {

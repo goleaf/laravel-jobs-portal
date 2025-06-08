@@ -1,4 +1,4 @@
-<div class="filter- container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+<div class="filter- max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
     <label for="filter-{{ $filter->getKey() }}" class="block text-sm font-medium text-gray-700 mb-1">{{ $filter->getName() }}</label>
     <div class="flex items-center">
         <input type="date" 

@@ -22,7 +22,7 @@
     <div class="flex-1 -xl-12 md:w-full flex-1 sm-12 mb-5">
         {{ Form::label('description', __('messages.job.description').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{-- {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'details', 'flex flex-wrap -mx-4s' => '5']) }} --}}
+        {{ --  Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'details', 'flex flex-wrap -mx-4s' => '5'])  -- }}
         <div id="editDetails"></div>
         {{ Form::hidden('description',$job->description, ['id' => 'editJobDescription']) }}
     </div>

@@ -3,13 +3,13 @@
     {{ __('messages.about_us') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}"> --}}
+{{ -- <link rel="stylesheet" href=" asset('front_web/scss/about-us.css') "> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="About Us-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -34,7 +34,7 @@
 
         <!-- start-about-section -->
         <div class="about-section pt-60 pb-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="about-infyjob">
                     <h5 class="fs-18 text-gray-600 mb-3">{{ __('web.about_us') }}</h5>
                     <p class="fs-16 text-gray mb-0">
@@ -47,7 +47,7 @@
 
         <!-- start-how-it-works section -->
         <section class="how-it-works-section bg-gray-100 pt-100 pb-60">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">{{ __('web.about_us_menu.how_it_works') }}?</h2>
@@ -105,12 +105,12 @@
         <!-- end-how-it-works section -->
 
         <!-- start question-section -->
-        {{ -- <section class="question-section py-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        {{  -- <section class="question-section py-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">
-                            {{ __('web.about_us_menu.frequently_asked_questions') }}
+                             __('web.about_us_menu.frequently_asked_questions') 
                         </h2>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                                 <div class="accordion" id="accordionExample">
                                     @foreach ($faqLists as $key => $faqList)
                                         <div class="accordion-item br-10">
-                                            <h2 class="accordion-header" id="heading-{{ $key }}">
+                                            <h2 class="accordion-header" id="heading-{{ $key  }}">
                                                 <button class="accordion-button collapsed fs-18 p-3" type="button"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#collapse-{{ $key }}" aria-expanded="false"
@@ -150,7 +150,7 @@
             </div>
         </section> --}}
         <section class="question-section py-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="overflow-hidden pb-60">
                     <div class="section-heading text-center">
                         <h2 class="text-gray-600 mb-0 inline-block">

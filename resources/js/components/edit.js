@@ -18,7 +18,7 @@ let isEdit = true;
 
 });
 // edit Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let blogDescription = '{{ $post->description }}';
 
@@ -28,7 +28,7 @@ let blogDescription = '{{ $post->description }}';
     }
 });
 // edit Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var phoneNo ="{{ old('region_code').old('phone') }}";
 
@@ -38,7 +38,7 @@ var phoneNo ="{{ old('region_code').old('phone') }}";
     }
 });
 // edit Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var phoneNo ="{{ old('region_code').old('phone') }}";
     let countryId = '{{ $company->$user->country_id }}';

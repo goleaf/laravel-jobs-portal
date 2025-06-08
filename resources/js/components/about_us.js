@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // about_us Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let aboutUsData = `{{ $setting['about_us'] }}`;
 

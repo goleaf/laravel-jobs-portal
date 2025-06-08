@@ -3,7 +3,7 @@
     {{ __('messages.email_template.edit_email_template') }}
 @endsection
 @section('header_toolbar')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="d-md-flex items-center justify-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
@@ -13,7 +13,7 @@
     </div>
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex flex- flex-1">
             <div class="flex flex-wrap">
                 <div class="flex-1 -12">
@@ -46,7 +46,7 @@
 
                                 <div class="flex justify-end mt-5">
                                     {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3']) }}
-                                    <a href="{{ route('admin.') }}"
+                                    <a href="{{ route('admin.dashboard') }}"
                                        class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
                                 </div>
                             </div>

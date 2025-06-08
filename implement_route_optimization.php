@@ -2,7 +2,7 @@
 
 /**
  * ROUTE OPTIMIZATION IMPLEMENTATION SCRIPT
- * Following Laravel routing best practices from Context7 documentation
+ * Following Laravel routing best practices from Universal documentation
  * 
  * This script will:
  * 1. Backup current routes
@@ -108,7 +108,7 @@ class RouteOptimizationImplementer
         $constraints = "
 /*
 |--------------------------------------------------------------------------
-| Global Route Parameter Constraints (Context7 Best Practice)
+| Global Route Parameter Constraints (Universal Best Practice)
 |--------------------------------------------------------------------------
 */
 Route::pattern('id', '[0-9]+');
@@ -391,7 +391,7 @@ public function boot()
                 echo "   ❌ Optimized routes file is invalid PHP\n";
             }
             
-            // Check for Context7 best practices
+            // Check for Universal best practices
             $practices = [
                 'Route::pattern(' => 'Global parameter constraints',
                 'Route::middleware(' => 'Middleware grouping',

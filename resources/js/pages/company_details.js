@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // company_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let addCompanyFavouriteUrl ="{{ route('save.favourite.company.index') }}" --}}
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // company_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let addCompanyFavouriteUrl ="{{ route('save.favourite.company.index') }}" --}}

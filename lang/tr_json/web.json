@@ -127,7 +127,8 @@
         "click_here": "Burayı Tıklayın",
         "to_upload_resume": "özgeçmişi yüklemek için",
         "register_to_apply": "Başvurmak için kaydolun",
-        "location_information_not_available": "Konum Bilgisi mevcut değil."
+        "location_information_not_available": "Konum Bilgisi mevcut değil.",
+        "functional_area": "Functional Area"
     },
     "apply_for_job": {
         "apply_for": "Şunun İçin Başvur",
@@ -257,7 +258,8 @@
         "view_company_profile": "Şirket profilini görüntüle",
         "founded_in": "Da kuruldu",
         "phone": "Telefon",
-        "Skill_Experience": "Beceri ve Deneyim"
+        "Skill_Experience": "Beceri ve Deneyim",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Şirket Ara",
@@ -307,5 +309,35 @@
         "reset_password": "Şifreyi yenile",
         "new_password": "Yeni Şifre Belirle",
         "set_new_password": "Yeni Şifre Belirle"
+    },
+    "web": {
+        "welcome": "İş portalımıza hoş geldiniz",
+        "find_job": "Hayalinizdeki işi bulun",
+        "post_job": "İş ilanı ver",
+        "welcome_title": "İş bul, yetenek işe al",
+        "welcome_subtitle": "İş arayan ile işverenleri birleştiriyor",
+        "for_job_seekers": "İş arayanlar için",
+        "for_employers": "İşverenler için",
+        "search_jobs": "İş ara",
+        "browse_companies": "Şirketlere gözat",
+        "latest_jobs": "Son işler",
+        "featured_companies": "Öne çıkan şirketler"
+    },
+    "nav": {
+        "home": "Ana Sayfa",
+        "jobs": "İşler",
+        "companies": "Şirketler",
+        "candidates": "Adaylar",
+        "about": "Hakkımızda",
+        "contact": "İletişim",
+        "login": "Giriş Yap",
+        "register": "Kayıt Ol",
+        "dashboard": "Panel",
+        "profile": "Profil",
+        "logout": "Çıkış Yap",
+        "find_jobs": "İş Bul",
+        "post_job": "İş İlanı Ver",
+        "browse_companies": "Şirketlere Gözat",
+        "admin_panel": "Yönetici Paneli"
     }
 }

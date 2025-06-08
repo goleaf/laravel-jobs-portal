@@ -22,7 +22,7 @@
             </div>
             <div class="bg-gray-50 px-5 py-3">
                 <div class="text-sm">
-                    <a href="{{ route('admin.') }}" class="font-medium text-blue-700 hover:text-blue-900">
+                    <a href="{{ route('admin.dashboard') }}" class="font-medium text-blue-700 hover:text-blue-900">
                         {{ __('messages.view_all') }}
                     </a>
                 </div>
@@ -100,7 +100,7 @@
             </div>
             <div class="bg-gray-50 px-5 py-3">
                 <div class="text-sm">
-                    <a href="{{ route('admin.') }}" class="font-medium text-blue-700 hover:text-blue-900">
+                    <a href="{{ route('admin.dashboard') }}" class="font-medium text-blue-700 hover:text-blue-900">
                         {{ __('messages.view_details') }}
                     </a>
                 </div>
@@ -197,28 +197,28 @@
             <div class="p-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <x-shared.components.forms.button 
-                        href="{{ route('admin.') }}" 
+                        href="{{ route('admin.dashboard') }}" 
                         variant="primary" 
                         class="w-full">
                         {{ __('messages.add_user') }}
                     </x-shared.components.forms.button>
                     
                     <x-shared.components.forms.button 
-                        href="{{ route('admin.') }}" 
+                        href="{{ route('admin.dashboard') }}" 
                         variant="success" 
                         class="w-full">
                         {{ __('messages.add_job') }}
                     </x-shared.components.forms.button>
                     
                     <x-shared.components.forms.button 
-                        href="{{ route('admin.') }}" 
+                        href="{{ route('admin.dashboard') }}" 
                         variant="info" 
                         class="w-full">
                         {{ __('messages.add_company') }}
                     </x-shared.components.forms.button>
                     
                     <x-shared.components.forms.button 
-                        href="{{ route('admin.') }}" 
+                        href="{{ route('admin.dashboard') }}" 
                         variant="secondary" 
                         class="w-full">
                         {{ __('messages.settings') }}

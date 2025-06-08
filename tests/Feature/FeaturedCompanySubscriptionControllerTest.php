@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\User;
 
 /**
- * Context7 Test for FeaturedCompanySubscriptionController
- * Implements Laravel 12 testing best practices with Context7 MCP patterns
+ * Universal Test for FeaturedCompanySubscriptionController
+ * Implements Laravel 12 testing best practices with Universal MCP patterns
  */
 class FeaturedCompanySubscriptionControllerTest extends TestCase
 {
@@ -19,12 +19,12 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     {
         parent::setUp();
         
-        // Context7 Pattern: Create test user with appropriate permissions
+        // Universal Pattern: Create test user with appropriate permissions
         $this->user = User::factory()->create();
     }
 
     /**
-     * Context7 Pattern: Test index functionality
+     * Universal Pattern: Test index functionality
      */
     public function test_index_displays_correctly(): void
     {
@@ -35,7 +35,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test create form display
+     * Universal Pattern: Test create form display
      */
     public function test_create_displays_form(): void
     {
@@ -46,7 +46,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test successful store operation
+     * Universal Pattern: Test successful store operation
      */
     public function test_store_creates_new_record(): void
     {
@@ -68,7 +68,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test validation errors
+     * Universal Pattern: Test validation errors
      */
     public function test_store_validates_required_fields(): void
     {
@@ -79,7 +79,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test show functionality
+     * Universal Pattern: Test show functionality
      */
     public function test_show_displays_record(): void
     {
@@ -92,7 +92,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test edit form display
+     * Universal Pattern: Test edit form display
      */
     public function test_edit_displays_form(): void
     {
@@ -105,7 +105,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test successful update operation
+     * Universal Pattern: Test successful update operation
      */
     public function test_update_modifies_record(): void
     {
@@ -126,7 +126,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test successful delete operation
+     * Universal Pattern: Test successful delete operation
      */
     public function test_destroy_deletes_record(): void
     {
@@ -140,7 +140,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test authorization
+     * Universal Pattern: Test authorization
      */
     public function test_unauthorized_access_is_prevented(): void
     {
@@ -150,7 +150,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test with invalid data
+     * Universal Pattern: Test with invalid data
      */
     public function test_store_with_invalid_email(): void
     {
@@ -167,7 +167,7 @@ class FeaturedCompanySubscriptionControllerTest extends TestCase
     }
 
     /**
-     * Context7 Pattern: Test unique validation
+     * Universal Pattern: Test unique validation
      */
     public function test_store_prevents_duplicate_names(): void
     {

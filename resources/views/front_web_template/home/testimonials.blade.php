@@ -1,5 +1,5 @@
 <section class="testimonial-section overflow-hidden py-100">
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
             <div class="flex-1 -xl-3 lg:w-4/12 px-2 flex-1 -sm-6 flex-1 -7">
                 <div class="section-heading">

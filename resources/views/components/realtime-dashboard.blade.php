@@ -296,7 +296,7 @@
                                 {{ __('dashboard.my_applications') }}
                             </a>
                         @else
-                            <a href="{{ route('employer.') }}" class="border border-gray-300 bg-transparent">
+                            <a href="{{ route('employer.dashboard') }}" class="border border-gray-300 bg-transparent">
                                 {{ __('dashboard.post_job') }}
                             </a>
                             

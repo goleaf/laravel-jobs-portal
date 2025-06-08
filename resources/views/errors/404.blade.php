@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>404 Not Found | {{ getAppName() }}</title></head>
 <body>
-<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto con-404 vh-100 flex justify-center">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto con-404 vh-100 flex justify-center">
     <div class="flex flex-wrap justify-content-md-center block">
         <div class="flex-1 md-12 mt-5">
             <img src="{{ asset('assets/img/404-error-image.png') }}" class="img-fluid img-404 mx-auto block">

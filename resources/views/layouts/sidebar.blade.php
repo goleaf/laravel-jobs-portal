@@ -1,5 +1,5 @@
-{{-- <link href="{{ mix('assets/css/style.css') }}" rel="stylesheet" type="text/css"/> --}}
-<div class="aside-menu- container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto" id="sidebar">
+{{ -- <link href=" mix('assets/css/style.css') " rel="stylesheet" type="text/css"/> -- }}
+<div class="aside-menu- max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto" id="sidebar">
     <!--begin::Brand-->
     <div class="aside-menu-container__aside-logo flex-column-auto">
         <a data-turbo="false" href="{{ url('/') }}" target="_blank" data-toggle="tooltip" data-placement="right"

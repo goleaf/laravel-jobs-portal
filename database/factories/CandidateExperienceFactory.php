@@ -17,7 +17,7 @@ class CandidateExperienceFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'candidate_id' => \App\Models\Candidate::factory(),
             'experience_title' => $this->faker->jobTitle,
             'company' => $this->faker->company,
             'country_id' => random_int(1, 50),

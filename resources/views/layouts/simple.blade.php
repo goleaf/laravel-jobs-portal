@@ -16,7 +16,7 @@
 <body>
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ url('/') }}">
                 <i class="fas fa-briefcase me-2"></i>{{ config('app.name', 'Job Portal') }}
             </a>
@@ -63,7 +63,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-light py-5 mt-5">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 md-4">
                     <h5><i class="fas fa-briefcase me-2"></i>{{ config('app.name', 'Job Portal') }}</h5>

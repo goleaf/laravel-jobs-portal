@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex flex- flex-1">
             @include('flash::message')
             @include('error')
@@ -26,6 +26,6 @@
     @include('translation-manager.create')
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/language_translate/language_translate.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/language_translate/language_translate.js') "></script> -- }}
 {{-- @endpush --}}
 

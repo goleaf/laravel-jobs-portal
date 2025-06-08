@@ -13,7 +13,7 @@
     <div class="Blog-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center">
                         <div class="hero-content">
@@ -38,7 +38,7 @@
 
         <!--start contact-us-section-->
         <section class="contact-us-section py-60 mb-5">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="contact-us bg-gray-100 br-10">
                     <div class="flex flex-wrap">
                         <div class="flex-1 lg-3 lg:block hidden text-end">
@@ -53,7 +53,7 @@
                                         {{ __('web.home_menu.contact_us') }}
                                     </h2>
                                 </div>
-                                @formOpen(['url' => route('front.'), 'id' => 'contactForm'])
+                                @formOpen(['url' => route('front.home'), 'id' => 'contactForm'])
                                     @csrf
                                     <div class="flex flex-wrap">
                                         <div class="flex-1 md-6">
@@ -112,7 +112,7 @@
 {{-- @section('page_scripts') --}}
 {{--  --}}
 
-{{-- {{-- CDN JS removed - now using local assets --}} --}}
+{{ -- -- CDN JS removed - now using local assets -- -- }}
 {{-- @endsection --}}
 
 @push('scripts')

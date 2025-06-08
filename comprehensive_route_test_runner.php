@@ -2,7 +2,7 @@
 
 /**
  * Comprehensive Route Testing and Test Runner
- * Following Laravel Best Practices from Context7
+ * Following Laravel Best Practices from Universal
  * 
  * This script:
  * 1. Tests all routes for accessibility

@@ -23,11 +23,11 @@
     <link href="{{ mix('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ mix('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ mix('assets/css/custom-auth.css') }}" rel="stylesheet">
-    {{-- <link href="{{ mix('css/front-pages.css') }}" rel="stylesheet" type="text/css"> --}}
+    {{ -- <link href=" mix('css/front-pages.css') " rel="stylesheet" type="text/css"> -- }}
 
     
-{{-- <link href="{{ asset('assets/plugins/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/> --}}
-{{-- <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css"/> --}}
+{{ -- <link href=" asset('assets/plugins/plugins.bundle.css') " rel="stylesheet" type="text/css"/> -- }}
+{{ -- <link href=" asset('assets/css/style.bundle.css') " rel="stylesheet" type="text/css"/> -- }}
 <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
@@ -80,10 +80,10 @@
                     @yield('content')
                 </div>
             </div>
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
                 <footer class="border border border-gray-300 -gray-300 -top w-full pt-4 mt-7 text-center">
-{{-- <p class="fs-6 text-gray-600">{{$settings['copy_right_text'] }} <a href="{{ route('front.home') }}" class="text-decoration-none"> --}}
-{{-- {{$settings['application_name'] }}</a> --}}
+{{ -- <p class="fs-6 text-gray-600">$settings['copy_right_text']  <a href="{{ route('front.home')  }}" class="text-decoration-none"> --}}
+{{ -- $settings['application_name'] </a> -- }}
 {{-- </p> --}}
                 </footer>
             </div>

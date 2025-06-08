@@ -14,7 +14,7 @@
 @section('content')
     <div class="job-seekers-page">
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -39,7 +39,7 @@
         @if (count($jobCategories) > 0)
 
             <section class="popular-job-categories-section py-100">
-                <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                     <div class="job- bg-white shadow rounded -lg overflow-hidden">
                         <div class="flex flex-wrap">
 
@@ -73,14 +73,14 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        {{ -- <div class="bg-white shadow rounded -lg overflow-hidden desc flex flex- flex-1 justify-between h-full mt-4">
+                                        {{  -- <div class="bg-white shadow rounded -lg overflow-hidden desc flex flex- flex-1 justify-between h-full mt-4">
                                             <div class="desc flex">
                                                 <p class="text text-indigo-600 -600 fs-14 mb-0 me-3">
-                                                    {{ !empty($job->jobsSkill[0]->name) ? $job->jobsSkill[0]->name : 'Skill' }}asd
+                                                     !empty($job->jobsSkill[0]->name) ? $job->jobsSkill[0]->name : 'Skill' asd
                                                 </p>
                                                 <p class="fs-14 text text-indigo-600 -600 mb-0">asdasdasd</p>
                                             </div>
-                                        </div> --}}
+                                        </div> -- }}
                                         @if ($jobCategory->jobs_count <= 0)
                                             <div class="bg-white shadow rounded -lg overflow-hidden desc mt-3">
                                                 <div class="desc flex mt-2">

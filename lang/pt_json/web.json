@@ -257,7 +257,8 @@
         "view_company_profile": "Ver o perfil da empresa",
         "founded_in": "Fundado em",
         "phone": "Telefone",
-        "Skill_Experience": "Habilidade e experiência"
+        "Skill_Experience": "Habilidade e experiência",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Empresa de Pesquisa",
@@ -307,5 +308,35 @@
         "reset_password": "Redefinir senha",
         "new_password": "Definir Nova Senha",
         "set_new_password": "Configurar uma Nova Senha"
+    },
+    "web": {
+        "welcome": "Bem-vindo ao nosso portal de empregos",
+        "find_job": "Encontre o emprego dos seus sonhos",
+        "post_job": "Publicar um emprego",
+        "welcome_title": "Encontrar empregos, contratar talentos",
+        "welcome_subtitle": "Conectando candidatos a emprego com empregadores",
+        "for_job_seekers": "Para candidatos a emprego",
+        "for_employers": "Para empregadores",
+        "search_jobs": "Pesquisar empregos",
+        "browse_companies": "Navegar pelas empresas",
+        "latest_jobs": "Últimos empregos",
+        "featured_companies": "Empresas em destaque"
+    },
+    "nav": {
+        "home": "Início",
+        "jobs": "Empregos",
+        "companies": "Empresas",
+        "candidates": "Candidatos",
+        "about": "Sobre nós",
+        "contact": "Contato",
+        "login": "Entrar",
+        "register": "Registrar",
+        "dashboard": "Painel",
+        "profile": "Perfil",
+        "logout": "Sair",
+        "find_jobs": "Encontrar empregos",
+        "post_job": "Publicar emprego",
+        "browse_companies": "Navegar pelas empresas",
+        "admin_panel": "Painel de administração"
     }
 }

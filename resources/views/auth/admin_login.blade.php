@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('{{ __('auth.admin_login') }}') }} - {{ config('app.name') }}</title>
+    <title>{{  __(' __('auth.admin_login') ')  }} - {{ config('app.name') }}</title>
 </head>
 <body class="admin-login-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
@@ -76,7 +76,7 @@
                             <div class="mb-3">
                                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
                                     <i class="fas fa-lock me-1 text-indigo-600 -600"></i>
-                                    {{ __('{{ __('auth.password') }}') }}
+                                    {{  __(' __('auth.password') ')  }}
                                 </label>
                                 <div class="flex">
                                     <input id="password" type="password" 

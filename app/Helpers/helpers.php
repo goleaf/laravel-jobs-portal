@@ -151,4 +151,54 @@ if (!function_exists('getCountries')) {
             return [];
         }
     }
+}
+
+if (!function_exists('getUniqueCompanyId')) {
+    /**
+     * Generate a unique company ID
+     * @return string
+     */
+    function getUniqueCompanyId(): string
+    {
+        $companyUniqueId = \Illuminate\Support\Str::random(12);
+        while (true) {
+            $isExist = \App\Models\Company::where('unique_id', $companyUniqueId)->exists();
+            if ($isExist) {
+                $companyUniqueId = \Illuminate\Support\Str::random(12);
+                continue;
+            }
+            break;
+        }
+        
+        return $companyUniqueId;
+    }
+}
+
+// Simple Flash helper class to replace Laracasts Flash
+if (!class_exists('Laracasts\Flash\Flash')) {
+    class Flash
+    {
+        public static function success($message)
+        {
+            session()->flash('success', $message);
+        }
+        
+        public static function error($message)
+        {
+            session()->flash('error', $message);
+        }
+        
+        public static function warning($message)
+        {
+            session()->flash('warning', $message);
+        }
+        
+        public static function info($message)
+        {
+            session()->flash('info', $message);
+        }
+    }
+    
+    // Create the namespace alias
+    class_alias('Flash', 'Laracasts\Flash\Flash');
 } 

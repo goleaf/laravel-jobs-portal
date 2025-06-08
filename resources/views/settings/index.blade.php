@@ -4,7 +4,7 @@
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
-    {{-- <link href="{{ asset('assets/css/summernote.min.css') }}" rel="stylesheet" type="text/css"/> --}}
+    {{ -- <link href=" asset('assets/css/summernote.min.css') " rel="stylesheet" type="text/css"/> -- }}
     <link href="{{ asset('css/header-padding.css') }}" rel="stylesheet" type="text/css"/>
 @endpush
 @section('content')
@@ -32,8 +32,8 @@
 @endsection
 {{-- @push('scripts') --}}
 {{--  --}}
-    {{-- <script src="{{ asset('assets/js/summernote.min.js') }}"></script> --}}
-{{-- <script src="{{ mix('assets/js/settings/settings.js') }}"></script> --}}
+    {{ -- <script src=" asset('assets/js/summernote.min.js') "></script> -- }}
+{{ -- <script src=" mix('assets/js/settings/settings.js') "></script> -- }}
 {{-- @endpush --}}
 
 @push('scripts')

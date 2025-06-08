@@ -47,7 +47,7 @@
         @endforeach
 
         {{-- Next Page Link --}}
-        {{-- {{ dd($paginator) }} --}}
+        {{ --  dd($paginator)  -- }}
         @if ($paginator->hasMorePages())
             <li class="page-item">
                 <button type="button" class="page-link" wire:click="nextPage({{ $paginator->lastPage() }})" rel="next"

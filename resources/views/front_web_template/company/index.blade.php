@@ -16,7 +16,7 @@
     <div class="companies-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center">
                         <div class="hero-content">

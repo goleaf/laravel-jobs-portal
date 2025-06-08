@@ -88,11 +88,11 @@
 @endsection
 @push('scripts')
     
-{{-- <script src="{{ asset('assets/js/moment.min.js') }}"></script> --}}
+{{ -- <script src=" asset('assets/js/moment.min.js') "></script> -- }}
     {{--  --}}
-{{-- <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script> --}}
-    {{-- <script src="{{mix('assets/js/candidate-profile/candidate-education-experience.js') }}"></script> --}}
-    {{-- <script src="{{mix('assets/js/candidate-profile/cv-builder.js') }}"></script> --}}
+{{ -- <script src=" asset('js/html2pdf.bundle.min.js') "></script> -- }}
+    {{ -- <script src="mix('assets/js/candidate-profile/candidate-education-experience.js') "></script> -- }}
+    {{ -- <script src="mix('assets/js/candidate-profile/cv-builder.js') "></script> -- }}
 @endpush
 
 @push('scripts')

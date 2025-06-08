@@ -2,7 +2,7 @@
 
 /**
  * OPTIMIZED ROUTES FILE - CLEAN VERSION
- * Following Laravel routing best practices from Context7 documentation
+ * Following Laravel routing best practices from Universal documentation
  * ✅ Proper route grouping with middleware
  * ✅ Consistent naming conventions  
  * ✅ Route caching optimization
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Route Pattern Constraints (Context7 Best Practice)
+| Route Pattern Constraints (Universal Best Practice)
 |--------------------------------------------------------------------------
 */
 Route::pattern('id', '[0-9]+');

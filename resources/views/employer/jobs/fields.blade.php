@@ -43,7 +43,7 @@
                 <i class="fas fa-calendar-alt"></i>
             </div>
             <input type="text" name="job_expiry_date" id="availableAt" class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 expiryDatepicker  {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}" autocomplete="off" value="{{ isset($job->job_expiry_date) ? $job->job_expiry_date : null, }}" placeholder="{{ __('messages.job.job_expiry_date') }}">
-{{-- {{ Form::text('job_expiry_date', isset($job->job_expiry_date) ? $job->job_expiry_date : null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm expiryDatepicker', 'text-red-500', 'autocomplete' => 'off', 'placeholder' => __('messages.job.job_expiry_date')]) }} --}}
+{{ --  Form::text('job_expiry_date', isset($job->job_expiry_date) ? $job->job_expiry_date : null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm expiryDatepicker', 'text-red-500', 'autocomplete' => 'off', 'placeholder' => __('messages.job.job_expiry_date')])  -- }}
         </div>
     </div>
     <div class="flex-1 -xl-6 md:w-6/12 flex-1 sm-12 mb-5">

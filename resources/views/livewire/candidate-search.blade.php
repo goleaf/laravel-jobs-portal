@@ -1,13 +1,13 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
     <div class="flex flex-wrap">
-        {{ -- <div class="flex-1 lg-4">
+        {{  -- <div class="flex-1 lg-4">
             <div class="latest-job-left br-10 px-40 bg-flex-1 px-4or-light">
                 <div class="mb-4 mb-md-4 mb-3">
                     <div class="flex flex-wrap mb-3 justify-between">
                         <label for="" class="fs-16 text-gray-600 my-auto pb-2">
-                            {{ __('web.web_jobs.search_by_keywords') }}</label>
+                             __('web.web_jobs.search_by_keywords') </label>
                         <button wire:click="resetFilter()" class="border border-gray-300 bg-transparent"
-                            id="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200Reset">{{ __('web.reset_filter') }}</button>
+                            id="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200Reset">{{ __('web.reset_filter')  }}</button>
                     </div>
                     <input class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 fs-14 text-gray bg-white br-10 p-3"
                         wire:model.debounce.100ms="searchByCandidate" type="search" id="searchByCandidate"
@@ -94,18 +94,18 @@
                 @formClose()
             </div>
         </div>
-        {{ -- <div class="content-flex-1 px-4umn lg:w-8/12 px-2 md:w-full flex-1 sm-12">
+        {{  -- <div class="content-flex-1 px-4umn lg:w-8/12 px-2 md:w-full flex-1 sm-12">
             <div class="flex flex-wrap">
                 @forelse($candidates as $candidate)
                     <div class="lg:w-6/12 px-2 flex-1 md-6 px-xl-3 mb-40">
                         <div class="bg-white shadow rounded -lg overflow-hidden py-30">
                             <div class="flex flex-wrap items-center">
                                 <div class="flex-1 -2">
-                                    <img src="{{ $candidate->candidate_url }}" class="bg-white shadow rounded -lg overflow-hidden img" alt="">
+                                    <img src=" $candidate->candidate_url " class="bg-white shadow rounded -lg overflow-hidden img" alt="">
                                 </div>
                                 <div class="flex-1 -10 px-3">
                                     <div class="bg-white shadow rounded -lg overflow-hidden body p-0">
-                                        <a href="{{ route('candidate.', $candidate->unique_id) }}"
+                                        <a href="{{ route('candidate.', $candidate->unique_id)  }}"
                                             class="text-gray-600 primary-link-hover">
                                             <h5 class="bg-white shadow rounded -lg overflow-hidden title   fs-20 mb-0">
                                                 {!! $candidate->$user->full_name !!}</h5>

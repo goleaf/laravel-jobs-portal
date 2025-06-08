@@ -42,7 +42,7 @@
         <!-- Submit Field -->
         <div class="flex justify-end">
             {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3']) }}
-            {{-- <a class="rounded-md transition">{{__('messages.common.cancel') }}</a> --}}
+            {{ -- <a class="rounded-md transition">__('messages.common.cancel') </a> -- }}
         </div>
     </div>
 {{-- </div> --}}

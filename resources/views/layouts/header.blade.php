@@ -4,7 +4,7 @@
         <i class="fa-solid fa-bars fs-1"></i>
     </button>
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow-expand-xl bg-white shadow-light top- bg-white shadow-sm d-xl-flex block px-3 px-xl-0 py-4 py-xl-0" id="nav-header">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
             <div class="bg-white shadow-sm collapse">
                 <ul class="bg-white shadow-sm nav me-auto mb-2 mb-lg-0">
                     @include('layouts.sub_menu')

@@ -1,6 +1,6 @@
 <header class="bg-gradient">
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow-sm expand-lg">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ url('/') }}">
                 <img src="{{ asset($settings['logo']) }}" alt="" class="inline-block img-fluid h-full" />
             </a>
@@ -22,33 +22,33 @@
                         </li>
                         <li class="">
                             <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("search-jobs') || Request::is('job-details*') ? 'header-navbar-color-active' : '' }}"
-                                href="{{ route('front.') }}">{{ __('web.jobs') }}</a>
+                                href="{{ route('front.home') }}">{{ __('web.jobs') }}</a>
                         </li>
                         <li class="">
                             <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("company-lists') || Request::is('company-details*') ? 'header-navbar-color-active' : '' }}"
-                                href="{{ route('front.') }}">{{ __('web.companies') }}</a>
+                                href="{{ route('front.home') }}">{{ __('web.companies') }}</a>
                         </li>
 
                         @auth
                             @role('Employer|Admin')
                                 <li class="">
                                     <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("candidate-lists') || Request::is('candidate-details*') ? 'header-navbar-color-active' : '' }}"
-                                        href="{{ route('candidate.') }}">{{ __('web.job_seekers') }}</a>
+                                        href="{{ route('candidate.dashboard') }}">{{ __('web.job_seekers') }}</a>
                                 </li>
                             @endrole
                         @endauth
 
                         <li class="">
                             <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("about-us') ? 'header-navbar-color-active' : '' }}"
-                                href="{{ route('front.') }}">{{ __('web.about_us') }}</a>
+                                href="{{ route('front.home') }}">{{ __('web.about_us') }}</a>
                         </li>
                         <li class="">
                             <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("contact-us') ? 'header-navbar-color-active' : '' }}"
-                                href="{{ route('front.') }}">{{ __('web.contact_us') }}</a>
+                                href="{{ route('front.home') }}">{{ __('web.contact_us') }}</a>
                         </li>
                         <li class="">
                             <a class="header- bg-white shadow-sm color text-gray text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium {{ Request::is("posts*') ? 'header-navbar-color-active' : '' }}"
-                                href="{{ route('front.') }}">{{ __('messages.post.blog') }}</a>
+                                href="{{ route('front.home') }}">{{ __('messages.post.blog') }}</a>
                         </li>
                         <li class="">
                             <div class="relative inline-block text-left">
@@ -91,17 +91,17 @@
                             <div class="flex items-center gap-xl-4 gap-3 mt-lg-0 mt-2 ms-xl-3 ms-lg-2">
                                 <ul class="bg-white shadow-sm nav flex flex- flex flex-wrap items-center py-2 py-lg-0">
                                     <li class="login_btn">
-                                        <a href="{{ route('candidate.') }}"
+                                        <a href="{{ route('candidate.dashboard') }}"
                                             class="border border-gray-300 bg-transparent">{{ __('web.login') }}</a>
                                         <ul class="flex space-x-1 submenu">
                                             <li class="mb-3 mt-2">
-                                                <a href="{{ route('candidate.') }}"
+                                                <a href="{{ route('candidate.dashboard') }}"
                                                     class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium text-gray flex items-center">
                                                     {{ __('messages.notification_settings.candidate') }}
                                                 </a>
                                             </li>
                                             <li class="mb-3">
-                                                <a href="{{ route('front.') }}"
+                                                <a href="{{ route('front.home') }}"
                                                     class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium text-gray flex items-center">
                                                     {{ __('messages.company.employer') }}
                                                 </a>
@@ -149,7 +149,7 @@
                                             </li>
                                             @role('Candidate')
                                                 <li class="mb-3">
-                                                    <a href="{{ route('candidate.') }}" data-turbo="false"
+                                                    <a href="{{ route('candidate.dashboard') }}" data-turbo="false"
                                                         class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium text-gray flex items-center">
                                                         {{ __('web.my_profile') }}
                                                     </a>
@@ -167,13 +167,13 @@
                                                     </a>
                                                 </li>
                                                 <li class="mb-3">
-                                                    <a href="{{ route('candidate.') }}" data-turbo="false"
+                                                    <a href="{{ route('candidate.dashboard') }}" data-turbo="false"
                                                         class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium text-gray flex items-center">
                                                         {{ __('messages.applied_job.applied_jobs') }}
                                                     </a>
                                                 </li>
                                                 <li class="mb-3">
-                                                    <a href="{{ route('candidate.') }}" data-turbo="false"
+                                                    <a href="{{ route('candidate.dashboard') }}" data-turbo="false"
                                                         class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium text-gray flex items-center">
                                                         {{ __('messages.job.job_alert') }}
                                                     </a>

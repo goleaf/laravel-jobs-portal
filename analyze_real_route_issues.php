@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Real Route Issues Analyzer - Context7
+ * Real Route Issues Analyzer - Universal
  * Focuses on actual route problems, filtering out JavaScript/hash placeholders
  */
 
@@ -18,7 +18,7 @@ class RealRouteIssuesAnalyzer
 
     public function __construct()
     {
-        echo "🎯 REAL ROUTE ISSUES ANALYZER - Context7\n";
+        echo "🎯 REAL ROUTE ISSUES ANALYZER - Universal\n";
         echo "=" . str_repeat("=", 50) . "\n";
         echo "🔍 Filtering out JavaScript/hash placeholders\n";
         echo "🎯 Focusing on actual Laravel route issues\n\n";

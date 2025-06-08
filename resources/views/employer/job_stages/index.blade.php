@@ -12,5 +12,5 @@
     @include('employer.job_stages.show_modal')
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/job_stages/job_stages.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/job_stages/job_stages.js') "></script> -- }}
 {{-- @endpush --}}

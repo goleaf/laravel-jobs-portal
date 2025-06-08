@@ -3,7 +3,7 @@
     {{ __('messages.candidate.candidate_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/candidate-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/candidate-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <section class="hero-section relative bg-color py-40">

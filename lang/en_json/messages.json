@@ -8,7 +8,7 @@
     "general": "General",
     "company_sizes": "Company Sizes",
     "Company size is required": "Company size is required",
-    "Company size must be a valid text": "Company size must be a valid text", 
+    "Company size must be a valid text": "Company size must be a valid text",
     "Company size must not exceed 255 characters": "Company size must not exceed 255 characters",
     "This company size already exists": "This company size already exists",
     "Company size contains invalid characters": "Company size contains invalid characters",
@@ -1530,5 +1530,17 @@
         "jobs.no_jobs_description": "Try adjusting your search criteria or browse all available positions.",
         "jobs.browse_all_jobs": "Browse All Jobs",
         "jobs.company_logo": "Company Logo"
+    },
+    "messages": {
+        "company_profile": "Company Profile",
+        "company_details": "Company Details",
+        "company_overview": "Company Overview",
+        "company_jobs": "Company Jobs",
+        "company_size_detail": "Company Size",
+        "company_location": "Company Location",
+        "company_website": "Company Website",
+        "company_founded": "Founded",
+        "company_employees": "Employees",
+        "about_company": "About Company"
     }
 }

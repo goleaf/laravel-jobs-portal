@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 
 /**
- * Context7 Enhanced Validation Tests for StoreUserRequest
+ * Universal Enhanced Validation Tests for StoreUserRequest
  * 
  * @group validation
  * @group requests

@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "这些凭据与我们的记录不匹配。",
-        "throttle": "登录尝试次数过多。 请再试一次 :seconds 秒."
+        "throttle": "登录尝试次数过多。 请再试一次 :seconds 秒.",
+        "password": "The provided 密码 is incorrect."
     },
     "js": {
         "admin": "管理员",
@@ -157,7 +158,8 @@
         "comment": "评论",
         "no_keyword_found": "沒有找到關鍵字",
         "city": "市",
-        "favourite_job": "最喜欢的工作"
+        "favourite_job": "最喜欢的工作",
+        "employer": "Employer"
     },
     "messages": {
         "dashboard": "仪表板",
@@ -397,7 +399,17 @@
             "seems_message": "看来，您无权访问此记录。",
             "no_found_record": "未找到匹配的记录",
             "default_language": "默认语言",
-            "select_language": "选择语言"
+            "select_language": "选择语言",
+            "remove": "Remove",
+            "open": "Open",
+            "pause": "Pause",
+            "closed": "Closed",
+            "view_public_profile": "View Public 个人资料",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "筛选",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "無效號碼",
@@ -551,7 +563,9 @@
             "google_redirect": "谷歌重定向",
             "configuration_update": "配置更新",
             "update_application_configuration": "您即将更新应用程序配置值，要继续吗？",
-            "image_validation": "圖像必須為 90 x 60 像素。"
+            "image_validation": "圖像必須為 90 x 60 像素。",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "更改應用程序徽標",
@@ -559,7 +573,8 @@
             "change_home_banner": "更改首頁橫幅",
             "copy_preview_link": "複製預覽鏈接",
             "change_favicon": "更改网站图标",
-            "change_profile": "更改配置文件"
+            "change_profile": "更改配置文件",
+            "change_category_image": "Change category image"
         },
         "company_size": {
             "new_company_size": "新公司规模",
@@ -603,7 +618,8 @@
             "size": "尺寸",
             "action": "行动",
             "no_salary_period_found": "找不到工资期",
-            "no_salary_period_available": "无薪资期"
+            "no_salary_period_available": "无薪资期",
+            "salary_period": "Salary Period"
         },
         "job_shift": {
             "new_job_shift": "新工作转移",
@@ -810,7 +826,8 @@
             "user_name": "用户名",
             "logout": "登出",
             "required_field_messages": "请填写所有必填字段。",
-            "password_invalid": "当前密码无效。"
+            "password_invalid": "当前密码无效。",
+            "profile_picture": "个人资料 Picture"
         },
         "salary_currency": {
             "new_salary_currency": "新薪水货币",
@@ -877,7 +894,9 @@
             "favourite_company": "最喜欢的公司",
             "favourite_job": "最喜欢的工作",
             "subscriber": "订户",
-            "please_enter_salary_range_to_greater_than_salary_range_from": "请输入薪资范围至大于薪资范围自。"
+            "please_enter_salary_range_to_greater_than_salary_range_from": "请输入薪资范围至大于薪资范围自。",
+            "view_drafted_job": "View Drafted Job",
+            "expired_job": "Expired job"
         },
         "candidate": {
             "new_admin": "新管理員",
@@ -936,7 +955,9 @@
             "reported_candidate": "申报候选人",
             "reported_employer": "报告雇主",
             "employee": "员工",
-            "expired_job": "過期工作"
+            "expired_job": "過期工作",
+            "in_years": "In Years",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "位置信息不可用.",
@@ -1629,7 +1650,34 @@
             "note_required": "註解欄位為必填項",
             "resume_field_required": "履歷表欄位是必需的。",
             "verify_google_recaptcha": "你應該檢查谷歌驗證碼。"
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "password_reset": "Click here to reset your password",
+        "reset_password": "Reset Password",
+        "enter_email_reset_password": "Enter your email to reset your password",
+        "new_password": "Set a New Password",
+        "admin_login": "Admin 登录",
+        "super_admin_login": "Super Admin 登录",
+        "candidate_login": "Candidate 登录",
+        "employer_login": "Employee 登录",
+        "front_site": "Front Site",
+        "sign_in": "登录",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "Back to Previous Page",
+        "company_subscription": "Company Subscription"
     },
     "pagination": {
         "previous": "&laquo; 以前",
@@ -1723,7 +1771,13 @@
         "not_in": "的 已选 :attribute 是无效的.",
         "not_regex": "的 :attribute 格式无效.",
         "numeric": "的 :attribute 必须是一个数字.",
-        "password": "的 密码错误.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
         "present": "的 :attribute 字段必须存在.",
         "regex": "的 :attribute 格式无效.",
         "required": "的 :attribute 必填项.",
@@ -1752,7 +1806,34 @@
                 "rule-name": "custom-message"
             }
         },
-        "attributes": []
+        "attributes": [],
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "current_password": "The password is incorrect.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "mac_address": "The :attribute field must be a valid MAC address.",
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "ulid": "The :attribute field must be a valid ULID."
     },
     "web": {
         "home": "家",
@@ -1906,7 +1987,8 @@
             "search_candidates": "搜索候选人",
             "no_candidates_found": "未找到求职者",
             "hire_me": "雇用我",
-            "candidate_name": "候选人名称"
+            "candidate_name": "候选人名称",
+            "opened_jobs": "Opened 工作"
         },
         "company_details": {
             "company_details": "公司詳情",
@@ -2012,7 +2094,8 @@
             "view_company_profile": "查看公司简介",
             "founded_in": "成立于",
             "phone": "电话",
-            "Skill_Experience": "技能和經驗"
+            "Skill_Experience": "技能和經驗",
+            "job_detail": "Job Detail"
         },
         "web_company": {
             "search_company": "搜索公司",

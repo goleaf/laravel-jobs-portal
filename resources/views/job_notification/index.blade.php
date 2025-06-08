@@ -49,7 +49,7 @@
 @endsection
 @push('scripts')
     
-    {{-- <script src="{{mix('assets/js/jobs/job_notification.js') }}"></script> --}}
+    {{ -- <script src="mix('assets/js/jobs/job_notification.js') "></script> -- }}
 @endpush
 
 

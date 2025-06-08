@@ -36,7 +36,7 @@
                 <div class="flex flex-wrap">
                     <div class="flex-1 -xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
-                        <form method="POST" action="{{ route('front.') }}" id="addEmployerNewForm"
+                        <form method="POST" action="{{ route('front.home') }}" id="addEmployerNewForm"
                               class="py-40 px-40 bg-gray">
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -12 mb-4">
@@ -162,8 +162,8 @@
 {{-- @section('page_scripts') --}}
 {{--  --}}
 {{-- @if($isGoogleReCaptchaEnabled) --}}
-{{-- {{-- CDN JS removed - now using local assets --}}--}}
-{{-- <script src="{{asset('assets/js/front_register/google-recaptcha.js') }}"></script> --}}
+{{ -- -- CDN JS removed - now using local assets ---- }}
+{{ -- <script src="asset('assets/js/front_register/google-recaptcha.js') "></script> -- }}
 {{-- @endif --}}
 {{-- @endsection --}}
 

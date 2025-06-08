@@ -57,3 +57,24 @@ if (!function_exists("getCountries")) {
         }
     }
 }
+
+if (!function_exists('getUniqueCompanyId')) {
+    /**
+     * Generate a unique company ID
+     * @return string
+     */
+    function getUniqueCompanyId(): string
+    {
+        $companyUniqueId = \Illuminate\Support\Str::random(12);
+        while (true) {
+            $isExist = \App\Models\Company::where('unique_id', $companyUniqueId)->exists();
+            if ($isExist) {
+                $companyUniqueId = \Illuminate\Support\Str::random(12);
+                continue;
+            }
+            break;
+        }
+        
+        return $companyUniqueId;
+    }
+}

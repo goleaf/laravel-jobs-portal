@@ -226,4 +226,15 @@ class JobFilterRequest extends FormRequest
             ],
         ];
     }
+    /**
+     * Prepare the data for validation.
+     * Context7 Pattern: Data normalization
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+        ]);
+    }
 } 

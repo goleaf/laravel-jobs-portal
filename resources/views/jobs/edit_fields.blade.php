@@ -185,7 +185,7 @@
                 class="required"></span>
         <div id="editDetails"></div>
         {{ Form::hidden('description', $job->description, ['id' => 'editJobDescription']) }}
-        {{-- {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'details', 'flex flex-wrap -mx-4s' => '5']) }} --}}
+        {{ --  Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'details', 'flex flex-wrap -mx-4s' => '5'])  -- }}
     </div>
     <div class="flex-1 -xl-6 md:w-6/12 flex-1 sm-12 mb-5">
          {{ Form::label('experience', __('messages.job_experience.job_experience').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 ']) }}
@@ -194,10 +194,10 @@
          {{ Form::text('experience',  null, ['id'=>'experienceId','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','placeholder' => __('messages.company.enter_experience_year'), 'min' => 0, 'max' => 255, 'onkeyup' => 'if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,"")']) }}
      </div>
     {{-- <div class="mb-4 flex-1 -xl-3 md:w-3/12 flex-1 sm-12 mb-5"> --}}
-    {{-- <label>{{ __('messages.job.hide_salary').':' }}</label> --}}
+    {{ -- <label> __('messages.job.hide_salary').':' </label> -- }}
     {{-- <label class="custom-switch pl-0 flex-1 -12"> --}}
     {{-- <input type="checkbox" name="hide_salary" class="custom-switch-input" --}}
-    {{-- id="salary" value="1" {{$job->hide_salary == 1? 'checked' : '' }}> --}}
+    {{ -- id="salary" value="1" $job->hide_salary == 1? 'checked' : '' > -- }}
     {{--  --}}
     {{-- </label> --}}
 {{-- </div> --}}
@@ -210,10 +210,10 @@
         </label>
     </div>
 {{-- <div class="mb-4 flex-1 -xl-3 md:w-3/12 flex-1 sm-12 mb-5"> --}}
-{{-- <label>{{ __('messages.job.is_freelance').':' }}</label> --}}
+{{ -- <label> __('messages.job.is_freelance').':' </label> -- }}
 {{-- <label class="custom-switch pl-0 flex-1 -12"> --}}
 {{-- <input type="checkbox" name="is_freelance" class="custom-switch-input" --}}
-{{-- id="freelance" value="1" {{$job->is_freelance == 1? 'checked' : '' }}> --}}
+{{ -- id="freelance" value="1" $job->is_freelance == 1? 'checked' : '' > -- }}
 {{-- <span class="custom-switch-indicator"></span> --}}
 {{-- </label> --}}
 {{-- </div> --}}
@@ -227,8 +227,8 @@
 
     <!-- Submit Field -->
     <div class="flex justify-end">
-        {{-- {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-flex-1 px-4ors me-3','id' => 'editJobsSaveBtn','data-loading-text' =>"<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded -full spinner- border border border-gray-300 -gray-300 -sm"></span>".__('messages.common.process')]) }}
-        <a href="{{ route('admin.jobs.index') }}"
+        {{ --  Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-flex-1 px-4ors me-3','id' => 'editJobsSaveBtn','data-loading-text' =>"<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded -full spinner- border border border-gray-300 -gray-300 -sm"></span>".__('messages.common.process')]) 
+        <a href="{{ route('admin.jobs.index')  }}"
            class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
     </div>
 </div>

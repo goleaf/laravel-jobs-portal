@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
     <div class="flex flex-wrap">
         <div class="flex-1 -12">
             <div class="bg-white shadow rounded -lg overflow-hidden">
                 <div class="bg-white shadow rounded -lg overflow-hidden header flex justify-between items-center">
                     <h3>{{ __('Manage Candidates') }}</h3>
-                    <a href="{{ route('admin.') }}" class="border border-gray-300 bg-transparent">
+                    <a href="{{ route('admin.dashboard') }}" class="border border-gray-300 bg-transparent">
                         <i class="fas fa-plus"></i> {{ __('Add New Candidate') }}
                     </a>
                 </div>
@@ -24,12 +24,12 @@
                         <div class="flex-1 md-3">
                             <select class="w-full px-3 py-2 border border-gray-300 border border border-gray-300 -gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500" id="statusFilter">
                                 <option value="">{{ __('All Status') }}</option>
-                                <option value="active">{{ __('{{ __('admin.active') }}') }}</option>
-                                <option value="inactive">{{ __('{{ __('admin.inactive') }}') }}</option>
+                                <option value="active">{{  __(' __('admin.active') ')  }}</option>
+                                <option value="inactive">{{  __(' __('admin.inactive') ')  }}</option>
                             </select>
                         </div>
                         <div class="flex-1 md-2">
-                            <button class="border border-gray-300 bg-transparent" id="filterBtn">{{ __('{{ __('admin.filter') }}') }}</button>
+                            <button class="border border-gray-300 bg-transparent" id="filterBtn">{{  __(' __('admin.filter') ')  }}</button>
                         </div>
                     </div>
                     
@@ -43,8 +43,8 @@
                                     <th>{{ __('Email') }}</th>
                                     <th>{{ __('Phone') }}</th>
                                     <th>{{ __('Registration Date') }}</th>
-                                    <th>{{ __('{{ __('admin.status') }}') }}</th>
-                                    <th>{{ __('{{ __('admin.actions') }}') }}</th>
+                                    <th>{{  __(' __('admin.status') ')  }}</th>
+                                    <th>{{  __(' __('admin.actions') ')  }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,13 +62,13 @@
                                     </td>
                                     <td>
                                         <div class="px-4 py-2 rounded font-medium transition-colors group" role="group">
-                                            <a href="{{ route('admin.', $candidate->id) }}" class="border border-gray-300 bg-transparent" title="{{ __('{{ __('admin.view') }}') }}">
+                                            <a href="{{ route('admin.', $candidate->id) }}" class="border border-gray-300 bg-transparent" title="{{  __(' __('admin.view') ')  }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.', $candidate->id) }}" class="border border-gray-300 bg-transparent" title="{{ __('{{ __('admin.edit') }}') }}">
+                                            <a href="{{ route('admin.', $candidate->id) }}" class="border border-gray-300 bg-transparent" title="{{  __(' __('admin.edit') ')  }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button class="border border-gray-300 bg-transparent" onclick="deleteCandidate({{ $candidate->id }})" title="{{ __('{{ __('admin.delete') }}') }}">
+                                            <button class="border border-gray-300 bg-transparent" onclick="deleteCandidate({{ $candidate->id }})" title="{{  __(' __('admin.delete') ')  }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>

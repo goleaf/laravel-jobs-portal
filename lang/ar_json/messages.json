@@ -234,7 +234,15 @@
         "seems_message": "يبدو أنه غير مسموح لك بالوصول إلى هذا السجل.",
         "no_found_record": "لم يتم العثور على سجلات مطابقة",
         "default_language": "اللغة الافتراضية",
-        "select_language": "اختار اللغة"
+        "select_language": "اختار اللغة",
+        "confirm_delete": "Are you sure you want to حذف this item?",
+        "remove": "Remove",
+        "view_public_profile": "View Public الملف الشخصي",
+        "removed": "removed",
+        "has_been_removed": "has been removed.",
+        "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+        "filter": "مرشح",
+        "this_week": "The Week"
     },
     "phone": {
         "invalid_number": "رقم غير صالح",
@@ -388,7 +396,9 @@
         "google_redirect": "جوجل إعادة التوجيه",
         "configuration_update": "تحديث التكوين",
         "update_application_configuration": "أنت على وشك تحديث قيم تكوين التطبيق ، هل تريد المتابعة؟",
-        "image_validation": "يجب أن تكون الصورة بقياس 90 × 60 بكسل."
+        "image_validation": "يجب أن تكون الصورة بقياس 90 × 60 بكسل.",
+        "term_conditions": "Term & Conditons",
+        "current_version": "Current Version"
     },
     "tooltip": {
         "change_app_logo": "تغيير شعار التطبيق",
@@ -396,7 +406,8 @@
         "change_home_banner": "تغيير المنزل banner",
         "copy_preview_link": "نسخ رابط المعاينة",
         "change_favicon": "تغيير الأيقونة المفضلة",
-        "change_profile": "تغيير ملف التكوين"
+        "change_profile": "تغيير ملف التكوين",
+        "change_category_image": "Change الفئة image"
     },
     "company_size": {
         "new_company_size": "حجم الشركة الجديد",
@@ -440,7 +451,8 @@
         "size": "بحجم",
         "action": "عمل",
         "no_salary_period_found": "لم يتم العثور على فترة الراتب",
-        "no_salary_period_available": "لا توجد فترة راتب متاحة"
+        "no_salary_period_available": "لا توجد فترة راتب متاحة",
+        "salary_period": "الراتب Period"
     },
     "job_shift": {
         "new_job_shift": "نوبة عمل جديدة",
@@ -549,7 +561,8 @@
         "reported_employer_detail": "تفاصيل صاحب العمل المبلغ عنها",
         "title": "مسمى وظيفي",
         "image": "صورة",
-        "select_company_size": "حدد حجم الشركة"
+        "select_company_size": "حدد حجم الشركة",
+        "employers": "Employers"
     },
     "job_tag": {
         "job_tag": "يوم العمل",
@@ -774,7 +787,8 @@
         "no_candidate_available": "لا يوجد مرشح متاح",
         "reported_candidate": "المرشح المبلغ عنه",
         "reported_employer": "صاحب العمل المبلغ عنه",
-        "employee": "الموظف"
+        "employee": "الموظف",
+        "0": "Employee"
     },
     "candidate_dashboard": {
         "location_information": "معلومات الموقع غير متوفرة.",
@@ -1037,7 +1051,8 @@
         "slider_active_title": "إذا تم تعطيل هذا التبديل ، فلن تكون شاشة شريط تمرير الصورة الافتراضية مرئية.",
         "image_slider_details": "تفاصيل شريط تمرير الصورة",
         "no_image_slider_found": "لم يتم العثور على صورة المنزلق",
-        "no_image_slider_available": "لا يوجد شريط تمرير صورة متاح"
+        "no_image_slider_available": "لا يوجد شريط تمرير صورة متاح",
+        "edit_image_slider": "تحرير Image Slider"
     },
     "header_slider": {
         "new_header_slider": "شريط تمرير رأس جديد",
@@ -1449,6 +1464,87 @@
         "follow_company_successfully": "اتبع الشركة بنجاح.",
         "note_required": "حقل الملاحظة مطلوب",
         "resume_field_required": "حقل السيرة الذاتية مطلوب.",
-        "verify_google_recaptcha": "يجب عليك التحقق من جوجل recaptcha."
-    }
+        "verify_google_recaptcha": "يجب عليك التحقق من جوجل recaptcha.",
+        "jobs": {
+            "featured": "Featured",
+            "view_details": "عرض Details",
+            "no_jobs_found": "No الوظائف Found",
+            "no_jobs_description": "Try adjusting your بحث criteria or browse all available positions.",
+            "browse_all_jobs": "Browse All الوظائف",
+            "company_logo": "الشركة Logo"
+        }
+    },
+    "messages": {
+        "company_profile": "ملف الشركة",
+        "company_details": "تفاصيل الشركة",
+        "company_overview": "نظرة عامة على الشركة",
+        "company_jobs": "وظائف الشركة",
+        "company_size_detail": "حجم الشركة",
+        "company_location": "موقع الشركة",
+        "company_website": "موقع الشركة",
+        "company_founded": "تأسست",
+        "about_company": "عن الشركة",
+        "company_employees": "Employees"
+    },
+    "language-name": "en",
+    "fileName": "messages.php",
+    "Company size is required": "الشركة size is required",
+    "Company size must be a valid text": "الشركة size must be a valid text",
+    "Company size must not exceed 255 characters": "الشركة size must not exceed 255 characters",
+    "This company size already exists": "This الشركة size already exists",
+    "Company size contains invalid characters": "الشركة size contains invalid characters",
+    "Company Size": "الشركة Size",
+    "Validation failed": "Validation failed",
+    "Edit company size": "تحرير company size",
+    "Delete company size": "حذف company size",
+    "Edit": "تحرير",
+    "Delete": "حذف",
+    "term_conditions": "Term & Conditons",
+    "no_keyword_found": "No Keyword Found",
+    "comments": "Comments",
+    "resume_id_required": "The السيرة الذاتية Field is Required.",
+    "password_mismatch": "The كلمة المرور and confirm كلمة المرور must match",
+    "image_required": "The image field is required.",
+    "country_id_required": "The country field is required.",
+    "image_type": "The image must be a file of النوع: jpeg, jpg, png.",
+    "iso_code_required": "The ISO Code field is required.",
+    "employer_details_required": "Employer Details is required",
+    "employer_name": "The Employer الاسم is required.",
+    "state_required": "The state field is required.",
+    "terms_and_conditions_required": "You must agreed to Terms and conditions.",
+    "enter_first_name": "Enter First الاسم",
+    "enter_last_name": "Enter Last الاسم",
+    "email": "Enter البريد الإلكتروني",
+    "password": "Enter كلمة المرور",
+    "forgot_password": "Forgot Your كلمة المرور?",
+    "email_address": "Enter Email إضافةress",
+    "phone_number": "Enter الهاتف Number",
+    "account_password": "Set Account كلمة المرور",
+    "confirm_account_password": "Confirm Account كلمة المرور",
+    "your_email": "Your البريد الإلكتروني",
+    "enter_your_email": "Enter Your البريد الإلكتروني",
+    "your_password": "Your كلمة المرور",
+    "min": "Min",
+    "max": "Max",
+    "password_reset": "Click here to reset your كلمة المرور",
+    "reset_password": "Reset كلمة المرور",
+    "enter_email_reset_password": "Enter your البريد الإلكتروني to reset your password",
+    "new_password": "Set a New كلمة المرور",
+    "admin_login": "Admin دخول",
+    "super_admin_login": "Super Admin دخول",
+    "candidate_login": "Candidate دخول",
+    "employer_login": "Employee دخول",
+    "front_site": "Front Site",
+    "sign_in": "تسجيل الدخول",
+    "already_have_an_account": "Already have an account",
+    "n\/a": "N\/A",
+    "unread_messages": "Unread Messages",
+    "processing": "Processing...",
+    "pdf": "PDF",
+    "not_immediate_available": "Not Immediate Available",
+    "immediate_available": "Immediate Available",
+    "something_missing": "Opps! Something's missing...",
+    "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+    "go_back": "رجوع to Previous Page",
+    "company_subscription": "الشركة Subscription"
 }

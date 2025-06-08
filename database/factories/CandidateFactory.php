@@ -26,23 +26,20 @@ class CandidateFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'career_level_id' => 1, // Default career level
-            'industry_id' => 1, // Default industry
-            'functional_area_id' => 1, // Default functional area
+            'unique_id' => 'CND-' . fake()->unique()->numberBetween(100000, 999999),
+            'father_name' => fake()->name('male'),
+            'marital_status_id' => null, // Nullable to avoid foreign key constraints
+            'nationality' => fake()->country(),
+            'national_id_card' => fake()->numerify('##########'),
+            'experience' => fake()->numberBetween(0, 15),
+            'career_level_id' => null, // Nullable to avoid foreign key constraints
+            'industry_id' => null, // Nullable to avoid foreign key constraints
+            'functional_area_id' => null, // Nullable to avoid foreign key constraints
             'current_salary' => fake()->numberBetween(30000, 80000),
             'expected_salary' => fake()->numberBetween(40000, 100000),
             'salary_currency' => 'USD',
-            'salary_period' => 'Monthly',
+            'address' => fake()->address(),
             'immediate_available' => fake()->boolean(),
-            'experience' => fake()->numberBetween(0, 15),
-            'phone' => fake()->phoneNumber(),
-            'marital_status_id' => 1, // Default marital status
-            'nationality' => fake()->country(),
-            'national_id_card' => fake()->numerify('##########'),
-            'is_immediate_available' => fake()->boolean(),
-            'is_active' => true,
-            'is_verified' => true,
-            'video_link' => fake()->url(),
         ];
     }
 
@@ -52,7 +49,6 @@ class CandidateFactory extends Factory
     public function immediatelyAvailable(): static
     {
         return $this->state(fn (array $attributes) => [
-            'is_immediate_available' => true,
             'immediate_available' => true,
         ]);
     }
@@ -78,22 +74,12 @@ class CandidateFactory extends Factory
     }
 
     /**
-     * Indicate that the candidate should be inactive.
+     * Indicate that the candidate should not be immediately available.
      */
-    public function inactive(): static
+    public function notImmediatelyAvailable(): static
     {
         return $this->state(fn (array $attributes) => [
-            'is_active' => false,
-        ]);
-    }
-
-    /**
-     * Indicate that the candidate should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'is_verified' => false,
+            'immediate_available' => false,
         ]);
     }
 } 

@@ -38,18 +38,18 @@
                 <div class="flex flex-wrap">
                     <div class="flex-1 -xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
-                        <form method="POST" action="{{ route('front.') }}" id="employeeForm"
+                        <form method="POST" action="{{ route('front.home') }}" id="employeeForm"
                               class="py-40 px-40 bg-gray">
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -12 mb-4">
                                     <div class="mb-4 flex flex-wrap">
                                         <div class="flex-1 -sm-6 flex-1 -12 mb-3 mb-sm-0">
-                                            <a href="{{ route('candidate.') }}"
+                                            <a href="{{ route('candidate.dashboard') }}"
                                                class="border border-gray-300 bg-transparent">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
                                         <div class="flex-1 -sm-6 flex-1 -12">
-                                            <a href="{{ route('front.') }}"
+                                            <a href="{{ route('front.home') }}"
                                                class="border border-gray-300 bg-transparent">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
@@ -137,8 +137,8 @@
 
 {{-- @section('scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/front_register/front_register.js') }}"></script> --}}
-{{-- <script src="{{asset('assets/js/auto_fill/auto_fill.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/front_register/front_register.js') "></script> -- }}
+{{ -- <script src="asset('assets/js/auto_fill/auto_fill.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

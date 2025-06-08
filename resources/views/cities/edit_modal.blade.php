@@ -27,7 +27,7 @@
                 </div>
 
             </div>
-            <div class="px-6 py-4 border-t border border border-gray-300 -gray-300 -gray-200 flex justify-end space-x-2 pt-0 quill- px-4 py-2 rounded font-medium transition-colors - container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="px-6 py-4 border-t border border border-gray-300 -gray-300 -gray-200 flex justify-end space-x-2 pt-0 quill- px-4 py-2 rounded font-medium transition-colors - max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors m-0','id' => 'btnEditSave','data-loading-text' =>"<span class="animate-spin h-5 w-5 border-2 border-current border-t-transparent rounded -full spinner- border border border-gray-300 -gray-300 -sm"></span>".__('messages.common.process')]) }}
                 <button type="button" class="border border-gray-300 bg-transparent"
                         id="btnEditCancel"

@@ -9,7 +9,7 @@
         <div class="flex-1 sm-12 my-0">
             {{ Form::label('about_us', __('messages.about_us').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
             <span class="required"></span>
-            {{-- {{ Form::textarea('about_us', $setting['about_us'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-75', 'id' => 'aboutUs', 'flex flex-wrap -mx-4s' => '5']) }} --}}
+            {{ --  Form::textarea('about_us', $setting['about_us'], ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-75', 'id' => 'aboutUs', 'flex flex-wrap -mx-4s' => '5'])  -- }}
             <div id="aboutUs"></div>
             {{ Form::hidden('about_us', $setting['about_us'], ['id' => 'aboutUsData']) }}
         </div>

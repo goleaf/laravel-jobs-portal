@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         @include('flash::message')
         <div class="flex flex- flex-1">
             <div class="flex-1 lg-9 mt-5">
@@ -16,14 +16,14 @@
                     {{-- class="lg:w-6/12 px-2 flex-1 -sm-12 flex items-center form-switch flex-1 sm block"> --}}
                     {{-- <label class="switch-label"> --}}
                     {{-- <input type="checkbox" name="is_active" --}}
-                    {{-- class="searchIsActiveHeaderSlider flex items-center input" {{ ($settings['slider_is_active'] == 1) ? 'checked' : '' }} > --}}
+                    {{ -- class="searchIsActiveHeaderSlider flex items-center input"  ($settings['slider_is_active'] == 1) ? 'checked' : ''  > -- }}
                     {{-- <span class="switch-span"></span> --}}
                     {{-- </label> --}}
                     {{-- <span --}}
-                    {{-- class="pb-2 fs-5 text-gray-600 mb-3 mx-3 mb-md-0">{{ __('messages.image_slider.message') }} --}}
+                    {{ -- class="pb-2 fs-5 text-gray-600 mb-3 mx-3 mb-md-0"> __('messages.image_slider.message')  -- }}
                     {{-- <i class="fas fa-question-circle ml-1" --}}
                     {{-- data-bs-toggle="tooltip" --}}
-                    {{-- title="{{ __('messages.image_slider.message_title') }}"></i> --}}
+                    {{ -- title=" __('messages.image_slider.message_title') "></i> -- }}
                     {{-- </span> --}}
                     {{-- </div> --}}
                     <div class="mb-5 flex items-center">
@@ -56,5 +56,5 @@
     {{ Form::hidden('header-extension-message',__('messages.image_slider.image_extension_message'),['id' => 'headerExtensionMessage']) }}
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/header_sliders/header_sliders.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/header_sliders/header_sliders.js') "></script> -- }}
 {{-- @endpush --}}

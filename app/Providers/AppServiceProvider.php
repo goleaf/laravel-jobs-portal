@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
         // Configure comprehensive rate limiting
         $this->configureRateLimiting();
         
-        // Configure Context7 database monitoring
+        // Configure Universal database monitoring
         $this->configureDatabaseMonitoring();
 
         // Register class aliases
@@ -193,13 +193,13 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure Context7 database monitoring for performance optimization.
+     * Configure Universal database monitoring for performance optimization.
      */
     protected function configureDatabaseMonitoring(): void
     {
-        // Context7 Pattern: Monitor slow queries for performance optimization
+        // Universal Pattern: Monitor slow queries for performance optimization
         \DB::whenQueryingForLongerThan(500, function (\Illuminate\Database\Connection $connection, \Illuminate\Database\Events\QueryExecuted $event) {
-            \Log::warning('Context7: Slow query detected', [
+            \Log::warning('Universal: Slow query detected', [
                 'sql' => $event->sql,
                 'time' => $event->time . 'ms',
                 'connection' => $connection->getName(),
@@ -207,11 +207,11 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        // Context7 Pattern: Query listener for development debugging
+        // Universal Pattern: Query listener for development debugging
         if (config('app.debug')) {
             \DB::listen(function (\Illuminate\Database\Events\QueryExecuted $query) {
                 if ($query->time > 1000) { // Over 1 second
-                    \Log::debug('Context7: Very slow query', [
+                    \Log::debug('Universal: Very slow query', [
                         'sql' => $query->sql,
                         'time' => $query->time . 'ms',
                         'bindings' => $query->bindings,

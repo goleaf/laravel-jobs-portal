@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="flex my-4">
-                        <a href="{{ route('candidate.') }}" class="border border-gray-300 bg-transparent">
+                        <a href="{{ route('candidate.dashboard') }}" class="border border-gray-300 bg-transparent">
                             {{ __('messages.user.edit_profile') }}
                         </a>
                     </div>

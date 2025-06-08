@@ -50,7 +50,7 @@
                                         <span class="font-size-13px post-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill {{ $counter }} inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -{{ getBadgeColor($loop->index) }}">{{ $category->name }}</span>
                                     @elseif($counter == (count($post->postAssignCategories )) - 1)
 {{-- <a href="javascript:void(0)" --}}
-{{-- class="font-size-13px  badge-pill inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill {{ $counter }} inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -{{ getBadgeColor($loop->index) }} text-decoration-none">More</a> --}}
+{{ -- class="font-size-13px  badge-pill inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill  $counter  inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -{{ getBadgeColor($loop->index)  }} text-decoration-none">More</a> --}}
                                         <span class="font-size-13px post-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium -pill inline-flex items-center px-2.5 py-0.5 rounded -full text-xs font-medium -danger text-decoration-none font-size-13px">{{"+" . $counter }}</span>
                                     @endif
                                 @endforeach

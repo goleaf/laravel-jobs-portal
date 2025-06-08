@@ -238,7 +238,16 @@
         "seems_message": "Görünüşe göre bu kayda erişmenize izin verilmiyor.",
         "no_found_record": "Hiçbir eşleşen kayıt bulunamadı",
         "default_language": "Varsayılan dil",
-        "select_language": "Dil Seçin"
+        "select_language": "Dil Seçin",
+        "confirm_delete": "Are you sure you want to delete this item?",
+        "remove": "Remove",
+        "closed": "Closed",
+        "view_public_profile": "View Public Profil",
+        "removed": "removed",
+        "has_been_removed": "has been removed.",
+        "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+        "filter": "Filtre",
+        "this_week": "The Week"
     },
     "phone": {
         "invalid_number": "Geçersiz numara",
@@ -392,7 +401,9 @@
         "google_redirect": "Google Yönlendirmesi",
         "configuration_update": "Yapılandırma Güncellemesi",
         "update_application_configuration": "Uygulama yapılandırma değerlerini güncellemek üzeresiniz, devam etmek istiyor musunuz?",
-        "image_validation": "Görüntü 90 x 60 piksel olmalıdır."
+        "image_validation": "Görüntü 90 x 60 piksel olmalıdır.",
+        "term_conditions": "Term & Conditons",
+        "current_version": "Current Version"
     },
     "tooltip": {
         "change_app_logo": "Uygulama logosunu değiştir",
@@ -400,7 +411,8 @@
         "change_home_banner": "Ana sayfa başlığını değiştir",
         "copy_preview_link": "Önizleme Bağlantısını Kopyala",
         "change_favicon": "Favicon'u değiştir",
-        "change_profile": "yapılandırma dosyasını değiştir"
+        "change_profile": "yapılandırma dosyasını değiştir",
+        "change_category_image": "Change category image"
     },
     "company_size": {
         "new_company_size": "Yeni Şirket Büyüklüğü",
@@ -444,7 +456,8 @@
         "size": "Boyut",
         "action": "Aksiyon",
         "no_salary_period_found": "Maaş Dönemi Bulunamadı",
-        "no_salary_period_available": "Maaş Dönemi Yok"
+        "no_salary_period_available": "Maaş Dönemi Yok",
+        "salary_period": "Salary Period"
     },
     "job_shift": {
         "new_job_shift": "Yeni İş Vardiyası",
@@ -720,7 +733,8 @@
         "favourite_company": "Favori Şirket",
         "favourite_job": "Favori İş",
         "subscriber": "Abone",
-        "please_enter_salary_range_to_greater_than_salary_range_from": "Lütfen Maaş Aralığını Giren Maaş Aralığından daha büyük girin."
+        "please_enter_salary_range_to_greater_than_salary_range_from": "Lütfen Maaş Aralığını Giren Maaş Aralığından daha büyük girin.",
+        "expired_job": "Expired job"
     },
     "candidate": {
         "new_admin": "Yeni Yönetici",
@@ -779,7 +793,9 @@
         "reported_candidate": "Bildirilen Aday",
         "reported_employer": "Bildirilen İşveren",
         "employee": "çalışan",
-        "expired_job": "Süresi dolmuş iş"
+        "expired_job": "Süresi dolmuş iş",
+        "in_years": "In Years",
+        "0": "Employee"
     },
     "candidate_dashboard": {
         "location_information": "Konum Bilgisi mevcut değil.",
@@ -1058,7 +1074,8 @@
         "slider_active_title": "Bu geçiş devre dışı bırakılırsa, varsayılan görüntü kaydırıcı ekranı görünmez.",
         "image_slider_details": "Görüntü Kaydırıcı Ayrıntıları",
         "no_image_slider_found": "Görüntü Kaydırıcısı Bulunamadı",
-        "no_image_slider_available": "Görüntü Kaydırıcısı Yok"
+        "no_image_slider_available": "Görüntü Kaydırıcısı Yok",
+        "add": "Add"
     },
     "header_slider": {
         "new_header_slider": "Yeni Başlık Kaydırıcısı",
@@ -1470,6 +1487,64 @@
         "follow_company_successfully": "Şirketi başarıyla takip edin.",
         "note_required": "Not alanı zorunludur",
         "resume_field_required": "Özgeçmiş alanı zorunludur.",
-        "verify_google_recaptcha": "Google recaptcha'yı kontrol etmelisiniz."
-    }
+        "verify_google_recaptcha": "Google recaptcha'yı kontrol etmelisiniz.",
+        "jobs": {
+            "featured": "Featured",
+            "view_details": "View Details",
+            "no_jobs_found": "No İşler Found",
+            "no_jobs_description": "Try adjusting your Ara criteria or browse all available positions.",
+            "browse_all_jobs": "Browse All İşler",
+            "company_logo": "Company Logo"
+        }
+    },
+    "messages": {
+        "company_profile": "Şirket Profili",
+        "company_details": "Şirket Detayları",
+        "company_overview": "Şirket Genel Bakış",
+        "company_jobs": "Şirket İşleri",
+        "company_size_detail": "Şirket Boyutu",
+        "company_location": "Şirket Konumu",
+        "company_website": "Şirket Web Sitesi",
+        "company_founded": "Kuruldu",
+        "about_company": "Şirket Hakkında",
+        "company_employees": "Employees"
+    },
+    "language-name": "en",
+    "fileName": "messages.php",
+    "Company size is required": "Company size is required",
+    "Company size must be a valid text": "Company size must be a valid text",
+    "Company size must not exceed 255 characters": "Company size must not exceed 255 characters",
+    "This company size already exists": "This company size already exists",
+    "Company size contains invalid characters": "Company size contains invalid characters",
+    "Company Size": "Company Size",
+    "Validation failed": "Validation failed",
+    "Edit company size": "Edit company size",
+    "Delete company size": "Delete company size",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "term_conditions": "Term & Conditons",
+    "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+    "no_keyword_found": "No Keyword Found",
+    "comments": "Comments",
+    "password_reset": "Click here to reset your password",
+    "reset_password": "Reset Password",
+    "enter_email_reset_password": "Enter your email to reset your password",
+    "new_password": "Set a New Password",
+    "admin_login": "Admin Giriş",
+    "super_admin_login": "Super Admin Giriş",
+    "candidate_login": "Candidate Giriş",
+    "employer_login": "Employee Giriş",
+    "front_site": "Front Site",
+    "sign_in": "Giriş yap",
+    "already_have_an_account": "Already have an account",
+    "n\/a": "N\/A",
+    "unread_messages": "Unread Messages",
+    "processing": "Processing...",
+    "pdf": "PDF",
+    "not_immediate_available": "Not Immediate Available",
+    "immediate_available": "Immediate Available",
+    "something_missing": "Opps! Something's missing...",
+    "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+    "go_back": "Back to Previous Page",
+    "company_subscription": "Company Subscription"
 }

@@ -6,7 +6,7 @@
     <div class="login-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
               <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                   <div class="hero-content">
@@ -29,21 +29,21 @@
 
         <!-- start candidate login section -->
         <section class="py-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
                     <div class="flex-1 -xl-6 flex-1 lg-8 mx-auto">
                         @include('flash::message')
-                        <form method="POST" action="{{ route('front.') }}" id="candidateForm"
+                        <form method="POST" action="{{ route('front.home') }}" id="candidateForm"
                             class="py-40 px-40 bg-gray">
                             <div class="flex flex-wrap">
                                 <div class="flex-1 -12 mb-4">
                                     <div class="mb-4 flex flex-wrap">
                                         <div class="flex-1 -sm-6 flex-1 -12 mb-3 mb-sm-0">
-                                            <a href="{{ route('candidate.') }}" class="border border-gray-300 bg-transparent">
+                                            <a href="{{ route('candidate.dashboard') }}" class="border border-gray-300 bg-transparent">
                                                 {{ __('web.register_menu.candidate') }} </a>
                                         </div>
                                         <div class="flex-1 -sm-6 flex-1 -12">
-                                            <a href="{{ route('front.') }}"
+                                            <a href="{{ route('front.home') }}"
                                                 class="border border-gray-300 bg-transparent">
                                                 {{ __('web.register_menu.employer') }} </a>
                                         </div>
@@ -147,7 +147,7 @@
 
 {{-- @section('page_scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/auto_fill/auto_fill.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/auto_fill/auto_fill.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

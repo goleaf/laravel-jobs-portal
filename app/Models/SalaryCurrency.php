@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SalaryCurrency extends Model
 {
+    use HasFactory;
     public $table = 'salary_currencies';
 
     public $fillable = [

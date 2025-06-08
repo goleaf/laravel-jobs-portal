@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // home Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- // var availableLocation = []; --}}

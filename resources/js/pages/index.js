@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- $(document).ready(function () { --}}
@@ -50,12 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var phoneNo ="{{ old('region_code').old('phone_no') }}";
 
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let isEdit = false --}}
@@ -69,7 +69,7 @@ var phoneNo ="{{ old('region_code').old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let registerSaveUrl ="{{ route('front.') }}"; --}}
@@ -82,7 +82,7 @@ var phoneNo ="{{ old('region_code').old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let input = JSON.parse('@json($input)'); --}}
@@ -94,7 +94,7 @@ var phoneNo ="{{ old('region_code').old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
         {{-- let registerSaveUrl ="{{ route('front.') }}"; --}}
@@ -107,7 +107,7 @@ var phoneNo ="{{ old('region_code').old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- $(document).ready(function () { --}}
@@ -128,12 +128,12 @@ var phoneNo ="{{ old('region_code').old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var phoneNo ="{{ old('region_code') . old('phone_no') }}";
 
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let isEdit = false --}}
@@ -147,7 +147,7 @@ var phoneNo ="{{ old('region_code') . old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let registerSaveUrl ="{{ route('front.') }}"; --}}
@@ -160,7 +160,7 @@ var phoneNo ="{{ old('region_code') . old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let input = JSON.parse('@json($input)'); --}}
@@ -172,7 +172,7 @@ var phoneNo ="{{ old('region_code') . old('phone_no') }}";
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let registerSaveUrl ="{{ route('front.') }}"; --}}

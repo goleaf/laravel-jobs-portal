@@ -39,7 +39,7 @@
         <div class="flex flex- flex flex-wrap flex-column-fluid">
             @include('layouts.sidebar')
             <div class="wrapper flex flex- flex-1 flex- flex flex-wrap fluid">
-                <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid flex align-items-stretch justify-between px-0">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid flex align-items-stretch justify-between px-0">
                     @include('layouts.header')
                 </div>
                 <div class="content flex flex- flex-1 flex-column-fluid pt-7">
@@ -48,7 +48,7 @@
                         @yield('content')
                     </div>
                 </div>
-                <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
                     @include('layouts.footer')
                 </div>
             </div>

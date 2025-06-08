@@ -79,7 +79,13 @@
     "not_in": "的 已选 :attribute 是无效的.",
     "not_regex": "的 :attribute 格式无效.",
     "numeric": "的 :attribute 必须是一个数字.",
-    "password": "的 密码错误.",
+    "password": {
+        "letters": "The :attribute field must contain at least one letter.",
+        "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+        "numbers": "The :attribute field must contain at least one number.",
+        "symbols": "The :attribute field must contain at least one symbol.",
+        "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+    },
     "present": "的 :attribute 字段必须存在.",
     "regex": "的 :attribute 格式无效.",
     "required": "的 :attribute 必填项.",
@@ -108,5 +114,32 @@
             "rule-name": "custom-message"
         }
     },
-    "attributes": []
+    "attributes": [],
+    "accepted_if": "The :attribute field must be accepted when :other is :value.",
+    "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+    "current_password": "The password is incorrect.",
+    "decimal": "The :attribute field must have :decimal decimal places.",
+    "declined": "The :attribute field must be declined.",
+    "declined_if": "The :attribute field must be declined when :other is :value.",
+    "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+    "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+    "enum": "The selected :attribute is invalid.",
+    "lowercase": "The :attribute field must be lowercase.",
+    "mac_address": "The :attribute field must be a valid MAC address.",
+    "max_digits": "The :attribute field must not have more than :max digits.",
+    "min_digits": "The :attribute field must have at least :min digits.",
+    "missing": "The :attribute field must be missing.",
+    "missing_if": "The :attribute field must be missing when :other is :value.",
+    "missing_unless": "The :attribute field must be missing unless :other is :value.",
+    "missing_with": "The :attribute field must be missing when :values is present.",
+    "missing_with_all": "The :attribute field must be missing when :values are present.",
+    "multiple_of": "The :attribute field must be a multiple of :value.",
+    "prohibited": "The :attribute field is prohibited.",
+    "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+    "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+    "prohibits": "The :attribute field prohibits :other from being present.",
+    "required_array_keys": "The :attribute field must contain entries for: :values.",
+    "required_if_accepted": "The :attribute field is required when :other is accepted.",
+    "uppercase": "The :attribute field must be uppercase.",
+    "ulid": "The :attribute field must be a valid ULID."
 }

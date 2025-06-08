@@ -75,7 +75,7 @@
                 <div class="flex flex-wrap justify-center">
                     <div class="flex-1 -xl-8 flex-1 lg-10">
                         <div class="find-job relative bg-white">
-                            <form action="{{ route('front.') }}" id='searchForm' method="get">
+                            <form action="{{ route('front.home') }}" id='searchForm' method="get">
                                 <div class="flex flex-wrap items-center justify-content-around m-0">
                                     <div class="flex-1 lg-5 br-2 ps-lg-4 px-20">
                                         <h3 class="fs-16 text-gray-600 mb-0">@lang('web.home_menu.keywords')</h3>
@@ -184,9 +184,9 @@
                                                 <h5 class="bg-white shadow rounded -lg overflow-hidden title fs-18 text-gray-600 mb-0">
                                                     {{ html_entity_decode($jobCategory->name) }}</h5>
                                             </a>
-                                            {{ -- <p class="bg-white shadow rounded -lg overflow-hidden text fs-14 text-gray text-indigo-600 -600">
-                                                {{ ($jobCategory->jobs_count ? $jobCategory->jobs_count : 0) . ' open positions' }}
-                                            </p> --}}
+                                            {{  -- <p class="bg-white shadow rounded -lg overflow-hidden text fs-14 text-gray text-indigo-600 -600">
+                                                 ($jobCategory->jobs_count ? $jobCategory->jobs_count : 0) . ' open positions' 
+                                            </p> -- }}
                                             @if ($jobCategory->jobs_count <= 0)
                                                 <p class="bg-white shadow rounded -lg overflow-hidden text fs-14 text-gray text-indigo-600 -600">
                                                     {{ 'No positions' }}
@@ -204,7 +204,7 @@
                                 </div>
                             @endforeach
                             <div class="flex-1 -12 text-center">
-                                <a href="{{ route('front.') }}" class="border border-gray-300 bg-transparent">
+                                <a href="{{ route('front.home') }}" class="border border-gray-300 bg-transparent">
                                     @lang('web.common.bflex flex-wrap -mx-4se_all')
                                 </a>
                             </div>
@@ -230,19 +230,19 @@
                                 \Illuminate\Support\Facades\Auth::check() && isset(auth()->user()->country_name) && isset($latestJobsEnable)
                                     ? $latestJobsEnable->value
                                     : '')
-                                @if (in_array(auth()->user()->country_name, array_flex-1 px-4umn($latestJobs->toArray(), 'country_name')))
+                                @if (in_array(auth()->user()->country_name, array_column($latestJobs->toArray(), 'country_name')))
                                     @foreach ($latestJobs as $job)
                                         @if ($job->country_name == auth()->user()->country_name)
                                             @include('front_web_template.common.job_bg-white overflow-hidden shadow rounded-lg')
                                         @endif
                                     @endforeach
                                     <div class="flex-1 md-12 text-center">
-                                        <a href="{{ route('front.') }}"
+                                        <a href="{{ route('front.home') }}"
                                             class="border border-gray-300 bg-transparent">{{ __('web.common.bflex flex-wrap -mx-4se_all') }}</a>
                                     </div>
                                 @else
                                     <div class="flex-1 md-12 text-center">
-                                        <a href="{{ route('front.') }}"
+                                        <a href="{{ route('front.home') }}"
                                             class="border border-gray-300 bg-transparent">{{ __('web.common.bflex flex-wrap -mx-4se_all') }}</a>
                                     </div>
                                 @endif
@@ -251,7 +251,7 @@
                                     @include('front_web_template.common.job_bg-white overflow-hidden shadow rounded-lg')
                                 @endforeach
                                 <div class="flex-1 -12 text-center">
-                                    <a href="{{ route('front.') }}" class="border border-gray-300 bg-transparent">
+                                    <a href="{{ route('front.home') }}" class="border border-gray-300 bg-transparent">
                                         @lang('web.common.bflex flex-wrap -mx-4se_all')
                                     </a>
                                 </div>

@@ -6,8 +6,8 @@
                     <h1>{{ __('messages.job_stage.batch') }} {{ $batch }}</h1>
                     @if($jobApplication->job_stage_id==$jobSchedule[0]->stage_id)
                         {{-- <a href="javascript:void(0)" class="border border-gray-300 bg-transparent" --}}
-                        {{-- data-batch="{{ $batch }}"> --}}
-                        {{-- <i class="fas fa-plus"></i> {{ __('messages.common.add') }} --}}
+                        {{ -- data-batch=" $batch "> -- }}
+                        {{ -- <i class="fas fa-plus"></i>  __('messages.common.add')  -- }}
                         {{-- </a> --}}
                         <div class="flex items-center me-4 me-md-5 form- px-4 py-2 rounded font-medium transition-colors float-right">
                             <a href="javascript:void(0)"

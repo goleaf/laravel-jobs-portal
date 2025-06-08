@@ -3,7 +3,7 @@
     {{ __('messages.about_us') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/about-us.css') }}"> --}}
+{{ -- <link rel="stylesheet" href=" asset('front_web/scss/about-us.css') "> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="About Us-page">

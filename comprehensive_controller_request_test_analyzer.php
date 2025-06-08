@@ -51,7 +51,7 @@ class ControllerRequestTestAnalyzer
                 $relativePath = str_replace($this->controllersPath . '/', '', $file->getPathname());
                 $className = $this->getClassNameFromFile($file->getPathname());
                 
-                if ($className && $className !== 'Controller' && $className !== 'AppBaseController' && $className !== 'Context7BaseController') {
+                if ($className && $className !== 'Controller' && $className !== 'AppBaseController' && $className !== 'UniversalBaseController') {
                     $this->controllers[] = [
                         'file' => $file->getPathname(),
                         'relative_path' => $relativePath,
@@ -392,17 +392,17 @@ class ControllerRequestTestAnalyzer
             echo "   Review and update {$controllerName} methods to use FormRequest classes\n";
         }
         
-        echo "\n✨ **RECOMMENDATION: Use Context7 Patterns**\n";
-        echo "   • Implement Context7BaseController for all controllers\n";
-        echo "   • Use Context7 request validation patterns\n";
-        echo "   • Add Context7 test patterns for comprehensive coverage\n";
-        echo "   • Follow Context7 MCP best practices\n";
+        echo "\n✨ **RECOMMENDATION: Use Universal Patterns**\n";
+        echo "   • Implement UniversalBaseController for all controllers\n";
+        echo "   • Use Universal request validation patterns\n";
+        echo "   • Add Universal test patterns for comprehensive coverage\n";
+        echo "   • Follow Universal MCP best practices\n";
         
         echo "\n🎉 **COMPLETION GOAL:**\n";
         echo "   • 100% Request Coverage for validation methods\n";
         echo "   • 95%+ Test Coverage for all controllers\n";
         echo "   • Zero orphaned files\n";
-        echo "   • Consistent Context7 patterns\n";
+        echo "   • Consistent Universal patterns\n";
     }
 }
 

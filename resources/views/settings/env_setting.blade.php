@@ -11,7 +11,7 @@
         {{-- <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input flex items-center input" id="enableEdit"> --}}
         {{-- <span class="custom-switch-indicator"></span> --}}
         {{-- <span class="mb-3 mt-5 custom-switch-description fs-6 fw-bolder text-gray-700" --}}
-        {{-- id="envUpdateText">{{ __('messages.setting.enable_edit') }}</span> --}}
+        {{ -- id="envUpdateText"> __('messages.setting.enable_edit') </span> -- }}
         {{-- </label> --}}
         {{-- </div> --}}
         <div class="mb-5 flex-1 sm-6">
@@ -144,7 +144,7 @@
                         <label class="pl-0 mt-2 flex items-center form-switch">
                             {{-- <input type="checkbox" name="cookie_consent_enabled" class="custom-switch-input flex items-center input" --}}
                             {{-- id="enableCookie" --}}
-                            {{-- {{ (!empty($cookie['COOKIE_CONSENT_ENABLED']) && filter_var($cookie['COOKIE_CONSENT_ENABLED'], FILTER_VALIDATE_BOOLEAN)) ? 'checked' : '' }} disabled> --}}
+                            {{ --  (!empty($cookie['COOKIE_CONSENT_ENABLED']) && filter_var($cookie['COOKIE_CONSENT_ENABLED'], FILTER_VALIDATE_BOOLEAN)) ? 'checked' : ''  disabled> -- }}
                             {{--  --}}
                             <input class="mr-5 flex items-center input" name="cookie_consent_enabled"
                                    id="enableCookie" type="checkbox"

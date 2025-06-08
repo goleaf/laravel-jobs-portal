@@ -3,7 +3,7 @@
     {{ __('web.job_details.job_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/company-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/company-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="company-details-page">
@@ -31,12 +31,12 @@
                                                 {{ !empty($companyDetail->industry->name) ? $companyDetail->industry->name : __('messages.common.n/a') }}
                                             </p>
                                         </div>
-                                        {{ -- @if (!empty($companyDetail->$user->city_id) || !empty($companyDetail->$user->state_id) || !empty($companyDetail->$user->country_id))
+                                        {{  -- @if (!empty($companyDetail->$user->city_id) || !empty($companyDetail->$user->state_id) || !empty($companyDetail->$user->country_id))
                                             <div class="desc flex items-center me-lg-4 me-2 pe-2">
                                                 <i class="fa-solid fa-location-dot text-gray me-3 fs-18"></i>
                                                 <p class="text-gray fs-14 mb-0">
-                                                    {{ isset($companyDetail->location) ? html_entity_decode($companyDetail->location) : __('messages.common.n/a') }}
-                                                    {{ isset($companyDetail->location2) ? ', ' . html_entity_decode($companyDetail->location2) : '' }}
+                                                     isset($companyDetail->location) ? html_entity_decode($companyDetail->location) : __('messages.common.n/a') 
+                                                    {{ isset($companyDetail->location2) ? ', ' . html_entity_decode($companyDetail->location2) : ''  }}
                                                 </p>
                                             </div>
                                         @endif --}}

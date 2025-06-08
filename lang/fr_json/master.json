@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "Ces informations d'identification ne correspondent pas à nos enregistrements.",
-        "throttle": "Trop de tentatives de connexion. Veuillez réessayer dans: secondes secondes."
+        "throttle": "Trop de tentatives de connexion. Veuillez réessayer dans: secondes secondes.",
+        "password": "The provided Mot de passe is incorrect."
     },
     "js": {
         "admin": "Administrateur",
@@ -398,7 +399,15 @@
             "seems_message": "Görünüşe göre bu kayda erişmenize izin verilmiyor.",
             "no_found_record": "Aucun enregistrements correspondants trouvés",
             "default_language": "Langage par défaut",
-            "select_language": "Choisir la langue"
+            "select_language": "Choisir la langue",
+            "remove": "Remove",
+            "closed": "Closed",
+            "view_public_profile": "View Public Profil",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "Filtre",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "Numéro invalide",
@@ -552,14 +561,19 @@
             "google_redirect": "Google Redirect",
             "configuration_update": "Mise à jour de la configuration",
             "update_application_configuration": "Vous êtes sur le point de mettre à jour les valeurs de configuration de l`application, vous souhaitez continuer ?",
-            "image_validation": "L'image doit être de pixel 90 x 60."
+            "image_validation": "L'image doit être de pixel 90 x 60.",
+            "linkedIn_url": "URL de LinkedIn",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "Changer le logo de l'application",
             "change_image": "Changer l'image",
             "change_home_banner": "Changer la bannière d'accueil",
             "copy_preview_link": "Copier le lien d'aperçu",
-            "change_favicon": "Changer de favicon"
+            "change_favicon": "Changer de favicon",
+            "change_category_image": "Change category image",
+            "change_profile": "Change Profil"
         },
         "company_size": {
             "new_company_size": "Nouvelle Compagnie Taille",
@@ -603,7 +617,8 @@
             "size": "Taille",
             "action": "action",
             "no_salary_period_found": "Aucune période de salaire trouvée",
-            "no_salary_period_available": "Aucune période de salaire disponible"
+            "no_salary_period_available": "Aucune période de salaire disponible",
+            "salary_period": "Salary Period"
         },
         "job_shift": {
             "new_job_shift": "Nouvelle Emploi Décalage",
@@ -810,7 +825,8 @@
             "user_name": "Nom d'utilisateur",
             "logout": "Se déconnecter",
             "required_field_messages": "Veuillez remplir tous les champs obligatoires.",
-            "password_invalid": "Le mot de passe actuel n est pas valide."
+            "password_invalid": "Le mot de passe actuel n est pas valide.",
+            "profile_picture": "Profil Picture"
         },
         "salary_currency": {
             "new_salary_currency": "Nouvelle devise de salaire",
@@ -877,7 +893,9 @@
             "favourite_company": "Entreprise préférée",
             "favourite_job": "Travail préféré",
             "subscriber": "Abonnée",
-            "please_enter_salary_range_to_greater_than_salary_range_from": "Veuillez saisir la fourchette de salaire jusqu`à supérieure à la fourchette de salaire de."
+            "please_enter_salary_range_to_greater_than_salary_range_from": "Veuillez saisir la fourchette de salaire jusqu`à supérieure à la fourchette de salaire de.",
+            "view_drafted_job": "View Drafted Job",
+            "expired_job": "Expired job"
         },
         "candidate": {
             "new_admin": "Nouvel administrateur",
@@ -932,7 +950,12 @@
             "no_candidate_available": "Aucun candidat disponible",
             "reported_candidate": "Candidat signalé",
             "reported_employer": "Employeur déclaré",
-            "employee": "Employée"
+            "employee": "Employée",
+            "select_candidate": "Select Candidate",
+            "in_years": "In Years",
+            "no_candidate_found": "No Candidate Found",
+            "email_verified": "Email Verified",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "Emplacement Information ne pas disponible.",
@@ -1327,7 +1350,8 @@
             "your_note": "Votre remarque"
         },
         "post_comment": {
-            "post_comment_details": "Détails de la publication du commentaire"
+            "post_comment_details": "Détails de la publication du commentaire",
+            "post_comment": "Post Comment"
         },
         "datepicker": {
             "today": "Aujourd'hui",
@@ -1626,7 +1650,35 @@
             "note_required": "Le champ de note est obligatoire",
             "resume_field_required": "Le champ CV est obligatoire.",
             "verify_google_recaptcha": "Vous devriez vérifier Google Recaptcha."
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "verify_captcha": "You must verify google recaptcha.",
+        "password_reset": "Click here to reset your password",
+        "reset_password": "Reset Password",
+        "enter_email_reset_password": "Enter your email to reset your password",
+        "new_password": "Set a New Password",
+        "admin_login": "Admin Se connecter",
+        "super_admin_login": "Super Admin Se connecter",
+        "candidate_login": "Candidate Se connecter",
+        "employer_login": "Employee Se connecter",
+        "front_site": "Front Site",
+        "sign_in": "Se connecter",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "Back to Previous Page",
+        "company_subscription": "Company Subscription"
     },
     "pagination": {
         "previous": "&laquo; Précédente",
@@ -1720,7 +1772,13 @@
         "not_in": "L':attribute selected n'est pas valide.",
         "not_regex": "Le format d':attribute n'est pas valide.",
         "numeric": "L':attribute doit être un nombre.",
-        "password": "Le mot de passe est incorrect.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
         "present": "Le champ :attribute doit être présent.",
         "regex": "Le format d':attribute n'est pas valide.",
         "required": "Le champ :attribute est obligatoire.",
@@ -1749,7 +1807,34 @@
                 "rule-name": "custom-message"
             }
         },
-        "attributes": []
+        "attributes": [],
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "current_password": "The password is incorrect.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "mac_address": "The :attribute field must be a valid MAC address.",
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "ulid": "The :attribute field must be a valid ULID."
     },
     "web": {
         "home": "Accueil",
@@ -1880,7 +1965,8 @@
             "click_here": "Cliquez ici",
             "to_upload_resume": "pour télécharger le CV",
             "register_to_apply": "Inscrivez-vous pour postuler",
-            "location_information_not_available": "Informations de localisation non disponibles."
+            "location_information_not_available": "Informations de localisation non disponibles.",
+            "functional_area": "Functional Area"
         },
         "apply_for_job": {
             "apply_for": "Postuler pour",
@@ -2010,7 +2096,8 @@
             "view_company_profile": "Voir le profil de l'entreprise",
             "founded_in": "Fondé en",
             "phone": "Téléphone",
-            "Skill_Experience": "Compétence et expérience"
+            "Skill_Experience": "Compétence et expérience",
+            "job_detail": "Job Detail"
         },
         "web_company": {
             "search_company": "Rechercher une entreprise",

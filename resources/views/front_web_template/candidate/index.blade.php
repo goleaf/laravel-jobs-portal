@@ -10,13 +10,13 @@
     @if (\Illuminate\Support\Facades\App::getLocale() == 'ar')
         
     @endif
-    {{-- <link rel="stylesheet" href="{{ asset('front_web/scss/jobs.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('front_web/scss/companies.css') }}"> --}}
+    {{ -- <link rel="stylesheet" href=" asset('front_web/scss/jobs.css') "> -- }}
+    {{ -- <link rel="stylesheet" href=" asset('front_web/scss/companies.css') "> -- }}
 @endsection
 @section('content')
     <div class="job-seekers-page">
-        {{ -- <section class="hero-section relative bg-color-light py-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        {{  -- <section class="hero-section relative bg-color-light py-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -25,7 +25,7 @@
                             </h1>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-center mb-0">
-                                    <li class="breadcrumb-item"><a href="{{route('front.home') }}" class="fs-18 text-gray">{{ __('web.home') }} </a>
+                                    <li class="breadcrumb-item"><a href="route('front.home') " class="fs-18 text-gray">{{ __('web.home')  }} </a>
                                     </li>
                                     <li class="breadcrumb-item text-indigo-600-600 fs-18" aria-current="page">@lang('web.job_seekers')</li>
                                 </ol>
@@ -40,7 +40,7 @@
         </section> --}}
 
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">

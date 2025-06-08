@@ -62,7 +62,8 @@
         "you_are_logged_in": "Вы вошли в систему!",
         "latest_job_not_available": "Последняя вакансия недоступна.",
         "min": "Мин",
-        "max": "Макс"
+        "max": "Макс",
+        "opened_jobs": "Open Вакансии"
     },
     "job_menu": {
         "search_job": "Искать вакансии",
@@ -257,7 +258,8 @@
         "view_company_profile": "Посмотреть профиль компании",
         "founded_in": "Основана в",
         "phone": "Телефон",
-        "Skill_Experience": "Навыки и опыт"
+        "Skill_Experience": "Навыки и опыт",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Поиск компании",
@@ -307,5 +309,35 @@
         "reset_password": "Сброс пароля",
         "new_password": "Установить новый пароль",
         "set_new_password": "Установить новый пароль"
+    },
+    "web": {
+        "welcome": "Добро пожаловать на наш портал вакансий",
+        "find_job": "Найдите работу своей мечты",
+        "post_job": "Разместить вакансию",
+        "welcome_title": "Найти работу, нанять таланты",
+        "welcome_subtitle": "Соединяем соискателей с работодателями",
+        "for_job_seekers": "Для соискателей",
+        "for_employers": "Для работодателей",
+        "search_jobs": "Поиск работы",
+        "browse_companies": "Просмотр компаний",
+        "latest_jobs": "Последние вакансии",
+        "featured_companies": "Рекомендуемые компании"
+    },
+    "nav": {
+        "home": "Главная",
+        "jobs": "Вакансии",
+        "companies": "Компании",
+        "candidates": "Кандидаты",
+        "about": "О нас",
+        "contact": "Контакты",
+        "login": "Вход",
+        "register": "Регистрация",
+        "dashboard": "Панель управления",
+        "profile": "Профиль",
+        "logout": "Выход",
+        "find_jobs": "Найти работу",
+        "post_job": "Разместить вакансию",
+        "browse_companies": "Просмотр компаний",
+        "admin_panel": "Панель администратора"
     }
 }

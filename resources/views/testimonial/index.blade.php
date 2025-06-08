@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/header-padding.css') }}">
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         @include('flash::message')
         <div class="flex flex- flex-1">
             <livewire:testimonial-table/>
@@ -19,7 +19,7 @@
 @endsection
 @push('scripts')
     
-{{-- <script src="{{mix('assets/js/testimonial/testimonial.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/testimonial/testimonial.js') "></script> -- }}
 @endpush
 
 @push('scripts')

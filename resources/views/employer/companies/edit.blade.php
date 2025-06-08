@@ -3,8 +3,8 @@
     {{ __('messages.company.edit_employer') }}
 @endsection
 @push('css')
-    {{-- <link href="{{ asset('assets/css/summernote.min.css') }}" rel="stylesheet" type="text/css"/> --}}
-    {{-- <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/> --}}
+    {{ -- <link href=" asset('assets/css/summernote.min.css') " rel="stylesheet" type="text/css"/> -- }}
+    {{ -- <link href=" asset('assets/css/select2.min.css') " rel="stylesheet" type="text/css"/> -- }}
     <link rel="stylesheet" href="{{ asset('assets/css/inttel/css/intlTelInput.css') }}">
 @endpush
 @section('content')
@@ -35,8 +35,8 @@
                                 {{-- @else --}}
                                 {{-- <button class="border border-gray-300 bg-transparent" data-bs-toggle="tooltip" --}}
                                 {{-- data-bs-placement="bottom" --}}
-                                {{-- title="{{ __('messages.front_settings.featured_employer_not_available') }}"> --}}
-                                {{-- {{ __('messages.front_settings.make_featured') }}</button> --}}
+                                {{ -- title=" __('messages.front_settings.featured_employer_not_available') "> -- }}
+                                {{ --  __('messages.front_settings.make_featured') </button> -- }}
                             @endif
                         @endif
                     </div>
@@ -58,9 +58,9 @@
 @push('scripts')
 {{-- <script src="https://js.stripe.com/v3/"></script> --}}
     
-    {{-- <script src="{{mix('assets/js/companies/create-edit.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/companies/companies_stripe_payment.js') }}"></script> --}}
-    {{-- <script src="{{ mix('assets/js/custom/phone-number-country-code.js') }}"></script> --}}
+    {{ -- <script src="mix('assets/js/companies/create-edit.js') "></script> -- }}
+    {{ -- <script src=" asset('assets/js/companies/companies_stripe_payment.js') "></script> -- }}
+    {{ -- <script src=" mix('assets/js/custom/phone-number-country-code.js') "></script> -- }}
 @endpush
 
 @push('scripts')

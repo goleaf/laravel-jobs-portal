@@ -41,13 +41,13 @@
                         {{ Form::label('start_date', __('messages.candidate_profile.start_date').(':'),['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                         <span class="required"></span>
                         <input type="text" name="start_date" id="editStartDate" class="rounded border border border border border-gray-300 -gray-300 w-full px-3 py-2 -gray-300 -gray-300 -md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.start_date') }}">
-{{-- {{ Form::text('start_date', null,['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'editStartDate','autocomplete' => 'off','placeholder'=>'Start Date']) }} --}}
+{{ --  Form::text('start_date', null,['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'editStartDate','autocomplete' => 'off','placeholder'=>'Start Date'])  -- }}
                     </div>
                     <div class="mb-5 flex-1 sm-6">
                         {{ Form::label('end_date', __('messages.candidate_profile.end_date').(':'),['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                         <span class="required"></span>
                         <input type="text" name="end_date" id="editEndDate" class="rounded border border border border border-gray-300 -gray-300 w-full px-3 py-2 -gray-300 -gray-300 -md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}" autocomplete="off" placeholder="{{ __('messages.candidate_profile.end_date') }}">
-{{-- {{ Form::text('end_date',  null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'data-modal-type' => 'experience','id' => 'editEndDate','autocomplete' => 'off','placeholder'=>'End Date']) }} --}}
+{{ --  Form::text('end_date',  null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'data-modal-type' => 'experience','id' => 'editEndDate','autocomplete' => 'off','placeholder'=>'End Date'])  -- }}
                     </div>
                     <div class="mb-5 flex-1 sm-6">
                         {{ Form::label('currently_working', __('messages.candidate_profile.currently_working').(':'),['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
@@ -61,10 +61,10 @@
                         {{ Form::textarea('description',null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','flex flex-wrap -mx-4s'=>'5','id' => 'editDescription','placeholder'=>__('messages.candidate_profile.description')]) }}
                     </div>
                     {{-- <div class="text-right"> --}}
-                    {{-- {{ Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200ExperienceSave','data-loading-text' =>"<span class="rounded border border border border border border-gray-300 -gray-300 animate-spin -full -2 -gray-300 -t-blue-600 spinner- -sm"></span> Processing..."]) }} --}}
+                    {{ --  Form::button(__('messages.common.save'), ['type' => 'submit','class' => 'rounded-md bg-indigo-600 px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200ExperienceSave','data-loading-text' =>"<span class="rounded border border border border border border-gray-300 -gray-300 animate-spin -full -2 -gray-300 -t-blue-600 spinner- -sm"></span> Processing..."])  -- }}
                     {{-- <button type="button" class="border border-gray-300 bg-transparent" --}}
                     {{-- id="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200Cancel" --}}
-                    {{-- data-bs-dismiss="modal">{{ __('messages.common.cancel') }}</button> --}}
+                    {{ -- data-bs-dismiss="modal"> __('messages.common.cancel') </button> -- }}
                     {{-- </div> --}}
                 </div>
             </div>

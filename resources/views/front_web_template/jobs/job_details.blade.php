@@ -3,7 +3,7 @@
     {{ __('web.job_details.job_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/job-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/job-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="job-details-page">
@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="desc flex me-4 pe-2">
                                         <button class="border border-gray-300 bg-transparent"
-                                            onclick="window.location='{{ route('candidate.') }}'">
+                                            onclick="window.location='{{ route('candidate.dashboard') }}'">
                                             {{ __('web.job_details.apply_for_job') }}
                                         </button>
                                     </div>

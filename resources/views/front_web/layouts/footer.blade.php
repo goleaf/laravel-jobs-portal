@@ -32,11 +32,11 @@
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("/') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">{{ __('web.home') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("search-jobs') || Request::is('job-details*') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">{{ __('web.jobs') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("company-lists') || Request::is('company-details*') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">{{ __('web.companies') }}</a>
                     </li>
                 </ul>
@@ -45,19 +45,19 @@
                 <h3 class="mb-3 fs-18 text-red-600">{{ __('web.web_home.helpful_resources') }}</h3>
                 <ul class="ps-0">
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("about-us') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">
                             {{ __('web.about_us') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("contact-us') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">
                             {{ __('web.contact_us') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                            class="text-decoration-none mb-3 block footer- bg-white shadow-sm color {{ Request::is("posts') ? 'footer-navbar-color-active' : 'text-dark' }} fs-14">
                             {{ __('messages.post.blog') }}
                         </a>

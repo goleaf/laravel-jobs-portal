@@ -7,14 +7,14 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Form Request for storing Health
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for storing Health
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreHealthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Context7 Pattern: Simple authorization check
+     * Universal Pattern: Simple authorization check
      */
     public function authorize(): bool
     {
@@ -23,7 +23,7 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
+     * Universal Pattern: Comprehensive validation with security
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -47,7 +47,7 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -62,7 +62,7 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -76,7 +76,7 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Universal Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -89,12 +89,12 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Performance optimization
+     * Universal Pattern: Performance optimization
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            // Context7 Pattern: Additional business logic validation
+            // Universal Pattern: Additional business logic validation
             if ($this->hasConflictingData()) {
                 $validator->errors()->add('name', __('validation.conflicting_data'));
             }
@@ -102,7 +102,7 @@ class StoreHealthRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Custom business logic check
+     * Universal Pattern: Custom business logic check
      */
     private function hasConflictingData(): bool
     {
@@ -112,11 +112,11 @@ class StoreHealthRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling
+     * Universal Pattern: Enhanced error handling
      */
     protected function failedValidation(Validator $validator): void
     {
-        // Context7 Pattern: Log validation failures for security monitoring
+        // Universal Pattern: Log validation failures for security monitoring
         logger()->warning('Validation failed for StoreHealthRequest', [
             'errors' => $validator->errors()->toArray(),
             'input' => $this->safe()->toArray(),

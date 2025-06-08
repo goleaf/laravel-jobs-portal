@@ -3,14 +3,14 @@
     {{ __('web.company_details.company_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/company-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/company-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 {{-- @dd($companyDetail) --}}
 @section('content')
     <div class="company-details-page">
         <!-- start hero section -->
         <section class="hero-section relative bg-gradient py-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 -12">
                         <div class="flex align-items-md-center">
@@ -97,7 +97,7 @@
 
         <!-- start about-comapany section -->
         <section class="about-company-section pt-60 pb-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
                     <div class="flex-1 lg-8 mb-lg-0 mb-40">
                         <div class="aboout-company-left text-gray mb-5">

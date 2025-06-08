@@ -5,7 +5,7 @@
 @push('css')
 @endpush
 @section('content')
-    <div class="container mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 py-8">
         <div class="bg-white overflow-hidden shadow-xl rounded-lg">
             <div class="px-6 py-8">
                 <div class="flex flex-wrap">

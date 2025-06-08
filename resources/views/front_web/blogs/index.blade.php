@@ -3,7 +3,7 @@
     {{ __('messages.post.blog') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/blog.css') }}"> --}}
+{{ -- <link rel="stylesheet" href=" asset('front_web/scss/blog.css') "> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="Blog-page">

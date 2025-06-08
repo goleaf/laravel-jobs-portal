@@ -127,7 +127,8 @@
         "click_here": "Cliquez ici",
         "to_upload_resume": "pour télécharger le CV",
         "register_to_apply": "Inscrivez-vous pour postuler",
-        "location_information_not_available": "Informations de localisation non disponibles."
+        "location_information_not_available": "Informations de localisation non disponibles.",
+        "functional_area": "Functional Area"
     },
     "apply_for_job": {
         "apply_for": "Postuler pour",
@@ -257,7 +258,8 @@
         "view_company_profile": "Voir le profil de l'entreprise",
         "founded_in": "Fondé en",
         "phone": "Téléphone",
-        "Skill_Experience": "Compétence et expérience"
+        "Skill_Experience": "Compétence et expérience",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Rechercher une entreprise",
@@ -307,5 +309,35 @@
         "reset_password": "réinitialiser le mot de passe",
         "new_password": "Définir un nouveau mot de passe",
         "set_new_password": "Définir un nouveau mot de passe"
+    },
+    "web": {
+        "welcome": "Bienvenue sur notre portail emploi",
+        "find_job": "Trouvez l'emploi de vos rêves",
+        "post_job": "Publier un emploi",
+        "welcome_title": "Trouver des emplois, embaucher des talents",
+        "welcome_subtitle": "Connecter les chercheurs d'emploi avec les employeurs",
+        "for_job_seekers": "Pour les chercheurs d'emploi",
+        "for_employers": "Pour les employeurs",
+        "search_jobs": "Rechercher des emplois",
+        "browse_companies": "Parcourir les entreprises",
+        "latest_jobs": "Derniers emplois",
+        "featured_companies": "Entreprises en vedette"
+    },
+    "nav": {
+        "home": "Accueil",
+        "jobs": "Emplois",
+        "companies": "Entreprises",
+        "candidates": "Candidats",
+        "about": "À propos",
+        "contact": "Contact",
+        "login": "Connexion",
+        "register": "S'inscrire",
+        "dashboard": "Tableau de bord",
+        "profile": "Profil",
+        "logout": "Déconnexion",
+        "find_jobs": "Trouver des emplois",
+        "post_job": "Publier un emploi",
+        "browse_companies": "Parcourir les entreprises",
+        "admin_panel": "Panel d'administration"
     }
 }

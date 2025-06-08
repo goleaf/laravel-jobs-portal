@@ -10,12 +10,12 @@
     @if (\Illuminate\Support\Facades\App::getLocale() == 'ar')
         
     @endif
-    {{-- <link href="{{asset('front_web/scss/jobs.css') }}" rel="stylesheet" type="text/css"> --}}
+    {{ -- <link href="asset('front_web/scss/jobs.css') " rel="stylesheet" type="text/css"> -- }}
 @endsection
 @section('content')
     <div class="Find Jobs-page">
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -38,7 +38,7 @@
         </section>
 
         <section class="latest-job-section py-60">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap">
                     <div class="flex-1 lg-4 px-lg-3">
                         <div class="latest-job-left br-10 px-40 bg-gray-100 mb-40">

@@ -1,4 +1,4 @@
-{{ -- <div class="flex-1 -4 px-xl-3 mb-20">
+{{  -- <div class="flex-1 -4 px-xl-3 mb-20">
     <div class="bg-white rounded-lg shadow-md border border-gray-300 border-gray-200 last-jobs- bg-white shadow rounded -lg overflow-hidden border border-gray-300 -left-color">
         <div class="absolute top-0 end-0 mt-3">
             @if ($company->activeFeatured)
@@ -13,11 +13,11 @@
         </div>
         <div class="flex flex-wrap flex flex-xl-column items-center">
             <div class="flex-1 -3">
-                <img src="{{ $company->company_url }}" class="bg-white shadow rounded -lg overflow-hidden img img- border border-gray-300" alt="">
+                <img src=" $company->company_url " class="bg-white shadow rounded -lg overflow-hidden img img- border border-gray-300" alt="">
             </div>
             <div class="flex-1 -9 px-3">
                 <div class="bg-white shadow rounded -lg overflow-hidden body p-0">
-                    <a href="{{ route('front.', $company->unique_id) }}"
+                    <a href="{{ route('front.', $company->unique_id)  }}"
                        class="text-gray-600 primary-link-hover">
                         <h5 class="bg-white shadow rounded -lg overflow-hidden title   fs-20 mb-0">
                             {!! $company->$user->first_name !!}</h5>
@@ -60,15 +60,15 @@
     </div>
 </div> --}}
 
-{{ -- <div class="lg:w-4/12 px-2 flex-1 md-6 px-xl-3 mb-40">
+{{  -- <div class="lg:w-4/12 px-2 flex-1 md-6 px-xl-3 mb-40">
     <div class="bg-white shadow rounded -lg overflow-hidden py-30">
         <div class="flex justify-between items-center">
             <div class="flex items-center">
                 <div class="me-4">
-                    <img src="{{ $company->company_url }}" class="bg-white shadow rounded -lg overflow-hidden img" alt="..." />
+                    <img src=" $company->company_url " class="bg-white shadow rounded -lg overflow-hidden img" alt="..." />
                 </div>
                 <div class="">
-                    <a href="{{ route('front.', $company->unique_id) }}"
+                    <a href="{{ route('front.', $company->unique_id)  }}"
                         class="text-gray-600 primary-link-hover" >
                         <div class="bg-white shadow rounded -lg overflow-hidden body p-0">
                             <h5 class="bg-white shadow rounded -lg overflow-hidden title fs-18 mb-0">{!! $company->$user->first_name !!}</h5>

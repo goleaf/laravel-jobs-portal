@@ -3,13 +3,13 @@
 @section('title', __('Admin Users'))
 
 @section('content')
-<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
     <div class="flex flex-wrap justify-center">
         <div class="flex-1 md-12">
             <div class="bg-white shadow rounded -lg overflow-hidden">
                 <div class="bg-white shadow rounded -lg overflow-hidden header flex justify-between items-center">
                     <h3 class="mb-0">{{ __('Admin Users') }}</h3>
-                    <a href="{{ route('admin.') }}" class="border border-gray-300 bg-transparent">
+                    <a href="{{ route('admin.dashboard') }}" class="border border-gray-300 bg-transparent">
                         <i class="fas fa-plus"></i> {{ __('Add Admin') }}
                     </a>
                 </div>

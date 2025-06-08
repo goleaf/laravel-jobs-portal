@@ -7,24 +7,24 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Form Request for updating Paystack
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for updating Paystack
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class UpdatePaystackRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Context7 Pattern: Resource-based authorization
+     * Universal Pattern: Resource-based authorization
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Check if user can update this specific resource
+        // Universal Pattern: Check if user can update this specific resource
         return $this->user()?->can('update', $this->route(strtolower('Paystack'))) ?? false;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Update-specific validation rules
+     * Universal Pattern: Update-specific validation rules
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -42,7 +42,7 @@ class UpdatePaystackRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -57,7 +57,7 @@ class UpdatePaystackRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -71,7 +71,7 @@ class UpdatePaystackRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Universal Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -84,7 +84,7 @@ class UpdatePaystackRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Universal Pattern: Enhanced validation logic
      */
     public function withValidator(Validator $validator): void
     {
@@ -96,7 +96,7 @@ class UpdatePaystackRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Check for unauthorized changes
+     * Universal Pattern: Check for unauthorized changes
      */
     private function hasUnauthorizedChanges(): bool
     {
@@ -106,7 +106,7 @@ class UpdatePaystackRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with audit logging
+     * Universal Pattern: Enhanced error handling with audit logging
      */
     protected function failedValidation(Validator $validator): void
     {

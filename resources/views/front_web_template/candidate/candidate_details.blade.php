@@ -3,26 +3,26 @@
     {{ __('messages.candidate.candidate_details') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/scss/candidate-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/scss/candidate-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 {{-- @dd($candidateDetails) --}}
 @section('content')
-    {{ -- <section class="hero-section relative bg-color py-40">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+    {{  -- <section class="hero-section relative bg-color py-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex flex-wrap align-items-lg-center mb-3">
                         <div class="lg:w-1/12 px-2 flex-1 -sm-2 flex-1 -3">
                             <div class="candidate-profile-img mt-md-0 mt-3">
                                 <img
-                                        src="{{ (!empty($candidateDetails->$user->avatar)) ? $candidateDetails->$user->avatar : asset('assets/img/infyom-logo.png') }}"
+                                        src=" (!empty($candidateDetails->$user->avatar)) ? $candidateDetails->$user->avatar : asset('assets/img/infyom-logo.png') "
                                         alt="candidate profile">
                             </div>
                         </div>
                         <div class="flex-1 -sm-10 flex-1 -9">
                             <div class="hero-content ps-xl-0 ps-3">
                                 <h4 class="text-gray-600 mb-0">
-                                    {{ html_entity_decode($candidateDetails->$user->full_name) }}
+                                    {{ html_entity_decode($candidateDetails->$user->full_name)  }}
                                 </h4>
                                 <div class="hero-desc flex items-center flex-wrap">
                                     <div class="flex items-center me-4 pe-2">
@@ -87,7 +87,7 @@
     </section>
 
     <section class="about-company-section py-60">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="mb-5">
@@ -138,7 +138,7 @@
     </section> --}}
 
     <section class="hero-section relative bg-gradient pt-15 pb-40">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap items-center justify-center">
                 <div class="flex-1 -12">
                     <div class="flex align-items-md-center">
@@ -202,7 +202,7 @@
     </section>
 
     <section class="job-details-section py-60 mb-sm-4">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="flex-1 lg-8">
                     <div class="Job Description mb-lg-5 mb-4">

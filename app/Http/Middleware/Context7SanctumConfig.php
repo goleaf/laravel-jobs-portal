@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Context7 Sanctum Configuration Middleware
+ * Universal Sanctum Configuration Middleware
  * Handles Sanctum-specific configurations and security enhancements
  */
-class Context7SanctumConfig
+class UniversalSanctumConfig
 {
     /**
-     * Handle an incoming request with Context7 security patterns
+     * Handle an incoming request with Universal security patterns
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Context7 Pattern: Add security headers for API responses
+        // Universal Pattern: Add security headers for API responses
         $response = $next($request);
         
         if ($request->is('api/*')) {
@@ -26,10 +26,10 @@ class Context7SanctumConfig
             $response->headers->set('X-XSS-Protection', '1; mode=block');
             $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
             
-            // Context7 Pattern: API versioning header
+            // Universal Pattern: API versioning header
             $response->headers->set('X-API-Version', '1.0.0');
             
-            // Context7 Pattern: Rate limit info (if available)
+            // Universal Pattern: Rate limit info (if available)
             if ($request->user() && $request->user()->currentAccessToken()) {
                 $response->headers->set('X-Token-Name', $request->user()->currentAccessToken()->name);
                 $response->headers->set('X-Token-Abilities', implode(',', $request->user()->currentAccessToken()->abilities));

@@ -2,7 +2,7 @@
 
 /**
  * Comprehensive Blade Template Syntax Error Fixer
- * Using Context7 best practices for Laravel Blade templating
+ * Using Universal best practices for Laravel Blade templating
  */
 
 $fixCount = 0;

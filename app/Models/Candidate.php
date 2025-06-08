@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -86,6 +87,8 @@ use Spatie\Translatable\HasTranslations;
  */
 class Candidate extends Model
 {
+    use HasFactory;
+    
     // use HasSlug;
     // use HasTranslations;
 

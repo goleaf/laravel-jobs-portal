@@ -1,5 +1,5 @@
 <footer class="footer bg-gradient">
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-between">
             <div class="flex-1 -xxl-3 flex-1 -xl-4 flex-1 lg-6 mb-xl-0 mb-5">
                 <div class="footer-logo">
@@ -35,11 +35,11 @@
                             class="text-decoration-none {{ Request::is('/') ? 'footer- bg-white shadow -color-active text-dark' : 'text-gray' }} mb-3 block fs-14">{{ __('web.home') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                             class="text-decoration-none {{ Request::is('search-jobs') || Request::is('job-details*') ? 'footer- bg-white shadow -color-active text-dark' : 'text-gray' }} mb-3 block fs-14">{{ __('web.jobs') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                             class="text-decoration-none {{ Request::is('company-lists') || Request::is('company-details*') ? 'footer- bg-white shadow -color-active text-dark' : 'text-gray' }} mb-3 block fs-14">{{ __('web.companies') }}</a>
                     </li>
                 </ul>
@@ -48,16 +48,16 @@
                 <h3 class="mb-3 text-gray-600 fs-18">{{ __('web.web_home.helpful_resources') }}</h3>
                 <ul class="ps-0">
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                             class="text-decoration-none mb-3 block {{ Request::is("about-us') ? 'footer-navbar-color-active text-dark' : 'text-gray' }} fs-14">{{ __('web.about_us') }}</a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                             class="text-decoration-none mb-3 block {{ Request::is("contact-us') ? 'footer-navbar-color-active text-dark' : 'text-gray' }} fs-14">{{ __('web.contact_us') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('front.') }}"
+                        <a href="{{ route('front.home') }}"
                             class="text-decoration-none mb-3 block {{ Request::is("posts*') ? 'footer-navbar-color-active text-dark' : 'text-gray' }} fs-14">
                             {{ __('messages.post.blog') }}</a>
                     </li>

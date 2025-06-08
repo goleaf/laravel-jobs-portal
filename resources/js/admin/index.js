@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 function deleteCandidate(id) {
     if (confirm('{{ __("Are you sure you want to delete this candidate?") }}')) {
@@ -29,7 +29,7 @@ function deleteCandidate(id) {
     }
 });
 // index Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 function deleteJob(id) {
     if (confirm('{{ __("Are you sure you want to delete this job?") }}')) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('{{ __('auth.register') }}') }} - {{ config('app.name') }}</title></head>
+    <title>{{  __(' __('auth.register') ')  }} - {{ config('app.name') }}</title></head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="flex flex-wrap justify-center">
@@ -12,7 +12,7 @@
                     <div class="bg-white shadow rounded -lg overflow-hidden header text-center bg-green-600 text-white">
                         <h4 class="mb-0">
                             <i class="fas fa-user-plus me-2"></i>
-                            {{ __('{{ __('auth.register') }}') }}
+                            {{  __(' __('auth.register') ')  }}
                         </h4>
                     </div>
                     <div class="bg-white shadow rounded -lg overflow-hidden body">
@@ -35,7 +35,7 @@
                                     <div class="mb-3">
                                         <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">
                                             <i class="fas fa-user me-1"></i>
-                                            {{ __('{{ __('auth.first_name') }}') }}
+                                            {{  __(' __('auth.first_name') ')  }}
                                         </label>
                                         <input id="first_name" type="text" 
                                                class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("first_name') is-invalid @enderror" 
@@ -56,7 +56,7 @@
                                     <div class="mb-3">
                                         <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">
                                             <i class="fas fa-user me-1"></i>
-                                            {{ __('{{ __('auth.last_name') }}') }}
+                                            {{  __(' __('auth.last_name') ')  }}
                                         </label>
                                         <input id="last_name" type="text" 
                                                class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("last_name') is-invalid @enderror" 
@@ -75,7 +75,7 @@
                             <div class="mb-3">
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
                                     <i class="fas fa-envelope me-1"></i>
-                                    {{ __('{{ __('auth.email_address') }}') }}
+                                    {{  __(' __('auth.email_address') ')  }}
                                 </label>
                                 <input id="email" type="email" 
                                        class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("email') is-invalid @enderror" 
@@ -93,7 +93,7 @@
                             <div class="mb-3">
                                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
                                     <i class="fas fa-phone me-1"></i>
-                                    {{ __('{{ __('auth.phone_number') }}') }} <small class="text-gray-500">({{ __('Optional') }})</small>
+                                    {{  __(' __('auth.phone_number') ')  }} <small class="text-gray-500">({{ __('Optional') }})</small>
                                 </label>
                                 <input id="phone" type="tel" 
                                        class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("phone') is-invalid @enderror" 
@@ -112,7 +112,7 @@
                                     <div class="mb-3">
                                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
                                             <i class="fas fa-lock me-1"></i>
-                                            {{ __('{{ __('auth.password') }}') }}
+                                            {{  __(' __('auth.password') ')  }}
                                         </label>
                                         <input id="password" type="password" 
                                                class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500 @error("password') is-invalid @enderror" 
@@ -134,7 +134,7 @@
                                     <div class="mb-3">
                                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
                                             <i class="fas fa-lock me-1"></i>
-                                            {{ __('{{ __('auth.confirm_password') }}') }}
+                                            {{  __(' __('auth.confirm_password') ')  }}
                                         </label>
                                         <input id="password_confirmation" type="password" 
                                                class="w-full px-3 py-2 border border-gray-300 border border-gray-300 -gray-300 rounded -md focus:outline-none focus:ring-2 focus:ring-primary-500" 
@@ -158,7 +158,7 @@
                             <div class="d-grid">
                                 <button type="submit" class="border border-gray-300 bg-transparent">
                                     <i class="fas fa-user-plus me-1"></i>
-                                    {{ __('{{ __('auth.create_account') }}') }}
+                                    {{  __(' __('auth.create_account') ')  }}
                                 </button>
                             </div>
                         </form>

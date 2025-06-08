@@ -50,7 +50,7 @@
                         <input type="text" name="end_date" id="endDateExperience"
                                class="rounded border border border border border-gray-300 -gray-300 w-full px-3 py-2 -gray-300 -gray-300 -md focus:outline-none focus:ring-2 focus:ring-primary-500 {{ (getLoggedInUser()->theme_mode) ?"bg-gray-100' : 'bg-white' }}"
                                autocomplete="off" placeholder="{{ __('messages.candidate_profile.end_date') }}">
-                        {{-- {{ Form::text('end_date',  null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'data-modal-type' => 'experience','id' => 'endDateExperience','placeholder'=>'End Date','text-red-500']) }} --}}
+                        {{ --  Form::text('end_date',  null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'data-modal-type' => 'experience','id' => 'endDateExperience','placeholder'=>'End Date','text-red-500'])  -- }}
                     </div>
                     <div class="mb-5 flex-1 sm-6">
                         {{ Form::label('currently_working', __('messages.candidate_profile.currently_working').(':'),['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}

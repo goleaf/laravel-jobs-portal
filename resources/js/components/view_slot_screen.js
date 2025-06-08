@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // view_slot_screen Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 var interviewSlotStoreUrl ="{{ route('employer.', ['jobId' => request()->route('jobId.index')]) }}";
         var batchSlotStoreUrl ="{{ route('employer.', ['jobId' => request()->route('jobId.index')]) }}";

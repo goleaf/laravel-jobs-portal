@@ -127,7 +127,9 @@
         "click_here": "Hier klicken",
         "to_upload_resume": "Lebenslauf hochladen",
         "register_to_apply": "Registrieren, um sich zu bewerben",
-        "location_information_not_available": "Standortinformationen nicht verfügbar."
+        "location_information_not_available": "Standortinformationen nicht verfügbar.",
+        "degree_level": "Degree Level",
+        "position": "Position"
     },
     "apply_for_job": {
         "apply_for": "Bewerben für",
@@ -138,20 +140,27 @@
         "due_to_our_continued_growth": "Aufgrund unseres anhaltenden Wachstums rekrutieren wir eine neue Position von",
         "or_words_to_that_effect": "oder entsprechende Wörter",
         "already_applied ": " Bereits angewendet ",
-        "share_this_job": "Teilen Sie diesen Job"
+        "share_this_job": "Teilen Sie diesen Job",
+        "expected_salary": "Expected Salary",
+        "already_applied": "Already Applied"
     },
     "companies_menu": {
         "search_companies": "Unternehmen suchen",
         "opened_jobs": "Offene Arbeitsplätze",
         "Featured": "Vorgestellt",
-        "no_company_found": "Kein Unternehmen gefunden"
+        "no_company_found": "Kein Unternehmen gefunden",
+        "featured": "Featured"
     },
     "candidates_menu": {
         "search candidates": "Kandidaten suchen",
         "no candidates found": "keine Arbeitssuchenden gefunden",
         "hire Me": "Stellt mich ein",
         "candidate name": "Kandidatenname",
-        "opened_jobs": "Geöffnete Arbeitsplätze"
+        "opened_jobs": "Geöffnete Arbeitsplätze",
+        "search_candidates": "Search Kandidaten",
+        "no_candidates_found": "No Job seekers found",
+        "hire_me": "Hire Me",
+        "candidate_name": "Candidate Name"
     },
     "company_details": {
         "company_details": "Firmendetails",
@@ -187,7 +196,8 @@
         "popular_post": "Beliebte Beiträge",
         "Newsletter": "Newsletter",
         "share": "Teilen",
-        "categories": "Kategorien"
+        "categories": "Kategorien",
+        "newsletter": "Newsletter"
     },
     "register_menu": {
         "candidate": "Kandidat",
@@ -222,11 +232,14 @@
         "your_passowrd": "Ihr Passwort",
         "don't_have_an_account": "Sie haben noch keinen Account?",
         "enter_email": "E-Mail eingeben",
-        "enter_password": "Passwort eingeben"
+        "enter_password": "Passwort eingeben",
+        "login_to": "Anmelden To",
+        "remember_me": "Remember me"
     },
     "header": {
         "toggle navigation": "Navigation umschalten",
-        "main_menu": "Hauptmenü"
+        "main_menu": "Hauptmenü",
+        "toggle_navigation": "Toggle navigation"
     },
     "web_home": {
         "what": "Was",
@@ -257,7 +270,8 @@
         "view_company_profile": "Firmenprofil ansehen",
         "founded_in": "Gegründet in",
         "phone": "Telefon",
-        "Skill_Experience": "Können und Erfahrung"
+        "Skill_Experience": "Können und Erfahrung",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "Unternehmen suchen",
@@ -307,5 +321,36 @@
         "reset_password": "Passwort zurücksetzen",
         "new_password": "Neues Passwort einrichten",
         "set_new_password": "Neues Passwort setzen"
-    }
+    },
+    "web": {
+        "welcome": "Willkommen in unserem Jobportal",
+        "find_job": "Finden Sie Ihren Traumjob",
+        "post_job": "Stellenanzeige veröffentlichen",
+        "welcome_title": "Jobs finden, Talente einstellen",
+        "welcome_subtitle": "Verbindung von Arbeitssuchenden und Arbeitgebern",
+        "for_job_seekers": "Für Arbeitssuchende",
+        "for_employers": "Für Arbeitgeber",
+        "search_jobs": "Jobs suchen",
+        "browse_companies": "Unternehmen durchsuchen",
+        "latest_jobs": "Neueste Jobs",
+        "featured_companies": "Ausgewählte Unternehmen"
+    },
+    "nav": {
+        "home": "Startseite",
+        "jobs": "Jobs",
+        "companies": "Unternehmen",
+        "candidates": "Kandidaten",
+        "about": "Über uns",
+        "contact": "Kontakt",
+        "login": "Anmelden",
+        "register": "Registrieren",
+        "dashboard": "Dashboard",
+        "profile": "Profil",
+        "logout": "Abmelden",
+        "find_jobs": "Jobs finden",
+        "post_job": "Job posten",
+        "browse_companies": "Unternehmen durchsuchen",
+        "admin_panel": "Admin-Panel"
+    },
+    "blogs": "Blogs"
 }

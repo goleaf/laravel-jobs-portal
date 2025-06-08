@@ -308,5 +308,35 @@
         "reset_password": "Reset Password",
         "new_password": "Setup New Password",
         "set_new_password": "Set a New Password"
+    },
+    "web": {
+        "welcome": "Welcome to our Job Portal",
+        "find_job": "Find Your Dream Job",
+        "post_job": "Post a Job",
+        "welcome_title": "Find Jobs, Hire Talent",
+        "welcome_subtitle": "Connecting job seekers with employers",
+        "for_job_seekers": "For Job Seekers",
+        "for_employers": "For Employers",
+        "search_jobs": "Search Jobs",
+        "browse_companies": "Browse Companies",
+        "latest_jobs": "Latest Jobs",
+        "featured_companies": "Featured Companies"
+    },
+    "nav": {
+        "home": "Home",
+        "jobs": "Jobs",
+        "companies": "Companies",
+        "candidates": "Candidates",
+        "about": "About Us",
+        "contact": "Contact",
+        "login": "Login",
+        "register": "Register",
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "logout": "Logout",
+        "find_jobs": "Find Jobs",
+        "post_job": "Post Job",
+        "browse_companies": "Browse Companies",
+        "admin_panel": "Admin Panel"
     }
 }

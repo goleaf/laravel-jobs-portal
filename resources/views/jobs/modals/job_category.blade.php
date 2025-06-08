@@ -22,7 +22,7 @@
                 <div class="flex-1 sm-12 mb-5 h-full">
                     {{ Form::label('description',__('messages.job_category.description').':', ['class' =>'block text-sm font-medium text-gray-700 mb-1']) }}
                     <span class="required"></span>
-                    {{-- {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'jobCategoryDescription', 'rows' => '5']) }} --}}
+                    {{ --  Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'jobCategoryDescription', 'rows' => '5'])  -- }}
                     <div id="addJobCategoryDescriptionQuillData" class="job-category-description"></div>
                     {{ Form::hidden('description', null, ['id' => 'jobCategoryDescriptionValue']) }}
                 </div>

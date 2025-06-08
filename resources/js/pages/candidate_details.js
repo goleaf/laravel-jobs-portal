@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // candidate_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let reportToCandidateUrl ="{{ route('front.') }}" --}}
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // candidate_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let reportToCandidateUrl ="{{ route('front.') }}" --}}

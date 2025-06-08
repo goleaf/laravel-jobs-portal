@@ -17,7 +17,7 @@ class CriticalBladeFixer
     
     public function __construct()
     {
-        echo "🔧 Starting Critical Blade Syntax Fixes using Context7 patterns...\n\n";
+        echo "🔧 Starting Critical Blade Syntax Fixes using Universal patterns...\n\n";
     }
     
     /**

@@ -1,9 +1,9 @@
 <section class="pt40 pb80" id="job-post">
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
         <div class="md:w-full flex-1 -sm-12 flex-1 xs-12 mb20">
             <h2 class="capitalize text-center">{{ __('web.home_menu.notices') }}</h2>
         </div>
-        <div class="flex-1 lg-8 offset-lg-2 marquee- container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="flex-1 lg-8 offset-lg-2 marquee- max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div style="height: 360px;">
             <marquee direction="down" scrolldelay="200" id="notices">
                 @foreach($notices as $notice)

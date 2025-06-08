@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "أوراق الاعتماد هذه لا تتطابق مع سجلاتنا.",
-        "throttle": "محاولات تسجيل دخول كثيرة جدًا. يرجى المحاولة مرة أخرى في seconds: ثواني."
+        "throttle": "محاولات تسجيل دخول كثيرة جدًا. يرجى المحاولة مرة أخرى في seconds: ثواني.",
+        "password": "The provided كلمة المرور is incorrect."
     },
     "js": {
         "admin": "المشرف",
@@ -395,7 +396,14 @@
             "seems_message": "يبدو أنه غير مسموح لك بالوصول إلى هذا السجل.",
             "no_found_record": "لم يتم العثور على سجلات مطابقة",
             "default_language": "اللغة الافتراضية",
-            "select_language": "اختار اللغة"
+            "select_language": "اختار اللغة",
+            "remove": "Remove",
+            "view_public_profile": "View Public الملف الشخصي",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "مرشح",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "رقم غير صالح",
@@ -549,7 +557,9 @@
             "google_redirect": "جوجل إعادة التوجيه",
             "configuration_update": "تحديث التكوين",
             "update_application_configuration": "أنت على وشك تحديث قيم تكوين التطبيق ، هل تريد المتابعة؟",
-            "image_validation": "يجب أن تكون الصورة بقياس 90 × 60 بكسل."
+            "image_validation": "يجب أن تكون الصورة بقياس 90 × 60 بكسل.",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "تغيير شعار التطبيق",
@@ -557,7 +567,8 @@
             "change_home_banner": "تغيير المنزل banner",
             "copy_preview_link": "نسخ رابط المعاينة",
             "change_favicon": "تغيير الأيقونة المفضلة",
-            "change_profile": "تغيير ملف التكوين"
+            "change_profile": "تغيير ملف التكوين",
+            "change_category_image": "Change الفئة image"
         },
         "company_size": {
             "new_company_size": "حجم الشركة الجديد",
@@ -601,7 +612,8 @@
             "size": "بحجم",
             "action": "عمل",
             "no_salary_period_found": "لم يتم العثور على فترة الراتب",
-            "no_salary_period_available": "لا توجد فترة راتب متاحة"
+            "no_salary_period_available": "لا توجد فترة راتب متاحة",
+            "salary_period": "الراتب Period"
         },
         "job_shift": {
             "new_job_shift": "نوبة عمل جديدة",
@@ -710,7 +722,8 @@
             "reported_employer_detail": "تفاصيل صاحب العمل المبلغ عنها",
             "title": "مسمى وظيفي",
             "image": "صورة",
-            "select_company_size": "حدد حجم الشركة"
+            "select_company_size": "حدد حجم الشركة",
+            "employers": "Employers"
         },
         "job_tag": {
             "job_tag": "يوم العمل",
@@ -935,7 +948,8 @@
             "no_candidate_available": "لا يوجد مرشح متاح",
             "reported_candidate": "المرشح المبلغ عنه",
             "reported_employer": "صاحب العمل المبلغ عنه",
-            "employee": "الموظف"
+            "employee": "الموظف",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "معلومات الموقع غير متوفرة.",
@@ -1198,7 +1212,8 @@
             "slider_active_title": "إذا تم تعطيل هذا التبديل ، فلن تكون شاشة شريط تمرير الصورة الافتراضية مرئية.",
             "image_slider_details": "تفاصيل شريط تمرير الصورة",
             "no_image_slider_found": "لم يتم العثور على صورة المنزلق",
-            "no_image_slider_available": "لا يوجد شريط تمرير صورة متاح"
+            "no_image_slider_available": "لا يوجد شريط تمرير صورة متاح",
+            "edit_image_slider": "تحرير Image Slider"
         },
         "header_slider": {
             "new_header_slider": "شريط تمرير رأس جديد",
@@ -1611,7 +1626,57 @@
             "note_required": "حقل الملاحظة مطلوب",
             "resume_field_required": "حقل السيرة الذاتية مطلوب.",
             "verify_google_recaptcha": "يجب عليك التحقق من جوجل recaptcha."
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "resume_id_required": "The السيرة الذاتية Field is Required.",
+        "password_mismatch": "The كلمة المرور and confirm كلمة المرور must match",
+        "image_required": "The image field is required.",
+        "country_id_required": "The country field is required.",
+        "image_type": "The image must be a file of النوع: jpeg, jpg, png.",
+        "iso_code_required": "The ISO Code field is required.",
+        "employer_details_required": "Employer Details is required",
+        "employer_name": "The Employer الاسم is required.",
+        "state_required": "The state field is required.",
+        "terms_and_conditions_required": "You must agreed to Terms and conditions.",
+        "enter_first_name": "Enter First الاسم",
+        "enter_last_name": "Enter Last الاسم",
+        "email": "Enter البريد الإلكتروني",
+        "password": "Enter كلمة المرور",
+        "forgot_password": "Forgot Your كلمة المرور?",
+        "email_address": "Enter Email إضافةress",
+        "phone_number": "Enter الهاتف Number",
+        "account_password": "Set Account كلمة المرور",
+        "confirm_account_password": "Confirm Account كلمة المرور",
+        "your_email": "Your البريد الإلكتروني",
+        "enter_your_email": "Enter Your البريد الإلكتروني",
+        "your_password": "Your كلمة المرور",
+        "min": "Min",
+        "max": "Max",
+        "password_reset": "Click here to reset your كلمة المرور",
+        "reset_password": "Reset كلمة المرور",
+        "enter_email_reset_password": "Enter your البريد الإلكتروني to reset your password",
+        "new_password": "Set a New كلمة المرور",
+        "admin_login": "Admin دخول",
+        "super_admin_login": "Super Admin دخول",
+        "candidate_login": "Candidate دخول",
+        "employer_login": "Employee دخول",
+        "front_site": "Front Site",
+        "sign_in": "تسجيل الدخول",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "رجوع to Previous Page",
+        "company_subscription": "الشركة Subscription"
     },
     "pagination": {
         "previous": "&laquo; السابق",
@@ -1705,7 +1770,13 @@
         "not_in": "ال المحدد attribute: غير صالح.",
         "not_regex": "ال attribute: التنسيق غير صالح.",
         "numeric": "ال attribute: يجب أن يكون رقما.",
-        "password": "كلمة المرور غير صحيحة.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
         "present": "ال attribute: يجب أن يكون الحقل موجودًا.",
         "regex": "ال attribute: التنسيق غير صالح.",
         "required": "ال attribute: الحقل مطلوب.",
@@ -1734,7 +1805,34 @@
                 "rule-name": "custom-message"
             }
         },
-        "attributes": []
+        "attributes": [],
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "current_password": "The كلمة المرور is incorrect.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "mac_address": "The :attribute field must be a valid MAC إضافةress.",
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "ulid": "The :attribute field must be a valid ULID."
     },
     "web": {
         "home": "الصفحة الرئيسية",
@@ -1989,7 +2087,8 @@
             "view_company_profile": "عرض ملف الشركة",
             "founded_in": "أسس في",
             "phone": "هاتف",
-            "Skill_Experience": "المهارة والخبرة"
+            "Skill_Experience": "المهارة والخبرة",
+            "job_detail": "الوظيفة Detail"
         },
         "web_company": {
             "search_company": "البحث عن شركة",
@@ -2039,6 +2138,13 @@
             "reset_password": "إعادة تعيين كلمة المرور",
             "new_password": "ضبط كلمة مرور جديدة",
             "set_new_password": "تعيين كلمة مرور جديدة"
+        },
+        "candidates_menu": {
+            "search_candidates": "Search المرشحون",
+            "no_candidates_found": "No الوظيفة seekers found",
+            "hire_me": "Hire Me",
+            "candidate_name": "Candidate الاسم",
+            "opened_jobs": "Opened الوظائف"
         }
     }
 }

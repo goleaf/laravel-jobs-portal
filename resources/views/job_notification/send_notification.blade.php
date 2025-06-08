@@ -5,7 +5,7 @@
         {{ Form::select('candidate_id[]',$candidates, null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm status-filter select2-hidden-accessible data-allow-clear="true"','id'=>'candidateId','data-control'=>'select2','multiple'=>true,'text-red-500', 'data-placeholder'=> __('messages.candidate.select_candidate') ]) }}
 
         <div class="my-5">
-            {{-- <label>{{__('messages.job_notification.select_all_jobs') }}: </label> --}}
+            {{ -- <label>__('messages.job_notification.select_all_jobs') : </label> -- }}
             {{-- <input type="checkbox" class="ml-2 mb-4 notification_select_all" id="ckbCheckAll"> --}}
             <div class="flex items-center form-switch form-switch-sm">
                 <input type="checkbox" id="ckbCheckAll"
@@ -39,14 +39,14 @@
                 <h4 class="text-center mt-9">{{ __('messages.job_notification.no_jobs_available') }}.</h4>
             @endforelse
             {{-- <li class="no-job-available"><h4 --}}
-            {{-- class="text-center mt-9">{{__('messages.job_notification.no_jobs_available') }}.</h4></li> --}}
+            {{ -- class="text-center mt-9">__('messages.job_notification.no_jobs_available') .</h4></li> -- }}
         </ul>
     </div>
 
     <!-- Submit Field -->
     <div class="flex justify-end">
         {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3','name' => 'save', 'id' => 'saveJobNotification']) }}
-        <a href="{{ route('notification.') }}"
+        <a href="{{ route('jobnotification.index') }}"
            class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
     </div>
 </div>

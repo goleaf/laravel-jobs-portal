@@ -38,15 +38,15 @@
     {{ Form::close() }}
 @endsection
 @push('scripts')
-    {{-- <script src="{{ asset('assets/js/inttel/js/intlTelInput.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/inttel/js/utils.min.js') }}"></script> --}}
+    {{ -- <script src=" asset('assets/js/inttel/js/intlTelInput.min.js') "></script> -- }}
+    {{ -- <script src=" asset('assets/js/inttel/js/utils.min.js') "></script> -- }}
     {{--  --}}
-    {{-- <script src="{{ mix('assets/js/custom/phone-number-country-code.js') }}"></script> --}}
+    {{ -- <script src=" mix('assets/js/custom/phone-number-country-code.js') "></script> -- }}
 
     
-    {{-- <script src="{{ asset('assets/js/inttel/js/intlTelInput.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/inttel/js/utils.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/phone-number-country-code.js') }}"></script> --}}
+    {{ -- <script src=" asset('assets/js/inttel/js/intlTelInput.min.js') "></script> -- }}
+    {{ -- <script src=" asset('assets/js/inttel/js/utils.min.js') "></script> -- }}
+    {{ -- <script src=" asset('assets/js/custom/phone-number-country-code.js') "></script> -- }}
 @endpush
 
 @push('scripts')

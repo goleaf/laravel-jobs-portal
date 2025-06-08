@@ -43,14 +43,14 @@
                     </div>
 
                     <div class="flex-1 sm-12">
-                        {{-- {{ Form::label('description', __('messages.image_slider.description').':') }} --}}
-                        {{-- {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'id' => 'description']) }} --}}
+                        {{ --  Form::label('description', __('messages.image_slider.description').':')  -- }}
+                        {{ --  Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'id' => 'description'])  -- }}
                         {{ Form::label('description', __('messages.image_slider.description').':',['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                         <div id="addImageSliderDescriptionQuillData"></div>
                         {{ Form::hidden('description', null, ['id' => 'descriptionData']) }}
                     </div>
                     <div class="pt-1 mb-0 mt-5 flex-1 sm-4">
-                        {{-- <label>{{ __('messages.common.status').':' }}</label><br> --}}
+                        {{ -- <label> __('messages.common.status').':' </label><br> -- }}
                         {{-- <label class="pl-0 custom-switch"> --}}
                         {{-- <input type="checkbox" name="is_active" class="custom-switch-input" --}}
                         {{-- value="1" id="active" checked> --}}

@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // show Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 function showApplyModal() {
     const modal = new bootstrap.Modal(document.getElementById('applyModal'));

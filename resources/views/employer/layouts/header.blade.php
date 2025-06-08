@@ -1,6 +1,6 @@
 @php($notifications = getNotification(\App\Models\Notification::EMPLOYER))
 @php($notificationCount = $notifications->count())
-<header class="w-full container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl flex align-items-stretch justify-between">
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto xxl flex align-items-stretch justify-between">
     <div class="flex items-center flex-grow-1 flex-lg-grow-0">
         <a href="{{ route('front.home') }}" data-turbo="false" target="_blank"
            class="text-decoration-none horizontal-sidebar-logo flex items-center pe-xl-8">

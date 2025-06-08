@@ -702,6 +702,6 @@ The **Job Portal** at `https://jobportal.prus.dev` has been successfully transfo
 
 ---
 
-*Optimization completed with Context7 Laravel documentation and enterprise best practices*  
+*Optimization completed with Universal Laravel documentation and enterprise best practices*  
 *Platform: https://jobportal.prus.dev | Status: 🟢 OPERATIONAL*  
 *Framework: Laravel 11.45.1 LTS | PHP: 8.3.15* 

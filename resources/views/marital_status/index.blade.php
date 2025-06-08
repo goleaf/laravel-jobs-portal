@@ -15,5 +15,5 @@
     {{ Form::hidden('maritalStatusData',true,['id'=>'indexMaritalStatusData']) }}
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{ mix('assets/js/marital_status/marital_status.js') }}"></script> --}}
+{{ -- <script src=" mix('assets/js/marital_status/marital_status.js') "></script> -- }}
 {{-- @endpush --}}

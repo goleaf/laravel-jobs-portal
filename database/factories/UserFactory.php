@@ -21,9 +21,11 @@ class UserFactory extends Factory
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
+            'name' => fake()->name(), // Test compatibility
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => Hash::make('password'), // Explicitly use Hash::make for consistency
+            'user_type' => 'candidate', // Add valid user type to pass constraint
             'is_active' => true,
             'is_verified' => true,
             'phone' => fake()->phoneNumber(),

@@ -37,11 +37,53 @@ class TestHelpers
     }
 
     /**
-     * Create basic test data - placeholder method
+     * Create basic test data using Context7 patterns
      */
     public static function createBasicTestData(): void
     {
-        // Basic test data setup - currently empty but prevents errors
-        // This method can be expanded later to create common test data
+        try {
+            // Create minimal data needed for foreign key relationships
+            // Using DB::table to avoid model constraints
+            if (!\DB::table('marital_status')->exists()) {
+                \DB::table('marital_status')->insert([
+                    'id' => 1,
+                    'marital_status' => 'Single',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            
+            if (!\DB::table('career_levels')->exists()) {
+                \DB::table('career_levels')->insert([
+                    'id' => 1, 
+                    'level_name' => 'Entry Level',
+                    'is_default' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            
+            if (!\DB::table('industries')->exists()) {
+                \DB::table('industries')->insert([
+                    'id' => 1,
+                    'name' => 'Technology',
+                    'is_default' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            
+            if (!\DB::table('functional_areas')->exists()) {
+                \DB::table('functional_areas')->insert([
+                    'id' => 1,
+                    'name' => 'Software Development',
+                    'is_default' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Silently continue if tables don't exist yet
+        }
     }
 }

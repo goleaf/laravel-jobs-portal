@@ -8,5 +8,5 @@
     </div>
 @endsection
 @push('scripts')
-    {{-- <script src="{{mix('assets/js/candidate/favourite_jobs.js') }}"></script> --}}
+    {{ -- <script src="mix('assets/js/candidate/favourite_jobs.js') "></script> -- }}
 @endpush

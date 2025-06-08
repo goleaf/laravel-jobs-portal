@@ -3,7 +3,7 @@
 /**
  * MISSING ROUTES FIX
  * Adding all missing routes identified by comprehensive analysis
- * Following Laravel routing best practices from Context7 documentation
+ * Following Laravel routing best practices from Universal documentation
  */
 
 use Illuminate\Support\Facades\Route;

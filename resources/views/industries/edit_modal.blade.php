@@ -23,7 +23,7 @@
                 <div class="mb-5">
                     {{ Form::label('description', __('messages.industry.description').(':'), ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                     <span class="required"></span>
-                    {{-- {{ Form::textarea('description', null, ['id' => 'editDescription','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid','text-red-500']) }} --}}
+                    {{ --  Form::textarea('description', null, ['id' => 'editDescription','class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid','text-red-500'])  -- }}
                     <div id="editIndustryDescriptionQuillData"></div>
                     {{ Form::hidden('description', null, ['id' => 'edit_industry_desc']) }}
                 </div>

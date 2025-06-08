@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "Эти учетные данные не соответствуют нашим записям.",
-        "throttle": "Слишком много попыток входа в систему. Пожалуйста, повторите попытку через: секунды, секунды. "
+        "throttle": "Слишком много попыток входа в систему. Пожалуйста, повторите попытку через: секунды, секунды. ",
+        "password": "The provided Пароль is incorrect."
     },
     "js": {
         "admin": "Администратор",
@@ -399,7 +400,15 @@
             "seems_message": "Похоже, вам не разрешен доступ к этой записи.",
             "no_found_record": "Совпадающих записей не найдено",
             "default_language": "Язык по умолчанию",
-            "select_language": "Выберите язык"
+            "select_language": "Выберите язык",
+            "remove": "Remove",
+            "closed": "Closed",
+            "view_public_profile": "View Public Профиль",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "Фильтр",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "Неправильный номер",
@@ -476,7 +485,8 @@
             "feature_employers_incomes": "Рекомендуемые доходы работодателей",
             "subscription_incomes": "Доходы от подписки",
             "weekly_users": "Еженедельные пользователи",
-            "post_statistics": "Статистика сообщений"
+            "post_statistics": "Статистика сообщений",
+            "featured_employers_incomes": "Featured Employers Incomes"
         },
         "job_category": {
             "new_job_category": "новый работа категория",
@@ -555,14 +565,18 @@
             "google_redirect": "Google Redirect",
             "configuration_update": "Обновление конфигурации",
             "update_application_configuration": "Вы собираетесь обновить значения конфигурации приложения, хотите продолжить?",
-            "image_validation": "Изображение должно быть размером 90 x 60 пикселей."
+            "image_validation": "Изображение должно быть размером 90 x 60 пикселей.",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "Изменить логотип приложения",
             "change_image": "Изменить изображение",
             "change_home_banner": "Изменить домашний баннер",
             "copy_preview_link": "Скопировать ссылку для предварительного просмотра",
-            "change_favicon": "Изменить значок"
+            "change_favicon": "Изменить значок",
+            "change_category_image": "Change category image",
+            "change_profile": "Change Профиль"
         },
         "company_size": {
             "new_company_size": "новый Компания Размер",
@@ -606,7 +620,8 @@
             "size": "Размер",
             "action": "действие",
             "no_salary_period_found": "Период заработной платы не найден",
-            "no_salary_period_available": "Период заработной платы недоступен"
+            "no_salary_period_available": "Период заработной платы недоступен",
+            "salary_period": "Salary Period"
         },
         "job_shift": {
             "new_job_shift": "новый работа сдвиг",
@@ -813,7 +828,8 @@
             "user_name": "имя пользователя",
             "logout": "Выйти",
             "required_field_messages": "Пожалуйста, заполните все обязательные поля.",
-            "password_invalid": "Текущий пароль недействителен."
+            "password_invalid": "Текущий пароль недействителен.",
+            "profile_picture": "Профиль Picture"
         },
         "salary_currency": {
             "new_salary_currency": "Новая валюта зарплаты",
@@ -880,7 +896,9 @@
             "favourite_company": "Любимая компания",
             "favourite_job": "Любимая работа",
             "subscriber": "Подписчик",
-            "please_enter_salary_range_to_greater_than_salary_range_from": "Пожалуйста, введите диапазон окладов до больше, чем диапазон окладов от."
+            "please_enter_salary_range_to_greater_than_salary_range_from": "Пожалуйста, введите диапазон окладов до больше, чем диапазон окладов от.",
+            "view_drafted_job": "View Drafted Job",
+            "expired_job": "Expired job"
         },
         "candidate": {
             "new_admin": "Новый администратор",
@@ -938,7 +956,10 @@
             "reported_candidate": "Зарегистрированный кандидат",
             "reported_employer": "Сообщенный работодатель",
             "employee": "Работник",
-            "expired_job": "Вакансия с истекшим сроком действия"
+            "expired_job": "Вакансия с истекшим сроком действия",
+            "select_candidate": "Select Candidate",
+            "in_years": "In Years",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "Информация о местоположении недоступна.",
@@ -1146,7 +1167,8 @@
             "pay_with_paypal": "Оплата с PayPal",
             "pay_with_manually": "Оплатить вручную",
             "pay_with_stack": "платить стопкой",
-            "upgrade": "Обновление"
+            "upgrade": "Обновление",
+            "active_subscription": "Active Subscriptions"
         },
         "transaction": {
             "plan_name": "Nome do Plano",
@@ -1631,7 +1653,34 @@
             "note_required": "Поле примечания обязательно",
             "resume_field_required": "Поле резюме обязательно для заполнения.",
             "verify_google_recaptcha": "Вам следует проверить Google Recaptcha."
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "password_reset": "Click here to reset your password",
+        "reset_password": "Reset Password",
+        "enter_email_reset_password": "Enter your email to reset your password",
+        "new_password": "Set a New Password",
+        "admin_login": "Admin Войти",
+        "super_admin_login": "Super Admin Войти",
+        "candidate_login": "Candidate Войти",
+        "employer_login": "Employee Войти",
+        "front_site": "Front Site",
+        "sign_in": "Войти",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "Back to Previous Page",
+        "company_subscription": "Company Subscription"
     },
     "pagination": {
         "previous": "&laquo; предыдущий",
@@ -1725,7 +1774,13 @@
         "not_in": "The выбранный :attribute является недействительным.",
         "not_regex": "The :attribute Формат недействителен.",
         "numeric": "The :attribute должно быть числом.",
-        "password": "Пароль неверен.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
         "present": "The :attribute поле должно присутствовать.",
         "regex": "The :attribute Формат недействителен.",
         "required": "The :attribute Поле, обязательное для заполнения.",
@@ -1754,7 +1809,34 @@
                 "rule-name": "custom-message"
             }
         },
-        "attributes": []
+        "attributes": [],
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "current_password": "The password is incorrect.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "mac_address": "The :attribute field must be a valid MAC address.",
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "ulid": "The :attribute field must be a valid ULID."
     },
     "web": {
         "home": "Дом",
@@ -1820,7 +1902,8 @@
             "you_are_logged_in": "Вы вошли в систему!",
             "latest_job_not_available": "Последняя вакансия недоступна.",
             "min": "Мин",
-            "max": "Макс"
+            "max": "Макс",
+            "opened_jobs": "Open Вакансии"
         },
         "job_menu": {
             "search_job": "Искать вакансии",
@@ -2015,7 +2098,8 @@
             "view_company_profile": "Посмотреть профиль компании",
             "founded_in": "Основана в",
             "phone": "Телефон",
-            "Skill_Experience": "Навыки и опыт"
+            "Skill_Experience": "Навыки и опыт",
+            "job_detail": "Job Detail"
         },
         "web_company": {
             "search_company": "Поиск компании",

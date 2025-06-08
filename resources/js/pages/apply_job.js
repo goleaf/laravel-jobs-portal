@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // apply_job Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let applyJobUrl ="{{ route('apply-job') }}"; --}}
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // apply_job Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let applyJobUrl ="{{ route('apply-job') }}"; --}}

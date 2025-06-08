@@ -4,7 +4,7 @@
  * Enhanced Asset Extraction Script  
  * Continues processing remaining files with inline CSS/JS
  * 
- * Based on Context7 Laravel asset management patterns
+ * Based on Universal Laravel asset management patterns
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -19,7 +19,7 @@ class EnhancedAssetExtractor
     
     public function __construct()
     {
-        echo "📦 Enhanced Asset Extraction using Context7 Patterns...\n\n";
+        echo "📦 Enhanced Asset Extraction using Universal Patterns...\n\n";
         $this->ensureDirectories();
     }
     
@@ -259,7 +259,7 @@ class EnhancedAssetExtractor
         
         if ($js) {
             $header = "// {$filename} Component JavaScript\n";
-            $header .= "// Enhanced with Context7 patterns\n\n";
+            $header .= "// Enhanced with Universal patterns\n\n";
             $js = $header . $js;
         }
         

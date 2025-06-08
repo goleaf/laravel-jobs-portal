@@ -59,7 +59,7 @@
     </div>
     <div class="flex justify-end mt-5">
         {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3']) }}
-        <a href="{{ route('admin.') }}"
+        <a href="{{ route('admin.dashboard') }}"
            class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
     </div>
 </div>

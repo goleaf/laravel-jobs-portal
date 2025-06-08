@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "Estas credenciales no coinciden con nuestros registros.",
-        "throttle": "Demasiados intentos de inicio de sesión. Por favor intente nuevamente en: segundos segundos."
+        "throttle": "Demasiados intentos de inicio de sesión. Por favor intente nuevamente en: segundos segundos.",
+        "password": "The provided Contraseña is incorrect."
     },
     "js": {
         "admin": "Administrador",
@@ -399,7 +400,15 @@
             "seems_message": "Parece que no tienes permiso para acceder a este registro.",
             "no_found_record": "No se encontraron registros coincidentes",
             "default_language": "Idioma predeterminado",
-            "select_language": "Seleccione el idioma"
+            "select_language": "Seleccione el idioma",
+            "remove": "Remove",
+            "closed": "Closed",
+            "view_public_profile": "View Public Perfil",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "Filtro",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "Número invalido",
@@ -570,14 +579,19 @@
             "google_redirect": "Google Redirect",
             "configuration_update": "Actualización de configuración",
             "update_application_configuration": "Está a punto de actualizar los valores de configuración de la aplicación, ¿desea continuar?",
-            "image_validation": "La imagen debe ser de pixel 90 x 60."
+            "image_validation": "La imagen debe ser de pixel 90 x 60.",
+            "linkedIn_url": "URL de LinkedIn",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "Cambiar el logotipo de la aplicación",
             "change_image": "Cambiar imagen",
             "change_home_banner": "Cambiar el banner de inicio",
             "copy_preview_link": "Copiar enlace de vista previa",
-            "change_favicon": "Cambiar icono de favorito"
+            "change_favicon": "Cambiar icono de favorito",
+            "change_category_image": "Change category image",
+            "change_profile": "Change Perfil"
         },
         "company_size": {
             "new_company_size": "Nueva Empresa Talla",
@@ -621,7 +635,8 @@
             "size": "Talla",
             "action": "Acción",
             "no_salary_period_found": "No se encontró período de salario",
-            "no_salary_period_available": "No hay período de salario disponible"
+            "no_salary_period_available": "No hay período de salario disponible",
+            "salary_period": "Salary Period"
         },
         "job_shift": {
             "new_job_shift": "Nueva Trabajo Cambio",
@@ -828,7 +843,8 @@
             "user_name": "Nombre de usuario",
             "logout": "Cerrar sesión",
             "required_field_messages": "Por favor complete todos los campos obligatorios.",
-            "password_invalid": "La contraseña actual no es válida."
+            "password_invalid": "La contraseña actual no es válida.",
+            "profile_picture": "Perfil Picture"
         },
         "salary_currency": {
             "new_salary_currency": "Nueva moneda de salario",
@@ -895,7 +911,9 @@
             "favourite_company": "Compañía favorita",
             "favourite_job": "Trabajo favorito",
             "subscriber": "Abonado",
-            "please_enter_salary_range_to_greater_than_salary_range_from": "Ingrese el rango de salario hasta mayor que el rango de salario desde."
+            "please_enter_salary_range_to_greater_than_salary_range_from": "Ingrese el rango de salario hasta mayor que el rango de salario desde.",
+            "view_drafted_job": "Ver Drafted Job",
+            "expired_job": "Expired job"
         },
         "candidate": {
             "new_admin": "Nuevo administrador",
@@ -954,7 +972,9 @@
             "reported_candidate": "Candidata reportada",
             "reported_employer": "Empleador denunciado",
             "employee": "Empleada",
-            "expired_job": "trabajo caducado"
+            "expired_job": "trabajo caducado",
+            "in_years": "In Years",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "Ubicación Información not disponible.",
@@ -1631,7 +1651,34 @@
             "note_required": "El campo de nota es obligatorio",
             "resume_field_required": "El campo del currículum es obligatorio.",
             "verify_google_recaptcha": "Deberías consultar Google Recaptcha."
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "password_reset": "Click here to reset your password",
+        "reset_password": "Reset Password",
+        "enter_email_reset_password": "Enter your email to reset your password",
+        "new_password": "Set a New Password",
+        "admin_login": "Admin Iniciar sesión",
+        "super_admin_login": "Super Admin Iniciar sesión",
+        "candidate_login": "Candidate Iniciar sesión",
+        "employer_login": "Employee Iniciar sesión",
+        "front_site": "Front Site",
+        "sign_in": "Iniciar sesión",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "Back to Previous Page",
+        "company_subscription": "Company Subscription"
     },
     "pagination": {
         "previous": "&laquo; Previa",
@@ -1725,7 +1772,13 @@
         "not_in": "El :attribute seleccionado no es válido.",
         "not_regex": "El formato del :attribute no es válido.",
         "numeric": "El :attribute debe ser un número.",
-        "password": "La contraseña es incorrecta.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
         "present": "El campo de :attribute debe estar presente.",
         "regex": "El formato del :attribute no es válido.",
         "required": "El campo de :attribute es obligatorio.",
@@ -1754,7 +1807,34 @@
                 "rule-name": "custom-message"
             }
         },
-        "attributes": []
+        "attributes": [],
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "current_password": "The password is incorrect.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "mac_address": "The :attribute field must be a valid MAC address.",
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "ulid": "The :attribute field must be a valid ULID."
     },
     "web": {
         "home": "Inicio",
@@ -1885,7 +1965,9 @@
             "click_here": "Haga clic aquí",
             "to_upload_resume": "para subir currículum",
             "register_to_apply": "Registrarse para postularse",
-            "location_information_not_available": "Información de ubicación no disponible."
+            "location_information_not_available": "Información de ubicación no disponible.",
+            "career_level": "Career Level",
+            "functional_area": "Functional Area"
         },
         "apply_for_job": {
             "apply_for": "Solicitar",
@@ -1896,13 +1978,15 @@
             "due_to_our_continued_growth": "Debido a nuestro continuo crecimiento, estamos contratando un nuevo puesto de",
             "or_words_to_that_effect": "o palabras en ese sentido",
             "already_applied": "Ya aplicado",
-            "share_this_job": "Comparte este trabajo"
+            "share_this_job": "Comparte este trabajo",
+            "expected_salary": "Expected Salary"
         },
         "companies_menu": {
             "search_companies": "Buscar empresas",
             "opened_jobs": "Trabajo abierto",
             "Featured": "Destacado",
-            "no_company_found": "No se encontró empresa"
+            "no_company_found": "No se encontró empresa",
+            "featured": "Featured"
         },
         "candidates_menu": {
             "search_candidates": "Buscar candidatos",
@@ -1917,7 +2001,8 @@
             "unfollow": "Dejar de seguir",
             "report_to_company": "Informar a la empresa",
             "our_latest_jobs": "Nuestros últimos trabajos",
-            "Processing": "Procesando ..."
+            "Processing": "Procesando ...",
+            "processing": "Processing..."
         },
         "about_us_menu": {
             "how_it_works": "Cómo funciona",
@@ -2015,7 +2100,8 @@
             "view_company_profile": "Ver perfil de la empresa",
             "founded_in": "Fundado en",
             "phone": "Teléfono",
-            "Skill_Experience": "Habilidad y experiencia"
+            "Skill_Experience": "Habilidad y experiencia",
+            "job_detail": "Job Detail"
         },
         "web_company": {
             "search_company": "Buscar empresa",

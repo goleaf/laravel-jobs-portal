@@ -44,7 +44,7 @@
 
 {{-- @section('scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/front_register/front_register.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/front_register/front_register.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

@@ -6,14 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Form Request for deleting JobCategory
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for deleting JobCategory
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class DeleteJobCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Context7 Pattern: Resource-based authorization
+     * Universal Pattern: Resource-based authorization
      */
     public function authorize(): bool
     {
@@ -23,7 +23,7 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Delete-specific validation rules
+     * Universal Pattern: Delete-specific validation rules
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -37,7 +37,7 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Delete operation messages
+     * Universal Pattern: Delete operation messages
      */
     public function messages(): array
     {
@@ -48,7 +48,7 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -60,7 +60,7 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization for delete
+     * Universal Pattern: Data normalization for delete
      */
     protected function prepareForValidation(): void
     {
@@ -72,17 +72,17 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Delete validation enhancements
+     * Universal Pattern: Delete validation enhancements
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            // Context7 Pattern: Check for dependencies before delete
+            // Universal Pattern: Check for dependencies before delete
             if ($this->hasActiveDependencies()) {
                 $validator->errors()->add('dependencies', __('validation.has_active_dependencies'));
             }
 
-            // Context7 Pattern: Check for protected resources
+            // Universal Pattern: Check for protected resources
             if ($this->isProtectedResource()) {
                 $validator->errors()->add('protected', __('validation.protected_resource'));
             }
@@ -90,7 +90,7 @@ class DeleteJobCategoryRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Check for active dependencies
+     * Universal Pattern: Check for active dependencies
      */
     private function hasActiveDependencies(): bool
     {
@@ -103,7 +103,7 @@ class DeleteJobCategoryRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Check if resource is protected from deletion
+     * Universal Pattern: Check if resource is protected from deletion
      */
     private function isProtectedResource(): bool
     {
@@ -117,7 +117,7 @@ class DeleteJobCategoryRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling for delete operations
+     * Universal Pattern: Enhanced error handling for delete operations
      */
     protected function failedValidation(Validator $validator): void
     {

@@ -2,7 +2,7 @@
 
 /**
  * COMPREHENSIVE ROUTE OPTIMIZATION ANALYSIS
- * Following Laravel routing best practices from Context7 documentation
+ * Following Laravel routing best practices from Universal documentation
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -254,7 +254,7 @@ class RouteOptimizer
                 'Consider using route groups with namespaces for controllers',
                 'Add route documentation for complex routing logic'
             ],
-            'context7_best_practices' => [
+            'universal_best_practices' => [
                 'Use Route::pattern() for global parameter constraints',
                 'Implement fallback routes for better UX',
                 'Use Route::domain() for multi-tenant applications',

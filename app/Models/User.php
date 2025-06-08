@@ -10,11 +10,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Cashier\Billable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -128,13 +131,14 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRegionCode($value)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens;
     use Billable;
     use HasFactory;
     use HasFiles;
     use HasRoles;
+    use InteractsWithMedia;
     use Notifiable;
 
     const DARK_MODE = 1;
@@ -146,9 +150,9 @@ class User extends Authenticatable
     const ACTIVE = 1;
 
     // User Types
-    const ADMIN = 1;
-    const EMPLOYER = 2;
-    const CANDIDATE = 3;
+    const ADMIN = 'admin';
+    const EMPLOYER = 'employer';
+    const CANDIDATE = 'candidate';
 
     const LANGUAGES = [
         'ar' => 'Arabic',
@@ -182,6 +186,7 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
+        'name', // Test compatibility field
         'email',
         'password',
         'user_type',
@@ -233,7 +238,7 @@ class User extends Authenticatable
     {
         return [
             'id' => 'integer',
-            'user_type' => 'integer',
+            'user_type' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'dob' => 'date',

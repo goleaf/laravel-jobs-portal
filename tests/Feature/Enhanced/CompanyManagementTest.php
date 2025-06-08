@@ -6,7 +6,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Industry;
 use App\Models\CompanySize;
-use App\Models\OwnershipType;
+use App\Models\OwnerShipType;
 use App\Services\EnhancedCompanyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -31,7 +31,9 @@ class CompanyManagementTest extends TestCase
         // Create required data
         Industry::factory()->create(['id' => 1, 'name' => 'Technology']);
         CompanySize::factory()->create(['id' => 1, 'size' => 'Small (1-50)']);
-        OwnershipType::factory()->create(['id' => 1, 'name' => 'Private']);
+        OwnerShipType::factory()->create(['id' => 1, 'name' => 'Private']);
+        \App\Models\Country::factory()->create(['id' => 1, 'name' => 'United States']);
+        \App\Models\Plan::factory()->create(['id' => 1, 'name' => 'Basic Plan', 'is_trial_plan' => true]);
         
         Storage::fake('public');
     }
@@ -59,10 +61,13 @@ class CompanyManagementTest extends TestCase
         
         $companyData = [
             'name' => 'Test Company Ltd',
+            'email' => 'contact@testcompany.com',
+            'password' => 'SecurePassword123!',
             'ceo' => 'John Doe',
             'industry_id' => 1,
             'ownership_type_id' => 1,
             'company_size_id' => 1,
+            'country_id' => 1,
             'established_in' => 2020,
             'website' => 'https://testcompany.com',
             'location' => 'New York, NY',
@@ -73,6 +78,10 @@ class CompanyManagementTest extends TestCase
         
         $response = $this->actingAs($employer)
             ->post(route('companies.store'), $companyData);
+        
+        if ($response->status() === 422) {
+            dump('Validation errors:', $response->json());
+        }
         
         $response->assertRedirect();
         $response->assertSessionHas('success');

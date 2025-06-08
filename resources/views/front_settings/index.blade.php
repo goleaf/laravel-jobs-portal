@@ -9,7 +9,7 @@
     <div class="px-4 py-3 rounded-md border border border border-gray-300 -gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 danger hidden" id="validationErrorsBox">
         <i class="fa-solid fa-face-frown me-5"></i>
     </div>
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex flex- flex-1">
             @include('flash::message')
             @include('layouts.errors')
@@ -24,5 +24,5 @@
     </div>
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/web/front_settings/front_settings.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/web/front_settings/front_settings.js') "></script> -- }}
 {{-- @endpush --}}

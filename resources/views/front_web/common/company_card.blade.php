@@ -18,14 +18,14 @@
                         {{-- @if(!empty($company->industry->name)) --}}
                         {{-- <div class="desc flex mb-2"> --}}
                         {{-- <i class="fa-solid fa-briefcase text-gray me-3 fs-18"></i> --}}
-                        {{-- <p class="fs-14 text-gray mb-0">{{$company->industry->name }}</p> --}}
+                        {{ -- <p class="fs-14 text-gray mb-0">$company->industry->name </p> -- }}
                         {{-- </div> --}}
                         {{-- @endif --}}
                         @if(!empty($company->location) || !empty($company->location2))
                             <div class="desc location-text flex">
                                 <i class="fa-solid fa-location-dot  me-1 mt-1 fs-18"></i>
                                 <span class="">
-                                    {{-- {{ (isset($company->location)) ? html_entity_decode(Str::limit($company->location)) : __('messages.common.n/a') }}{{ (isset($company->location2)) ? ','.html_entity_decode(Str::limit($company->location2,10,'...')) : '' }} --}}
+                                    {{ --  (isset($company->location)) ? html_entity_decode(Str::limit($company->location)) : __('messages.common.n/a') {{ (isset($company->location2)) ? ','.html_entity_decode(Str::limit($company->location2,10,'...')) : ''  }} --}}
                                  {{ $company->$user->city_name.', '.$company->$user->country_name }}
                                 </span>
                             </div>

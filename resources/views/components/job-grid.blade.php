@@ -58,7 +58,7 @@
                 {{ $emptyMessage ?? __('jobs.no_jobs_description') }}
             </p>
             <div class="mt-6">
-                <a href="{{ route('front.') }}" 
+                <a href="{{ route('front.home') }}" 
                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                     {{ __('jobs.browse_all_jobs') }}
                 </a>

@@ -18,19 +18,19 @@
                     <div class="flex-1 sm-12">
                         {{-- <div class="flex-wrap flex"> --}}
                         {{-- <div class="px-3"> --}}
-                        {{-- {{ Form::label('image_slider', __('messages.image_slider.image').':') }}<span --}}
+                        {{ --  Form::label('image_slider', __('messages.image_slider.image').':') <span -- }}
                         {{-- class="text-red-600">*</span> --}}
                         {{-- <span><i class="ml-1 fas fa-question-circle" --}}
                         {{-- data-toggle="tooltip" --}}
                         {{-- data-placement="top" --}}
-                        {{-- title="{{ __('messages.image_slider.image_title_text') }}"></i></span> --}}
-                        {{-- <label class="image__file-upload"> {{ __('messages.setting.choose') }} --}}
-                        {{-- {{ Form::file('image_slider',['id'=>'editImageSlider','class' => 'hidden']) }} --}}
+                        {{ -- title=" __('messages.image_slider.image_title_text') "></i></span> -- }}
+                        {{ -- <label class="image__file-upload">  __('messages.setting.choose')  -- }}
+                        {{ --  Form::file('image_slider',['id'=>'editImageSlider','class' => 'hidden'])  -- }}
                         {{-- </label> --}}
                         {{-- </div> --}}
                         {{-- <div class="pl-3 mt-1 flex-1 -6 w-auto"> --}}
                         {{-- <img id='editPreviewImage' class="img-thumbnail thumbnail-preview" --}}
-                        {{-- src="{{ asset('assets/img/infyom-logo.png') }}"> --}}
+                        {{ -- src=" asset('assets/img/infyom-logo.png') "> -- }}
                         {{-- </div> --}}
                         {{-- </div> --}}
                         {{-- <a href="#" target="_blank" id="imageSliderUrl"></a> --}}
@@ -64,8 +64,8 @@
 
                     </div>
                     <div class="flex-1 sm-12">
-                        {{-- {{ Form::label('description', __('messages.image_slider.description').':') }} --}}
-                        {{-- {{ Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'id' => 'editDescription']) }} --}}
+                        {{ --  Form::label('description', __('messages.image_slider.description').':')  -- }}
+                        {{ --  Form::textarea('description', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'id' => 'editDescription'])  -- }}
 
                         {{ Form::label('description', __('messages.image_slider.description').':',['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
                         <div id="editImageSliderDescriptionQuillData"></div>

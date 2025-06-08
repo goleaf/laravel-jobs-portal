@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="download-resume">
-                <a href="{{ route('admin.') .'/'. $candidateResume->id }}"
+                <a href="{{ route('admin.dashboard') .'/'. $candidateResume->id }}"
                    class="download-link"><i class="fas fa-download"></i> {{ __('messages.common.download') }}</a>
             </div>
         </div>

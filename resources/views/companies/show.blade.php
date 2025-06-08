@@ -3,7 +3,7 @@
     {{ __('messages.company.employer_details') }}
 @endsection
 @section('header_toolbar')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="d-md-flex items-center justify-between mb-5">
             <h1 class="mb-0">@yield('title')</h1>
             <div class="text-end mt-4 mt-md-0">
@@ -14,7 +14,7 @@
     </div>
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex flex- flex-1">
             <div class="bg-white shadow rounded -lg overflow-hidden">
                 <div class="bg-white shadow rounded -lg overflow-hidden body">

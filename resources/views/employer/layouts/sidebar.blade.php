@@ -23,7 +23,7 @@
         </li>
         <li class="flex space-x-8-item {{ Request::is("employer/job-stage*') ? 'active' : '' }}">
             <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center py-3" aria-current="page"
-               href="{{ route('admin.') }}">
+               href="{{ route('admin.dashboard') }}">
                 <span class="horizontal-menu-icon"><i class="far fa-building"></i></span>
                 <span class="horizontal-menu-title">{{ __('messages.job_stages') }}</span>
             </a>

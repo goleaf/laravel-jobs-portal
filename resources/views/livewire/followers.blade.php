@@ -1,6 +1,6 @@
 <div>
     <div class="section gray padding-bottom-50">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <div class="flex flex-wrap">
                 <div class="lg:w-full px-2 flex-1 md-12">
                     @if(count($followers) > 0 || $searchByFollowers != '')

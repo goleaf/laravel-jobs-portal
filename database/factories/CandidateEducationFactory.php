@@ -17,9 +17,11 @@ class CandidateEducationFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'candidate_id' => \App\Models\Candidate::factory(),
             'degree_level_id' => random_int(1, 10),
             'degree_title' => $this->faker->jobTitle,
+            'institute' => $this->faker->company,
+            'result' => $this->faker->randomElement(['A', 'B', 'C', 'D', 'Pass', 'Distinction']),
             'year' => $this->faker->year,
             'country_id' => random_int(1, 50),
             'state_id' => random_int(1, 100),

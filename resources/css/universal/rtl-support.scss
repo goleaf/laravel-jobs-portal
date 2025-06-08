@@ -1,0 +1,652 @@
+/* Universal RTL Support for Arabic Language */
+
+/* Base RTL styles */
+.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.rtl * {
+    direction: rtl;
+}
+
+/* Typography adjustments for RTL */
+.rtl h1, .rtl h2, .rtl h3, .rtl h4, .rtl h5, .rtl h6 {
+    text-align: right;
+}
+
+.rtl p, .rtl div, .rtl span {
+    text-align: right;
+}
+
+/* Form elements RTL */
+.rtl input[type="text"],
+.rtl input[type="email"],
+.rtl input[type="password"],
+.rtl input[type="search"],
+.rtl input[type="tel"],
+.rtl input[type="url"],
+.rtl textarea,
+.rtl select {
+    text-align: right;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.rtl .form-label {
+    text-align: right;
+}
+
+.rtl .form-control {
+    text-align: right;
+}
+
+/* Button adjustments */
+.rtl .btn {
+    text-align: center;
+}
+
+.rtl .btn-group {
+    flex-direction: row-reverse;
+}
+
+/* Navigation RTL */
+.rtl .navbar-nav {
+    flex-direction: row-reverse;
+}
+
+.rtl .nav-link {
+    text-align: right;
+}
+
+.rtl .dropdown-menu {
+    left: auto;
+    right: 0;
+    text-align: right;
+}
+
+.rtl .dropdown-item {
+    text-align: right;
+}
+
+/* Breadcrumb RTL */
+.rtl .breadcrumb {
+    flex-direction: row-reverse;
+}
+
+.rtl .breadcrumb-item + .breadcrumb-item::before {
+    content: "\\";
+    transform: scaleX(-1);
+}
+
+/* Card components RTL */
+.rtl .card-header {
+    text-align: right;
+}
+
+.rtl .card-body {
+    text-align: right;
+}
+
+.rtl .card-footer {
+    text-align: right;
+}
+
+/* Table RTL */
+.rtl table {
+    direction: rtl;
+}
+
+.rtl th, .rtl td {
+    text-align: right;
+}
+
+.rtl .table-responsive {
+    direction: rtl;
+}
+
+/* Modal RTL */
+.rtl .modal-header {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .modal-title {
+    text-align: right;
+}
+
+.rtl .modal-body {
+    text-align: right;
+}
+
+.rtl .modal-footer {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .btn-close {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* Alert RTL */
+.rtl .alert {
+    text-align: right;
+}
+
+.rtl .alert-dismissible .btn-close {
+    left: 0;
+    right: auto;
+}
+
+/* Pagination RTL */
+.rtl .pagination {
+    flex-direction: row-reverse;
+}
+
+.rtl .page-link {
+    text-align: center;
+}
+
+/* Sidebar RTL */
+.rtl .sidebar {
+    left: auto;
+    right: 0;
+}
+
+.rtl .sidebar-nav {
+    text-align: right;
+}
+
+.rtl .sidebar-nav .nav-link {
+    text-align: right;
+}
+
+/* Main content adjustment for RTL sidebar */
+.rtl .main-content {
+    margin-left: 0;
+    margin-right: 250px; /* Adjust based on sidebar width */
+}
+
+/* List group RTL */
+.rtl .list-group-item {
+    text-align: right;
+}
+
+/* Badge RTL */
+.rtl .badge {
+    text-align: center;
+}
+
+/* Progress bar RTL */
+.rtl .progress {
+    direction: ltr; /* Keep progress direction LTR for visual consistency */
+}
+
+/* Tooltip RTL */
+.rtl .tooltip {
+    text-align: center;
+}
+
+/* Popover RTL */
+.rtl .popover {
+    text-align: right;
+}
+
+.rtl .popover-header {
+    text-align: right;
+}
+
+.rtl .popover-body {
+    text-align: right;
+}
+
+/* Accordion RTL */
+.rtl .accordion-header {
+    text-align: right;
+}
+
+.rtl .accordion-body {
+    text-align: right;
+}
+
+.rtl .accordion-button {
+    text-align: right;
+}
+
+.rtl .accordion-button::after {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Tab RTL */
+.rtl .nav-tabs {
+    flex-direction: row-reverse;
+}
+
+.rtl .nav-pills {
+    flex-direction: row-reverse;
+}
+
+.rtl .tab-content {
+    text-align: right;
+}
+
+/* Carousel RTL */
+.rtl .carousel-control-prev {
+    left: auto;
+    right: 0;
+}
+
+.rtl .carousel-control-next {
+    left: 0;
+    right: auto;
+}
+
+.rtl .carousel-indicators {
+    flex-direction: row-reverse;
+}
+
+/* Offcanvas RTL */
+.rtl .offcanvas-start {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+}
+
+.rtl .offcanvas-end {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+}
+
+.rtl .offcanvas-header {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .offcanvas-body {
+    text-align: right;
+}
+
+/* Toast RTL */
+.rtl .toast {
+    text-align: right;
+}
+
+.rtl .toast-header {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .toast-body {
+    text-align: right;
+}
+
+/* Spinner RTL - Keep as is for visual consistency */
+.rtl .spinner-border,
+.rtl .spinner-grow {
+    /* No changes needed */
+}
+
+/* Custom Universal Components RTL */
+
+/* Language Switcher RTL */
+.rtl .language-switcher .dropdown-menu {
+    left: 0;
+    right: auto;
+}
+
+.rtl .language-switcher .dropdown-item {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .language-switcher .language-flag {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* Theme Toggle RTL */
+.rtl .theme-toggle {
+    flex-direction: row-reverse;
+}
+
+/* Search RTL */
+.rtl .search-input {
+    text-align: right;
+}
+
+.rtl .search-icon {
+    left: auto;
+    right: 0.75rem;
+}
+
+/* Job Cards RTL */
+.rtl .job-card {
+    text-align: right;
+}
+
+.rtl .job-card .job-title {
+    text-align: right;
+}
+
+.rtl .job-card .job-company {
+    text-align: right;
+}
+
+.rtl .job-card .job-location {
+    text-align: right;
+}
+
+.rtl .job-card .job-salary {
+    text-align: right;
+}
+
+.rtl .job-card .job-actions {
+    flex-direction: row-reverse;
+}
+
+/* Company Cards RTL */
+.rtl .company-card {
+    text-align: right;
+}
+
+.rtl .company-card .company-name {
+    text-align: right;
+}
+
+.rtl .company-card .company-industry {
+    text-align: right;
+}
+
+.rtl .company-card .company-location {
+    text-align: right;
+}
+
+/* Profile RTL */
+.rtl .profile-header {
+    text-align: right;
+}
+
+.rtl .profile-info {
+    text-align: right;
+}
+
+.rtl .profile-stats {
+    flex-direction: row-reverse;
+}
+
+/* Dashboard RTL */
+.rtl .dashboard-stats {
+    flex-direction: row-reverse;
+}
+
+.rtl .dashboard-card {
+    text-align: right;
+}
+
+.rtl .dashboard-chart {
+    /* Keep charts as LTR for data visualization */
+    direction: ltr;
+}
+
+/* Data Tables RTL */
+.rtl .dataTables_wrapper {
+    direction: rtl;
+}
+
+.rtl .dataTables_filter {
+    text-align: left; /* Keep search on the left for UX */
+}
+
+.rtl .dataTables_length {
+    text-align: right;
+}
+
+.rtl .dataTables_info {
+    text-align: right;
+}
+
+.rtl .dataTables_paginate {
+    text-align: left; /* Keep pagination on the left for UX */
+}
+
+/* File Upload RTL */
+.rtl .file-upload-area {
+    text-align: right;
+}
+
+.rtl .file-upload-text {
+    text-align: right;
+}
+
+/* Steps/Wizard RTL */
+.rtl .steps {
+    flex-direction: row-reverse;
+}
+
+.rtl .step {
+    text-align: right;
+}
+
+.rtl .step-connector {
+    transform: scaleX(-1);
+}
+
+/* Timeline RTL */
+.rtl .timeline {
+    direction: rtl;
+}
+
+.rtl .timeline-item {
+    text-align: right;
+}
+
+.rtl .timeline-content {
+    text-align: right;
+}
+
+/* Chat/Messages RTL */
+.rtl .chat-container {
+    direction: rtl;
+}
+
+.rtl .message {
+    text-align: right;
+}
+
+.rtl .message-sent {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.rtl .message-received {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* Utility Classes for RTL */
+.rtl .text-left {
+    text-align: right !important;
+}
+
+.rtl .text-right {
+    text-align: left !important;
+}
+
+.rtl .float-left {
+    float: right !important;
+}
+
+.rtl .float-right {
+    float: left !important;
+}
+
+.rtl .ml-auto {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+.rtl .mr-auto {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+.rtl .pl-0 { padding-left: 0 !important; padding-right: 0 !important; }
+.rtl .pl-1 { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+.rtl .pl-2 { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+.rtl .pl-3 { padding-left: 1rem !important; padding-right: 1rem !important; }
+.rtl .pl-4 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+.rtl .pl-5 { padding-left: 3rem !important; padding-right: 3rem !important; }
+
+.rtl .pr-0 { padding-right: 0 !important; padding-left: 0 !important; }
+.rtl .pr-1 { padding-right: 0.25rem !important; padding-left: 0.25rem !important; }
+.rtl .pr-2 { padding-right: 0.5rem !important; padding-left: 0.5rem !important; }
+.rtl .pr-3 { padding-right: 1rem !important; padding-left: 1rem !important; }
+.rtl .pr-4 { padding-right: 1.5rem !important; padding-left: 1.5rem !important; }
+.rtl .pr-5 { padding-right: 3rem !important; padding-left: 3rem !important; }
+
+.rtl .ml-0 { margin-left: 0 !important; margin-right: 0 !important; }
+.rtl .ml-1 { margin-left: 0.25rem !important; margin-right: 0.25rem !important; }
+.rtl .ml-2 { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
+.rtl .ml-3 { margin-left: 1rem !important; margin-right: 1rem !important; }
+.rtl .ml-4 { margin-left: 1.5rem !important; margin-right: 1.5rem !important; }
+.rtl .ml-5 { margin-left: 3rem !important; margin-right: 3rem !important; }
+
+.rtl .mr-0 { margin-right: 0 !important; margin-left: 0 !important; }
+.rtl .mr-1 { margin-right: 0.25rem !important; margin-left: 0.25rem !important; }
+.rtl .mr-2 { margin-right: 0.5rem !important; margin-left: 0.5rem !important; }
+.rtl .mr-3 { margin-right: 1rem !important; margin-left: 1rem !important; }
+.rtl .mr-4 { margin-right: 1.5rem !important; margin-left: 1.5rem !important; }
+.rtl .mr-5 { margin-right: 3rem !important; margin-left: 3rem !important; }
+
+/* Border radius adjustments for RTL */
+.rtl .rounded-l-none { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+.rtl .rounded-r-none { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+
+.rtl .rounded-l { border-top-left-radius: 0.375rem !important; border-bottom-left-radius: 0.375rem !important; border-top-right-radius: 0.375rem !important; border-bottom-right-radius: 0.375rem !important; }
+.rtl .rounded-r { border-top-right-radius: 0.375rem !important; border-bottom-right-radius: 0.375rem !important; border-top-left-radius: 0.375rem !important; border-bottom-left-radius: 0.375rem !important; }
+
+/* Animation adjustments for RTL */
+.rtl .slide-in-left {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.rtl .slide-in-right {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Print styles for RTL */
+@media print {
+    .rtl * {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+    
+    .rtl .no-print {
+        display: none !important;
+    }
+}
+
+/* High contrast mode for RTL */
+@media (prefers-contrast: high) {
+    .rtl {
+        /* Enhanced contrast for RTL text */
+    }
+}
+
+/* Reduced motion for RTL */
+@media (prefers-reduced-motion: reduce) {
+    .rtl * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Mobile responsive RTL adjustments */
+@media (max-width: 768px) {
+    .rtl .mobile-rtl-stack {
+        flex-direction: column-reverse;
+    }
+    
+    .rtl .mobile-rtl-text {
+        text-align: center;
+    }
+    
+    .rtl .sidebar {
+        right: -100%;
+        left: auto;
+    }
+    
+    .rtl .sidebar.active {
+        right: 0;
+    }
+    
+    .rtl .main-content {
+        margin-right: 0;
+    }
+}
+
+/* Dark mode RTL adjustments */
+.dark.rtl {
+    /* Specific dark mode RTL styles if needed */
+}
+
+/* Focus styles for RTL */
+.rtl *:focus {
+    outline-offset: 2px;
+}
+
+.rtl .focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for RTL */
+.rtl ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.rtl ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.rtl ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.rtl ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Firefox scrollbar for RTL */
+.rtl {
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+} 

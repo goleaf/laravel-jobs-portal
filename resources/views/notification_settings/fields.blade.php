@@ -25,7 +25,7 @@
     <div class="separator my-5"></div>
     <div class="flex justify-end">
         {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none transition-colors me-3','id' => 'jobsSaveBtn']) }}
-        <a href="{{ route('notification.') }}"
+        <a href="{{ route('jobnotification.index') }}"
            class="border border-gray-300 bg-transparent">{{ __('messages.common.cancel') }}</a>
     </div>
 </div>

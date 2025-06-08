@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // blogs_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let blogComment ="{{ route('front.', $blog->id) }}"; --}}
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // blogs_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
 {{-- let blogComment ="{{ route('front.', $blog->id) }}"; --}}

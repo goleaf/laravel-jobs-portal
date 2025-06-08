@@ -83,7 +83,7 @@ class CompanyController extends AppBaseController
      *
      * @throws \Throwable
      */
-    public function store(CreateCompanyCreateCompanyRequest $request): RedirectResponse
+    public function store(CreateCompanyRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;

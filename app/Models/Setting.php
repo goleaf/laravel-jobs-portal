@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 
@@ -29,6 +30,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  */
 class Setting extends Model
 {
+    use HasFactory;
     use QueryCacheable;
 
     public $cacheFor = 3600; // cache time, in seconds

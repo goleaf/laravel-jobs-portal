@@ -237,7 +237,16 @@
         "seems_message": "Görünüşe göre bu kayda erişmenize izin verilmiyor.",
         "no_found_record": "Aucun enregistrements correspondants trouvés",
         "default_language": "Langage par défaut",
-        "select_language": "Choisir la langue"
+        "select_language": "Choisir la langue",
+        "confirm_delete": "Are you sure you want to delete this item?",
+        "remove": "Remove",
+        "closed": "Closed",
+        "view_public_profile": "View Public Profil",
+        "removed": "removed",
+        "has_been_removed": "has been removed.",
+        "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+        "filter": "Filtre",
+        "this_week": "The Week"
     },
     "phone": {
         "invalid_number": "Numéro invalide",
@@ -391,14 +400,19 @@
         "google_redirect": "Google Redirect",
         "configuration_update": "Mise à jour de la configuration",
         "update_application_configuration": "Vous êtes sur le point de mettre à jour les valeurs de configuration de l`application, vous souhaitez continuer ?",
-        "image_validation": "L'image doit être de pixel 90 x 60."
+        "image_validation": "L'image doit être de pixel 90 x 60.",
+        "linkedIn_url": "URL de LinkedIn",
+        "term_conditions": "Term & Conditons",
+        "current_version": "Current Version"
     },
     "tooltip": {
         "change_app_logo": "Changer le logo de l'application",
         "change_image": "Changer l'image",
         "change_home_banner": "Changer la bannière d'accueil",
         "copy_preview_link": "Copier le lien d'aperçu",
-        "change_favicon": "Changer de favicon"
+        "change_favicon": "Changer de favicon",
+        "change_category_image": "Change category image",
+        "change_profile": "Change Profil"
     },
     "company_size": {
         "new_company_size": "Nouvelle Compagnie Taille",
@@ -442,7 +456,8 @@
         "size": "Taille",
         "action": "action",
         "no_salary_period_found": "Aucune période de salaire trouvée",
-        "no_salary_period_available": "Aucune période de salaire disponible"
+        "no_salary_period_available": "Aucune période de salaire disponible",
+        "salary_period": "Salary Period"
     },
     "job_shift": {
         "new_job_shift": "Nouvelle Emploi Décalage",
@@ -649,7 +664,8 @@
         "user_name": "Nom d'utilisateur",
         "logout": "Se déconnecter",
         "required_field_messages": "Veuillez remplir tous les champs obligatoires.",
-        "password_invalid": "Le mot de passe actuel n est pas valide."
+        "password_invalid": "Le mot de passe actuel n est pas valide.",
+        "profile_picture": "Profil Picture"
     },
     "salary_currency": {
         "new_salary_currency": "Nouvelle devise de salaire",
@@ -716,7 +732,9 @@
         "favourite_company": "Entreprise préférée",
         "favourite_job": "Travail préféré",
         "subscriber": "Abonnée",
-        "please_enter_salary_range_to_greater_than_salary_range_from": "Veuillez saisir la fourchette de salaire jusqu`à supérieure à la fourchette de salaire de."
+        "please_enter_salary_range_to_greater_than_salary_range_from": "Veuillez saisir la fourchette de salaire jusqu`à supérieure à la fourchette de salaire de.",
+        "view_drafted_job": "View Drafted Job",
+        "expired_job": "Expired job"
     },
     "candidate": {
         "new_admin": "Nouvel administrateur",
@@ -771,7 +789,12 @@
         "no_candidate_available": "Aucun candidat disponible",
         "reported_candidate": "Candidat signalé",
         "reported_employer": "Employeur déclaré",
-        "employee": "Employée"
+        "employee": "Employée",
+        "select_candidate": "Select Candidate",
+        "in_years": "In Years",
+        "no_candidate_found": "No Candidate Found",
+        "email_verified": "Email Verified",
+        "0": "Employee"
     },
     "candidate_dashboard": {
         "location_information": "Emplacement Information ne pas disponible.",
@@ -1166,7 +1189,8 @@
         "your_note": "Votre remarque"
     },
     "post_comment": {
-        "post_comment_details": "Détails de la publication du commentaire"
+        "post_comment_details": "Détails de la publication du commentaire",
+        "post_comment": "Post Comment"
     },
     "datepicker": {
         "today": "Aujourd'hui",
@@ -1464,6 +1488,65 @@
         "follow_company_successfully": "Suivez l'entreprise avec succès.",
         "note_required": "Le champ de note est obligatoire",
         "resume_field_required": "Le champ CV est obligatoire.",
-        "verify_google_recaptcha": "Vous devriez vérifier Google Recaptcha."
-    }
+        "verify_google_recaptcha": "Vous devriez vérifier Google Recaptcha.",
+        "jobs": {
+            "featured": "Featured",
+            "view_details": "View Details",
+            "no_jobs_found": "No Emplois Found",
+            "no_jobs_description": "Try adjusting your Rechercher criteria or browse all available positions.",
+            "browse_all_jobs": "Browse All Emplois",
+            "company_logo": "Company Logo"
+        }
+    },
+    "messages": {
+        "company_profile": "Profil de l'entreprise",
+        "company_details": "Détails de l'entreprise",
+        "company_overview": "Aperçu de l'entreprise",
+        "company_jobs": "Emplois de l'entreprise",
+        "company_size_detail": "Taille de l'entreprise",
+        "company_location": "Emplacement de l'entreprise",
+        "company_website": "Site web de l'entreprise",
+        "company_founded": "Fondée",
+        "about_company": "À propos de l'entreprise",
+        "company_employees": "Employees"
+    },
+    "language-name": "en",
+    "fileName": "messages.php",
+    "Company size is required": "Company size is required",
+    "Company size must be a valid text": "Company size must be a valid text",
+    "Company size must not exceed 255 characters": "Company size must not exceed 255 characters",
+    "This company size already exists": "This company size already exists",
+    "Company size contains invalid characters": "Company size contains invalid characters",
+    "Company Size": "Company Size",
+    "Validation failed": "Validation failed",
+    "Edit company size": "Edit company size",
+    "Delete company size": "Delete company size",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "term_conditions": "Term & Conditons",
+    "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+    "no_keyword_found": "No Keyword Found",
+    "comments": "Comments",
+    "verify_captcha": "You must verify google recaptcha.",
+    "password_reset": "Click here to reset your password",
+    "reset_password": "Reset Password",
+    "enter_email_reset_password": "Enter your email to reset your password",
+    "new_password": "Set a New Password",
+    "admin_login": "Admin Se connecter",
+    "super_admin_login": "Super Admin Se connecter",
+    "candidate_login": "Candidate Se connecter",
+    "employer_login": "Employee Se connecter",
+    "front_site": "Front Site",
+    "sign_in": "Se connecter",
+    "already_have_an_account": "Already have an account",
+    "n\/a": "N\/A",
+    "unread_messages": "Unread Messages",
+    "processing": "Processing...",
+    "pdf": "PDF",
+    "not_immediate_available": "Not Immediate Available",
+    "immediate_available": "Immediate Available",
+    "something_missing": "Opps! Something's missing...",
+    "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+    "go_back": "Back to Previous Page",
+    "company_subscription": "Company Subscription"
 }

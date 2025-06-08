@@ -4,7 +4,7 @@
  * Security Fixes Script for Blade Templates
  * Addresses unescaped output {!! !!} and missing CSRF protection
  * 
- * Based on Context7 Laravel security best practices
+ * Based on Universal Laravel security best practices
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -18,7 +18,7 @@ class SecurityFixer
     
     public function __construct()
     {
-        echo "🔒 Starting Security Fixes using Context7 Laravel Security Patterns...\n\n";
+        echo "🔒 Starting Security Fixes using Universal Laravel Security Patterns...\n\n";
     }
     
     /**
@@ -177,7 +177,7 @@ class SecurityFixer
     private function generateSecurityReport()
     {
         echo str_repeat("=", 70) . "\n";
-        echo "🔒 SECURITY FIXES COMPLETED - CONTEXT7 PATTERNS APPLIED\n";
+        echo "🔒 SECURITY FIXES COMPLETED - UNIVERSAL PATTERNS APPLIED\n";
         echo str_repeat("=", 70) . "\n\n";
         
         echo "📊 SECURITY SUMMARY:\n";
@@ -209,7 +209,7 @@ class SecurityFixer
             echo "\n";
         }
         
-        echo "📋 CONTEXT7 SECURITY BEST PRACTICES APPLIED:\n";
+        echo "📋 UNIVERSAL SECURITY BEST PRACTICES APPLIED:\n";
         echo "✅ Escaped output: {{ \$variable }} for user input\n";
         echo "✅ CSRF protection: @csrf directive in POST forms\n";
         echo "✅ Safe unescaped output: Only for trusted content\n";

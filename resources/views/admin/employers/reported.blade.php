@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex justify-between items-center mb-4">
             <h1 class="h3 mb-0">{{ __('messages.company.reported_employers') }}</h1>
         </div>

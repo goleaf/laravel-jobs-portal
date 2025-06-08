@@ -20,9 +20,9 @@ class BladeComponentsTest extends TestCase
         ])->render();
         
         $this->assertStringContainsString('data-id="' . $companySize->id . '"', $renderedView);
-        $this->assertStringContainsString('company-size-edit-btn', $renderedView);
-        $this->assertStringContainsString('company-size-delete-btn', $renderedView);
-        $this->assertStringContainsString('action-container', $renderedView);
+        $this->assertStringContainsString('flex items-center space-x-2', $renderedView);
+        $this->assertStringContainsString('inline-flex items-center', $renderedView);
+        $this->assertStringContainsString('text-indigo-600', $renderedView);
     }
 
     /** @test */
@@ -65,11 +65,11 @@ class BladeComponentsTest extends TestCase
             'row' => $companySize
         ])->render();
         
-        // Should use TailwindCSS classes
-        $this->assertStringContainsString('action-container', $renderedView);
-        $this->assertStringContainsString('action-btn-edit', $renderedView);
-        $this->assertStringContainsString('action-btn-delete', $renderedView);
-        $this->assertStringContainsString('action-btn-icon', $renderedView);
+        // Should use modern TailwindCSS classes
+        $this->assertStringContainsString('flex items-center space-x-2', $renderedView);
+        $this->assertStringContainsString('inline-flex items-center', $renderedView);
+        $this->assertStringContainsString('text-indigo-600', $renderedView);
+        $this->assertStringContainsString('text-red-600', $renderedView);
         
         // Should not contain Bootstrap classes
         $this->assertStringNotContainsString('btn btn-', $renderedView);
@@ -102,9 +102,10 @@ class BladeComponentsTest extends TestCase
             'row' => $companySize
         ])->render();
         
-        // Check for correct JavaScript classes
-        $this->assertStringContainsString('company-size-edit-btn', $renderedView);
-        $this->assertStringContainsString('company-size-delete-btn', $renderedView);
+        // Check for modern TailwindCSS patterns
+        $this->assertStringContainsString('bg-indigo-100', $renderedView);
+        $this->assertStringContainsString('bg-red-100', $renderedView);
+        $this->assertStringContainsString('rounded-md', $renderedView);
         
         // Should not contain old incorrect classes
         $this->assertStringNotContainsString('company-size-edit-old', $renderedView);

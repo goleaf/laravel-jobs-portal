@@ -106,7 +106,7 @@
     <div class="flex-1 -xl-12 md:w-full flex-1 sm-12 mb-5">
         {{ Form::label('details', __('messages.company.employer_details').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}
         <span class="required"></span>
-        {{-- {{ Form::textarea('details', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'editDetails','rows'=>'5']) }} --}}
+        {{ --  Form::textarea('details', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm' , 'id' => 'editDetails','rows'=>'5'])  -- }}
         <div id="editAdminEmployerDescriptionQuillData"></div>
         {{ Form::hidden('details', $company->details, ['id' => 'editAdminEmployerDetail']) }}
     </div>

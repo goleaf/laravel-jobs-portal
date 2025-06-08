@@ -21,7 +21,7 @@ class BladeAnalyzer
     public function __construct()
     {
         $this->loadRoutes();
-        echo "🚀 Starting Comprehensive Blade Analysis using Context7 patterns...\n\n";
+        echo "🚀 Starting Comprehensive Blade Analysis using Universal patterns...\n\n";
     }
     
     /**
@@ -387,7 +387,7 @@ class BladeAnalyzer
     public function generateReport()
     {
         echo "\n\n" . str_repeat("=", 80) . "\n";
-        echo "🎯 COMPREHENSIVE BLADE ANALYSIS REPORT (Context7 Enhanced)\n";
+        echo "🎯 COMPREHENSIVE BLADE ANALYSIS REPORT (Universal Enhanced)\n";
         echo str_repeat("=", 80) . "\n\n";
         
         $this->generateSummary();
@@ -527,7 +527,7 @@ class BladeAnalyzer
     
     private function generateRecommendations()
     {
-        echo "💡 CONTEXT7 RECOMMENDATIONS\n";
+        echo "💡 UNIVERSAL RECOMMENDATIONS\n";
         echo str_repeat("-", 40) . "\n";
         
         echo "1. PRIORITY FIXES:\n";

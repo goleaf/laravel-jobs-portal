@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // google_analytics Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 window.dataLayer = window.dataLayer || [];
 

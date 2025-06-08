@@ -3,7 +3,7 @@
     {{ __('messages.skills') }}
 @endsection
 @section('content')
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
         <div class="flex flex- flex-1">
             @include('flash::message')
             <livewire:skill-table/>
@@ -15,5 +15,5 @@
     {{ Form::hidden('skillsData',true,['id'=>'indexSkillsData']) }}
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/skills/skills.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/skills/skills.js') "></script> -- }}
 {{-- @endpush --}}

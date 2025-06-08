@@ -16,7 +16,7 @@ class BrandingSlidersTest extends TestCase
         $model = BrandingSliders::factory()->create();
         
         $this->assertInstanceOf(BrandingSliders::class, $model);
-        $this->assertDatabaseHas('brandingsliderses', [
+        $this->assertDatabaseHas('branding_sliders', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class BrandingSlidersTest extends TestCase
         $newData = BrandingSliders::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('brandingsliderses', [
+        $this->assertDatabaseHas('branding_sliders', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class BrandingSlidersTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('brandingsliderses', [
+        $this->assertDatabaseMissing('branding_sliders', [
             'id' => $modelId
         ]);
     }

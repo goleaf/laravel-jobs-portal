@@ -27,16 +27,16 @@
         {{-- <div class="mb-4 flex-1 sm-4"> --}}
         {{-- <div class="flex-wrap flex"> --}}
         {{-- <div class="px-3"> --}}
-        {{-- {{ Form::label('app_logo', __('messages.setting.logo').':') }}<span class="text-red-600">*</span> --}}
+        {{ --  Form::label('app_logo', __('messages.setting.logo').':') <span class="text-red-600">*</span> -- }}
         {{-- <i class="ml-1 mt-1 fas fa-question-circle general-question-mark" data-toggle="tooltip" --}}
         {{-- data-placement="top" title="Upload 90 x 60 logo to get best user experience."></i> --}}
-        {{-- <label class="image__file-upload"> {{ __('messages.setting.choose') }} --}}
-        {{-- {{ Form::file('logo',['id'=>'logo','class' => 'hidden']) }} --}}
+        {{ -- <label class="image__file-upload">  __('messages.setting.choose')  -- }}
+        {{ --  Form::file('logo',['id'=>'logo','class' => 'hidden'])  -- }}
         {{-- </label> --}}
         {{-- </div> --}}
         {{-- <div class="pl-3 mt-1 w-auto"> --}}
         {{-- <img id='logoPreview' class="img-thumbnail thumbnail-preview" --}}
-        {{-- src="{{($setting['logo']) ? asset($setting['logo']) : asset('assets/img/infyom-logo.png') }}"> --}}
+        {{ -- src="($setting['logo']) ? asset($setting['logo']) : asset('assets/img/infyom-logo.png') "> -- }}
         {{-- </div> --}}
         {{-- </div> --}}
         {{-- </div> --}}
@@ -123,43 +123,43 @@
         {{-- <div class="mb-4 flex-1 sm-4"> --}}
         {{-- <div class="flex-wrap flex"> --}}
         {{-- <div class="px-3"> --}}
-        {{-- {{ Form::label('app_footer_logo','Footer Logo:') }}<span class="text-red-600">*</span> --}}
+        {{ --  Form::label('app_footer_logo','Footer Logo:') <span class="text-red-600">*</span> -- }}
         {{-- <i class="ml-1 mt-1 fas fa-question-circle general-question-mark" data-toggle="tooltip" --}}
         {{-- data-placement="top" title="Upload 90 x 60 logo to get best user experience."></i> --}}
-        {{-- <label class="image__file-upload"> {{ __('messages.setting.choose') }} --}}
-        {{-- {{ Form::file('footer_logo',['id'=>'footerLogo','class' => 'hidden']) }} --}}
+        {{ -- <label class="image__file-upload">  __('messages.setting.choose')  -- }}
+        {{ --  Form::file('footer_logo',['id'=>'footerLogo','class' => 'hidden'])  -- }}
         {{-- </label> --}}
         {{-- </div> --}}
         {{-- <div class="pl-3 mt-1 w-auto"> --}}
         {{-- <img id='footerLogoPreview' class="img-thumbnail thumbnail-preview" --}}
-        {{-- src="{{($setting['footer_logo']) ? asset($setting['footer_logo']) : asset('assets/img/infyom-logo.png') }}"> --}}
+        {{ -- src="($setting['footer_logo']) ? asset($setting['footer_logo']) : asset('assets/img/infyom-logo.png') "> -- }}
         {{-- </div> --}}
         {{-- </div> --}}
         {{-- </div> --}}
         {{-- <div class="mb-4 flex-1 sm-4"> --}}
         {{-- <div class="flex-wrap flex"> --}}
         {{-- <div class="px-3"> --}}
-        {{-- {{ Form::label('favicon', __('messages.setting.favicon').':') }} --}}
+        {{ --  Form::label('favicon', __('messages.setting.favicon').':')  -- }}
         {{-- <span class="text-red-600">*</span><i class="ml-1 mt-1 fas fa-question-circle general-question-mark" --}}
         {{-- data-toggle="tooltip" data-placement="top" --}}
         {{-- title="The image must be of pixel 16 x 16 and 32 x 32."></i> --}}
-        {{-- <label class="image__file-upload"> {{ __('messages.setting.choose') }} --}}
-        {{-- {{ Form::file('favicon',['id'=>'favicon','class' => 'hidden']) }} --}}
+        {{ -- <label class="image__file-upload">  __('messages.setting.choose')  -- }}
+        {{ --  Form::file('favicon',['id'=>'favicon','class' => 'hidden'])  -- }}
         {{-- </label> --}}
         {{-- </div> --}}
         {{-- <div class="pl-3 mt-1 w-auto"> --}}
         {{-- <img id='faviconPreview' class="mt-4 img-thumbnail thumbnail-preview width-40px" --}}
-        {{-- src="{{($setting['favicon']) ? asset($setting['favicon']) : asset('assets/img/infyom-logo.png') }}"> --}}
+        {{ -- src="($setting['favicon']) ? asset($setting['favicon']) : asset('assets/img/infyom-logo.png') "> -- }}
         {{-- </div> --}}
         {{-- </div> --}}
         {{-- </div> --}}
         {{-- <div class="mb-4 lg:w-full px-2 flex-1 md-12 flex justify-start"> --}}
         {{-- <label class="flex-wrap pl-0 mt-0 custom-switch switch-label flex"> --}}
         {{-- <input type="checkbox" name="enable_google_recaptcha" class="custom-switch-input flex items-center input" --}}
-        {{-- {{ ($setting['enable_google_recaptcha']) ? 'checked' : '' }} value="1"> --}}
+        {{ --  ($setting['enable_google_recaptcha']) ? 'checked' : ''  value="1"> -- }}
         {{-- <span class="custom-switch-indicator switch-span"></span> --}}
         {{-- </label> --}}
-        {{-- <span class="mb-3 font-bold custom-switch-description fs-6 fw-bolder text-gray-700">{{ __('messages.setting.enable_google_recaptcha') }}</span> --}}
+        {{ -- <span class="mb-3 font-bold custom-switch-description fs-6 fw-bolder text-gray-700"> __('messages.setting.enable_google_recaptcha') </span> -- }}
         {{-- </div> --}}
         <div class="mb-5 md:w-5/12 flex-1 sm-6">
             {{ Form::label('status', __('messages.setting.enable_google_recaptcha'), ['class' => 'block text-sm font-medium text-gray-700 mb-1 inline']) }}

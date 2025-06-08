@@ -10,8 +10,8 @@
     @if(\Illuminate\Support\Facades\App::getLocale() == 'ar')
         
     @endif
-    {{-- <link rel="stylesheet" href="{{ asset('front_web/scss/jobs.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('front_web/scss/companies.css') }}"> --}}
+    {{ -- <link rel="stylesheet" href=" asset('front_web/scss/jobs.css') "> -- }}
+    {{ -- <link rel="stylesheet" href=" asset('front_web/scss/companies.css') "> -- }}
 @endsection
 @section('content')
     <div class="job-seekers-page">

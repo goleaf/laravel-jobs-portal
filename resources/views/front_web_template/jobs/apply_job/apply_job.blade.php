@@ -3,13 +3,13 @@
     {{ __('web.job_details.apply_for_job') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css') }}"> --}}
-{{-- <link href="{{asset('front_web/scss/apply-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link rel="stylesheet" type="text/css" href=" asset('web_front/css/header-span.css') "> -- }}
+{{ -- <link href="asset('front_web/scss/apply-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="apply-job-page">
         <section class="hero-section relative bg-gradient pt-15 pb-40">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="flex flex-wrap items-center justify-center">
                     <div class="flex-1 lg-6 text-center mb-lg-0 mb-md-5 mb-sm-4">
                         <div class="hero-content">
@@ -32,7 +32,7 @@
         </section>
 
         <section class="apply-job-section contact-section py-100">
-            <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
                 <div class="upper-box">
                     <div class="flex flex-wrap">
                         <div class="flex-1 -xl-8 flex-1 md-10 mx-auto mb-4">
@@ -146,8 +146,8 @@
 @endsection
 {{-- @section('page_scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/custom/input_price_format.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/js/jobs/front/apply_job.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/custom/input_price_format.js') "></script> -- }}
+{{ -- <script src=" asset('assets/js/jobs/front/apply_job.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

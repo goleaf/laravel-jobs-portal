@@ -2,7 +2,7 @@
 
 /**
  * OPTIMIZED ROUTES FILE
- * Following Laravel routing best practices from Context7 documentation
+ * Following Laravel routing best practices from Universal documentation
  * - Proper route grouping with middleware
  * - Consistent naming conventions
  * - Route caching optimization
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| Route Pattern Constraints (Context7 Best Practice)
+| Route Pattern Constraints (Universal Best Practice)
 |--------------------------------------------------------------------------
 | Define global parameter constraints for better performance and security
 */
@@ -370,7 +370,7 @@ Route::fallback(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Custom Rate Limiters (Context7 Best Practice)
+| Custom Rate Limiters (Universal Best Practice)
 |--------------------------------------------------------------------------
 */
 

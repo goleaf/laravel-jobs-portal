@@ -16,7 +16,7 @@ class CareerLevelTest extends TestCase
         $model = CareerLevel::factory()->create();
         
         $this->assertInstanceOf(CareerLevel::class, $model);
-        $this->assertDatabaseHas('careerlevels', [
+        $this->assertDatabaseHas('career_levels', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class CareerLevelTest extends TestCase
         $newData = CareerLevel::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('careerlevels', [
+        $this->assertDatabaseHas('career_levels', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class CareerLevelTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('careerlevels', [
+        $this->assertDatabaseMissing('career_levels', [
             'id' => $modelId
         ]);
     }

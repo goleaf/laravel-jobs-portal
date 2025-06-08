@@ -4,7 +4,7 @@
  * Manual Security Review Script
  * Systematic review of files flagged for manual security inspection
  * 
- * Based on Context7 Laravel security best practices
+ * Based on Universal Laravel security best practices
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -30,7 +30,7 @@ class ManualSecurityReviewer
     
     public function __construct()
     {
-        echo "🔍 Starting Manual Security Review using Context7 Security Patterns...\n\n";
+        echo "🔍 Starting Manual Security Review using Universal Security Patterns...\n\n";
     }
     
     /**
@@ -270,7 +270,7 @@ class ManualSecurityReviewer
             }
         }
         
-        echo "📋 CONTEXT7 SECURITY PATTERNS APPLIED:\n";
+        echo "📋 UNIVERSAL SECURITY PATTERNS APPLIED:\n";
         echo "✅ Input escaping: {{ }} for user-generated content\n";
         echo "✅ CSRF protection: @csrf tokens in POST forms\n";
         echo "✅ Safe HTML: HtmlString for trusted content\n";

@@ -150,7 +150,8 @@
         "search_candidates": "搜索候选人",
         "no_candidates_found": "未找到求职者",
         "hire_me": "雇用我",
-        "candidate_name": "候选人名称"
+        "candidate_name": "候选人名称",
+        "opened_jobs": "Opened 工作"
     },
     "company_details": {
         "company_details": "公司詳情",
@@ -256,7 +257,8 @@
         "view_company_profile": "查看公司简介",
         "founded_in": "成立于",
         "phone": "电话",
-        "Skill_Experience": "技能和經驗"
+        "Skill_Experience": "技能和經驗",
+        "job_detail": "Job Detail"
     },
     "web_company": {
         "search_company": "搜索公司",
@@ -306,5 +308,35 @@
         "reset_password": "重新設密碼",
         "new_password": "设置新密码",
         "set_new_password": "设置新密码"
+    },
+    "web": {
+        "welcome": "欢迎来到我们的求职门户",
+        "find_job": "找到你的梦想工作",
+        "post_job": "发布工作",
+        "welcome_title": "找工作，招聘人才",
+        "welcome_subtitle": "连接求职者与雇主",
+        "for_job_seekers": "求职者",
+        "for_employers": "雇主",
+        "search_jobs": "搜索工作",
+        "browse_companies": "浏览公司",
+        "latest_jobs": "最新工作",
+        "featured_companies": "特色公司"
+    },
+    "nav": {
+        "home": "首页",
+        "jobs": "工作",
+        "companies": "公司",
+        "candidates": "候选人",
+        "about": "关于我们",
+        "contact": "联系",
+        "login": "登录",
+        "register": "注册",
+        "dashboard": "仪表板",
+        "profile": "个人资料",
+        "logout": "退出",
+        "find_jobs": "找工作",
+        "post_job": "发布工作",
+        "browse_companies": "浏览公司",
+        "admin_panel": "管理面板"
     }
 }

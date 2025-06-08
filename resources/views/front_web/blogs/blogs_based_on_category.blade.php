@@ -3,7 +3,7 @@
     {{ __('web.post_of').html_entity_decode($blogCategory[$categoryId]) }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" href="{{ asset('front_web/scss/blog.css') }}"> --}}
+{{ -- <link rel="stylesheet" href=" asset('front_web/scss/blog.css') "> -- }}
 {{-- @endsection --}}
 @section('content')
     <section class="hero-section relative bg-gray-100 py-40">

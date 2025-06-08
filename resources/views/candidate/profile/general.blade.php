@@ -226,7 +226,7 @@
         <div class="flex justify-end">
             {{ Form::submit(__('messages.common.save'), ['class' => 'rounded-md bg-indigo-600 px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-flex-1 px-4ors duration-200Save']) }}
             {{-- <a href="" --}}
-            {{-- class="border border-gray-300 bg-transparent">{{__('messages.common.cancel') }}</a> --}}
+            {{ -- class="border border-gray-300 bg-transparent">__('messages.common.cancel') </a> -- }}
         </div>
     </div>
 </div>
@@ -236,9 +236,9 @@
 @endsection
 @push('scripts')
     
-    {{-- <script src="{{mix('assets/js/custom/input_price_format.js') }}"></script> --}}
-    {{-- <script src="{{mix('assets/js/candidate-profile/candidate-general.js') }}"></script> --}}
-    {{-- <script src="{{ mix('assets/js/custom/phone-number-country-code.js') }}"></script> --}}
+    {{ -- <script src="mix('assets/js/custom/input_price_format.js') "></script> -- }}
+    {{ -- <script src="mix('assets/js/candidate-profile/candidate-general.js') "></script> -- }}
+    {{ -- <script src=" mix('assets/js/custom/phone-number-country-code.js') "></script> -- }}
 @endpush
 
 @push('scripts')

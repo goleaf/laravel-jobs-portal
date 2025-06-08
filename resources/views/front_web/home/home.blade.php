@@ -3,9 +3,9 @@
     {{ __('web.home') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link href="{{asset('front_web/css/slick.css') }}" rel="stylesheet" type="text/css"> --}}
-{{-- <link href="{{asset('front_web/css/slick-theme.css') }}" rel="stylesheet" type="text/css"> --}}
-{{-- <link href="{{asset('front_web/scss/home.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link href="asset('front_web/css/slick.css') " rel="stylesheet" type="text/css"> -- }}
+{{ -- <link href="asset('front_web/css/slick-theme.css') " rel="stylesheet" type="text/css"> -- }}
+{{ -- <link href="asset('front_web/scss/home.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="home-page" style="overflow-x: hidden;">
@@ -298,29 +298,29 @@
                                 \Illuminate\Support\Facades\Auth::check() && isset(auth()->user()->country_name) && isset($latestJobsEnable)
                                     ? $latestJobsEnable->value
                                     : '')
-                                @if (in_array(auth()->user()->country_name, array_flex-1 px-4umn($latestJobs->toArray(), 'country_name')))
+                                @if (in_array(auth()->user()->country_name, array_column($latestJobs->toArray(), 'country_name')))
                                     @foreach ($latestJobs as $job)
                                         @if ($job->country_name == auth()->user()->country_name)
-                                            @include('front_web.common.job_bg-white overflow-hidden shadow rounded-lg')
+                                            @include('front_web.common.job_card')
                                         @endif
                                     @endforeach
-                                    <div class="text-center flex-1 md-12">
+                                    <div class="text-center col-md-12">
                                         <a href="{{ route('front.search-jobs') }}"
-                                            class="border border-gray-300 bg-transparent">{{ __('web.common.bflex flex-wrap -mx-4se_all') }}</a>
+                                            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ __('web.common.browse_all') }}</a>
                                     </div>
                                 @else
-                                    <div class="text-center flex-1 md-12">
+                                    <div class="text-center col-md-12">
                                         <a href="{{ route('front.search-jobs') }}"
-                                            class="border border-gray-300 bg-transparent">{{ __('web.common.bflex flex-wrap -mx-4se_all') }}</a>
+                                            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ __('web.common.browse_all') }}</a>
                                     </div>
                                 @endif
                             @else
                                 @foreach ($latestJobs as $job)
-                                    @include('front_web.common.job_bg-white overflow-hidden shadow rounded-lg')
+                                    @include('front_web.common.job_card')
                                 @endforeach
-                                <div class="text-center flex-1 -12">
-                                    <a href="{{ route('front.search-jobs') }}" class="border border-gray-300 bg-transparent">
-                                        @lang('web.common.bflex flex-wrap -mx-4se_all')
+                                <div class="text-center col-md-12">
+                                    <a href="{{ route('front.search-jobs') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        @lang('web.common.browse_all')
                                     </a>
                                 </div>
                             @endif
@@ -413,7 +413,7 @@
                                 <div class="flex-wrap flex justify-center me-0">
                                     @foreach ($notices as $key => $notice)
                                         <div
-                                            class="mb-4 px-4-sm-10 flex-1 -11 relative {{ $loop->first ?"' : 'mt-lg-3' }}">
+                                            class="mb-4 px-sm-4 col-md-11 relative {{ $loop->first ? '' : 'mt-lg-3' }}">
                                             <div class="bg-white notice-desc py-20 px-md-5 px-4">
                                                 <p class="fs-16 text-gray-600">
                                                     {{ nl2br(strip_tags($notice->description)) }}
@@ -632,10 +632,10 @@
 @endsection
 {{-- @section('page_scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('front_web/js/slick.min.js') }}"></script> --}}
-{{-- <script src="{{asset('assets/js/home/home.js') }}"></script> --}}
+{{ -- <script src="asset('front_web/js/slick.min.js') "></script> -- }}
+{{ -- <script src="asset('assets/js/home/home.js') "></script> -- }}
 {{-- @endsection --}}
 
 {{-- @push('scripts')
     @vite('resources/js/pages/home.js')
-@endpush --}}
+@endpush  --}}

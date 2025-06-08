@@ -251,7 +251,8 @@
         "view_company_profile": "عرض ملف الشركة",
         "founded_in": "أسس في",
         "phone": "هاتف",
-        "Skill_Experience": "المهارة والخبرة"
+        "Skill_Experience": "المهارة والخبرة",
+        "job_detail": "الوظيفة Detail"
     },
     "web_company": {
         "search_company": "البحث عن شركة",
@@ -301,5 +302,42 @@
         "reset_password": "إعادة تعيين كلمة المرور",
         "new_password": "ضبط كلمة مرور جديدة",
         "set_new_password": "تعيين كلمة مرور جديدة"
+    },
+    "web": {
+        "welcome": "مرحبا بكم في بوابة العمل الخاصة بنا",
+        "find_job": "ابحث عن وظيفة أحلامك",
+        "post_job": "انشر وظيفة",
+        "welcome_title": "ابحث عن وظائف، وظف المواهب",
+        "welcome_subtitle": "ربط الباحثين عن عمل مع أصحاب العمل",
+        "for_job_seekers": "للباحثين عن عمل",
+        "for_employers": "لأصحاب العمل",
+        "search_jobs": "البحث عن وظائف",
+        "browse_companies": "تصفح الشركات",
+        "latest_jobs": "أحدث الوظائف",
+        "featured_companies": "الشركات المميزة"
+    },
+    "nav": {
+        "home": "الرئيسية",
+        "jobs": "الوظائف",
+        "companies": "الشركات",
+        "candidates": "المرشحون",
+        "about": "معلومات عنا",
+        "contact": "اتصل بنا",
+        "login": "تسجيل الدخول",
+        "register": "التسجيل",
+        "dashboard": "لوحة التحكم",
+        "profile": "الملف الشخصي",
+        "logout": "تسجيل الخروج",
+        "find_jobs": "البحث عن وظائف",
+        "post_job": "انشر وظيفة",
+        "browse_companies": "تصفح الشركات",
+        "admin_panel": "لوحة الإدارة"
+    },
+    "candidates_menu": {
+        "search_candidates": "Search المرشحون",
+        "no_candidates_found": "No الوظيفة seekers found",
+        "hire_me": "Hire Me",
+        "candidate_name": "Candidate الاسم",
+        "opened_jobs": "Opened الوظائف"
     }
 }

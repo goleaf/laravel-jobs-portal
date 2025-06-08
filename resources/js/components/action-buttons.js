@@ -1,7 +1,7 @@
 /**
  * Action Buttons Component
  * Handles edit and delete actions for table components
- * Enhanced with Context7 patterns
+ * Enhanced with Universal patterns
  */
 
 class ActionButtons {

@@ -12,6 +12,6 @@
 </div>
 @endsection
 {{-- @push('scripts') --}}
-{{-- <script src="{{mix('assets/js/job_expired/job_expired.js') }}"></script> --}}
+{{ -- <script src="mix('assets/js/job_expired/job_expired.js') "></script> -- }}
 {{-- @endpush --}}
 

@@ -1,7 +1,8 @@
 {
     "auth": {
         "failed": "Bu kimlik bilgileri kayıtlarımızla eşleşmiyor.",
-        "throttle": "Çok fazla giriş denemesi. Lütfen saniye sonra tekrar deneyin."
+        "throttle": "Çok fazla giriş denemesi. Lütfen saniye sonra tekrar deneyin.",
+        "password": "The provided Şifre is incorrect."
     },
     "js": {
         "admin": "Yönetici",
@@ -399,7 +400,15 @@
             "seems_message": "Görünüşe göre bu kayda erişmenize izin verilmiyor.",
             "no_found_record": "Hiçbir eşleşen kayıt bulunamadı",
             "default_language": "Varsayılan dil",
-            "select_language": "Dil Seçin"
+            "select_language": "Dil Seçin",
+            "remove": "Remove",
+            "closed": "Closed",
+            "view_public_profile": "View Public Profil",
+            "removed": "removed",
+            "has_been_removed": "has been removed.",
+            "are_you_sure_want_to_remove": "Are you sure want to Remove this",
+            "filter": "Filtre",
+            "this_week": "The Week"
         },
         "phone": {
             "invalid_number": "Geçersiz numara",
@@ -553,7 +562,9 @@
             "google_redirect": "Google Yönlendirmesi",
             "configuration_update": "Yapılandırma Güncellemesi",
             "update_application_configuration": "Uygulama yapılandırma değerlerini güncellemek üzeresiniz, devam etmek istiyor musunuz?",
-            "image_validation": "Görüntü 90 x 60 piksel olmalıdır."
+            "image_validation": "Görüntü 90 x 60 piksel olmalıdır.",
+            "term_conditions": "Term & Conditons",
+            "current_version": "Current Version"
         },
         "tooltip": {
             "change_app_logo": "Uygulama logosunu değiştir",
@@ -561,7 +572,8 @@
             "change_home_banner": "Ana sayfa başlığını değiştir",
             "copy_preview_link": "Önizleme Bağlantısını Kopyala",
             "change_favicon": "Favicon'u değiştir",
-            "change_profile": "yapılandırma dosyasını değiştir"
+            "change_profile": "yapılandırma dosyasını değiştir",
+            "change_category_image": "Change category image"
         },
         "company_size": {
             "new_company_size": "Yeni Şirket Büyüklüğü",
@@ -605,7 +617,8 @@
             "size": "Boyut",
             "action": "Aksiyon",
             "no_salary_period_found": "Maaş Dönemi Bulunamadı",
-            "no_salary_period_available": "Maaş Dönemi Yok"
+            "no_salary_period_available": "Maaş Dönemi Yok",
+            "salary_period": "Salary Period"
         },
         "job_shift": {
             "new_job_shift": "Yeni İş Vardiyası",
@@ -881,7 +894,8 @@
             "favourite_company": "Favori Şirket",
             "favourite_job": "Favori İş",
             "subscriber": "Abone",
-            "please_enter_salary_range_to_greater_than_salary_range_from": "Lütfen Maaş Aralığını Giren Maaş Aralığından daha büyük girin."
+            "please_enter_salary_range_to_greater_than_salary_range_from": "Lütfen Maaş Aralığını Giren Maaş Aralığından daha büyük girin.",
+            "expired_job": "Expired job"
         },
         "candidate": {
             "new_admin": "Yeni Yönetici",
@@ -940,7 +954,9 @@
             "reported_candidate": "Bildirilen Aday",
             "reported_employer": "Bildirilen İşveren",
             "employee": "çalışan",
-            "expired_job": "Süresi dolmuş iş"
+            "expired_job": "Süresi dolmuş iş",
+            "in_years": "In Years",
+            "0": "Employee"
         },
         "candidate_dashboard": {
             "location_information": "Konum Bilgisi mevcut değil.",
@@ -1219,7 +1235,8 @@
             "slider_active_title": "Bu geçiş devre dışı bırakılırsa, varsayılan görüntü kaydırıcı ekranı görünmez.",
             "image_slider_details": "Görüntü Kaydırıcı Ayrıntıları",
             "no_image_slider_found": "Görüntü Kaydırıcısı Bulunamadı",
-            "no_image_slider_available": "Görüntü Kaydırıcısı Yok"
+            "no_image_slider_available": "Görüntü Kaydırıcısı Yok",
+            "add": "Add"
         },
         "header_slider": {
             "new_header_slider": "Yeni Başlık Kaydırıcısı",
@@ -1632,7 +1649,34 @@
             "note_required": "Not alanı zorunludur",
             "resume_field_required": "Özgeçmiş alanı zorunludur.",
             "verify_google_recaptcha": "Google recaptcha'yı kontrol etmelisiniz."
-        }
+        },
+        "language-name": "en",
+        "fileName": "messages.php",
+        "term_conditions": "Term & Conditons",
+        "by_signing_up_you_agree_to_our": "By signing up you agree to our",
+        "no_keyword_found": "No Keyword Found",
+        "comments": "Comments",
+        "password_reset": "Click here to reset your password",
+        "reset_password": "Reset Password",
+        "enter_email_reset_password": "Enter your email to reset your password",
+        "new_password": "Set a New Password",
+        "admin_login": "Admin Giriş",
+        "super_admin_login": "Super Admin Giriş",
+        "candidate_login": "Candidate Giriş",
+        "employer_login": "Employee Giriş",
+        "front_site": "Front Site",
+        "sign_in": "Giriş yap",
+        "already_have_an_account": "Already have an account",
+        "n\/a": "N\/A",
+        "unread_messages": "Unread Messages",
+        "processing": "Processing...",
+        "pdf": "PDF",
+        "not_immediate_available": "Not Immediate Available",
+        "immediate_available": "Immediate Available",
+        "something_missing": "Opps! Something's missing...",
+        "page_not_found": "The page you are looking for doesn't exists \/ isn't available \/ was loading incorrectly",
+        "go_back": "Back to Previous Page",
+        "company_subscription": "Company Subscription"
     },
     "pagination": {
         "previous": "&laquo; Önceki",
@@ -1809,6 +1853,146 @@
             "newsletter_text": "Bültenimize abone olarak düzenli güncellemelerimizle Bağlantıda Kalın.",
             "copyright": "Telif Hakkı",
             "all_rights_reserved": "Tüm hakları Saklıdır"
+        },
+        "accepted": "The :attribute field must be accepted.",
+        "accepted_if": "The :attribute field must be accepted when :other is :value.",
+        "active_url": "The :attribute field must be a valid URL.",
+        "after": "The :attribute field must be a date after :date.",
+        "after_or_equal": "The :attribute field must be a date after or equal to :date.",
+        "alpha": "The :attribute field must only contain letters.",
+        "alpha_dash": "The :attribute field must only contain letters, numbers, dashes, and underscores.",
+        "alpha_num": "The :attribute field must only contain letters and numbers.",
+        "array": "The :attribute field must be an array.",
+        "ascii": "The :attribute field must only contain single-byte alphanumeric characters and symbols.",
+        "before": "The :attribute field must be a date before :date.",
+        "before_or_equal": "The :attribute field must be a date before or equal to :date.",
+        "between": {
+            "array": "The :attribute field must have between :min and :max items.",
+            "file": "The :attribute field must be between :min and :max kilobytes.",
+            "numeric": "The :attribute field must be between :min and :max.",
+            "string": "The :attribute field must be between :min and :max characters."
+        },
+        "boolean": "The :attribute field must be true or false.",
+        "confirmed": "The :attribute field confirmation does not match.",
+        "current_password": "The password is incorrect.",
+        "date": "The :attribute field must be a valid date.",
+        "date_equals": "The :attribute field must be a date equal to :date.",
+        "date_format": "The :attribute field must match the format :format.",
+        "decimal": "The :attribute field must have :decimal decimal places.",
+        "declined": "The :attribute field must be declined.",
+        "declined_if": "The :attribute field must be declined when :other is :value.",
+        "different": "The :attribute field and :other must be different.",
+        "digits_between": "The :attribute field must be between :min and :max digits.",
+        "dimensions": "The :attribute field has invalid image dimensions.",
+        "distinct": "The :attribute field has a duplicate value.",
+        "doesnt_end_with": "The :attribute field must not end with one of the following: :values.",
+        "doesnt_start_with": "The :attribute field must not start with one of the following: :values.",
+        "email": "The :attribute field must be a valid email address.",
+        "ends_with": "The :attribute field must end with one of the following: :values.",
+        "enum": "The selected :attribute is invalid.",
+        "exists": "The selected :attribute is invalid.",
+        "file": "The :attribute field must be a file.",
+        "filled": "The :attribute field must have a value.",
+        "gt": {
+            "array": "The :attribute field must have more than :value items.",
+            "file": "The :attribute field must be greater than :value kilobytes.",
+            "numeric": "The :attribute field must be greater than :value.",
+            "string": "The :attribute field must be greater than :value characters."
+        },
+        "gte": {
+            "array": "The :attribute field must have :value items or more.",
+            "file": "The :attribute field must be greater than or equal to :value kilobytes.",
+            "numeric": "The :attribute field must be greater than or equal to :value.",
+            "string": "The :attribute field must be greater than or equal to :value characters."
+        },
+        "image": "The :attribute field must be an image.",
+        "in": "The selected :attribute is invalid.",
+        "in_array": "The :attribute field must exist in :other.",
+        "integer": "The :attribute field must be an integer.",
+        "ip": "The :attribute field must be a valid IP address.",
+        "ipv4": "The :attribute field must be a valid IPv4 address.",
+        "ipv6": "The :attribute field must be a valid IPv6 address.",
+        "json": "The :attribute field must be a valid JSON string.",
+        "lowercase": "The :attribute field must be lowercase.",
+        "lt": {
+            "array": "The :attribute field must have less than :value items.",
+            "file": "The :attribute field must be less than :value kilobytes.",
+            "numeric": "The :attribute field must be less than :value.",
+            "string": "The :attribute field must be less than :value characters."
+        },
+        "lte": {
+            "array": "The :attribute field must not have more than :value items.",
+            "file": "The :attribute field must be less than or equal to :value kilobytes.",
+            "numeric": "The :attribute field must be less than or equal to :value.",
+            "string": "The :attribute field must be less than or equal to :value characters."
+        },
+        "mac_address": "The :attribute field must be a valid MAC address.",
+        "max": {
+            "array": "The :attribute field must not have more than :max items.",
+            "file": "The :attribute field must not be greater than :max kilobytes.",
+            "numeric": "The :attribute field must not be greater than :max.",
+            "string": "The :attribute field must not be greater than :max characters."
+        },
+        "max_digits": "The :attribute field must not have more than :max digits.",
+        "mimes": "The :attribute field must be a file of type: :values.",
+        "mimetypes": "The :attribute field must be a file of type: :values.",
+        "min": {
+            "array": "The :attribute field must have at least :min items.",
+            "file": "The :attribute field must be at least :min kilobytes.",
+            "numeric": "The :attribute field must be at least :min.",
+            "string": "The :attribute field must be at least :min characters."
+        },
+        "min_digits": "The :attribute field must have at least :min digits.",
+        "missing": "The :attribute field must be missing.",
+        "missing_if": "The :attribute field must be missing when :other is :value.",
+        "missing_unless": "The :attribute field must be missing unless :other is :value.",
+        "missing_with": "The :attribute field must be missing when :values is present.",
+        "missing_with_all": "The :attribute field must be missing when :values are present.",
+        "multiple_of": "The :attribute field must be a multiple of :value.",
+        "not_in": "The selected :attribute is invalid.",
+        "not_regex": "The :attribute field format is invalid.",
+        "numeric": "The :attribute field must be a number.",
+        "password": {
+            "letters": "The :attribute field must contain at least one letter.",
+            "mixed": "The :attribute field must contain at least one uppercase and one lowercase letter.",
+            "numbers": "The :attribute field must contain at least one number.",
+            "symbols": "The :attribute field must contain at least one symbol.",
+            "uncompromised": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+        },
+        "present": "The :attribute field must be present.",
+        "prohibited": "The :attribute field is prohibited.",
+        "prohibited_if": "The :attribute field is prohibited when :other is :value.",
+        "prohibited_unless": "The :attribute field is prohibited unless :other is in :values.",
+        "prohibits": "The :attribute field prohibits :other from being present.",
+        "regex": "The :attribute field format is invalid.",
+        "required": "The :attribute field is required.",
+        "required_array_keys": "The :attribute field must contain entries for: :values.",
+        "required_if": "The :attribute field is required when :other is :value.",
+        "required_if_accepted": "The :attribute field is required when :other is accepted.",
+        "required_unless": "The :attribute field is required unless :other is in :values.",
+        "required_with": "The :attribute field is required when :values is present.",
+        "required_with_all": "The :attribute field is required when :values are present.",
+        "required_without": "The :attribute field is required when :values is not present.",
+        "required_without_all": "The :attribute field is required when none of :values are present.",
+        "size": {
+            "array": "The :attribute field must contain :size items.",
+            "file": "The :attribute field must be :size kilobytes.",
+            "numeric": "The :attribute field must be :size.",
+            "string": "The :attribute field must be :size characters."
+        },
+        "starts_with": "The :attribute field must start with one of the following: :values.",
+        "string": "The :attribute field must be a string.",
+        "timezone": "The :attribute field must be a valid timezone.",
+        "unique": "The :attribute has already been taken.",
+        "uploaded": "The :attribute failed to upload.",
+        "uppercase": "The :attribute field must be uppercase.",
+        "url": "The :attribute field must be a valid URL.",
+        "ulid": "The :attribute field must be a valid ULID.",
+        "uuid": "The :attribute field must be a valid UUID.",
+        "custom": {
+            "attribute-name": {
+                "rule-name": "custom-message"
+            }
         }
     },
     "web": {
@@ -1940,7 +2124,8 @@
             "click_here": "Burayı Tıklayın",
             "to_upload_resume": "özgeçmişi yüklemek için",
             "register_to_apply": "Başvurmak için kaydolun",
-            "location_information_not_available": "Konum Bilgisi mevcut değil."
+            "location_information_not_available": "Konum Bilgisi mevcut değil.",
+            "functional_area": "Functional Area"
         },
         "apply_for_job": {
             "apply_for": "Şunun İçin Başvur",
@@ -2070,7 +2255,8 @@
             "view_company_profile": "Şirket profilini görüntüle",
             "founded_in": "Da kuruldu",
             "phone": "Telefon",
-            "Skill_Experience": "Beceri ve Deneyim"
+            "Skill_Experience": "Beceri ve Deneyim",
+            "job_detail": "Job Detail"
         },
         "web_company": {
             "search_company": "Şirket Ara",

@@ -16,8 +16,8 @@
         {{ Form::text('email', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ','text-red-500','id'=>'email','disabled']) }}
     </div>
     {{-- <div class="mb-5 mb-4 flex-1 sm-6"> --}}
-    {{-- {{ Form::label('phone',__('messages.candidate.phone').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 fs-6 fw-bolder text-gray-700 mb-3']) }} --}}
-    {{-- {{ Form::tel('phone', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid','id'=>'phone','placeholder'=>__('messages.candidate.phone')]) }} --}}
+    {{ --  Form::label('phone',__('messages.candidate.phone').':', ['class' => 'block text-sm font-medium text-gray-700 mb-1 fs-6 fw-bolder text-gray-700 mb-3'])  -- }}
+    {{ --  Form::tel('phone', null, ['class' => 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm-solid','id'=>'phone','placeholder'=>__('messages.candidate.phone')])  -- }}
     {{-- </div> --}}
     <div class="mb-5 flex-1 sm-6">
         {{ Form::label('phone',__('messages.candidate.phone').(':'),['class' => 'block text-sm font-medium text-gray-700 mb-1']) }}

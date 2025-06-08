@@ -1,7 +1,7 @@
 <div class="lg:w-full px-2 flex-1 md-12">
 {{-- @if(session()->has('message')) --}}
 {{-- <div class="px-4 py-3 rounded-md border border border-gray-300 -gray-300 mb-4 p-4 rounded -md mb-4 success"> --}}
-{{-- {{ session('message') }} --}}
+{{ --  session('message')  -- }}
 {{-- </div> --}}
 {{-- @endif --}}
     @if(count($appliedJobs) > 0 || $searchByAppliedJob != '' || $jobApplicationStatus != '')

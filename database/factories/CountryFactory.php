@@ -20,7 +20,6 @@ class CountryFactory extends Factory
             'name' => $this->faker->country,
             'short_code' => $this->faker->countryCode,
             'phone_code' => $this->faker->numberBetween(1, 999),
-            'is_active' => $this->faker->boolean(80),
         ];
     }
 }

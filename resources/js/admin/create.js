@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // create Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let isEdit = false;
         var phoneNo ="{{ old('region_code').old('phone') }}";

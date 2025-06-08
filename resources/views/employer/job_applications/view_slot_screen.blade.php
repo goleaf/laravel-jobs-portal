@@ -42,7 +42,7 @@
         {{ Form::hidden('indexEmployerJobSlot',true,['id'=>'indexEmployerJobSlot']) }}
 @endsection
 @push('scripts')
-    {{-- <script src="{{ asset('assets/js/job_applications/job_slots.js') }}"></script> --}}
+    {{ -- <script src=" asset('assets/js/job_applications/job_slots.js') "></script> -- }}
 @endpush
 
 

@@ -23,7 +23,7 @@ $statusArray = App\Models\Job::STATUS;
         <div class="relative inline-block text-left dropdown-transparent">
             {{-- <a class="rounded-md transition" data-bs-toggle="dropdown" --}}
             {{-- aria-expanded="false"> --}}
-            {{-- {{$statusArray[$row->status] }} --}}
+            {{ -- $statusArray[$row->status]  -- }}
             {{-- </a> --}}
 
             <button class="px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 text-gray-600 mr-1" type="button"

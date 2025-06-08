@@ -3,8 +3,8 @@
     {{ __('web.job_details.apply_for_job') }}
 @endsection
 {{-- @section('page_css') --}}
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('web_front/css/header-span.css') }}"> --}}
-{{-- <link href="{{asset('front_web/scss/apply-details.css') }}" rel="stylesheet" type="text/css"> --}}
+{{ -- <link rel="stylesheet" type="text/css" href=" asset('web_front/css/header-span.css') "> -- }}
+{{ -- <link href="asset('front_web/scss/apply-details.css') " rel="stylesheet" type="text/css"> -- }}
 {{-- @endsection --}}
 @section('content')
     <div class="apply-job-page">
@@ -75,7 +75,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                {{-- {{ Form::select('resume_id', $resumes, ($isJobDrafted) ? $draftJobDetails->resume_id : $default_resume, ['class' => 'selectpicker block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'resumeId','placeholder'=>'Select Resume', 'text-red-500']) }} --}}
+                                {{ --  Form::select('resume_id', $resumes, ($isJobDrafted) ? $draftJobDetails->resume_id : $default_resume, ['class' => 'selectpicker block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm','id' => 'resumeId','placeholder'=>'Select Resume', 'text-red-500'])  -- }}
                             </div>
 
                             <div class="lg:w-6/12 px-2 md:w-full flex-1 sm-12 mb-4">
@@ -125,8 +125,8 @@
 @endsection
 {{-- @section('page_scripts') --}}
 {{--  --}}
-{{-- <script src="{{asset('assets/js/custom/input_price_format.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/js/jobs/front/apply_job.js') }}"></script> --}}
+{{ -- <script src="asset('assets/js/custom/input_price_format.js') "></script> -- }}
+{{ -- <script src=" asset('assets/js/jobs/front/apply_job.js') "></script> -- }}
 {{-- @endsection --}}
 
 @push('scripts')

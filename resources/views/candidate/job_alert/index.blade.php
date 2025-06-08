@@ -8,7 +8,7 @@
         <div class="overflow-hidden shadow rounded bg-white -lg header">
             <h3 class="overflow-hidden shadow rounded bg-white -lg title">{{ __('Job Alerts') }}</h3>
             <div class="overflow-hidden shadow rounded bg-white -lg toolbar">
-                <a href="{{ route('candidate.') }}" class="border border-gray-300 bg-transparent">
+                <a href="{{ route('candidate.dashboard') }}" class="border border-gray-300 bg-transparent">
                     {{ __('Create Alert') }}
                 </a>
             </div>

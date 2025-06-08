@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     try {
         // front_office_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 --}}
     {{-- let utilsScript ="{{asset('assets/js/inttel/js/utils.min.js') }}"; --}}
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     {{--
 
 // front_office_details Component JavaScript
-// Enhanced with Context7 patterns
+// Enhanced with Universal patterns
 
 let isEdit = true;
         var phoneNo ="{{ old('region_code').old('phone') }}";

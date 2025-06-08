@@ -6,7 +6,7 @@
     <title>{{ __('Jobs') }} - {{ config('app.name') }}</title></head>
 <body>
     <nav class="bg-white shadow-sm border-b border border border-gray-300 -gray-300 -gray-200 bg-white shadow -expand-lg bg-white shadow-sm dark bg-indigo-600 -600">
-        <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto">
             <a class="bg-white shadow-sm brand" href="{{ route('front.home') }}">{{ config('app.name') }}</a>
             <div class="bg-white shadow-sm nav ms-auto">
                 <a class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded -md text-sm font-medium" href="{{ route('jobs.index') }}">{{ __('Jobs') }}</a>
@@ -27,7 +27,7 @@
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto mt-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto mt-5">
         <div class="flex flex-wrap">
             <div class="flex-1 md-12">
                 <h1>{{ __('Job Listings') }}</h1>

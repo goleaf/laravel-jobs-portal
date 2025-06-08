@@ -7,23 +7,23 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Form Request for storing MasterData
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for storing MasterData
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreMasterDataRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Context7 Pattern: Simple authorization check
      */
     public function authorize(): bool
     {
-        return true;
+        // For development and testing, allow all authenticated users
+        return auth()->check();
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
+     * Universal Pattern: Comprehensive validation with security
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -34,6 +34,8 @@ class StoreMasterDataRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', 'boolean'],
+            'category' => ['nullable', 'string', 'max:100'],
+            'type' => ['nullable', 'string', 'max:50'],
             'g-recaptcha-response' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
@@ -47,7 +49,7 @@ class StoreMasterDataRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -57,12 +59,15 @@ class StoreMasterDataRequest extends FormRequest
             'email.email' => __('validation.email_format'),
             'status.required' => __('validation.status_required'),
             'status.boolean' => __('validation.status_boolean'),
+            'description.max' => __('validation.description_max'),
+            'category.max' => __('validation.category_max'),
+            'type.max' => __('validation.type_max'),
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -71,12 +76,14 @@ class StoreMasterDataRequest extends FormRequest
             'email' => __('validation.attributes.email'),
             'description' => __('validation.attributes.description'),
             'status' => __('validation.attributes.status'),
+            'category' => __('validation.attributes.category'),
+            'type' => __('validation.attributes.type'),
         ];
     }
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Universal Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -89,12 +96,12 @@ class StoreMasterDataRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Performance optimization
+     * Universal Pattern: Performance optimization
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            // Context7 Pattern: Additional business logic validation
+            // Universal Pattern: Additional business logic validation
             if ($this->hasConflictingData()) {
                 $validator->errors()->add('name', __('validation.conflicting_data'));
             }
@@ -102,7 +109,7 @@ class StoreMasterDataRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Custom business logic check
+     * Universal Pattern: Custom business logic check
      */
     private function hasConflictingData(): bool
     {
@@ -112,11 +119,11 @@ class StoreMasterDataRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling
+     * Universal Pattern: Enhanced error handling
      */
     protected function failedValidation(Validator $validator): void
     {
-        // Context7 Pattern: Log validation failures for security monitoring
+        // Universal Pattern: Log validation failures for security monitoring
         logger()->warning('Validation failed for StoreMasterDataRequest', [
             'errors' => $validator->errors()->toArray(),
             'input' => $this->safe()->toArray(),

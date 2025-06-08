@@ -1,4 +1,4 @@
-{{-- Modern Job Grid with Context7 TailwindCSS Components --}}
+{{-- Modern Job Grid with Universal TailwindCSS Components --}}
 <x-job-grid 
     :jobs="$jobs" 
     layout="default" 

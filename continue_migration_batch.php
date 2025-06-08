@@ -2,7 +2,7 @@
 
 /**
  * Enhanced Aggressive TailwindCSS Migration Script
- * Using Context7 patterns for comprehensive Bootstrap replacement
+ * Using Universal patterns for comprehensive Bootstrap replacement
  */
 
 echo "🚀 Starting Enhanced Aggressive TailwindCSS Migration...\n\n";

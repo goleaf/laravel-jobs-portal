@@ -46,9 +46,9 @@
 @endsection
 @push('scripts')
     
-    {{-- <script src="{{mix('assets/js/custom/input_price_format.js') }}"></script> --}}
-    {{-- <script src="{{mix('assets/js/candidate/create-edit.js') }}"></script> --}}
-    {{-- <script src="{{ mix('assets/js/custom/phone-number-country-code.js') }}"></script> --}}
+    {{ -- <script src="mix('assets/js/custom/input_price_format.js') "></script> -- }}
+    {{ -- <script src="mix('assets/js/candidate/create-edit.js') "></script> -- }}
+    {{ -- <script src=" mix('assets/js/custom/phone-number-country-code.js') "></script> -- }}
 @endpush
 
 @push('scripts')

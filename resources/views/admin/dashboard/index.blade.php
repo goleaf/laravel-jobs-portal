@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mx-auto px-4 mx-auto px-4 mx-auto px-4 mx-auto fluid">
     <div class="flex flex-wrap">
         <div class="flex-1 -12">
             <div class="bg-white shadow rounded -lg overflow-hidden">
@@ -104,19 +104,19 @@
                                     </a>
                                 </div>
                                 <div class="flex-1 md-2 mb-3">
-                                    <a href="{{ route('admin.') }}" class="border border-gray-300 bg-transparent">
+                                    <a href="{{ route('admin.dashboard') }}" class="border border-gray-300 bg-transparent">
                                         <i class="fas fa-money-bill"></i><br>
                                         {{ __('Transactions') }}
                                     </a>
                                 </div>
                                 <div class="flex-1 md-2 mb-3">
-                                    <a href="{{ route('admin.') }}" class="border border-gray-300 bg-transparent">
+                                    <a href="{{ route('admin.dashboard') }}" class="border border-gray-300 bg-transparent">
                                         <i class="fas fa-cog"></i><br>
-                                        {{ __('{{ __('admin.settings') }}') }}
+                                        {{  __(' __('admin.settings') ')  }}
                                     </a>
                                 </div>
                                 <div class="flex-1 md-2 mb-3">
-                                    <a href="{{ route('admin.') }}" class="border border-gray-300 bg-transparent">
+                                    <a href="{{ route('admin.dashboard') }}" class="border border-gray-300 bg-transparent">
                                         <i class="fas fa-envelope"></i><br>
                                         {{ __('Subscribers') }}
                                     </a>
@@ -148,7 +148,7 @@
                         <div class="flex-1 md-6">
                             <div class="bg-white shadow rounded -lg overflow-hidden">
                                 <div class="bg-white shadow rounded -lg overflow-hidden header">
-                                    <h5>{{ __('{{ __('admin.system_status') }}') }}</h5>
+                                    <h5>{{  __(' __('admin.system_status') ')  }}</h5>
                                 </div>
                                 <div class="bg-white shadow rounded -lg overflow-hidden body">
                                     <div class="flex flex-wrap">

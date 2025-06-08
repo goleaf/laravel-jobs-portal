@@ -51,6 +51,8 @@ class State extends Model
         return [
             'id' => 'integer',
             'country_id' => 'integer',
+            'name' => 'string',
+            'code' => 'string',
             'is_active' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
@@ -86,6 +88,14 @@ class State extends Model
     }
 
     /**
+     * Scope for inactive states.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
      * Scope for states by country.
      */
     public function scopeByCountry($query, int $countryId)
@@ -94,31 +104,74 @@ class State extends Model
     }
 
     /**
-     * Scope for states with users.
-     */
-    public function scopeWithUsers($query)
-    {
-        return $query->whereHas('users');
-    }
-
-    /**
      * Scope for states with cities.
      */
     public function scopeWithCities($query)
     {
-        return $query->whereHas('cities');
+        return $query->has('cities');
     }
 
     /**
-     * Scope for searching states by name.
+     * Scope for states without cities.
+     */
+    public function scopeWithoutCities($query)
+    {
+        return $query->doesntHave('cities');
+    }
+
+    /**
+     * Scope for states with companies.
+     */
+    public function scopeWithCompanies($query)
+    {
+        return $query->has('companies');
+    }
+
+    /**
+     * Scope for states with candidates.
+     */
+    public function scopeWithCandidates($query)
+    {
+        return $query->has('candidates');
+    }
+
+    /**
+     * Scope for searching states.
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('name', 'like', "%{$term}%");
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('code', 'like', "%{$term}%");
     }
 
     /**
-     * Scope for alphabetically ordered states.
+     * Scope for recent states.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old states.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular states (with most companies).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('companies')
+                    ->orderBy('companies_count', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -126,12 +179,48 @@ class State extends Model
     }
 
     /**
-     * Scope for popular states (with most users).
+     * Scope for states by code.
      */
-    public function scopePopular($query, int $limit = 10)
+    public function scopeByCode($query, string $code)
     {
-        return $query->withCount('users')
-                    ->orderByDesc('users_count')
+        return $query->where('code', $code);
+    }
+
+    /**
+     * Scope for states with active country.
+     */
+    public function scopeWithActiveCountry($query)
+    {
+        return $query->whereHas('country', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    /**
+     * Scope for states in specific countries.
+     */
+    public function scopeInCountries($query, array $countryIds)
+    {
+        return $query->whereIn('country_id', $countryIds);
+    }
+
+    /**
+     * Scope for states with most cities.
+     */
+    public function scopeWithMostCities($query, int $limit = 10)
+    {
+        return $query->withCount('cities')
+                    ->orderBy('cities_count', 'desc')
                     ->limit($limit);
+    }
+
+    /**
+     * Scope for metropolitan states.
+     */
+    public function scopeMetropolitan($query)
+    {
+        return $query->where('name', 'like', '%metro%')
+                    ->orWhere('name', 'like', '%capital%')
+                    ->orWhere('name', 'like', '%city%');
     }
 }

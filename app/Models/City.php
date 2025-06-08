@@ -56,7 +56,11 @@ class City extends Model
         return [
             'id' => 'integer',
             'state_id' => 'integer',
+            'name' => 'string',
             'is_active' => 'boolean',
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+            'population' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -86,6 +90,14 @@ class City extends Model
     }
 
     /**
+     * Scope for inactive cities.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
      * Scope for cities by state.
      */
     public function scopeByState($query, int $stateId)
@@ -94,7 +106,7 @@ class City extends Model
     }
 
     /**
-     * Scope for cities by country through state.
+     * Scope for cities by country.
      */
     public function scopeByCountry($query, int $countryId)
     {
@@ -104,15 +116,31 @@ class City extends Model
     }
 
     /**
-     * Scope for cities with users.
+     * Scope for cities with companies.
      */
-    public function scopeWithUsers($query)
+    public function scopeWithCompanies($query)
     {
-        return $query->whereHas('users');
+        return $query->has('companies');
     }
 
     /**
-     * Scope for searching cities by name.
+     * Scope for cities with candidates.
+     */
+    public function scopeWithCandidates($query)
+    {
+        return $query->has('candidates');
+    }
+
+    /**
+     * Scope for cities with jobs.
+     */
+    public function scopeWithJobs($query)
+    {
+        return $query->has('jobs');
+    }
+
+    /**
+     * Scope for searching cities.
      */
     public function scopeSearch($query, string $term)
     {
@@ -120,7 +148,33 @@ class City extends Model
     }
 
     /**
-     * Scope for alphabetically ordered cities.
+     * Scope for recent cities.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old cities.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular cities (with most companies).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('companies')
+                    ->orderBy('companies_count', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -128,22 +182,83 @@ class City extends Model
     }
 
     /**
-     * Scope for popular cities (with most users).
+     * Scope for cities with coordinates.
      */
-    public function scopePopular($query, int $limit = 10)
+    public function scopeWithCoordinates($query)
     {
-        return $query->withCount('users')
-                    ->orderByDesc('users_count')
-                    ->limit($limit);
+        return $query->whereNotNull('latitude')
+                    ->whereNotNull('longitude');
     }
 
     /**
-     * Scope for major cities (with many users).
+     * Scope for cities without coordinates.
      */
-    public function scopeMajor($query, int $minUsers = 50)
+    public function scopeWithoutCoordinates($query)
     {
-        return $query->withCount('users')
-                    ->having('users_count', '>=', $minUsers)
-                    ->orderByDesc('users_count');
+        return $query->whereNull('latitude')
+                    ->orWhereNull('longitude');
+    }
+
+    /**
+     * Scope for cities by population range.
+     */
+    public function scopeByPopulationRange($query, int $min, int $max)
+    {
+        return $query->whereBetween('population', [$min, $max]);
+    }
+
+    /**
+     * Scope for major cities (population > 1 million).
+     */
+    public function scopeMajor($query)
+    {
+        return $query->where('population', '>', 1000000);
+    }
+
+    /**
+     * Scope for metropolitan cities.
+     */
+    public function scopeMetropolitan($query)
+    {
+        return $query->where('population', '>', 500000);
+    }
+
+    /**
+     * Scope for cities with active state.
+     */
+    public function scopeWithActiveState($query)
+    {
+        return $query->whereHas('state', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    /**
+     * Scope for cities with active country.
+     */
+    public function scopeWithActiveCountry($query)
+    {
+        return $query->whereHas('state.country', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    /**
+     * Scope for cities in specific states.
+     */
+    public function scopeInStates($query, array $stateIds)
+    {
+        return $query->whereIn('state_id', $stateIds);
+    }
+
+    /**
+     * Scope for cities near coordinates.
+     */
+    public function scopeNear($query, float $latitude, float $longitude, float $radius = 50)
+    {
+        return $query->whereRaw(
+            "ST_Distance_Sphere(POINT(longitude, latitude), POINT(?, ?)) <= ?",
+            [$longitude, $latitude, $radius * 1000]
+        );
     }
 }

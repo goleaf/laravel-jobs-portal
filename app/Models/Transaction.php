@@ -91,12 +91,19 @@ class Transaction extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'owner_id' => 'integer',
+            'plan_id' => 'integer',
             'amount' => 'decimal:2',
-            'is_approved' => 'boolean',
-            'status' => 'integer',
-            'approved_id' => 'integer',
-            'plan_currency_id' => 'integer',
+            'currency' => 'string',
+            'status' => 'string',
+            'payment_method' => 'string',
+            'payment_gateway' => 'string',
+            'transaction_id' => 'string',
+            'gateway_transaction_id' => 'string',
+            'is_refunded' => 'boolean',
+            'refund_amount' => 'decimal:2',
+            'refunded_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'meta_data' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -155,19 +162,48 @@ class Transaction extends Model
     }
 
     /**
+     * Scope for successful transactions.
+     */
+    public function scopeSuccessful($query)
+    {
+        return $query->where('status', 'completed')
+                    ->orWhere('status', 'success')
+                    ->orWhere('status', 'paid');
+    }
+
+    /**
+     * Scope for failed transactions.
+     */
+    public function scopeFailed($query)
+    {
+        return $query->where('status', 'failed')
+                    ->orWhere('status', 'declined')
+                    ->orWhere('status', 'error');
+    }
+
+    /**
      * Scope for pending transactions.
      */
     public function scopePending($query)
     {
-        return $query->where('is_approved', false);
+        return $query->where('status', 'pending')
+                    ->orWhere('status', 'processing');
     }
 
     /**
-     * Scope for transactions by status.
+     * Scope for refunded transactions.
      */
-    public function scopeByStatus($query, int $status)
+    public function scopeRefunded($query)
     {
-        return $query->where('status', $status);
+        return $query->where('is_refunded', true);
+    }
+
+    /**
+     * Scope for non-refunded transactions.
+     */
+    public function scopeNotRefunded($query)
+    {
+        return $query->where('is_refunded', false);
     }
 
     /**
@@ -179,11 +215,48 @@ class Transaction extends Model
     }
 
     /**
-     * Scope for transactions by amount range.
+     * Scope for transactions by plan.
      */
-    public function scopeByAmountRange($query, float $min, float $max)
+    public function scopeByPlan($query, int $planId)
     {
-        return $query->whereBetween('amount', [$min, $max]);
+        return $query->where('plan_id', $planId);
+    }
+
+    /**
+     * Scope for transactions by status.
+     */
+    public function scopeByStatus($query, string $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    /**
+     * Scope for transactions by payment method.
+     */
+    public function scopeByPaymentMethod($query, string $method)
+    {
+        return $query->where('payment_method', $method);
+    }
+
+    /**
+     * Scope for transactions by payment gateway.
+     */
+    public function scopeByPaymentGateway($query, string $gateway)
+    {
+        return $query->where('payment_gateway', $gateway);
+    }
+
+    /**
+     * Scope for searching transactions.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('transaction_id', 'like', "%{$term}%")
+                    ->orWhere('gateway_transaction_id', 'like', "%{$term}%")
+                    ->orWhereHas('user', function ($q) use ($term) {
+                        $q->where('name', 'like', "%{$term}%")
+                          ->orWhere('email', 'like', "%{$term}%");
+                    });
     }
 
     /**
@@ -195,19 +268,71 @@ class Transaction extends Model
     }
 
     /**
+     * Scope for old transactions.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for transactions by amount range.
+     */
+    public function scopeByAmountRange($query, float $min, float $max)
+    {
+        return $query->whereBetween('amount', [$min, $max]);
+    }
+
+    /**
+     * Scope for high value transactions.
+     */
+    public function scopeHighValue($query, float $threshold = 1000)
+    {
+        return $query->where('amount', '>=', $threshold);
+    }
+
+    /**
+     * Scope for low value transactions.
+     */
+    public function scopeLowValue($query, float $threshold = 50)
+    {
+        return $query->where('amount', '<=', $threshold);
+    }
+
+    /**
+     * Scope for expired transactions.
+     */
+    public function scopeExpired($query)
+    {
+        return $query->whereNotNull('expires_at')
+                    ->where('expires_at', '<', now());
+    }
+
+    /**
+     * Scope for active transactions.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('expires_at')
+              ->orWhere('expires_at', '>=', now());
+        });
+    }
+
+    /**
+     * Scope for transactions by currency.
+     */
+    public function scopeByCurrency($query, string $currency)
+    {
+        return $query->where('currency', $currency);
+    }
+
+    /**
      * Scope for today's transactions.
      */
     public function scopeToday($query)
     {
         return $query->whereDate('created_at', today());
-    }
-
-    /**
-     * Scope for this week's transactions.
-     */
-    public function scopeThisWeek($query)
-    {
-        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
     }
 
     /**
@@ -220,51 +345,36 @@ class Transaction extends Model
     }
 
     /**
-     * Scope for featured company transactions.
+     * Scope for this year's transactions.
      */
-    public function scopeFeaturedCompany($query)
+    public function scopeThisYear($query)
     {
-        return $query->where('owner_type', Company::class);
+        return $query->whereYear('created_at', now()->year);
     }
 
     /**
-     * Scope for featured job transactions.
+     * Scope for credit card transactions.
      */
-    public function scopeFeaturedJob($query)
+    public function scopeCreditCard($query)
     {
-        return $query->where('owner_type', Job::class);
+        return $query->where('payment_method', 'credit_card')
+                    ->orWhere('payment_method', 'card');
     }
 
     /**
-     * Scope for subscription transactions.
+     * Scope for PayPal transactions.
      */
-    public function scopeSubscription($query)
+    public function scopePayPal($query)
     {
-        return $query->where('owner_type', Subscription::class);
+        return $query->where('payment_gateway', 'paypal');
     }
 
     /**
-     * Scope for high value transactions.
+     * Scope for Stripe transactions.
      */
-    public function scopeHighValue($query, float $threshold = 1000)
+    public function scopeStripe($query)
     {
-        return $query->where('amount', '>=', $threshold);
-    }
-
-    /**
-     * Scope for transactions by payment method.
-     */
-    public function scopeByPaymentMethod($query, int $method)
-    {
-        return $query->where('status', $method);
-    }
-
-    /**
-     * Scope for revenue summary.
-     */
-    public function scopeRevenue($query)
-    {
-        return $query->approved()->sum('amount');
+        return $query->where('payment_gateway', 'stripe');
     }
 
     /**

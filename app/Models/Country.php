@@ -54,7 +54,14 @@ class Country extends Model
     {
         return [
             'id' => 'integer',
+            'name' => 'string',
+            'code' => 'string',
+            'iso_code' => 'string',
+            'phone_code' => 'string',
+            'currency' => 'string',
+            'currency_symbol' => 'string',
             'is_active' => 'boolean',
+            'is_default' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -79,11 +86,27 @@ class Country extends Model
     }
 
     /**
-     * Scope for countries with users.
+     * Scope for inactive countries.
      */
-    public function scopeWithUsers($query)
+    public function scopeInactive($query)
     {
-        return $query->whereHas('users');
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for default countries.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom countries.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
     }
 
     /**
@@ -91,37 +114,79 @@ class Country extends Model
      */
     public function scopeWithStates($query)
     {
-        return $query->whereHas('states');
+        return $query->has('states');
     }
 
     /**
-     * Scope for searching countries by name.
+     * Scope for countries without states.
+     */
+    public function scopeWithoutStates($query)
+    {
+        return $query->doesntHave('states');
+    }
+
+    /**
+     * Scope for countries with cities.
+     */
+    public function scopeWithCities($query)
+    {
+        return $query->has('cities');
+    }
+
+    /**
+     * Scope for countries with companies.
+     */
+    public function scopeWithCompanies($query)
+    {
+        return $query->has('companies');
+    }
+
+    /**
+     * Scope for countries with candidates.
+     */
+    public function scopeWithCandidates($query)
+    {
+        return $query->has('candidates');
+    }
+
+    /**
+     * Scope for searching countries.
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('short_code', 'like', "%{$term}%");
+                    ->orWhere('code', 'like', "%{$term}%")
+                    ->orWhere('iso_code', 'like', "%{$term}%");
     }
 
     /**
-     * Scope for countries by short code.
+     * Scope for recent countries.
      */
-    public function scopeByShortCode($query, string $shortCode)
+    public function scopeRecent($query, int $days = 30)
     {
-        return $query->where('short_code', $shortCode);
+        return $query->where('created_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for countries with phone codes.
+     * Scope for old countries.
      */
-    public function scopeWithPhoneCode($query)
+    public function scopeOld($query, int $days = 365)
     {
-        return $query->whereNotNull('phone_code')
-                    ->where('phone_code', '!=', '');
+        return $query->where('created_at', '<', now()->subDays($days));
     }
 
     /**
-     * Scope for alphabetically ordered countries.
+     * Scope for popular countries (with most companies).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('companies')
+                    ->orderBy('companies_count', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -129,12 +194,52 @@ class Country extends Model
     }
 
     /**
-     * Scope for popular countries (with most users).
+     * Scope for countries by code.
      */
-    public function scopePopular($query, int $limit = 10)
+    public function scopeByCode($query, string $code)
     {
-        return $query->withCount('users')
-                    ->orderByDesc('users_count')
-                    ->limit($limit);
+        return $query->where('code', $code);
+    }
+
+    /**
+     * Scope for countries by ISO code.
+     */
+    public function scopeByIsoCode($query, string $isoCode)
+    {
+        return $query->where('iso_code', $isoCode);
+    }
+
+    /**
+     * Scope for countries by phone code.
+     */
+    public function scopeByPhoneCode($query, string $phoneCode)
+    {
+        return $query->where('phone_code', $phoneCode);
+    }
+
+    /**
+     * Scope for countries by currency.
+     */
+    public function scopeByCurrency($query, string $currency)
+    {
+        return $query->where('currency', $currency);
+    }
+
+    /**
+     * Scope for European countries.
+     */
+    public function scopeEuropean($query)
+    {
+        $europeanCodes = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
+        return $query->whereIn('iso_code', $europeanCodes);
+    }
+
+    /**
+     * Scope for North American countries.
+     */
+    public function scopeNorthAmerican($query)
+    {
+        $northAmericanCodes = ['US', 'CA', 'MX'];
+        return $query->whereIn('iso_code', $northAmericanCodes);
     }
 }

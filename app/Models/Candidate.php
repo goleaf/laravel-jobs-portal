@@ -176,17 +176,26 @@ class Candidate extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'marital_status_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
             'career_level_id' => 'integer',
-            'industry_id' => 'integer',
             'functional_area_id' => 'integer',
+            'marital_status_id' => 'integer',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'email' => 'string',
+            'phone' => 'string',
+            'date_of_birth' => 'date',
+            'gender' => 'string',
+            'experience_years' => 'integer',
             'current_salary' => 'decimal:2',
             'expected_salary' => 'decimal:2',
-            'experience' => 'integer',
-            'immediate_available' => 'boolean',
             'is_active' => 'boolean',
-            'job_alert' => 'boolean',
-            'available_at' => 'datetime',
+            'is_verified' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_available' => 'boolean',
+            'is_immediate_available' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -489,246 +498,282 @@ class Candidate extends Model
     /**
      * Scope for active candidates.
      */
-    public function scopeActive(Builder $query): Builder
+    public function scopeActive($query)
     {
-        return $query->where('is_active', true)
-                    ->whereHas('user', function ($q) {
-                        $q->where('is_active', true);
-                    });
+        return $query->where('is_active', true);
     }
 
     /**
      * Scope for inactive candidates.
      */
-    public function scopeInactive(Builder $query): Builder
+    public function scopeInactive($query)
     {
         return $query->where('is_active', false);
     }
 
     /**
+     * Scope for verified candidates.
+     */
+    public function scopeVerified($query)
+    {
+        return $query->where('is_verified', true);
+    }
+
+    /**
+     * Scope for unverified candidates.
+     */
+    public function scopeUnverified($query)
+    {
+        return $query->where('is_verified', false);
+    }
+
+    /**
+     * Scope for featured candidates.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured candidates.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
      * Scope for available candidates.
      */
-    public function scopeAvailable(Builder $query): Builder
+    public function scopeAvailable($query)
     {
-        return $query->where(function ($q) {
-            $q->where('immediate_available', true)
-              ->orWhere('available_at', '<=', now())
-              ->orWhereNull('available_at');
-        });
+        return $query->where('is_available', true);
+    }
+
+    /**
+     * Scope for unavailable candidates.
+     */
+    public function scopeUnavailable($query)
+    {
+        return $query->where('is_available', false);
     }
 
     /**
      * Scope for immediately available candidates.
      */
-    public function scopeImmediatelyAvailable(Builder $query): Builder
+    public function scopeImmediatelyAvailable($query)
     {
-        return $query->where('immediate_available', true);
+        return $query->where('is_immediate_available', true);
     }
 
     /**
-     * Scope for candidates available by specific date.
+     * Scope for candidates by country.
      */
-    public function scopeAvailableByDate(Builder $query, ?Carbon $date = null): Builder
+    public function scopeByCountry($query, int $countryId)
     {
-        $date = $date ?: now();
-        return $query->where(function ($q) use ($date) {
-            $q->where('immediate_available', true)
-              ->orWhere('available_at', '<=', $date);
-        });
+        return $query->where('country_id', $countryId);
     }
 
     /**
-     * Scope for candidates by experience range.
+     * Scope for candidates by state.
      */
-    public function scopeByExperience(Builder $query, int $minYears, ?int $maxYears = null): Builder
+    public function scopeByState($query, int $stateId)
     {
-        $query->where('experience', '>=', $minYears);
-        
-        if ($maxYears !== null) {
-            $query->where('experience', '<=', $maxYears);
-        }
-        
-        return $query;
+        return $query->where('state_id', $stateId);
+    }
+
+    /**
+     * Scope for candidates by city.
+     */
+    public function scopeByCity($query, int $cityId)
+    {
+        return $query->where('city_id', $cityId);
     }
 
     /**
      * Scope for candidates by career level.
      */
-    public function scopeByCareerLevel(Builder $query, int $careerLevelId): Builder
+    public function scopeByCareerLevel($query, int $careerLevelId)
     {
         return $query->where('career_level_id', $careerLevelId);
     }
 
     /**
-     * Scope for candidates by industry.
-     */
-    public function scopeByIndustry(Builder $query, int $industryId): Builder
-    {
-        return $query->where('industry_id', $industryId);
-    }
-
-    /**
      * Scope for candidates by functional area.
      */
-    public function scopeByFunctionalArea(Builder $query, int $functionalAreaId): Builder
+    public function scopeByFunctionalArea($query, int $functionalAreaId)
     {
         return $query->where('functional_area_id', $functionalAreaId);
     }
 
     /**
-     * Scope for candidates by salary range.
+     * Scope for candidates by marital status.
      */
-    public function scopeBySalaryRange(Builder $query, ?float $minSalary = null, ?float $maxSalary = null, string $type = 'expected'): Builder
+    public function scopeByMaritalStatus($query, int $maritalStatusId)
     {
-        $column = $type === 'current' ? 'current_salary' : 'expected_salary';
-        
-        if ($minSalary !== null) {
-            $query->where($column, '>=', $minSalary);
-        }
-        
-        if ($maxSalary !== null) {
-            $query->where($column, '<=', $maxSalary);
-        }
-        
-        return $query;
-    }
-
-    /**
-     * Scope for candidates by location.
-     */
-    public function scopeByLocation(Builder $query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null): Builder
-    {
-        return $query->whereHas('user', function ($q) use ($countryId, $stateId, $cityId) {
-            if ($countryId) {
-                $q->where('country_id', $countryId);
-            }
-            if ($stateId) {
-                $q->where('state_id', $stateId);
-            }
-            if ($cityId) {
-                $q->where('city_id', $cityId);
-            }
-        });
-    }
-
-    /**
-     * Scope for candidates with resume.
-     */
-    public function scopeWithResume(Builder $query): Builder
-    {
-        return $query->whereNotNull('resume_path')
-                    ->where('resume_path', '!=', '');
-    }
-
-    /**
-     * Scope for candidates with profile image.
-     */
-    public function scopeWithProfileImage(Builder $query): Builder
-    {
-        return $query->whereNotNull('image_path')
-                    ->where('image_path', '!=', '');
+        return $query->where('marital_status_id', $maritalStatusId);
     }
 
     /**
      * Scope for searching candidates.
      */
-    public function scopeSearch(Builder $query, string $term): Builder
+    public function scopeSearch($query, string $term)
     {
-        return $query->whereHas('user', function ($q) use ($term) {
-            $q->where('first_name', 'like', "%{$term}%")
-              ->orWhere('last_name', 'like', "%{$term}%")
-              ->orWhere('email', 'like', "%{$term}%");
-        })->orWhere('father_name', 'like', "%{$term}%")
-          ->orWhere('nationality', 'like', "%{$term}%")
-          ->orWhere('national_id_card', 'like', "%{$term}%");
+        return $query->where('first_name', 'like', "%{$term}%")
+                    ->orWhere('last_name', 'like', "%{$term}%")
+                    ->orWhere('email', 'like', "%{$term}%")
+                    ->orWhere('phone', 'like', "%{$term}%");
     }
 
     /**
      * Scope for recent candidates.
      */
-    public function scopeRecent(Builder $query, int $days = 30): Builder
+    public function scopeRecent($query, int $days = 30)
     {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+        return $query->where('created_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for candidates with job alerts enabled.
+     * Scope for old candidates.
      */
-    public function scopeWithJobAlerts(Builder $query): Builder
+    public function scopeOld($query, int $days = 365)
     {
-        return $query->where('job_alert', true);
+        return $query->where('created_at', '<', now()->subDays($days));
     }
 
     /**
-     * Scope for verified candidates.
+     * Scope for candidates by experience range.
      */
-    public function scopeVerified(Builder $query): Builder
+    public function scopeByExperienceRange($query, int $min, int $max)
     {
-        return $query->whereHas('user', function ($q) {
-            $q->where('is_verified', true);
-        });
+        return $query->whereBetween('experience_years', [$min, $max]);
     }
 
     /**
-     * Scope for candidates with complete profiles.
+     * Scope for entry level candidates.
      */
-    public function scopeProfileComplete(Builder $query): Builder
+    public function scopeEntryLevel($query)
     {
-        return $query->whereNotNull('resume_path')
-                    ->whereNotNull('career_level_id')
-                    ->whereNotNull('industry_id')
-                    ->whereNotNull('functional_area_id');
-    }
-
-    /**
-     * Scope for popular candidates (high profile views).
-     */
-    public function scopePopular(Builder $query): Builder
-    {
-        return $query->whereHas('user', function ($q) {
-            $q->where('profile_views', '>', 10);
-        })->orderByDesc(
-            User::select('profile_views')
-                ->whereColumn('users.id', 'candidates.user_id')
-        );
+        return $query->where('experience_years', '<=', 2);
     }
 
     /**
      * Scope for experienced candidates.
      */
-    public function scopeExperienced(Builder $query, int $minYears = 5): Builder
+    public function scopeExperienced($query)
     {
-        return $query->where('experience', '>=', $minYears);
+        return $query->where('experience_years', '>=', 5);
     }
 
     /**
-     * Scope for fresh graduates.
+     * Scope for senior candidates.
      */
-    public function scopeFreshGraduate(Builder $query): Builder
+    public function scopeSenior($query)
     {
-        return $query->where('experience', '<=', 1);
+        return $query->where('experience_years', '>=', 10);
     }
 
     /**
-     * Scope for job seeking candidates.
+     * Scope for candidates by salary range.
      */
-    public function scopeJobSeeking(Builder $query): Builder
+    public function scopeBySalaryRange($query, float $min, float $max)
     {
-        return $query->active()
-                    ->available()
-                    ->where('job_alert', true);
+        return $query->whereBetween('expected_salary', [$min, $max]);
     }
 
     /**
-     * Scope for alphabetically ordered candidates.
+     * Scope for candidates by gender.
      */
-    public function scopeAlphabetical(Builder $query): Builder
+    public function scopeByGender($query, string $gender)
     {
-        return $query->join('users', 'candidates.user_id', '=', 'users.id')
-                    ->orderBy('users.first_name', 'asc')
-                    ->orderBy('users.last_name', 'asc')
-                    ->select('candidates.*');
+        return $query->where('gender', $gender);
+    }
+
+    /**
+     * Scope for male candidates.
+     */
+    public function scopeMale($query)
+    {
+        return $query->where('gender', 'male');
+    }
+
+    /**
+     * Scope for female candidates.
+     */
+    public function scopeFemale($query)
+    {
+        return $query->where('gender', 'female');
+    }
+
+    /**
+     * Scope for candidates with resumes.
+     */
+    public function scopeWithResumes($query)
+    {
+        return $query->has('resumes');
+    }
+
+    /**
+     * Scope for candidates without resumes.
+     */
+    public function scopeWithoutResumes($query)
+    {
+        return $query->doesntHave('resumes');
+    }
+
+    /**
+     * Scope for candidates with job applications.
+     */
+    public function scopeWithApplications($query)
+    {
+        return $query->has('jobApplications');
+    }
+
+    /**
+     * Scope for candidates with skills.
+     */
+    public function scopeWithSkills($query)
+    {
+        return $query->has('skills');
+    }
+
+    /**
+     * Scope for candidates by age range.
+     */
+    public function scopeByAgeRange($query, int $minAge, int $maxAge)
+    {
+        $maxDate = now()->subYears($minAge)->format('Y-m-d');
+        $minDate = now()->subYears($maxAge + 1)->format('Y-m-d');
+        
+        return $query->whereBetween('date_of_birth', [$minDate, $maxDate]);
+    }
+
+    /**
+     * Scope for young candidates (under 30).
+     */
+    public function scopeYoung($query)
+    {
+        return $query->byAgeRange(18, 30);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('first_name', 'asc')
+                    ->orderBy('last_name', 'asc');
+    }
+
+    /**
+     * Scope for popular candidates (with most applications).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('jobApplications')
+                    ->orderBy('job_applications_count', 'desc')
+                    ->limit($limit);
     }
 
     /**

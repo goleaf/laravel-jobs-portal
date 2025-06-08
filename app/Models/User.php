@@ -238,19 +238,20 @@ class User extends Authenticatable implements HasMedia
     {
         return [
             'id' => 'integer',
-            'user_type' => 'string',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'name' => 'string',
+            'email' => 'string',
+            'phone' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'dob' => 'date',
-            'gender' => 'integer',
             'is_active' => 'boolean',
             'is_verified' => 'boolean',
-            'is_default' => 'boolean',
-            'profile_views' => 'integer',
-            'country_id' => 'integer',
-            'state_id' => 'integer',
-            'city_id' => 'integer',
-            'owner_id' => 'integer',
+            'is_featured' => 'boolean',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -412,39 +413,77 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * Scope for inactive users.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
      * Scope for verified users.
      */
     public function scopeVerified($query)
     {
-        return $query->where('is_verified', true);
+        return $query->whereNotNull('email_verified_at');
     }
 
     /**
-     * Scope for users by role name.
+     * Scope for unverified users.
      */
-    public function scopeByRole($query, string $roleName)
+    public function scopeUnverified($query)
     {
-        return $query->whereHas('roles', function ($q) use ($roleName) {
-            $q->where('name', $roleName);
+        return $query->whereNull('email_verified_at');
+    }
+
+    /**
+     * Scope for featured users.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured users.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for users by role.
+     */
+    public function scopeByRole($query, string $role)
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('name', $role);
         });
     }
 
     /**
-     * Scope for users by location.
+     * Scope for admin users.
      */
-    public function scopeByLocation($query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null)
+    public function scopeAdmins($query)
     {
-        if ($countryId) {
-            $query->where('country_id', $countryId);
-        }
-        if ($stateId) {
-            $query->where('state_id', $stateId);
-        }
-        if ($cityId) {
-            $query->where('city_id', $cityId);
-        }
-        
-        return $query;
+        return $query->byRole('admin');
+    }
+
+    /**
+     * Scope for candidate users.
+     */
+    public function scopeCandidates($query)
+    {
+        return $query->byRole('candidate');
+    }
+
+    /**
+     * Scope for employer users.
+     */
+    public function scopeEmployers($query)
+    {
+        return $query->byRole('employer');
     }
 
     /**
@@ -454,7 +493,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $query->where('first_name', 'like', "%{$term}%")
                     ->orWhere('last_name', 'like', "%{$term}%")
-                    ->orWhere('email', 'like', "%{$term}%");
+                    ->orWhere('name', 'like', "%{$term}%")
+                    ->orWhere('email', 'like', "%{$term}%")
+                    ->orWhere('phone', 'like', "%{$term}%");
     }
 
     /**
@@ -466,62 +507,146 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Scope for users with profile images.
+     * Scope for old users.
      */
-    public function scopeWithProfileImage($query)
+    public function scopeOld($query, int $days = 365)
     {
-        return $query->whereHas('media', function ($q) {
-            $q->where('collection_name', self::PROFILE);
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for online users (last seen within minutes).
+     */
+    public function scopeOnline($query, int $minutes = 5)
+    {
+        return $query->where('last_seen_at', '>=', now()->subMinutes($minutes));
+    }
+
+    /**
+     * Scope for offline users.
+     */
+    public function scopeOffline($query, int $minutes = 5)
+    {
+        return $query->where('last_seen_at', '<', now()->subMinutes($minutes))
+                    ->orWhereNull('last_seen_at');
+    }
+
+    /**
+     * Scope for users who logged in recently.
+     */
+    public function scopeRecentlyLoggedIn($query, int $days = 7)
+    {
+        return $query->where('last_login_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for users who haven't logged in recently.
+     */
+    public function scopeInactive($query, int $days = 30)
+    {
+        return $query->where('last_login_at', '<', now()->subDays($days))
+                    ->orWhereNull('last_login_at');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('first_name', 'asc')
+                    ->orderBy('last_name', 'asc');
+    }
+
+    /**
+     * Scope for users with profile.
+     */
+    public function scopeWithProfile($query)
+    {
+        return $query->whereHas('candidate')
+                    ->orWhereHas('company');
+    }
+
+    /**
+     * Scope for users without profile.
+     */
+    public function scopeWithoutProfile($query)
+    {
+        return $query->whereDoesntHave('candidate')
+                    ->whereDoesntHave('company');
+    }
+
+    /**
+     * Scope for users with subscriptions.
+     */
+    public function scopeWithSubscriptions($query)
+    {
+        return $query->has('subscriptions');
+    }
+
+    /**
+     * Scope for users with active subscriptions.
+     */
+    public function scopeWithActiveSubscriptions($query)
+    {
+        return $query->whereHas('subscriptions', function ($q) {
+            $q->where('status', 'active')
+              ->where('expires_at', '>', now());
         });
     }
 
     /**
-     * Scope for candidates.
+     * Scope for users by country.
      */
-    public function scopeCandidates($query)
+    public function scopeByCountry($query, int $countryId)
     {
-        return $query->byRole(self::CANDIDATE);
+        return $query->whereHas('candidate', function ($q) use ($countryId) {
+            $q->where('country_id', $countryId);
+        })->orWhereHas('company', function ($q) use ($countryId) {
+            $q->where('country_id', $countryId);
+        });
     }
 
     /**
-     * Scope for employers.
+     * Scope for users by state.
      */
-    public function scopeEmployers($query)
+    public function scopeByState($query, int $stateId)
     {
-        return $query->byRole(self::EMPLOYER);
+        return $query->whereHas('candidate', function ($q) use ($stateId) {
+            $q->where('state_id', $stateId);
+        })->orWhereHas('company', function ($q) use ($stateId) {
+            $q->where('state_id', $stateId);
+        });
     }
 
     /**
-     * Scope for admins.
+     * Scope for users by city.
      */
-    public function scopeAdmins($query)
+    public function scopeByCity($query, int $cityId)
     {
-        return $query->byRole(self::ADMIN);
+        return $query->whereHas('candidate', function ($q) use ($cityId) {
+            $q->where('city_id', $cityId);
+        })->orWhereHas('company', function ($q) use ($cityId) {
+            $q->where('city_id', $cityId);
+        });
     }
 
     /**
-     * Scope for users by gender.
+     * Scope for premium users.
      */
-    public function scopeByGender($query, int $gender)
+    public function scopePremium($query)
     {
-        return $query->where('gender', $gender);
+        return $query->withActiveSubscriptions();
     }
 
     /**
-     * Scope for users by language.
+     * Scope for free users.
      */
-    public function scopeByLanguage($query, string $language)
+    public function scopeFree($query)
     {
-        return $query->where('language', $language);
-    }
-
-    /**
-     * Scope for users with high profile views.
-     */
-    public function scopePopular($query, int $minViews = 100)
-    {
-        return $query->where('profile_views', '>=', $minViews)
-                    ->orderByDesc('profile_views');
+        return $query->whereDoesntHave('subscriptions', function ($q) {
+            $q->where('status', 'active')
+              ->where('expires_at', '>', now());
+        });
     }
 
     /**

@@ -172,19 +172,26 @@ class Company extends Model
             'industry_id' => 'integer',
             'ownership_type_id' => 'integer',
             'company_size_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'name' => 'string',
+            'email' => 'string',
+            'phone' => 'string',
+            'website' => 'string',
+            'description' => 'string',
             'established_in' => 'integer',
             'no_of_offices' => 'integer',
-            'last_change' => 'integer',
             'is_active' => 'boolean',
+            'is_verified' => 'boolean',
             'is_featured' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'website' => 'string',
             'facebook_url' => 'string',
             'twitter_url' => 'string',
             'linkedin_url' => 'string',
             'google_plus_url' => 'string',
             'pinterest_url' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -342,7 +349,7 @@ class Company extends Model
     /**
      * Scope for active companies.
      */
-    public function scopeActive(Builder $query): Builder
+    public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
@@ -350,135 +357,213 @@ class Company extends Model
     /**
      * Scope for inactive companies.
      */
-    public function scopeInactive(Builder $query): Builder
+    public function scopeInactive($query)
     {
         return $query->where('is_active', false);
     }
 
     /**
+     * Scope for verified companies.
+     */
+    public function scopeVerified($query)
+    {
+        return $query->where('is_verified', true);
+    }
+
+    /**
+     * Scope for unverified companies.
+     */
+    public function scopeUnverified($query)
+    {
+        return $query->where('is_verified', false);
+    }
+
+    /**
      * Scope for featured companies.
      */
-    public function scopeFeatured(Builder $query): Builder
+    public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
 
     /**
+     * Scope for non-featured companies.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
      * Scope for companies by industry.
      */
-    public function scopeByIndustry(Builder $query, int $industryId): Builder
+    public function scopeByIndustry($query, int $industryId)
     {
         return $query->where('industry_id', $industryId);
     }
 
     /**
-     * Scope for companies by size.
+     * Scope for companies by ownership type.
      */
-    public function scopeBySize(Builder $query, int $sizeId): Builder
+    public function scopeByOwnershipType($query, int $ownershipTypeId)
     {
-        return $query->where('company_size_id', $sizeId);
+        return $query->where('ownership_type_id', $ownershipTypeId);
     }
 
     /**
-     * Scope for companies established between years.
+     * Scope for companies by size.
      */
-    public function scopeEstablishedBetween(Builder $query, int $startYear, int $endYear): Builder
+    public function scopeBySize($query, int $companySizeId)
+    {
+        return $query->where('company_size_id', $companySizeId);
+    }
+
+    /**
+     * Scope for companies by country.
+     */
+    public function scopeByCountry($query, int $countryId)
+    {
+        return $query->where('country_id', $countryId);
+    }
+
+    /**
+     * Scope for companies by state.
+     */
+    public function scopeByState($query, int $stateId)
+    {
+        return $query->where('state_id', $stateId);
+    }
+
+    /**
+     * Scope for companies by city.
+     */
+    public function scopeByCity($query, int $cityId)
+    {
+        return $query->where('city_id', $cityId);
+    }
+
+    /**
+     * Scope for searching companies.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('email', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('website', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent companies.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old companies.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for companies with jobs.
+     */
+    public function scopeWithJobs($query)
+    {
+        return $query->has('jobs');
+    }
+
+    /**
+     * Scope for companies without jobs.
+     */
+    public function scopeWithoutJobs($query)
+    {
+        return $query->doesntHave('jobs');
+    }
+
+    /**
+     * Scope for companies with active jobs.
+     */
+    public function scopeWithActiveJobs($query)
+    {
+        return $query->whereHas('jobs', function ($q) {
+            $q->where('status', 1);
+        });
+    }
+
+    /**
+     * Scope for companies established in year range.
+     */
+    public function scopeEstablishedBetween($query, int $startYear, int $endYear)
     {
         return $query->whereBetween('established_in', [$startYear, $endYear]);
     }
 
     /**
-     * Scope for companies with websites.
+     * Scope for startup companies (established recently).
      */
-    public function scopeWithWebsite(Builder $query): Builder
+    public function scopeStartup($query, int $years = 5)
+    {
+        $cutoffYear = now()->year - $years;
+        return $query->where('established_in', '>=', $cutoffYear);
+    }
+
+    /**
+     * Scope for established companies.
+     */
+    public function scopeEstablished($query, int $years = 10)
+    {
+        $cutoffYear = now()->year - $years;
+        return $query->where('established_in', '<=', $cutoffYear);
+    }
+
+    /**
+     * Scope for small companies.
+     */
+    public function scopeSmall($query)
+    {
+        return $query->whereHas('companySize', function ($q) {
+            $q->where('size', '<=', 50);
+        });
+    }
+
+    /**
+     * Scope for medium companies.
+     */
+    public function scopeMedium($query)
+    {
+        return $query->whereHas('companySize', function ($q) {
+            $q->whereBetween('size', [51, 500]);
+        });
+    }
+
+    /**
+     * Scope for large companies.
+     */
+    public function scopeLarge($query)
+    {
+        return $query->whereHas('companySize', function ($q) {
+            $q->where('size', '>', 500);
+        });
+    }
+
+    /**
+     * Scope for companies with website.
+     */
+    public function scopeWithWebsite($query)
     {
         return $query->whereNotNull('website')
                     ->where('website', '!=', '');
     }
 
     /**
-     * Scope for companies by location.
+     * Scope for companies with social media.
      */
-    public function scopeByLocation(Builder $query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null): Builder
-    {
-        return $query->whereHas('user', function ($q) use ($countryId, $stateId, $cityId) {
-            if ($countryId) {
-                $q->where('country_id', $countryId);
-            }
-            if ($stateId) {
-                $q->where('state_id', $stateId);
-            }
-            if ($cityId) {
-                $q->where('city_id', $cityId);
-            }
-        });
-    }
-
-    /**
-     * Scope for companies with jobs.
-     */
-    public function scopeWithJobs(Builder $query): Builder
-    {
-        return $query->whereHas('jobs');
-    }
-
-    /**
-     * Scope for companies with active jobs.
-     */
-    public function scopeWithActiveJobs(Builder $query): Builder
-    {
-        return $query->whereHas('jobs', function ($q) {
-            $q->active();
-        });
-    }
-
-    /**
-     * Scope for searching companies.
-     */
-    public function scopeSearch(Builder $query, string $term): Builder
-    {
-        return $query->where('ceo', 'like', "%{$term}%")
-                    ->orWhere('details', 'like', "%{$term}%")
-                    ->orWhere('location', 'like', "%{$term}%")
-                    ->orWhereHas('user', function ($q) use ($term) {
-                        $q->where('first_name', 'like', "%{$term}%")
-                          ->orWhere('last_name', 'like', "%{$term}%");
-                    });
-    }
-
-    /**
-     * Scope for recent companies.
-     */
-    public function scopeRecent(Builder $query, int $days = 30): Builder
-    {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
-    }
-
-    /**
-     * Scope for popular companies (with most jobs).
-     */
-    public function scopePopular(Builder $query, int $minJobs = 5): Builder
-    {
-        return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $minJobs)
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Scope for verified companies (active users).
-     */
-    public function scopeVerified(Builder $query): Builder
-    {
-        return $query->whereHas('user', function ($q) {
-            $q->where('is_verified', true);
-        });
-    }
-
-    /**
-     * Scope for companies with social media presence.
-     */
-    public function scopeWithSocialMedia(Builder $query): Builder
+    public function scopeWithSocialMedia($query)
     {
         return $query->where(function ($q) {
             $q->whereNotNull('facebook_url')
@@ -490,51 +575,49 @@ class Company extends Model
     }
 
     /**
-     * Scope for multi-office companies.
+     * Scope for alphabetical ordering.
      */
-    public function scopeMultiOffice(Builder $query): Builder
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for popular companies (with most jobs).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('jobs')
+                    ->orderBy('jobs_count', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for technology companies.
+     */
+    public function scopeTechnology($query)
+    {
+        return $query->whereHas('industry', function ($q) {
+            $q->where('name', 'like', '%technology%')
+              ->orWhere('name', 'like', '%IT%')
+              ->orWhere('name', 'like', '%software%');
+        });
+    }
+
+    /**
+     * Scope for companies with multiple offices.
+     */
+    public function scopeMultiOffice($query)
     {
         return $query->where('no_of_offices', '>', 1);
     }
 
     /**
-     * Scope for alphabetically ordered companies.
+     * Scope for companies by office count range.
      */
-    public function scopeAlphabetical(Builder $query): Builder
+    public function scopeByOfficeRange($query, int $min, int $max)
     {
-        return $query->orderBy('ceo', 'asc');
-    }
-
-    /**
-     * Scope for companies by ownership type.
-     */
-    public function scopeByOwnership(Builder $query, int $ownershipTypeId): Builder
-    {
-        return $query->where('ownership_type_id', $ownershipTypeId);
-    }
-
-    /**
-     * Scope for large companies (more than specified offices).
-     */
-    public function scopeLarge(Builder $query, int $minOffices = 10): Builder
-    {
-        return $query->where('no_of_offices', '>=', $minOffices);
-    }
-
-    /**
-     * Scope for established companies (older than specified years).
-     */
-    public function scopeEstablished(Builder $query, int $yearsAgo = 10): Builder
-    {
-        return $query->where('established_in', '<=', now()->year - $yearsAgo);
-    }
-
-    /**
-     * Check if company is featured.
-     */
-    public function isFeatured(): bool
-    {
-        return $this->activeFeatured()->exists();
+        return $query->whereBetween('no_of_offices', [$min, $max]);
     }
 
     /**

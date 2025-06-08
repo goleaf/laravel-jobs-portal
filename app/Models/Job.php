@@ -861,4 +861,160 @@ class Job extends Model
         
         return $query;
     }
+
+    /**
+     * Scope for jobs by status.
+     */
+    public function scopeByStatus(Builder $query, string $status): Builder
+    {
+        $statusMap = [
+            'draft' => self::STATUS_DRAFT,
+            'open' => self::STATUS_OPEN,
+            'closed' => self::STATUS_CLOSED,
+            'paused' => self::STATUS_PAUSED,
+            'suspended' => self::STATUS_SUSPENDED,
+        ];
+
+        if (isset($statusMap[$status])) {
+            return $query->where('status', $statusMap[$status]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope for jobs that are not expired.
+     */
+    public function scopeNotExpired(Builder $query): Builder
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('job_expiry_date')
+              ->orWhere('job_expiry_date', '>', now());
+        });
+    }
+
+    /**
+     * Scope for jobs that are expired.
+     */
+    public function scopeExpired(Builder $query): Builder
+    {
+        return $query->where('job_expiry_date', '<', now());
+    }
+
+    /**
+     * Scope for jobs with applications.
+     */
+    public function scopeWithApplications(Builder $query): Builder
+    {
+        return $query->has('appliedJobs');
+    }
+
+    /**
+     * Scope for jobs without applications.
+     */
+    public function scopeWithoutApplications(Builder $query): Builder
+    {
+        return $query->doesntHave('appliedJobs');
+    }
+
+    /**
+     * Scope for freelance jobs.
+     */
+    public function scopeFreelance(Builder $query): Builder
+    {
+        return $query->where('is_freelance', true);
+    }
+
+    /**
+     * Scope for non-freelance jobs.
+     */
+    public function scopeFullTime(Builder $query): Builder
+    {
+        return $query->where('is_freelance', false);
+    }
+
+    /**
+     * Scope for entry level jobs.
+     */
+    public function scopeEntryLevel(Builder $query): Builder
+    {
+        return $query->where('experience', '<=', 2);
+    }
+
+    /**
+     * Scope for senior level jobs.
+     */
+    public function scopeSeniorLevel(Builder $query): Builder
+    {
+        return $query->where('experience', '>=', 5);
+    }
+
+    /**
+     * Scope for jobs that hide salary.
+     */
+    public function scopeHiddenSalary(Builder $query): Builder
+    {
+        return $query->where('hide_salary', true);
+    }
+
+    /**
+     * Scope for jobs that show salary.
+     */
+    public function scopeVisibleSalary(Builder $query): Builder
+    {
+        return $query->where('hide_salary', false);
+    }
+
+    /**
+     * Get applications count for this job.
+     */
+    public function getApplicationsCount(): int
+    {
+        return $this->appliedJobs()->count();
+    }
+
+    /**
+     * Get formatted salary range.
+     */
+    public function getFormattedSalaryRange(): string
+    {
+        if ($this->hide_salary) {
+            return 'Salary not disclosed';
+        }
+
+        if (!$this->salary_from && !$this->salary_to) {
+            return 'Salary negotiable';
+        }
+
+        $currency = $this->currency->symbol ?? '$';
+        
+        if ($this->salary_from && $this->salary_to) {
+            return "{$currency}" . number_format($this->salary_from) . " - {$currency}" . number_format($this->salary_to);
+        }
+
+        if ($this->salary_from) {
+            return "From {$currency}" . number_format($this->salary_from);
+        }
+
+        if ($this->salary_to) {
+            return "Up to {$currency}" . number_format($this->salary_to);
+        }
+
+        return 'Salary negotiable';
+    }
+
+    /**
+     * Get full location string.
+     */
+    public function getFullLocation(): string
+    {
+        $parts = array_filter([
+            $this->location,
+            $this->city?->name,
+            $this->state?->name,
+            $this->country?->name,
+        ]);
+
+        return implode(', ', $parts);
+    }
 }

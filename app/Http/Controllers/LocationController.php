@@ -7,11 +7,6 @@ use App\Models\State;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
-use App\Http\Requests\GetStatesLocationRequest;
-
-use App\Http\Requests\GetCitiesLocationRequest;
-
 class LocationController extends AppBaseController
 {
     /**

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\SwaggerAsset;
 use App\Http\Resources\SwaggerAssetResource;
-use App\Http\Requests\Api\StoreSwaggerAssetRequest;
-use App\Http\Requests\Api\UpdateSwaggerAssetRequest;
 
 /**
  * Context7 API Controller for SwaggerAsset

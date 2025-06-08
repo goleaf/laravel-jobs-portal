@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\FunctionalArea;
 use App\Http\Resources\FunctionalAreaResource;
-use App\Http\Requests\Api\StoreFunctionalAreaRequest;
-use App\Http\Requests\Api\UpdateFunctionalAreaRequest;
 
 /**
  * Context7 API Controller for FunctionalArea

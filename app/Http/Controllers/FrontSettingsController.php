@@ -12,9 +12,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-
-use App\Http\Requests\UpdateFrontSettingsRequest;
-
 class FrontSettingsController extends AppBaseController
 {
     /**

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateJobStageRequest;
-use App\Http\Requests\UpdateJobStageRequest;
 use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
 use App\Models\JobStage;
@@ -13,13 +11,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
-
-use App\Http\Requests\StoreJobStageRequest;
-
-use App\Http\Requests\DeleteJobStageRequest;
-
 class JobStageController extends AppBaseController
 {
     /** @var JobStageRepository */

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\ApplyJobRequest;
+
 use App\Mail\EmailToEmployer;
 use App\Models\Candidate;
 use App\Models\EmailTemplate;
@@ -14,9 +14,6 @@ use App\Repositories\JobApplicationRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
-
-use App\Http\Requests\ApplyJobJobApplicationRequest;
-
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
@@ -19,37 +18,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
 
 /**
  * Class JobApplicationController
  */
-use App\Http\Requests\ChangeJobApplicationStatusJobApplicationRequest;
-
-use App\Http\Requests\DownloadMediaJobApplicationRequest;
-
-use App\Http\Requests\GetJobStageJobApplicationRequest;
-
-use App\Http\Requests\ChangeJobStageJobApplicationRequest;
-
-use App\Http\Requests\ViewSlotsScreenJobApplicationRequest;
-
-use App\Http\Requests\InterviewSlotStoreJobApplicationRequest;
-
-use App\Http\Requests\BatchSlotStoreJobApplicationRequest;
-
-use App\Http\Requests\EditSlotJobApplicationRequest;
-
-use App\Http\Requests\UpdateSlotJobApplicationRequest;
-
-use App\Http\Requests\SlotDestroyJobApplicationRequest;
-
-use App\Http\Requests\GetScheduleHistoryJobApplicationRequest;
-
-use App\Http\Requests\CancelSelectedSlotJobApplicationRequest;
-
-use App\Http\Requests\DeleteJobApplicationRequest;
 
 class JobApplicationController extends AppBaseController
 {

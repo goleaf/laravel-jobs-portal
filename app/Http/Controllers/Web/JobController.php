@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Requests\Web\StoreRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\EmailJobToFriendRequest;
+
 use App\Models\Job;
 use App\Repositories\JobRepository;
 use Auth;
@@ -15,17 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-
-use App\Http\Requests\CreateJobRequest;
-
-use App\Http\Requests\UpdateJobRequest;
-
-use App\Http\Requests\SaveFavouriteJobJobRequest;
-
-use App\Http\Requests\ReportJobAbuseJobRequest;
-
-use App\Http\Requests\EmailJobToFriendJobRequest;
-
 class JobController extends AppBaseController
 {
     /** @var JobRepository */

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateTagRequest;
-use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
 use App\Repositories\JobTagRepository;
 use Exception;
@@ -11,11 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreTagRequest;
-
-use App\Http\Requests\DeleteTagRequest;
-
 class TagController extends AppBaseController
 {
     /** @var JobTagRepository */

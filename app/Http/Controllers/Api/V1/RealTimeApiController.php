@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\RealTime;
 use App\Http\Resources\RealTimeResource;
-use App\Http\Requests\Api\StoreRealTimeRequest;
-use App\Http\Requests\Api\UpdateRealTimeRequest;
 
 /**
  * Context7 API Controller for RealTime

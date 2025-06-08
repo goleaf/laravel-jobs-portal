@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateRequiredDegreeLevelRequest;
-use App\Http\Requests\UpdateRequiredDegreeLevelRequest;
 use App\Models\Job;
 use App\Models\RequiredDegreeLevel;
 use App\Repositories\RequiredDegreeLevelRepository;
@@ -12,11 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreRequiredDegreeLevelRequest;
-
-use App\Http\Requests\DeleteRequiredDegreeLevelRequest;
-
 class RequiredDegreeLevelController extends AppBaseController
 {
     /** @var RequiredDegreeLevelRepository */

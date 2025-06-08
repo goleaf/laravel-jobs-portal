@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\CreateNewsLetterRequest;
+
 use App\Models\NewsLetter;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\UserRepository;
@@ -12,9 +12,6 @@ use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Redirect;
-
-use App\Http\Requests\NewsLetterWebRequest;
-
 class WebController extends AppBaseController
 {
     /**

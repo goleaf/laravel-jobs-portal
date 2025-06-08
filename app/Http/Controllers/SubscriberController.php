@@ -10,7 +10,6 @@ use Illuminate\View\View;
 /**
  * Class SubscriberController
  */
-use App\Http\Requests\DeleteSubscriberRequest;
 
 class SubscriberController extends AppBaseController
 {

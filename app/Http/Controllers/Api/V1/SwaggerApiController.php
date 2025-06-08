@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Swagger;
 use App\Http\Resources\SwaggerResource;
-use App\Http\Requests\Api\StoreSwaggerRequest;
-use App\Http\Requests\Api\UpdateSwaggerRequest;
 
 /**
  * Context7 API Controller for Swagger

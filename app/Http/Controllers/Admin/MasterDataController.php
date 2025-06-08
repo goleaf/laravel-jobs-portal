@@ -19,9 +19,6 @@ use App\Models\Language;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\Admin\StoreMasterDataRequest;
-use App\Http\Requests\Admin\UpdateMasterDataRequest;
-
 class MasterDataController extends AppBaseController
 {
     /**

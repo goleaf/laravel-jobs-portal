@@ -14,11 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
-
-use App\Http\Requests\StoreJobNotificationRequest;
-
 class JobNotificationController extends AppBaseController
 {
     /**

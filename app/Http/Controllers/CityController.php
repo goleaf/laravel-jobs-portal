@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCityRequest;
-use App\Http\Requests\UpdateCityRequest;
 use App\Models\City;
 use App\Models\Job;
 use App\Models\State;
@@ -14,11 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreCityRequest;
-
-use App\Http\Requests\DeleteCityRequest;
-
 class CityController extends AppBaseController
 {
     /**

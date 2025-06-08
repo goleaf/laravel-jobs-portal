@@ -27,15 +27,15 @@ class StoreTransactionRequest extends FormRequest
      */
     public function rules(): array
     {
-        return {
-    "user_id": "required|exists:users,id",
-    "subscription_plan_id": "required|exists:subscription_plans,id",
-    "transaction_id": "required|string|unique:transactions,transaction_id",
-    "amount": "required|numeric|min:0",
-    "payment_type": "required|in:stripe,paypal,razorpay,paystack,manual",
-    "status": "required|in:pending,approved,denied,cancelled",
-    "meta": "nullable|json"
-};
+        return [
+    "user_id" => "required|exists:users,id",
+    "subscription_plan_id" => "required|exists:subscription_plans,id",
+    "transaction_id" => "required|string|unique:transactions,transaction_id",
+    "amount" => "required|numeric|min:0",
+    "payment_type" => "required|in:stripe,paypal,razorpay,paystack,manual",
+    "status" => "required|in:pending,approved,denied,cancelled",
+    "meta" => "nullable|json"
+];
     }
 
     /**
@@ -45,16 +45,16 @@ class StoreTransactionRequest extends FormRequest
      */
     public function messages(): array
     {
-        return {
-    "user_id.required": "User is required",
-    "subscription_plan_id.required": "Subscription plan is required",
-    "transaction_id.required": "Transaction ID is required",
-    "transaction_id.unique": "Transaction ID already exists",
-    "amount.required": "Amount is required",
-    "amount.numeric": "Amount must be a number",
-    "payment_type.required": "Payment type is required",
-    "status.required": "Status is required"
-};
+        return [
+    "user_id.required" => "User is required",
+    "subscription_plan_id.required" => "Subscription plan is required",
+    "transaction_id.required" => "Transaction ID is required",
+    "transaction_id.unique" => "Transaction ID already exists",
+    "amount.required" => "Amount is required",
+    "amount.numeric" => "Amount must be a number",
+    "payment_type.required" => "Payment type is required",
+    "status.required" => "Status is required"
+];
     }
 
     /**

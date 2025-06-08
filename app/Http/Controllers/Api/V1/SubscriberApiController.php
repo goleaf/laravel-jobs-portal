@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Subscriber;
 use App\Http\Resources\SubscriberResource;
-use App\Http\Requests\Api\StoreSubscriberRequest;
-use App\Http\Requests\Api\UpdateSubscriberRequest;
 
 /**
  * Context7 API Controller for Subscriber

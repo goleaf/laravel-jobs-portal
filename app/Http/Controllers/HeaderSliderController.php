@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateHeaderSliderRequest;
 use App\Models\HeaderSlider;
 use App\Models\Setting;
 use App\Repositories\HeaderSliderRepository;
@@ -16,11 +15,6 @@ use Illuminate\View\View;
 /**
  * Class HeaderSliderController
  */
-use App\Http\Requests\UpdateHeaderSliderRequest;
-
-use App\Http\Requests\DeleteHeaderSliderRequest;
-
-use App\Http\Requests\StoreHeaderSliderRequest;
 
 class HeaderSliderController extends AppBaseController
 {

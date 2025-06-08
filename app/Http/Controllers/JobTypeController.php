@@ -7,15 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
-
-use App\Http\Requests\StoreJobTypeRequest;
-
-use App\Http\Requests\UpdateJobTypeRequest;
-
-use App\Http\Requests\DeleteJobTypeRequest;
-
 class JobTypeController extends Controller
 {
 

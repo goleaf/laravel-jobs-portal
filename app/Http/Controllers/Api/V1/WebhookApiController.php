@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Webhook;
 use App\Http\Resources\WebhookResource;
-use App\Http\Requests\Api\StoreWebhookRequest;
-use App\Http\Requests\Api\UpdateWebhookRequest;
 
 /**
  * Context7 API Controller for Webhook

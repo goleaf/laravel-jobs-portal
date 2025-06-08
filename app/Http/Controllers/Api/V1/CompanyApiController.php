@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Company;
 use App\Http\Resources\CompanyResource;
-use App\Http\Requests\Api\StoreCompanyRequest;
-use App\Http\Requests\Api\UpdateCompanyRequest;
 
 /**
  * Context7 API Controller for Company

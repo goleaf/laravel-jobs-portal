@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Candidate;
 use App\Http\Resources\CandidateResource;
-use App\Http\Requests\Api\StoreCandidateRequest;
-use App\Http\Requests\Api\UpdateCandidateRequest;
 
 /**
  * Context7 API Controller for Candidate

@@ -21,15 +21,10 @@ use Laracasts\Flash\Flash;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
-use App\Http\Requests\Company\UpdateCompanyRequest as CompanyUpdateRequest;
 
 /**
  * Class FeaturedCompanySubscriptionController
  */
-use App\Http\Requests\CreateSessionFeaturedCompanySubscriptionRequest;
-
-use App\Http\Requests\PaymentSuccessFeaturedCompanySubscriptionRequest;
 
 class FeaturedCompanySubscriptionController extends AppBaseController
 {

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\BlogComment;
 use App\Http\Resources\BlogCommentResource;
-use App\Http\Requests\Api\StoreBlogCommentRequest;
-use App\Http\Requests\Api\UpdateBlogCommentRequest;
 
 /**
  * Context7 API Controller for BlogComment

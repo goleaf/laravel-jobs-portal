@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateFAQRequest;
-use App\Http\Requests\UpdateFAQRequest;
 use App\Models\FAQ;
 use App\Repositories\FAQRepository;
 use Exception;
@@ -11,11 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreFAQRequest;
-
-use App\Http\Requests\DeleteFAQRequest;
-
 class FAQController extends AppBaseController
 {
     /** @var FAQRepository */

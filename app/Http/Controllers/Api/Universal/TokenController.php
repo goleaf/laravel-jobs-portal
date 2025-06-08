@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\Universal;
 
-use App\Http\Requests\Api\Universal\LoginRequest;
-use App\Http\Requests\Api\Universal\StoreRequest;
 use App\Http\Controllers\UniversalBaseController;
 use App\Models\User;
 use Illuminate\Http\Request;

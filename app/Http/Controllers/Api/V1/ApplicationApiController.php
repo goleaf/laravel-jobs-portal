@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Application;
 use App\Http\Resources\ApplicationResource;
-use App\Http\Requests\Api\StoreApplicationRequest;
-use App\Http\Requests\Api\UpdateApplicationRequest;
 
 /**
  * Context7 API Controller for Application

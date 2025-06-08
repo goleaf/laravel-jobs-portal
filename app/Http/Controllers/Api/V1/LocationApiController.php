@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Location;
 use App\Http\Resources\LocationResource;
-use App\Http\Requests\Api\StoreLocationRequest;
-use App\Http\Requests\Api\UpdateLocationRequest;
 
 /**
  * Context7 API Controller for Location

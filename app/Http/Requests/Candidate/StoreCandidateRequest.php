@@ -27,21 +27,21 @@ class StoreCandidateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return {
-    "user.first_name": "required|string|max:255",
-    "user.last_name": "required|string|max:255",
-    "user.email": "required|email|unique:users,email",
-    "user.password": "required|string|min:8|confirmed",
-    "user.phone": "nullable|string|max:20",
-    "user.dob": "nullable|date|before:today",
-    "marital_status_id": "nullable|exists:marital_statuses,id",
-    "nationality": "nullable|string|max:100",
-    "country_id": "nullable|exists:countries,id",
-    "state_id": "nullable|exists:states,id",
-    "city_id": "nullable|exists:cities,id",
-    "is_active": "boolean",
-    "is_verified": "boolean"
-};
+        return [
+    "user.first_name" => "required|string|max:255",
+    "user.last_name" => "required|string|max:255",
+    "user.email" => "required|email|unique:users,email",
+    "user.password" => "required|string|min:8|confirmed",
+    "user.phone" => "nullable|string|max:20",
+    "user.dob" => "nullable|date|before:today",
+    "marital_status_id" => "nullable|exists:marital_statuses,id",
+    "nationality" => "nullable|string|max:100",
+    "country_id" => "nullable|exists:countries,id",
+    "state_id" => "nullable|exists:states,id",
+    "city_id" => "nullable|exists:cities,id",
+    "is_active" => "boolean",
+    "is_verified" => "boolean"
+];
     }
 
     /**
@@ -51,15 +51,15 @@ class StoreCandidateRequest extends FormRequest
      */
     public function messages(): array
     {
-        return {
-    "user.first_name.required": "First name is required",
-    "user.last_name.required": "Last name is required",
-    "user.email.required": "Email is required",
-    "user.email.unique": "Email already exists",
-    "user.password.required": "Password is required",
-    "user.password.min": "Password must be at least 8 characters",
-    "user.password.confirmed": "Password confirmation does not match"
-};
+        return [
+    "user.first_name.required" => "First name is required",
+    "user.last_name.required" => "Last name is required",
+    "user.email.required" => "Email is required",
+    "user.email.unique" => "Email already exists",
+    "user.password.required" => "Password is required",
+    "user.password.min" => "Password must be at least 8 characters",
+    "user.password.confirmed" => "Password confirmation does not match"
+];
     }
 
     /**

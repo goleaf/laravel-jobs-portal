@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateLanguageRequest;
-use App\Http\Requests\UpdateLanguageRequest;
 use App\Models\Language;
 use App\Repositories\LanguageRepository;
 use Illuminate\Contracts\View\Factory;
@@ -13,13 +11,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-
-use App\Http\Requests\ChangeLanguageLanguageRequest;
-
-use App\Http\Requests\StoreLanguageRequest;
-
-use App\Http\Requests\DeleteLanguageRequest;
-
 class LanguageController extends AppBaseController
 {
     /** @var LanguageRepository */

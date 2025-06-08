@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\SalaryPeriod;
 use App\Http\Resources\SalaryPeriodResource;
-use App\Http\Requests\Api\StoreSalaryPeriodRequest;
-use App\Http\Requests\Api\UpdateSalaryPeriodRequest;
 
 /**
  * Context7 API Controller for SalaryPeriod

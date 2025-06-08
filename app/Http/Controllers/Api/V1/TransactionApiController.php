@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
-use App\Http\Requests\Api\StoreTransactionRequest;
-use App\Http\Requests\Api\UpdateTransactionRequest;
 
 /**
  * Context7 API Controller for Transaction

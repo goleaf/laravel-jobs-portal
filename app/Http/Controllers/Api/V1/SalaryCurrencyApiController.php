@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\SalaryCurrency;
 use App\Http\Resources\SalaryCurrencyResource;
-use App\Http\Requests\Api\StoreSalaryCurrencyRequest;
-use App\Http\Requests\Api\UpdateSalaryCurrencyRequest;
 
 /**
  * Context7 API Controller for SalaryCurrency

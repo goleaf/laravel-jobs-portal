@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Unknown;
 use App\Http\Resources\UnknownResource;
-use App\Http\Requests\Api\StoreUnknownRequest;
-use App\Http\Requests\Api\UpdateUnknownRequest;
 
 /**
  * Context7 API Controller for Unknown

@@ -1,0 +1,3533 @@
+{
+    "summary": {
+        "total_routes": 256,
+        "passed": 29,
+        "failed": 62,
+        "skipped": 29,
+        "pass_percentage": 11.3
+    },
+    "results": [
+        {
+            "method": "GET",
+            "uri": "api\/documentation",
+            "name": "l5-swagger.default.api",
+            "action": "\\L5Swagger\\Http\\Controllers\\SwaggerController@api",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "L5Swagger\\Http\\Middleware\\Config"
+            ],
+            "error": "",
+            "responseTime": 0.18211603164672852
+        },
+        {
+            "method": "GET",
+            "uri": "docs",
+            "name": "l5-swagger.default.docs",
+            "action": "\\L5Swagger\\Http\\Controllers\\SwaggerController@docs",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "L5Swagger\\Http\\Middleware\\Config"
+            ],
+            "error": "",
+            "responseTime": 0.3339219093322754
+        },
+        {
+            "method": "GET",
+            "uri": "docs\/asset\/{asset}",
+            "name": "l5-swagger.default.asset",
+            "action": "\\L5Swagger\\Http\\Controllers\\SwaggerAssetController@index",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "L5Swagger\\Http\\Middleware\\Config"
+            ],
+            "error": "",
+            "responseTime": 6.198883056640625e-5
+        },
+        {
+            "method": "GET",
+            "uri": "api\/oauth2-callback",
+            "name": "l5-swagger.default.oauth2_callback",
+            "action": "\\L5Swagger\\Http\\Controllers\\SwaggerController@oauth2Callback",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "L5Swagger\\Http\\Middleware\\Config"
+            ],
+            "error": "",
+            "responseTime": 0.002007007598876953
+        },
+        {
+            "method": "GET",
+            "uri": "stripe\/payment\/{id}",
+            "name": "cashier.payment",
+            "action": "Laravel\\Cashier\\Http\\Controllers\\PaymentController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [],
+            "error": "",
+            "responseTime": 5.1021575927734375e-5
+        },
+        {
+            "method": "POST",
+            "uri": "stripe\/webhook",
+            "name": "cashier.webhook",
+            "action": "Laravel\\Cashier\\Http\\Controllers\\WebhookController@handleWebhook",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [],
+            "error": "",
+            "responseTime": 0.10559296607971191
+        },
+        {
+            "method": "GET",
+            "uri": "_dusk\/login\/{userId}\/{guard?}",
+            "name": "dusk.login",
+            "action": "Laravel\\Dusk\\Http\\Controllers\\UserController@login",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 6.103515625e-5
+        },
+        {
+            "method": "GET",
+            "uri": "_dusk\/logout\/{guard?}",
+            "name": "dusk.logout",
+            "action": "Laravel\\Dusk\\Http\\Controllers\\UserController@logout",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 2.6941299438476562e-5
+        },
+        {
+            "method": "GET",
+            "uri": "_dusk\/user\/{guard?}",
+            "name": "dusk.user",
+            "action": "Laravel\\Dusk\\Http\\Controllers\\UserController@user",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 2.288818359375e-5
+        },
+        {
+            "method": "GET",
+            "uri": "pulse",
+            "name": "pulse",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web",
+                "Laravel\\Pulse\\Http\\Middleware\\Authorize"
+            ],
+            "error": "",
+            "responseTime": 0.2476811408996582
+        },
+        {
+            "method": "GET",
+            "uri": "sanctum\/csrf-cookie",
+            "name": "sanctum.csrf-cookie",
+            "action": "Laravel\\Sanctum\\Http\\Controllers\\CsrfCookieController@show",
+            "status": "FAIL",
+            "responseCode": 204,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0042688846588134766
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/mail",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MailController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.010253190994262695
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/mail\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MailController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 6.794929504394531e-5
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/mail\/{telescopeEntryId}\/preview",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MailHtmlController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 2.384185791015625e-5
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/mail\/{telescopeEntryId}\/download",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MailEmlController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 2.002716064453125e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/exceptions",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ExceptionController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004734992980957031
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/exceptions\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ExceptionController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.698204040527344e-5
+        },
+        {
+            "method": "PUT",
+            "uri": "telescope\/telescope-api\/exceptions\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ExceptionController@update",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 2.5033950805664062e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/dumps",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\DumpController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0052149295806884766
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/logs",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\LogController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0045511722564697266
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/logs\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\LogController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 4.315376281738281e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/notifications",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\NotificationsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004137992858886719
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/notifications\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\NotificationsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.1021575927734375e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/jobs",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueueController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.00480198860168457
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/jobs\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueueController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 4.291534423828125e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/batches",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueueBatchesController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.00500798225402832
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/batches\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueueBatchesController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 8.702278137207031e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/events",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\EventsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.00413203239440918
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/events\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\EventsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.507469177246094e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/gates",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\GatesController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004436969757080078
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/gates\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\GatesController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 6.818771362304688e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/cache",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\CacheController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004431009292602539
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/cache\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\CacheController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 4.291534423828125e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/queries",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueriesController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0045909881591796875
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/queries\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\QueriesController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.888938903808594e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/models",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ModelsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004292011260986328
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/models\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ModelsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.4836273193359375e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/requests",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\RequestsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0045011043548583984
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/requests\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\RequestsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 6.985664367675781e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/views",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ViewsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004199981689453125
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/views\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ViewsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.507469177246094e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/commands",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\CommandsController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0044460296630859375
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/commands\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\CommandsController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 6.890296936035156e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/schedule",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ScheduleController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0043430328369140625
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/schedule\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ScheduleController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 6.914138793945312e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/redis",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\RedisController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0044209957122802734
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/redis\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\RedisController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 5.602836608886719e-5
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/client-requests",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ClientRequestController@index",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0045261383056640625
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/client-requests\/{telescopeEntryId}",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\ClientRequestController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 4.291534423828125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/telescope-api\/monitored-tags",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MonitoredTagController@index",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.14260101318359375
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/monitored-tags",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MonitoredTagController@store",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.003863096237182617
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/monitored-tags\/delete",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\MonitoredTagController@destroy",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0038759708404541016
+        },
+        {
+            "method": "POST",
+            "uri": "telescope\/telescope-api\/toggle-recording",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\RecordingController@toggle",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.0045850276947021484
+        },
+        {
+            "method": "DELETE",
+            "uri": "telescope\/telescope-api\/entries",
+            "name": "unnamed",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\EntriesController@destroy",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 0.004693031311035156
+        },
+        {
+            "method": "GET",
+            "uri": "telescope\/{view?}",
+            "name": "telescope",
+            "action": "Laravel\\Telescope\\Http\\Controllers\\HomeController@index",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "telescope"
+            ],
+            "error": "",
+            "responseTime": 4.887580871582031e-5
+        },
+        {
+            "method": "POST",
+            "uri": "livewire\/update",
+            "name": "livewire.update",
+            "action": "Livewire\\Mechanisms\\HandleRequests\\HandleRequests@handleUpdate",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0034618377685546875
+        },
+        {
+            "method": "GET",
+            "uri": "livewire\/livewire.js",
+            "name": "unnamed",
+            "action": "Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [],
+            "error": "",
+            "responseTime": 0.010129928588867188
+        },
+        {
+            "method": "GET",
+            "uri": "livewire\/livewire.min.js.map",
+            "name": "unnamed",
+            "action": "Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [],
+            "error": "",
+            "responseTime": 0.0018818378448486328
+        },
+        {
+            "method": "POST",
+            "uri": "livewire\/upload-file",
+            "name": "livewire.upload-file",
+            "action": "Livewire\\Features\\SupportFileUploads\\FileUploadController@handle",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [],
+            "error": "",
+            "responseTime": 0.008661031723022461
+        },
+        {
+            "method": "GET",
+            "uri": "livewire\/preview-file\/{filename}",
+            "name": "livewire.preview-file",
+            "action": "Livewire\\Features\\SupportFileUploads\\FilePreviewController@handle",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [],
+            "error": "",
+            "responseTime": 5.507469177246094e-5
+        },
+        {
+            "method": "GET",
+            "uri": "_ignition\/health-check",
+            "name": "ignition.healthCheck",
+            "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\HealthCheckController",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+            ],
+            "error": "",
+            "responseTime": 0.449221134185791
+        },
+        {
+            "method": "POST",
+            "uri": "_ignition\/execute-solution",
+            "name": "ignition.executeSolution",
+            "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\ExecuteSolutionController",
+            "status": "REDIRECT",
+            "responseCode": 302,
+            "middleware": [
+                "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+            ],
+            "error": "",
+            "responseTime": 0.08608603477478027
+        },
+        {
+            "method": "POST",
+            "uri": "_ignition\/update-config",
+            "name": "ignition.updateConfig",
+            "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\UpdateConfigController",
+            "status": "REDIRECT",
+            "responseCode": 302,
+            "middleware": [
+                "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+            ],
+            "error": "",
+            "responseTime": 0.013679027557373047
+        },
+        {
+            "method": "GET",
+            "uri": "api\/user",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "REDIRECT",
+            "responseCode": 302,
+            "middleware": [
+                "api",
+                "auth:api"
+            ],
+            "error": "",
+            "responseTime": 0.007569074630737305
+        },
+        {
+            "method": "GET",
+            "uri": "test",
+            "name": "test",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.003682851791381836
+        },
+        {
+            "method": "GET",
+            "uri": "\/",
+            "name": "front.home",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.004511117935180664
+        },
+        {
+            "method": "GET",
+            "uri": "login",
+            "name": "login",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.00911092758178711
+        },
+        {
+            "method": "POST",
+            "uri": "login",
+            "name": "login.submit",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.00362396240234375
+        },
+        {
+            "method": "GET",
+            "uri": "register",
+            "name": "register",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.0086669921875
+        },
+        {
+            "method": "POST",
+            "uri": "register",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.0036399364471435547
+        },
+        {
+            "method": "POST",
+            "uri": "logout",
+            "name": "logout",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0037469863891601562
+        },
+        {
+            "method": "GET",
+            "uri": "password\/reset",
+            "name": "password.request",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.11663103103637695
+        },
+        {
+            "method": "POST",
+            "uri": "password\/email",
+            "name": "password.email",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.0037641525268554688
+        },
+        {
+            "method": "GET",
+            "uri": "password\/reset\/{token}",
+            "name": "password.reset",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 5.507469177246094e-5
+        },
+        {
+            "method": "POST",
+            "uri": "password\/reset",
+            "name": "password.update",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 0.0035829544067382812
+        },
+        {
+            "method": "GET",
+            "uri": "about-us",
+            "name": "about-us",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.007821083068847656
+        },
+        {
+            "method": "GET",
+            "uri": "contact",
+            "name": "contact",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.011099100112915039
+        },
+        {
+            "method": "POST",
+            "uri": "contact",
+            "name": "contact.submit",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0034859180450439453
+        },
+        {
+            "method": "GET",
+            "uri": "jobs",
+            "name": "jobs.index",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.007174015045166016
+        },
+        {
+            "method": "GET",
+            "uri": "companies",
+            "name": "companies.index",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.007114887237548828
+        },
+        {
+            "method": "GET",
+            "uri": "employer-register",
+            "name": "employer.register",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 5.91278076171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate-register",
+            "name": "candidate.register",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 2.193450927734375e-5
+        },
+        {
+            "method": "GET",
+            "uri": "terms-and-conditions",
+            "name": "terms.conditions.list",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.18936705589294434
+        },
+        {
+            "method": "GET",
+            "uri": "privacy-policy-page",
+            "name": "privacy.policy.list",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.18564391136169434
+        },
+        {
+            "method": "GET",
+            "uri": "posts",
+            "name": "posts.index",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.1836411952972412
+        },
+        {
+            "method": "GET",
+            "uri": "job-listing",
+            "name": "job.index",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.005433082580566406
+        },
+        {
+            "method": "GET",
+            "uri": "company",
+            "name": "company.index",
+            "action": "App\\Http\\Controllers\\CompanyController@index",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.02213597297668457
+        },
+        {
+            "method": "GET",
+            "uri": "company\/create",
+            "name": "company.create",
+            "action": "App\\Http\\Controllers\\CompanyController@create",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.4509899616241455
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/login",
+            "name": "admin.login",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "guest"
+            ],
+            "error": "",
+            "responseTime": 9.918212890625e-5
+        },
+        {
+            "method": "POST",
+            "uri": "posts",
+            "name": "posts.store",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0037250518798828125
+        },
+        {
+            "method": "POST",
+            "uri": "uploads",
+            "name": "uploads.store",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0038671493530273438
+        },
+        {
+            "method": "POST",
+            "uri": "password\/confirm",
+            "name": "password.confirm",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 6.580352783203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "theme-mode-toggle",
+            "name": "theme.mode",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.600120544433594e-5
+        },
+        {
+            "method": "GET",
+            "uri": "components\/icon-documentation",
+            "name": "components.icon-documentation",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.009251832962036133
+        },
+        {
+            "method": "GET",
+            "uri": "icons\/documentation",
+            "name": "icons.documentation",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.18730902671813965
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/front-settings",
+            "name": "admin.front.settings.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 9.894371032714844e-5
+        },
+        {
+            "method": "GET",
+            "uri": "posts\/{post}\/edit",
+            "name": "posts.edit",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 5.1975250244140625e-5
+        },
+        {
+            "method": "GET",
+            "uri": "posts\/{post}",
+            "name": "posts.show",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 3.409385681152344e-5
+        },
+        {
+            "method": "GET",
+            "uri": "download\/image\/{id}",
+            "name": "download.image",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 3.3855438232421875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/candidates",
+            "name": "admin.candidates.index",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 3.218650817871094e-5
+        },
+        {
+            "method": "GET",
+            "uri": "payment-method\/{planId}",
+            "name": "payment-method-screen",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 4.696846008300781e-5
+        },
+        {
+            "method": "GET",
+            "uri": "paypal-payment\/{planId}",
+            "name": "paypal-payment",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "manually-payment\/{planId}",
+            "name": "manually-payment",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "paystack-payment\/{planId}",
+            "name": "paystack.payment",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/jobs",
+            "name": "admin.jobs.index",
+            "action": "App\\Http\\Controllers\\Web\\JobController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/jobs\/create",
+            "name": "admin.jobs.create",
+            "action": "App\\Http\\Controllers\\Web\\JobController@create",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/jobs\/{job}",
+            "name": "admin.jobs.show",
+            "action": "App\\Http\\Controllers\\Web\\JobController@show",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/jobs\/{job}\/edit",
+            "name": "admin.jobs.edit",
+            "action": "App\\Http\\Controllers\\Web\\JobController@edit",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "DELETE",
+            "uri": "admin\/jobs\/{job}",
+            "name": "admin.jobs.destroy",
+            "action": "App\\Http\\Controllers\\Web\\JobController@destroy",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.8835067749023438e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/transactions",
+            "name": "admin.transactions.index",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/transactions\/create",
+            "name": "admin.transactions.create",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@create",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/transactions\/{transaction}",
+            "name": "admin.transactions.show",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@show",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/transactions\/{transaction}\/edit",
+            "name": "admin.transactions.edit",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@edit",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 2.9802322387695312e-5
+        },
+        {
+            "method": "DELETE",
+            "uri": "admin\/transactions\/{transaction}",
+            "name": "admin.transactions.destroy",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@destroy",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 4.601478576660156e-5
+        },
+        {
+            "method": "GET",
+            "uri": "language\/{locale}",
+            "name": "language.change",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "states-list",
+            "name": "states-list",
+            "action": "App\\Http\\Controllers\\LocationController@getStates",
+            "status": "FAIL",
+            "responseCode": 400,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.006901979446411133
+        },
+        {
+            "method": "GET",
+            "uri": "cities-list",
+            "name": "cities-list",
+            "action": "App\\Http\\Controllers\\LocationController@getCities",
+            "status": "FAIL",
+            "responseCode": 400,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0033240318298339844
+        },
+        {
+            "method": "GET",
+            "uri": "countries-list",
+            "name": "countries-list",
+            "action": "App\\Http\\Controllers\\LocationController@getCountries",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.09440207481384277
+        },
+        {
+            "method": "GET",
+            "uri": "dashboard",
+            "name": "dashboard",
+            "action": "App\\Http\\Controllers\\DashboardController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 8.106231689453125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/profile",
+            "name": "candidate.profile",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.504753112792969e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/profile\/edit",
+            "name": "candidate.profile.edit",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/applied-jobs",
+            "name": "candidate.applied-jobs",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/favorite-jobs",
+            "name": "candidate.favorite-jobs",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/job-alerts",
+            "name": "candidate.job-alerts",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/job-alert",
+            "name": "candidate.job.alert",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.0040740966796875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidate\/applied-job",
+            "name": "candidate.applied.job",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "employer\/company",
+            "name": "employer.company",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "employer\/company\/edit",
+            "name": "employer.company.edit",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "employer\/jobs",
+            "name": "employer.jobs.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "employer\/jobs\/create",
+            "name": "employer.jobs.create",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 2.4080276489257812e-5
+        },
+        {
+            "method": "GET",
+            "uri": "employer\/jobs\/applications",
+            "name": "employer.jobs.applications",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/dashboard",
+            "name": "admin.dashboard",
+            "action": "App\\Http\\Controllers\\DashboardController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/admin",
+            "name": "admin.admin.admin.index",
+            "action": "App\\Http\\Controllers\\AdminController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/admin\/create",
+            "name": "admin.admin.admin.create",
+            "action": "App\\Http\\Controllers\\AdminController@create",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "POST",
+            "uri": "admin\/admin",
+            "name": "admin.admin.admin.store",
+            "action": "App\\Http\\Controllers\\AdminController@store",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.9073486328125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/admin\/{admin}",
+            "name": "admin.admin.admin.show",
+            "action": "App\\Http\\Controllers\\AdminController@show",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/admin\/{admin}\/edit",
+            "name": "admin.admin.admin.edit",
+            "action": "App\\Http\\Controllers\\AdminController@edit",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "PUT",
+            "uri": "admin\/admin\/{admin}",
+            "name": "admin.admin.admin.update",
+            "action": "App\\Http\\Controllers\\AdminController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "PATCH",
+            "uri": "admin\/admin\/{admin}",
+            "name": "admin.admin.admin.update",
+            "action": "App\\Http\\Controllers\\AdminController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "DELETE",
+            "uri": "admin\/admin\/{admin}",
+            "name": "admin.admin.admin.destroy",
+            "action": "App\\Http\\Controllers\\AdminController@destroy",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/candidates\/create",
+            "name": "admin.candidates.create",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@create",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "POST",
+            "uri": "admin\/candidates",
+            "name": "admin.candidates.store",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@store",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 3.1948089599609375e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/candidates\/{candidate}",
+            "name": "admin.candidates.show",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@show",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/candidates\/{candidate}\/edit",
+            "name": "admin.candidates.edit",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@edit",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "PUT",
+            "uri": "admin\/candidates\/{candidate}",
+            "name": "admin.candidates.update",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 3.1948089599609375e-5
+        },
+        {
+            "method": "PATCH",
+            "uri": "admin\/candidates\/{candidate}",
+            "name": "admin.candidates.update",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "DELETE",
+            "uri": "admin\/candidates\/{candidate}",
+            "name": "admin.candidates.destroy",
+            "action": "App\\Http\\Controllers\\Web\\CandidateController@destroy",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "POST",
+            "uri": "admin\/jobs",
+            "name": "admin.jobs.store",
+            "action": "App\\Http\\Controllers\\Web\\JobController@store",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "PUT",
+            "uri": "admin\/jobs\/{job}",
+            "name": "admin.jobs.update",
+            "action": "App\\Http\\Controllers\\Web\\JobController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "PATCH",
+            "uri": "admin\/jobs\/{job}",
+            "name": "admin.jobs.update",
+            "action": "App\\Http\\Controllers\\Web\\JobController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "POST",
+            "uri": "admin\/transactions",
+            "name": "admin.transactions.store",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@store",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "PUT",
+            "uri": "admin\/transactions\/{transaction}",
+            "name": "admin.transactions.update",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "PATCH",
+            "uri": "admin\/transactions\/{transaction}",
+            "name": "admin.transactions.update",
+            "action": "App\\Http\\Controllers\\Web\\TransactionController@update",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/subscribers",
+            "name": "admin.subscribers.index",
+            "action": "App\\Http\\Controllers\\SubscriberController@index",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "DELETE",
+            "uri": "admin\/subscribers\/{subscriber}",
+            "name": "admin.subscribers.destroy",
+            "action": "App\\Http\\Controllers\\SubscriberController@destroy",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/reported-employers",
+            "name": "admin.reported.companies",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/reported-candidates",
+            "name": "admin.reported.candidates",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/degree-levels",
+            "name": "admin.requiredDegreeLevel.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/resumes",
+            "name": "admin.resumes.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 3.0994415283203125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/selected-candidates",
+            "name": "admin.selected.candidate",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/job-categories",
+            "name": "admin.job-categories.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/job-types",
+            "name": "admin.jobType.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/job-tags",
+            "name": "admin.jobTag.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/job-shifts",
+            "name": "admin.jobShift.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/reported-jobs",
+            "name": "admin.reported.jobs",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/job-notification",
+            "name": "admin.job-notification.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/expired-jobs",
+            "name": "admin.admin.jobs.expiredJobs",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/post-categories",
+            "name": "admin.post-categories.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 2.288818359375e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/posts",
+            "name": "admin.posts.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/posts\/create",
+            "name": "admin.posts.create",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/posts\/{post}",
+            "name": "admin.posts.show",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/posts\/{post}\/edit",
+            "name": "admin.posts.edit",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/post-comments",
+            "name": "admin.post.comments",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/plans",
+            "name": "admin.plans.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/countries",
+            "name": "admin.countries.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@countries",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/states",
+            "name": "admin.states.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@states",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/cities",
+            "name": "admin.cities.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@cities",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/marital-status",
+            "name": "admin.maritalStatus.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@maritalStatus",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/skills",
+            "name": "admin.skills.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@skills",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/salary-periods",
+            "name": "admin.salaryPeriod.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@salaryPeriods",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/industries",
+            "name": "admin.industry.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@industries",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/company-sizes",
+            "name": "admin.companySize.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@companySizes",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/functional-areas",
+            "name": "admin.functionalArea.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@functionalAreas",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/career-levels",
+            "name": "admin.careerLevel.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@careerLevels",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/salary-currencies",
+            "name": "admin.salaryCurrency.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@salaryCurrencies",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/ownership-types",
+            "name": "admin.ownerShipType.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@ownershipTypes",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/languages",
+            "name": "admin.languages.index",
+            "action": "App\\Http\\Controllers\\Admin\\MasterDataController@languages",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/noticeboards",
+            "name": "admin.noticeboards.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/faqs",
+            "name": "admin.faqs.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/inquires",
+            "name": "admin.inquires.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/inquires\/{inquire}",
+            "name": "admin.inquires.show",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/notification-settings",
+            "name": "admin.notification.settings.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/privacy-policy",
+            "name": "admin.privacy.policy.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.811981201171875e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/email-template",
+            "name": "admin.email.template.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/settings",
+            "name": "admin.settings.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/testimonials",
+            "name": "admin.testimonials.index",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@testimonials",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/branding-sliders",
+            "name": "admin.branding.sliders.index",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@brandingSliders",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/header-sliders",
+            "name": "admin.header.sliders.index",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@headerSliders",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/image-sliders",
+            "name": "admin.image-sliders.index",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@imageSliders",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/cms-services",
+            "name": "admin.cms.services.index",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@cmsServices",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin\/cms-about-us",
+            "name": "admin.cms.about-us.service",
+            "action": "App\\Http\\Controllers\\Admin\\CmsController@cmsAboutUs",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "admin",
+            "name": "admin.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "admin"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "manage-subscription",
+            "name": "manage-subscription.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "transactions",
+            "name": "transactions.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "followers",
+            "name": "followers.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "favourite-companies",
+            "name": "favourite.companies",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "favourite-jobs",
+            "name": "favourite.jobs",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "candidates-list",
+            "name": "candidates.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "testimonials",
+            "name": "testimonials.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.6927719116210938e-5
+        },
+        {
+            "method": "GET",
+            "uri": "subscribers",
+            "name": "subscribers.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 2.4080276489257812e-5
+        },
+        {
+            "method": "GET",
+            "uri": "noticeboards",
+            "name": "noticeboards.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "plans",
+            "name": "plans.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.5974044799804688e-5
+        },
+        {
+            "method": "GET",
+            "uri": "post-categories",
+            "name": "post-categories.index",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth"
+            ],
+            "error": "",
+            "responseTime": 1.71661376953125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "jobs\/{id}",
+            "name": "jobs.show",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.9073486328125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "company\/{company}",
+            "name": "company.show",
+            "action": "App\\Http\\Controllers\\CompanyController@show",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "company\/{company}\/edit",
+            "name": "company.edit",
+            "action": "App\\Http\\Controllers\\CompanyController@edit",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 1.7881393432617188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "privacy-policy",
+            "name": "privacy-policy",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.007038116455078125
+        },
+        {
+            "method": "GET",
+            "uri": "terms-conditions",
+            "name": "terms-conditions",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.004148960113525391
+        },
+        {
+            "method": "GET",
+            "uri": "front\/search-jobs",
+            "name": "front.search.jobs",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.21041107177734375
+        },
+        {
+            "method": "GET",
+            "uri": "front\/company-lists",
+            "name": "front.company.lists",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.19284820556640625
+        },
+        {
+            "method": "GET",
+            "uri": "front\/candidate-lists",
+            "name": "front.candidate.lists",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 7.200241088867188e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/about-us",
+            "name": "front.about.us",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.13013410568237305
+        },
+        {
+            "method": "GET",
+            "uri": "front\/contact-us",
+            "name": "front.contact",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.13265180587768555
+        },
+        {
+            "method": "GET",
+            "uri": "front\/posts",
+            "name": "front.post.lists",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.1204519271850586
+        },
+        {
+            "method": "GET",
+            "uri": "front\/posts\/{post}",
+            "name": "front.posts.details",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 8.392333984375e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/job-details\/{jobId}",
+            "name": "front.job.details",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 5.1975250244140625e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/company-details\/{companyId}",
+            "name": "front.company.details",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 2.002716064453125e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/candidate-details\/{candidateId}",
+            "name": "front.candidate.details",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 3.218650817871094e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/register",
+            "name": "front.save.register",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.19787383079528809
+        },
+        {
+            "method": "GET",
+            "uri": "front\/candidate-login",
+            "name": "front.candidate.login",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 4.506111145019531e-5
+        },
+        {
+            "method": "GET",
+            "uri": "front\/employee-login",
+            "name": "front.employee.login",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.20330381393432617
+        },
+        {
+            "method": "GET",
+            "uri": "front\/login",
+            "name": "front.login",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.18943190574645996
+        },
+        {
+            "method": "GET",
+            "uri": "front\/blog-category\/{categoryId}",
+            "name": "front.blog.category",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 8.606910705566406e-5
+        },
+        {
+            "method": "GET",
+            "uri": "apply-job-form\/{jobId}",
+            "name": "show.apply-job-form",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 4.982948303222656e-5
+        },
+        {
+            "method": "POST",
+            "uri": "apply-job",
+            "name": "apply-job",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0038950443267822266
+        },
+        {
+            "method": "POST",
+            "uri": "save-favourite-company",
+            "name": "save.favourite.company",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.003780841827392578
+        },
+        {
+            "method": "POST",
+            "uri": "save-favourite-job",
+            "name": "save.favourite.job",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.003571033477783203
+        },
+        {
+            "method": "POST",
+            "uri": "report-to-company",
+            "name": "report.to.company",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0036840438842773438
+        },
+        {
+            "method": "POST",
+            "uri": "report-job-abuse",
+            "name": "report.job.abuse",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0037050247192382812
+        },
+        {
+            "method": "POST",
+            "uri": "email-job",
+            "name": "email.job",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.003720998764038086
+        },
+        {
+            "method": "POST",
+            "uri": "news-letter",
+            "name": "news-letter.create",
+            "action": "Closure",
+            "status": "FAIL",
+            "responseCode": 419,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.0036149024963378906
+        },
+        {
+            "method": "GET",
+            "uri": "company\/{companyId}\/edit-form",
+            "name": "company.edit.form",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 3.886222839355469e-5
+        },
+        {
+            "method": "GET",
+            "uri": "privacy-policy\/{section?}",
+            "name": "privacy.policy.index",
+            "action": "Closure",
+            "status": "PARAMETERS_REQUIRED",
+            "responseCode": 404,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 5.793571472167969e-5
+        },
+        {
+            "method": "POST",
+            "uri": "email\/verification-notification",
+            "name": "verification.resend",
+            "action": "Closure",
+            "status": "AUTH_REQUIRED",
+            "responseCode": 302,
+            "middleware": [
+                "web",
+                "auth",
+                "throttle:6,1"
+            ],
+            "error": "",
+            "responseTime": 3.600120544433594e-5
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v4-2-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.1470808982849121
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v4-4-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.01854395866394043
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v4-5-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.14939117431640625
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v6-0-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.02096390724182129
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v6-1-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "ERROR",
+            "responseCode": 500,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.15493988990783691
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v7-1-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.025568008422851562
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v7-1-1",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.2198619842529297
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v8-0-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.027490854263305664
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v8-1-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.040498971939086914
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v9-0-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.025923967361450195
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade-to-v9-1-0",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.02600884437561035
+        },
+        {
+            "method": "GET",
+            "uri": "upgrade\/database",
+            "name": "unnamed",
+            "action": "Closure",
+            "status": "PASS",
+            "responseCode": 200,
+            "middleware": [
+                "web"
+            ],
+            "error": "",
+            "responseTime": 0.08249306678771973
+        }
+    ],
+    "timestamp": "2025-06-04 00:47:19"
+}

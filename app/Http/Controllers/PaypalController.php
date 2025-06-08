@@ -22,7 +22,6 @@ use PayPalHttp\IOException;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 /** All Paypal Details class **/
-use App\Http\Requests\GetPaymentStatusPaypalRequest;
 
 class PaypalController extends Controller
 {

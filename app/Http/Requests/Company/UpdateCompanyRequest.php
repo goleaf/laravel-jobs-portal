@@ -27,24 +27,24 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function rules(): array
     {
-        return {
-    "name": "required|string|max:255",
-    "email": "required|email|unique:companies,email",
-    "phone": "nullable|string|max:20",
-    "website": "nullable|url|max:255",
-    "industry_id": "nullable|exists:industries,id",
-    "ownership_type_id": "nullable|exists:ownership_types,id",
-    "company_size_id": "nullable|exists:company_sizes,id",
-    "established_in": "nullable|integer|min:1800|max:2025",
-    "description": "nullable|string|max:2000",
-    "country_id": "required|exists:countries,id",
-    "state_id": "nullable|exists:states,id",
-    "city_id": "nullable|exists:cities,id",
-    "address": "nullable|string|max:500",
-    "postal_code": "nullable|string|max:20",
-    "logo": "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
-    "is_active": "boolean"
-};
+        return [
+    "name" => "required|string|max:255",
+    "email" => "required|email|unique:companies,email",
+    "phone" => "nullable|string|max:20",
+    "website" => "nullable|url|max:255",
+    "industry_id" => "nullable|exists:industries,id",
+    "ownership_type_id" => "nullable|exists:ownership_types,id",
+    "company_size_id" => "nullable|exists:company_sizes,id",
+    "established_in" => "nullable|integer|min:1800|max:2025",
+    "description" => "nullable|string|max:2000",
+    "country_id" => "required|exists:countries,id",
+    "state_id" => "nullable|exists:states,id",
+    "city_id" => "nullable|exists:cities,id",
+    "address" => "nullable|string|max:500",
+    "postal_code" => "nullable|string|max:20",
+    "logo" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+    "is_active" => "boolean"
+];
     }
 
     /**
@@ -54,17 +54,17 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function messages(): array
     {
-        return {
-    "name.required": "Company name is required",
-    "email.required": "Email is required",
-    "email.unique": "Email already exists",
-    "website.url": "Please enter a valid website URL",
-    "country_id.required": "Country is required",
-    "established_in.min": "Establishment year cannot be before 1800",
-    "established_in.max": "Establishment year cannot be in the future",
-    "logo.image": "Logo must be an image",
-    "logo.max": "Logo size cannot exceed 2MB"
-};
+        return [
+    "name.required" => "Company name is required",
+    "email.required" => "Email is required",
+    "email.unique" => "Email already exists",
+    "website.url" => "Please enter a valid website URL",
+    "country_id.required" => "Country is required",
+    "established_in.min" => "Establishment year cannot be before 1800",
+    "established_in.max" => "Establishment year cannot be in the future",
+    "logo.image" => "Logo must be an image",
+    "logo.max" => "Logo size cannot exceed 2MB"
+];
     }
 
     /**

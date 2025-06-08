@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateBrandingSliderRequest;
 use App\Models\BrandingSliders;
 use App\Repositories\BrandingSliderRepository;
 use Exception;
@@ -10,13 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\UpdateBrandingSliderRequest;
-
-use App\Http\Requests\DeleteBrandingSliderRequest;
-
-use App\Http\Requests\StoreBrandingSliderRequest;
-
 class BrandingSliderController extends AppBaseController
 {
     /** @var BrandingSliderRepository */

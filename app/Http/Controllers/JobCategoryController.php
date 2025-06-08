@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateJobCategoryRequest;
-use App\Http\Requests\UpdateJobCategoryRequest;
 use App\Models\Job;
 use App\Models\JobCategory;
 use App\Repositories\JobCategoryRepository;
@@ -12,13 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
-
-use App\Http\Requests\StoreJobCategoryRequest;
-
-use App\Http\Requests\DeleteJobCategoryRequest;
-
 class JobCategoryController extends AppBaseController
 {
     /** @var JobCategoryRepository */

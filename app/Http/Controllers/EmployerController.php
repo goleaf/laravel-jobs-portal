@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\UpdateEmployerProfileRequest;
 use App\Models\Company;
 use App\Repositories\UserRepository;
 use Exception;
@@ -14,9 +12,6 @@ use Laracasts\Flash\Flash;
 /**
  * Class EmployerController
  */
-use App\Http\Requests\ChangePasswordEmployerRequest;
-
-use App\Http\Requests\ProfileUpdateEmployerRequest;
 
 class EmployerController extends AppBaseController
 {

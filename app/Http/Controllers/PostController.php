@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePostRequest;
-use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostComment;
@@ -18,11 +16,6 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-
-use App\Http\Requests\StorePostRequest;
-
-use App\Http\Requests\DeletePostRequest;
-
 class PostController extends AppBaseController
 {
     /** @var PostRepository */

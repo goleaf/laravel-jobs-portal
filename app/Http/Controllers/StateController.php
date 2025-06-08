@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateStateRequest;
-use App\Http\Requests\UpdateStateRequest;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Job;
@@ -15,11 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreStateRequest;
-
-use App\Http\Requests\DeleteStateRequest;
-
 class StateController extends AppBaseController
 {
     /**

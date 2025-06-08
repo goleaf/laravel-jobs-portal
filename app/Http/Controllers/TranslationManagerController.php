@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
 use App\Repositories\TranslationManagerRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,11 +12,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-
-use App\Http\Requests\StoreTranslationManagerRequest;
-
-use App\Http\Requests\UpdateTranslationManagerRequest;
-
 class TranslationManagerController extends AppBaseController
 {
     /**

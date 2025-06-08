@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\HeaderSlider;
 use App\Http\Resources\HeaderSliderResource;
-use App\Http\Requests\Api\StoreHeaderSliderRequest;
-use App\Http\Requests\Api\UpdateHeaderSliderRequest;
 
 /**
  * Context7 API Controller for HeaderSlider

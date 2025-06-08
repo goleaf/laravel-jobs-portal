@@ -9,15 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
-use App\Http\Requests\GetDashboardDataRealTimeRequest;
-
-use App\Http\Requests\UpdateApplicationStatusRealTimeRequest;
-
-use App\Http\Requests\GetWebSocketAuthRealTimeRequest;
-
-use App\Http\Requests\GetActivityFeedRealTimeRequest;
-
 class RealTimeController extends Controller
 {
     /**

@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-
-use App\Http\Requests\UpdateNotificationSettingsRequest;
-
 class NotificationSettingsController extends Controller
 {
     /**

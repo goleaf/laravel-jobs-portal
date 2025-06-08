@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CandidatesExport;
-use App\Http\Requests\CreateCandidateRequest;
-use App\Http\Requests\UpdateCandidateRequest;
+
 use App\Models\Candidate;
 use App\Models\Country;
 use App\Models\SalaryCurrency;
@@ -25,15 +24,6 @@ use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
-use App\Http\Requests\ReportCandidateCandidateRequest;
-
-use App\Http\Requests\ShowReportedCandiateNoteCandidateRequest;
-
-use App\Http\Requests\StoreCandidateRequest;
-
-use App\Http\Requests\DeleteCandidateRequest;
-
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */

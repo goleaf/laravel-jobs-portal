@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSalaryCurrencyRequest;
-use App\Http\Requests\updateSalaryCurrencyRequest;
 use App\Models\Candidate;
 use App\Models\Job;
 use App\Models\Plan;
@@ -12,13 +10,6 @@ use App\Repositories\SalaryCurrencyRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-
-use App\Http\Requests\UpdateSalaryCurrencyRequest;
-
-use App\Http\Requests\StoreSalaryCurrencyRequest;
-
-use App\Http\Requests\DeleteSalaryCurrencyRequest;
-
 class SalaryCurrencyController extends AppBaseController
 {
     /** @var SalaryCurrencyRepository */

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\FrontendAssets;
 use App\Http\Resources\FrontendAssetsResource;
-use App\Http\Requests\Api\StoreFrontendAssetsRequest;
-use App\Http\Requests\Api\UpdateFrontendAssetsRequest;
 
 /**
  * Context7 API Controller for FrontendAssets

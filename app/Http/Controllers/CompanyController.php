@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCompanyRequest;
-use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\Country;
 use App\Models\FeaturedRecord;
@@ -27,18 +25,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Throwable;
-use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
-
-use App\Http\Requests\GetStatesCompanyRequest;
-
-use App\Http\Requests\GetCitiesCompanyRequest;
-
-use App\Http\Requests\UpdateCompanyCompanyRequest;
-
-use App\Http\Requests\ShowReportedCompanyNoteCompanyRequest;
-
-use App\Http\Requests\StoreCompanyRequest;
-
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */

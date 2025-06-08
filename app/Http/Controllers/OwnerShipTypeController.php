@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateOwnerShipTypeRequest;
-use App\Http\Requests\UpdateOwnerShipTypeRequest;
 use App\Models\Company;
 use App\Models\OwnerShipType;
 use App\Repositories\OwnerShipTypeRepository;
@@ -12,11 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreOwnerShipTypeRequest;
-
-use App\Http\Requests\DeleteOwnerShipTypeRequest;
-
 class OwnerShipTypeController extends AppBaseController
 {
     /** @var OwnerShipTypeRepository */

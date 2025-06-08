@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\ReportedJob;
 use App\Http\Resources\ReportedJobResource;
-use App\Http\Requests\Api\StoreReportedJobRequest;
-use App\Http\Requests\Api\UpdateReportedJobRequest;
 
 /**
  * Context7 API Controller for ReportedJob

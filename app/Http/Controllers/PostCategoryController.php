@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePostCategoryRequest;
-use App\Http\Requests\UpdatePostCategoryRequest;
 use App\Models\PostCategory;
 use App\Repositories\PostCategoryRepository;
 use Exception;
@@ -11,11 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StorePostCategoryRequest;
-
-use App\Http\Requests\DeletePostCategoryRequest;
-
 class PostCategoryController extends AppBaseController
 {
     /** @var PostCategoryRepository */

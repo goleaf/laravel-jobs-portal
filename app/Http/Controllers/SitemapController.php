@@ -7,7 +7,6 @@ use App\Models\Company;
 use App\Models\JobCategory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-
 class SitemapController extends Controller
 {
     public function index(): Response

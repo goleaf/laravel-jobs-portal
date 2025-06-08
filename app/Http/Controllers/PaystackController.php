@@ -15,7 +15,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Unicodeveloper\Paystack\Facades\Paystack;
-
 class PaystackController extends Controller
 {
     public function __construct()

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
-use App\Http\Requests\UpdateSettingRequest;
 use App\Models\EnvSetting;
 use App\Models\Language;
 use App\Models\Setting;

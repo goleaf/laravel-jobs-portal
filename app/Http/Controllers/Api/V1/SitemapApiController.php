@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Sitemap;
 use App\Http\Resources\SitemapResource;
-use App\Http\Requests\Api\StoreSitemapRequest;
-use App\Http\Requests\Api\UpdateSitemapRequest;
 
 /**
  * Context7 API Controller for Sitemap

@@ -13,11 +13,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
-
-use App\Http\Requests\RedirectToVerificationRequest;
-
-use App\Http\Requests\VerifyVerificationRequest;
-
 class VerificationController extends Controller
 {
     /*
@@ -30,11 +25,6 @@ class VerificationController extends Controller
     | be re-sent if the user didn't receive the original email message.
     |
     */
-
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Requests\Auth\ForgotPasswordRequest;
-use App\Http\Requests\Auth\ResetPasswordRequest;
 
     /**
      * Where to redirect users after verification.

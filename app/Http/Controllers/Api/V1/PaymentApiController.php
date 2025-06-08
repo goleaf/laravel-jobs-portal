@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Payment;
 use App\Http\Resources\PaymentResource;
-use App\Http\Requests\Api\StorePaymentRequest;
-use App\Http\Requests\Api\UpdatePaymentRequest;
 
 /**
  * Context7 API Controller for Payment

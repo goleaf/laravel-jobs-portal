@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\ImageSlider;
 use App\Http\Resources\ImageSliderResource;
-use App\Http\Requests\Api\StoreImageSliderRequest;
-use App\Http\Requests\Api\UpdateImageSliderRequest;
 
 /**
  * Context7 API Controller for ImageSlider

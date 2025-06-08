@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateImageSliderRequest;
 use App\Models\ImageSlider;
 use App\Models\Setting;
 use App\Repositories\ImageSliderRepository;
@@ -11,13 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\UpdateImageSliderRequest;
-
-use App\Http\Requests\DeleteImageSliderRequest;
-
-use App\Http\Requests\StoreImageSliderRequest;
-
 class ImageSliderController extends AppBaseController
 {
     /** @var ImageSliderRepository */

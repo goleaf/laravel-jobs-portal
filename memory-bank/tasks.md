@@ -199,3 +199,118 @@
 4. Begin systematic Blade-to-Vue3 migration
 
 **Complexity Assessment:** This is the largest transformation in the project's history, requiring enterprise-level planning and execution with Context7 Level 4 workflow compliance.## LEVEL 4 VUE3 TRANSFORMATION
+
+# Universal Root Directory Cleanup & Organization Tasks
+
+## 🎯 **PRIORITY 1: Root Directory Cleanup (High Impact)** ✅ **COMPLETED**
+
+### **Task 1.1: Remove Temporary Analysis Files** ✅ **COMPLETED**
+- [x] Delete 136 PHP analysis/fix scripts from root (aggressive_bootstrap_migration.php, analyze_*.php, fix_*.php, etc.)
+- [x] Remove temporary JSON reports (blade_analysis_*.json, route_*.json, etc.)
+- [x] Clean up shell scripts (.sh files) used for one-time fixes
+- [x] Delete backup files (.backup, .bak extensions)
+
+### **Task 1.2: Move Documentation to Memory Bank** ✅ **COMPLETED**
+- [x] Move 92 .md files from root to appropriate memory-bank subdirectories
+- [x] Organize by categories: archive/, creative/, optimization-journey/, reflection/
+- [x] Create index file in memory-bank for documentation navigation
+- [x] Update relative links in moved documentation
+
+## 🎯 **PRIORITY 2: Laravel Best Practices Implementation (Medium Impact)**
+
+### **Task 2.1: Essential Root Files (Keep)**
+- [ ] Verify essential Laravel files: artisan, composer.json, package.json, etc.
+- [ ] Keep configuration files: tailwind.config.js, vite.config.js, phpunit.xml
+- [ ] Maintain LICENSE and legitimate .md files (CHANGELOG.md if actively maintained)
+
+### **Task 2.2: Universal Project Organization**
+- [ ] Implement domain-based directory structure in src/ (if needed)
+- [ ] Create proper temp/ directory for temporary files (Laravel best practice)
+- [ ] Set up docs/ directory for project documentation
+- [ ] Configure .gitignore for temporary file patterns
+
+## 🎯 **PRIORITY 3: Memory Bank Enhancement (Medium Impact)**
+
+### **Task 3.1: Documentation Categories**
+- [ ] **archive/**: Completed task documentation, implementation reports
+- [ ] **creative/**: Design decisions, UI/UX planning, architecture docs
+- [ ] **optimization-journey/**: Performance improvements, upgrade processes
+- [ ] **reflection/**: Post-task analysis, lessons learned
+- [ ] **assets/**: Screenshots, diagrams, visual documentation
+
+### **Task 3.2: Universal Knowledge Organization**
+- [ ] Create comprehensive index with search capabilities
+- [ ] Implement cross-referencing between related documents
+- [ ] Add metadata headers to all documentation
+- [ ] Create templates for future documentation
+
+## 🎯 **PRIORITY 4: Laravel Temporary File Management (Low Impact)**
+
+### **Task 4.1: Proper Temporary Directory Structure**
+```
+storage/
+├── app/
+│   ├── temp/          # Application temporary files
+│   ├── uploads/       # User uploads before processing
+│   └── cache/         # Application cache
+├── framework/
+│   └── cache/         # Framework cache
+└── logs/              # Application logs
+```
+
+### **Task 4.2: Universal Cleanup Automation**
+- [ ] Create Artisan command for root cleanup
+- [ ] Implement scheduled task for temp file cleanup
+- [ ] Add cleanup validation and safety checks
+- [ ] Create documentation for maintenance procedures
+
+## 📊 **Success Metrics**
+
+### **Immediate Goals:**
+- Root directory reduced from 228+ files to <20 essential files
+- All .md documentation properly organized in memory-bank/
+- Zero temporary/analysis files in root directory
+- Improved project navigation and discoverability
+
+### **Long-term Benefits:**
+- Enhanced maintainability following Laravel conventions
+- Better separation of concerns (code vs documentation)
+- Improved onboarding for new developers
+- Professional project structure aligned with industry standards
+
+## 🔧 **Implementation Strategy**
+
+### **Phase 1: Analysis & Planning (Day 1)**
+1. Inventory all root files and categorize
+2. Identify essential vs temporary files
+3. Plan memory-bank organization structure
+4. Create backup of important documentation
+
+### **Phase 2: Universal Cleanup (Day 2)**
+1. Move .md files to memory-bank/ with proper organization
+2. Remove temporary PHP scripts and JSON reports
+3. Clean up backup and old files
+4. Verify Laravel application functionality
+
+### **Phase 3: Enhancement (Day 3)**
+1. Create documentation index and navigation
+2. Implement Universal patterns for file organization
+3. Set up automated cleanup processes
+4. Update project README with new structure
+
+## 🛡️ **Safety Measures**
+
+- Backup strategy before mass deletion
+- Verification of Laravel application functionality
+- Documentation of removed files for recovery
+- Testing of Universal patterns implementation
+- Rollback plan for critical files
+
+---
+
+**Universal Patterns Applied:**
+- Domain-driven organization
+- Laravel best practices adherence
+- Professional project structure
+- Automated maintenance processes
+- Comprehensive documentation system

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Home;
 use App\Http\Resources\HomeResource;
-use App\Http\Requests\Api\StoreHomeRequest;
-use App\Http\Requests\Api\UpdateHomeRequest;
 
 /**
  * Context7 API Controller for Home

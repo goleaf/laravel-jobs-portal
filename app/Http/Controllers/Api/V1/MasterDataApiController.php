@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\MasterData;
 use App\Http\Resources\MasterDataResource;
-use App\Http\Requests\Api\StoreMasterDataRequest;
-use App\Http\Requests\Api\UpdateMasterDataRequest;
 
 /**
  * Context7 API Controller for MasterData

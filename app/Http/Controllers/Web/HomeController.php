@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\ContactFormRequest;
+
 use App\Models\CmsServices;
 use App\Models\Setting;
 use App\Models\User;
@@ -17,13 +17,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
-use App\Http\Requests\SendContactEmailHomeRequest;
-
-use App\Http\Requests\ChangeLanguageHomeRequest;
-
-use App\Http\Requests\GetJobsSearchHomeRequest;
-
 class HomeController extends AppBaseController
 {
     /** @var WebHomeRepository */

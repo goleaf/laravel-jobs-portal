@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
 use App\Models\Setting;
 use App\Repositories\PrivacyPolicyRepository;
 use Illuminate\Contracts\View\Factory;
@@ -15,7 +14,6 @@ use Laracasts\Flash\Flash;
 /**
  * Class PrivacyPolicyController
  */
-use App\Http\Requests\UpdatePrivacyPolicyRequest;
 
 class PrivacyPolicyController extends AppBaseController
 {

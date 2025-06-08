@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
-use App\Http\Requests\StoreBlogCommentRequest;
-
 class BlogCommentController extends Controller
 {
     /**

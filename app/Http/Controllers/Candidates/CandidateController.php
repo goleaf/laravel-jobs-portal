@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\Candidates;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\CandidateUpdateGeneralInformationRequest;
-use App\Http\Requests\CandidateUpdateOnlineProfileRequest;
-use App\Http\Requests\CandidateUpdateProfileRequest;
-use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\UpdateCandidateProfileRequest;
+
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
 use App\Models\FavouriteCompany;
@@ -28,27 +24,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use App\Http\Requests\Candidate\StoreCandidateRequest;
-use App\Http\Requests\Candidate\UpdateCandidateRequest;
-
-use App\Http\Requests\EditProfileCandidateRequest;
-
-use App\Http\Requests\UpdateProfileCandidateRequest;
-
-use App\Http\Requests\UpdateGeneralInformationCandidateRequest;
-
-use App\Http\Requests\UpdateOnlineProfileCandidateRequest;
-
-use App\Http\Requests\UploadResumeCandidateRequest;
-
-use App\Http\Requests\UpdateJobAlertCandidateRequest;
-
-use App\Http\Requests\ChangePasswordCandidateRequest;
-
-use App\Http\Requests\ProfileUpdateCandidateRequest;
-
-use App\Http\Requests\ChoosePreferenceCandidateRequest;
-
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -430,11 +405,6 @@ class CandidateController extends AppBaseController
 
     public function choosePreference(JobApplication $jobApplication, ChoosePreferenceCandidateRequest $request): JsonResponse
     {
-        if (! isset($request->rejectSlot)) {
-            $request->validated(),
-            ]);
-        }
-
         $request->validated();
         $scheduleId = $request->get('schedule_id');
         $slotNotes = $request->get('choose_slot_notes');

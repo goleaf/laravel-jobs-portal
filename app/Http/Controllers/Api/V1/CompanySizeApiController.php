@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\CompanySize;
 use App\Http\Resources\CompanySizeResource;
-use App\Http\Requests\Api\StoreCompanySizeRequest;
-use App\Http\Requests\Api\UpdateCompanySizeRequest;
 
 /**
  * Context7 API Controller for CompanySize

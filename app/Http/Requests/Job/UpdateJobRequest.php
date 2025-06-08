@@ -27,31 +27,31 @@ class UpdateJobRequest extends FormRequest
      */
     public function rules(): array
     {
-        return {
-    "job_title": "required|string|max:255",
-    "job_description": "required|string|min:50",
-    "job_requirement": "nullable|string",
-    "job_benefit": "nullable|string",
-    "country_id": "required|exists:countries,id",
-    "state_id": "nullable|exists:states,id",
-    "city_id": "nullable|exists:cities,id",
-    "salary_from": "nullable|numeric|min:0",
-    "salary_to": "nullable|numeric|min:0|gte:salary_from",
-    "salary_currency_id": "nullable|exists:salary_currencies,id",
-    "salary_period_id": "nullable|exists:salary_periods,id",
-    "job_category_id": "required|exists:job_categories,id",
-    "job_type_id": "required|exists:job_types,id",
-    "career_level_id": "nullable|exists:career_levels,id",
-    "functional_area_id": "nullable|exists:functional_areas,id",
-    "job_shift_id": "nullable|exists:job_shifts,id",
-    "degree_level_id": "nullable|exists:required_degree_levels,id",
-    "position": "nullable|integer|min:1",
-    "experience": "nullable|string|max:100",
-    "job_expiry_date": "required|date|after:today",
-    "hide_salary": "boolean",
-    "is_freelance": "boolean",
-    "is_suspended": "boolean"
-};
+        return [
+            "job_title" => "required|string|max:255",
+            "job_description" => "required|string|min:50",
+            "job_requirement" => "nullable|string",
+            "job_benefit" => "nullable|string",
+            "country_id" => "required|exists:countries,id",
+            "state_id" => "nullable|exists:states,id",
+            "city_id" => "nullable|exists:cities,id",
+            "salary_from" => "nullable|numeric|min:0",
+            "salary_to" => "nullable|numeric|min:0|gte:salary_from",
+            "salary_currency_id" => "nullable|exists:salary_currencies,id",
+            "salary_period_id" => "nullable|exists:salary_periods,id",
+            "job_category_id" => "required|exists:job_categories,id",
+            "job_type_id" => "required|exists:job_types,id",
+            "career_level_id" => "nullable|exists:career_levels,id",
+            "functional_area_id" => "nullable|exists:functional_areas,id",
+            "job_shift_id" => "nullable|exists:job_shifts,id",
+            "degree_level_id" => "nullable|exists:required_degree_levels,id",
+            "position" => "nullable|integer|min:1",
+            "experience" => "nullable|string|max:100",
+            "job_expiry_date" => "required|date|after:today",
+            "hide_salary" => "boolean",
+            "is_freelance" => "boolean",
+            "is_suspended" => "boolean"
+        ];
     }
 
     /**
@@ -61,17 +61,17 @@ class UpdateJobRequest extends FormRequest
      */
     public function messages(): array
     {
-        return {
-    "job_title.required": "Job title is required",
-    "job_description.required": "Job description is required",
-    "job_description.min": "Job description must be at least 50 characters",
-    "country_id.required": "Country is required",
-    "job_category_id.required": "Job category is required",
-    "job_type_id.required": "Job type is required",
-    "salary_to.gte": "Maximum salary must be greater than or equal to minimum salary",
-    "job_expiry_date.required": "Job expiry date is required",
-    "job_expiry_date.after": "Job expiry date must be in the future"
-};
+        return [
+            "job_title.required" => "Job title is required",
+            "job_description.required" => "Job description is required",
+            "job_description.min" => "Job description must be at least 50 characters",
+            "country_id.required" => "Country is required",
+            "job_category_id.required" => "Job category is required",
+            "job_type_id.required" => "Job type is required",
+            "salary_to.gte" => "Maximum salary must be greater than or equal to minimum salary",
+            "job_expiry_date.required" => "Job expiry date is required",
+            "job_expiry_date.after" => "Job expiry date must be in the future"
+        ];
     }
 
     /**

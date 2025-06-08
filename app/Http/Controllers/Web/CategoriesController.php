@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Repositories\WebHomeRepository;
 use Illuminate\View\View;
-
 class CategoriesController extends Controller
 {
     /** @var WebHomeRepository */

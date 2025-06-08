@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateJobShiftRequest;
-use App\Http\Requests\UpdateJobShiftRequest;
 use App\Models\Job;
 use App\Models\JobShift;
 use App\Repositories\JobShiftRepository;
@@ -12,13 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-use App\Http\Requests\Job\UpdateJobRequest as JobUpdateRequest;
-
-use App\Http\Requests\StoreJobShiftRequest;
-
-use App\Http\Requests\DeleteJobShiftRequest;
-
 class JobShiftController extends AppBaseController
 {
     /** @var JobShiftRepository */

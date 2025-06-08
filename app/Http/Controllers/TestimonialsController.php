@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateTestimonialRequest;
-use App\Http\Requests\UpdateTestimonialRequest;
 use App\Models\Testimonial;
 use App\Repositories\TestimonialRepository;
 use Exception;
@@ -12,13 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-
-use App\Http\Requests\UpdateTestimonialsRequest;
-
-use App\Http\Requests\StoreTestimonialsRequest;
-
-use App\Http\Requests\DeleteTestimonialsRequest;
-
 class TestimonialsController extends AppBaseController
 {
     /**

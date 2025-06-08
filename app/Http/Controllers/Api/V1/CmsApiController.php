@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Cms;
 use App\Http\Resources\CmsResource;
-use App\Http\Requests\Api\StoreCmsRequest;
-use App\Http\Requests\Api\UpdateCmsRequest;
 
 /**
  * Context7 API Controller for Cms

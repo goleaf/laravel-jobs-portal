@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\FileUpload;
 use App\Http\Resources\FileUploadResource;
-use App\Http\Requests\Api\StoreFileUploadRequest;
-use App\Http\Requests\Api\UpdateFileUploadRequest;
 
 /**
  * Context7 API Controller for FileUpload

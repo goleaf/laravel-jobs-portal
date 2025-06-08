@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateNoticeboardRequest;
-use App\Http\Requests\UpdateNoticeboardRequest;
 use App\Models\Noticeboard;
 use App\Repositories\NoticeboardRepository;
 use Exception;
@@ -11,11 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreNoticeboardRequest;
-
-use App\Http\Requests\DeleteNoticeboardRequest;
-
 class NoticeboardController extends AppBaseController
 {
     /** @var NoticeboardRepository */

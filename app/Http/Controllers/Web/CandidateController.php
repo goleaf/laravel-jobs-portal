@@ -10,13 +10,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\CreateCandidateRequest;
-
-use App\Http\Requests\UpdateCandidateRequest;
-
-use App\Http\Requests\GetCandidatesListsCandidateRequest;
-
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */

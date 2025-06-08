@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCountryRequest;
-use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country;
 use App\Models\Job;
 use App\Models\State;
@@ -14,11 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreCountryRequest;
-
-use App\Http\Requests\DeleteCountryRequest;
-
 class CountryController extends AppBaseController
 {
     /**

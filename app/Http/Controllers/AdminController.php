@@ -6,15 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-
-use App\Http\Requests\CreateAdminRequest;
-
-use App\Http\Requests\UpdateAdminRequest;
-
-use App\Http\Requests\StoreAdminRequest;
-
-use App\Http\Requests\DeleteAdminRequest;
-
 class AdminController extends Controller
 {
     /**

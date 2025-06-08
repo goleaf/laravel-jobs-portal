@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\CsrfCookie;
 use App\Http\Resources\CsrfCookieResource;
-use App\Http\Requests\Api\StoreCsrfCookieRequest;
-use App\Http\Requests\Api\UpdateCsrfCookieRequest;
 
 /**
  * Context7 API Controller for CsrfCookie

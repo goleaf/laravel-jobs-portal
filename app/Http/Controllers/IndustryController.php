@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateIndustryRequest;
-use App\Http\Requests\UpdateIndustryRequest;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Industry;
@@ -13,11 +11,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreIndustryRequest;
-
-use App\Http\Requests\DeleteIndustryRequest;
-
 class IndustryController extends AppBaseController
 {
     /** @var IndustryRepository */

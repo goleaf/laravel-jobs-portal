@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSalaryPeriodRequest;
-use App\Http\Requests\UpdateSalaryPeriodRequest;
 use App\Models\Job;
 use App\Models\SalaryPeriod;
 use App\Repositories\SalaryPeriodRepository;
@@ -12,11 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreSalaryPeriodRequest;
-
-use App\Http\Requests\DeleteSalaryPeriodRequest;
-
 class SalaryPeriodController extends AppBaseController
 {
     /** @var SalaryPeriodRepository */

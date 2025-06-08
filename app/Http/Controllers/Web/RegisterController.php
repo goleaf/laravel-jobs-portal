@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\WebRegisterRequest;
+
 use App\Repositories\WebRegisterRepository;
 use Flash;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-
-use App\Http\Requests\RegisterRegisterRequest;
-
 class RegisterController extends AppBaseController
 {
     /** @var WebRegisterRepository */

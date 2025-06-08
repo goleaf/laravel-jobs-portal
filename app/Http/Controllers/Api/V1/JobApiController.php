@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Job;
 use App\Http\Resources\JobResource;
-use App\Http\Requests\Api\StoreJobRequest;
-use App\Http\Requests\Api\UpdateJobRequest;
 
 /**
  * Context7 API Controller for Job

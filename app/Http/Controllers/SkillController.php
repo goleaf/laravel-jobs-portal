@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSkillRequest;
-use App\Http\Requests\UpdateSkillRequest;
 use App\Models\Skill;
 use App\Repositories\SkillRepository;
 use Exception;
@@ -11,11 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreSkillRequest;
-
-use App\Http\Requests\DeleteSkillRequest;
-
 class SkillController extends AppBaseController
 {
     /** @var SkillRepository */

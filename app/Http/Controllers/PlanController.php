@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePlanRequest;
-use App\Http\Requests\UpdatePlanRequest;
 use App\Models\Plan;
 use App\Models\SalaryCurrency;
 use App\Repositories\PlanRepository;
@@ -12,11 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StorePlanRequest;
-
-use App\Http\Requests\DeletePlanRequest;
-
 class PlanController extends AppBaseController
 {
     /** @var*/

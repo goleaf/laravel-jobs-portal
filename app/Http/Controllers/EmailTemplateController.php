@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateEMailTemplateRequest;
 use App\Models\EmailTemplate;
 use App\Repositories\EmailTemplateRepository;
 use Exception;
@@ -17,7 +16,6 @@ use Laracasts\Flash\Flash;
 /**
  * Class EmailTemplateController
  */
-use App\Http\Requests\UpdateEmailTemplateRequest;
 
 class EmailTemplateController extends Controller
 {

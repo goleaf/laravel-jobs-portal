@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateFunctionalAreaRequest;
-use App\Http\Requests\UpdateFunctionalAreaRequest;
 use App\Models\Candidate;
 use App\Models\FunctionalArea;
 use App\Models\Job;
@@ -13,11 +11,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreFunctionalAreaRequest;
-
-use App\Http\Requests\DeleteFunctionalAreaRequest;
-
 class FunctionalAreaController extends AppBaseController
 {
     /** @var FunctionalAreaRepository */

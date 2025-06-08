@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\CreateAdminRequest;
-use App\Http\Requests\UpdateAdminRequest;
-use App\Http\Requests\UpdateUserProfileRequest;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Job;
@@ -25,17 +21,6 @@ use Laracasts\Flash\Flash;
 /**
  * Class UserController
  */
-use App\Http\Requests\ChangePasswordUserRequest;
-
-use App\Http\Requests\ProfileUpdateUserRequest;
-
-use App\Http\Requests\UpdateLanguageUserRequest;
-
-use App\Http\Requests\AdminCreateUserRequest;
-
-use App\Http\Requests\AdminStoreUserRequest;
-
-use App\Http\Requests\AdminUpdateUserRequest;
 
 class UserController extends AppBaseController
 {

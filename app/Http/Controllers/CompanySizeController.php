@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCompanySizeRequest;
-use App\Http\Requests\UpdateCompanySizeRequest;
 use App\Models\Company;
 use App\Models\CompanySize;
 use App\Repositories\CompanySizeRepository;
@@ -12,13 +10,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\Company\StoreCompanyRequest as CompanyStoreRequest;
-use App\Http\Requests\Company\UpdateCompanyRequest as CompanyUpdateRequest;
-
-use App\Http\Requests\StoreCompanySizeRequest;
-
-use App\Http\Requests\DeleteCompanySizeRequest;
-
 class CompanySizeController extends AppBaseController
 {
     /** @var CompanySizeRepository */

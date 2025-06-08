@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\StoreRequest;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Auth;
 use Illuminate\Contracts\View\Factory;
+
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Redirect;
-
 class LoginController extends Controller
 {
     /*
@@ -27,11 +25,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Requests\Auth\ForgotPasswordRequest;
-use App\Http\Requests\Auth\ResetPasswordRequest;
 
     /**
      * Where to redirect users after login.

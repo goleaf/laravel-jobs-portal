@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\Universal;
 
-use App\Http\Requests\Api\Universal\StoreRequest;
-use App\Http\Requests\Api\Universal\UpdateRequest;
 use App\Http\Controllers\UniversalBaseController;
 use App\Models\Job;
 use App\Http\Resources\Universal\JobResource;

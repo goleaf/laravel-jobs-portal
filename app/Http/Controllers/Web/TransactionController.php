@@ -6,11 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreTransactionRequest;
-
-use App\Http\Requests\UpdateTransactionRequest;
-
 class TransactionController extends Controller
 {
     /**

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\HandleRequests;
 use App\Http\Resources\HandleRequestsResource;
-use App\Http\Requests\Api\StoreHandleRequestsRequest;
-use App\Http\Requests\Api\UpdateHandleRequestsRequest;
 
 /**
  * Context7 API Controller for HandleRequests

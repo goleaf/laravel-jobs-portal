@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\WireUiAssets;
 use App\Http\Resources\WireUiAssetsResource;
-use App\Http\Requests\Api\StoreWireUiAssetsRequest;
-use App\Http\Requests\Api\UpdateWireUiAssetsRequest;
 
 /**
  * Context7 API Controller for WireUiAssets

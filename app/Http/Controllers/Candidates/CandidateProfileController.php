@@ -3,20 +3,10 @@
 namespace App\Http\Controllers\Candidates;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\CreateCandidateEducationRequest;
-use App\Http\Requests\CreateCandidateExperienceRequest;
+
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
 use App\Repositories\Candidates\CandidateProfileRepository;
-
-use App\Http\Requests\CreateExperienceCandidateProfileRequest;
-
-use App\Http\Requests\UpdateExperienceCandidateProfileRequest;
-
-use App\Http\Requests\CreateEducationCandidateProfileRequest;
-
-use App\Http\Requests\UpdateEducationCandidateProfileRequest;
-
 class CandidateProfileController extends AppBaseController
 {
     /** @var CandidateProfileRepository */

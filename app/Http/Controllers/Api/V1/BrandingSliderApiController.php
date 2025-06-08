@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\BrandingSlider;
 use App\Http\Resources\BrandingSliderResource;
-use App\Http\Requests\Api\StoreBrandingSliderRequest;
-use App\Http\Requests\Api\UpdateBrandingSliderRequest;
 
 /**
  * Context7 API Controller for BrandingSlider

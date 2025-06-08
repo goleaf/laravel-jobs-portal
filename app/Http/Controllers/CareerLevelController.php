@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCareerLevelRequest;
-use App\Http\Requests\UpdateCareerLevelRequest;
 use App\Models\Candidate;
 use App\Models\CareerLevel;
 use App\Models\Job;
@@ -14,11 +12,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use App\Http\Requests\StoreCareerLevelRequest;
-
-use App\Http\Requests\DeleteCareerLevelRequest;
-
 class CareerLevelController extends AppBaseController
 {
     /** @var CareerLevelRepository */

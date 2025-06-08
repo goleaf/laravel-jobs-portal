@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Dashboard;
 use App\Http\Resources\DashboardResource;
-use App\Http\Requests\Api\StoreDashboardRequest;
-use App\Http\Requests\Api\UpdateDashboardRequest;
 
 /**
  * Context7 API Controller for Dashboard

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-
 class NotificationController extends AppBaseController
 {
     public function readNotification(Notification $notification): JsonResponse

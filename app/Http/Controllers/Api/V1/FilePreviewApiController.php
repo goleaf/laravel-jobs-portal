@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\FilePreview;
 use App\Http\Resources\FilePreviewResource;
-use App\Http\Requests\Api\StoreFilePreviewRequest;
-use App\Http\Requests\Api\UpdateFilePreviewRequest;
 
 /**
  * Context7 API Controller for FilePreview

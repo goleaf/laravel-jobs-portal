@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\EmailTemplate;
 use App\Http\Resources\EmailTemplateResource;
-use App\Http\Requests\Api\StoreEmailTemplateRequest;
-use App\Http\Requests\Api\UpdateEmailTemplateRequest;
 
 /**
  * Context7 API Controller for EmailTemplate

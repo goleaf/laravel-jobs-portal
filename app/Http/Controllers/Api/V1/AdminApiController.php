@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Admin;
 use App\Http\Resources\AdminResource;
-use App\Http\Requests\Api\StoreAdminRequest;
-use App\Http\Requests\Api\UpdateAdminRequest;
 
 /**
  * Context7 API Controller for Admin

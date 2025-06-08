@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequest;
-use App\Http\Requests\CreateJobRequest;
-use App\Http\Requests\UpdateJobRequest;
 use App\Models\Country;
 use App\Models\FeaturedRecord;
 use App\Models\FrontSetting;
@@ -27,20 +24,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Throwable;
-use App\Http\Requests\Job\StoreJobRequest as JobStoreRequest;
-
-use App\Http\Requests\GetStatesJobRequest;
-
-use App\Http\Requests\GetCitiesJobRequest;
-
-use App\Http\Requests\StoreJobJobRequest;
-
-use App\Http\Requests\UpdateJobJobRequest;
-
-use App\Http\Requests\StoreJobRequest;
-
-use App\Http\Requests\DeleteJobRequest;
-
 class JobController extends AppBaseController
 {
     /** @var JobRepository */

@@ -1,0 +1,88 @@
+{
+    "skills": {
+        "levels": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced",
+            "expert": "Expert"
+        },
+        "categories": {
+            "technical": "Technical Skills",
+            "soft": "Soft Skills",
+            "language": "Language Skills",
+            "certification": "Certifications",
+            "tool": "Tools & Software",
+            "framework": "Frameworks",
+            "database": "Database",
+            "other": "Other Skills"
+        },
+        "messages": {
+            "created": "Skill created successfully",
+            "updated": "Skill updated successfully",
+            "deleted": "Skill deleted successfully",
+            "not_found": "Skill not found",
+            "featured": "Skill featured successfully",
+            "unfeatured": "Skill unfeatured successfully"
+        }
+    },
+    "validation": {
+        "skill": {
+            "name": {
+                "required": "Skill name is required",
+                "string": "Skill name must be text",
+                "max": "Skill name cannot exceed 255 characters",
+                "unique": "This skill already exists"
+            },
+            "description": {
+                "string": "Description must be text",
+                "max": "Description cannot exceed 500 characters"
+            },
+            "category": {
+                "string": "Category must be text",
+                "max": "Category cannot exceed 100 characters"
+            },
+            "level": {
+                "in": "Please select a valid skill level"
+            },
+            "is_active": {
+                "boolean": "Active status must be true or false"
+            },
+            "is_default": {
+                "boolean": "Default status must be true or false"
+            },
+            "is_featured": {
+                "boolean": "Featured status must be true or false"
+            },
+            "sort_order": {
+                "integer": "Sort order must be a number",
+                "min": "Sort order cannot be negative",
+                "max": "Sort order cannot exceed 999"
+            },
+            "icon": {
+                "string": "Icon must be text",
+                "max": "Icon cannot exceed 100 characters"
+            },
+            "color": {
+                "string": "Color must be text",
+                "regex": "Color must be a valid hex color code (e.g., #FF0000)"
+            },
+            "similar_exists": "Similar skills already exist: :skills",
+            "inappropriate_content": "Skill name contains inappropriate content",
+            "icon_format_invalid": "Icon must be a valid FontAwesome icon class"
+        }
+    },
+    "attributes": {
+        "skill": {
+            "name": "Skill Name",
+            "description": "Description",
+            "category": "Category",
+            "level": "Skill Level",
+            "is_active": "Active Status",
+            "is_default": "Default Skill",
+            "is_featured": "Featured Skill",
+            "sort_order": "Sort Order",
+            "icon": "Icon",
+            "color": "Color"
+        }
+    }
+} 

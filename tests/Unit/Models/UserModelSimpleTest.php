@@ -10,9 +10,9 @@ class UserModelSimpleTest extends TestCase
     /** @test */
     public function it_has_user_type_constants()
     {
-        $this->assertEquals(1, User::ADMIN);
-        $this->assertEquals(2, User::EMPLOYER);
-        $this->assertEquals(3, User::CANDIDATE);
+        $this->assertEquals('admin', User::ADMIN);
+        $this->assertEquals('employer', User::EMPLOYER);
+        $this->assertEquals('candidate', User::CANDIDATE);
     }
 
     /** @test */
@@ -71,7 +71,7 @@ class UserModelSimpleTest extends TestCase
         $casts = $user->getCasts();
 
         $expectedCasts = [
-            'user_type' => 'integer',
+            'user_type' => 'string',
             'is_active' => 'boolean',
             'is_verified' => 'boolean',
             'is_default' => 'boolean',
@@ -80,7 +80,7 @@ class UserModelSimpleTest extends TestCase
         ];
 
         foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals($cast, $casts[$attribute]);
+            $this->assertEquals($cast, $casts[$attribute], "Cast for {$attribute} should be {$cast}");
         }
     }
 

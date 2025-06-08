@@ -430,6 +430,101 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * Scope for users by location.
+     */
+    public function scopeByLocation($query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null)
+    {
+        if ($countryId) {
+            $query->where('country_id', $countryId);
+        }
+        if ($stateId) {
+            $query->where('state_id', $stateId);
+        }
+        if ($cityId) {
+            $query->where('city_id', $cityId);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope for searching users.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('first_name', 'like', "%{$term}%")
+                    ->orWhere('last_name', 'like', "%{$term}%")
+                    ->orWhere('email', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent users.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for users with profile images.
+     */
+    public function scopeWithProfileImage($query)
+    {
+        return $query->whereHas('media', function ($q) {
+            $q->where('collection_name', self::PROFILE);
+        });
+    }
+
+    /**
+     * Scope for candidates.
+     */
+    public function scopeCandidates($query)
+    {
+        return $query->byRole(self::CANDIDATE);
+    }
+
+    /**
+     * Scope for employers.
+     */
+    public function scopeEmployers($query)
+    {
+        return $query->byRole(self::EMPLOYER);
+    }
+
+    /**
+     * Scope for admins.
+     */
+    public function scopeAdmins($query)
+    {
+        return $query->byRole(self::ADMIN);
+    }
+
+    /**
+     * Scope for users by gender.
+     */
+    public function scopeByGender($query, int $gender)
+    {
+        return $query->where('gender', $gender);
+    }
+
+    /**
+     * Scope for users by language.
+     */
+    public function scopeByLanguage($query, string $language)
+    {
+        return $query->where('language', $language);
+    }
+
+    /**
+     * Scope for users with high profile views.
+     */
+    public function scopePopular($query, int $minViews = 100)
+    {
+        return $query->where('profile_views', '>=', $minViews)
+                    ->orderByDesc('profile_views');
+    }
+
+    /**
      * Send email verification notification.
      */
     public function sendEmailVerificationNotification(): void

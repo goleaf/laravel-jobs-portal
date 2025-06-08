@@ -46,19 +46,95 @@ class Country extends Model
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'short_code' => 'string',
-        'name' => 'string',
-        'phone_code' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     public function users(): HasMany
     {
         return $this->hasMany(User::class, 'country_id');
+    }
+
+    public function states(): HasMany
+    {
+        return $this->hasMany(State::class, 'country_id');
+    }
+
+    /**
+     * Scope for active countries.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for countries with users.
+     */
+    public function scopeWithUsers($query)
+    {
+        return $query->whereHas('users');
+    }
+
+    /**
+     * Scope for countries with states.
+     */
+    public function scopeWithStates($query)
+    {
+        return $query->whereHas('states');
+    }
+
+    /**
+     * Scope for searching countries by name.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('short_code', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for countries by short code.
+     */
+    public function scopeByShortCode($query, string $shortCode)
+    {
+        return $query->where('short_code', $shortCode);
+    }
+
+    /**
+     * Scope for countries with phone codes.
+     */
+    public function scopeWithPhoneCode($query)
+    {
+        return $query->whereNotNull('phone_code')
+                    ->where('phone_code', '!=', '');
+    }
+
+    /**
+     * Scope for alphabetically ordered countries.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for popular countries (with most users).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('users')
+                    ->orderByDesc('users_count')
+                    ->limit($limit);
     }
 }

@@ -47,15 +47,20 @@ class City extends Model
     ];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'state_id' => 'integer',
-        'name' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'state_id' => 'integer',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     public function state(): BelongsTo
     {
@@ -65,5 +70,80 @@ class City extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class, 'city_id');
+    }
+
+    public function country()
+    {
+        return $this->hasOneThrough(Country::class, State::class, 'id', 'id', 'state_id', 'country_id');
+    }
+
+    /**
+     * Scope for active cities.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for cities by state.
+     */
+    public function scopeByState($query, int $stateId)
+    {
+        return $query->where('state_id', $stateId);
+    }
+
+    /**
+     * Scope for cities by country through state.
+     */
+    public function scopeByCountry($query, int $countryId)
+    {
+        return $query->whereHas('state', function ($q) use ($countryId) {
+            $q->where('country_id', $countryId);
+        });
+    }
+
+    /**
+     * Scope for cities with users.
+     */
+    public function scopeWithUsers($query)
+    {
+        return $query->whereHas('users');
+    }
+
+    /**
+     * Scope for searching cities by name.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for alphabetically ordered cities.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for popular cities (with most users).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('users')
+                    ->orderByDesc('users_count')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for major cities (with many users).
+     */
+    public function scopeMajor($query, int $minUsers = 50)
+    {
+        return $query->withCount('users')
+                    ->having('users_count', '>=', $minUsers)
+                    ->orderByDesc('users_count');
     }
 }

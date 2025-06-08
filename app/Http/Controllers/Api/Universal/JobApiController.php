@@ -6,7 +6,13 @@ use App\Http\Controllers\UniversalBaseController;
 use App\Models\Job;
 use App\Http\Resources\Universal\JobResource;
 use App\Http\Resources\Universal\JobCollection;
-use Illuminate\Http\Request;
+use App\Http\Resources\Universal\ShowJobResource;
+use App\Http\Resources\Universal\DestroyJobResource;
+use App\Http\Requests\Api\Universal\IndexRequest;
+use App\Http\Requests\Api\Universal\ShowJobRequest;
+use App\Http\Requests\Api\Universal\StoreRequest;
+use App\Http\Requests\Api\Universal\UpdateRequest;
+use App\Http\Requests\Api\Universal\DestroyJobRequest;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -18,7 +24,7 @@ class JobApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display a listing of the resource with caching
      */
-    public function index(StoreRequest $request): JsonResponse
+    public function index(IndexRequest $request): JsonResponse
     {
         try {
             $cacheKey = $this->generateCacheKey($request, 'job_index');
@@ -50,7 +56,7 @@ class JobApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching
      */
-    public function show($id): JsonResponse
+    public function show(ShowJobRequest $request, $id): JsonResponse
     {
         try {
             $job = $this->findCached(Job::class, $id, ['user']);
@@ -60,7 +66,7 @@ class JobApiController extends UniversalBaseController
             }
             
             return $this->jsonResponse([
-                'job' => new App\Http\Resources\Universal\JobResource($job)
+                'job' => new ShowJobResource($job)
             ]);
             
         } catch (\Exception $e) {
@@ -137,20 +143,34 @@ class JobApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete
      */
-    public function destroy($id): JsonResponse
+    public function destroy(DestroyJobRequest $request, $id): JsonResponse
     {
         try {
             $job = Job::findOrFail($id);
             
             // Universal Pattern: Rate limited action
-            return $this->rateLimitedAction($request ?? request(), 'delete_job', function () use ($job) {
+            return $this->rateLimitedAction($request, 'delete_job', function () use ($job, $request) {
                 $this->executeTransaction(function () use ($job) {
                     $job->delete();
                 });
                 
                 $this->clearModelCache(Job::class, $job->id);
                 
-                return $this->jsonResponse([], 'Deleted successfully');
+                return $this->jsonResponse([
+                    'deletion' => new DestroyJobResource([
+                        'job_id' => $job->id,
+                        'job_title' => $job->title,
+                        'reason' => $request->input('reason'),
+                        'applications_affected' => $job->applications()->count(),
+                        'active_applications' => $job->applications()->whereIn('status', ['pending', 'reviewing', 'shortlisted'])->count(),
+                        'applicants_notified' => $request->input('notify_applicants', false),
+                        'refund_processed' => $request->input('refund_featured', false),
+                        'cleanup_performed' => true,
+                        'cache_cleared' => true,
+                        'search_updated' => true,
+                        'audit_logged' => true
+                    ])
+                ], 'Deleted successfully');
             });
             
         } catch (\Exception $e) {

@@ -735,4 +735,131 @@ class Job extends Model
                     ->having('applied_jobs_count', '>', 10)
                     ->orderByDesc('applied_jobs_count');
     }
+
+    /**
+     * Scope for jobs by experience level.
+     */
+    public function scopeByExperience(Builder $query, int $minExperience, ?int $maxExperience = null): Builder
+    {
+        $query->where('experience', '>=', $minExperience);
+        
+        if ($maxExperience !== null) {
+            $query->where('experience', '<=', $maxExperience);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope for remote jobs.
+     */
+    public function scopeRemote(Builder $query): Builder
+    {
+        return $query->where('is_freelance', true);
+    }
+
+    /**
+     * Scope for jobs with salary information.
+     */
+    public function scopeWithSalary(Builder $query): Builder
+    {
+        return $query->where('hide_salary', false)
+                    ->whereNotNull('salary_from')
+                    ->whereNotNull('salary_to');
+    }
+
+    /**
+     * Scope for urgent jobs (expiring soon).
+     */
+    public function scopeUrgent(Builder $query, int $days = 7): Builder
+    {
+        return $query->active()
+                    ->where('job_expiry_date', '<=', now()->addDays($days));
+    }
+
+    /**
+     * Scope for jobs by keyword search.
+     */
+    public function scopeKeywordSearch(Builder $query, string $keyword): Builder
+    {
+        return $query->where('job_title', 'like', "%{$keyword}%")
+                    ->orWhere('description', 'like', "%{$keyword}%")
+                    ->orWhereHas('jobsSkill', function ($q) use ($keyword) {
+                        $q->where('name', 'like', "%{$keyword}%");
+                    })
+                    ->orWhereHas('jobsTag', function ($q) use ($keyword) {
+                        $q->where('name', 'like', "%{$keyword}%");
+                    });
+    }
+
+    /**
+     * Scope for jobs today.
+     */
+    public function scopeToday(Builder $query): Builder
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    /**
+     * Scope for jobs this week.
+     */
+    public function scopeThisWeek(Builder $query): Builder
+    {
+        return $query->whereBetween('created_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek()
+        ]);
+    }
+
+    /**
+     * Scope for jobs this month.
+     */
+    public function scopeThisMonth(Builder $query): Builder
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Scope for jobs by multiple filters.
+     */
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        if (!empty($filters['category_id'])) {
+            $query->byCategory($filters['category_id']);
+        }
+        
+        if (!empty($filters['job_type_id'])) {
+            $query->where('job_type_id', $filters['job_type_id']);
+        }
+        
+        if (!empty($filters['career_level_id'])) {
+            $query->where('career_level_id', $filters['career_level_id']);
+        }
+        
+        if (!empty($filters['functional_area_id'])) {
+            $query->where('functional_area_id', $filters['functional_area_id']);
+        }
+        
+        if (!empty($filters['country_id']) || !empty($filters['state_id']) || !empty($filters['city_id'])) {
+            $query->byLocation(
+                $filters['country_id'] ?? null,
+                $filters['state_id'] ?? null,
+                $filters['city_id'] ?? null
+            );
+        }
+        
+        if (!empty($filters['min_salary']) || !empty($filters['max_salary'])) {
+            $query->bySalaryRange(
+                $filters['min_salary'] ?? null,
+                $filters['max_salary'] ?? null
+            );
+        }
+        
+        if (!empty($filters['skills'])) {
+            $query->withSkills($filters['skills']);
+        }
+        
+        return $query;
+    }
 }

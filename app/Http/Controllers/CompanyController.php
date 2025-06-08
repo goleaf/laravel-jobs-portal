@@ -56,8 +56,10 @@ class CompanyController extends AppBaseController
     public function create(): View
     {
         $data = $this->companyRepository->prepareData();
-        $countries = Country::pluck('name', 'id');
-        $states = State::toBase()->pluck('name', 'id');
+        
+        // Use new scopes for better performance and filtering
+        $countries = Country::active()->alphabetical()->pluck('name', 'id');
+        $states = State::active()->alphabetical()->pluck('name', 'id');
 
         return view('companies.create', compact('countries', 'states'))->with('data', $data);
     }
@@ -101,8 +103,10 @@ class CompanyController extends AppBaseController
         $user = $company->user;
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
         $data = $this->companyRepository->prepareData();
-        $countries = Country::pluck('name', 'id');
-        $states = State::toBase()->pluck('name', 'id');
+        
+        // Use new scopes for better performance and filtering
+        $countries = Country::active()->alphabetical()->pluck('name', 'id');
+        $states = State::active()->alphabetical()->pluck('name', 'id');
         $state = $cities = null;
         if (isset($user->country_id)) {
             $state = getStates($user->country_id);

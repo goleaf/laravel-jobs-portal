@@ -15,20 +15,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+
+/*
+|--------------------------------------------------------------------------
+| Login Information API Routes (for Vue components)
+|--------------------------------------------------------------------------
+*/
+Route::prefix("auth")->group(function () {
+    Route::get("/login-info", [\App\Http\Controllers\Api\AuthController::class, "getLoginInfo"])->name("api.auth.login-info");
+    Route::post("/verify-credentials", [\App\Http\Controllers\Api\AuthController::class, "verifyCredentials"])->name("api.auth.verify-credentials");
+});
     return $request->user();
 });
 
 /*
 |--------------------------------------------------------------------------
-| Context7 Multilingual API Routes
+| Login Information API Routes (for Vue components)
 |--------------------------------------------------------------------------
 */
-Route::prefix('locale')->group(function () {
-    Route::post('/', [\App\Http\Controllers\Api\LocaleController::class, 'setLocale'])->name('api.locale.set');
-    Route::get('/current', [\App\Http\Controllers\Api\LocaleController::class, 'getCurrentLocale'])->name('api.locale.current');
-    Route::get('/available', [\App\Http\Controllers\Api\LocaleController::class, 'getAvailableLocales'])->name('api.locale.available');
-    Route::get('/browser', [\App\Http\Controllers\Api\LocaleController::class, 'getBrowserLocale'])->name('api.locale.browser');
-    Route::get('/translations/{locale?}', [\App\Http\Controllers\Api\LocaleController::class, 'getTranslations'])->name('api.locale.translations');
+Route::prefix('auth')->group(function () {
+    Route::get('/login-info', [\App\Http\Controllers\Api\AuthController::class, 'getLoginInfo'])->name('api.auth.login-info');
+    Route::post('/verify-credentials', [\App\Http\Controllers\Api\AuthController::class, 'verifyCredentials'])->name('api.auth.verify-credentials');
 });
 
 /*

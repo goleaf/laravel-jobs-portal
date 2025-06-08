@@ -1,0 +1,121 @@
+{
+    "companies": {
+        "messages": {
+            "created": "Company created successfully",
+            "updated": "Company updated successfully",
+            "deleted": "Company deleted successfully",
+            "not_found": "Company not found",
+            "featured": "Company featured successfully",
+            "unfeatured": "Company unfeatured successfully"
+        }
+    },
+    "validation": {
+        "company": {
+            "name": {
+                "required": "Company name is required",
+                "string": "Company name must be text",
+                "max": "Company name cannot exceed 255 characters",
+                "unique": "This company name is already registered"
+            },
+            "email": {
+                "required": "Company email is required",
+                "email": "Please enter a valid email address",
+                "unique": "This email address is already registered",
+                "max": "Email address cannot exceed 255 characters"
+            },
+            "phone": {
+                "string": "Phone number must be text",
+                "max": "Phone number cannot exceed 20 characters"
+            },
+            "website": {
+                "url": "Please enter a valid website URL",
+                "max": "Website URL cannot exceed 255 characters"
+            },
+            "description": {
+                "string": "Description must be text",
+                "min": "Description must be at least 50 characters"
+            },
+            "established_in": {
+                "integer": "Establishment year must be a number",
+                "min": "Establishment year cannot be before 1800",
+                "max": "Establishment year cannot be in the future",
+                "future": "Establishment year cannot be in the future",
+                "too_old": "Establishment year seems too old"
+            },
+            "company_size_id": {
+                "exists": "Selected company size does not exist"
+            },
+            "industry_id": {
+                "exists": "Selected industry does not exist"
+            },
+            "ownership_type_id": {
+                "exists": "Selected ownership type does not exist"
+            },
+            "country_id": {
+                "required": "Country is required",
+                "exists": "Selected country does not exist"
+            },
+            "state_id": {
+                "exists": "Selected state does not exist"
+            },
+            "city_id": {
+                "exists": "Selected city does not exist"
+            },
+            "address": {
+                "string": "Address must be text",
+                "max": "Address cannot exceed 500 characters"
+            },
+            "postal_code": {
+                "string": "Postal code must be text",
+                "max": "Postal code cannot exceed 20 characters"
+            },
+            "logo": {
+                "image": "Logo must be an image file",
+                "mimes": "Logo must be a JPEG, JPG, or PNG file",
+                "max": "Logo file size cannot exceed 2MB"
+            },
+            "facebook_url": {
+                "url": "Please enter a valid Facebook URL"
+            },
+            "twitter_url": {
+                "url": "Please enter a valid Twitter URL"
+            },
+            "linkedin_url": {
+                "url": "Please enter a valid LinkedIn URL"
+            },
+            "instagram_url": {
+                "url": "Please enter a valid Instagram URL"
+            },
+            "youtube_url": {
+                "url": "Please enter a valid YouTube URL"
+            },
+            "state_country_mismatch": "Selected state does not belong to the selected country",
+            "city_state_mismatch": "Selected city does not belong to the selected state",
+            "social_url_invalid": ":platform URL must be a valid :platform link"
+        }
+    },
+    "attributes": {
+        "company": {
+            "name": "Company Name",
+            "email": "Company Email",
+            "phone": "Phone Number",
+            "website": "Website",
+            "description": "Company Description",
+            "established_in": "Established Year",
+            "company_size": "Company Size",
+            "industry": "Industry",
+            "ownership_type": "Ownership Type",
+            "country": "Country",
+            "state": "State",
+            "city": "City",
+            "address": "Address",
+            "postal_code": "Postal Code",
+            "logo": "Company Logo",
+            "facebook_url": "Facebook URL",
+            "twitter_url": "Twitter URL",
+            "linkedin_url": "LinkedIn URL",
+            "instagram_url": "Instagram URL",
+            "youtube_url": "YouTube URL"
+        }
+    }
+} 

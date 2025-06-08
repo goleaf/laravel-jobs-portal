@@ -1,53 +1,82 @@
 <template>
-  <component
-    :is="as"
+  <button
     :class="[
       baseClasses,
       sizeClasses[size],
       variantClasses[variant],
-      {
+      { 
         'opacity-50 cursor-not-allowed': disabled,
         'animate-pulse': loading,
-        'w-full': fullWidth,
-        'rounded-full': rounded === 'full',
-        'rounded-none': rounded === 'none',
+        'shadow-lg': elevation && !disabled,
+        'w-full': fullWidth
       }
     ]"
     :disabled="disabled || loading"
-    :href="as === 'a' ? href : undefined"
-    :to="as === 'router-link' ? to : undefined"
-    v-bind="$attrs"
+    :aria-label="ariaLabel || $t('ui.button.default_label')"
+    :aria-describedby="ariaDescribedby"
+    :type="type"
     @click="handleClick"
+    @keydown.enter="handleKeyDown"
+    @keydown.space="handleKeyDown"
   >
     <!-- Loading Spinner -->
-    <div v-if="loading" class="animate-spin rounded-full border-2 border-current border-t-transparent mr-2"
-         :class="sizeClasses[size].includes('text-sm') ? 'h-4 w-4' : 'h-5 w-5'">
-    </div>
+    <div 
+      v-if="loading" 
+      class="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"
+      :aria-label="$t('ui.button.loading')"
+    ></div>
     
-    <!-- Leading Icon -->
-    <slot name="leading-icon" v-if="!loading" />
+    <!-- Left Icon -->
+    <component 
+      v-if="leftIcon && !loading" 
+      :is="leftIcon" 
+      class="w-4 h-4 mr-2" 
+      :aria-hidden="true"
+    />
     
     <!-- Button Content -->
-    <span class="relative">
-      <slot />
+    <span :class="{ 'sr-only': loading && hideTextOnLoading }">
+      <slot>{{ text || $t('ui.button.default_text') }}</slot>
     </span>
     
-    <!-- Trailing Icon -->
-    <slot name="trailing-icon" v-if="!loading" />
-  </component>
+    <!-- Right Icon -->
+    <component 
+      v-if="rightIcon && !loading" 
+      :is="rightIcon" 
+      class="w-4 h-4 ml-2" 
+      :aria-hidden="true"
+    />
+    
+    <!-- Badge/Counter -->
+    <span 
+      v-if="badge && !loading" 
+      class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full"
+      :aria-label="$t('ui.button.badge_count', { count: badge })"
+    >
+      {{ badge }}
+    </span>
+  </button>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface Props {
-  variant?: "primary" | "secondary" | "success" | "warning" | "error" | "outline" | "ghost" | "link" | "gradient"
+  variant?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "outline" | "ghost"
   size?: "xs" | "sm" | "md" | "lg" | "xl"
   disabled?: boolean
   loading?: boolean
+  type?: "button" | "submit" | "reset"
   fullWidth?: boolean
-  rounded?: "default" | "full" | "none"
-  as?: "button" | "a" | "router-link"
-  href?: string
-  to?: string | object
+  elevation?: boolean
+  leftIcon?: string
+  rightIcon?: string
+  text?: string
+  ariaLabel?: string
+  ariaDescribedby?: string
+  badge?: number | string
+  hideTextOnLoading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -55,35 +84,40 @@ const props = withDefaults(defineProps<Props>(), {
   size: "md",
   disabled: false,
   loading: false,
+  type: "button",
   fullWidth: false,
-  rounded: "default",
-  as: "button"
+  elevation: false,
+  hideTextOnLoading: false
 })
 
 const emit = defineEmits<{
   click: [event: MouseEvent]
+  keydown: [event: KeyboardEvent]
 }>()
 
-const baseClasses = "inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 relative overflow-hidden group"
+const { t } = useI18n()
+
+const baseClasses = computed(() => 
+  "inline-flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 active:transform active:scale-95"
+)
 
 const sizeClasses = {
-  xs: "px-2.5 py-1.5 text-xs rounded-md gap-1",
-  sm: "px-3 py-2 text-sm rounded-md gap-1.5",
-  md: "px-4 py-2.5 text-sm rounded-lg gap-2",
-  lg: "px-6 py-3 text-base rounded-lg gap-2",
-  xl: "px-8 py-4 text-lg rounded-xl gap-3"
+  xs: "px-2 py-1 text-xs",
+  sm: "px-3 py-1.5 text-sm",
+  md: "px-4 py-2 text-sm",
+  lg: "px-6 py-3 text-base",
+  xl: "px-8 py-4 text-lg"
 }
 
 const variantClasses = {
-  primary: "bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-md hover:shadow-lg",
-  secondary: "bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 shadow-md hover:shadow-lg",
-  success: "bg-success-600 text-white hover:bg-success-700 focus:ring-success-500 shadow-md hover:shadow-lg",
-  warning: "bg-warning-600 text-white hover:bg-warning-700 focus:ring-warning-500 shadow-md hover:shadow-lg",
-  error: "bg-error-600 text-white hover:bg-error-700 focus:ring-error-500 shadow-md hover:shadow-lg",
-  outline: "border-2 border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 focus:ring-neutral-500 active:bg-neutral-100",
-  ghost: "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 focus:ring-neutral-500 active:bg-neutral-200",
-  link: "text-primary-600 hover:text-primary-700 underline-offset-4 hover:underline focus:ring-primary-500 p-0",
-  gradient: "bg-gradient-to-r from-primary-600 to-purple-600 text-white hover:from-primary-700 hover:to-purple-700 focus:ring-primary-500 shadow-md hover:shadow-lg"
+  primary: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 shadow-sm",
+  secondary: "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500 shadow-sm",
+  success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 shadow-sm",
+  danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",
+  warning: "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500 shadow-sm",
+  info: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 shadow-sm",
+  outline: "border-2 border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-500",
+  ghost: "text-gray-700 hover:bg-gray-100 focus:ring-gray-500"
 }
 
 const handleClick = (event: MouseEvent) => {
@@ -91,22 +125,60 @@ const handleClick = (event: MouseEvent) => {
     emit("click", event)
   }
 }
+
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (!props.disabled && !props.loading && (event.key === 'Enter' || event.key === ' ')) {
+    event.preventDefault()
+    emit("keydown", event)
+    // Trigger click event for keyboard interaction
+    handleClick(event as unknown as MouseEvent)
+  }
+}
 </script>
 
 <style scoped>
-/* Custom button effects */
-.group:hover::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s;
+/* Additional Context7 Button Styles */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
 }
 
-.group:hover::before {
-  left: 100%;
+.btn-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Focus visible for better accessibility */
+.focus\:ring-offset-2:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-gray-800 {
+    background-color: #1f2937;
+  }
+  
+  .dark\:text-gray-200 {
+    color: #e5e7eb;
+  }
+  
+  .dark\:border-gray-600 {
+    border-color: #4b5563;
+  }
 }
 </style>

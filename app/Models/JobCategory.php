@@ -80,17 +80,21 @@ class JobCategory extends Model implements HasMedia
     protected $appends = ['image_url', 'is_featured_label'];
 
     /**
-     * The attributes that should be casted to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'description' => 'string',
-        'is_featured' => 'boolean',
-        'is_default' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_featured' => 'boolean',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     /**
      * Get the URL for the job category image.
@@ -117,5 +121,98 @@ class JobCategory extends Model implements HasMedia
     public function jobs(): HasMany
     {
         return $this->hasMany(Job::class, 'job_category_id');
+    }
+
+    /**
+     * Scope for active job categories.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for featured job categories.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured job categories.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for default job categories.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom job categories.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope for job categories with jobs.
+     */
+    public function scopeWithJobs($query)
+    {
+        return $query->whereHas('jobs');
+    }
+
+    /**
+     * Scope for job categories with active jobs.
+     */
+    public function scopeWithActiveJobs($query)
+    {
+        return $query->whereHas('jobs', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    /**
+     * Scope for searching job categories by name.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for popular job categories (with most jobs).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('jobs')
+                    ->orderByDesc('jobs_count')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetically ordered job categories.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for recently created job categories.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
     }
 }

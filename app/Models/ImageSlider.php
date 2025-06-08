@@ -92,4 +92,140 @@ class ImageSlider extends Model implements HasMedia
 
         return asset('assets/img/infyom-logo.png');
     }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'title' => 'string',
+            'description' => 'string',
+            'image_url' => 'string',
+            'link_url' => 'string',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope for active image sliders.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive image sliders.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for featured image sliders.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured image sliders.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for searching image sliders.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent image sliders.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old image sliders.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for ordering by sort order.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('title', 'asc');
+    }
+
+    /**
+     * Scope for sliders with images.
+     */
+    public function scopeWithImages($query)
+    {
+        return $query->whereNotNull('image_url')->where('image_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders with links.
+     */
+    public function scopeWithLinks($query)
+    {
+        return $query->whereNotNull('link_url')->where('link_url', '!=', '');
+    }
+
+    /**
+     * Scope for sliders without links.
+     */
+    public function scopeWithoutLinks($query)
+    {
+        return $query->where(function ($query) {
+            $query->whereNull('link_url')->orWhere('link_url', '');
+        });
+    }
+
+    /**
+     * Scope for gallery sliders.
+     */
+    public function scopeGallery($query)
+    {
+        return $query->active()->withImages()->ordered();
+    }
+
+    /**
+     * Scope for promotional sliders.
+     */
+    public function scopePromotional($query)
+    {
+        return $query->active()->featured()->withLinks();
+    }
 }

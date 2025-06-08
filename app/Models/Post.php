@@ -89,6 +89,31 @@ class Post extends Model implements HasMedia
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'title' => 'string',
+            'description' => 'string',
+            'content' => 'string',
+            'slug' => 'string',
+            'meta_title' => 'string',
+            'meta_description' => 'string',
+            'featured_image' => 'string',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
      * @return mixed
      */
     public function getBlogImageUrlAttribute()
@@ -115,5 +140,151 @@ class Post extends Model implements HasMedia
     public function comments(): HasMany
     {
         return $this->hasMany(PostComment::class, 'post_id');
+    }
+
+    /**
+     * Scope for active posts.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive posts.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for published posts.
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true)
+                    ->where('published_at', '<=', now());
+    }
+
+    /**
+     * Scope for unpublished posts.
+     */
+    public function scopeUnpublished($query)
+    {
+        return $query->where('is_published', false)
+                    ->orWhere('published_at', '>', now());
+    }
+
+    /**
+     * Scope for featured posts.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured posts.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for searching posts.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('content', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent posts.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old posts.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for posts by category.
+     */
+    public function scopeByCategory($query, int $categoryId)
+    {
+        return $query->where('post_category_id', $categoryId);
+    }
+
+    /**
+     * Scope for posts with featured images.
+     */
+    public function scopeWithFeaturedImages($query)
+    {
+        return $query->whereNotNull('featured_image')->where('featured_image', '!=', '');
+    }
+
+    /**
+     * Scope for posts without featured images.
+     */
+    public function scopeWithoutFeaturedImages($query)
+    {
+        return $query->where(function ($query) {
+            $query->whereNull('featured_image')->orWhere('featured_image', '');
+        });
+    }
+
+    /**
+     * Scope for posts with comments.
+     */
+    public function scopeWithComments($query)
+    {
+        return $query->has('comments');
+    }
+
+    /**
+     * Scope for posts without comments.
+     */
+    public function scopeWithoutComments($query)
+    {
+        return $query->doesntHave('comments');
+    }
+
+    /**
+     * Scope for popular posts (with most comments).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->withCount('comments')
+                    ->orderBy('comments_count', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for latest published posts.
+     */
+    public function scopeLatest($query, int $limit = 10)
+    {
+        return $query->published()
+                    ->orderBy('published_at', 'desc')
+                    ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('title', 'asc');
     }
 }

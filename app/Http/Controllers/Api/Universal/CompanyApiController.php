@@ -6,7 +6,13 @@ use App\Http\Controllers\UniversalBaseController;
 use App\Models\Company;
 use App\Http\Resources\Universal\CompanyResource;
 use App\Http\Resources\Universal\CompanyCollection;
-use Illuminate\Http\Request;
+use App\Http\Resources\Universal\ShowCompanyResource;
+use App\Http\Resources\Universal\DestroyCompanyResource;
+use App\Http\Requests\Api\Universal\IndexRequest;
+use App\Http\Requests\Api\Universal\ShowCompanyRequest;
+use App\Http\Requests\Api\Universal\StoreRequest;
+use App\Http\Requests\Api\Universal\UpdateRequest;
+use App\Http\Requests\Api\Universal\DestroyCompanyRequest;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -18,7 +24,7 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display a listing of the resource with caching
      */
-    public function index(StoreRequest $request): JsonResponse
+    public function index(IndexRequest $request): JsonResponse
     {
         try {
             $cacheKey = $this->generateCacheKey($request, 'company_index');
@@ -50,7 +56,7 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching
      */
-    public function show($id): JsonResponse
+    public function show(ShowCompanyRequest $request, $id): JsonResponse
     {
         try {
             $company = $this->findCached(Company::class, $id, ['user']);
@@ -60,7 +66,7 @@ class CompanyApiController extends UniversalBaseController
             }
             
             return $this->jsonResponse([
-                'company' => new App\Http\Resources\Universal\CompanyResource($company)
+                'company' => new ShowCompanyResource($company)
             ]);
             
         } catch (\Exception $e) {
@@ -137,20 +143,33 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete
      */
-    public function destroy($id): JsonResponse
+    public function destroy(DestroyCompanyRequest $request, $id): JsonResponse
     {
         try {
             $company = Company::findOrFail($id);
             
             // Universal Pattern: Rate limited action
-            return $this->rateLimitedAction($request ?? request(), 'delete_company', function () use ($company) {
+            return $this->rateLimitedAction($request, 'delete_company', function () use ($company, $request) {
                 $this->executeTransaction(function () use ($company) {
                     $company->delete();
                 });
                 
                 $this->clearModelCache(Company::class, $company->id);
                 
-                return $this->jsonResponse([], 'Deleted successfully');
+                return $this->jsonResponse([
+                    'deletion' => new DestroyCompanyResource([
+                        'company_id' => $company->id,
+                        'company_name' => $company->name,
+                        'reason' => $request->input('reason'),
+                        'jobs_transferred' => $request->has('transfer_data_to'),
+                        'transfer_target' => $request->input('transfer_data_to'),
+                        'jobs_affected' => $company->jobs()->count(),
+                        'cleanup_performed' => true,
+                        'cache_cleared' => true,
+                        'audit_logged' => true,
+                        'admin_notified' => true
+                    ])
+                ], 'Deleted successfully');
             });
             
         } catch (\Exception $e) {

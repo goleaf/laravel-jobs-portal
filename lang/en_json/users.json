@@ -1,0 +1,110 @@
+{
+    "users": {
+        "gender": {
+            "male": "Male",
+            "female": "Female",
+            "other": "Other"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "unverified": "Unverified"
+        },
+        "location": {
+            "not_specified": "Location not specified"
+        },
+        "messages": {
+            "created": "User created successfully",
+            "updated": "User updated successfully",
+            "deleted": "User deleted successfully",
+            "not_found": "User not found",
+            "profile_updated": "Profile updated successfully",
+            "password_changed": "Password changed successfully",
+            "email_verified": "Email verified successfully"
+        }
+    },
+    "validation": {
+        "user": {
+            "first_name": {
+                "required": "First name is required",
+                "string": "First name must be text",
+                "max": "First name cannot exceed 255 characters"
+            },
+            "last_name": {
+                "required": "Last name is required",
+                "string": "Last name must be text",
+                "max": "Last name cannot exceed 255 characters"
+            },
+            "email": {
+                "required": "Email address is required",
+                "email": "Please enter a valid email address",
+                "unique": "This email address is already registered",
+                "max": "Email address cannot exceed 255 characters"
+            },
+            "password": {
+                "required": "Password is required",
+                "confirmed": "Password confirmation does not match"
+            },
+            "phone": {
+                "string": "Phone number must be text",
+                "max": "Phone number cannot exceed 20 characters"
+            },
+            "dob": {
+                "date": "Date of birth must be a valid date",
+                "before": "Date of birth must be in the past",
+                "minimum_age": "You must be at least 16 years old"
+            },
+            "gender": {
+                "in": "Please select a valid gender option"
+            },
+            "marital_status_id": {
+                "exists": "Selected marital status does not exist"
+            },
+            "nationality_id": {
+                "exists": "Selected nationality does not exist"
+            },
+            "country_id": {
+                "exists": "Selected country does not exist"
+            },
+            "state_id": {
+                "exists": "Selected state does not exist"
+            },
+            "city_id": {
+                "exists": "Selected city does not exist"
+            },
+            "language": {
+                "in": "Please select a valid language"
+            },
+            "role": {
+                "required": "User role is required",
+                "in": "Please select a valid user role"
+            },
+            "avatar": {
+                "image": "Avatar must be an image file",
+                "mimes": "Avatar must be a JPEG, JPG, or PNG file",
+                "max": "Avatar file size cannot exceed 2MB"
+            },
+            "state_country_mismatch": "Selected state does not belong to the selected country",
+            "city_state_mismatch": "Selected city does not belong to the selected state"
+        }
+    },
+    "attributes": {
+        "user": {
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "email": "Email Address",
+            "password": "Password",
+            "phone": "Phone Number",
+            "date_of_birth": "Date of Birth",
+            "gender": "Gender",
+            "marital_status": "Marital Status",
+            "nationality": "Nationality",
+            "country": "Country",
+            "state": "State",
+            "city": "City",
+            "language": "Preferred Language",
+            "role": "User Role",
+            "avatar": "Profile Picture"
+        }
+    }
+} 

@@ -98,6 +98,27 @@ class UserController extends AppBaseController
     }
 
     /**
+     * Get dashboard statistics using new model scopes
+     */
+    public function getDashboardStats(): JsonResponse
+    {
+        $stats = [
+            'recent_users' => User::recent(7)->count(),
+            'candidates' => User::candidates()->count(), 
+            'employers' => User::employers()->count(),
+            'admins' => User::admins()->count(),
+            'active_jobs' => Job::active()->count(),
+            'featured_jobs' => Job::featured()->count(),
+            'urgent_jobs' => Job::urgent()->count(),
+            'remote_jobs' => Job::remote()->count(),
+            'active_companies' => Company::active()->count(),
+            'featured_companies' => Company::featured()->count(),
+        ];
+
+        return $this->sendResponse($stats, 'Dashboard statistics retrieved successfully.');
+    }
+
+    /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function adminIndex(): View

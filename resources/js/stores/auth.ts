@@ -4,7 +4,7 @@ import type { User, LoginCredentials, RegisterData, ApiResponse } from '../types
 import { apiClient } from '../services/api'
 
 /**
- * Context7 Authentication Store
+ * Universal Authentication Store
  * Manages user authentication state for Vue.js SPA
  * Uses Laravel Sanctum for SPA authentication
  */

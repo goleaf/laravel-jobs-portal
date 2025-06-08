@@ -235,4 +235,325 @@ class TokenControllerTest extends TestCase
 
         $response->assertStatus(400);
     }
+
+    /** @test */
+    public function it_can_login_with_valid_credentials()
+    {
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => [
+                    'user' => [
+                        'id',
+                        'name',
+                        'email'
+                    ],
+                    'token' => [
+                        'access_token',
+                        'token_type',
+                        'abilities'
+                    ]
+                ],
+                'meta'
+            ])
+            ->assertJson([
+                'success' => true
+            ]);
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'name' => 'Test Device',
+            'tokenable_id' => $this->user->id,
+            'tokenable_type' => User::class,
+        ]);
+    }
+
+    /** @test */
+    public function it_cannot_login_with_invalid_credentials()
+    {
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrongpassword',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Invalid credentials'
+            ]);
+    }
+
+    /** @test */
+    public function it_validates_login_request_data()
+    {
+        // Test missing email
+        $response = $this->postJson('/api/auth/login', [
+            'password' => 'password123',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['email']);
+
+        // Test invalid email format
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'invalid-email',
+            'password' => 'password123',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['email']);
+
+        // Test short password
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'test@example.com',
+            'password' => '123',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['password']);
+    }
+
+    /** @test */
+    public function it_can_get_authenticated_user_details()
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->getJson('/api/auth/user');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => [
+                    'user' => [
+                        'id',
+                        'name',
+                        'email',
+                        'created_at'
+                    ],
+                    'authentication' => [
+                        'token_abilities'
+                    ]
+                ]
+            ])
+            ->assertJson([
+                'success' => true,
+                'data' => [
+                    'user' => [
+                        'id' => $this->user->id,
+                        'email' => $this->user->email
+                    ]
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function it_cannot_get_user_details_without_authentication()
+    {
+        $response = $this->getJson('/api/auth/user');
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function it_can_logout_authenticated_user()
+    {
+        $token = $this->user->createToken('Test Token')->plainTextToken;
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson('/api/auth/logout');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Logged out successfully'
+            ]);
+
+        // Verify token was deleted
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $this->user->id,
+            'name' => 'Test Token'
+        ]);
+    }
+
+    /** @test */
+    public function it_cannot_logout_without_authentication()
+    {
+        $response = $this->postJson('/api/auth/logout');
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function it_can_logout_all_tokens()
+    {
+        // Create multiple tokens
+        $token1 = $this->user->createToken('Token 1');
+        $token2 = $this->user->createToken('Token 2');
+        $token3 = $this->user->createToken('Token 3');
+
+        Sanctum::actingAs($this->user, ['*'], $token1->accessToken);
+
+        $response = $this->postJson('/api/auth/logout-all');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => [
+                    'revoked_tokens'
+                ]
+            ])
+            ->assertJson([
+                'success' => true,
+                'data' => [
+                    'revoked_tokens' => 3
+                ]
+            ]);
+
+        // Verify all tokens were deleted
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $this->user->id
+        ]);
+    }
+
+    /** @test */
+    public function it_can_list_user_tokens()
+    {
+        // Create multiple tokens
+        $token1 = $this->user->createToken('Token 1');
+        $token2 = $this->user->createToken('Token 2');
+
+        Sanctum::actingAs($this->user, ['*'], $token1->accessToken);
+
+        $response = $this->getJson('/api/auth/tokens');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => [
+                    'tokens' => [
+                        '*' => [
+                            'id',
+                            'name',
+                            'abilities',
+                            'created_at'
+                        ]
+                    ],
+                    'summary' => [
+                        'total_tokens'
+                    ]
+                ]
+            ])
+            ->assertJson([
+                'success' => true,
+                'data' => [
+                    'summary' => [
+                        'total_tokens' => 2
+                    ]
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function it_can_filter_tokens_with_query_parameters()
+    {
+        $token1 = $this->user->createToken('Token 1');
+        $token2 = $this->user->createToken('Token 2');
+
+        Sanctum::actingAs($this->user, ['*'], $token1->accessToken);
+
+        $response = $this->getJson('/api/auth/tokens?limit=1&sort_by=created_at&sort_direction=desc');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'meta' => [
+                    'pagination' => [
+                        'limit'
+                    ]
+                ]
+            ])
+            ->assertJson([
+                'meta' => [
+                    'pagination' => [
+                        'limit' => 1
+                    ]
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function it_validates_tokens_request_parameters()
+    {
+        Sanctum::actingAs($this->user);
+
+        // Test invalid sort_by
+        $response = $this->getJson('/api/auth/tokens?sort_by=invalid_field');
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['sort_by']);
+
+        // Test invalid limit
+        $response = $this->getJson('/api/auth/tokens?limit=101');
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['limit']);
+    }
+
+    /** @test */
+    public function it_cannot_access_tokens_without_authentication()
+    {
+        $response = $this->getJson('/api/auth/tokens');
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function it_handles_rate_limiting_on_login()
+    {
+        // Make multiple failed login attempts
+        for ($i = 0; $i < 6; $i++) {
+            $this->postJson('/api/auth/login', [
+                'email' => 'test@example.com',
+                'password' => 'wrongpassword',
+                'device_name' => 'Test Device'
+            ]);
+        }
+
+        // The 6th attempt should be rate limited
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrongpassword',
+            'device_name' => 'Test Device'
+        ]);
+
+        $response->assertStatus(429); // Too Many Requests
+    }
+
+    /** @test */
+    public function it_sets_default_device_name_when_not_provided()
+    {
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'test@example.com',
+            'password' => 'password123'
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'name' => 'API Client',
+            'tokenable_id' => $this->user->id,
+        ]);
+    }
 }

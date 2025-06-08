@@ -47,13 +47,22 @@ class EmailTemplate extends Model
         'variables',
     ];
 
-    protected $casts = [
-        'id' => 'integer',
-        'template_name' => 'string',
-        'subject' => 'string',
-        'body' => 'string',
-        'variables' => 'string',
-    ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'variables' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     /**
      * Validation rules
@@ -64,4 +73,88 @@ class EmailTemplate extends Model
         'subject' => 'required|max:150',
         'body' => 'required',
     ];
+
+    /**
+     * Scope for active email templates.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for default email templates.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom email templates.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope for searching templates by name or subject.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('template_name', 'like', "%{$term}%")
+                    ->orWhere('subject', 'like', "%{$term}%")
+                    ->orWhere('body', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for templates by name.
+     */
+    public function scopeByName($query, string $name)
+    {
+        return $query->where('template_name', $name);
+    }
+
+    /**
+     * Scope for recently created templates.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for alphabetically ordered templates.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('template_name', 'asc');
+    }
+
+    /**
+     * Scope for templates with variables.
+     */
+    public function scopeWithVariables($query)
+    {
+        return $query->whereNotNull('variables');
+    }
+
+    /**
+     * Scope for system notification templates.
+     */
+    public function scopeNotification($query)
+    {
+        return $query->where('template_name', 'like', '%notification%')
+                    ->orWhere('template_name', 'like', '%alert%');
+    }
+
+    /**
+     * Scope for welcome/registration templates.
+     */
+    public function scopeWelcome($query)
+    {
+        return $query->where('template_name', 'like', '%welcome%')
+                    ->orWhere('template_name', 'like', '%registration%');
+    }
 }

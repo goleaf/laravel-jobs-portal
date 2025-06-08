@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMaritalStatusRequest;
+use App\Http\Requests\UpdateMaritalStatusRequest;
 use App\Models\Candidate;
 use App\Models\MaritalStatus;
 use App\Repositories\MaritalStatusRepository;
@@ -10,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class MaritalStatusController extends AppBaseController
 {
     /** @var MaritalStatusRepository */
@@ -35,6 +38,9 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Store a newly created MaritalStatus in storage.
+     *
+     * @param CreateMaritalStatusRequest $request
+     * @return JsonResponse
      */
     public function store(CreateMaritalStatusRequest $request): JsonResponse
     {
@@ -46,6 +52,9 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param MaritalStatus $maritalStatus
+     * @return JsonResponse
      */
     public function show(MaritalStatus $maritalStatus): JsonResponse
     {
@@ -54,6 +63,9 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Show the form for editing the specified MaritalStatus.
+     *
+     * @param MaritalStatus $maritalStatus
+     * @return JsonResponse
      */
     public function edit(MaritalStatus $maritalStatus): JsonResponse
     {
@@ -62,8 +74,12 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Update the specified MaritalStatus in storage.
+     *
+     * @param UpdateMaritalStatusRequest $request
+     * @param MaritalStatus $maritalStatus
+     * @return JsonResponse
      */
-    public function update(UpdateMaritalStatusUpdateMaritalStatusRequest $request, MaritalStatus $maritalStatus): JsonResponse
+    public function update(UpdateMaritalStatusRequest $request, MaritalStatus $maritalStatus): JsonResponse
     {
         $input = $request->all();
         $this->maritalStatusRepository->update($input, $maritalStatus->id);
@@ -74,6 +90,8 @@ class MaritalStatusController extends AppBaseController
     /**
      * Remove the specified MaritalStatus from storage.
      *
+     * @param MaritalStatus $maritalStatus
+     * @return JsonResponse
      *
      * @throws Exception
      */

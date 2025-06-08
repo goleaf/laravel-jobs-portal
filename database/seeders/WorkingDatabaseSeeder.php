@@ -39,8 +39,10 @@ class WorkingDatabaseSeeder extends Seeder
             // Geographic data (for foreign key dependencies)
             CountriesSeeder::class,
             StatesSeeder::class,
+            CitiesSeeder::class,
             
             // Job portal master data
+            SkillsSeeder::class,
             CreateDefaultIndustriesSeeder::class,
             CreateDefaultCareerLevelSeeder::class,
             CreateDefaultDegreeLevelSeeder::class,

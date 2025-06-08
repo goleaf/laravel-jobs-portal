@@ -88,9 +88,17 @@ class JobCategory extends Model implements HasMedia
     {
         return [
             'id' => 'integer',
+            'parent_id' => 'integer',
+            'name' => 'string',
+            'description' => 'string',
+            'slug' => 'string',
+            'icon' => 'string',
+            'color' => 'string',
+            'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'is_default' => 'boolean',
-            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+            'jobs_count' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -132,6 +140,14 @@ class JobCategory extends Model implements HasMedia
     }
 
     /**
+     * Scope for inactive job categories.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
      * Scope for featured job categories.
      */
     public function scopeFeatured($query)
@@ -164,30 +180,95 @@ class JobCategory extends Model implements HasMedia
     }
 
     /**
-     * Scope for job categories with jobs.
+     * Scope for parent categories (top-level).
      */
-    public function scopeWithJobs($query)
+    public function scopeParent($query)
     {
-        return $query->whereHas('jobs');
+        return $query->whereNull('parent_id');
     }
 
     /**
-     * Scope for job categories with active jobs.
+     * Scope for child categories (subcategories).
+     */
+    public function scopeChild($query)
+    {
+        return $query->whereNotNull('parent_id');
+    }
+
+    /**
+     * Scope for categories by parent.
+     */
+    public function scopeByParent($query, int $parentId)
+    {
+        return $query->where('parent_id', $parentId);
+    }
+
+    /**
+     * Scope for categories with jobs.
+     */
+    public function scopeWithJobs($query)
+    {
+        return $query->has('jobs');
+    }
+
+    /**
+     * Scope for categories without jobs.
+     */
+    public function scopeWithoutJobs($query)
+    {
+        return $query->doesntHave('jobs');
+    }
+
+    /**
+     * Scope for categories with active jobs.
      */
     public function scopeWithActiveJobs($query)
     {
         return $query->whereHas('jobs', function ($q) {
-            $q->where('is_active', true);
+            $q->where('status', 1);
         });
     }
 
     /**
-     * Scope for searching job categories by name.
+     * Scope for categories with children.
+     */
+    public function scopeWithChildren($query)
+    {
+        return $query->has('children');
+    }
+
+    /**
+     * Scope for categories without children.
+     */
+    public function scopeWithoutChildren($query)
+    {
+        return $query->doesntHave('children');
+    }
+
+    /**
+     * Scope for searching job categories.
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('slug', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent job categories.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old job categories.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
     }
 
     /**
@@ -196,12 +277,33 @@ class JobCategory extends Model implements HasMedia
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('jobs')
-                    ->orderByDesc('jobs_count')
+                    ->orderBy('jobs_count', 'desc')
                     ->limit($limit);
     }
 
     /**
-     * Scope for alphabetically ordered job categories.
+     * Scope for trending job categories.
+     */
+    public function scopeTrending($query, int $limit = 10)
+    {
+        return $query->withCount(['jobs' => function ($q) {
+            $q->where('created_at', '>=', now()->subDays(30))
+              ->where('status', 1);
+        }])
+        ->orderBy('jobs_count', 'desc')
+        ->limit($limit);
+    }
+
+    /**
+     * Scope for ordered job categories.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -209,10 +311,121 @@ class JobCategory extends Model implements HasMedia
     }
 
     /**
-     * Scope for recently created job categories.
+     * Scope for categories by slug.
      */
-    public function scopeRecent($query, int $days = 30)
+    public function scopeBySlug($query, string $slug)
     {
-        return $query->where('created_at', '>=', now()->subDays($days));
+        return $query->where('slug', $slug);
+    }
+
+    /**
+     * Scope for technology categories.
+     */
+    public function scopeTechnology($query)
+    {
+        return $query->where('name', 'like', '%technology%')
+                    ->orWhere('name', 'like', '%IT%')
+                    ->orWhere('name', 'like', '%software%')
+                    ->orWhere('name', 'like', '%development%');
+    }
+
+    /**
+     * Scope for business categories.
+     */
+    public function scopeBusiness($query)
+    {
+        return $query->where('name', 'like', '%business%')
+                    ->orWhere('name', 'like', '%management%')
+                    ->orWhere('name', 'like', '%finance%')
+                    ->orWhere('name', 'like', '%accounting%');
+    }
+
+    /**
+     * Scope for creative categories.
+     */
+    public function scopeCreative($query)
+    {
+        return $query->where('name', 'like', '%creative%')
+                    ->orWhere('name', 'like', '%design%')
+                    ->orWhere('name', 'like', '%art%')
+                    ->orWhere('name', 'like', '%media%');
+    }
+
+    /**
+     * Scope for healthcare categories.
+     */
+    public function scopeHealthcare($query)
+    {
+        return $query->where('name', 'like', '%healthcare%')
+                    ->orWhere('name', 'like', '%medical%')
+                    ->orWhere('name', 'like', '%nursing%')
+                    ->orWhere('name', 'like', '%doctor%');
+    }
+
+    /**
+     * Scope for education categories.
+     */
+    public function scopeEducation($query)
+    {
+        return $query->where('name', 'like', '%education%')
+                    ->orWhere('name', 'like', '%teaching%')
+                    ->orWhere('name', 'like', '%academic%')
+                    ->orWhere('name', 'like', '%training%');
+    }
+
+    /**
+     * Scope for sales categories.
+     */
+    public function scopeSales($query)
+    {
+        return $query->where('name', 'like', '%sales%')
+                    ->orWhere('name', 'like', '%marketing%')
+                    ->orWhere('name', 'like', '%retail%')
+                    ->orWhere('name', 'like', '%customer%');
+    }
+
+    /**
+     * Scope for engineering categories.
+     */
+    public function scopeEngineering($query)
+    {
+        return $query->where('name', 'like', '%engineering%')
+                    ->orWhere('name', 'like', '%engineer%')
+                    ->orWhere('name', 'like', '%technical%')
+                    ->orWhere('name', 'like', '%mechanical%');
+    }
+
+    /**
+     * Scope for categories with high job count.
+     */
+    public function scopeHighJobCount($query, int $threshold = 100)
+    {
+        return $query->where('jobs_count', '>=', $threshold);
+    }
+
+    /**
+     * Scope for categories with low job count.
+     */
+    public function scopeLowJobCount($query, int $threshold = 10)
+    {
+        return $query->where('jobs_count', '<=', $threshold);
+    }
+
+    /**
+     * Scope for categories with icon.
+     */
+    public function scopeWithIcon($query)
+    {
+        return $query->whereNotNull('icon')
+                    ->where('icon', '!=', '');
+    }
+
+    /**
+     * Scope for categories with color.
+     */
+    public function scopeWithColor($query)
+    {
+        return $query->whereNotNull('color')
+                    ->where('color', '!=', '');
     }
 }

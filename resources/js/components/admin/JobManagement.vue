@@ -1,672 +1,598 @@
 <template>
-  <div class="job-management-container">
+  <div class="job-management min-h-screen bg-gray-50">
     <!-- Header Section -->
-    <div class="header-section">
-      <div class="flex justify-between items-center mb-6">
+    <div class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+      <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-            {{ $t('admin.jobs.title') }}
-          </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-1">
-            {{ $t('admin.jobs.subtitle') }}
-          </p>
+          <h1 class="text-2xl font-semibold text-gray-900">{{ $t('jobs.management.title') }}</h1>
+          <p class="text-sm text-gray-600 mt-1">{{ $t('jobs.management.subtitle') }}</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex items-center space-x-3">
           <button
-            @click="exportJobs"
-            :disabled="exporting"
-            class="btn-secondary"
+            @click="refreshJobs"
+            :disabled="loading"
+            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
-            <Icon name="download" class="w-4 h-4 mr-2" />
-            {{ exporting ? $t('common.exporting') : $t('common.export') }}
+            <svg class="h-4 w-4 mr-2" :class="{ 'animate-spin': loading }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {{ $t('common.refresh') }}
           </button>
-          <button
-            @click="showCreateModal = true"
-            class="btn-primary"
+          <router-link
+            to="/admin/jobs/create"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            <Icon name="plus" class="w-4 h-4 mr-2" />
-            {{ $t('admin.jobs.create') }}
-          </button>
+            <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            {{ $t('jobs.actions.create') }}
+          </router-link>
         </div>
-      </div>
-
-      <!-- Statistics Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <StatCard
-          v-for="stat in statistics"
-          :key="stat.key"
-          :title="stat.title"
-          :value="stat.value"
-          :change="stat.change"
-          :icon="stat.icon"
-          :color="stat.color"
-        />
       </div>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="filters-section bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-      <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-4">
-        <!-- Search Input -->
-        <div class="lg:col-span-2">
-          <SearchInput
-            v-model="filters.search"
-            :placeholder="$t('admin.jobs.search_placeholder')"
-            @input="debouncedSearch"
-          />
-        </div>
-
-        <!-- Status Filter -->
+    <!-- Filters Section -->
+    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
-          <SelectField
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('jobs.filters.status') }}
+          </label>
+          <select
             v-model="filters.status"
-            :options="statusOptions"
-            :placeholder="$t('admin.jobs.filter_status')"
-            @update:modelValue="applyFilters"
+            @change="applyFilters"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.all') }}</option>
+            <option value="open">{{ $t('jobs.status.open') }}</option>
+            <option value="closed">{{ $t('jobs.status.closed') }}</option>
+            <option value="drafted">{{ $t('jobs.status.drafted') }}</option>
+            <option value="paused">{{ $t('jobs.status.paused') }}</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('jobs.filters.company') }}
+          </label>
+          <select
+            v-model="filters.company_id"
+            @change="applyFilters"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.all') }}</option>
+            <option v-for="company in companies" :key="company.id" :value="company.id">
+              {{ company.name }}
+            </option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('jobs.filters.search') }}
+          </label>
+          <input
+            v-model="filters.search"
+            @input="debounceSearch"
+            type="text"
+            :placeholder="$t('jobs.filters.search_placeholder')"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
         </div>
-
-        <!-- Category Filter -->
+        
         <div>
-          <SelectField
-            v-model="filters.category"
-            :options="categoryOptions"
-            :placeholder="$t('admin.jobs.filter_category')"
-            @update:modelValue="applyFilters"
-          />
-        </div>
-
-        <!-- Company Filter -->
-        <div>
-          <SelectField
-            v-model="filters.company"
-            :options="companyOptions"
-            :placeholder="$t('admin.jobs.filter_company')"
-            @update:modelValue="applyFilters"
-          />
-        </div>
-
-        <!-- Date Range -->
-        <div>
-          <DateRangePicker
-            v-model="filters.dateRange"
-            :placeholder="$t('admin.jobs.filter_date')"
-            @update:modelValue="applyFilters"
-          />
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('jobs.filters.date_range') }}
+          </label>
+          <select
+            v-model="filters.date_range"
+            @change="applyFilters"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.all_time') }}</option>
+            <option value="today">{{ $t('common.today') }}</option>
+            <option value="week">{{ $t('common.this_week') }}</option>
+            <option value="month">{{ $t('common.this_month') }}</option>
+          </select>
         </div>
       </div>
+    </div>
 
-      <!-- Quick Filters -->
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="quickFilter in quickFilters"
-          :key="quickFilter.key"
-          @click="applyQuickFilter(quickFilter)"
-          :class="[
-            'px-3 py-1 text-sm rounded-full border transition-colors',
-            activeQuickFilter === quickFilter.key
-              ? 'bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-900 dark:border-indigo-700 dark:text-indigo-300'
-              : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600'
-          ]"
-        >
-          {{ quickFilter.label }}
-          <span v-if="quickFilter.count" class="ml-1 font-medium">
-            ({{ quickFilter.count }})
-          </span>
-        </button>
+    <!-- Statistics Cards -->
+    <div class="px-6 py-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <BriefcaseIcon class="h-6 w-6 text-gray-400" />
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    {{ $t('jobs.stats.total') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ statistics.total || 0 }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <CheckCircleIcon class="h-6 w-6 text-green-400" />
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    {{ $t('jobs.stats.active') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ statistics.active || 0 }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <UserGroupIcon class="h-6 w-6 text-blue-400" />
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    {{ $t('jobs.stats.applications') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ statistics.applications || 0 }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <StarIcon class="h-6 w-6 text-yellow-400" />
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    {{ $t('jobs.stats.featured') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ statistics.featured || 0 }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Jobs Table -->
-    <div class="jobs-table-section bg-white dark:bg-gray-800 rounded-lg shadow">
-      <!-- Table Header -->
-      <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-4">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              {{ $t('admin.jobs.list_title') }}
-            </h3>
-            <span class="text-sm text-gray-500 dark:text-gray-400">
-              {{ $t('admin.jobs.showing_count', { 
-                from: pagination.from || 0, 
-                to: pagination.to || 0, 
-                total: pagination.total || 0 
-              }) }}
-            </span>
+    <div class="px-6 pb-6">
+      <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <div class="px-4 py-5 sm:p-6">
+          <!-- Loading State -->
+          <div v-if="loading" class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            <span class="ml-3 text-gray-600">{{ $t('common.loading') }}</span>
           </div>
 
-          <div class="flex items-center gap-2">
-            <!-- Bulk Actions -->
-            <div v-if="selectedJobs.length > 0" class="flex items-center gap-2">
-              <span class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t('admin.jobs.selected_count', { count: selectedJobs.length }) }}
-              </span>
-              <BulkActions
-                :selected-count="selectedJobs.length"
-                @bulk-action="handleBulkAction"
-              />
-            </div>
+          <!-- Jobs List -->
+          <div v-else-if="jobs.length > 0" class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.title') }}
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.company') }}
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.status') }}
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.applications') }}
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.created') }}
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $t('jobs.table.expires') }}
+                  </th>
+                  <th class="relative px-6 py-3">
+                    <span class="sr-only">{{ $t('common.actions') }}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="job in jobs" :key="job.id" class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0 h-10 w-10">
+                        <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                          <BriefcaseIcon class="h-5 w-5 text-indigo-600" />
+                        </div>
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">
+                          {{ job.title }}
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          {{ job.job_type }} • {{ job.category }}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">{{ job.company?.name }}</div>
+                    <div class="text-sm text-gray-500">{{ job.location?.city }}, {{ job.location?.country }}</div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span :class="getStatusBadgeClass(job.status)" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full">
+                      {{ $t(`jobs.status.${job.status}`) }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{ job.statistics?.applications_count || 0 }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ formatDate(job.dates?.created) }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span v-if="job.dates?.expires" :class="{ 'text-red-600': job.dates?.is_expired }">
+                      {{ formatDate(job.dates?.expires) }}
+                    </span>
+                    <span v-else class="text-gray-400">{{ $t('common.never') }}</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex items-center space-x-2">
+                      <router-link
+                        :to="`/admin/jobs/${job.id}`"
+                        class="text-indigo-600 hover:text-indigo-900"
+                        :title="$t('common.view')"
+                      >
+                        <EyeIcon class="h-4 w-4" />
+                      </router-link>
+                      <router-link
+                        v-if="job.permissions?.can_edit"
+                        :to="`/admin/jobs/${job.id}/edit`"
+                        class="text-gray-600 hover:text-gray-900"
+                        :title="$t('common.edit')"
+                      >
+                        <PencilIcon class="h-4 w-4" />
+                      </router-link>
+                      <button
+                        v-if="job.permissions?.can_feature"
+                        @click="toggleFeature(job)"
+                        :class="job.flags?.is_featured ? 'text-yellow-600 hover:text-yellow-900' : 'text-gray-400 hover:text-gray-600'"
+                        :title="job.flags?.is_featured ? $t('jobs.actions.unfeature') : $t('jobs.actions.feature')"
+                      >
+                        <StarIcon class="h-4 w-4" />
+                      </button>
+                      <button
+                        v-if="job.permissions?.can_delete"
+                        @click="confirmDelete(job)"
+                        class="text-red-600 hover:text-red-900"
+                        :title="$t('common.delete')"
+                      >
+                        <TrashIcon class="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-            <!-- View Toggle -->
-            <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg">
-              <button
-                @click="viewMode = 'table'"
-                :class="[
-                  'px-3 py-1 text-sm',
-                  viewMode === 'table'
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
-                ]"
-              >
-                <Icon name="table" class="w-4 h-4" />
-              </button>
-              <button
-                @click="viewMode = 'card'"
-                :class="[
-                  'px-3 py-1 text-sm border-l border-gray-300 dark:border-gray-600',
-                  viewMode === 'card'
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
-                ]"
-              >
-                <Icon name="grid" class="w-4 h-4" />
-              </button>
-            </div>
-
-            <!-- Per Page Selector -->
-            <SelectField
-              v-model="pagination.perPage"
-              :options="perPageOptions"
-              class="w-20"
-              @update:modelValue="changePerPage"
-            />
+          <!-- Empty State -->
+          <div v-else class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8zM8 14v.01M12 14v.01M16 14v.01" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ $t('jobs.empty.title') }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ $t('jobs.empty.description') }}</p>
           </div>
         </div>
       </div>
-
-      <!-- Loading State -->
-      <div v-if="loading" class="p-8 text-center">
-        <LoadingSpinner class="mx-auto" />
-        <p class="text-gray-600 dark:text-gray-400 mt-2">
-          {{ $t('common.loading') }}
-        </p>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else-if="jobs.length === 0" class="p-8 text-center">
-        <Icon name="briefcase" class="w-16 h-16 mx-auto text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {{ $t('admin.jobs.empty_title') }}
-        </h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-4">
-          {{ $t('admin.jobs.empty_message') }}
-        </p>
-        <button @click="showCreateModal = true" class="btn-primary">
-          {{ $t('admin.jobs.create_first') }}
-        </button>
-      </div>
-
-      <!-- Table View -->
-      <div v-else-if="viewMode === 'table'" class="overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th class="px-6 py-3 text-left">
-                <Checkbox
-                  :checked="allJobsSelected"
-                  @update:checked="toggleAllJobs"
-                />
-              </th>
-              <th
-                v-for="column in tableColumns"
-                :key="column.key"
-                @click="sort(column.key)"
-                :class="[
-                  'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
-                  column.sortable ? 'cursor-pointer hover:text-gray-700 dark:hover:text-gray-200' : ''
-                ]"
-              >
-                <div class="flex items-center gap-1">
-                  {{ column.label }}
-                  <Icon
-                    v-if="column.sortable && sortField === column.key"
-                    :name="sortDirection === 'asc' ? 'chevron-up' : 'chevron-down'"
-                    class="w-3 h-3"
-                  />
-                </div>
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {{ $t('common.actions') }}
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            <JobTableRow
-              v-for="job in jobs"
-              :key="job.id"
-              :job="job"
-              :selected="selectedJobs.includes(job.id)"
-              @toggle-selection="toggleJobSelection"
-              @edit="editJob"
-              @delete="deleteJob"
-              @feature="toggleFeature"
-              @view-applications="viewApplications"
-            />
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Card View -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        <JobCard
-          v-for="job in jobs"
-          :key="job.id"
-          :job="job"
-          :selected="selectedJobs.includes(job.id)"
-          @toggle-selection="toggleJobSelection"
-          @edit="editJob"
-          @delete="deleteJob"
-          @feature="toggleFeature"
-          @view-applications="viewApplications"
-        />
-      </div>
-
-      <!-- Pagination -->
-      <div v-if="pagination.lastPage > 1" class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-        <Pagination
-          :current-page="pagination.currentPage"
-          :last-page="pagination.lastPage"
-          :total="pagination.total"
-          :per-page="pagination.perPage"
-          @page-changed="changePage"
-        />
-      </div>
     </div>
 
-    <!-- Modals -->
-    <CreateJobModal
-      v-model:show="showCreateModal"
-      @job-created="onJobCreated"
-    />
+    <!-- Delete Confirmation Modal -->
+    <TransitionRoot as="template" :show="showDeleteModal">
+      <Dialog as="div" class="relative z-10" @close="showDeleteModal = false">
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
 
-    <EditJobModal
-      v-model:show="showEditModal"
-      :job="selectedJob"
-      @job-updated="onJobUpdated"
-    />
-
-    <ViewApplicationsModal
-      v-model:show="showApplicationsModal"
-      :job="selectedJob"
-    />
-
-    <DeleteConfirmModal
-      v-model:show="showDeleteModal"
-      :title="$t('admin.jobs.delete_title')"
-      :message="$t('admin.jobs.delete_message')"
-      @confirmed="confirmDelete"
-    />
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enter-to="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 translate-y-0 sm:scale-100"
+              leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <ExclamationTriangleIcon class="h-6 w-6 text-red-600" />
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                      <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                        {{ $t('jobs.delete.title') }}
+                      </DialogTitle>
+                      <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                          {{ $t('jobs.delete.message', { title: jobToDelete?.title }) }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <button
+                    @click="deleteJob"
+                    :disabled="deleting"
+                    class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  >
+                    <span v-if="deleting" class="flex items-center">
+                      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      {{ $t('common.deleting') }}
+                    </span>
+                    <span v-else>{{ $t('common.delete') }}</span>
+                  </button>
+                  <button
+                    @click="showDeleteModal = false"
+                    :disabled="deleting"
+                    class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  >
+                    {{ $t('common.cancel') }}
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from '@/composables/useToast'
-import { useDebounce } from '@/composables/useDebounce'
-import { useJobsApi } from '@/composables/api/useJobsApi'
-import { usePagination } from '@/composables/usePagination'
-import { useSelection } from '@/composables/useSelection'
-
-// Components
-import StatCard from '@/components/ui/StatCard.vue'
-import SearchInput from '@/components/ui/SearchInput.vue'
-import SelectField from '@/components/ui/SelectField.vue'
-import DateRangePicker from '@/components/ui/DateRangePicker.vue'
-import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
-import Checkbox from '@/components/ui/Checkbox.vue'
-import Pagination from '@/components/ui/Pagination.vue'
-import JobTableRow from './components/JobTableRow.vue'
-import JobCard from './components/JobCard.vue'
-import BulkActions from './components/BulkActions.vue'
-import CreateJobModal from './modals/CreateJobModal.vue'
-import EditJobModal from './modals/EditJobModal.vue'
-import ViewApplicationsModal from './modals/ViewApplicationsModal.vue'
-import DeleteConfirmModal from '@/components/ui/DeleteConfirmModal.vue'
-import Icon from '@/components/ui/Icon.vue'
+import { useRouter } from 'vue-router'
+import { 
+  Dialog, 
+  DialogPanel, 
+  DialogTitle, 
+  TransitionChild, 
+  TransitionRoot 
+} from '@headlessui/vue'
+import {
+  BriefcaseIcon,
+  CheckCircleIcon,
+  UserGroupIcon,
+  StarIcon,
+  PlusIcon,
+  RefreshIcon,
+  EyeIcon,
+  PencilIcon,
+  TrashIcon,
+  ExclamationTriangleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/vue/24/outline'
+import { debounce } from 'lodash-es'
+import { jobService } from '@/services/jobService'
+import { companyService } from '@/services/companyService'
+import type { Job, Company, JobFilters, Pagination, Statistics } from '@/types'
 
 // Composables
 const { t } = useI18n()
-const { showToast } = useToast()
-const { debouncedValue: debouncedSearch } = useDebounce()
+const router = useRouter()
 
-// API
-const {
-  jobs,
-  loading,
-  pagination,
-  statistics,
-  fetchJobs,
-  createJob,
-  updateJob,
-  deleteJob: apiDeleteJob,
-  toggleFeatureJob,
-  exportJobs: apiExportJobs
-} = useJobsApi()
-
-// Selection
-const {
-  selectedItems: selectedJobs,
-  selectAll: allJobsSelected,
-  toggleSelection: toggleJobSelection,
-  toggleAll: toggleAllJobs,
-  clearSelection
-} = useSelection()
-
-// Reactive Data
-const viewMode = ref('table')
-const exporting = ref(false)
-const sortField = ref('created_at')
-const sortDirection = ref('desc')
-const activeQuickFilter = ref('all')
-
-// Modal states
-const showCreateModal = ref(false)
-const showEditModal = ref(false)
-const showApplicationsModal = ref(false)
+// Reactive state
+const loading = ref(false)
+const deleting = ref(false)
 const showDeleteModal = ref(false)
-const selectedJob = ref(null)
+const jobToDelete = ref<Job | null>(null)
 
-// Filters
-const filters = reactive({
-  search: '',
-  status: '',
-  category: '',
-  company: '',
-  dateRange: null
+const jobs = ref<Job[]>([])
+const companies = ref<Company[]>([])
+const statistics = ref<Statistics>({
+  total: 0,
+  active: 0,
+  applications: 0,
+  featured: 0
 })
 
-// Computed Properties
-const statistics = computed(() => [
-  {
-    key: 'total',
-    title: t('admin.jobs.stats.total'),
-    value: statistics.value?.total || 0,
-    change: statistics.value?.totalChange || 0,
-    icon: 'briefcase',
-    color: 'blue'
-  },
-  {
-    key: 'active',
-    title: t('admin.jobs.stats.active'),
-    value: statistics.value?.active || 0,
-    change: statistics.value?.activeChange || 0,
-    icon: 'check-circle',
-    color: 'green'
-  },
-  {
-    key: 'applications',
-    title: t('admin.jobs.stats.applications'),
-    value: statistics.value?.applications || 0,
-    change: statistics.value?.applicationsChange || 0,
-    icon: 'users',
-    color: 'purple'
-  },
-  {
-    key: 'featured',
-    title: t('admin.jobs.stats.featured'),
-    value: statistics.value?.featured || 0,
-    change: statistics.value?.featuredChange || 0,
-    icon: 'star',
-    color: 'yellow'
+const pagination = ref<Pagination>({
+  current_page: 1,
+  per_page: 15,
+  total: 0,
+  from: 0,
+  to: 0,
+  prev_page_url: null,
+  next_page_url: null,
+  last_page: 1
+})
+
+const filters = reactive<JobFilters>({
+  status: '',
+  company_id: '',
+  search: '',
+  date_range: '',
+  sort_by: 'created_at',
+  sort_order: 'desc'
+})
+
+// Computed properties
+const visiblePages = computed(() => {
+  const current = pagination.value.current_page
+  const last = pagination.value.last_page
+  const pages: number[] = []
+  
+  // Always show first page
+  if (current > 3) pages.push(1)
+  
+  // Show pages around current
+  for (let i = Math.max(1, current - 2); i <= Math.min(last, current + 2); i++) {
+    pages.push(i)
   }
-])
-
-const statusOptions = computed(() => [
-  { value: '', label: t('admin.jobs.all_statuses') },
-  { value: 'active', label: t('admin.jobs.status.active') },
-  { value: 'inactive', label: t('admin.jobs.status.inactive') },
-  { value: 'pending', label: t('admin.jobs.status.pending') },
-  { value: 'expired', label: t('admin.jobs.status.expired') }
-])
-
-const categoryOptions = computed(() => [
-  { value: '', label: t('admin.jobs.all_categories') },
-  // This would be populated from API
-])
-
-const companyOptions = computed(() => [
-  { value: '', label: t('admin.jobs.all_companies') },
-  // This would be populated from API
-])
-
-const quickFilters = computed(() => [
-  {
-    key: 'all',
-    label: t('admin.jobs.filters.all'),
-    count: statistics.value?.total || 0
-  },
-  {
-    key: 'active',
-    label: t('admin.jobs.filters.active'),
-    count: statistics.value?.active || 0
-  },
-  {
-    key: 'featured',
-    label: t('admin.jobs.filters.featured'),
-    count: statistics.value?.featured || 0
-  },
-  {
-    key: 'expiring',
-    label: t('admin.jobs.filters.expiring'),
-    count: statistics.value?.expiring || 0
-  },
-  {
-    key: 'no_applications',
-    label: t('admin.jobs.filters.no_applications'),
-    count: statistics.value?.noApplications || 0
-  }
-])
-
-const tableColumns = computed(() => [
-  { key: 'title', label: t('admin.jobs.columns.title'), sortable: true },
-  { key: 'company', label: t('admin.jobs.columns.company'), sortable: true },
-  { key: 'category', label: t('admin.jobs.columns.category'), sortable: false },
-  { key: 'applications', label: t('admin.jobs.columns.applications'), sortable: true },
-  { key: 'status', label: t('admin.jobs.columns.status'), sortable: true },
-  { key: 'created_at', label: t('admin.jobs.columns.created'), sortable: true }
-])
-
-const perPageOptions = computed(() => [
-  { value: 10, label: '10' },
-  { value: 25, label: '25' },
-  { value: 50, label: '50' },
-  { value: 100, label: '100' }
-])
+  
+  // Always show last page
+  if (current < last - 2) pages.push(last)
+  
+  return [...new Set(pages)].sort((a, b) => a - b)
+})
 
 // Methods
-const loadJobs = async () => {
+const loadJobs = async (page = 1) => {
   try {
-    await fetchJobs({
+    loading.value = true
+    const response = await jobService.getJobs({
       ...filters,
-      sort: sortField.value,
-      direction: sortDirection.value,
-      page: pagination.currentPage,
-      perPage: pagination.perPage
+      page,
+      per_page: pagination.value.per_page
     })
+    
+    jobs.value = response.data
+    pagination.value = response.meta.pagination
+    statistics.value = response.meta.statistics
   } catch (error) {
-    showToast(t('admin.jobs.errors.load_failed'), 'error')
+    console.error('Failed to load jobs:', error)
+    // Handle error with toast notification
+  } finally {
+    loading.value = false
   }
+}
+
+const loadCompanies = async () => {
+  try {
+    const response = await companyService.getCompanies({ per_page: 1000 })
+    companies.value = response.data
+  } catch (error) {
+    console.error('Failed to load companies:', error)
+  }
+}
+
+const refreshJobs = () => {
+  loadJobs(pagination.value.current_page)
 }
 
 const applyFilters = () => {
-  pagination.currentPage = 1
-  loadJobs()
+  loadJobs(1)
 }
 
-const applyQuickFilter = (filter) => {
-  activeQuickFilter.value = filter.key
-  
-  // Reset other filters
-  Object.keys(filters).forEach(key => {
-    filters[key] = key === 'search' ? filters[key] : ''
-  })
-
-  // Apply specific filter logic
-  switch (filter.key) {
-    case 'active':
-      filters.status = 'active'
-      break
-    case 'featured':
-      filters.status = 'active'
-      // Add featured filter logic
-      break
-    case 'expiring':
-      filters.status = 'active'
-      // Add expiring filter logic
-      break
-    case 'no_applications':
-      filters.status = 'active'
-      // Add no applications filter logic
-      break
-  }
-
+const debounceSearch = debounce(() => {
   applyFilters()
+}, 500)
+
+const goToPage = (page: number) => {
+  loadJobs(page)
 }
 
-const sort = (field) => {
-  if (sortField.value === field) {
-    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
-  } else {
-    sortField.value = field
-    sortDirection.value = 'asc'
+const previousPage = () => {
+  if (pagination.value.current_page > 1) {
+    loadJobs(pagination.value.current_page - 1)
   }
-  applyFilters()
 }
 
-const changePage = (page) => {
-  pagination.currentPage = page
-  loadJobs()
+const nextPage = () => {
+  if (pagination.value.current_page < pagination.value.last_page) {
+    loadJobs(pagination.value.current_page + 1)
+  }
 }
 
-const changePerPage = (perPage) => {
-  pagination.perPage = perPage
-  pagination.currentPage = 1
-  loadJobs()
+const getStatusBadgeClass = (status: string) => {
+  const classes = {
+    open: 'bg-green-100 text-green-800',
+    closed: 'bg-red-100 text-red-800',
+    drafted: 'bg-gray-100 text-gray-800',
+    paused: 'bg-yellow-100 text-yellow-800'
+  }
+  return classes[status as keyof typeof classes] || 'bg-gray-100 text-gray-800'
 }
 
-const editJob = (job) => {
-  selectedJob.value = job
-  showEditModal.value = true
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString()
 }
 
-const deleteJob = (job) => {
-  selectedJob.value = job
+const toggleFeature = async (job: Job) => {
+  try {
+    if (job.flags?.is_featured) {
+      await jobService.unfeatureJob(job.id)
+    } else {
+      await jobService.featureJob(job.id)
+    }
+    refreshJobs()
+  } catch (error) {
+    console.error('Failed to toggle feature:', error)
+  }
+}
+
+const confirmDelete = (job: Job) => {
+  jobToDelete.value = job
   showDeleteModal.value = true
 }
 
-const confirmDelete = async () => {
+const deleteJob = async () => {
+  if (!jobToDelete.value) return
+  
   try {
-    await apiDeleteJob(selectedJob.value.id)
-    showToast(t('admin.jobs.delete_success'), 'success')
-    loadJobs()
-  } catch (error) {
-    showToast(t('admin.jobs.errors.delete_failed'), 'error')
-  } finally {
+    deleting.value = true
+    await jobService.deleteJob(jobToDelete.value.id)
     showDeleteModal.value = false
-    selectedJob.value = null
-  }
-}
-
-const toggleFeature = async (job) => {
-  try {
-    await toggleFeatureJob(job.id)
-    showToast(
-      job.is_featured 
-        ? t('admin.jobs.unfeatured_success') 
-        : t('admin.jobs.featured_success'),
-      'success'
-    )
-    loadJobs()
+    jobToDelete.value = null
+    refreshJobs()
   } catch (error) {
-    showToast(t('admin.jobs.errors.feature_failed'), 'error')
-  }
-}
-
-const viewApplications = (job) => {
-  selectedJob.value = job
-  showApplicationsModal.value = true
-}
-
-const exportJobs = async () => {
-  try {
-    exporting.value = true
-    await apiExportJobs(filters)
-    showToast(t('admin.jobs.export_success'), 'success')
-  } catch (error) {
-    showToast(t('admin.jobs.errors.export_failed'), 'error')
+    console.error('Failed to delete job:', error)
   } finally {
-    exporting.value = false
+    deleting.value = false
   }
 }
-
-const handleBulkAction = async (action) => {
-  try {
-    switch (action) {
-      case 'delete':
-        // Handle bulk delete
-        break
-      case 'feature':
-        // Handle bulk feature
-        break
-      case 'activate':
-        // Handle bulk activate
-        break
-      case 'deactivate':
-        // Handle bulk deactivate
-        break
-    }
-    clearSelection()
-    loadJobs()
-  } catch (error) {
-    showToast(t('admin.jobs.errors.bulk_action_failed'), 'error')
-  }
-}
-
-const onJobCreated = (job) => {
-  showToast(t('admin.jobs.create_success'), 'success')
-  loadJobs()
-}
-
-const onJobUpdated = (job) => {
-  showToast(t('admin.jobs.update_success'), 'success')
-  loadJobs()
-}
-
-// Watchers
-watch(() => filters.search, debouncedSearch)
-watch(debouncedSearch, applyFilters)
 
 // Lifecycle
 onMounted(() => {
   loadJobs()
+  loadCompanies()
 })
+
+// Watchers
+watch(() => filters.search, debounceSearch)
 </script>
 
 <style scoped>
-.job-management-container {
-  @apply p-6 max-w-7xl mx-auto;
-}
-
-.btn-primary {
-  @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors;
-}
-
-.btn-secondary {
-  @apply inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700;
-}
-
-.btn-secondary:disabled {
-  @apply opacity-50 cursor-not-allowed;
+.job-management {
+  @apply min-h-screen bg-gray-50;
 }
 </style> 

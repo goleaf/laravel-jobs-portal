@@ -280,8 +280,6 @@ class Job extends Model
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -289,25 +287,26 @@ class Job extends Model
             'id' => 'integer',
             'company_id' => 'integer',
             'job_category_id' => 'integer',
-            'country_id' => 'integer',
-            'state_id' => 'integer',
-            'city_id' => 'integer',
-            'currency_id' => 'integer',
-            'salary_period_id' => 'integer',
             'job_type_id' => 'integer',
             'career_level_id' => 'integer',
             'functional_area_id' => 'integer',
             'job_shift_id' => 'integer',
             'degree_level_id' => 'integer',
+            'currency_id' => 'integer',
+            'salary_period_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'salary_from' => 'decimal:2',
+            'salary_to' => 'decimal:2',
             'experience' => 'integer',
-            'position' => 'integer',
-            'job_expiry_date' => 'date',
-            'no_preference' => 'integer',
+            'no_preference' => 'boolean',
             'hide_salary' => 'boolean',
             'is_freelance' => 'boolean',
             'is_suspended' => 'boolean',
-            'status' => 'integer',
+            'is_featured' => 'boolean',
             'is_created_by_admin' => 'boolean',
+            'job_expiry_date' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',

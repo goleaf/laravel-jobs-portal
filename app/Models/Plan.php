@@ -90,15 +90,24 @@ class Plan extends Model
     {
         return [
             'id' => 'integer',
-            'allowed_jobs' => 'integer',
-            'amount' => 'decimal:2',
-            'is_trial_plan' => 'boolean',
+            'name' => 'string',
+            'description' => 'string',
+            'price' => 'decimal:2',
+            'currency' => 'string',
+            'duration' => 'integer',
+            'duration_type' => 'string',
+            'job_limit' => 'integer',
+            'featured_job_limit' => 'integer',
+            'cv_view_limit' => 'integer',
             'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'salary_currency_id' => 'integer',
+            'is_default' => 'boolean',
+            'is_trial' => 'boolean',
+            'is_popular' => 'boolean',
+            'trial_days' => 'integer',
+            'sort_order' => 'integer',
+            'features' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -122,20 +131,59 @@ class Plan extends Model
     }
 
     /**
+     * Scope for inactive plans.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for default plans.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for custom plans.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
      * Scope for trial plans.
      */
     public function scopeTrial($query)
     {
-        return $query->where('is_trial_plan', true);
+        return $query->where('is_trial', true);
     }
 
     /**
-     * Scope for paid plans.
+     * Scope for non-trial plans.
      */
-    public function scopePaid($query)
+    public function scopeNonTrial($query)
     {
-        return $query->where('is_trial_plan', false)
-                    ->where('amount', '>', 0);
+        return $query->where('is_trial', false);
+    }
+
+    /**
+     * Scope for popular plans.
+     */
+    public function scopePopular($query)
+    {
+        return $query->where('is_popular', true);
+    }
+
+    /**
+     * Scope for non-popular plans.
+     */
+    public function scopeNotPopular($query)
+    {
+        return $query->where('is_popular', false);
     }
 
     /**
@@ -143,63 +191,23 @@ class Plan extends Model
      */
     public function scopeFree($query)
     {
-        return $query->where('amount', 0);
+        return $query->where('price', 0);
     }
 
     /**
-     * Scope for featured plans.
+     * Scope for paid plans.
      */
-    public function scopeFeatured($query)
+    public function scopePaid($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('price', '>', 0);
     }
 
     /**
-     * Scope for plans by price range.
+     * Scope for plans with subscriptions.
      */
-    public function scopeByPriceRange($query, ?float $minPrice = null, ?float $maxPrice = null)
+    public function scopeWithSubscriptions($query)
     {
-        if ($minPrice !== null) {
-            $query->where('amount', '>=', $minPrice);
-        }
-        
-        if ($maxPrice !== null) {
-            $query->where('amount', '<=', $maxPrice);
-        }
-        
-        return $query;
-    }
-
-    /**
-     * Scope for plans by job allowance.
-     */
-    public function scopeByJobAllowance($query, int $minJobs, ?int $maxJobs = null)
-    {
-        $query->where('allowed_jobs', '>=', $minJobs);
-        
-        if ($maxJobs !== null) {
-            $query->where('allowed_jobs', '<=', $maxJobs);
-        }
-        
-        return $query;
-    }
-
-    /**
-     * Scope for popular plans (with most subscriptions).
-     */
-    public function scopePopular($query, int $limit = 5)
-    {
-        return $query->withCount('activeSubscriptions')
-                    ->orderByDesc('active_subscriptions_count')
-                    ->limit($limit);
-    }
-
-    /**
-     * Scope for plans ordered by price.
-     */
-    public function scopeOrderByPrice($query, string $direction = 'asc')
-    {
-        return $query->orderBy('amount', $direction);
+        return $query->has('subscriptions');
     }
 
     /**
@@ -207,7 +215,106 @@ class Plan extends Model
      */
     public function scopeWithActiveSubscriptions($query)
     {
-        return $query->whereHas('activeSubscriptions');
+        return $query->whereHas('subscriptions', function ($q) {
+            $q->where('status', 'active');
+        });
+    }
+
+    /**
+     * Scope for searching plans.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%");
+    }
+
+    /**
+     * Scope for recent plans.
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old plans.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for ordered plans.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('price', 'asc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope for plans by price range.
+     */
+    public function scopeByPriceRange($query, float $min, float $max)
+    {
+        return $query->whereBetween('price', [$min, $max]);
+    }
+
+    /**
+     * Scope for monthly plans.
+     */
+    public function scopeMonthly($query)
+    {
+        return $query->where('duration_type', 'month')
+                    ->orWhere('duration_type', 'monthly');
+    }
+
+    /**
+     * Scope for yearly plans.
+     */
+    public function scopeYearly($query)
+    {
+        return $query->where('duration_type', 'year')
+                    ->orWhere('duration_type', 'yearly')
+                    ->orWhere('duration_type', 'annual');
+    }
+
+    /**
+     * Scope for basic plans.
+     */
+    public function scopeBasic($query)
+    {
+        return $query->where('name', 'like', '%basic%')
+                    ->orWhere('name', 'like', '%starter%')
+                    ->orWhere('name', 'like', '%free%');
+    }
+
+    /**
+     * Scope for premium plans.
+     */
+    public function scopePremium($query)
+    {
+        return $query->where('name', 'like', '%premium%')
+                    ->orWhere('name', 'like', '%pro%')
+                    ->orWhere('name', 'like', '%enterprise%');
+    }
+
+    /**
+     * Scope for unlimited plans.
+     */
+    public function scopeUnlimited($query)
+    {
+        return $query->where('job_limit', -1)
+                    ->orWhere('cv_view_limit', -1);
     }
 
     /**

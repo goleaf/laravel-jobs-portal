@@ -71,6 +71,12 @@ class Setting extends Model
     {
         return [
             'id' => 'integer',
+            'key' => 'string',
+            'value' => 'string',
+            'type' => 'string',
+            'category' => 'string',
+            'is_public' => 'boolean',
+            'is_editable' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -107,6 +113,54 @@ class Setting extends Model
     ];
 
     /**
+     * Scope for public settings.
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
+    }
+
+    /**
+     * Scope for private settings.
+     */
+    public function scopePrivate($query)
+    {
+        return $query->where('is_public', false);
+    }
+
+    /**
+     * Scope for editable settings.
+     */
+    public function scopeEditable($query)
+    {
+        return $query->where('is_editable', true);
+    }
+
+    /**
+     * Scope for non-editable settings.
+     */
+    public function scopeNonEditable($query)
+    {
+        return $query->where('is_editable', false);
+    }
+
+    /**
+     * Scope for settings by category.
+     */
+    public function scopeByCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope for settings by type.
+     */
+    public function scopeByType($query, string $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    /**
      * Scope for settings by key.
      */
     public function scopeByKey($query, string $key)
@@ -115,45 +169,37 @@ class Setting extends Model
     }
 
     /**
-     * Scope for settings by key pattern.
+     * Scope for searching settings.
      */
-    public function scopeByKeyPattern($query, string $pattern)
+    public function scopeSearch($query, string $term)
     {
-        return $query->where('key', 'like', $pattern);
+        return $query->where('key', 'like', "%{$term}%")
+                    ->orWhere('value', 'like', "%{$term}%")
+                    ->orWhere('category', 'like', "%{$term}%");
     }
 
     /**
-     * Scope for global settings.
+     * Scope for recent settings.
      */
-    public function scopeGlobal($query)
+    public function scopeRecent($query, int $days = 30)
     {
-        return $query->whereNotIn('key', [
-            'user_preference',
-            'candidate_setting',
-            'employer_setting'
-        ]);
+        return $query->where('updated_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for user-specific settings.
+     * Scope for old settings.
      */
-    public function scopeUserSpecific($query)
+    public function scopeOld($query, int $days = 365)
     {
-        return $query->whereIn('key', [
-            'user_preference',
-            'candidate_setting',
-            'employer_setting'
-        ]);
+        return $query->where('updated_at', '<', now()->subDays($days));
     }
 
     /**
-     * Scope for theme settings.
+     * Scope for general settings.
      */
-    public function scopeTheme($query)
+    public function scopeGeneral($query)
     {
-        return $query->where('key', 'like', 'theme_%')
-                    ->orWhere('key', 'like', 'color_%')
-                    ->orWhere('key', 'like', 'logo_%');
+        return $query->where('category', 'general');
     }
 
     /**
@@ -161,20 +207,9 @@ class Setting extends Model
      */
     public function scopeEmail($query)
     {
-        return $query->where('key', 'like', 'email_%')
-                    ->orWhere('key', 'like', 'mail_%')
-                    ->orWhere('key', 'like', 'smtp_%');
-    }
-
-    /**
-     * Scope for social media settings.
-     */
-    public function scopeSocialMedia($query)
-    {
-        return $query->where('key', 'like', 'social_%')
-                    ->orWhere('key', 'like', 'facebook_%')
-                    ->orWhere('key', 'like', 'twitter_%')
-                    ->orWhere('key', 'like', 'linkedin_%');
+        return $query->where('category', 'email')
+                    ->orWhere('key', 'like', '%email%')
+                    ->orWhere('key', 'like', '%mail%');
     }
 
     /**
@@ -182,8 +217,62 @@ class Setting extends Model
      */
     public function scopePayment($query)
     {
-        return $query->where('key', 'like', 'payment_%')
-                    ->orWhere('key', 'like', 'stripe_%')
-                    ->orWhere('key', 'like', 'paypal_%');
+        return $query->where('category', 'payment')
+                    ->orWhere('key', 'like', '%payment%')
+                    ->orWhere('key', 'like', '%stripe%')
+                    ->orWhere('key', 'like', '%paypal%');
+    }
+
+    /**
+     * Scope for notification settings.
+     */
+    public function scopeNotification($query)
+    {
+        return $query->where('category', 'notification')
+                    ->orWhere('key', 'like', '%notification%')
+                    ->orWhere('key', 'like', '%alert%');
+    }
+
+    /**
+     * Scope for security settings.
+     */
+    public function scopeSecurity($query)
+    {
+        return $query->where('category', 'security')
+                    ->orWhere('key', 'like', '%security%')
+                    ->orWhere('key', 'like', '%password%')
+                    ->orWhere('key', 'like', '%auth%');
+    }
+
+    /**
+     * Scope for boolean type settings.
+     */
+    public function scopeBoolean($query)
+    {
+        return $query->where('type', 'boolean');
+    }
+
+    /**
+     * Scope for string type settings.
+     */
+    public function scopeString($query)
+    {
+        return $query->where('type', 'string');
+    }
+
+    /**
+     * Scope for integer type settings.
+     */
+    public function scopeInteger($query)
+    {
+        return $query->where('type', 'integer');
+    }
+
+    /**
+     * Scope for array type settings.
+     */
+    public function scopeArray($query)
+    {
+        return $query->where('type', 'array');
     }
 }

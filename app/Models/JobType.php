@@ -109,8 +109,10 @@ class JobType extends Model
     {
         return [
             'id' => 'integer',
-            'is_default' => 'boolean',
+            'name' => 'string',
+            'description' => 'string',
             'is_active' => 'boolean',
+            'is_default' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -236,7 +238,15 @@ class JobType extends Model
      */
     public function scopeWithJobs(Builder $query): Builder
     {
-        return $query->whereHas('jobs');
+        return $query->has('jobs');
+    }
+
+    /**
+     * Scope for job types without jobs.
+     */
+    public function scopeWithoutJobs(Builder $query): Builder
+    {
+        return $query->doesntHave('jobs');
     }
 
     /**
@@ -245,12 +255,12 @@ class JobType extends Model
     public function scopeWithActiveJobs(Builder $query): Builder
     {
         return $query->whereHas('jobs', function ($q) {
-            $q->active();
+            $q->where('status', 1);
         });
     }
 
     /**
-     * Scope for searching job types by name.
+     * Scope for searching job types.
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
@@ -259,62 +269,37 @@ class JobType extends Model
     }
 
     /**
+     * Scope for recent job types.
+     */
+    public function scopeRecent(Builder $query, int $days = 30): Builder
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old job types.
+     */
+    public function scopeOld(Builder $query, int $days = 365): Builder
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
      * Scope for popular job types (with most jobs).
      */
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->orderByDesc('jobs_count')
+                    ->orderBy('jobs_count', 'desc')
                     ->limit($limit);
     }
 
     /**
-     * Scope for alphabetically ordered job types.
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical(Builder $query): Builder
     {
         return $query->orderBy('name', 'asc');
-    }
-
-    /**
-     * Scope for recent job types.
-     */
-    public function scopeRecent(Builder $query, int $days = 30): Builder
-    {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
-    }
-
-    /**
-     * Scope for trending job types.
-     */
-    public function scopeTrending(Builder $query): Builder
-    {
-        return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Scope for job types with minimum usage.
-     */
-    public function scopeMinUsage(Builder $query, int $count = 1): Builder
-    {
-        return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $count);
-    }
-
-    /**
-     * Scope for high demand job types.
-     */
-    public function scopeHighDemand(Builder $query, int $minJobs = 10): Builder
-    {
-        return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $minJobs)
-                    ->orderByDesc('jobs_count');
     }
 
     /**
@@ -323,7 +308,7 @@ class JobType extends Model
     public function scopeFullTime(Builder $query): Builder
     {
         return $query->where('name', 'like', '%full%time%')
-                    ->orWhere('name', 'like', '%fulltime%')
+                    ->orWhere('name', 'like', '%full-time%')
                     ->orWhere('name', 'like', '%permanent%');
     }
 
@@ -333,7 +318,7 @@ class JobType extends Model
     public function scopePartTime(Builder $query): Builder
     {
         return $query->where('name', 'like', '%part%time%')
-                    ->orWhere('name', 'like', '%parttime%');
+                    ->orWhere('name', 'like', '%part-time%');
     }
 
     /**
@@ -343,17 +328,7 @@ class JobType extends Model
     {
         return $query->where('name', 'like', '%contract%')
                     ->orWhere('name', 'like', '%temporary%')
-                    ->orWhere('name', 'like', '%temp%');
-    }
-
-    /**
-     * Scope for freelance job types.
-     */
-    public function scopeFreelance(Builder $query): Builder
-    {
-        return $query->where('name', 'like', '%freelance%')
-                    ->orWhere('name', 'like', '%consultant%')
-                    ->orWhere('name', 'like', '%project%');
+                    ->orWhere('name', 'like', '%freelance%');
     }
 
     /**
@@ -362,8 +337,18 @@ class JobType extends Model
     public function scopeRemote(Builder $query): Builder
     {
         return $query->where('name', 'like', '%remote%')
-                    ->orWhere('name', 'like', '%work%from%home%')
-                    ->orWhere('name', 'like', '%wfh%');
+                    ->orWhere('name', 'like', '%work from home%')
+                    ->orWhere('name', 'like', '%telecommute%');
+    }
+
+    /**
+     * Scope for internship job types.
+     */
+    public function scopeInternship(Builder $query): Builder
+    {
+        return $query->where('name', 'like', '%intern%')
+                    ->orWhere('name', 'like', '%trainee%')
+                    ->orWhere('name', 'like', '%apprentice%');
     }
 
     /**

@@ -10,6 +10,15 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\IndexRequiredDegreeLevelRequest;
+use App\Http\Requests\CreateRequiredDegreeLevelRequest;
+use App\Http\Requests\ShowRequiredDegreeLevelRequest;
+use App\Http\Requests\UpdateRequiredDegreeLevelRequest;
+use App\Http\Requests\DestroyRequiredDegreeLevelRequest;
+use App\Http\Requests\DropdownRequiredDegreeLevelRequest;
+use App\Http\Resources\RequiredDegreeLevelResource;
+
 class RequiredDegreeLevelController extends AppBaseController
 {
     /** @var RequiredDegreeLevelRepository */
@@ -21,73 +30,242 @@ class RequiredDegreeLevelController extends AppBaseController
     }
 
     /**
-     * Display a listing of the JobType.
-     *
-     * @param  Request  $request
-     * @return Factory|View
-     *
-     * @throws Exception
+     * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(IndexRequiredDegreeLevelRequest $request)
     {
-        return view('required_degree_levels.index');
-    }
+        try {
+            $query = RequiredDegreeLevel::query();
 
-    /**
-     * Store a newly created RequiredDegreeLevel in storage.
-     */
-    public function store(CreateRequiredDegreeLevelRequest $request): JsonResponse
-    {
-        $input = $request->all();
-        $degreeLevel = $this->requiredDegreeLevelRepository->create($input);
+            // Apply scopes based on request parameters
+            if ($request->has('active')) {
+                $query = $request->boolean('active') ? $query->active() : $query->inactive();
+            }
 
-        return $this->sendResponse($degreeLevel, __('messages.flash.degree_level_save'));
-    }
+            if ($request->has('default')) {
+                $query = $request->boolean('default') ? $query->default() : $query->custom();
+            }
 
-    /**
-     * Display the specified RequiredDegreeLevel.
-     */
-    public function show(RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
-    {
-        return $this->sendResponse($requiredDegreeLevel, __('messages.flash.degree_level_retrieve'));
-    }
+            if ($request->filled('search')) {
+                $query->search($request->input('search'));
+            }
 
-    /**
-     * Show the form for editing the specified RequiredDegreeLevel.
-     */
-    public function edit(RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
-    {
-        return $this->sendResponse($requiredDegreeLevel, 'Degree Level Successfully.');
-    }
+            if ($request->has('with_jobs')) {
+                $query = $request->boolean('with_jobs') ? $query->withJobs() : $query->withoutJobs();
+            }
 
-    /**
-     * Update the specified RequiredDegreeLevel in storage.
-     */
-    public function update(UpdateRequiredDegreeLevelUpdateRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
-    {
-        $input = $request->all();
-        $this->requiredDegreeLevelRepository->update($input, $requiredDegreeLevel->id);
+            // Apply sorting
+            $sortBy = $request->input('sort_by', 'name');
+            $sortDirection = $request->input('sort_direction', 'asc');
+            
+            if ($sortBy === 'alphabetical') {
+                $query->alphabetical();
+            } elseif ($sortBy === 'popular') {
+                $query->popular();
+            } else {
+                $query->orderBy($sortBy, $sortDirection);
+            }
 
-        return $this->sendSuccess(__('messages.flash.degree_level_update'));
-    }
+            $requiredDegreeLevels = $query->paginate($request->input('per_page', 15));
 
-    /**
-     * Remove the specified RequiredDegreeLevel from storage.
-     *
-     *
-     * @throws Exception
-     */
-    public function destroy(RequiredDegreeLevel $requiredDegreeLevel): JsonResponse
-    {
-        $jobModels = [
-            Job::class,
-        ];
-        $result = canDelete($jobModels, 'degree_level_id', $requiredDegreeLevel->id);
-        if ($result) {
-            return $this->sendError(__('messages.flash.degree_level_cant_delete'));
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.index.success'),
+                'data' => RequiredDegreeLevelResource::collection($requiredDegreeLevels),
+                'meta' => [
+                    'total' => $requiredDegreeLevels->total(),
+                    'per_page' => $requiredDegreeLevels->perPage(),
+                    'current_page' => $requiredDegreeLevels->currentPage(),
+                    'last_page' => $requiredDegreeLevels->lastPage(),
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level index error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.index.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
         }
-        $requiredDegreeLevel->delete();
+    }
 
-        return $this->sendSuccess(__('messages.flash.degree_level_delete'));
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(CreateRequiredDegreeLevelRequest $request)
+    {
+        try {
+            $requiredDegreeLevel = RequiredDegreeLevel::create($request->validated());
+
+            Log::info('Required Degree Level created', [
+                'id' => $requiredDegreeLevel->id,
+                'name' => $requiredDegreeLevel->name,
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.store.success'),
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel)
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level creation error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.store.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(ShowRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel)
+    {
+        try {
+            // Load relationships if requested
+            if ($request->has('include')) {
+                $includes = explode(',', $request->input('include'));
+                $allowedIncludes = ['jobs', 'candidates'];
+                $validIncludes = array_intersect($includes, $allowedIncludes);
+                
+                if (!empty($validIncludes)) {
+                    $requiredDegreeLevel->load($validIncludes);
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.show.success'),
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level show error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.show.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel)
+    {
+        try {
+            $oldData = $requiredDegreeLevel->toArray();
+            $requiredDegreeLevel->update($request->validated());
+
+            Log::info('Required Degree Level updated', [
+                'id' => $requiredDegreeLevel->id,
+                'old_data' => $oldData,
+                'new_data' => $requiredDegreeLevel->fresh()->toArray(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.update.success'),
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel->fresh())
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level update error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.update.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(DestroyRequiredDegreeLevelRequest $request, RequiredDegreeLevel $requiredDegreeLevel)
+    {
+        try {
+            // Check if required degree level has associated jobs
+            if ($requiredDegreeLevel->jobs()->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('required_degree_levels.destroy.has_jobs'),
+                ], 422);
+            }
+
+            // Check if required degree level has associated candidates
+            if ($requiredDegreeLevel->candidates()->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('required_degree_levels.destroy.has_candidates'),
+                ], 422);
+            }
+
+            $requiredDegreeLevelData = $requiredDegreeLevel->toArray();
+            $requiredDegreeLevel->delete();
+
+            Log::info('Required Degree Level deleted', [
+                'deleted_data' => $requiredDegreeLevelData,
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.destroy.success')
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level deletion error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.destroy.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
+        }
+    }
+
+    /**
+     * Get active required degree levels for dropdowns.
+     */
+    public function dropdown(DropdownRequiredDegreeLevelRequest $request)
+    {
+        try {
+            $requiredDegreeLevels = RequiredDegreeLevel::active()
+                ->alphabetical()
+                ->select('id', 'name')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('required_degree_levels.dropdown.success'),
+                'data' => $requiredDegreeLevels->map(function ($level) {
+                    return [
+                        'value' => $level->id,
+                        'label' => $level->name,
+                        'text' => $level->name
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Required Degree Level dropdown error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => __('required_degree_levels.dropdown.error'),
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+            ], 500);
+        }
     }
 }

@@ -16,7 +16,7 @@ class ReportedJobTest extends TestCase
         $model = ReportedJob::factory()->create();
         
         $this->assertInstanceOf(ReportedJob::class, $model);
-        $this->assertDatabaseHas('reportedjobs', [
+        $this->assertDatabaseHas('reported_jobs', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class ReportedJobTest extends TestCase
         $newData = ReportedJob::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('reportedjobs', [
+        $this->assertDatabaseHas('reported_jobs', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class ReportedJobTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('reportedjobs', [
+        $this->assertDatabaseMissing('reported_jobs', [
             'id' => $modelId
         ]);
     }

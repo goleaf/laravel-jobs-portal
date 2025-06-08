@@ -28,8 +28,8 @@ class ReportedToCompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 100),
-            'company_id' => fake()->numberBetween(1, 100),
+            'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs
+            'company_id' => fake()->numberBetween(1, 3), // Use existing company IDs
             'note' => fake()->word()
         ];
     }

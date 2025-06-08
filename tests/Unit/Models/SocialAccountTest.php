@@ -16,7 +16,7 @@ class SocialAccountTest extends TestCase
         $model = SocialAccount::factory()->create();
         
         $this->assertInstanceOf(SocialAccount::class, $model);
-        $this->assertDatabaseHas('socialaccounts', [
+        $this->assertDatabaseHas('social_accounts', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class SocialAccountTest extends TestCase
         $newData = SocialAccount::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('socialaccounts', [
+        $this->assertDatabaseHas('social_accounts', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class SocialAccountTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('socialaccounts', [
+        $this->assertDatabaseMissing('social_accounts', [
             'id' => $modelId
         ]);
     }

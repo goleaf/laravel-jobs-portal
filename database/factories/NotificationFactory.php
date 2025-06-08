@@ -30,7 +30,7 @@ class NotificationFactory extends Factory
         return [
             'type' => fake()->word(),
             'notification_for' => fake()->word(),
-            'user_id' => fake()->numberBetween(1, 100),
+            'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs
             'title' => fake()->sentence(3),
             'text' => fake()->word(),
             'meta' => fake()->word(),

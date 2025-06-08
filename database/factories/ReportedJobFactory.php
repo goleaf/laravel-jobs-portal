@@ -28,8 +28,8 @@ class ReportedJobFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 100),
-            'job_id' => fake()->numberBetween(1, 100),
+            'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs
+            'job_id' => fake()->numberBetween(1, 2), // Use existing job IDs
             'note' => fake()->word()
         ];
     }

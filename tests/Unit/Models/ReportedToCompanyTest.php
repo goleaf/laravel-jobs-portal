@@ -16,7 +16,7 @@ class ReportedToCompanyTest extends TestCase
         $model = ReportedToCompany::factory()->create();
         
         $this->assertInstanceOf(ReportedToCompany::class, $model);
-        $this->assertDatabaseHas('reportedtocompanies', [
+        $this->assertDatabaseHas('reported_to_companies', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class ReportedToCompanyTest extends TestCase
         $newData = ReportedToCompany::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('reportedtocompanies', [
+        $this->assertDatabaseHas('reported_to_companies', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class ReportedToCompanyTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('reportedtocompanies', [
+        $this->assertDatabaseMissing('reported_to_companies', [
             'id' => $modelId
         ]);
     }

@@ -32,7 +32,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
-            '--headless',
+            '--headless=new',  // Use new headless mode
             '--no-sandbox',
             '--disable-dev-shm-usage',
             '--window-size=1920,1080',
@@ -57,15 +57,34 @@ abstract class DuskTestCase extends BaseTestCase
             '--no-first-run',
             '--no-default-browser-check',
             '--remote-debugging-port=9222',
+            '--disable-blink-features=AutomationControlled',
+            '--disable-features=VizDisplayCompositor,VizServiceDisplayCompositor',
         ]);
 
-        // Context7 pattern: Add Windows-specific configurations
+        // Context7 pattern: Add platform-specific configurations
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $options->addArguments([
                 '--disable-features=VizDisplayCompositor',
-                '--enable-logging',
-                '--log-level=0',
+                '--log-level=3',  // Reduce logging on Windows
+                '--silent',
                 '--user-data-dir=' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'chrome-dusk-' . time(),
+                '--disable-software-rasterizer',
+                '--disable-background-mode',
+            ]);
+        } else {
+            $options->addArguments([
+                '--disable-setuid-sandbox',
+                '--single-process',  // Better for containers
+            ]);
+        }
+
+        // Context7 pattern: CI environment optimizations
+        if (getenv('CI') || getenv('GITHUB_ACTIONS')) {
+            $options->addArguments([
+                '--disable-dev-shm-usage',
+                '--no-zygote',
+                '--single-process',
+                '--disable-gpu-sandbox',
             ]);
         }
 
@@ -74,21 +93,35 @@ abstract class DuskTestCase extends BaseTestCase
         
         // Context7 pattern: Enhanced timeouts for CI environments
         $capabilities->setCapability('timeouts', [
-            'script' => 30000,
-            'pageLoad' => 30000,
-            'implicit' => 10000,
+            'script' => 60000,      // 60 seconds for scripts
+            'pageLoad' => 60000,    // 60 seconds for page loads
+            'implicit' => 15000,    // 15 seconds for implicit waits
         ]);
 
         // Context7 pattern: Improved logging for debugging
         $capabilities->setCapability('loggingPrefs', [
-            'browser' => 'ALL',
-            'driver' => 'ALL',
+            'browser' => 'INFO',
+            'driver' => 'INFO',
         ]);
 
-        return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
-            $capabilities
-        );
+        // Context7 pattern: Add Chrome options for better stability
+        $capabilities->setCapability('chrome.switches', [
+            '--disable-blink-features=AutomationControlled',
+            '--disable-extensions',
+        ]);
+
+        $driverUrl = $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515';
+        
+        try {
+            return RemoteWebDriver::create($driverUrl, $capabilities);
+        } catch (\Exception $e) {
+            // Context7 pattern: Better error reporting
+            throw new \Exception(
+                "Failed to create ChromeDriver connection to {$driverUrl}. " .
+                "Error: " . $e->getMessage() . ". " .
+                "Please ensure ChromeDriver is running on the correct port."
+            );
+        }
     }
 
     /**
@@ -147,11 +180,41 @@ abstract class DuskTestCase extends BaseTestCase
             return;
         }
         
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) {
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
-            is_dir($path) ? $this->removeDirectory($path) : unlink($path);
+        try {
+            $files = array_diff(scandir($dir), ['.', '..']);
+            foreach ($files as $file) {
+                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                is_dir($path) ? $this->removeDirectory($path) : unlink($path);
+            }
+            rmdir($dir);
+        } catch (\Exception $e) {
+            // Ignore cleanup errors in CI environments
+            if (!getenv('CI')) {
+                throw $e;
+            }
         }
-        rmdir($dir);
+    }
+
+    /**
+     * Context7 pattern: Override browse method with better error handling
+     */
+    public function browse(\Closure $callback)
+    {
+        try {
+            return parent::browse($callback);
+        } catch (\Exception $e) {
+            // Context7 pattern: Enhanced error reporting for debugging
+            $message = "Dusk test failed: " . $e->getMessage();
+            
+            if (getenv('CI') || getenv('GITHUB_ACTIONS')) {
+                $message .= "\n\nDebugging information:";
+                $message .= "\n- PHP Version: " . PHP_VERSION;
+                $message .= "\n- OS: " . PHP_OS;
+                $message .= "\n- Memory Limit: " . ini_get('memory_limit');
+                $message .= "\n- Driver URL: " . ($_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515');
+            }
+            
+            throw new \Exception($message, $e->getCode(), $e);
+        }
     }
 } 

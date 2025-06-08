@@ -16,7 +16,7 @@ class PostCategoryTest extends TestCase
         $model = PostCategory::factory()->create();
         
         $this->assertInstanceOf(PostCategory::class, $model);
-        $this->assertDatabaseHas('postcategories', [
+        $this->assertDatabaseHas('post_categories', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class PostCategoryTest extends TestCase
         $newData = PostCategory::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('postcategories', [
+        $this->assertDatabaseHas('post_categories', [
             'id' => $model->id
         ]);
     }

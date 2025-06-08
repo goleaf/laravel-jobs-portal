@@ -28,15 +28,14 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 100),
-            'owner_id' => fake()->numberBetween(1, 100),
-            'owner_type' => fake()->word(),
-            'amount' => fake()->randomFloat(2, 1, 10000),
-            'invoice_id' => fake()->numberBetween(1, 100),
-            'status' => fake()->randomElement(['active', 'inactive']),
-            'is_approved' => fake()->word(),
-            'approved_id' => fake()->numberBetween(1, 100),
-            'plan_currency_id' => fake()->numberBetween(1, 100)
+            'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs
+            'subscription_id' => fake()->numberBetween(1, 10),
+            'invoice_id' => fake()->uuid(),
+            'amount' => fake()->randomFloat(2, 10, 1000),
+            'status' => fake()->randomElement(['pending', 'completed', 'failed', 'cancelled']),
+            'is_approved' => fake()->boolean(),
+            'approved_id' => fake()->optional()->numberBetween(1, 3),
+            'plan_currency_id' => fake()->numberBetween(1, 3) // Use existing currency IDs
         ];
     }
 }

@@ -16,7 +16,7 @@ class OwnerShipTypeTest extends TestCase
         $model = OwnerShipType::factory()->create();
         
         $this->assertInstanceOf(OwnerShipType::class, $model);
-        $this->assertDatabaseHas('ownershiptypes', [
+        $this->assertDatabaseHas('ownership_types', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class OwnerShipTypeTest extends TestCase
         $newData = OwnerShipType::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('ownershiptypes', [
+        $this->assertDatabaseHas('ownership_types', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class OwnerShipTypeTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('ownershiptypes', [
+        $this->assertDatabaseMissing('ownership_types', [
             'id' => $modelId
         ]);
     }

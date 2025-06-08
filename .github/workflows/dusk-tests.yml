@@ -2,89 +2,168 @@ name: Dusk Tests
 on: [push, pull_request]
 jobs:
   dusk-tests:
-    runs-on: windows-2022  # Using Windows Server 2022 (closest to Windows 11 for CI)
+    runs-on: windows-2022
+    timeout-minutes: 30
     env:
+      APP_ENV: testing
+      APP_KEY: base64:2fl+Ktvkfl+Fuz4Qp/A75G2RTiWVA/ZoKUvnO5+Ll28=
       APP_URL: "http://127.0.0.1:8000"
       DB_CONNECTION: sqlite
       DB_DATABASE: ":memory:"
       MAIL_MAILER: log
       NODE_OPTIONS: "--max-old-space-size=4096"
+      DUSK_DRIVER_URL: "http://localhost:9515"
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-      - name: Setup PHP with Memory Limit
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
-          ini-values: memory_limit=4G, max_execution_time=600
+          ini-values: memory_limit=4G, max_execution_time=600, post_max_size=256M, upload_max_filesize=256M
           coverage: none
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
           
-      - name: Prepare The Environment
+      - name: Create Environment File
         run: |
-          copy .env.example .env
-          echo DB_CONNECTION=sqlite >> .env
-          echo DB_DATABASE=:memory: >> .env
+          Copy-Item .env.example .env
+          Add-Content .env "APP_ENV=testing"
+          Add-Content .env "DB_CONNECTION=sqlite"
+          Add-Content .env "DB_DATABASE=:memory:"
+          Add-Content .env "DUSK_DRIVER_URL=http://localhost:9515"
+        shell: powershell
         
       - name: Install Composer Dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-dev
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
         
       - name: Install NPM Dependencies
-        run: npm ci --silent
+        run: npm ci
         
       - name: Build Assets
         run: npm run build
         
       - name: Generate Application Key
-        run: php -d memory_limit=4G artisan key:generate
+        run: php artisan key:generate --force
         
-      - name: Run Migrations
-        run: php -d memory_limit=4G artisan migrate --force
+      - name: Create Database & Run Migrations
+        run: |
+          php artisan migrate --force --no-interaction
+          php artisan db:seed --force --no-interaction
         
       - name: Install ChromeDriver
         run: php artisan dusk:chrome-driver --detect
         
+      - name: Ensure Required Directories Exist
+        run: |
+          New-Item -ItemType Directory -Force -Path "tests\Browser\screenshots"
+          New-Item -ItemType Directory -Force -Path "tests\Browser\console"
+        shell: powershell
+        
       - name: Start ChromeDriver
         run: |
-          Start-Process -FilePath "vendor\laravel\dusk\bin\chromedriver-win.exe" -ArgumentList "--port=9515" -WindowStyle Hidden
-          Start-Sleep -Seconds 3
+          $chromeDriverPath = "vendor\laravel\dusk\bin\chromedriver-win.exe"
+          if (Test-Path $chromeDriverPath) {
+            Start-Process -FilePath $chromeDriverPath -ArgumentList "--port=9515", "--whitelisted-ips=" -WindowStyle Hidden
+            Write-Output "ChromeDriver started"
+          } else {
+            Write-Output "ChromeDriver not found at $chromeDriverPath"
+            Get-ChildItem vendor\laravel\dusk\bin\ -Recurse
+            exit 1
+          }
+          Start-Sleep -Seconds 5
         shell: powershell
         
       - name: Start Laravel Server
         run: |
-          Start-Process -FilePath "php" -ArgumentList "-d","memory_limit=4G","artisan","serve","--no-reload" -WindowStyle Hidden
-          Start-Sleep -Seconds 5
+          Start-Process -FilePath "php" -ArgumentList "artisan", "serve", "--host=127.0.0.1", "--port=8000", "--no-reload" -WindowStyle Hidden
+          Write-Output "Laravel server started"
+          Start-Sleep -Seconds 10
         shell: powershell
         
-      - name: Test Website Accessibility
+      - name: Verify Services
         run: |
-          $response = Invoke-WebRequest -Uri "http://127.0.0.1:8000/" -UseBasicParsing
-          if ($response.StatusCode -eq 200) {
-            Write-Output "✅ Website is accessible"
+          # Check if ChromeDriver is running
+          $chromeDriver = Get-Process -Name "chromedriver-win" -ErrorAction SilentlyContinue
+          if ($chromeDriver) {
+            Write-Output "✅ ChromeDriver is running (PID: $($chromeDriver.Id))"
           } else {
-            Write-Output "❌ Website is not accessible"
+            Write-Output "❌ ChromeDriver is not running"
+            exit 1
+          }
+          
+          # Check if Laravel server is running
+          $phpServer = Get-Process -Name "php" -ErrorAction SilentlyContinue
+          if ($phpServer) {
+            Write-Output "✅ PHP server is running (PID: $($phpServer.Id))"
+          } else {
+            Write-Output "❌ PHP server is not running"
+            exit 1
+          }
+          
+          # Test website accessibility
+          try {
+            $response = Invoke-WebRequest -Uri "http://127.0.0.1:8000/" -UseBasicParsing -TimeoutSec 30
+            if ($response.StatusCode -eq 200) {
+              Write-Output "✅ Website is accessible (Status: $($response.StatusCode))"
+            } else {
+              Write-Output "❌ Website returned status: $($response.StatusCode)"
+              exit 1
+            }
+          } catch {
+            Write-Output "❌ Website is not accessible: $($_.Exception.Message)"
             exit 1
           }
         shell: powershell
           
       - name: Run Dusk Tests
-        run: php artisan dusk --env=testing
+        run: |
+          php artisan dusk --env=testing
+        env:
+          APP_ENV: testing
+          
+      - name: Display Logs on Failure
+        if: failure()
+        run: |
+          Write-Output "=== Laravel Logs ==="
+          if (Test-Path "storage\logs\laravel.log") {
+            Get-Content "storage\logs\laravel.log" -Tail 50
+          }
+          Write-Output "=== Dusk Logs ==="
+          if (Test-Path "tests\Browser\console") {
+            Get-ChildItem "tests\Browser\console" | ForEach-Object { 
+              Write-Output "--- $($_.Name) ---"
+              Get-Content $_.FullName 
+            }
+          }
+        shell: powershell
         
       - name: Upload Screenshots on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: dusk-screenshots
+          name: dusk-screenshots-${{ github.run_number }}
           path: tests/Browser/screenshots
+          if-no-files-found: ignore
           
       - name: Upload Console Logs on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: dusk-console-logs
-          path: tests/Browser/console 
+          name: dusk-console-logs-${{ github.run_number }}
+          path: tests/Browser/console
+          if-no-files-found: ignore
+          
+      - name: Upload Laravel Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-logs-${{ github.run_number }}
+          path: storage/logs
+          if-no-files-found: ignore 

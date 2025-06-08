@@ -280,6 +280,8 @@ class Job extends Model
 
     /**
      * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -288,28 +290,34 @@ class Job extends Model
             'company_id' => 'integer',
             'job_category_id' => 'integer',
             'job_type_id' => 'integer',
+            'job_shift_id' => 'integer',
             'career_level_id' => 'integer',
             'functional_area_id' => 'integer',
-            'job_shift_id' => 'integer',
-            'degree_level_id' => 'integer',
-            'currency_id' => 'integer',
+            'required_degree_level_id' => 'integer',
+            'salary_currency_id' => 'integer',
             'salary_period_id' => 'integer',
             'country_id' => 'integer',
             'state_id' => 'integer',
             'city_id' => 'integer',
+            'title' => 'string',
+            'description' => 'string',
+            'requirements' => 'string',
+            'benefits' => 'string',
             'salary_from' => 'decimal:2',
             'salary_to' => 'decimal:2',
-            'experience' => 'integer',
-            'no_preference' => 'boolean',
             'hide_salary' => 'boolean',
             'is_freelance' => 'boolean',
-            'is_suspended' => 'boolean',
             'is_featured' => 'boolean',
-            'is_created_by_admin' => 'boolean',
-            'job_expiry_date' => 'datetime',
+            'is_urgent' => 'boolean',
+            'status' => 'integer',
+            'experience_years' => 'integer',
+            'application_deadline' => 'date',
+            'total_positions' => 'integer',
+            'filled_positions' => 'integer',
+            'views_count' => 'integer',
+            'applications_count' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -1016,5 +1024,358 @@ class Job extends Model
         ]);
 
         return implode(', ', $parts);
+    }
+
+    /**
+     * Scope for active jobs.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    /**
+     * Scope for inactive jobs.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 0);
+    }
+
+    /**
+     * Scope for featured jobs.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope for non-featured jobs.
+     */
+    public function scopeNotFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
+     * Scope for urgent jobs.
+     */
+    public function scopeUrgent($query)
+    {
+        return $query->where('is_urgent', true);
+    }
+
+    /**
+     * Scope for non-urgent jobs.
+     */
+    public function scopeNotUrgent($query)
+    {
+        return $query->where('is_urgent', false);
+    }
+
+    /**
+     * Scope for freelance jobs.
+     */
+    public function scopeFreelance($query)
+    {
+        return $query->where('is_freelance', true);
+    }
+
+    /**
+     * Scope for non-freelance jobs.
+     */
+    public function scopeNotFreelance($query)
+    {
+        return $query->where('is_freelance', false);
+    }
+
+    /**
+     * Scope for jobs by company.
+     */
+    public function scopeByCompany($query, int $companyId)
+    {
+        return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * Scope for jobs by category.
+     */
+    public function scopeByCategory($query, int $categoryId)
+    {
+        return $query->where('job_category_id', $categoryId);
+    }
+
+    /**
+     * Scope for jobs by type.
+     */
+    public function scopeByType($query, int $typeId)
+    {
+        return $query->where('job_type_id', $typeId);
+    }
+
+    /**
+     * Scope for jobs by shift.
+     */
+    public function scopeByShift($query, int $shiftId)
+    {
+        return $query->where('job_shift_id', $shiftId);
+    }
+
+    /**
+     * Scope for jobs by career level.
+     */
+    public function scopeByCareerLevel($query, int $careerLevelId)
+    {
+        return $query->where('career_level_id', $careerLevelId);
+    }
+
+    /**
+     * Scope for jobs by functional area.
+     */
+    public function scopeByFunctionalArea($query, int $functionalAreaId)
+    {
+        return $query->where('functional_area_id', $functionalAreaId);
+    }
+
+    /**
+     * Scope for jobs by country.
+     */
+    public function scopeByCountry($query, int $countryId)
+    {
+        return $query->where('country_id', $countryId);
+    }
+
+    /**
+     * Scope for jobs by state.
+     */
+    public function scopeByState($query, int $stateId)
+    {
+        return $query->where('state_id', $stateId);
+    }
+
+    /**
+     * Scope for jobs by city.
+     */
+    public function scopeByCity($query, int $cityId)
+    {
+        return $query->where('city_id', $cityId);
+    }
+
+    /**
+     * Scope for searching jobs.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('title', 'like', "%{$term}%")
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('requirements', 'like', "%{$term}%")
+                    ->orWhereHas('company', function ($q) use ($term) {
+                        $q->where('name', 'like', "%{$term}%");
+                    });
+    }
+
+    /**
+     * Scope for recent jobs.
+     */
+    public function scopeRecent($query, int $days = 7)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for old jobs.
+     */
+    public function scopeOld($query, int $days = 30)
+    {
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for jobs by salary range.
+     */
+    public function scopeBySalaryRange($query, float $min, float $max)
+    {
+        return $query->where(function ($q) use ($min, $max) {
+            $q->whereBetween('salary_from', [$min, $max])
+              ->orWhereBetween('salary_to', [$min, $max])
+              ->orWhere(function ($subQ) use ($min, $max) {
+                  $subQ->where('salary_from', '<=', $min)
+                       ->where('salary_to', '>=', $max);
+              });
+        });
+    }
+
+    /**
+     * Scope for high paying jobs.
+     */
+    public function scopeHighPaying($query, float $threshold = 100000)
+    {
+        return $query->where('salary_to', '>=', $threshold);
+    }
+
+    /**
+     * Scope for jobs with salary disclosed.
+     */
+    public function scopeWithSalary($query)
+    {
+        return $query->where('hide_salary', false)
+                    ->whereNotNull('salary_from')
+                    ->whereNotNull('salary_to');
+    }
+
+    /**
+     * Scope for jobs with hidden salary.
+     */
+    public function scopeWithoutSalary($query)
+    {
+        return $query->where('hide_salary', true)
+                    ->orWhereNull('salary_from')
+                    ->orWhereNull('salary_to');
+    }
+
+    /**
+     * Scope for jobs by experience range.
+     */
+    public function scopeByExperienceRange($query, int $min, int $max)
+    {
+        return $query->whereBetween('experience_years', [$min, $max]);
+    }
+
+    /**
+     * Scope for entry level jobs.
+     */
+    public function scopeEntryLevel($query)
+    {
+        return $query->where('experience_years', '<=', 2);
+    }
+
+    /**
+     * Scope for experienced jobs.
+     */
+    public function scopeExperienced($query)
+    {
+        return $query->where('experience_years', '>=', 5);
+    }
+
+    /**
+     * Scope for senior level jobs.
+     */
+    public function scopeSeniorLevel($query)
+    {
+        return $query->where('experience_years', '>=', 10);
+    }
+
+    /**
+     * Scope for jobs with applications.
+     */
+    public function scopeWithApplications($query)
+    {
+        return $query->has('appliedJobs');
+    }
+
+    /**
+     * Scope for jobs without applications.
+     */
+    public function scopeWithoutApplications($query)
+    {
+        return $query->doesntHave('appliedJobs');
+    }
+
+    /**
+     * Scope for jobs with deadline.
+     */
+    public function scopeWithDeadline($query)
+    {
+        return $query->whereNotNull('application_deadline');
+    }
+
+    /**
+     * Scope for jobs without deadline.
+     */
+    public function scopeWithoutDeadline($query)
+    {
+        return $query->whereNull('application_deadline');
+    }
+
+    /**
+     * Scope for jobs with upcoming deadline.
+     */
+    public function scopeDeadlineSoon($query, int $days = 7)
+    {
+        return $query->whereNotNull('application_deadline')
+                    ->where('application_deadline', '<=', now()->addDays($days))
+                    ->where('application_deadline', '>=', now());
+    }
+
+    /**
+     * Scope for expired jobs.
+     */
+    public function scopeExpired($query)
+    {
+        return $query->whereNotNull('application_deadline')
+                    ->where('application_deadline', '<', now());
+    }
+
+    /**
+     * Scope for popular jobs (most viewed).
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->orderBy('views_count', 'desc')->limit($limit);
+    }
+
+    /**
+     * Scope for trending jobs (most applications).
+     */
+    public function scopeTrending($query, int $limit = 10)
+    {
+        return $query->orderBy('applications_count', 'desc')->limit($limit);
+    }
+
+    /**
+     * Scope for jobs with available positions.
+     */
+    public function scopeAvailablePositions($query)
+    {
+        return $query->whereRaw('filled_positions < total_positions');
+    }
+
+    /**
+     * Scope for fully filled jobs.
+     */
+    public function scopeFullyFilled($query)
+    {
+        return $query->whereRaw('filled_positions >= total_positions');
+    }
+
+    /**
+     * Scope for remote jobs.
+     */
+    public function scopeRemote($query)
+    {
+        return $query->where('title', 'like', '%remote%')
+                    ->orWhere('description', 'like', '%remote%')
+                    ->orWhere('requirements', 'like', '%remote%');
+    }
+
+    /**
+     * Scope for part-time jobs.
+     */
+    public function scopePartTime($query)
+    {
+        return $query->whereHas('jobType', function ($q) {
+            $q->where('name', 'like', '%part%time%');
+        });
+    }
+
+    /**
+     * Scope for full-time jobs.
+     */
+    public function scopeFullTime($query)
+    {
+        return $query->whereHas('jobType', function ($q) {
+            $q->where('name', 'like', '%full%time%');
+        });
     }
 }

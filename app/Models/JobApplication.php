@@ -135,9 +135,18 @@ class JobApplication extends Model
             'job_id' => 'integer',
             'candidate_id' => 'integer',
             'resume_id' => 'integer',
-            'status' => 'integer',
+            'status' => 'string',
             'expected_salary' => 'decimal:2',
-            'job_stage_id' => 'integer',
+            'cover_letter' => 'string',
+            'notes' => 'string',
+            'applied_at' => 'datetime',
+            'reviewed_at' => 'datetime',
+            'interview_scheduled_at' => 'datetime',
+            'rejected_at' => 'datetime',
+            'hired_at' => 'datetime',
+            'is_shortlisted' => 'boolean',
+            'is_rejected' => 'boolean',
+            'is_hired' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -255,7 +264,7 @@ class JobApplication extends Model
     /**
      * Scope for applications by status.
      */
-    public function scopeByStatus(Builder $query, int $status): Builder
+    public function scopeByStatus($query, string $status)
     {
         return $query->where('status', $status);
     }
@@ -263,48 +272,61 @@ class JobApplication extends Model
     /**
      * Scope for pending applications.
      */
-    public function scopePending(Builder $query): Builder
+    public function scopePending($query)
     {
-        return $query->where('status', self::STATUS_APPLIED);
+        return $query->where('status', 'pending')
+                    ->orWhere('status', 'applied');
     }
 
     /**
-     * Scope for hired applications.
+     * Scope for reviewed applications.
      */
-    public function scopeHired(Builder $query): Builder
+    public function scopeReviewed($query)
     {
-        return $query->where('status', self::COMPLETE);
-    }
-
-    /**
-     * Scope for rejected applications.
-     */
-    public function scopeRejected(Builder $query): Builder
-    {
-        return $query->where('status', self::REJECTED);
+        return $query->where('status', 'reviewed')
+                    ->orWhereNotNull('reviewed_at');
     }
 
     /**
      * Scope for shortlisted applications.
      */
-    public function scopeShortlisted(Builder $query): Builder
+    public function scopeShortlisted($query)
     {
-        return $query->where('status', self::SHORT_LIST);
+        return $query->where('is_shortlisted', true)
+                    ->orWhere('status', 'shortlisted');
     }
 
     /**
-     * Scope for recent applications.
+     * Scope for rejected applications.
      */
-    public function scopeRecent(Builder $query, int $days = 30): Builder
+    public function scopeRejected($query)
     {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+        return $query->where('is_rejected', true)
+                    ->orWhere('status', 'rejected');
+    }
+
+    /**
+     * Scope for hired applications.
+     */
+    public function scopeHired($query)
+    {
+        return $query->where('is_hired', true)
+                    ->orWhere('status', 'hired');
+    }
+
+    /**
+     * Scope for applications with interview scheduled.
+     */
+    public function scopeInterviewScheduled($query)
+    {
+        return $query->whereNotNull('interview_scheduled_at')
+                    ->orWhere('status', 'interview_scheduled');
     }
 
     /**
      * Scope for applications by job.
      */
-    public function scopeByJob(Builder $query, int $jobId): Builder
+    public function scopeByJob($query, int $jobId)
     {
         return $query->where('job_id', $jobId);
     }
@@ -312,40 +334,15 @@ class JobApplication extends Model
     /**
      * Scope for applications by candidate.
      */
-    public function scopeByCandidate(Builder $query, int $candidateId): Builder
+    public function scopeByCandidate($query, int $candidateId)
     {
         return $query->where('candidate_id', $candidateId);
     }
 
     /**
-     * Scope for applications by salary range.
-     */
-    public function scopeBySalaryRange(Builder $query, ?float $minSalary = null, ?float $maxSalary = null): Builder
-    {
-        if ($minSalary !== null) {
-            $query->where('expected_salary', '>=', $minSalary);
-        }
-        
-        if ($maxSalary !== null) {
-            $query->where('expected_salary', '<=', $maxSalary);
-        }
-        
-        return $query;
-    }
-
-    /**
-     * Scope for applications with notes.
-     */
-    public function scopeWithNotes(Builder $query): Builder
-    {
-        return $query->whereNotNull('notes')
-                    ->where('notes', '!=', '');
-    }
-
-    /**
      * Scope for applications by company.
      */
-    public function scopeByCompany(Builder $query, int $companyId): Builder
+    public function scopeByCompany($query, int $companyId)
     {
         return $query->whereHas('job', function ($q) use ($companyId) {
             $q->where('company_id', $companyId);
@@ -353,74 +350,133 @@ class JobApplication extends Model
     }
 
     /**
-     * Scope for applications today.
+     * Scope for recent applications.
      */
-    public function scopeToday(Builder $query): Builder
+    public function scopeRecent($query, int $days = 7)
     {
-        return $query->whereDate('created_at', today());
+        return $query->where('applied_at', '>=', now()->subDays($days))
+                    ->orWhere('created_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for applications this week.
+     * Scope for old applications.
      */
-    public function scopeThisWeek(Builder $query): Builder
+    public function scopeOld($query, int $days = 30)
     {
-        return $query->whereBetween('created_at', [
-            now()->startOfWeek(),
-            now()->endOfWeek()
-        ]);
+        return $query->where('applied_at', '<', now()->subDays($days))
+                    ->where('created_at', '<', now()->subDays($days));
     }
 
     /**
-     * Scope for applications this month.
+     * Scope for applications by salary range.
      */
-    public function scopeThisMonth(Builder $query): Builder
+    public function scopeBySalaryRange($query, float $min, float $max)
     {
-        return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+        return $query->whereBetween('expected_salary', [$min, $max]);
     }
 
     /**
-     * Scope for applications with scheduled interviews.
+     * Scope for high salary expectations.
      */
-    public function scopeWithSchedules(Builder $query): Builder
-    {
-        return $query->whereHas('applicationSchedule');
-    }
-
-    /**
-     * Scope for applications needing review (applied but no action taken).
-     */
-    public function scopeNeedsReview(Builder $query): Builder
-    {
-        return $query->where('status', self::STATUS_APPLIED)
-                    ->where('created_at', '<=', now()->subDays(3))
-                    ->orderBy('created_at', 'asc');
-    }
-
-    /**
-     * Scope for applications with high salary expectations.
-     */
-    public function scopeHighSalaryExpectation(Builder $query, float $threshold = 100000): Builder
+    public function scopeHighSalaryExpectation($query, float $threshold = 100000)
     {
         return $query->where('expected_salary', '>=', $threshold);
     }
 
     /**
-     * Scope for popular applications (for jobs with many applications).
+     * Scope for applications with cover letter.
      */
-    public function scopePopular(Builder $query): Builder
+    public function scopeWithCoverLetter($query)
     {
-        return $query->whereHas('job', function ($q) {
-            $q->withCount('appliedJobs')
-              ->having('applied_jobs_count', '>=', 10);
-        });
+        return $query->whereNotNull('cover_letter')
+                    ->where('cover_letter', '!=', '');
+    }
+
+    /**
+     * Scope for applications without cover letter.
+     */
+    public function scopeWithoutCoverLetter($query)
+    {
+        return $query->whereNull('cover_letter')
+                    ->orWhere('cover_letter', '');
+    }
+
+    /**
+     * Scope for applications with notes.
+     */
+    public function scopeWithNotes($query)
+    {
+        return $query->whereNotNull('notes')
+                    ->where('notes', '!=', '');
+    }
+
+    /**
+     * Scope for applications requiring review.
+     */
+    public function scopeRequiringReview($query)
+    {
+        return $query->where('status', 'pending')
+                    ->orWhere('status', 'applied')
+                    ->whereNull('reviewed_at');
+    }
+
+    /**
+     * Scope for applications today.
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereDate('applied_at', today())
+                    ->orWhereDate('created_at', today());
+    }
+
+    /**
+     * Scope for applications this week.
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('applied_at', [now()->startOfWeek(), now()->endOfWeek()])
+                    ->orWhereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    }
+
+    /**
+     * Scope for applications this month.
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('applied_at', now()->month)
+                    ->whereYear('applied_at', now()->year)
+                    ->orWhere(function ($q) {
+                        $q->whereMonth('created_at', now()->month)
+                          ->whereYear('created_at', now()->year);
+                    });
+    }
+
+    /**
+     * Scope for applications with upcoming interviews.
+     */
+    public function scopeUpcomingInterviews($query, int $days = 7)
+    {
+        return $query->whereNotNull('interview_scheduled_at')
+                    ->where('interview_scheduled_at', '>=', now())
+                    ->where('interview_scheduled_at', '<=', now()->addDays($days));
+    }
+
+    /**
+     * Scope for overdue interviews.
+     */
+    public function scopeOverdueInterviews($query)
+    {
+        return $query->whereNotNull('interview_scheduled_at')
+                    ->where('interview_scheduled_at', '<', now())
+                    ->where('status', '!=', 'completed')
+                    ->where('status', '!=', 'rejected')
+                    ->where('status', '!=', 'hired');
     }
 
     /**
      * Scope for applications by job category.
      */
-    public function scopeByJobCategory(Builder $query, int $categoryId): Builder
+    public function scopeByJobCategory($query, int $categoryId)
     {
         return $query->whereHas('job', function ($q) use ($categoryId) {
             $q->where('job_category_id', $categoryId);
@@ -428,21 +484,70 @@ class JobApplication extends Model
     }
 
     /**
-     * Scope for applications by location.
+     * Scope for applications by job type.
      */
-    public function scopeByLocation(Builder $query, ?int $countryId = null, ?int $stateId = null, ?int $cityId = null): Builder
+    public function scopeByJobType($query, int $typeId)
     {
-        return $query->whereHas('job', function ($q) use ($countryId, $stateId, $cityId) {
-            if ($countryId) {
-                $q->where('country_id', $countryId);
-            }
-            if ($stateId) {
-                $q->where('state_id', $stateId);
-            }
-            if ($cityId) {
-                $q->where('city_id', $cityId);
-            }
+        return $query->whereHas('job', function ($q) use ($typeId) {
+            $q->where('job_type_id', $typeId);
         });
+    }
+
+    /**
+     * Scope for applications to active jobs.
+     */
+    public function scopeToActiveJobs($query)
+    {
+        return $query->whereHas('job', function ($q) {
+            $q->where('status', 1);
+        });
+    }
+
+    /**
+     * Scope for applications to featured jobs.
+     */
+    public function scopeToFeaturedJobs($query)
+    {
+        return $query->whereHas('job', function ($q) {
+            $q->where('is_featured', true);
+        });
+    }
+
+    /**
+     * Scope for applications from verified candidates.
+     */
+    public function scopeFromVerifiedCandidates($query)
+    {
+        return $query->whereHas('candidate', function ($q) {
+            $q->where('is_verified', true);
+        });
+    }
+
+    /**
+     * Scope for applications from active candidates.
+     */
+    public function scopeFromActiveCandidates($query)
+    {
+        return $query->whereHas('candidate', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    /**
+     * Scope for searching applications.
+     */
+    public function scopeSearch($query, string $term)
+    {
+        return $query->where('cover_letter', 'like', "%{$term}%")
+                    ->orWhere('notes', 'like', "%{$term}%")
+                    ->orWhereHas('candidate', function ($q) use ($term) {
+                        $q->where('first_name', 'like', "%{$term}%")
+                          ->orWhere('last_name', 'like', "%{$term}%")
+                          ->orWhere('email', 'like', "%{$term}%");
+                    })
+                    ->orWhereHas('job', function ($q) use ($term) {
+                        $q->where('title', 'like', "%{$term}%");
+                    });
     }
 
     /**

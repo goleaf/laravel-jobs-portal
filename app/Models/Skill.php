@@ -85,8 +85,14 @@ class Skill extends Model
     {
         return [
             'id' => 'integer',
+            'name' => 'string',
+            'description' => 'string',
+            'category' => 'string',
             'is_active' => 'boolean',
-            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_technical' => 'boolean',
+            'is_soft_skill' => 'boolean',
+            'popularity_score' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -148,59 +154,109 @@ class Skill extends Model
     }
 
     /**
-     * Scope for default skills.
+     * Scope for featured skills.
      */
-    public function scopeDefault($query)
+    public function scopeFeatured($query)
     {
-        return $query->where('is_default', true);
+        return $query->where('is_featured', true);
     }
 
     /**
-     * Scope for custom skills.
+     * Scope for non-featured skills.
      */
-    public function scopeCustom($query)
+    public function scopeNotFeatured($query)
     {
-        return $query->where('is_default', false);
+        return $query->where('is_featured', false);
     }
 
     /**
-     * Scope for popular skills (skills with most candidates/jobs).
+     * Scope for technical skills.
      */
-    public function scopePopular($query, int $limit = 10)
+    public function scopeTechnical($query)
     {
-        return $query->withCount(['candidate', 'jobs'])
-                    ->orderByDesc('candidate_count')
-                    ->orderByDesc('jobs_count')
-                    ->limit($limit);
+        return $query->where('is_technical', true);
     }
 
     /**
-     * Scope for skills by name search.
+     * Scope for non-technical skills.
+     */
+    public function scopeNonTechnical($query)
+    {
+        return $query->where('is_technical', false);
+    }
+
+    /**
+     * Scope for soft skills.
+     */
+    public function scopeSoftSkills($query)
+    {
+        return $query->where('is_soft_skill', true);
+    }
+
+    /**
+     * Scope for hard skills.
+     */
+    public function scopeHardSkills($query)
+    {
+        return $query->where('is_soft_skill', false);
+    }
+
+    /**
+     * Scope for skills by category.
+     */
+    public function scopeByCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope for searching skills.
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('category', 'like', "%{$term}%");
     }
 
     /**
-     * Scope for skills used in jobs.
+     * Scope for recent skills.
      */
-    public function scopeUsedInJobs($query)
+    public function scopeRecent($query, int $days = 30)
     {
-        return $query->whereHas('jobs');
+        return $query->where('created_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for skills used by candidates.
+     * Scope for old skills.
      */
-    public function scopeUsedByCandidates($query)
+    public function scopeOld($query, int $days = 365)
     {
-        return $query->whereHas('candidate');
+        return $query->where('created_at', '<', now()->subDays($days));
     }
 
     /**
-     * Scope for alphabetically ordered skills.
+     * Scope for popular skills.
+     */
+    public function scopePopular($query, int $limit = 10)
+    {
+        return $query->orderBy('popularity_score', 'desc')->limit($limit);
+    }
+
+    /**
+     * Scope for trending skills.
+     */
+    public function scopeTrending($query, int $limit = 10)
+    {
+        return $query->withCount(['candidates' => function ($q) {
+            $q->where('created_at', '>=', now()->subDays(30));
+        }])
+        ->orderBy('candidates_count', 'desc')
+        ->limit($limit);
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -208,37 +264,160 @@ class Skill extends Model
     }
 
     /**
-     * Scope for recently created skills.
+     * Scope for skills with candidates.
      */
-    public function scopeRecent($query, int $days = 30)
+    public function scopeWithCandidates($query)
     {
-        return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+        return $query->has('candidates');
     }
 
     /**
-     * Scope for trending skills (recently used).
+     * Scope for skills without candidates.
      */
-    public function scopeTrending($query, int $days = 7)
+    public function scopeWithoutCandidates($query)
     {
-        return $query->whereHas('candidate', function ($q) use ($days) {
-                     $q->where('created_at', '>=', now()->subDays($days));
-                 })
-                 ->orWhereHas('jobs', function ($q) use ($days) {
-                     $q->where('created_at', '>=', now()->subDays($days));
-                 })
-                 ->withCount(['candidate', 'jobs'])
-                 ->orderByDesc('candidate_count')
-                 ->orderByDesc('jobs_count');
+        return $query->doesntHave('candidates');
     }
 
     /**
-     * Scope for skills with minimum usage threshold.
+     * Scope for skills with jobs.
      */
-    public function scopeMinUsage($query, int $minCount = 5)
+    public function scopeWithJobs($query)
     {
-        return $query->withCount(['candidate', 'jobs'])
-                    ->havingRaw('(candidate_count + jobs_count) >= ?', [$minCount]);
+        return $query->has('jobs');
+    }
+
+    /**
+     * Scope for skills without jobs.
+     */
+    public function scopeWithoutJobs($query)
+    {
+        return $query->doesntHave('jobs');
+    }
+
+    /**
+     * Scope for programming skills.
+     */
+    public function scopeProgramming($query)
+    {
+        return $query->where('category', 'programming')
+                    ->orWhere('name', 'like', '%programming%')
+                    ->orWhere('name', 'like', '%coding%')
+                    ->orWhere('name', 'like', '%development%');
+    }
+
+    /**
+     * Scope for design skills.
+     */
+    public function scopeDesign($query)
+    {
+        return $query->where('category', 'design')
+                    ->orWhere('name', 'like', '%design%')
+                    ->orWhere('name', 'like', '%ui%')
+                    ->orWhere('name', 'like', '%ux%');
+    }
+
+    /**
+     * Scope for marketing skills.
+     */
+    public function scopeMarketing($query)
+    {
+        return $query->where('category', 'marketing')
+                    ->orWhere('name', 'like', '%marketing%')
+                    ->orWhere('name', 'like', '%seo%')
+                    ->orWhere('name', 'like', '%social media%');
+    }
+
+    /**
+     * Scope for management skills.
+     */
+    public function scopeManagement($query)
+    {
+        return $query->where('category', 'management')
+                    ->orWhere('name', 'like', '%management%')
+                    ->orWhere('name', 'like', '%leadership%')
+                    ->orWhere('name', 'like', '%project%');
+    }
+
+    /**
+     * Scope for language skills.
+     */
+    public function scopeLanguages($query)
+    {
+        return $query->where('category', 'language')
+                    ->orWhere('name', 'like', '%language%')
+                    ->orWhere('name', 'like', '%english%')
+                    ->orWhere('name', 'like', '%spanish%')
+                    ->orWhere('name', 'like', '%french%');
+    }
+
+    /**
+     * Scope for communication skills.
+     */
+    public function scopeCommunication($query)
+    {
+        return $query->where('category', 'communication')
+                    ->orWhere('name', 'like', '%communication%')
+                    ->orWhere('name', 'like', '%presentation%')
+                    ->orWhere('name', 'like', '%writing%');
+    }
+
+    /**
+     * Scope for skills by popularity score range.
+     */
+    public function scopeByPopularityRange($query, int $min, int $max)
+    {
+        return $query->whereBetween('popularity_score', [$min, $max]);
+    }
+
+    /**
+     * Scope for highly popular skills.
+     */
+    public function scopeHighlyPopular($query, int $threshold = 80)
+    {
+        return $query->where('popularity_score', '>=', $threshold);
+    }
+
+    /**
+     * Scope for emerging skills.
+     */
+    public function scopeEmerging($query)
+    {
+        return $query->where('created_at', '>=', now()->subYear())
+                    ->where('popularity_score', '>=', 50);
+    }
+
+    /**
+     * Scope for in-demand skills.
+     */
+    public function scopeInDemand($query, int $limit = 20)
+    {
+        return $query->withCount(['jobs' => function ($q) {
+            $q->where('created_at', '>=', now()->subDays(30))
+              ->where('status', 1);
+        }])
+        ->orderBy('jobs_count', 'desc')
+        ->limit($limit);
+    }
+
+    /**
+     * Scope for skills required by specific job.
+     */
+    public function scopeRequiredByJob($query, int $jobId)
+    {
+        return $query->whereHas('jobs', function ($q) use ($jobId) {
+            $q->where('job_id', $jobId);
+        });
+    }
+
+    /**
+     * Scope for skills possessed by candidate.
+     */
+    public function scopePossessedByCandidate($query, int $candidateId)
+    {
+        return $query->whereHas('candidates', function ($q) use ($candidateId) {
+            $q->where('candidate_id', $candidateId);
+        });
     }
 
     /**

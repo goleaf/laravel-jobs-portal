@@ -50,7 +50,7 @@ class IndexCompanyRequest extends FormRequest
                 'sometimes',
                 'string',
                 'max:255',
-                'regex:/^[a-zA-Z0-9\s\-\.\&\(\)]+$/',
+                'regex:/^[\p{L}\p{N}\p{P}\p{Z}\s]+$/u', // Unicode-safe search
             ],
             'status' => [
                 'sometimes',

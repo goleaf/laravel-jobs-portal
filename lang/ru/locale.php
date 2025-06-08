@@ -2,7 +2,7 @@
 
 return [
     // Language Management
-    'change_language' => 'Изменить язык',
+    'change_language' => 'Изменить язык', //tuutuu
     'current_language' => 'Текущий язык',
     'select_language' => 'Выберите язык',
     'language_changed' => 'Язык успешно изменен на :language',

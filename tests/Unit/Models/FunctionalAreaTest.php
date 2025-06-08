@@ -16,7 +16,7 @@ class FunctionalAreaTest extends TestCase
         $model = FunctionalArea::factory()->create();
         
         $this->assertInstanceOf(FunctionalArea::class, $model);
-        $this->assertDatabaseHas('functionalareas', [
+        $this->assertDatabaseHas('functional_areas', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class FunctionalAreaTest extends TestCase
         $newData = FunctionalArea::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('functionalareas', [
+        $this->assertDatabaseHas('functional_areas', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class FunctionalAreaTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('functionalareas', [
+        $this->assertDatabaseMissing('functional_areas', [
             'id' => $modelId
         ]);
     }

@@ -16,7 +16,7 @@ class JobShiftTest extends TestCase
         $model = JobShift::factory()->create();
         
         $this->assertInstanceOf(JobShift::class, $model);
-        $this->assertDatabaseHas('jobshifts', [
+        $this->assertDatabaseHas('job_shifts', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class JobShiftTest extends TestCase
         $newData = JobShift::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('jobshifts', [
+        $this->assertDatabaseHas('job_shifts', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class JobShiftTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('jobshifts', [
+        $this->assertDatabaseMissing('job_shifts', [
             'id' => $modelId
         ]);
     }

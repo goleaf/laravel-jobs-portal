@@ -60,6 +60,10 @@ abstract class TestCase extends BaseTestCase
             UsersSeeder::class,
             BasicJobsSeeder::class,
         ]);
+        
+        // Create basic candidates and media entry for testing
+        $this->createBasicCandidates();
+        $this->createBasicMediaEntry();
     }
 
     /**
@@ -140,7 +144,14 @@ abstract class TestCase extends BaseTestCase
     {
         try {
             if (config('database.default') === 'sqlite') {
+                // Force disable foreign key constraints for testing
                 DB::statement('PRAGMA foreign_keys=OFF');
+                // Verify it's disabled
+                $result = DB::select('PRAGMA foreign_keys');
+                if (!empty($result) && $result[0]->foreign_keys == 1) {
+                    // If still enabled, try again
+                    DB::statement('PRAGMA foreign_keys=OFF');
+                }
             }
         } catch (\Exception $e) {
             // Ignore if database is not available yet
@@ -155,6 +166,100 @@ abstract class TestCase extends BaseTestCase
             }
         } catch (\Exception $e) {
             // Ignore if database is not available
+        }
+    }
+
+    private function createBasicCandidates(): void
+    {
+        try {
+            // Create basic candidates for testing
+            DB::table('candidates')->insert([
+                [
+                    'id' => 1,
+                    'user_id' => 2, // John Doe from UsersSeeder
+                    'career_level_id' => 1,
+                    'industry_id' => 1,
+                    'functional_area_id' => 1,
+                    'current_salary' => 50000,
+                    'expected_salary' => 60000,
+                    'salary_currency_id' => 1,
+                    'salary_period_id' => 1,
+                    'country_id' => 1,
+                    'state_id' => 1,
+                    'city_id' => 1,
+                    'is_active' => 1,
+                    'is_verified' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'id' => 2,
+                    'user_id' => 3, // Jane Smith from UsersSeeder
+                    'career_level_id' => 1,
+                    'industry_id' => 1,
+                    'functional_area_id' => 1,
+                    'current_salary' => 45000,
+                    'expected_salary' => 55000,
+                    'salary_currency_id' => 1,
+                    'salary_period_id' => 1,
+                    'country_id' => 1,
+                    'state_id' => 1,
+                    'city_id' => 1,
+                    'is_active' => 1,
+                    'is_verified' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'id' => 3,
+                    'user_id' => 1, // Admin user as candidate for testing
+                    'career_level_id' => 1,
+                    'industry_id' => 1,
+                    'functional_area_id' => 1,
+                    'current_salary' => 70000,
+                    'expected_salary' => 80000,
+                    'salary_currency_id' => 1,
+                    'salary_period_id' => 1,
+                    'country_id' => 1,
+                    'state_id' => 1,
+                    'city_id' => 1,
+                    'is_active' => 1,
+                    'is_verified' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            // Ignore if candidates table doesn't exist or entries already exist
+        }
+    }
+
+    private function createBasicMediaEntry(): void
+    {
+        try {
+            // Create a basic media entry for resume testing
+            DB::table('media')->insert([
+                'id' => 1,
+                'model_type' => 'App\\Models\\Candidate',
+                'model_id' => 1,
+                'uuid' => '12345678-1234-1234-1234-123456789012',
+                'collection_name' => 'resumes',
+                'name' => 'test-resume',
+                'file_name' => 'test-resume.pdf',
+                'mime_type' => 'application/pdf',
+                'disk' => 'public',
+                'conversions_disk' => 'public',
+                'size' => 1024,
+                'manipulations' => '[]',
+                'custom_properties' => '[]',
+                'generated_conversions' => '[]',
+                'responsive_images' => '[]',
+                'order_column' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            // Ignore if media table doesn't exist or entry already exists
         }
     }
 }

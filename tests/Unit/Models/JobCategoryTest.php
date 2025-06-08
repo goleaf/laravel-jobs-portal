@@ -16,7 +16,7 @@ class JobCategoryTest extends TestCase
         $model = JobCategory::factory()->create();
         
         $this->assertInstanceOf(JobCategory::class, $model);
-        $this->assertDatabaseHas('jobcategories', [
+        $this->assertDatabaseHas('job_categories', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class JobCategoryTest extends TestCase
         $newData = JobCategory::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('jobcategories', [
+        $this->assertDatabaseHas('job_categories', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,7 @@ class JobCategoryTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('jobcategories', [
+        $this->assertDatabaseMissing('job_categories', [
             'id' => $modelId
         ]);
     }

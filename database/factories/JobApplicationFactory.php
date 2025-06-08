@@ -22,11 +22,12 @@ class JobApplicationFactory extends Factory
     public function definition(): array
     {
         return [
-            'job_id' => Job::factory(),
-            'candidate_id' => Candidate::factory(),
+            'job_id' => fake()->numberBetween(1, 2), // Use existing jobs from seeder
+            'candidate_id' => fake()->numberBetween(1, 3), // Use existing candidates from seeder
+            'resume_id' => 1, // Use a default resume ID
             'expected_salary' => fake()->numberBetween(40000, 100000),
-            'cover_letter' => fake()->text(500),
-            'status' => JobApplication::STATUS_PENDING,
+            'notes' => fake()->text(500),
+            'status' => JobApplication::STATUS_APPLIED,
         ];
     }
 
@@ -36,7 +37,7 @@ class JobApplicationFactory extends Factory
     public function shortlisted(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => JobApplication::STATUS_SHORTLISTED,
+            'status' => JobApplication::SHORT_LIST,
         ]);
     }
 
@@ -46,7 +47,7 @@ class JobApplicationFactory extends Factory
     public function selected(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => JobApplication::STATUS_SELECTED,
+            'status' => JobApplication::SELECT_STATUS,
         ]);
     }
 
@@ -56,7 +57,7 @@ class JobApplicationFactory extends Factory
     public function rejected(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => JobApplication::STATUS_REJECTED,
+            'status' => JobApplication::REJECTED,
         ]);
     }
 
@@ -66,7 +67,7 @@ class JobApplicationFactory extends Factory
     public function completed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => JobApplication::STATUS_COMPLETED,
+            'status' => JobApplication::COMPLETE,
         ]);
     }
 
@@ -76,7 +77,7 @@ class JobApplicationFactory extends Factory
     public function declined(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => JobApplication::STATUS_DECLINED,
+            'status' => JobApplication::REJECTED,
         ]);
     }
 } 

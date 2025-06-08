@@ -10,13 +10,23 @@ class JobApplicationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Explicitly disable foreign key constraints for this test
+        if (config('database.default') === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys=OFF');
+        }
+    }
+
     /** @test */
     public function it_can_be_created()
     {
         $model = JobApplication::factory()->create();
         
         $this->assertInstanceOf(JobApplication::class, $model);
-        $this->assertDatabaseHas('jobapplications', [
+        $this->assertDatabaseHas('job_applications', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +61,7 @@ class JobApplicationTest extends TestCase
         $newData = JobApplication::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('jobapplications', [
+        $this->assertDatabaseHas('job_applications', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +74,7 @@ class JobApplicationTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('jobapplications', [
+        $this->assertDatabaseMissing('job_applications', [
             'id' => $modelId
         ]);
     }

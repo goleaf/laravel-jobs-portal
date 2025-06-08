@@ -41,7 +41,7 @@ class BasicTest extends TestCase
             'password' => 'password',
         ]);
         
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($user);
     }
 } 

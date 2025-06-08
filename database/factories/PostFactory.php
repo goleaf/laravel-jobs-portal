@@ -30,8 +30,8 @@ class PostFactory extends Factory
         return [
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
-            'created_by' => fake()->word(),
-            'is_default' => fake()->word()
+            'created_by' => fake()->numberBetween(1, 3), // Use existing user IDs
+            'is_default' => fake()->boolean()
         ];
     }
 }

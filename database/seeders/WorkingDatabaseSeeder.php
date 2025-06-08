@@ -44,6 +44,7 @@ class WorkingDatabaseSeeder extends Seeder
             // Job portal master data
             SkillsSeeder::class,
             CreateDefaultIndustriesSeeder::class,
+            BasicJobsSeeder::class,
             CreateDefaultCareerLevelSeeder::class,
             CreateDefaultDegreeLevelSeeder::class,
             CreateDefaultFunctionalAreaSeeder::class,

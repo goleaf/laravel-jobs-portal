@@ -64,7 +64,7 @@ class PostCategoryTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('postcategories', [
+        $this->assertDatabaseMissing('post_categories', [
             'id' => $modelId
         ]);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Models\Job;
+use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
@@ -18,16 +20,19 @@ class StoreJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Role-based authorization
-        if (!auth()->check()) {
-            return false;
+        $user = auth()->user();
+        
+        // Admin can always create jobs
+        if ($user->hasRole('admin')) {
+            return true;
         }
         
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        // Employer must have an active company
+        if ($user->hasRole('employer') && $user->company) {
+            return $user->company->is_active;
+        }
+        
+        return false;
     }
 
     /**
@@ -39,96 +44,170 @@ class StoreJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Job Basic Information
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:65000'],
-            'benefits' => ['nullable', 'string', 'max:65000'],
-            'requirements' => ['nullable', 'string', 'max:65000'],
-            
-            // Job Classification
-            'job_category_id' => ['required', 'integer', 'exists:job_categories,id'],
-            'job_type_id' => ['required', 'integer', 'exists:job_types,id'],
-            'job_shift_id' => ['required', 'integer', 'exists:job_shifts,id'],
-            'career_level_id' => ['required', 'integer', 'exists:career_levels,id'],
-            'functional_area_id' => ['required', 'integer', 'exists:functional_areas,id'],
-            
-            // Company Information
+            'job_title' => [
+                'required',
+                'string',
+                'min:3',
+                'max:180',
+                'regex:/^[\p{L}\p{N}\s\-.,()&]+$/u'
+            ],
+            'description' => [
+                'required',
+                'string',
+                'min:50',
+                'max:10000'
+            ],
             'company_id' => [
-                'required', 
-                'integer', 
-                'exists:companies,id',
-                function ($attribute, $value, $fail) {
-                    $user = auth()->user();
-                    if ($user->hasRole('Employer')) {
-                        $company = \App\Models\Company::find($value);
-                        if (!$company || $company->user_id !== $user->id) {
-                            $fail(__('validation.unauthorized_company'));
-                        }
-                    }
-                },
+                'required_unless:is_admin,true',
+                'integer',
+                'exists:companies,id'
             ],
-            
-            // Salary Information
-            'salary_from' => ['nullable', 'numeric', 'min:0', 'max:999999999'],
-            'salary_to' => [
-                'nullable', 
-                'numeric', 
-                'min:0', 
-                'max:999999999',
-                'gte:salary_from'
+            'job_category_id' => [
+                'required',
+                'integer',
+                'exists:job_categories,id'
             ],
-            'salary_period_id' => ['required', 'integer', 'exists:salary_periods,id'],
-            'salary_currency_id' => ['required', 'integer', 'exists:salary_currencies,id'],
-            'hide_salary' => ['boolean'],
-            
-            // Location Information
-            'country_id' => ['required', 'integer', 'exists:countries,id'],
-            'state_id' => ['nullable', 'integer', 'exists:states,id'],
-            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
-            'is_freelance' => ['boolean'],
-            'is_suspended' => ['boolean'],
-            
-            // Experience and Education
-            'experience' => ['nullable', 'integer', 'min:0', 'max:50'],
-            'degree_level_id' => ['required', 'integer', 'exists:required_degree_levels,id'],
-            
-            // Job Details
-            'position' => ['nullable', 'integer', 'min:1', 'max:10000'],
-            'job_expiry_date' => [
-                'required', 
-                'date', 
-                'after:today',
-                'before:' . now()->addYear()->format('Y-m-d')
+            'job_type_id' => [
+                'required',
+                'integer',
+                'exists:job_types,id'
             ],
-            
-            // Skills (array of skill IDs)
-            'job_skill' => ['nullable', 'array'],
-            'job_skill.*' => ['integer', 'exists:skills,id'],
-            
-            // Tags (array of tag IDs)  
-            'job_tag' => ['nullable', 'array'],
-            'job_tag.*' => ['integer', 'exists:job_tags,id'],
-            
-            // Status and Features
-            'status' => ['required', 'boolean'],
-            'is_featured' => [
-                'boolean',
-                function ($attribute, $value, $fail) {
-                    if ($value && !auth()->user()->hasRole('Admin')) {
-                        $fail(__('validation.admin_only_field'));
-                    }
-                },
-            ],
-            
-            // Security
-            'g-recaptcha-response' => [
+            'career_level_id' => [
                 'nullable',
-                function ($attribute, $value, $fail) {
-                    if (config('app.recaptcha_enabled', false) && empty($value)) {
-                        $fail(__('validation.recaptcha_required'));
-                    }
-                },
+                'integer',
+                'exists:career_levels,id'
             ],
+            'functional_area_id' => [
+                'required',
+                'integer',
+                'exists:functional_areas,id'
+            ],
+            'job_shift_id' => [
+                'nullable',
+                'integer',
+                'exists:job_shifts,id'
+            ],
+            'degree_level_id' => [
+                'nullable',
+                'integer',
+                'exists:required_degree_levels,id'
+            ],
+            'country_id' => [
+                'required',
+                'integer',
+                'exists:countries,id'
+            ],
+            'state_id' => [
+                'required',
+                'integer',
+                'exists:states,id'
+            ],
+            'city_id' => [
+                'required',
+                'integer',
+                'exists:cities,id'
+            ],
+            'salary_from' => [
+                'required',
+                'numeric',
+                'min:0',
+                'max:999999999',
+                'lt:salary_to'
+            ],
+            'salary_to' => [
+                'required',
+                'numeric',
+                'min:0',
+                'max:999999999',
+                'gt:salary_from'
+            ],
+            'currency_id' => [
+                'required',
+                'integer',
+                'exists:salary_currencies,id'
+            ],
+            'salary_period_id' => [
+                'required',
+                'integer',
+                'exists:salary_periods,id'
+            ],
+            'position' => [
+                'required',
+                'string',
+                'min:2',
+                'max:255'
+            ],
+            'experience' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:50'
+            ],
+            'job_expiry_date' => [
+                'required',
+                'date',
+                'after:today',
+                'before:' . now()->addMonths(12)->format('Y-m-d')
+            ],
+            'no_preference' => [
+                'nullable',
+                'integer',
+                'in:0,1,2'
+            ],
+            'hide_salary' => [
+                'nullable',
+                'boolean'
+            ],
+            'is_freelance' => [
+                'nullable',
+                'boolean'
+            ],
+            'status' => [
+                'nullable',
+                'integer',
+                Rule::in([
+                    Job::STATUS_DRAFT,
+                    Job::STATUS_OPEN,
+                    Job::STATUS_PAUSED
+                ])
+            ],
+            'skills' => [
+                'nullable',
+                'array',
+                'max:20'
+            ],
+            'skills.*' => [
+                'integer',
+                'exists:skills,id'
+            ],
+            'tags' => [
+                'nullable',
+                'array',
+                'max:10'
+            ],
+            'tags.*' => [
+                'integer',
+                'exists:tags,id'
+            ],
+            'key_responsibilities' => [
+                'nullable',
+                'string',
+                'max:5000'
+            ],
+            'benefits' => [
+                'nullable',
+                'string',
+                'max:3000'
+            ],
+            'requirements' => [
+                'nullable',
+                'string',
+                'max:3000'
+            ],
+            'save_as_draft' => [
+                'nullable',
+                'boolean'
+            ]
         ];
     }
 
@@ -139,54 +218,72 @@ class StoreJobRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => __('validation.job_title_required'),
-            'title.max' => __('validation.job_title_max'),
-            'description.required' => __('validation.job_description_required'),
-            'description.max' => __('validation.job_description_max'),
-            'job_category_id.required' => __('validation.job_category_required'),
-            'job_category_id.exists' => __('validation.job_category_exists'),
-            'job_type_id.required' => __('validation.job_type_required'),
-            'job_type_id.exists' => __('validation.job_type_exists'),
-            'job_shift_id.required' => __('validation.job_shift_required'),
-            'job_shift_id.exists' => __('validation.job_shift_exists'),
-            'career_level_id.required' => __('validation.career_level_required'),
-            'career_level_id.exists' => __('validation.career_level_exists'),
-            'functional_area_id.required' => __('validation.functional_area_required'),
-            'functional_area_id.exists' => __('validation.functional_area_exists'),
-            'company_id.required' => __('validation.company_required'),
-            'company_id.exists' => __('validation.company_exists'),
-            'salary_from.numeric' => __('validation.salary_from_numeric'),
-            'salary_from.min' => __('validation.salary_from_min'),
-            'salary_from.max' => __('validation.salary_from_max'),
-            'salary_to.numeric' => __('validation.salary_to_numeric'),
-            'salary_to.gte' => __('validation.salary_to_gte'),
-            'salary_period_id.required' => __('validation.salary_period_required'),
-            'salary_period_id.exists' => __('validation.salary_period_exists'),
-            'salary_currency_id.required' => __('validation.salary_currency_required'),
-            'salary_currency_id.exists' => __('validation.salary_currency_exists'),
-            'country_id.required' => __('validation.country_required'),
-            'country_id.exists' => __('validation.country_exists'),
-            'state_id.exists' => __('validation.state_exists'),
-            'city_id.exists' => __('validation.city_exists'),
-            'experience.integer' => __('validation.experience_integer'),
-            'experience.min' => __('validation.experience_min'),
-            'experience.max' => __('validation.experience_max'),
-            'degree_level_id.required' => __('validation.degree_level_required'),
-            'degree_level_id.exists' => __('validation.degree_level_exists'),
-            'position.integer' => __('validation.position_integer'),
-            'position.min' => __('validation.position_min'),
-            'position.max' => __('validation.position_max'),
-            'job_expiry_date.required' => __('validation.job_expiry_required'),
-            'job_expiry_date.date' => __('validation.job_expiry_date'),
-            'job_expiry_date.after' => __('validation.job_expiry_future'),
-            'job_expiry_date.before' => __('validation.job_expiry_within_year'),
-            'job_skill.array' => __('validation.job_skills_array'),
-            'job_skill.*.exists' => __('validation.job_skill_exists'),
-            'job_tag.array' => __('validation.job_tags_array'),
-            'job_tag.*.exists' => __('validation.job_tag_exists'),
-            'status.required' => __('validation.status_required'),
-            'status.boolean' => __('validation.status_boolean'),
-            'is_featured.admin_only' => __('validation.admin_only_field'),
+            'job_title.required' => __('validation.required', ['attribute' => __('jobs.job_title')]),
+            'job_title.min' => __('validation.min.string', ['attribute' => __('jobs.job_title'), 'min' => 3]),
+            'job_title.max' => __('validation.max.string', ['attribute' => __('jobs.job_title'), 'max' => 180]),
+            'job_title.regex' => __('validation.regex', ['attribute' => __('jobs.job_title')]),
+            
+            'description.required' => __('validation.required', ['attribute' => __('jobs.description')]),
+            'description.min' => __('validation.min.string', ['attribute' => __('jobs.description'), 'min' => 50]),
+            'description.max' => __('validation.max.string', ['attribute' => __('jobs.description'), 'max' => 10000]),
+            
+            'company_id.required_unless' => __('validation.required', ['attribute' => __('jobs.company')]),
+            'company_id.exists' => __('validation.exists', ['attribute' => __('jobs.company')]),
+            
+            'job_category_id.required' => __('validation.required', ['attribute' => __('jobs.job_category')]),
+            'job_category_id.exists' => __('validation.exists', ['attribute' => __('jobs.job_category')]),
+            
+            'job_type_id.required' => __('validation.required', ['attribute' => __('jobs.job_type')]),
+            'job_type_id.exists' => __('validation.exists', ['attribute' => __('jobs.job_type')]),
+            
+            'functional_area_id.required' => __('validation.required', ['attribute' => __('jobs.functional_area')]),
+            'functional_area_id.exists' => __('validation.exists', ['attribute' => __('jobs.functional_area')]),
+            
+            'country_id.required' => __('validation.required', ['attribute' => __('jobs.country')]),
+            'country_id.exists' => __('validation.exists', ['attribute' => __('jobs.country')]),
+            
+            'state_id.required' => __('validation.required', ['attribute' => __('jobs.state')]),
+            'state_id.exists' => __('validation.exists', ['attribute' => __('jobs.state')]),
+            
+            'city_id.required' => __('validation.required', ['attribute' => __('jobs.city')]),
+            'city_id.exists' => __('validation.exists', ['attribute' => __('jobs.city')]),
+            
+            'salary_from.required' => __('validation.required', ['attribute' => __('jobs.salary_from')]),
+            'salary_from.numeric' => __('validation.numeric', ['attribute' => __('jobs.salary_from')]),
+            'salary_from.min' => __('validation.min.numeric', ['attribute' => __('jobs.salary_from'), 'min' => 0]),
+            'salary_from.lt' => __('validation.lt.numeric', ['attribute' => __('jobs.salary_from'), 'value' => __('jobs.salary_to')]),
+            
+            'salary_to.required' => __('validation.required', ['attribute' => __('jobs.salary_to')]),
+            'salary_to.numeric' => __('validation.numeric', ['attribute' => __('jobs.salary_to')]),
+            'salary_to.gt' => __('validation.gt.numeric', ['attribute' => __('jobs.salary_to'), 'value' => __('jobs.salary_from')]),
+            
+            'currency_id.required' => __('validation.required', ['attribute' => __('jobs.currency')]),
+            'currency_id.exists' => __('validation.exists', ['attribute' => __('jobs.currency')]),
+            
+            'salary_period_id.required' => __('validation.required', ['attribute' => __('jobs.salary_period')]),
+            'salary_period_id.exists' => __('validation.exists', ['attribute' => __('jobs.salary_period')]),
+            
+            'position.required' => __('validation.required', ['attribute' => __('jobs.position')]),
+            'position.min' => __('validation.min.string', ['attribute' => __('jobs.position'), 'min' => 2]),
+            'position.max' => __('validation.max.string', ['attribute' => __('jobs.position'), 'max' => 255]),
+            
+            'experience.required' => __('validation.required', ['attribute' => __('jobs.experience')]),
+            'experience.integer' => __('validation.integer', ['attribute' => __('jobs.experience')]),
+            'experience.min' => __('validation.min.numeric', ['attribute' => __('jobs.experience'), 'min' => 0]),
+            'experience.max' => __('validation.max.numeric', ['attribute' => __('jobs.experience'), 'max' => 50]),
+            
+            'job_expiry_date.required' => __('validation.required', ['attribute' => __('jobs.job_expiry_date')]),
+            'job_expiry_date.date' => __('validation.date', ['attribute' => __('jobs.job_expiry_date')]),
+            'job_expiry_date.after' => __('validation.after', ['attribute' => __('jobs.job_expiry_date'), 'date' => 'today']),
+            'job_expiry_date.before' => __('validation.before', ['attribute' => __('jobs.job_expiry_date'), 'date' => now()->addMonths(12)->format('Y-m-d')]),
+            
+            'skills.array' => __('validation.array', ['attribute' => __('jobs.skills')]),
+            'skills.max' => __('validation.max.array', ['attribute' => __('jobs.skills'), 'max' => 20]),
+            'skills.*.exists' => __('validation.exists', ['attribute' => __('jobs.skill')]),
+            
+            'tags.array' => __('validation.array', ['attribute' => __('jobs.tags')]),
+            'tags.max' => __('validation.max.array', ['attribute' => __('jobs.tags'), 'max' => 10]),
+            'tags.*.exists' => __('validation.exists', ['attribute' => __('jobs.tag')]),
         ];
     }
 
@@ -197,31 +294,30 @@ class StoreJobRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => __('validation.attributes.job_title'),
-            'description' => __('validation.attributes.job_description'),
-            'benefits' => __('validation.attributes.job_benefits'),
-            'requirements' => __('validation.attributes.job_requirements'),
-            'job_category_id' => __('validation.attributes.job_category'),
-            'job_type_id' => __('validation.attributes.job_type'),
-            'job_shift_id' => __('validation.attributes.job_shift'),
-            'career_level_id' => __('validation.attributes.career_level'),
-            'functional_area_id' => __('validation.attributes.functional_area'),
-            'company_id' => __('validation.attributes.company'),
-            'salary_from' => __('validation.attributes.salary_from'),
-            'salary_to' => __('validation.attributes.salary_to'),
-            'salary_period_id' => __('validation.attributes.salary_period'),
-            'salary_currency_id' => __('validation.attributes.salary_currency'),
-            'country_id' => __('validation.attributes.country'),
-            'state_id' => __('validation.attributes.state'),
-            'city_id' => __('validation.attributes.city'),
-            'experience' => __('validation.attributes.experience_years'),
-            'degree_level_id' => __('validation.attributes.degree_level'),
-            'position' => __('validation.attributes.positions_available'),
-            'job_expiry_date' => __('validation.attributes.job_expiry_date'),
-            'job_skill' => __('validation.attributes.job_skills'),
-            'job_tag' => __('validation.attributes.job_tags'),
-            'status' => __('validation.attributes.status'),
-            'is_featured' => __('validation.attributes.featured_status'),
+            'job_title' => __('jobs.job_title'),
+            'description' => __('jobs.description'),
+            'company_id' => __('jobs.company'),
+            'job_category_id' => __('jobs.job_category'),
+            'job_type_id' => __('jobs.job_type'),
+            'career_level_id' => __('jobs.career_level'),
+            'functional_area_id' => __('jobs.functional_area'),
+            'job_shift_id' => __('jobs.job_shift'),
+            'degree_level_id' => __('jobs.degree_level'),
+            'country_id' => __('jobs.country'),
+            'state_id' => __('jobs.state'),
+            'city_id' => __('jobs.city'),
+            'salary_from' => __('jobs.salary_from'),
+            'salary_to' => __('jobs.salary_to'),
+            'currency_id' => __('jobs.currency'),
+            'salary_period_id' => __('jobs.salary_period'),
+            'position' => __('jobs.position'),
+            'experience' => __('jobs.experience'),
+            'job_expiry_date' => __('jobs.job_expiry_date'),
+            'skills' => __('jobs.skills'),
+            'tags' => __('jobs.tags'),
+            'key_responsibilities' => __('jobs.key_responsibilities'),
+            'benefits' => __('jobs.benefits'),
+            'requirements' => __('jobs.requirements'),
         ];
     }
 
@@ -231,25 +327,25 @@ class StoreJobRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'title' => trim($this->title ?? ''),
-            'description' => trim($this->description ?? ''),
-            'benefits' => trim($this->benefits ?? ''),
-            'requirements' => trim($this->requirements ?? ''),
-            'salary_from' => $this->salary_from ? (float) $this->salary_from : null,
-            'salary_to' => $this->salary_to ? (float) $this->salary_to : null,
-            'experience' => $this->experience ? (int) $this->experience : null,
-            'position' => $this->position ? (int) $this->position : 1,
-            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
-            'is_featured' => filter_var($this->is_featured, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            'is_freelance' => filter_var($this->is_freelance, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            'is_suspended' => filter_var($this->is_suspended, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            'hide_salary' => filter_var($this->hide_salary, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            
-            // Ensure arrays are properly formatted
-            'job_skill' => is_array($this->job_skill) ? array_filter($this->job_skill) : [],
-            'job_tag' => is_array($this->job_tag) ? array_filter($this->job_tag) : [],
-        ]);
+        // Auto-assign company for employers
+        if (auth()->user()->hasRole('employer') && auth()->user()->company) {
+            $this->merge([
+                'company_id' => auth()->user()->company->id,
+                'is_admin' => false
+            ]);
+        } elseif (auth()->user()->hasRole('admin')) {
+            $this->merge([
+                'is_admin' => true
+            ]);
+        }
+
+        // Set default status
+        if (!$this->has('status')) {
+            $this->merge([
+                'status' => $this->has('save_as_draft') && $this->save_as_draft ? 
+                           Job::STATUS_DRAFT : Job::STATUS_OPEN
+            ]);
+        }
     }
 
     /**
@@ -259,135 +355,92 @@ class StoreJobRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
-                $validator->errors()->add('title', __('validation.job_conflict'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('description', __('validation.suspicious_content'));
-            }
-            
-            if ($this->hasInvalidLocationCombination()) {
-                $validator->errors()->add('location', __('validation.invalid_location_combination'));
+            // Check job creation limits for live jobs
+            if ($this->status == Job::STATUS_OPEN && !$this->checkJobCreationLimit()) {
+                $validator->errors()->add('status', __('jobs.job_creation_limit_exceeded'));
             }
 
-            if ($this->hasInvalidSalaryRange()) {
-                $validator->errors()->add('salary', __('validation.invalid_salary_range'));
+            // Validate salary range makes sense
+            if ($this->salary_from && $this->salary_to) {
+                $salaryDifference = $this->salary_to - $this->salary_from;
+                $minimumDifference = $this->salary_from * 0.1; // 10% minimum difference
+                
+                if ($salaryDifference < $minimumDifference) {
+                    $validator->errors()->add('salary_to', __('jobs.salary_range_too_small'));
+                }
             }
 
-            if ($this->hasInvalidExpiryDate()) {
-                $validator->errors()->add('job_expiry_date', __('validation.invalid_expiry_date'));
+            // Validate company ownership for non-admin users
+            if (!auth()->user()->hasRole('admin') && $this->company_id) {
+                $company = Company::find($this->company_id);
+                if (!$company || $company->user_id !== auth()->id()) {
+                    $validator->errors()->add('company_id', __('jobs.unauthorized_company'));
+                }
             }
+
+            // Validate location hierarchy
+            $this->validateLocationHierarchy($validator);
         });
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Check if user can create more jobs.
      */
-    private function hasContext7ValidationConflicts(): bool
+    protected function checkJobCreationLimit(): bool
     {
-        // Check for duplicate job titles in same company
-        if ($this->title && $this->company_id) {
-            $duplicateJob = \App\Models\Job::where('title', 'LIKE', '%' . $this->title . '%')
-                ->where('company_id', $this->company_id)
-                ->where('status', 1)
-                ->exists();
-                
-            return $duplicateJob;
+        $user = auth()->user();
+        
+        if ($user->hasRole('admin')) {
+            return true;
         }
         
-        return false;
+        // Get active subscription
+        $subscription = $user->subscriptions()->active()->first();
+        if (!$subscription) {
+            return false;
+        }
+        
+        // Check job limit
+        $currentJobCount = Job::where('company_id', $user->company->id)
+            ->where('status', Job::STATUS_OPEN)
+            ->count();
+            
+        return $currentJobCount < $subscription->plan->job_limit;
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Validate location hierarchy (country -> state -> city).
      */
-    private function hasSuspiciousContent(): bool
+    protected function validateLocationHierarchy($validator): void
     {
-        $suspiciousPatterns = [
-            'pyramid scheme', 'get rich quick', 'guaranteed income',
-            'work from home easy money', 'no experience required high salary',
-            'spam', 'scam', 'virus', 'malware'
-        ];
-        
-        $content = strtolower($this->description . ' ' . $this->benefits . ' ' . $this->requirements);
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
+        if ($this->state_id && $this->country_id) {
+            $state = \App\Models\State::find($this->state_id);
+            if (!$state || $state->country_id != $this->country_id) {
+                $validator->errors()->add('state_id', __('jobs.invalid_state_for_country'));
             }
         }
-        
-        return false;
+
+        if ($this->city_id && $this->state_id) {
+            $city = \App\Models\City::find($this->city_id);
+            if (!$city || $city->state_id != $this->state_id) {
+                $validator->errors()->add('city_id', __('jobs.invalid_city_for_state'));
+            }
+        }
     }
 
     /**
-     * Context7 Pattern: Location validation
+     * Get validated data with defaults.
      */
-    private function hasInvalidLocationCombination(): bool
+    public function getValidatedWithDefaults(): array
     {
-        // Validate state belongs to country
-        if ($this->country_id && $this->state_id) {
-            $stateExists = \App\Models\State::where('id', $this->state_id)
-                ->where('country_id', $this->country_id)
-                ->exists();
-            
-            if (!$stateExists) return true;
-        }
-
-        // Validate city belongs to state
-        if ($this->state_id && $this->city_id) {
-            $cityExists = \App\Models\City::where('id', $this->city_id)
-                ->where('state_id', $this->state_id)
-                ->exists();
-            
-            if (!$cityExists) return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Context7 Pattern: Salary validation
-     */
-    private function hasInvalidSalaryRange(): bool
-    {
-        if ($this->salary_from && $this->salary_to) {
-            // Salary range should not be too wide (more than 10x)
-            if ($this->salary_to > ($this->salary_from * 10)) {
-                return true;
-            }
-            
-            // Minimum salary should not be unrealistically low
-            if ($this->salary_from < 100) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Context7 Pattern: Expiry date validation
-     */
-    private function hasInvalidExpiryDate(): bool
-    {
-        if ($this->job_expiry_date) {
-            $expiryDate = \Carbon\Carbon::parse($this->job_expiry_date);
-            $now = \Carbon\Carbon::now();
-            
-            // Must be at least 7 days from now
-            if ($expiryDate->diffInDays($now) < 7) {
-                return true;
-            }
-            
-            // Must not be more than 1 year from now
-            if ($expiryDate->diffInDays($now) > 365) {
-                return true;
-            }
-        }
-
-        return false;
+        $validated = $this->validated();
+        
+        // Set default values
+        $validated['hide_salary'] = $validated['hide_salary'] ?? false;
+        $validated['is_freelance'] = $validated['is_freelance'] ?? false;
+        $validated['no_preference'] = $validated['no_preference'] ?? 2; // Both
+        
+        return $validated;
     }
 
     /**
@@ -400,7 +453,7 @@ class StoreJobRequest extends FormRequest
             'errors' => $validator->errors()->toArray(),
             'controller' => 'Job',
             'action' => 'Store',
-            'job_title' => $this->title,
+            'job_title' => $this->job_title,
             'company_id' => $this->company_id,
             'user_id' => $this->user()?->id,
             'ip' => $this->ip(),

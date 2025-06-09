@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Job;
 
 use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
@@ -20,16 +21,19 @@ class DeleteJobRequest extends FormRequest
     public function authorize(): bool
     {
         $job = $this->route('job');
+        $user = auth()->user();
         
-        return auth()->check() && 
-               auth()->user()->is_active &&
-               $job &&
-               (
-                   // Admin can delete any job
-                   auth()->user()->hasRole('admin') ||
-                   // Employer can delete their own company's job
-                   (auth()->user()->hasRole('employer') && $job->company_id === auth()->user()->company?->id)
-               );
+        // Admin can always delete jobs
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+        
+        // Employer can only delete own company's jobs
+        if ($user->hasRole('employer') && $user->company) {
+            return $job->company_id === $user->company->id && $user->company->is_active;
+        }
+        
+        return false;
     }
 
     /**
@@ -40,6 +44,7 @@ class DeleteJobRequest extends FormRequest
     {
         return [
             'force_delete' => [
+                'nullable',
                 'boolean'
             ],
             'reason' => [
@@ -47,32 +52,57 @@ class DeleteJobRequest extends FormRequest
                 'string',
                 'max:500',
                 'required_if:force_delete,true'
+            ],
+            'notify_applicants' => [
+                'nullable',
+                'boolean'
+            ],
+            'notification_message' => [
+                'nullable',
+                'string',
+                'max:1000',
+                'required_if:notify_applicants,true'
             ]
         ];
     }
 
     /**
-     * Get custom validation messages with multilanguage support.
+     * Get custom validation messages with multilingual support.
      */
     public function messages(): array
     {
         return [
-            'force_delete.boolean' => __('validation.job.force_delete_boolean'),
-            'reason.string' => __('validation.job.reason_string'),
-            'reason.max' => __('validation.job.reason_max'),
-            'reason.required_if' => __('validation.job.reason_required_if'),
+            'reason.required_if' => __('validation.required_if', [
+                'attribute' => __('jobs.deletion_reason'),
+                'other' => __('jobs.force_delete'),
+                'value' => 'true'
+            ]),
+            'reason.max' => __('validation.max.string', [
+                'attribute' => __('jobs.deletion_reason'),
+                'max' => 500
+            ]),
+            'notification_message.required_if' => __('validation.required_if', [
+                'attribute' => __('jobs.notification_message'),
+                'other' => __('jobs.notify_applicants'),
+                'value' => 'true'
+            ]),
+            'notification_message.max' => __('validation.max.string', [
+                'attribute' => __('jobs.notification_message'),
+                'max' => 1000
+            ])
         ];
     }
 
     /**
-     * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Get custom attribute names for multilingual support.
      */
     public function attributes(): array
     {
         return [
-            'force_delete' => __('form.job.force_delete'),
-            'reason' => __('form.job.deletion_reason'),
+            'force_delete' => __('jobs.force_delete'),
+            'reason' => __('jobs.deletion_reason'),
+            'notify_applicants' => __('jobs.notify_applicants'),
+            'notification_message' => __('jobs.notification_message')
         ];
     }
 
@@ -82,8 +112,10 @@ class DeleteJobRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        // Set default values
         $this->merge([
-            'force_delete' => $this->boolean('force_delete'),
+            'force_delete' => $this->boolean('force_delete', false),
+            'notify_applicants' => $this->boolean('notify_applicants', true)
         ]);
     }
 
@@ -96,34 +128,224 @@ class DeleteJobRequest extends FormRequest
         $validator->after(function ($validator) {
             $job = $this->route('job');
             
-            if (!$job) {
-                $validator->errors()->add('job', __('validation.job.not_found'));
-                return;
+            // Check if job can be safely deleted
+            if (!$this->force_delete && !$this->canSafelyDelete($job)) {
+                $this->addJobDeletionErrors($validator, $job);
             }
-
-            // Check if job has active applications
-            $activeApplicationsCount = $job->jobApplications()
-                                          ->whereIn('status', [
-                                              \App\Models\JobApplication::STATUS_APPLIED,
-                                              \App\Models\JobApplication::STATUS_IN_PROGRESS,
-                                              \App\Models\JobApplication::STATUS_COMPLETED
-                                          ])
-                                          ->count();
-
-            if ($activeApplicationsCount > 0 && !$this->force_delete) {
-                $validator->errors()->add('general', __('validation.job.has_active_applications', [
-                    'count' => $activeApplicationsCount
-                ]));
-            }
-
-            // Check if job is featured and still has time left
-            if ($job->is_featured && !$this->force_delete) {
-                $featuredRecord = $job->activeFeatured;
-                if ($featuredRecord && $featuredRecord->end_date > now()) {
-                    $validator->errors()->add('general', __('validation.job.featured_time_remaining'));
-                }
+            
+            // Additional validation for forced deletion
+            if ($this->force_delete && !auth()->user()->hasRole('admin')) {
+                $validator->errors()->add('force_delete', __('jobs.force_delete_admin_only'));
             }
         });
+    }
+
+    /**
+     * Check if job can be safely deleted without impacting applications.
+     */
+    protected function canSafelyDelete(Job $job): bool
+    {
+        // Check for active applications
+        $activeApplications = $job->appliedJobs()
+            ->whereIn('status', [
+                JobApplication::STATUS_APPLIED,
+                JobApplication::STATUS_INTERVIEW,
+                JobApplication::STATUS_SHORTLISTED
+            ])
+            ->count();
+
+        return $activeApplications === 0;
+    }
+
+    /**
+     * Add specific errors for job deletion constraints.
+     */
+    protected function addJobDeletionErrors($validator, Job $job): void
+    {
+        $activeApplications = $job->appliedJobs()
+            ->whereIn('status', [
+                JobApplication::STATUS_APPLIED,
+                JobApplication::STATUS_INTERVIEW,
+                JobApplication::STATUS_SHORTLISTED
+            ])
+            ->count();
+
+        if ($activeApplications > 0) {
+            $validator->errors()->add('job', __('jobs.cannot_delete_with_active_applications', [
+                'count' => $activeApplications
+            ]));
+        }
+
+        // Check for featured status
+        if ($job->isFeatured()) {
+            $validator->errors()->add('job', __('jobs.cannot_delete_featured_job'));
+        }
+
+        // Check if job is part of ongoing campaigns
+        if ($this->hasOngoingCampaigns($job)) {
+            $validator->errors()->add('job', __('jobs.cannot_delete_with_campaigns'));
+        }
+    }
+
+    /**
+     * Check if job is part of ongoing marketing campaigns.
+     */
+    protected function hasOngoingCampaigns(Job $job): bool
+    {
+        // Check for active featured records
+        return $job->activeFeatured()->exists();
+    }
+
+    /**
+     * Get statistics about job deletion impact.
+     */
+    public function getDeletionImpact(): array
+    {
+        $job = $this->route('job');
+        
+        $totalApplications = $job->appliedJobs()->count();
+        $activeApplications = $job->appliedJobs()
+            ->whereIn('status', [
+                JobApplication::STATUS_APPLIED,
+                JobApplication::STATUS_INTERVIEW,
+                JobApplication::STATUS_SHORTLISTED
+            ])
+            ->count();
+        
+        $completedApplications = $job->appliedJobs()
+            ->whereIn('status', [
+                JobApplication::STATUS_HIRED,
+                JobApplication::STATUS_REJECTED,
+                JobApplication::STATUS_DECLINED
+            ])
+            ->count();
+
+        return [
+            'total_applications' => $totalApplications,
+            'active_applications' => $activeApplications,
+            'completed_applications' => $completedApplications,
+            'is_featured' => $job->isFeatured(),
+            'has_campaigns' => $this->hasOngoingCampaigns($job),
+            'can_safely_delete' => $this->canSafelyDelete($job),
+            'views_count' => $job->views_count ?? 0
+        ];
+    }
+
+    /**
+     * Get applicants who should be notified.
+     */
+    public function getApplicantsToNotify(): array
+    {
+        if (!$this->notify_applicants) {
+            return [];
+        }
+
+        $job = $this->route('job');
+        
+        return $job->appliedJobs()
+            ->with(['user:id,name,email'])
+            ->whereIn('status', [
+                JobApplication::STATUS_APPLIED,
+                JobApplication::STATUS_INTERVIEW,
+                JobApplication::STATUS_SHORTLISTED
+            ])
+            ->get()
+            ->map(function ($application) {
+                return [
+                    'id' => $application->id,
+                    'user_id' => $application->user_id,
+                    'user_name' => $application->user->name,
+                    'user_email' => $application->user->email,
+                    'application_status' => $application->status,
+                    'applied_at' => $application->created_at
+                ];
+            })
+            ->toArray();
+    }
+
+    /**
+     * Get deletion summary for logging.
+     */
+    public function getDeletionSummary(): array
+    {
+        $job = $this->route('job');
+        $impact = $this->getDeletionImpact();
+        
+        return [
+            'job_id' => $job->id,
+            'job_title' => $job->job_title,
+            'company_id' => $job->company_id,
+            'company_name' => $job->company->user->name ?? $job->company->name,
+            'deleted_by' => [
+                'user_id' => auth()->id(),
+                'user_name' => auth()->user()->name,
+                'user_role' => auth()->user()->roles->pluck('name')->first()
+            ],
+            'deletion_details' => [
+                'force_delete' => $this->force_delete,
+                'reason' => $this->reason,
+                'notify_applicants' => $this->notify_applicants,
+                'notification_message' => $this->notification_message
+            ],
+            'impact' => $impact,
+            'applicants_to_notify' => $this->notify_applicants ? count($this->getApplicantsToNotify()) : 0,
+            'deletion_timestamp' => now()->toISOString()
+        ];
+    }
+
+    /**
+     * Check if deletion requires additional confirmation.
+     */
+    public function requiresConfirmation(): bool
+    {
+        $impact = $this->getDeletionImpact();
+        
+        return $impact['active_applications'] > 0 || 
+               $impact['is_featured'] || 
+               $impact['has_campaigns'] ||
+               $impact['total_applications'] > 10;
+    }
+
+    /**
+     * Get confirmation message for UI.
+     */
+    public function getConfirmationMessage(): string
+    {
+        $impact = $this->getDeletionImpact();
+        $job = $this->route('job');
+        
+        $messages = [];
+        
+        if ($impact['active_applications'] > 0) {
+            $messages[] = __('jobs.delete_confirmation.active_applications', [
+                'count' => $impact['active_applications']
+            ]);
+        }
+        
+        if ($impact['is_featured']) {
+            $messages[] = __('jobs.delete_confirmation.featured_job');
+        }
+        
+        if ($impact['has_campaigns']) {
+            $messages[] = __('jobs.delete_confirmation.ongoing_campaigns');
+        }
+        
+        if ($impact['total_applications'] > 10) {
+            $messages[] = __('jobs.delete_confirmation.many_applications', [
+                'count' => $impact['total_applications']
+            ]);
+        }
+        
+        if (empty($messages)) {
+            return __('jobs.delete_confirmation.default', [
+                'job_title' => $job->job_title
+            ]);
+        }
+        
+        return __('jobs.delete_confirmation.warning', [
+            'job_title' => $job->job_title,
+            'issues' => implode(' ', $messages)
+        ]);
     }
 
     /**

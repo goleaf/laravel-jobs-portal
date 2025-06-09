@@ -15,471 +15,233 @@ class CompanyShowResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $request->user();
+        $isOwner = $user && $user->id === $this->user_id;
+        $isAdmin = $user && $user->hasRole('admin');
+        $canViewPrivate = $isOwner || $isAdmin;
+
         return [
+            // Basic Information
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'email' => $this->when($this->canViewContactInfo(), $this->email),
-            'phone' => $this->when($this->canViewContactInfo(), $this->phone),
+            'email' => $this->email,
+            'phone' => $this->phone,
             'website' => $this->website,
-            
-            // Detailed information
-            'details' => $this->details,
             'established_in' => $this->established_in,
-            'no_of_employees' => $this->no_of_employees,
-            'company_age' => $this->when($this->established_in, $this->getCompanyAge()),
-            
-            // Complete location information
+            'description' => $this->description,
+            'vision' => $this->vision,
+            'mission' => $this->mission,
+
+            // Location Information
             'location' => [
-                'address' => $this->location,
-                'full_address' => $this->getFullLocation(),
-                'country' => $this->whenLoaded('country', function () {
-                    return [
-                        'id' => $this->country->id,
-                        'name' => $this->country->name,
-                        'code' => $this->country->code,
-                        'flag_url' => $this->country->flag_url,
-                    ];
-                }),
-                'state' => $this->whenLoaded('state', function () {
-                    return [
-                        'id' => $this->state->id,
-                        'name' => $this->state->name,
-                        'code' => $this->state->code,
-                    ];
-                }),
+                'address' => $this->address,
+                'address2' => $this->address2,
                 'city' => $this->whenLoaded('city', function () {
                     return [
                         'id' => $this->city->id,
                         'name' => $this->city->name,
-                        'timezone' => $this->city->timezone,
+                        'state' => $this->whenLoaded('city.state', function () {
+                            return [
+                                'id' => $this->city->state->id,
+                                'name' => $this->city->state->name,
+                                'country' => $this->whenLoaded('city.state.country', function () {
+                                    return [
+                                        'id' => $this->city->state->country->id,
+                                        'name' => $this->city->state->country->name,
+                                        'iso_code' => $this->city->state->country->iso_code,
+                                    ];
+                                }),
+                            ];
+                        }),
                     ];
                 }),
+                'postal_code' => $this->postal_code,
+                'full_address' => $this->getFullAddress(),
             ],
-            
-            // Categories and classifications
-            'industry' => $this->whenLoaded('industry', function () {
-                return [
-                    'id' => $this->industry->id,
-                    'name' => $this->industry->name,
-                    'description' => $this->industry->description,
-                    'icon' => $this->industry->icon_url,
-                ];
-            }),
-            'company_size' => $this->whenLoaded('companySize', function () {
-                return [
-                    'id' => $this->companySize->id,
-                    'size' => $this->companySize->size,
-                    'description' => $this->companySize->description,
-                    'min_employees' => $this->companySize->min_employees,
-                    'max_employees' => $this->companySize->max_employees,
-                ];
-            }),
-            'ownership_type' => $this->whenLoaded('ownershipType', function () {
-                return [
-                    'id' => $this->ownershipType->id,
-                    'name' => $this->ownershipType->name,
-                    'description' => $this->ownershipType->description,
-                ];
-            }),
-            
-            // Media and branding
+
+            // Company Details
+            'details' => [
+                'company_size' => $this->whenLoaded('companySize', function () {
+                    return [
+                        'id' => $this->companySize->id,
+                        'size' => $this->companySize->size,
+                        'from' => $this->companySize->from,
+                        'to' => $this->companySize->to,
+                    ];
+                }),
+                'ownership_type' => $this->whenLoaded('ownershipType', function () {
+                    return [
+                        'id' => $this->ownershipType->id,
+                        'name' => $this->ownershipType->name,
+                    ];
+                }),
+                'industry' => $this->whenLoaded('industry', function () {
+                    return [
+                        'id' => $this->industry->id,
+                        'name' => $this->industry->name,
+                    ];
+                }),
+                'organization_type' => $this->whenLoaded('organizationType', function () {
+                    return [
+                        'id' => $this->organizationType->id,
+                        'name' => $this->organizationType->name,
+                    ];
+                }),
+                'team_size' => $this->team_size,
+                'date_of_incorporation' => $this->date_of_incorporation,
+            ],
+
+            // Media & Branding
             'media' => [
-                'logo' => [
-                    'original' => $this->logo_url,
-                    'thumbnail' => $this->logo_thumb_url,
-                    'medium' => $this->logo_medium_url,
-                    'large' => $this->logo_large_url,
-                ],
-                'banner' => [
-                    'url' => $this->banner_url,
-                    'thumbnail' => $this->banner_thumb_url,
-                ],
-                'gallery' => $this->when($this->relationLoaded('media'), function () {
+                'logo' => $this->logo ? [
+                    'url' => $this->logo,
+                    'alt' => __('company.logo_alt', ['name' => $this->name]),
+                ] : null,
+                'banner' => $this->banner ? [
+                    'url' => $this->banner,
+                    'alt' => __('company.banner_alt', ['name' => $this->name]),
+                ] : null,
+                'gallery' => $this->whenLoaded('media', function () {
                     return $this->media->map(function ($media) {
                         return [
                             'id' => $media->id,
                             'url' => $media->getUrl(),
-                            'thumbnail' => $media->getUrl('thumbnail'),
-                            'type' => $media->mime_type,
+                            'name' => $media->name,
+                            'mime_type' => $media->mime_type,
                             'size' => $media->size,
                         ];
                     });
                 }),
             ],
-            
-            // Comprehensive statistics
-            'statistics' => [
-                'jobs' => [
-                    'total' => $this->whenCounted('jobs'),
-                    'active' => $this->whenCounted('activeJobs'),
-                    'featured' => $this->when(
-                        $this->relationLoaded('jobs'),
-                        $this->jobs->where('is_featured', true)->count()
-                    ),
-                    'recent' => $this->when(
-                        $this->relationLoaded('jobs'),
-                        $this->jobs->where('created_at', '>=', now()->subDays(30))->count()
-                    ),
-                ],
-                'applications' => [
-                    'total' => $this->when(
-                        $this->relationLoaded('jobs'),
-                        $this->jobs->sum('applications_count')
-                    ),
-                    'this_month' => $this->when(
-                        $this->canViewStatistics(),
-                        $this->getApplicationsThisMonth()
-                    ),
-                    'success_rate' => $this->when(
-                        $this->canViewStatistics(),
-                        $this->getApplicationSuccessRate()
-                    ),
-                ],
-                'engagement' => [
-                    'views_count' => $this->when($this->canViewStatistics(), $this->views_count),
-                    'profile_views' => $this->when($this->canViewStatistics(), $this->profile_views),
-                    'followers_count' => $this->when($this->canViewStatistics(), $this->followers_count),
-                    'rating' => $this->when($this->canViewStatistics(), $this->average_rating),
-                    'reviews_count' => $this->when($this->canViewStatistics(), $this->reviews_count),
-                ],
+
+            // Social Media
+            'social_media' => [
+                'facebook_url' => $this->facebook_url,
+                'twitter_url' => $this->twitter_url,
+                'linkedin_url' => $this->linkedin_url,
+                'google_plus_url' => $this->google_plus_url,
+                'pinterest_url' => $this->pinterest_url,
             ],
-            
-            // Status and verification
+
+            // Status & Flags
             'status' => [
                 'is_active' => $this->is_active,
                 'is_featured' => $this->is_featured,
-                'is_verified' => $this->is_verified,
-                'is_premium' => $this->is_premium,
-                'verification_status' => $this->verification_status,
-                'subscription_status' => $this->subscription_status,
-                'account_type' => $this->account_type,
+                'is_profile_verified' => $this->is_profile_verified,
+                'status_label' => $this->is_active ? __('common.active') : __('common.inactive'),
+                'verification_status' => $this->is_profile_verified ? __('company.verified') : __('company.unverified'),
             ],
-            
-            // Social media presence
-            'social_links' => [
-                'facebook' => $this->facebook_url,
-                'twitter' => $this->twitter_url,
-                'linkedin' => $this->linkedin_url,
-                'google_plus' => $this->google_plus_url,
-                'pinterest' => $this->pinterest_url,
-                'instagram' => $this->instagram_url,
-                'youtube' => $this->youtube_url,
-                'has_social_presence' => $this->hasSocialLinks(),
+
+            // Statistics (Public)
+            'statistics' => [
+                'total_jobs' => $this->whenCounted('jobs'),
+                'active_jobs' => $this->jobs_count ?? 0,
+                'total_applications' => $this->whenCounted('jobApplications'),
+                'followers_count' => $this->followers_count ?? 0,
+                'views_count' => $this->views_count ?? 0,
             ],
-            
-            // Contact information (role-based)
-            'contact' => $this->when($this->canViewContactInfo(), [
-                'primary_email' => $this->email,
-                'secondary_email' => $this->secondary_email,
-                'phone' => $this->phone,
-                'mobile' => $this->mobile_phone,
-                'fax' => $this->fax,
-                'contact_person' => [
-                    'name' => $this->contact_person_name,
-                    'title' => $this->contact_person_title,
-                    'email' => $this->contact_person_email,
-                    'phone' => $this->contact_person_phone,
-                ],
-            ]),
-            
-            // Jobs information
-            'jobs' => $this->when($request->boolean('include_jobs'), function () {
-                return $this->whenLoaded('jobs', function () {
-                    return $this->jobs->map(function ($job) {
+
+            // Private Information (Owner/Admin Only)
+            'private_info' => $this->when($canViewPrivate, function () {
+                return [
+                    'user_id' => $this->user_id,
+                    'employer' => $this->whenLoaded('user', function () {
                         return [
-                            'id' => $job->id,
-                            'title' => $job->title,
-                            'slug' => $job->slug,
-                            'status' => $job->status,
-                            'location' => $job->getFullLocation(),
-                            'job_type' => $job->jobType?->name,
-                            'salary_range' => $job->getFormattedSalaryRange(),
-                            'applications_count' => $job->applications_count,
-                            'created_at' => $job->created_at?->toISOString(),
-                            'expires_at' => $job->job_expiry_date?->toISOString(),
-                            'is_featured' => $job->is_featured,
-                            'is_urgent' => $job->isUrgent(),
-                            'url' => route('jobs.show', $job->slug),
+                            'id' => $this->user->id,
+                            'name' => $this->user->name,
+                            'email' => $this->user->email,
+                            'phone' => $this->user->phone,
+                            'last_login_at' => $this->user->last_login_at,
                         ];
-                    });
-                });
+                    }),
+                    'subscription' => $this->whenLoaded('activePlan', function () {
+                        return [
+                            'plan_id' => $this->activePlan->id,
+                            'plan_name' => $this->activePlan->label,
+                            'expires_at' => $this->activePlan->pivot->expires_at,
+                            'is_trial' => $this->activePlan->pivot->is_trial,
+                            'jobs_quota' => $this->activePlan->job_allowed,
+                            'featured_jobs_quota' => $this->activePlan->featured_job_allowed,
+                        ];
+                    }),
+                ];
             }),
-            
-            // Team and culture (if available)
-            'culture' => $this->when($this->relationLoaded('culture'), [
-                'values' => $this->culture?->values,
-                'benefits' => $this->culture?->benefits,
-                'work_environment' => $this->culture?->work_environment,
-                'diversity_inclusion' => $this->culture?->diversity_inclusion,
-                'remote_policy' => $this->culture?->remote_policy,
-            ]),
-            
-            // Important dates
-            'dates' => [
-                'created' => $this->created_at?->toISOString(),
-                'updated' => $this->updated_at?->toISOString(),
-                'verified_at' => $this->verified_at?->toISOString(),
-                'last_activity' => $this->last_activity_at?->toISOString(),
-                'subscription_expires' => $this->subscription_expires_at?->toISOString(),
-            ],
-            
-            // SEO and metadata
-            'seo' => [
-                'meta_title' => $this->meta_title ?: $this->name,
-                'meta_description' => $this->meta_description ?: str($this->details)->limit(160),
-                'keywords' => $this->meta_keywords,
-                'canonical_url' => route('companies.show', $this->slug),
-                'og_image' => $this->logo_url,
-            ],
-            
-            // Navigation URLs
-            'urls' => [
-                'view' => route('companies.show', $this->slug),
-                'jobs' => route('companies.jobs', $this->slug),
-                'contact' => route('companies.contact', $this->slug),
-                'follow' => route('companies.follow', $this->id),
-                'api' => route('api.companies.show', $this->id),
-                'edit' => $this->when($this->canEdit(), route('companies.edit', $this->id)),
-                'admin' => $this->when($this->canManage(), route('admin.companies.show', $this->id)),
-            ],
-            
-            // User permissions and actions
-            'permissions' => $this->when(Auth::check(), [
-                'can_view' => $this->canView(),
-                'can_edit' => $this->canEdit(),
-                'can_delete' => $this->canDelete(),
-                'can_manage' => $this->canManage(),
-                'can_feature' => $this->canFeature(),
-                'can_verify' => $this->canVerify(),
-                'can_contact' => $this->canContact(),
-                'can_follow' => $this->canFollow(),
-                'can_review' => $this->canReview(),
-                'can_report' => $this->canReport(),
-            ]),
-            
-            // User interactions
-            'user_interactions' => $this->when(Auth::check(), [
-                'is_following' => $this->isFollowedByUser(Auth::id()),
-                'has_reviewed' => $this->hasUserReviewed(Auth::id()),
-                'has_applied_to_jobs' => $this->hasUserAppliedToJobs(Auth::id()),
-                'last_interaction' => $this->getLastUserInteraction(Auth::id()),
-            ]),
-            
-            // Related companies (similar industry/location)
-            'related_companies' => $this->when($request->boolean('include_related'), function () {
-                return $this->getRelatedCompanies(5)->map(function ($company) {
+
+            // Recent Jobs (Limited)
+            'recent_jobs' => $this->whenLoaded('jobs', function () {
+                return $this->jobs->take(5)->map(function ($job) {
                     return [
-                        'id' => $company->id,
-                        'name' => $company->name,
-                        'slug' => $company->slug,
-                        'logo_url' => $company->logo_thumb_url,
-                        'industry' => $company->industry?->name,
-                        'location' => $company->getShortLocation(),
-                        'jobs_count' => $company->active_jobs_count,
-                        'url' => route('companies.show', $company->slug),
+                        'id' => $job->id,
+                        'title' => $job->title,
+                        'slug' => $job->slug,
+                        'status' => $job->status,
+                        'created_at' => $job->created_at,
+                        'expires_at' => $job->deadline,
+                        'applications_count' => $job->job_applications_count ?? 0,
                     ];
                 });
             }),
+
+            // SEO & Meta
+            'seo' => [
+                'meta_title' => $this->name . ' - ' . __('company.company_profile'),
+                'meta_description' => $this->description ? 
+                    \Str::limit(strip_tags($this->description), 160) : 
+                    __('company.default_meta_description', ['name' => $this->name]),
+                'canonical_url' => route('company.show', $this->slug),
+                'og_image' => $this->logo ?: asset('images/default-company-logo.png'),
+            ],
+
+            // Timestamps
+            'timestamps' => [
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'created_at_human' => $this->created_at->diffForHumans(),
+                'updated_at_human' => $this->updated_at->diffForHumans(),
+            ],
+
+            // Relationships Count
+            'relationships_count' => [
+                'jobs_count' => $this->jobs_count ?? 0,
+                'followers_count' => $this->followers_count ?? 0,
+                'reviews_count' => $this->reviews_count ?? 0,
+                'media_count' => $this->media_count ?? 0,
+            ],
+
+            // Additional Context
+            'context' => [
+                'can_edit' => $canViewPrivate,
+                'can_follow' => $user && !$isOwner,
+                'is_following' => $user ? $this->isFollowedBy($user) : false,
+                'can_contact' => $this->is_active && $this->email,
+                'can_view_jobs' => $this->is_active,
+                'locale' => app()->getLocale(),
+                'currency' => config('app.currency', 'USD'),
+            ],
         ];
     }
 
     /**
-     * Check if user can view contact information.
+     * Get additional data that should be returned with the resource array.
+     *
+     * @return array<string, mixed>
      */
-    private function canViewContactInfo(): bool
+    public function with(Request $request): array
     {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Admin can view all contact info
-        if (Auth::user()->hasRole('Admin')) {
-            return true;
-        }
-
-        // Company owner can view their own contact info
-        if (Auth::user()->id === $this->user_id) {
-            return true;
-        }
-
-        // Premium users can view contact info
-        if (Auth::user()->isPremium()) {
-            return true;
-        }
-
-        // Users who have applied to company jobs can view basic contact info
-        if ($this->hasUserAppliedToJobs(Auth::id())) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if user can view detailed statistics.
-     */
-    private function canViewStatistics(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Admin can view all statistics
-        if (Auth::user()->hasRole('Admin')) {
-            return true;
-        }
-
-        // Company owner can view their own statistics
-        return Auth::user()->id === $this->user_id;
-    }
-
-    /**
-     * Check if user can edit the company.
-     */
-    private function canEdit(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        if (Auth::user()->hasRole('Admin')) {
-            return true;
-        }
-
-        return Auth::user()->id === $this->user_id;
-    }
-
-    /**
-     * Check if user can manage the company.
-     */
-    private function canManage(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        return Auth::user()->hasAnyRole(['Admin', 'Super Admin']);
-    }
-
-    /**
-     * Check if user can delete the company.
-     */
-    private function canDelete(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        return Auth::user()->hasRole('Admin');
-    }
-
-    /**
-     * Check if user can feature the company.
-     */
-    private function canFeature(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        return Auth::user()->hasRole('Admin');
-    }
-
-    /**
-     * Check if user can verify the company.
-     */
-    private function canVerify(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        return Auth::user()->hasRole('Admin');
-    }
-
-    /**
-     * Check if user can contact the company.
-     */
-    private function canContact(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Can't contact own company
-        if (Auth::user()->id === $this->user_id) {
-            return false;
-        }
-
-        return $this->is_active;
-    }
-
-    /**
-     * Check if user can follow the company.
-     */
-    private function canFollow(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Can't follow own company
-        if (Auth::user()->id === $this->user_id) {
-            return false;
-        }
-
-        return $this->is_active;
-    }
-
-    /**
-     * Check if user can review the company.
-     */
-    private function canReview(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Can't review own company
-        if (Auth::user()->id === $this->user_id) {
-            return false;
-        }
-
-        // Must have applied to at least one job
-        return $this->hasUserAppliedToJobs(Auth::id());
-    }
-
-    /**
-     * Check if user can report the company.
-     */
-    private function canReport(): bool
-    {
-        if (!Auth::check()) {
-            return false;
-        }
-
-        // Can't report own company
-        return Auth::user()->id !== $this->user_id;
-    }
-
-    /**
-     * Check if user can view the company.
-     */
-    private function canView(): bool
-    {
-        if (!Auth::check()) {
-            return $this->is_active;
-        }
-
-        if (Auth::user()->hasRole('Admin')) {
-            return true;
-        }
-
-        if (Auth::user()->id === $this->user_id) {
-            return true;
-        }
-
-        return $this->is_active;
+        return [
+            'meta' => [
+                'version' => '1.0',
+                'generated_at' => now()->toISOString(),
+                'locale' => app()->getLocale(),
+                'user_timezone' => $request->user()?->timezone ?? config('app.timezone'),
+            ],
+            'links' => [
+                'self' => route('api.companies.show', $this->id),
+                'edit' => route('api.companies.edit', $this->id),
+                'jobs' => route('api.companies.jobs', $this->id),
+                'public_profile' => route('company.show', $this->slug),
+            ],
+        ];
     }
 }

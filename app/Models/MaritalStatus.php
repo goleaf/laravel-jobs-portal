@@ -30,45 +30,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class MaritalStatus extends Model
-{
-    use HasFactory;
-
-    public $table = 'marital_status';
-
-    public $fillable = [
-        'marital_status',
-        'description',
-        'is_default',
-        'is_active',
-    ];
-
+
     /**
-     * Validation rules
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'marital_status' => 'required|unique:marital_status,marital_status|max:150',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-        'id' => 'integer',
-        'marital_status' => 'string',
-        'description' => 'string',
-        'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Get candidates that belong to this marital status.

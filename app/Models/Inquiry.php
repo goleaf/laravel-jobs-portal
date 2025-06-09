@@ -32,17 +32,19 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class Inquiry extends Model
-{
-    use HasFactory;
+
     /**
-     * Validation rules
+     * Scope a query to only include popular records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'name' => 'required',
-        'email' => 'required|regex:/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i',
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("views_count", "desc");
+    }
+
+$/i',
         'phone_no' => 'nullable',
         'subject' => 'required|max:190',
         'message' => 'required',
@@ -59,9 +61,12 @@ class Inquiry extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+
             'id' => 'integer',
             'name' => 'string',
             'email' => 'string',
@@ -73,8 +78,10 @@ class Inquiry extends Model
             'priority' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Scope for read inquiries.
@@ -191,3 +198,25 @@ class Inquiry extends Model
         return $query->orderBy('priority', 'desc')->orderBy('created_at', 'asc');
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

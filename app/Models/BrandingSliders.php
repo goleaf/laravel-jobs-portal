@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * App\Models\BrandingSliders
  *
  * @property int $id
  * @property string $title
- * @property int $is_active
+ * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $branding_slider_url
+ * @property-read string $branding_slider_url
  * @property-read \Illuminate\Database\Eloquent\Collection|Media[] $media
  * @property-read int|null $media_count
  *
@@ -81,25 +82,24 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'title' => 'string',
-            'description' => 'string',
-            'image_url' => 'string',
-            'link_url' => 'string',
-            'is_active' => 'boolean',
             'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+
+        'id' => 'integer',
+        'title' => 'string',
+        'is_active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    
         ];
     }
+
 
     /**
      * Scope for active branding sliders.

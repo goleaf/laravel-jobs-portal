@@ -29,35 +29,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read \App\Models\Country $country
  */
-class State extends Model
-{
-    use HasFactory;
-    const COUNTIES = '';
-    protected $table = 'states';
-
-    protected $fillable = [
-        'id',
-        'country_id',
-        'name',
-    ];
-
+
     /**
-     * Get the attributes that should be cast.
+     * Scope a query to only include featured records.
      *
-     * @return array<string, string>
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function casts(): array
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'country_id' => 'integer',
-            'name' => 'string',
-            'code' => 'string',
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->where("is_featured", true);
     }
+
+
+
 
     public static $rules = [
         'name' => 'required|max:180|unique:states,name',

@@ -33,27 +33,20 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Models\Company $company
  * @property-read \App\Models\User $user
  */
-class ReportedToCompany extends Model
-{
-    use HasFactory;
-    public $table = 'reported_to_companies';
-
-    public $fillable = [
-        'user_id',
-        'company_id',
-        'note',
-    ];
-
+
     /**
-     * The attributes that should be casted to native types.
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected $casts = [
-        'user_id' => 'integer',
-        'company_id' => 'integer',
-        'note' => 'string',
-    ];
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("created_at", "asc");
+    }
+
+
+
 
     public function user(): BelongsTo
     {
@@ -65,3 +58,49 @@ class ReportedToCompany extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope a query to only include recent records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', \Carbon\Carbon::now()->subDays($days));
+    }
+
+    /**
+     * Scope a query to search records by name or relevant fields.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%');
+    }

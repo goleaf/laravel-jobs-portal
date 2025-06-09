@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Stripe\StripeClient;
+use App\Http\Requests\Transaction\IndexTransactionRequest;
+use App\Http\Requests\Transaction\GetTransactionInvoiceRequest;
 
 /**
  * Class TransactionController
@@ -16,12 +18,12 @@ use Stripe\StripeClient;
 class TransactionController extends AppBaseController
 {
     /**
-     * @param  Request  $request
+     * @param  IndexTransactionRequest  $request
      * @return Factory|View
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexTransactionRequest $request): View
     {
         if (Auth::user()->hasRole('Employer')) {
             return view('employer.transactions.index');
@@ -35,7 +37,7 @@ class TransactionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function getTransactionInvoice(string $invoiceId)
+    public function getTransactionInvoice(string $invoiceId, GetTransactionInvoiceRequest $request)
     {
         try {
             setStripeApiKey();

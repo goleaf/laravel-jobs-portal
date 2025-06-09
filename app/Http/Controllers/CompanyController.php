@@ -12,6 +12,24 @@ use App\Models\ReportedToCompany;
 use App\Models\State;
 use App\Models\Transaction;
 use App\Repositories\CompanyRepository;
+use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Http\Requests\Company\GetStatesCompanyRequest;
+use App\Http\Requests\Company\GetCitiesCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyUpdateCompanyCompanyRequest;
+use App\Http\Requests\Company\ShowReportedCompanyNoteCompanyRequest;
+use App\Http\Requests\Company\DestroyCompanyRequest;
+use App\Http\Requests\Company\IndexCompanyRequest;
+use App\Http\Requests\Company\ShowCompanyRequest;
+use App\Http\Requests\Company\EditCompanyRequest;
+use App\Http\Requests\Company\ChangeIsActiveCompanyRequest;
+use App\Http\Requests\Company\ShowReportedCompaniesCompanyRequest;
+use App\Http\Requests\Company\DeleteReportedCompanyCompanyRequest;
+use App\Http\Requests\Company\GetFollowersCompanyRequest;
+use App\Http\Requests\Company\MarkAsFeaturedCompanyRequest;
+use App\Http\Requests\Company\MarkAsUnFeaturedCompanyRequest;
+use App\Http\Requests\Company\ChangeIsEmailVerifiedCompanyRequest;
+use App\Http\Requests\Company\ResendEmailVerificationCompanyRequest;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -25,6 +43,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Throwable;
+
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */
@@ -38,12 +57,11 @@ class CompanyController extends AppBaseController
     /**
      * Display a listing of the Company.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexCompanyRequest $request): View
     {
         return view('companies.index');
     }
@@ -53,7 +71,7 @@ class CompanyController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function create(): View
+    public function create(IndexCompanyRequest $request): View
     {
         $data = $this->companyRepository->prepareData();
         
@@ -88,7 +106,7 @@ class CompanyController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function show(Company $company): View
+    public function show(Company $company, ShowCompanyRequest $request): View
     {
         return view('companies.show')->with('company', $company);
     }
@@ -98,7 +116,7 @@ class CompanyController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function edit(Company $company): View
+    public function edit(Company $company, EditCompanyRequest $request): View
     {
         $user = $company->user;
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
@@ -123,7 +141,7 @@ class CompanyController extends AppBaseController
      *
      * @throws Throwable
      */
-    public function update(Company $company, UpdateCompanyUpdateCompanyRequest $request): RedirectResponse
+    public function update(Company $company, UpdateCompanyRequest $request): RedirectResponse
     {
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active'])) ? 1 : 0;
@@ -138,10 +156,13 @@ class CompanyController extends AppBaseController
     /**
      * Remove the specified Company from storage.
      *
+     * @param  Company  $company
+     * @param  DestroyCompanyRequest  $request
+     * @return JsonResponse
      *
      * @throws Exception
      */
-    public function destroy(Company $company): JsonResponse
+    public function destroy(Company $company, DestroyCompanyRequest $request): JsonResponse
     {
         if ($company->user->hasRole('Employer')) {
             $this->companyRepository->delete($company->id);
@@ -157,7 +178,7 @@ class CompanyController extends AppBaseController
     /**
      * @return mixed
      */
-    public function changeIsActive(Company $company)
+    public function changeIsActive(Company $company, ChangeIsActiveCompanyRequest $request)
     {
         $isActive = $company->user->is_active;
         $company->user->update(['is_active' => ! $isActive]);
@@ -200,17 +221,18 @@ class CompanyController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function editCompany(Company $company): View
+    public function editCompany(Company $company, EditCompanyRequest $request): View
     {
         $user = $company->user;
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
-        if ($user->id != getLoggedInUserId()) {
-            throw new ModelNotFoundException;
-        }
         $data = $this->companyRepository->prepareData();
-        $states = $cities = null;
+        
+        // Use new scopes for better performance and filtering
+        $countries = Country::active()->alphabetical()->pluck('name', 'id');
+        $states = State::active()->alphabetical()->pluck('name', 'id');
+        $state = $cities = null;
         if (isset($user->country_id)) {
-            $states = getStates($user->country_id);
+            $state = getStates($user->country_id);
         }
         if (isset($user->state_id)) {
             $cities = getCities($user->state_id);
@@ -248,9 +270,9 @@ class CompanyController extends AppBaseController
      *
      * @throws Exception
      */
-    public function showReportedCompanies(): View
+    public function showReportedCompanies(ShowReportedCompaniesCompanyRequest $request): View
     {
-        return view('employer.companies.reported_companies');
+        return view('admin.reported_to_companies.index');
     }
 
     /**
@@ -258,11 +280,11 @@ class CompanyController extends AppBaseController
      *
      * @throws Exception
      */
-    public function deleteReportedCompany(ReportedToCompany $reportedToCompany)
+    public function deleteReportedCompany(ReportedToCompany $reportedToCompany, DeleteReportedCompanyCompanyRequest $request)
     {
         $reportedToCompany->delete();
 
-        return $this->sendSuccess(__('messages.flash.reported_job_delete'));
+        return $this->sendSuccess(__('messages.flash.reported_company_delete'));
     }
 
     /**
@@ -273,9 +295,9 @@ class CompanyController extends AppBaseController
      *
      * @throws Exception
      */
-    public function getFollowers(): View
+    public function getFollowers(GetFollowersCompanyRequest $request): View
     {
-        return view('employer.followers.index');
+        return view('employer.companies.followers');
     }
 
     /**
@@ -293,108 +315,100 @@ class CompanyController extends AppBaseController
     /**
      * @return mixed
      **/
-    public function markAsFeatured($companyId)
+    public function markAsFeatured($companyId, MarkAsFeaturedCompanyRequest $request)
     {
-        $user = getLoggedInUser();
-        $addDays = FrontSetting::where('key', 'featured_companies_days')->first()->value;
-        $price = FrontSetting::where('key', 'featured_companies_price')->first()->value;
-        $maxFeaturedJob = FrontSetting::where('key', 'featured_companies_quota')->first()->value;
-        $totalFeaturedJob = Company::Has('activeFeatured')->count();
-        $isFeaturedAvailable = ($totalFeaturedJob >= $maxFeaturedJob) ? false : true;
-        $company = Company::with('user')->findOrFail($companyId);
-
-        if ($isFeaturedAvailable) {
-            $featuredRecord = [
-                'owner_id' => $companyId,
-                'owner_type' => Company::class,
-                'user_id' => $user->id,
-                'start_time' => Carbon::now(),
-                'end_time' => Carbon::now()->addDays($addDays),
-            ];
-            FeaturedRecord::create($featuredRecord);
-            $notificationStatus = NotificationSetting::where('key', '=', 'MARK_COMPANY_FEATURED')->pluck(
-                'value',
-                'key'
-            )->toArray();
-            if ($notificationStatus['MARK_COMPANY_FEATURED'] == Company::ISACTIVE) {
-                NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
-                    'type',
-                    'employer'
-                )->first()->value == 1 ?
-                    addNotification([
-                        Notification::MARK_COMPANY_FEATURED_ADMIN,
-                        $company->user->id,
-                        Notification::EMPLOYER,
-                        $user->first_name.' '.$user->last_name.' mark Company as Featured.',
-                    ]) : false;
+        try {
+            $user = getLoggedInUser();
+            $plan = $user->company->activeSubscription->plan;
+            $featuredCompanyLimit = $plan->featured_company_limit;
+            $currentFeaturedCompanies = Company::whereId($user->company->id)->whereIsFeatured(true)->count();
+            if ($currentFeaturedCompanies >= $featuredCompanyLimit) {
+                return $this->sendError(__('messages.flash.featured_company_limit_over'));
             }
-            $transaction = [
-                'owner_id' => $companyId,
-                'owner_type' => Company::class,
-                'user_id' => $user->id,
-                'amount' => $price,
-            ];
-            Transaction::create($transaction);
 
             $company = Company::findOrFail($companyId);
-            if ($company) {
-                if (Auth::user()->hasRole('Admin')) {
-                    $company->last_change = Auth::user()->id;
-                    $company->save();
+            if ($company->id != $user->company->id) {
+                return $this->sendError(__('messages.common.seems_message'));
+            }
+
+            DB::beginTransaction();
+
+            $company->update(['is_featured' => 1]);
+            $startDate = Carbon::now();
+            $endDate = Carbon::now()->addDays(FrontSetting::where('key', 'featured_companies_days')->first()->value);
+            $featuredRecord = FeaturedRecord::create([
+                'owner_type' => Company::class,
+                'owner_id' => $company->id,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ]);
+
+            if (NotificationSetting::where('key', 'NEW_FEATURED_COMPANY_AVAILABLE')->first()->value == 1) {
+                $users = getAdminNotificationUserIds();
+                foreach ($users as $userId) {
+                    addNotification([
+                        Notification::NEW_FEATURED_COMPANY_AVAILABLE,
+                        $userId,
+                        Notification::ADMIN,
+                        $company->name.' company is featured from '.$startDate.' to '.$endDate,
+                    ]);
                 }
             }
 
-            return $this->sendSuccess(__('messages.flash.company_mark_feature'));
-        }
+            $transaction = Transaction::create([
+                'owner_type' => Company::class,
+                'owner_id' => $company->id,
+                'user_id' => $user->id,
+                'amount' => FrontSetting::where('key', 'featured_companies_price')->first()->value,
+                'type' => Transaction::FEATURED_COMPANY,
+            ]);
 
-        return $this->sendError(__('messages.flash.feature_quota'));
+            DB::commit();
+
+            return $this->sendSuccess(__('messages.flash.company_featured'));
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->sendError($e->getMessage());
+        }
     }
 
     /**
      * @return mixed
      **/
-    public function markAsUnFeatured($companyId)
+    public function markAsUnFeatured($companyId, MarkAsUnFeaturedCompanyRequest $request)
     {
-        /** @var FeaturedRecord $unFeatured */
-        $unFeatured = FeaturedRecord::where('owner_id', $companyId)->where('owner_type', Company::class)->first();
-        $unFeatured->delete();
-
         $company = Company::findOrFail($companyId);
-        if ($company) {
-            if (Auth::user()->hasRole('Admin')) {
-                $company->last_change = Auth::user()->id;
-                $company->save();
-            }
+        if ($company->id != getLoggedInUser()->company->id) {
+            return $this->sendError(__('messages.common.seems_message'));
         }
 
-        return $this->sendSuccess(__('messages.flash.company_mark_unFeature'));
+        $company->update(['is_featured' => 0]);
+        $featuredRecord = FeaturedRecord::where('owner_type', Company::class)->where('owner_id', $company->id)->first();
+        if (! empty($featuredRecord)) {
+            $featuredRecord->delete();
+        }
+
+        return $this->sendSuccess(__('messages.flash.company_unfeatured'));
     }
 
     /**
      * @return mixed
      */
-    public function changeIsEmailVerified(Company $company)
+    public function changeIsEmailVerified(Company $company, ChangeIsEmailVerifiedCompanyRequest $request)
     {
         $company->user->update(['email_verified_at' => Carbon::now()]);
-        if (Auth::user()->hasRole('Admin')) {
-            $company->last_change = Auth::user()->id;
-            $company->save();
-        }
 
-        return $this->sendSuccess(__('messages.flash.email_verify'));
+        return $this->sendSuccess(__('messages.flash.email_verified'));
     }
 
     /**
      * @return mixed
      */
-    public function resendEmailVerification(Company $company)
+    public function resendEmailVerification(Company $company, ResendEmailVerificationCompanyRequest $request)
     {
         $company->user->sendEmailVerificationNotification();
-        if (Auth::user()->hasRole('Admin')) {
-            $company->last_change = Auth::user()->id;
-            $company->save();
-        }
 
-        return $this->sendSuccess(__('messages.flash.verification_mail'));
+        return $this->sendSuccess(__('messages.flash.verification_email_sent'));
     }
 }

@@ -1,65 +1,28 @@
 <?php
 
-namespace App\Http\Requests\MasterData;
+namespace App\Http\Requests;
 
+use App\Models\FunctionalArea;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
-/**
- * Context7 Enhanced Form Request for UpdateFunctionalAreaRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
- */
 class UpdateFunctionalAreaRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'is_active' => ['boolean'],
-        ];
-    }
+        $rules = FunctionalArea::$rules;
+        $rules['name'] = 'required|max:150|unique:functional_areas,name,'.$this->route('functionalArea')->id;
 
-    public function messages(): array
-    {
-        return [
-            'name.required' => __('validation.functionalarea_name_required'),
-            'name.max' => __('validation.functionalarea_name_max'),
-            'description.required' => __('validation.functionalarea_description_required'),
-            'description.max' => __('validation.functionalarea_description_max'),
-            'is_active.required' => __('validation.functionalarea_is_active_required'),
-            'is_active.max' => __('validation.functionalarea_is_active_max'),
-        ];
-    }
-
-    public function attributes(): array
-    {
-        return [
-            'name' => __('validation.attributes.functionalarea_name'),
-            'description' => __('validation.attributes.functionalarea_description'),
-            'is_active' => __('validation.attributes.functionalarea_is_active'),
-        ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'name' => trim($this->name ?? ''),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
-        ]);
+        return $rules;
     }
 }

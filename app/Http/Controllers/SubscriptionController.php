@@ -26,6 +26,17 @@ use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use UnexpectedValueException;
+use App\Http\Requests\Subscription\PurchaseSubscriptionSubscriptionRequest;
+use App\Http\Requests\Subscription\PaymentSuccessSubscriptionRequest;
+use App\Http\Requests\Subscription\CancelSubscriptionSubscriptionRequest;
+use App\Http\Requests\Subscription\UpdateSubscriptionSubscriptionRequest;
+use App\Http\Requests\Subscription\ChangeTransactionStatusSubscriptionRequest;
+use App\Http\Requests\Subscription\IndexSubscriptionRequest;
+use App\Http\Requests\Subscription\HandleFailedPaymentSubscriptionRequest;
+use App\Http\Requests\Subscription\PurchaseTrialSubscriptionRequest;
+use App\Http\Requests\Subscription\ShowPaymentSelectSubscriptionRequest;
+use App\Http\Requests\Subscription\ManuallyPaymentSubscriptionRequest;
+
 class SubscriptionController extends AppBaseController
 {
     private $subscriptionRepository;
@@ -40,7 +51,7 @@ class SubscriptionController extends AppBaseController
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexSubscriptionRequest $request): View
     {
         /** @var PlanRepository $planRepo */
         $planRepo = app(PlanRepository::class);
@@ -123,7 +134,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @return Factory|View
      */
-    public function handleFailedPayment(): View
+    public function handleFailedPayment(HandleFailedPaymentSubscriptionRequest $request): View
     {
         return view('transactions.failed_payments');
     }
@@ -155,7 +166,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @throws Exception
      */
-    public function purchaseTrialSubscription(): JsonResponse
+    public function purchaseTrialSubscription(PurchaseTrialSubscriptionRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
@@ -210,49 +221,62 @@ class SubscriptionController extends AppBaseController
     /**
      * @return Application|Factory|View
      */
-    public function showPaymentSelect(Plan $plan): View
+    public function showPaymentSelect(Plan $plan, ShowPaymentSelectSubscriptionRequest $request): View
     {
-        return view('pricing.payment_methods', compact('plan'));
+        return view('employer.subscriptions.payment_select', compact('plan'));
     }
 
     /**
      * @return JsonResponse|RedirectResponse
      */
-    public function manuallyPayment(Plan $plan): RedirectResponse
+    public function manuallyPayment(Plan $plan, ManuallyPaymentSubscriptionRequest $request): RedirectResponse
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
+            $pendingApproval = Transaction::where('user_id', $user->id)->where('is_approved', Transaction::PENDING)->first();
 
-        $pendingApproval = Transaction::where('user_id', $user->id)->where('is_approved', Transaction::PENDING)->first();
+            if ($pendingApproval) {
+                Flash::error(__('messages.flash.pending_manual_purchase'));
+                return redirect()->back();
+            }
 
-        if ($pendingApproval) {
-            Flash::error(__('messages.flash.please_wait_for'));
-        } else {
-            /** @var Subscription $tsSubscription */
-            $tsSubscription = Subscription::create([
-                'name' => $plan->name,
-                'stripe_id' => null,
-                'stripe_status' => Subscription::PENDING,
+            $transaction = Transaction::create([
                 'user_id' => $user->id,
-                'plan_id' => $plan->id,
-                'type' => Subscription::MANUALLY,
-            ]);
-
-            $transaction = [
-                'owner_id' => $tsSubscription->id,
-                'owner_type' => Subscription::class,
-                'user_id' => $user->id,
+                'owner_id' => $plan->id,
+                'owner_type' => Plan::class,
                 'amount' => $plan->amount,
                 'plan_currency_id' => $plan->salary_currency_id,
-                'status' => Transaction::MANUALLY,
+                'type' => Transaction::MANUAL,
                 'is_approved' => Transaction::PENDING,
-            ];
+            ]);
 
-            Transaction::create($transaction);
+            if (isset($user->company)) {
+                $user->company->transactions()->save($transaction);
+            }
 
-            Flash::success(__('messages.flash.please_wait_for_com'));
+            $startDate = Carbon::now();
+            $endDate = Carbon::now()->addDays($plan->days);
+
+            $subscription = Subscription::create([
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'status' => Subscription::INACTIVE,
+            ]);
+
+            if (isset($user->company)) {
+                $user->company->subscriptions()->save($subscription);
+            }
+
+            Flash::success(__('messages.flash.manual_payment_request_sent'));
+
+            return redirect(route('manage-subscription.index'));
+        } catch (Exception $e) {
+            Flash::error(__('messages.flash.something_went_wrong'));
+
+            return redirect()->back();
         }
-
-        return redirect(route('manage-subscription.index'));
     }
 
     /**

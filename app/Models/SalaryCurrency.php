@@ -81,83 +81,20 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-class SalaryCurrency extends Model
-{
-    use HasFactory, LogsActivity;
-
-    public $table = 'salary_currencies';
-
+
     /**
-     * Default eager loading for performance
-     */
-    protected $with = [];
-
-    /**
-     * Validation rules with multilingual support
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name',
-        'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code',
-        'currency_symbol' => 'required|string|max:10',
-        'exchange_rate' => 'nullable|numeric|min:0|max:999999999.99999999',
-        'base_currency' => 'nullable|string|size:3',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_crypto' => 'boolean',
-        'supported_countries' => 'nullable|array',
-        'supported_countries.*' => 'string|size:2', // ISO country codes
-        'decimal_places' => 'integer|min:0|max:8',
-        'number_format' => 'nullable|string|max:50',
-        'last_rate_update' => 'nullable|date',
-    ];
-
-    public $fillable = [
-        'currency_name',
-        'currency_code',
-        'currency_symbol',
-        'exchange_rate',
-        'base_currency',
-        'is_active',
-        'is_default',
-        'is_crypto',
-        'supported_countries',
-        'decimal_places',
-        'number_format',
-        'last_rate_update',
-    ];
-
-    protected $appends = [
-        'usage_statistics',
-        'formatted_symbol',
-        'exchange_info',
-        'market_value',
-        'currency_trend',
-        'conversion_data',
-        'regional_info'
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'exchange_rate' => 'decimal:8',
-            'decimal_places' => 'integer',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_crypto' => 'boolean',
-            'supported_countries' => 'array',
-            'last_rate_update' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Boot the model.
@@ -793,3 +730,15 @@ class SalaryCurrency extends Model
         return $this->is_crypto ? 'Emerging' : 'Established';
     }
 }
+
+    /**
+     * Scope a query to only include recent records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', \Carbon\Carbon::now()->subDays($days));
+    }

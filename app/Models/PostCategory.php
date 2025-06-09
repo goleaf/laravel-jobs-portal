@@ -29,60 +29,42 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $postAssignCategories
  * @property-read int|null $post_assign_categories_count
  */
-class PostCategory extends Model
-{
-    use HasFactory;
+
     /**
-     * Validation rules
+     * Scope a query to only include featured records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'name' => 'required|max:180|unique:post_categories,name',
-    ];
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("is_featured", true);
+    }
 
-    public $table = 'post_categories';
+
 
-    /**
-     * @var string[]
-     */
-    public $fillable = [
-        'name',
-        'description',
-        'is_default',
-    ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'description' => 'string',
-        'is_default' => 'boolean',
-    ];
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'name' => 'string',
-            'description' => 'string',
-            'slug' => 'string',
             'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'sort_order' => 'integer',
+            'is_featured' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+
+        'id' => 'integer',
+        'name' => 'string',
+        'description' => 'string',
+        'is_default' => 'boolean',
+    
         ];
     }
+
 
     /**
      * Scope for active post categories.

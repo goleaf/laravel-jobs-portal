@@ -1,159 +1,132 @@
 <?php
 
-namespace App\Http\Requests\Candidate;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for Candidate destroy
- * Implements Laravel 12 best practices with Context7 MCP patterns
- * Auto-generated for Level 4 Complex System Transformation
+ * Universal Form Request for deleting Candidate
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class DeleteCandidateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * Universal Pattern: Resource-based authorization
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
-        );
+        $resource = $this->route(strtolower('Candidate'));
+        return $this->user()?->can('delete', $resource) ?? false;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
+     * Universal Pattern: Delete-specific validation rules
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            // Add specific validation rules based on method
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:1000'],
-            'is_active' => ['sometimes', 'boolean'],
-            
-            // Security validation
-            'g-recaptcha-response' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (config('app.recaptcha_enabled', false) && empty($value)) {
-                        $fail(__('validation.recaptcha_required'));
-                    }
-                },
-            ],
+            'force_delete' => ['nullable', 'boolean'],
+            'reason' => ['nullable', 'string', 'max:500'],
         ];
     }
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Universal Pattern: Delete operation messages
      */
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.name_required'),
-            'name.max' => __('validation.name_max'),
-            'email.email' => __('validation.email_invalid'),
-            'email.max' => __('validation.email_max'),
-            'description.max' => __('validation.description_max'),
+            'reason.max' => __('validation.reason_max'),
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names
      */
     public function attributes(): array
     {
         return [
-            'name' => __('validation.attributes.name'),
-            'email' => __('validation.attributes.email'),
-            'description' => __('validation.attributes.description'),
-            'is_active' => __('validation.attributes.is_active'),
+            'force_delete' => __('validation.attributes.force_delete'),
+            'reason' => __('validation.attributes.reason'),
         ];
     }
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Universal Pattern: Data normalization for delete
      */
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => strtolower(trim($this->email ?? '')),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'force_delete' => filter_var($this->force_delete, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
+            'reason' => trim($this->reason ?? '') ?: null,
         ]);
     }
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Universal Pattern: Delete validation enhancements
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
+            // Universal Pattern: Check for dependencies before delete
+            if ($this->hasActiveDependencies()) {
+                $validator->errors()->add('dependencies', __('validation.has_active_dependencies'));
             }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
+
+            // Universal Pattern: Check for protected resources
+            if ($this->isProtectedResource()) {
+                $validator->errors()->add('protected', __('validation.protected_resource'));
             }
         });
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Universal Pattern: Check for active dependencies
      */
-    private function hasContext7ValidationConflicts(): bool
+    private function hasActiveDependencies(): bool
     {
-        // Add specific business logic validation here
+        $resource = $this->route(strtolower('Candidate'));
+        
+        // Add specific dependency checks here
+        // Example: return $resource->relatedItems()->exists();
+        
         return false;
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Universal Pattern: Check if resource is protected from deletion
      */
-    private function hasSuspiciousContent(): bool
+    private function isProtectedResource(): bool
     {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
+        $resource = $this->route(strtolower('Candidate'));
         
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
+        // Add protection logic here
+        // Example: return $resource->is_system_default;
         
         return false;
     }
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
+     * Universal Pattern: Enhanced error handling for delete operations
      */
     protected function failedValidation(Validator $validator): void
     {
-        logger()->warning('Context7 validation failed for DeleteCandidateRequest', [
+        logger()->warning('Delete validation failed for DeleteCandidateRequest', [
             'errors' => $validator->errors()->toArray(),
-            'controller' => 'CandidateController',
-            'method' => 'destroy',
+            'resource_id' => $this->route('id'),
             'user_id' => $this->user()?->id,
             'ip' => $this->ip(),
-            'user_agent' => $this->userAgent(),
+            'force_delete' => $this->force_delete,
         ]);
 
         parent::failedValidation($validator);

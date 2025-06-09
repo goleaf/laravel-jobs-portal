@@ -77,17 +77,20 @@ class Testimonial extends Model implements HasMedia
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+
             'id' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'rating' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Scope for active testimonials.
@@ -162,3 +165,14 @@ class Testimonial extends Model implements HasMedia
         return $query->orderBy('customer_name', 'asc');
     }
 }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

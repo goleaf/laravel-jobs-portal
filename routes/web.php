@@ -246,7 +246,7 @@ Route::get('/admin/front-settings', function () {
     return view('admin.front_settings.index');
 })->name('front.settings.index');
 
-// Missing posts edit and show routes (referenced in livewire/blog-post.blade.php)
+// Missing posts edit and show routes (referenced in blog-post.blade.php)
 Route::get('/posts/{post}/edit', function ($post) {
     return view('posts.edit', compact('post'));
 })->name('posts.edit');

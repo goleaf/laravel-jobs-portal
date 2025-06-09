@@ -56,59 +56,20 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-class FunctionalArea extends Model
-{
-    use HasFactory, LogsActivity;
-
-    public $table = 'functional_areas';
-
+
     /**
-     * Default eager loading for performance
-     */
-    protected $with = [];
-
-    /**
-     * Validation rules with multilingual support
+     * Scope a query to only include featured records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'name' => 'required|unique:functional_areas|max:150',
-        'description' => 'nullable|string|max:500',
-        'is_default' => 'boolean',
-        'is_active' => 'boolean',
-    ];
-
-    public $fillable = [
-        'name',
-        'description',
-        'is_default',
-        'is_active',
-    ];
-
-    protected $appends = [
-        'usage_count',
-        'formatted_usage_stats'
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'name' => 'string',
-            'description' => 'string',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->where("is_featured", true);
     }
+
+
+
 
     /**
      * Boot the model.

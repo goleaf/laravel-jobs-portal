@@ -53,16 +53,20 @@ class SalaryPeriod extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+            'is_featured' => 'boolean',
+
             'id' => 'integer',
             'is_default' => 'boolean',
             'is_active' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     public function jobs()
     {

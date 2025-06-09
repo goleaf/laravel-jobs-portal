@@ -11,7 +11,7 @@ class UpdateAdminRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->hasRole('Admin');
     }
 
     /**
@@ -19,26 +19,37 @@ class UpdateAdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return array (
-  'first_name' => 'required|string|max:255',
-  'last_name' => 'nullable|string|max:255',
-  'email' => 'required|email|unique:users,email,{id}',
-  'password' => 'nullable|string|min:8|confirmed',
-  'phone' => 'nullable|string|max:20',
-  'is_active' => 'boolean',
-);
+        $userId = $this->route('admin') ? $this->route('admin')->id : $this->route('id');
+        
+        return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['nullable', 'string', 'min:8'],
+            'is_active' => ['boolean'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'dob' => ['nullable', 'date', 'before:today'],
+            'gender' => ['nullable', 'in:0,1'],
+        ];
     }
 
     /**
-     * Get custom error messages for validation rules.
+     * Get custom messages for validator errors.
      */
     public function messages(): array
     {
-        return array (
-  'first_name.required' => 'First name is required',
-  'email.required' => 'Email is required',
-  'email.unique' => 'Email already exists',
-);
+        return [
+            'first_name.required' => __('validation_custom.user.first_name_required'),
+            'last_name.required' => __('validation_custom.user.last_name_required'),
+            'email.required' => __('validation_custom.user.email_required'),
+            'email.unique' => __('validation_custom.user.email_unique'),
+            'password.min' => __('validation_custom.user.password_min'),
+            'password.confirmed' => __('validation_custom.user.password_confirmed'),
+            'email.email' => 'Please enter a valid email address.',
+            'dob.before' => 'Date of birth must be before today.',
+            'gender.in' => 'Please select a valid gender option.',
+        ];
     }
 
     /**
@@ -47,23 +58,29 @@ class UpdateAdminRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'first_name' => __('messages.common.first_name'),
-            'last_name' => __('messages.common.last_name'),
-            'email' => __('messages.common.email'),
-            'password' => __('messages.common.password'),
-            'phone' => __('messages.common.phone'),
-            'name' => __('messages.common.name'),
-            'description' => __('messages.common.description'),
-            'address' => __('messages.common.address'),
-            'website' => __('messages.common.website'),
-            'country_id' => __('messages.common.country'),
-            'state_id' => __('messages.common.state'),
-            'city_id' => __('messages.common.city'),
-            'job_title' => __('messages.job.job_title'),
-            'job_description' => __('messages.job.job_description'),
-            'salary_from' => __('messages.job.salary_from'),
-            'salary_to' => __('messages.job.salary_to'),
-            'job_expiry_date' => __('messages.job.job_expiry_date'),
+            'first_name' => 'first name',
+            'last_name' => 'last name',
+            'dob' => 'date of birth',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_active' => $this->boolean('is_active', true),
+        ]);
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
     }
 }

@@ -24,8 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class FAQ extends Model
-{
+
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
+
     /**
      * Validation rules
      *
@@ -51,16 +52,19 @@ class FAQ extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+
             'id' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Scope for active FAQs.
@@ -135,3 +139,14 @@ class FAQ extends Model
         return $query->orderBy('created_at', 'asc');
     }
 }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

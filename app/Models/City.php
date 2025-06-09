@@ -29,42 +29,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read \App\Models\State $state
  */
-class City extends Model
-{
-    use HasFactory;
-    
-    protected $table = 'cities';
-    const STATE = '';
-
-    protected $fillable = [
-        'state_id',
-        'name',
-    ];
-
-    public static $rules = [
-        'name' => 'required|max:180|unique:cities,name',
-        'state_id' => 'required',
-    ];
-
+
     /**
-     * Get the attributes that should be cast.
+     * Scope a query to only include featured records.
      *
-     * @return array<string, string>
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function casts(): array
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'state_id' => 'integer',
-            'name' => 'string',
-            'is_active' => 'boolean',
-            'latitude' => 'decimal:8',
-            'longitude' => 'decimal:8',
-            'population' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->where("is_featured", true);
     }
+
+
+
 
     public function state(): BelongsTo
     {

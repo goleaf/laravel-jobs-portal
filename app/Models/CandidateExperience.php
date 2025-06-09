@@ -93,61 +93,20 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin Eloquent
  */
-class CandidateExperience extends Model
-{
-    use HasFactory, LogsActivity;
-
-    public $table = 'candidate_experiences';
-
-    protected $fillable = [
-        'candidate_id',
-        'experience_title',
-        'company',
-        'country_id',
-        'state_id',
-        'city_id',
-        'start_date',
-        'end_date',
-        'currently_working',
-        'description',
-        'job_level',
-        'employment_type',
-        'salary',
-        'is_verified',
-    ];
-
-    protected $appends = [
-        'full_location',
-        'duration_description',
-        'duration_in_months',
-        'formatted_salary',
-        'is_current',
-        'is_recent',
-        'experience_level',
-    ];
-
+
     /**
-     * Get the attributes that should be cast.
+     * Scope a query to only include old records.
      *
-     * @return array<string, string>
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function casts(): array
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'candidate_id' => 'integer',
-            'country_id' => 'integer',
-            'state_id' => 'integer',
-            'city_id' => 'integer',
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'currently_working' => 'boolean',
-            'salary' => 'decimal:2',
-            'is_verified' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Validation rules with multilingual support
@@ -621,3 +580,25 @@ class CandidateExperience extends Model
         return $thisStart <= $otherEnd && $otherStart <= $thisEnd;
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

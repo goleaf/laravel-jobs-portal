@@ -71,11 +71,20 @@ class HeaderSlider extends Model implements HasMedia
      *
      * @var array
      */
-    protected $casts = [
+        protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+
         'id' => 'integer',
         'description' => 'string',
         'is_active' => 'boolean',
-    ];
+    
+        ];
+    }
+
 
     /**
      * @var array
@@ -101,23 +110,20 @@ class HeaderSlider extends Model implements HasMedia
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'title' => 'string',
-            'sub_title' => 'string',
-            'description' => 'string',
-            'image_url' => 'string',
-            'button_text' => 'string',
-            'button_url' => 'string',
-            'is_active' => 'boolean',
             'is_featured' => 'boolean',
-            'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+
+        'id' => 'integer',
+        'description' => 'string',
+        'is_active' => 'boolean',
+    
         ];
     }
+
 
     /**
      * Scope for active header sliders.

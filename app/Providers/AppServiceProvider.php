@@ -20,6 +20,24 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MasterDataController;
+use App\Http\Controllers\Admin\BrandingSliderController;
+use App\Http\Controllers\Admin\HeaderSliderController;
+use App\Http\Controllers\Admin\ImageSliderController;
+use App\Http\Controllers\Admin\CmsController;
+use App\Http\Controllers\Admin\EmailTemplateController;
+use App\Http\Controllers\Admin\ReportedJobController;
+use App\Http\Controllers\Admin\SalaryPeriodController;
+use App\Http\Controllers\Admin\FunctionalAreaController;
+use App\Http\Controllers\Admin\SalaryCurrencyController;
+use App\Http\Controllers\Admin\OwnershipTypeController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Candidate\ApplicationController as CandidateApplicationController;
+use App\Http\Controllers\Employer\ApplicationController as EmployerApplicationController;
+use App\Http\Controllers\Front\BlogCommentController;
+use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -85,6 +103,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
+
         // Force HTTPS in production
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
@@ -136,9 +157,152 @@ class AppServiceProvider extends ServiceProvider
             return '<?php endif; ?>';
         });
 
-        // Comment out Livewire components registration to prevent errors
-        // Livewire::component('language-table', LanguageTable::class);
-        // Add other Livewire components here
+        // Register custom Blade directives
+        Blade::directive('money', function ($expression) {
+            return "<?php echo number_format($expression, 2); ?>";
+        });
+
+        // Register API routes for admin controllers
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Admin Dashboard API
+                Route::get('/dashboard-stats', [AdminDashboardController::class, 'getStats']);
+                Route::get('/dashboard-overview', [AdminDashboardController::class, 'getOverview']);
+                
+                // Admin Management API
+                Route::apiResource('admins', AdminController::class);
+                Route::patch('/admins/{admin}/toggle-status', [AdminController::class, 'toggleStatus']);
+            });
+
+        // Register API routes for candidate controllers
+        Route::middleware('api')
+            ->prefix('api/candidate')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Candidate Applications API
+                Route::apiResource('applications', CandidateApplicationController::class);
+            });
+
+        // Register API routes for employer controllers
+        Route::middleware('api')
+            ->prefix('api/employer')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Employer Applications API
+                Route::apiResource('applications', EmployerApplicationController::class);
+            });
+
+        // Register API routes for front-end controllers
+        Route::middleware('api')
+            ->prefix('api/front')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Blog Comment API
+                Route::apiResource('blog-comments', BlogCommentController::class);
+            });
+
+        // Register API routes for admin email templates
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Email Template API
+                Route::apiResource('email-templates', EmailTemplateController::class);
+            });
+
+        // Register API routes for admin reported jobs
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Reported Jobs API
+                Route::apiResource('reported-jobs', ReportedJobController::class);
+            });
+
+        // Register API routes for admin salary periods
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Salary Periods API
+                Route::apiResource('salary-periods', SalaryPeriodController::class);
+            });
+
+        // Register API routes for admin functional areas
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Functional Areas API
+                Route::apiResource('functional-areas', FunctionalAreaController::class);
+            });
+
+        // Register API routes for admin salary currencies
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Salary Currencies API
+                Route::apiResource('salary-currencies', SalaryCurrencyController::class);
+            });
+
+        // Register API routes for admin ownership types
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Ownership Types API
+                Route::apiResource('ownership-types', OwnershipTypeController::class);
+            });
+
+        // Register API routes for admin master data
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Master Data API
+                Route::apiResource('master-data', MasterDataController::class);
+            });
+
+        // Register API routes for admin branding sliders
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Branding Sliders API
+                Route::apiResource('branding-sliders', BrandingSliderController::class);
+            });
+
+        // Register API routes for admin header sliders
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Header Sliders API
+                Route::apiResource('header-sliders', HeaderSliderController::class);
+            });
+
+        // Register API routes for admin image sliders
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // Image Sliders API
+                Route::apiResource('image-sliders', ImageSliderController::class);
+            });
+
+        // Register API routes for admin CMS
+        Route::middleware('api')
+            ->prefix('api/admin')
+            ->namespace($this->app->getNamespace())
+            ->group(function () {
+                // CMS API
+                Route::apiResource('cms', CmsController::class);
+            });
+
+        // Removed Livewire component registration as part of Vue3 migration
     }
 
     /**
@@ -266,4 +430,9 @@ class AppServiceProvider extends ServiceProvider
         // Livewire class aliases removed as part of Vue3 migration
         // Universal patterns will replace these with Vue3 components
     }
+
+    // Additional methods or properties can be added here if needed
+    protected $listen = [
+        // Add event listeners if necessary
+    ];
 }

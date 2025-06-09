@@ -10,6 +10,14 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\Plan\CreatePlanRequest;
+use App\Http\Requests\Plan\UpdatePlanUpdatePlanRequest;
+use App\Http\Requests\Plan\IndexPlanRequest;
+use App\Http\Requests\Plan\EditPlanRequest;
+use App\Http\Requests\Plan\ShowPlanRequest;
+use App\Http\Requests\Plan\DestroyPlanRequest;
+use App\Http\Requests\Plan\ChangeTrialPlanRequest;
+
 class PlanController extends AppBaseController
 {
     /** @var*/
@@ -23,12 +31,12 @@ class PlanController extends AppBaseController
     /**
      * Display a listing of the Plan.
      *
-     * @param  Request  $request
+     * @param  IndexPlanRequest  $request
      * @return Factory|View
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexPlanRequest $request): View
     {
         $currency = SalaryCurrency::toBase()->orderBy('id')->pluck('currency_name', 'id')->toArray();
         $currencyIcon = SalaryCurrency::toBase()->orderBy('id')->pluck('currency_icon', 'id')->toArray();
@@ -56,7 +64,7 @@ class PlanController extends AppBaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Plan $plan): JsonResponse
+    public function edit(Plan $plan, EditPlanRequest $request): JsonResponse
     {
         if ($plan->salary_currency_id == 0) {
             $salaryCurrencyId = SalaryCurrency::whereCurrencyName('USD US Dollar')->first()->id;
@@ -69,7 +77,7 @@ class PlanController extends AppBaseController
     /**
      * Show the form for editing the specified Plan.
      */
-    public function show(Plan $plan): JsonResponse
+    public function show(Plan $plan, ShowPlanRequest $request): JsonResponse
     {
         return $this->sendResponse($plan, __('messages.flash.plan_retrieve'));
     }
@@ -100,7 +108,7 @@ class PlanController extends AppBaseController
      *
      * @throws Exception
      */
-    public function destroy(Plan $plan): JsonResponse
+    public function destroy(Plan $plan, DestroyPlanRequest $request): JsonResponse
     {
         if ($plan->activeSubscriptions->count() > 0) {
             return $this->sendError(__('messages.flash.plan_cant_delete'));
@@ -120,7 +128,7 @@ class PlanController extends AppBaseController
     /**
      * @return mixed
      */
-    public function changeTrialPlan(Plan $plan)
+    public function changeTrialPlan(Plan $plan, ChangeTrialPlanRequest $request)
     {
         Plan::where('is_trial_plan', true)->update([
             'is_trial_plan' => false,

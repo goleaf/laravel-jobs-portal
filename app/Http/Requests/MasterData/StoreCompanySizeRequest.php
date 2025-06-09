@@ -1,106 +1,121 @@
 <?php
 
-namespace App\Http\Requests\MasterData;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for StoreCompanySizeRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
- * Following proven MasterData pattern
+ * Universal Form Request for storing CompanySize
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreCompanySizeRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     * Universal Pattern: Authorization check
+     */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        return $this->user()?->can('create', companysize::class) ?? true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     * Universal Pattern: Comprehensive validation rules
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
-            'size' => ['required', 'string', 'max:255'],
-            'from_range' => ['nullable', 'integer', 'min:1'],
-            'to_range' => ['nullable', 'integer', 'min:1'],
-            'is_active' => ['boolean'],
+            'name' => ['required', 'string', 'max:255', 'unique:companysizes,name'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'status' => ['required', 'boolean'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     * Universal Pattern: Multilingual error messages
+     */
     public function messages(): array
     {
         return [
-            'size.required' => __('validation.companysize_size_required'),
-            'size.max' => __('validation.companysize_size_max'),
-            'from_range.required' => __('validation.companysize_from_range_required'),
-            'from_range.max' => __('validation.companysize_from_range_max'),
-            'to_range.required' => __('validation.companysize_to_range_required'),
-            'to_range.max' => __('validation.companysize_to_range_max'),
-            'is_active.required' => __('validation.companysize_is_active_required'),
-            'is_active.max' => __('validation.companysize_is_active_max'),
+            'name.required' => __('validation.name_required'),
+            'name.unique' => __('validation.name_unique'),
+            'name.max' => __('validation.name_max'),
+            'status.required' => __('validation.status_required'),
+            'status.boolean' => __('validation.status_boolean'),
         ];
     }
 
+    /**
+     * Get custom attributes for validator errors.
+     * Universal Pattern: User-friendly field names
+     */
     public function attributes(): array
     {
         return [
-            'size' => __('validation.attributes.companysize_size'),
-            'from_range' => __('validation.attributes.companysize_from_range'),
-            'to_range' => __('validation.attributes.companysize_to_range'),
-            'is_active' => __('validation.attributes.companysize_is_active'),
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'status' => __('validation.attributes.status'),
+            'sort_order' => __('validation.attributes.sort_order'),
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization
+     */
     protected function prepareForValidation(): void
     {
-        $data = [];
-        
-        if (isset($this->name)) {
-            $data['name'] = trim($this->name);
-        }
-        
-        if (isset($this->currency_name)) {
-            $data['currency_name'] = trim($this->currency_name);
-        }
-        
-        if (isset($this->level_name)) {
-            $data['level_name'] = trim($this->level_name);
-        }
-        
-        if (isset($this->shift)) {
-            $data['shift'] = trim($this->shift);
-        }
-        
-        if (isset($this->size)) {
-            $data['size'] = trim($this->size);
-        }
-        
-        $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
-        
-        $this->merge($data);
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'description' => trim($this->description ?? '') ?: null,
+            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
+        ]);
     }
 
+    /**
+     * Configure the validator instance.
+     * Universal Pattern: Enhanced validation logic
+     */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasBusinessLogicConflicts()) {
-                $validator->errors()->add('name', __('validation.companysize_business_conflict'));
+            // Universal Pattern: Additional business logic validation
+            if ($this->hasConflictingData()) {
+                $validator->errors()->add('name', __('validation.conflicting_data'));
             }
         });
     }
 
-    private function hasBusinessLogicConflicts(): bool
+    /**
+     * Universal Pattern: Custom business logic check
+     */
+    private function hasConflictingData(): bool
     {
-        // Add specific business logic validation here
+        // Add specific business logic here
         return false;
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     * Universal Pattern: Enhanced error handling
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        logger()->info('Store validation failed for StoreCompanySizeRequest', [
+            'errors' => $validator->errors()->toArray(),
+            'input' => $this->safe()->toArray(),
+            'user_id' => $this->user()?->id,
+            'ip' => $this->ip(),
+        ]);
+
+        parent::failedValidation($validator);
     }
 }

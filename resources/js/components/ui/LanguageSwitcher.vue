@@ -1,190 +1,123 @@
 <template>
-  <div class="relative inline-block text-left">
-    <!-- Language Switcher Button -->
+  <div class="relative inline-block">
     <button
-      @click="toggleDropdown"
-      class="inline-flex items-center justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      :aria-expanded="isOpen"
-      aria-haspopup="true"
+      @click="toggleLanguageMenu"
+      class="inline-flex items-center p-2 rounded-md text-sm font-medium text-neutral-700 bg-white shadow-sm hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+      aria-expanded="false"
+      aria-label="Switch language"
     >
-      <span class="mr-2 text-lg">{{ currentLanguage.flag }}</span>
-      <span>{{ currentLanguage.name }}</span>
-      <svg
-        class="ml-2 -mr-1 h-5 w-5 transition-transform duration-200"
-        :class="{ 'rotate-180': isOpen }"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clip-rule="evenodd"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8a2.5 2.5 0 012.5 2.5c0 1.186-.474 2.252-1.232 3.03a17.319 17.319 0 014.232-.495l.468-.935a2 2 0 011.289-2.573 16.947 16.947 0 001.024-2.204 18.108 18.108 0 001.44-5.243A18.09 18.09 0 0017.5 3.675" />
+      </svg>
+      <span class="ml-2 hidden md:inline">{{ currentLanguage ? currentLanguage.name : 'Language' }}</span>
+      <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
 
-    <!-- Language Dropdown Menu -->
-    <transition
-      enter-active-class="transition ease-out duration-100"
-      enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-active-class="transition ease-in duration-75"
-      leave-from-class="transform opacity-100 scale-100"
-      leave-to-class="transform opacity-0 scale-95"
+    <div
+      v-if="isLanguageMenuOpen"
+      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="language-button"
     >
-      <div
-        v-show="isOpen"
-        class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="language-menu"
+      <button
+        v-for="lang in languages"
+        :key="lang.code"
+        @click="setLanguage(lang.code)"
+        class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
+        :class="{ 'font-bold': currentLanguage && currentLanguage.code === lang.code }"
+        role="menuitem"
       >
-        <div class="py-1" role="none">
-          <button
-            v-for="language in languages"
-            :key="language.code"
-            @click="changeLanguage(language.code)"
-            class="group flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-150"
-            :class="{
-              'bg-gray-100 text-gray-900': currentLanguage.code === language.code,
-              'text-gray-700': currentLanguage.code !== language.code,
-            }"
-            role="menuitem"
-          >
-            <span class="mr-3 text-lg">{{ language.flag }}</span>
-            <div class="flex-1 text-left">
-              <div class="font-medium">{{ language.name }}</div>
-              <div class="text-xs text-gray-500">{{ language.nativeName }}</div>
-            </div>
-            <svg
-              v-if="currentLanguage.code === language.code"
-              class="ml-2 h-4 w-4 text-indigo-600"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </transition>
+        <span class="flex items-center">
+          <span class="mr-2">{{ lang.flag }}</span>
+          {{ lang.name }}
+        </span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-// Language configuration with Context7 patterns
-const languages = [
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸', dir: 'ltr' },
-  { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', dir: 'rtl' },
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', dir: 'ltr' },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', dir: 'ltr' },
-  { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', dir: 'ltr' },
-  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', dir: 'ltr' },
-  { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', dir: 'ltr' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳', dir: 'ltr' },
-];
+interface Language {
+  code: string
+  name: string
+  flag: string
+}
 
-// Reactive state
-const isOpen = ref(false);
-const currentLocale = ref(localStorage.getItem('locale') || 'en');
+const isLanguageMenuOpen = ref(false)
+const languages: Language[] = [
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+  { code: 'de', name: 'German', flag: '🇩🇪' },
+  { code: 'es', name: 'Spanish', flag: '🇪🇸' },
+  { code: 'fr', name: 'French', flag: '🇫🇷' },
+  { code: 'pt', name: 'Portuguese', flag: '🇵🇹' },
+  { code: 'ru', name: 'Russian', flag: '🇷🇺' },
+  { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
+  { code: 'zh', name: 'Chinese', flag: '🇨🇳' }
+]
+const currentLanguageCode = ref<string>('en')
 
-// Computed properties
 const currentLanguage = computed(() => {
-  return languages.find(lang => lang.code === currentLocale.value) || languages[0];
-});
+  return languages.find(lang => lang.code === currentLanguageCode.value) || null
+})
 
-// Methods
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
+// Toggle dropdown menu visibility
+const toggleLanguageMenu = () => {
+  isLanguageMenuOpen.value = !isLanguageMenuOpen.value
+}
 
-const changeLanguage = async (languageCode: string) => {
-  try {
-    // Update local state
-    currentLocale.value = languageCode;
-    
-    // Store in localStorage
-    localStorage.setItem('locale', languageCode);
-    
-    // Close dropdown
-    isOpen.value = false;
-    
-    // Find language config
-    const language = languages.find(lang => lang.code === languageCode);
-    
-    if (language) {
-      // Update document direction for RTL languages
-      document.documentElement.dir = language.dir;
-      document.documentElement.lang = languageCode;
-      
-      // Add/remove RTL class for Arabic
-      if (language.dir === 'rtl') {
-        document.documentElement.classList.add('rtl');
-      } else {
-        document.documentElement.classList.remove('rtl');
-      }
-    }
-    
-    // Send request to Laravel backend to update session locale
-    await fetch('/api/locale', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-      },
-      body: JSON.stringify({ locale: languageCode }),
-    });
-    
-    // Emit custom event for other components
-    window.dispatchEvent(new CustomEvent('locale-changed', {
-      detail: { locale: languageCode, language }
-    }));
-    
-    // Reload page to apply Laravel translations
-    window.location.reload();
-    
-  } catch (error) {
-    console.error('Error changing language:', error);
+// Set language and update localStorage
+const setLanguage = (code: string) => {
+  currentLanguageCode.value = code
+  localStorage.setItem('language', code)
+  // Emit event to parent or use a store to notify about language change
+  applyLanguageDirection(code)
+  isLanguageMenuOpen.value = false
+}
+
+// Apply language direction (RTL for Arabic)
+const applyLanguageDirection = (code: string) => {
+  if (code === 'ar') {
+    document.documentElement.setAttribute('dir', 'rtl')
+    document.documentElement.setAttribute('lang', 'ar')
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr')
+    document.documentElement.setAttribute('lang', code)
   }
-};
+}
 
-const handleClickOutside = (event: Event) => {
-  const target = event.target as Element;
-  if (!target.closest('.relative')) {
-    isOpen.value = false;
-  }
-};
-
-// Lifecycle hooks
 onMounted(() => {
-  // Set initial language direction
-  const language = currentLanguage.value;
-  document.documentElement.dir = language.dir;
-  document.documentElement.lang = language.code;
-  
-  if (language.dir === 'rtl') {
-    document.documentElement.classList.add('rtl');
+  // Load saved language
+  const savedLanguage = localStorage.getItem('language')
+  if (savedLanguage) {
+    currentLanguageCode.value = savedLanguage
+  } else {
+    // Detect browser language
+    const browserLang = navigator.language.split('-')[0]
+    if (languages.some(lang => lang.code === browserLang)) {
+      currentLanguageCode.value = browserLang
+    }
   }
-  
-  // Add click outside listener
-  document.addEventListener('click', handleClickOutside);
-});
+  applyLanguageDirection(currentLanguageCode.value)
+
+  // Close dropdown when clicking outside
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as HTMLElement
+    if (isLanguageMenuOpen.value && !target.closest('.relative')) {
+      isLanguageMenuOpen.value = false
+    }
+  }
+  document.addEventListener('click', handleClickOutside)
+})
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
+  document.removeEventListener('click', () => {}) // Clean up event listener
+})
 </script>
 
 <style scoped>

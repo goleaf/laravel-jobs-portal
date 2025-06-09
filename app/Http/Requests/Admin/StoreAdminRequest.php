@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreAdminRequest extends FormRequest
 {
@@ -16,56 +17,82 @@ class StoreAdminRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return array (
-  'first_name' => 'required|string|max:255',
-  'last_name' => 'nullable|string|max:255',
-  'email' => 'required|email|unique:users,email',
-  'password' => 'required|string|min:8|confirmed',
-  'phone' => 'nullable|string|max:20',
-  'is_active' => 'boolean',
-);
+        return [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|string|in:super_admin,admin',
+        ];
     }
 
     /**
-     * Get custom error messages for validation rules.
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {
-        return array (
-  'first_name.required' => 'First name is required',
-  'email.required' => 'Email is required',
-  'email.unique' => 'Email already exists',
-  'password.required' => 'Password is required',
-  'password.min' => 'Password must be at least 8 characters',
-);
+        return [
+            'required' => 'The :attribute field is required.',
+            'email' => 'Please enter a valid email address.',
+            'unique' => 'This :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'max' => 'The :attribute may not be greater than :max characters.',
+            'confirmed' => 'The :attribute confirmation does not match.',
+            'exists' => 'The selected :attribute is invalid.',
+            'image' => 'The :attribute must be an image.',
+            'mimes' => 'The :attribute must be a file of type: :values.',
+            'numeric' => 'The :attribute must be a number.',
+            'date' => 'The :attribute is not a valid date.',
+            'after' => 'The :attribute must be a date after :date.',
+            'url' => 'The :attribute format is invalid.',
+            'boolean' => 'The :attribute field must be true or false.',
+            'array' => 'The :attribute must be an array.',
+            'accepted' => 'The :attribute must be accepted.',
+        ];
     }
 
     /**
      * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'first_name' => __('messages.common.first_name'),
-            'last_name' => __('messages.common.last_name'),
-            'email' => __('messages.common.email'),
-            'password' => __('messages.common.password'),
-            'phone' => __('messages.common.phone'),
-            'name' => __('messages.common.name'),
-            'description' => __('messages.common.description'),
-            'address' => __('messages.common.address'),
-            'website' => __('messages.common.website'),
-            'country_id' => __('messages.common.country'),
-            'state_id' => __('messages.common.state'),
-            'city_id' => __('messages.common.city'),
-            'job_title' => __('messages.job.job_title'),
-            'job_description' => __('messages.job.job_description'),
-            'salary_from' => __('messages.job.salary_from'),
-            'salary_to' => __('messages.job.salary_to'),
-            'job_expiry_date' => __('messages.job.job_expiry_date'),
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'role' => 'Role',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Add any data preparation logic here
+        // Example: Convert empty strings to null
+        $this->merge([
+            // Add any automatic data transformations
+        ]);
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
     }
 }

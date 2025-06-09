@@ -32,33 +32,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
-class PostComment extends Model
-{
-    use HasFactory;
-
-    protected $table = 'post_comments';
-
-    protected $fillable = [
-        'name',
-        'email',
-        'comment',
-        'user_id',
-        'post_id',
-    ];
-
+
     /**
-     * The attributes that should be casted to native types.
+     * Scope a query to only include popular records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'email' => 'string',
-        'comment' => 'string',
-        'user_id' => 'integer',
-        'post_id' => 'integer',
-    ];
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("views_count", "desc");
+    }
+
+
+
 
     public function user(): BelongsTo
     {
@@ -75,20 +62,24 @@ class PostComment extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'post_id' => 'integer',
-            'user_id' => 'integer',
-            'parent_id' => 'integer',
-            'comment' => 'string',
-            'is_approved' => 'boolean',
-            'is_spam' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+
+        'id' => 'integer',
+        'name' => 'string',
+        'email' => 'string',
+        'comment' => 'string',
+        'user_id' => 'integer',
+        'post_id' => 'integer',
+    
         ];
     }
+
 
     /**
      * Scope for approved comments.
@@ -202,3 +193,25 @@ class PostComment extends Model
         return $query->doesntHave('replies');
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

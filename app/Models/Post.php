@@ -80,38 +80,46 @@ class Post extends Model implements HasMedia
      *
      * @var array
      */
-    protected $casts = [
+        protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+
         'id' => 'integer',
         'title' => 'string',
         'description' => 'string',
         'created_by' => 'integer',
         'is_default' => 'boolean',
-    ];
+    
+        ];
+    }
+
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'title' => 'string',
-            'description' => 'string',
-            'content' => 'string',
-            'slug' => 'string',
-            'meta_title' => 'string',
-            'meta_description' => 'string',
-            'featured_image' => 'string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
-            'is_published' => 'boolean',
-            'published_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+
+        'id' => 'integer',
+        'title' => 'string',
+        'description' => 'string',
+        'created_by' => 'integer',
+        'is_default' => 'boolean',
+    
         ];
     }
+
 
     /**
      * @return mixed

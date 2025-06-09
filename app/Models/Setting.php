@@ -28,59 +28,20 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  *
  * @property-read mixed $logo_url
  */
-class Setting extends Model
-{
-    use HasFactory;
-    use QueryCacheable;
-
-    public $cacheFor = 3600; // cache time, in seconds
-
+
     /**
-     * Invalidate the cache automatically
-     * upon update in the database.
+     * Scope a query to only include popular records.
      *
-     * @var bool
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected static $flushCacheOnUpdate = true;
-
-    public const PATH = 'settings';
-
-    public $table = 'settings';
-
-    public $fillable = [
-        'key',
-        'value',
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'key' => 'required',
-        'value' => 'required',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'key' => 'string',
-            'value' => 'string',
-            'type' => 'string',
-            'category' => 'string',
-            'is_public' => 'boolean',
-            'is_editable' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("views_count", "desc");
     }
+
+
+
 
     /**
      * @return mixed
@@ -276,3 +237,25 @@ class Setting extends Model
         return $query->where('type', 'array');
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

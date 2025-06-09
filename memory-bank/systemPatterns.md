@@ -1219,3 +1219,31 @@ These patterns ensure:
 - **Performance**: Optimized queries and caching
 - **Testing**: Comprehensive test coverage
 - **Maintainability**: Clear, documented, and reusable patterns 
+
+# System Patterns: Laravel Job Portal Modernization
+
+## Core Patterns
+- **Context7 Patterns**: Used for all implementations to ensure consistency and scalability.
+- **Modular Architecture**: Code organized into distinct modules for maintainability.
+- **RESTful API Design**: Consistent resource-based routing and response structures.
+
+## Model & Controller Patterns
+- **Scopes and Casts**: Comprehensive scopes and casts in every model.
+- **Single Responsibility**: Controller methods handle specific actions with logic delegation.
+- **Request Validation**: Dedicated Form Request classes for each controller action.
+
+## UI/UX Patterns
+- **Vue 3 Components**: Reusable frontend elements with TypeScript.
+- **TailwindCSS**: Utility-first CSS framework, managed locally via npm.
+- **Responsive & Accessible**: Mobile-first design with ARIA attributes.
+
+## Multilingual Patterns
+- **JSON Translations**: Strings managed in JSON files for 9 languages with RTL support.
+- **Dynamic Switching**: Context7 I18n integrated with Laravel localization.
+
+## Testing & Performance Patterns
+- **Comprehensive Testing**: Aim for 95%+ coverage with unit, feature, and integration tests.
+- **Caching & Optimization**: Redis caching and optimized Eloquent queries for performance.
+- **Concurrent Support**: Designed for 1000+ concurrent users.
+
+These patterns are aligned with Context7 best practices and Laravel 12 standards to ensure the job portal transformation results in a modern, efficient, and user-friendly system. 

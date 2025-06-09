@@ -63,57 +63,20 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-class Industry extends Model
-{
-    use HasFactory, LogsActivity;
-
-    public $table = 'industries';
-
+
     /**
-     * Default eager loading for performance
-     */
-    protected $with = [];
-
-    /**
-     * Validation rules with multilingual support
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'name' => 'required|unique:industries,name|max:150',
-        'description' => 'nullable|string|max:1000',
-        'is_default' => 'boolean',
-        'is_active' => 'boolean',
-    ];
-
-    public $fillable = [
-        'name',
-        'description',
-        'is_default',
-        'is_active',
-    ];
-
-    protected $appends = [
-        'usage_count',
-        'formatted_usage_stats',
-        'market_presence'
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Boot the model.

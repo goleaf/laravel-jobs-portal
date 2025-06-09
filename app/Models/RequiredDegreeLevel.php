@@ -72,67 +72,20 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-class RequiredDegreeLevel extends Model
-{
-    use HasFactory, LogsActivity;
-
-    public $table = 'required_degree_levels';
-
+
     /**
-     * Default eager loading for performance
-     */
-    protected $with = [];
-
-    /**
-     * Validation rules with multilingual support
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'name' => 'required|unique:required_degree_levels,name|max:100',
-        'description' => 'nullable|string|max:500',
-        'level_order' => 'required|integer|min:1|max:100|unique:required_degree_levels,level_order',
-        'years_required' => 'required|integer|min:0|max:20',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'certification_required' => 'nullable|string|max:255',
-    ];
-
-    public $fillable = [
-        'name',
-        'description',
-        'level_order',
-        'years_required',
-        'is_active',
-        'is_default',
-        'certification_required',
-    ];
-
-    protected $appends = [
-        'usage_count',
-        'formatted_usage_stats',
-        'education_category',
-        'career_progression_level',
-        'salary_range_multiplier'
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'level_order' => 'integer',
-            'years_required' => 'integer',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Boot the model.

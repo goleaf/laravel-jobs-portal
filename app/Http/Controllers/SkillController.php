@@ -9,6 +9,13 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\Skill\CreateSkillRequest;
+use App\Http\Requests\Skill\UpdateSkillUpdateSkillRequest;
+use App\Http\Requests\Skill\IndexSkillRequest;
+use App\Http\Requests\Skill\EditSkillRequest;
+use App\Http\Requests\Skill\ShowSkillRequest;
+use App\Http\Requests\Skill\DestroySkillRequest;
+
 class SkillController extends AppBaseController
 {
     /** @var SkillRepository */
@@ -22,12 +29,12 @@ class SkillController extends AppBaseController
     /**
      * Display a listing of the Skill.
      *
-     * @param  Request  $request
+     * @param  IndexSkillRequest  $request
      * @return Factory|View
      *
      * @throws Exception
      */
-    public function index(): View
+    public function index(IndexSkillRequest $request): View
     {
         return view('skills.index');
     }
@@ -46,7 +53,7 @@ class SkillController extends AppBaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Skill $skill): JsonResponse
+    public function edit(Skill $skill, EditSkillRequest $request): JsonResponse
     {
         return $this->sendResponse($skill, 'Skill Retrieved Successfully.');
     }
@@ -54,7 +61,7 @@ class SkillController extends AppBaseController
     /**
      * Show the form for editing the specified Skill.
      */
-    public function show(Skill $skill): JsonResponse
+    public function show(Skill $skill, ShowSkillRequest $request): JsonResponse
     {
         return $this->sendResponse($skill, 'Skill Retrieved Successfully.');
     }
@@ -76,7 +83,7 @@ class SkillController extends AppBaseController
      *
      * @throws Exception
      */
-    public function destroy(Skill $skill): JsonResponse
+    public function destroy(Skill $skill, DestroySkillRequest $request): JsonResponse
     {
         $candidateskillIds = $skill->candidate()->pluck('skill_id')->toArray();
         $jobskillIds = $skill->jobs()->pluck('skill_id')->toArray();

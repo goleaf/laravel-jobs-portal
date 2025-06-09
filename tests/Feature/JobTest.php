@@ -373,4 +373,88 @@ class JobTest extends TestCase
              'tag_ids' => \App\Models\Tag::factory()->count(2)->create()->pluck('id')->toArray(), // Example tags
         ];
     }
+
+    /** @test */
+    public function it_can_create_a_job()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $job = Job::factory()->create(['company_id' => $company->id]);
+
+        $this->assertDatabaseHas('jobs', [
+            'id' => $job->id,
+            'company_id' => $company->id,
+            'job_title' => $job->job_title,
+        ]);
+    }
+
+    /** @test */
+    public function it_can_update_a_job()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $job = Job::factory()->create(['company_id' => $company->id]);
+
+        $updatedData = [
+            'job_title' => 'Updated Job Title',
+            'description' => 'Updated Description',
+        ];
+
+        $job->update($updatedData);
+
+        $this->assertDatabaseHas('jobs', [
+            'id' => $job->id,
+            'job_title' => 'Updated Job Title',
+            'description' => 'Updated Description',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_delete_a_job()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $job = Job::factory()->create(['company_id' => $company->id]);
+
+        $job->delete();
+
+        $this->assertDatabaseMissing('jobs', ['id' => $job->id]);
+    }
+
+    /** @test */
+    public function it_belongs_to_a_company()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $job = Job::factory()->create(['company_id' => $company->id]);
+
+        $this->assertEquals($company->id, $job->company->id);
+    }
+
+    /** @test */
+    public function it_can_filter_by_status()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $openJob = Job::factory()->create(['company_id' => $company->id, 'status' => Job::STATUS_OPEN]);
+        $closedJob = Job::factory()->create(['company_id' => $company->id, 'status' => Job::STATUS_CLOSED]);
+
+        $openJobs = Job::active()->get();
+        $this->assertCount(1, $openJobs);
+        $this->assertEquals($openJob->id, $openJobs->first()->id);
+    }
+
+    /** @test */
+    public function it_can_filter_by_category()
+    {
+        $user = User::factory()->create(['user_type' => 'employer']);
+        $company = Company::factory()->create(['user_id' => $user->id]);
+        $categoryId = 1; // Assuming a category ID exists or is seeded
+        $job = Job::factory()->create(['company_id' => $company->id, 'job_category_id' => $categoryId]);
+        $otherJob = Job::factory()->create(['company_id' => $company->id, 'job_category_id' => 2]);
+
+        $filteredJobs = Job::byCategory($categoryId)->get();
+        $this->assertCount(1, $filteredJobs);
+        $this->assertEquals($job->id, $filteredJobs->first()->id);
+    }
 }

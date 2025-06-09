@@ -1096,3 +1096,10 @@ The Laravel Job Portal now has a **world-class database seeding system** that ca
 - [ ] Create unit tests for new scopes
 - [ ] Document scope usage examples
 - [ ] Performance benchmarking with larger datasets 
+
+# Request Files Cleanup and Organization
+
+- [ ] Organize all request files into a hierarchical structure under `app/Http/Requests` using subdirectories like `Admin`, `Candidate`, `Job`, `MasterData`, etc.
+- [ ] Remove duplicate request files, keeping the most comprehensive and well-structured versions (e.g., keep Context7-enhanced files).
+- [ ] Standardize naming conventions for request files to ensure consistency.
+- [ ] Review and update controller methods to use the correct request classes after reorganization. 

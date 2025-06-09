@@ -38,22 +38,34 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereMeta($value)
  */
-class Notification extends Model
-{
-    use HasFactory;
-    public $table = 'notifications';
+
+    /**
+     * Scope a query to only include popular records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("views_count", "desc");
+    }
 
-    public $fillable = [
-        'type',
-        'notification_for',
-        'user_id',
-        'title',
-        'text',
-        'meta',
-        'read_at',
-    ];
+
 
-    protected $casts = [
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+        protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+
         'type' => 'integer',
         'notification_for' => 'integer',
         'user_id' => 'integer',
@@ -61,28 +73,10 @@ class Notification extends Model
         'text' => 'string',
         'meta' => 'array',
         'read_at' => 'datetime',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'type' => 'integer',
-            'notification_for' => 'integer',
-            'user_id' => 'integer',
-            'is_read' => 'boolean',
-            'is_active' => 'boolean',
-            'meta' => 'array',
-            'read_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+    
         ];
     }
+
 
     const CANDIDATE = 1;
 
@@ -264,3 +258,14 @@ class Notification extends Model
         ]);
     }
 }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

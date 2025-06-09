@@ -1,106 +1,121 @@
 <?php
 
-namespace App\Http\Requests\Job;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for StoreJobShiftRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
- * Following proven MasterData pattern
+ * Universal Form Request for storing JobShift
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreJobShiftRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     * Universal Pattern: Authorization check
+     */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        return $this->user()?->can('create', jobshift::class) ?? true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     * Universal Pattern: Comprehensive validation rules
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
-            'shift' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:jobshifts,name'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'is_active' => ['boolean'],
-            'size' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'boolean'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     * Universal Pattern: Multilingual error messages
+     */
     public function messages(): array
     {
         return [
-            'shift.required' => __('validation.jobshift_shift_required'),
-            'shift.max' => __('validation.jobshift_shift_max'),
-            'description.required' => __('validation.jobshift_description_required'),
-            'description.max' => __('validation.jobshift_description_max'),
-            'is_active.required' => __('validation.jobshift_is_active_required'),
-            'is_active.max' => __('validation.jobshift_is_active_max'),
-            'size.required' => __('validation.jobshift_size_required'),
-            'size.max' => __('validation.jobshift_size_max'),
+            'name.required' => __('validation.name_required'),
+            'name.unique' => __('validation.name_unique'),
+            'name.max' => __('validation.name_max'),
+            'status.required' => __('validation.status_required'),
+            'status.boolean' => __('validation.status_boolean'),
         ];
     }
 
+    /**
+     * Get custom attributes for validator errors.
+     * Universal Pattern: User-friendly field names
+     */
     public function attributes(): array
     {
         return [
-            'shift' => __('validation.attributes.jobshift_shift'),
-            'description' => __('validation.attributes.jobshift_description'),
-            'is_active' => __('validation.attributes.jobshift_is_active'),
-            'size' => __('validation.attributes.jobshift_size'),
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'status' => __('validation.attributes.status'),
+            'sort_order' => __('validation.attributes.sort_order'),
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization
+     */
     protected function prepareForValidation(): void
     {
-        $data = [];
-        
-        if (isset($this->name)) {
-            $data['name'] = trim($this->name);
-        }
-        
-        if (isset($this->currency_name)) {
-            $data['currency_name'] = trim($this->currency_name);
-        }
-        
-        if (isset($this->level_name)) {
-            $data['level_name'] = trim($this->level_name);
-        }
-        
-        if (isset($this->shift)) {
-            $data['shift'] = trim($this->shift);
-        }
-        
-        if (isset($this->size)) {
-            $data['size'] = trim($this->size);
-        }
-        
-        $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
-        
-        $this->merge($data);
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'description' => trim($this->description ?? '') ?: null,
+            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
+        ]);
     }
 
+    /**
+     * Configure the validator instance.
+     * Universal Pattern: Enhanced validation logic
+     */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasBusinessLogicConflicts()) {
-                $validator->errors()->add('name', __('validation.jobshift_business_conflict'));
+            // Universal Pattern: Additional business logic validation
+            if ($this->hasConflictingData()) {
+                $validator->errors()->add('name', __('validation.conflicting_data'));
             }
         });
     }
 
-    private function hasBusinessLogicConflicts(): bool
+    /**
+     * Universal Pattern: Custom business logic check
+     */
+    private function hasConflictingData(): bool
     {
-        // Add specific business logic validation here
+        // Add specific business logic here
         return false;
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     * Universal Pattern: Enhanced error handling
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        logger()->info('Store validation failed for StoreJobShiftRequest', [
+            'errors' => $validator->errors()->toArray(),
+            'input' => $this->safe()->toArray(),
+            'user_id' => $this->user()?->id,
+            'ip' => $this->ip(),
+        ]);
+
+        parent::failedValidation($validator);
     }
 }

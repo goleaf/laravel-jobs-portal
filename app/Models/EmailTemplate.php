@@ -30,8 +30,9 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class EmailTemplate extends Model
-{
+
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
+
     /**
      * @var string
      */
@@ -52,17 +53,21 @@ class EmailTemplate extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+            'is_featured' => 'boolean',
+
             'id' => 'integer',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'variables' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Validation rules
@@ -158,3 +163,14 @@ class EmailTemplate extends Model
                     ->orWhere('template_name', 'like', '%registration%');
     }
 }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }

@@ -1,106 +1,128 @@
 <?php
 
-namespace App\Http\Requests\MasterData;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
-/**
- * Context7 Enhanced Form Request for UpdateCompanySizeRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
- * Following proven MasterData pattern
- */
 class UpdateCompanySizeRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        return auth()->check() && auth()->user()->hasRole(['admin', 'super_admin']);
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     */
     public function rules(): array
     {
+        $companySizeId = $this->route('companySize')->id ?? $this->route('company_size');
+        
         return [
-            'size' => ['required', 'string', 'max:255'],
-            'from_range' => ['nullable', 'integer', 'min:1'],
-            'to_range' => ['nullable', 'integer', 'min:1'],
-            'is_active' => ['boolean'],
+            'size' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('company_sizes', 'size')->ignore($companySizeId),
+                'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/'
+            ],
+            'is_active' => [
+                'sometimes',
+                'boolean'
+            ],
+            'is_default' => [
+                'sometimes',
+                'boolean'
+            ],
         ];
     }
 
+    /**
+     * Get custom error messages for validation rules.
+     */
     public function messages(): array
     {
         return [
-            'size.required' => __('validation.companysize_size_required'),
-            'size.max' => __('validation.companysize_size_max'),
-            'from_range.required' => __('validation.companysize_from_range_required'),
-            'from_range.max' => __('validation.companysize_from_range_max'),
-            'to_range.required' => __('validation.companysize_to_range_required'),
-            'to_range.max' => __('validation.companysize_to_range_max'),
-            'is_active.required' => __('validation.companysize_is_active_required'),
-            'is_active.max' => __('validation.companysize_is_active_max'),
+            'size.required' => __('validation.required', ['attribute' => __('Company Size')]),
+            'size.string' => __('validation.string', ['attribute' => __('Company Size')]),
+            'size.max' => __('validation.max.string', ['attribute' => __('Company Size'), 'max' => 255]),
+            'size.unique' => __('validation.unique', ['attribute' => __('Company Size')]),
+            'size.regex' => __('validation.regex', ['attribute' => __('Company Size')]),
+            'is_active.boolean' => __('validation.boolean', ['attribute' => __('Active Status')]),
+            'is_default.boolean' => __('validation.boolean', ['attribute' => __('Default Status')]),
         ];
     }
 
+    /**
+     * Get custom attributes for validator errors.
+     */
     public function attributes(): array
     {
         return [
-            'size' => __('validation.attributes.companysize_size'),
-            'from_range' => __('validation.attributes.companysize_from_range'),
-            'to_range' => __('validation.attributes.companysize_to_range'),
-            'is_active' => __('validation.attributes.companysize_is_active'),
+            'size' => __('Company Size'),
+            'is_active' => __('Active Status'),
+            'is_default' => __('Default Status'),
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     */
     protected function prepareForValidation(): void
     {
-        $data = [];
-        
-        if (isset($this->name)) {
-            $data['name'] = trim($this->name);
+        // Convert string boolean values to actual booleans
+        if ($this->has('is_active')) {
+            $this->merge([
+                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
         }
-        
-        if (isset($this->currency_name)) {
-            $data['currency_name'] = trim($this->currency_name);
+
+        if ($this->has('is_default')) {
+            $this->merge([
+                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
         }
-        
-        if (isset($this->level_name)) {
-            $data['level_name'] = trim($this->level_name);
+
+        // Trim and clean the size field
+        if ($this->has('size')) {
+            $this->merge([
+                'size' => trim($this->size)
+            ]);
         }
-        
-        if (isset($this->shift)) {
-            $data['shift'] = trim($this->shift);
-        }
-        
-        if (isset($this->size)) {
-            $data['size'] = trim($this->size);
-        }
-        
-        $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
-        
-        $this->merge($data);
     }
 
-    public function withValidator(Validator $validator): void
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        if ($this->expectsJson()) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'success' => false,
+                    'message' => __('validation.failed'),
+                    'errors' => $validator->errors()
+                ], 422)
+            );
+        }
+
+        parent::failedValidation($validator);
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if ($this->hasBusinessLogicConflicts()) {
-                $validator->errors()->add('name', __('validation.companysize_business_conflict'));
+            // Additional business logic validation
+            if ($this->is_default && $this->is_active === false) {
+                $validator->errors()->add('is_active', __('Default company sizes must be active'));
             }
         });
-    }
-
-    private function hasBusinessLogicConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
     }
 }

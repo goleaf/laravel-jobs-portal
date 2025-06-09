@@ -81,9 +81,10 @@ class Skill extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+
             'id' => 'integer',
             'name' => 'string',
             'description' => 'string',
@@ -95,8 +96,10 @@ class Skill extends Model
             'popularity_score' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Boot the model.

@@ -679,3 +679,98 @@ This technology stack ensures:
 - **Accessibility**: WCAG 2.1 AA compliance
 - **Internationalization**: Multi-language support
 - **Monitoring**: Comprehensive observability and performance tracking 
+
+# Tech Context - Laravel Job Portal Transformation
+
+## Technology Stack
+The following technologies and frameworks are utilized in the comprehensive transformation of the Laravel job portal system:
+
+### Backend Technologies
+- **Laravel 12**: The core PHP framework for building the job portal, providing robust features for routing, middleware, ORM, and more.
+- **PHP 8.2+**: The programming language powering the backend, ensuring modern features and performance improvements.
+- **MySQL/MariaDB**: The relational database management system for storing job listings, user data, applications, and other critical information.
+- **Redis**: Used for caching and session management to enhance application performance and scalability.
+- **Spatie Laravel Permission**: For implementing role-based access control and managing user permissions.
+- **Laravel Activity Log**: For logging user activities and changes within the system for audit purposes.
+
+### Frontend Technologies
+- **Vue 3**: The JavaScript framework for building dynamic user interfaces, both for frontend user-facing components and backend admin interfaces.
+- **TypeScript**: Adding static typing to JavaScript for improved code maintainability and error prevention in Vue components.
+- **TailwindCSS**: A utility-first CSS framework for creating responsive, modern designs without relying on Bootstrap.
+- **Vite**: The build tool for fast development and optimized production builds of frontend assets.
+- **Pinia**: State management library for Vue, providing a modern alternative to Vuex for managing application state.
+
+### API and Integration
+- **Laravel API Resources**: For creating consistent and optimized JSON responses for API endpoints.
+- **Rate Limiting**: Implemented with Laravel's built-in middleware and Context7 patterns to prevent API abuse.
+- **RESTful API Design**: Following best practices for creating scalable and maintainable API endpoints.
+
+### Testing and Quality Assurance
+- **Pest**: A modern PHP testing framework for unit, feature, and integration tests, ensuring high code coverage.
+- **Laravel Dusk**: For browser automation testing (used only on Windows 11 OS as per user rules).
+- **Selenium**: For end-to-end testing of user journeys (where applicable).
+- **PHPUnit**: As a fallback testing framework for compatibility with existing tests.
+
+### Performance Optimization
+- **Query Optimization**: Using Laravel's Eloquent scopes, eager loading, and database indexing for efficient data retrieval.
+- **Caching Strategies**: Implementing Redis-based caching with intelligent invalidation for frequently accessed data.
+- **Asset Optimization**: Leveraging Vite for optimized frontend asset bundling and minification.
+
+### Security
+- **Authentication Middleware**: Enhanced with account lockout and suspicious activity detection.
+- **Input Validation**: Comprehensive request validation with multilingual error messages using Laravel's validation system.
+- **Content Security Policy (CSP)**: Configured to prevent cross-site scripting (XSS) attacks.
+- **OWASP Top 10 Compliance**: Ensuring the application addresses common security vulnerabilities.
+
+### Multilingual System
+- **JSON-Based Translations**: Supporting 9 languages (English, Arabic, German, Spanish, French, Portuguese, Russian, Turkish, Chinese) with RTL support for Arabic.
+- **Dynamic Language Switching**: Implemented with browser detection and localStorage persistence for seamless user experience.
+
+### Development Tools
+- **Composer**: For managing PHP dependencies and autoloading.
+- **NPM**: For managing frontend dependencies and running build scripts.
+- **Git**: For version control, with a focus on clean main branch workflow and systematic commits.
+- **VS Code**: Recommended IDE for development, with extensions for PHP, Laravel, Vue, and TailwindCSS support.
+
+### Deployment and Environment
+- **Linux**: Primary development and deployment environment (as per user OS: Linux 5.14.0-503.40.1.el9_5.x86_64).
+- **No Docker**: As per user rules, Docker is not used in this project.
+- **Local Asset Hosting**: All CSS and JS files are hosted locally via NPM packages, avoiding CDN usage as per user guidelines.
+
+This technology stack is aligned with Context7 best practices and user-specific rules to ensure a modern, secure, and efficient job portal system. 
+
+# Technical Context: Laravel Job Portal Modernization
+
+## Technology Stack
+- **Backend Framework**: Laravel 12
+  - Used for core application logic, routing, middleware, and API development.
+- **Frontend Framework**: Vue 3 with TypeScript
+  - For building dynamic, reusable UI components with strong typing.
+- **Styling Framework**: TailwindCSS
+  - Utility-first CSS framework for rapid, consistent design, managed locally via npm (no CDNs).
+- **Database**: MySQL
+  - Primary relational database for storing application data.
+- **Caching**: Redis
+  - For caching frequently accessed data to improve performance and support 1000+ concurrent users.
+- **Testing Frameworks**: PHPUnit, Pest
+  - For unit, feature, and integration testing aiming for 95%+ coverage.
+- **Package Management**: Composer (PHP), npm (JavaScript/CSS)
+  - For dependency management and build processes.
+- **Version Control**: Git
+  - For source code management with a clean main branch workflow.
+
+## Development Practices
+- **Context7 Patterns**: All code follows Context7 design principles for consistency and scalability.
+- **Multilingual System**: JSON-based translations supporting 9 languages with RTL for Arabic, integrated with Context7 I18n.
+- **Build Process**: Run `npm run build` after CSS/JS edits to compile assets.
+- **Environment**: Development and production environments with specific configurations (e.g., HTTPS forced in production).
+
+## Constraints
+- **No Bootstrap**: Exclusively use TailwindCSS for styling.
+- **No CDNs**: All JS/CSS managed locally via npm.
+- **No Docker or Livewire**: Focus on native Laravel and Vue implementations.
+- **No User System Development**: Do not create or modify user-related features.
+
+## Performance Goals
+- **Concurrent Users**: System optimized for 1000+ concurrent users.
+- **Response Time**: Target sub-200ms response times for API endpoints through caching and query optimization. 

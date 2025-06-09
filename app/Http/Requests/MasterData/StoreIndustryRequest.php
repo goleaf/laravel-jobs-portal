@@ -1,69 +1,121 @@
 <?php
 
-namespace App\Http\Requests\MasterData;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for StoreIndustryRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Universal Form Request for storing Industry
+ * Implements Laravel 12 best practices with Universal MCP patterns
  */
 class StoreIndustryRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     * Universal Pattern: Authorization check
+     */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
-        );
+        return $this->user()?->can('create', industry::class) ?? true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     * Universal Pattern: Comprehensive validation rules
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:industrys,name'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'is_active' => ['boolean'],
-            'size' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'boolean'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     * Universal Pattern: Multilingual error messages
+     */
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.industry_name_required'),
-            'name.max' => __('validation.industry_name_max'),
-            'description.required' => __('validation.industry_description_required'),
-            'description.max' => __('validation.industry_description_max'),
-            'is_active.required' => __('validation.industry_is_active_required'),
-            'is_active.max' => __('validation.industry_is_active_max'),
-            'size.required' => __('validation.industry_size_required'),
-            'size.max' => __('validation.industry_size_max'),
+            'name.required' => __('validation.name_required'),
+            'name.unique' => __('validation.name_unique'),
+            'name.max' => __('validation.name_max'),
+            'status.required' => __('validation.status_required'),
+            'status.boolean' => __('validation.status_boolean'),
         ];
     }
 
+    /**
+     * Get custom attributes for validator errors.
+     * Universal Pattern: User-friendly field names
+     */
     public function attributes(): array
     {
         return [
-            'name' => __('validation.attributes.industry_name'),
-            'description' => __('validation.attributes.industry_description'),
-            'is_active' => __('validation.attributes.industry_is_active'),
-            'size' => __('validation.attributes.industry_size'),
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'status' => __('validation.attributes.status'),
+            'sort_order' => __('validation.attributes.sort_order'),
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization
+     */
     protected function prepareForValidation(): void
     {
         $this->merge([
             'name' => trim($this->name ?? ''),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'description' => trim($this->description ?? '') ?: null,
+            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
         ]);
+    }
+
+    /**
+     * Configure the validator instance.
+     * Universal Pattern: Enhanced validation logic
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Universal Pattern: Additional business logic validation
+            if ($this->hasConflictingData()) {
+                $validator->errors()->add('name', __('validation.conflicting_data'));
+            }
+        });
+    }
+
+    /**
+     * Universal Pattern: Custom business logic check
+     */
+    private function hasConflictingData(): bool
+    {
+        // Add specific business logic here
+        return false;
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     * Universal Pattern: Enhanced error handling
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        logger()->info('Store validation failed for StoreIndustryRequest', [
+            'errors' => $validator->errors()->toArray(),
+            'input' => $this->safe()->toArray(),
+            'user_id' => $this->user()?->id,
+            'ip' => $this->ip(),
+        ]);
+
+        parent::failedValidation($validator);
     }
 }

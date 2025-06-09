@@ -1,16 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Candidate;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
-/**
- * Context7 Enhanced Form Request for Candidate create
- * Implements Laravel 12 best practices with Context7 MCP patterns
- * Auto-generated for Level 4 Complex System Transformation
- */
 class CreateCandidateRequest extends FormRequest
 {
     /**
@@ -18,144 +11,93 @@ class CreateCandidateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
-            return false;
-        }
-        
-        $user = auth()->user();
-        return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
-        );
+        return true; // Anyone can register as candidate
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
      */
     public function rules(): array
     {
         return [
-            // Add specific validation rules based on method
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:1000'],
-            'is_active' => ['sometimes', 'boolean'],
-            
-            // Security validation
-            'g-recaptcha-response' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (config('app.recaptcha_enabled', false) && empty($value)) {
-                        $fail(__('validation.recaptcha_required'));
-                    }
-                },
-            ],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required', 'string', 'min:8'],
+            'phone' => ['required', 'string', 'max:20'],
+            'dob' => ['nullable', 'date', 'before:today'],
+            'gender' => ['nullable', 'in:0,1'], // 0=Male, 1=Female
+            'marital_status_id' => ['nullable', 'exists:marital_statuses,id'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'state_id' => ['nullable', 'exists:states,id'],
+            'city_id' => ['nullable', 'exists:cities,id'],
+            'career_level_id' => ['nullable', 'exists:career_levels,id'],
+            'functional_area_id' => ['nullable', 'exists:functional_areas,id'],
+            'current_salary' => ['nullable', 'numeric', 'min:0'],
+            'expected_salary' => ['nullable', 'numeric', 'min:0'],
+            'salary_currency_id' => ['nullable', 'exists:salary_currencies,id'],
+            'experience' => ['nullable', 'integer', 'min:0', 'max:50'],
+            'is_immediate_available' => ['boolean'],
+            'is_active' => ['boolean'],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'], // 5MB
         ];
     }
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
      */
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.name_required'),
-            'name.max' => __('validation.name_max'),
-            'email.email' => __('validation.email_invalid'),
-            'email.max' => __('validation.email_max'),
-            'description.max' => __('validation.description_max'),
+            'first_name.required' => __('validation_custom.candidate.first_name_required'),
+            'last_name.required' => __('validation_custom.candidate.last_name_required'),
+            'email.required' => __('validation_custom.candidate.email_required'),
+            'phone.required' => __('validation_custom.candidate.phone_required'),
+            'password.required' => __('validation_custom.user.password_required'),
+            'password.min' => __('validation_custom.user.password_min'),
+            'password.confirmed' => __('validation_custom.user.password_confirmed'),
+            'email.unique' => __('validation_custom.user.email_unique'),
+            'experience.numeric' => __('validation_custom.candidate.experience_numeric'),
+            'profile_image.image' => __('validation_custom.file.avatar_mimes'),
+            'profile_image.max' => __('validation_custom.file.avatar_max'),
+            'resume.mimes' => __('validation_custom.file.resume_mimes'),
+            'resume.max' => __('validation_custom.file.resume_max'),
+            'dob.before' => 'Date of birth must be before today.',
+            'gender.in' => 'Please select a valid gender option.',
+            'experience.max' => 'Experience cannot exceed 50 years.',
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
      */
     public function attributes(): array
     {
         return [
-            'name' => __('validation.attributes.name'),
-            'email' => __('validation.attributes.email'),
-            'description' => __('validation.attributes.description'),
-            'is_active' => __('validation.attributes.is_active'),
+            'first_name' => 'first name',
+            'last_name' => 'last name',
+            'dob' => 'date of birth',
+            'marital_status_id' => 'marital status',
+            'country_id' => 'country',
+            'state_id' => 'state',
+            'city_id' => 'city',
+            'career_level_id' => 'career level',
+            'functional_area_id' => 'functional area',
+            'salary_currency_id' => 'salary currency',
+            'profile_image' => 'profile image',
         ];
     }
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => strtolower(trim($this->email ?? '')),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'is_immediate_available' => $this->boolean('is_immediate_available', false),
+            'is_active' => $this->boolean('is_active', true),
         ]);
-    }
-
-    /**
-     * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
-            }
-        });
-    }
-
-    /**
-     * Context7 Pattern: Enhanced business logic validation
-     */
-    private function hasContext7ValidationConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Context7 Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        logger()->warning('Context7 validation failed for CreateCandidateRequest', [
-            'errors' => $validator->errors()->toArray(),
-            'controller' => 'CandidateController',
-            'method' => 'create',
-            'user_id' => $this->user()?->id,
-            'ip' => $this->ip(),
-            'user_agent' => $this->userAgent(),
-        ]);
-
-        parent::failedValidation($validator);
     }
 }

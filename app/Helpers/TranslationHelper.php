@@ -468,3 +468,121 @@ class TranslationHelper
         return $key;
     }
 }
+
+if (!function_exists('trans_json')) {
+    /**
+     * Get translation from JSON files with enhanced features
+     *
+     * @param string $key
+     * @param array $replace
+     * @param string|null $locale
+     * @return string
+     */
+    function trans_json(string $key, array $replace = [], string $locale = null): string {
+        return app('translation.service')->get($key, $replace, $locale ?? App::getLocale());
+    }
+}
+
+if (!function_exists('is_rtl')) {
+    /**
+     * Check if locale is RTL with caching
+     *
+     * @param string|null $locale
+     * @return bool
+     */
+    function is_rtl(string $locale = null): bool {
+        return app('language.helper')->isRtl($locale ?? App::getLocale());
+    }
+}
+
+if (!function_exists('lang_direction')) {
+    /**
+     * Get language direction with caching
+     *
+     * @param string|null $locale
+     * @return string
+     */
+    function lang_direction(string $locale = null): string {
+        return app('language.helper')->getDirection($locale ?? App::getLocale());
+    }
+}
+
+if (!function_exists('locale_flag')) {
+    /**
+     * Get flag emoji for locale
+     *
+     * @param string $locale
+     * @return string
+     */
+    function locale_flag(string $locale): string {
+        $flags = [
+            'en' => '🇺🇸', 'ar' => '🇸🇦', 'de' => '🇩🇪', 'es' => '🇪🇸',
+            'fr' => '🇫🇷', 'pt' => '🇵🇹', 'ru' => '🇷🇺', 'tr' => '🇹🇷', 'zh' => '🇨🇳'
+        ];
+        return $flags[$locale] ?? '🌐';
+    }
+}
+
+if (!function_exists('trans_has')) {
+    /**
+     * Check if translation key exists
+     *
+     * @param string $key
+     * @param string|null $locale
+     * @return bool
+     */
+    function trans_has(string $key, string $locale = null): bool {
+        return app('translation.service')->has($key, $locale ?? App::getLocale());
+    }
+}
+
+if (!function_exists('available_locales')) {
+    /**
+     * Get available locales
+     *
+     * @return array
+     */
+    function available_locales(): array {
+        return array_keys(config('app.available_locales', []));
+    }
+}
+
+if (!function_exists('current_locale_config')) {
+    /**
+     * Get current locale configuration
+     *
+     * @return array
+     */
+    function current_locale_config(): array {
+        $locale = App::getLocale();
+        return config("app.available_locales.{$locale}", []);
+    }
+}
+
+if (!function_exists('format_number_locale')) {
+    /**
+     * Format number according to current locale
+     *
+     * @param mixed $number
+     * @param array $options
+     * @return string
+     */
+    function format_number_locale($number, array $options = []): string {
+        $locale = $options['locale'] ?? App::getLocale();
+        $style = $options['style'] ?? 'decimal';
+        $currency = $options['currency'] ?? 'USD';
+        $minimumFractionDigits = $options['minimumFractionDigits'] ?? 0;
+        $maximumFractionDigits = $options['maximumFractionDigits'] ?? 2;
+
+        $formatter = new \NumberFormatter($locale, constant("\NumberFormatter::{$style}"));
+        if ($style === 'currency') {
+            $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 2);
+            $formatter->setTextAttribute(\NumberFormatter::CURRENCY_CODE, $currency);
+        } else {
+            $formatter->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $minimumFractionDigits);
+            $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $maximumFractionDigits);
+        }
+
+        return $formatter->format($number) ?: (string)$number;
+    }
+}

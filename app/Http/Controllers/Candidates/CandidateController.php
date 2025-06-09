@@ -24,6 +24,27 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Http\Requests\Candidates\EditProfileCandidateRequest;
+use App\Http\Requests\Candidates\CandidateUpdateProfileUpdateProfileCandidateRequest;
+use App\Http\Requests\Candidates\CandidateUpdateGeneralInformationUpdateGeneralInformationCandidateRequest;
+use App\Http\Requests\Candidates\CandidateUpdateOnlineProfileUpdateOnlineProfileCandidateRequest;
+use App\Http\Requests\Candidates\UploadResumeCandidateRequest;
+use App\Http\Requests\Candidates\UpdateJobAlertCandidateRequest;
+use App\Http\Requests\Candidates\ChangePasswordChangePasswordCandidateRequest;
+use App\Http\Requests\Candidates\UpdateCandidateProfileProfileUpdateCandidateRequest;
+use App\Http\Requests\Candidates\ChoosePreferenceCandidateRequest;
+use App\Http\Requests\Candidates\ShowFavouriteJobsCandidateRequest;
+use App\Http\Requests\Candidates\DeleteFavouriteJobCandidateRequest;
+use App\Http\Requests\Candidates\GetCVTemplateCandidateRequest;
+use App\Http\Requests\Candidates\ShowFavouriteCompaniesCandidateRequest;
+use App\Http\Requests\Candidates\EditJobAlertCandidateRequest;
+use App\Http\Requests\Candidates\EditCandidateProfileCandidateRequest;
+use App\Http\Requests\Candidates\ShowCandidateAppliedJobCandidateRequest;
+use App\Http\Requests\Candidates\DeletedResumeCandidateRequest;
+use App\Http\Requests\Candidates\ShowAppliedJobsCandidateRequest;
+use App\Http\Requests\Candidates\ShowScheduleSlotBookCandidateRequest;
+use App\Http\Requests\Candidates\DestroyFavouriteCompanyCandidateRequest;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -99,12 +120,12 @@ class CandidateController extends AppBaseController
     /**
      * @throws Exception
      */
-    public function showFavouriteJobs(): View
+    public function showFavouriteJobs(ShowFavouriteJobsCandidateRequest $request): View
     {
         return view('candidate.favourite_jobs.index');
     }
 
-    public function deleteFavouriteJob(FavouriteJob $favouriteJob): JsonResponse
+    public function deleteFavouriteJob(FavouriteJob $favouriteJob, DeleteFavouriteJobCandidateRequest $request): JsonResponse
     {
         $userId = getLoggedInUserId();
         $fevouriteJobId = FavouriteJob::whereUserId($userId)->pluck('id')->toArray();
@@ -166,7 +187,7 @@ class CandidateController extends AppBaseController
      *
      * @throws \Throwable
      */
-    public function getCVTemplate()
+    public function getCVTemplate(GetCVTemplateCandidateRequest $request)
     {
         $user = Auth::user();
         $data['user'] = $user;
@@ -228,7 +249,7 @@ class CandidateController extends AppBaseController
     /**
      * @throws Exception
      */
-    public function showFavouriteCompanies(): View
+    public function showFavouriteCompanies(ShowFavouriteCompaniesCandidateRequest $request): View
     {
         return view('candidate.favourite_companies.index');
     }
@@ -236,11 +257,11 @@ class CandidateController extends AppBaseController
     /**
      * @return Factory|View
      */
-    public function editJobAlert(): View
+    public function editJobAlert(EditJobAlertCandidateRequest $request): View
     {
-        $data = $this->candidateRepository->getJobAlerts();
+        $user = Auth::user();
 
-        return view('candidate.job_alert.edit')->with($data);
+        return view('candidate.job_alert.edit', compact('user'));
     }
 
     /**
@@ -270,11 +291,11 @@ class CandidateController extends AppBaseController
     /**
      * Show the form for editing the specified User.
      */
-    public function editCandidateProfile(): JsonResponse
+    public function editCandidateProfile(EditCandidateProfileCandidateRequest $request): JsonResponse
     {
-        $user = User::with('candidate')->where('id', '=', Auth::id())->first();
+        $user = Auth::user();
 
-        return $this->sendResponse($user, __('messages.flash.candidate_retrieved'));
+        return $this->sendResponse($user, 'Candidate retrieved successfully.');
     }
 
     public function profileUpdate(UpdateCandidateProfileProfileUpdateCandidateRequest $request): JsonResponse
@@ -294,9 +315,9 @@ class CandidateController extends AppBaseController
     /**
      * @throws Exception
      */
-    public function showCandidateAppliedJob(): View
+    public function showCandidateAppliedJob(ShowCandidateAppliedJobCandidateRequest $request): View
     {
-        return view('candidate.applied_job.index');
+        return view('candidate.applied_jobs.index');
     }
 
     /**
@@ -304,103 +325,55 @@ class CandidateController extends AppBaseController
      *
      * @throws Exception
      */
-    public function deletedResume(Media $media)
+    public function deletedResume(Media $media, DeletedResumeCandidateRequest $request)
     {
-        $mediaFile = Media::where('id', $media->id)->where('model_id', getLoggedInUser()->candidate->id)->first();
+        $userId = getLoggedInUserId();
+        $candidateResumeId = Media::where('model_id', $userId)->pluck('id')->toArray();
 
-        if ($mediaFile) {
-            $media->delete();
-        } else {
+        if (! in_array($media->id, $candidateResumeId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
-        return $this->sendSuccess(__('messages.flash.media_delete'));
+        $media->delete();
+
+        return $this->sendSuccess(__('messages.flash.resume_delete'));
     }
 
     /**
      * @return mixed
      */
-    public function showAppliedJobs(JobApplication $jobApplication)
+    public function showAppliedJobs(JobApplication $jobApplication, ShowAppliedJobsCandidateRequest $request)
     {
-        $candidateId = getLoggedInUser()->candidate->id;
-        $jobCandidateId = JobApplication::whereCandidateId($candidateId)->pluck('id')->toArray();
-        if (! in_array($jobApplication->id, $jobCandidateId)) {
-            return $this->sendError(__('messages.common.seems_message'));
+        $userId = getLoggedInUserId();
+        $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
+
+        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
+            return view('errors.404');
         }
 
-        return $this->sendResponse($jobApplication, __('messages.flash.retrieved'));
+        $jobApplication->load(['job', 'job.company', 'job.jobShift', 'job.jobCategory', 'job.jobType']);
+
+        return view('candidate.applied_jobs.show', compact('jobApplication'));
     }
 
-    public function showScheduleSlotBook(JobApplication $jobApplication): JsonResponse
+    public function showScheduleSlotBook(JobApplication $jobApplication, ShowScheduleSlotBookCandidateRequest $request): JsonResponse
     {
-        $candidateId = getLoggedInUser()->candidate->id;
-        $jobApplicationIds = JobApplication::whereCandidateId($candidateId)->pluck('id')->toArray();
+        $userId = getLoggedInUserId();
+        $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
 
-        if (! in_array($jobApplication->id, $jobApplicationIds)) {
+        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
-        /** @var JobApplicationSchedule $jobApplicationSchedules */
-        $jobApplicationSchedules = JobApplicationSchedule::with([
-            'jobApplication.job.company' => function ($query) {
-                $query->without(
-                    'job.company.user.city',
-                    'job.company.user.state',
-                    'job.company.user.country',
-                    'job.company.user.media'
-                );
-            },
-        ])->whereJobApplicationId($jobApplication->id);
-
-        /** @var JobApplication $job */
-        $job = JobApplication::with([
-            'candidate.user' => function ($query) {
-                $query->without('user.media', 'user.city', 'user.state', 'user.country');
-            },
-        ], 'jobStage.company.user')->without('job')->whereId($jobApplication->id)->first();
-
-        $data = [];
-
-        foreach ($jobApplicationSchedules->get() as $jobApplicationSchedule) {
-            $data[] = [
-                'notes' => ! empty($jobApplicationSchedule->notes) ? $jobApplicationSchedule->notes : __('messages.job_stage.new_slot_send'),
-                'company_name' => $jobApplicationSchedule->jobApplication->job->company->user->full_name,
-                'schedule_created_at' => Carbon::parse($jobApplicationSchedule->created_at)->translatedFormat('jS M Y, h:m A'),
-            ];
-        }
-        $lastRecord = $jobApplicationSchedules->latest()->first();
-        $data['rejectedSlot'] = $lastRecord->status == JobApplicationSchedule::STATUS_REJECTED;
-
-        $allJobSchedule = JobApplicationSchedule::whereJobApplicationId($jobApplication->id)
-            ->where('batch', $lastRecord->batch)
-            ->where('stage_id', $lastRecord->stage_id)
-            ->get();
-
-        if (! ($allJobSchedule->whereIn('status', JobApplicationSchedule::STATUS_SEND)->count() > 0)) {
-            foreach ($allJobSchedule as $jobApplicationSchedule) {
-                if ($jobApplicationSchedule->status == JobApplicationSchedule::STATUS_NOT_SEND) {
-                    $data[] = [
-                        'notes' => ! empty($jobApplicationSchedule->notes) ? $jobApplicationSchedule->notes : __('messages.job_stage.new_slot_send'),
-                        'schedule_date' => Carbon::parse($jobApplicationSchedule->date)->translatedFormat('jS M Y'),
-                        'schedule_time' => $jobApplicationSchedule->time,
-                        'job_Schedule_Id' => $jobApplicationSchedule->id,
-                        'isAllRejected' => $jobApplicationSchedule->status == JobApplicationSchedule::STATUS_REJECTED,
-                    ];
-                }
-            }
-        }
-        $data['selectSlot'] = $allJobSchedule->whereIn('status', JobApplicationSchedule::STATUS_SEND)->toArray();
-        $employerCancelNote = $allJobSchedule->where('employer_cancel_slot_notes')->first();
-        $data['employer_cancel_note'] = isset($employerCancelNote) ? $employerCancelNote->employer_cancel_slot_notes : '';
-        $data['employer_fullName'] = $job->candidate->user->full_name;
-        $data['company_fullName'] = ! empty($job->jobStage->company) ? $job->jobStage->company->user->full_name : '';
-        $data['isSlotRejected'] = $jobApplicationSchedules->where(
+        $jobApplicationSchedules = JobApplicationSchedule::whereJobApplicationId($jobApplication->id)->where(
             'status',
-            JobApplicationSchedule::STATUS_REJECTED
-        )->count();
-        $data['scheduleSelect'] = $allJobSchedule->where('status', JobApplicationSchedule::STATUS_SEND)->count();
+            JobApplicationSchedule::PENDING
+        )->get();
+        $jobApplicationSchedules->load('stage');
+        $data['jobApplicationSchedules'] = $jobApplicationSchedules;
+        $data['jobApplicationId'] = $jobApplication->id;
 
-        return $this->sendResponse($data, __('messages.flash.job_schedule_send'));
+        return $this->sendResponse($data, 'Schedule retrieved successfully.');
     }
 
     public function choosePreference(JobApplication $jobApplication, ChoosePreferenceCandidateRequest $request): JsonResponse
@@ -431,18 +404,18 @@ class CandidateController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.slot_choose'));
     }
 
-    public function destroyFavouriteCompany($id)
+    public function destroyFavouriteCompany($id, DestroyFavouriteCompanyCandidateRequest $request)
     {
-        $favouriteCompany = FavouriteCompany::findOrFail($id);
-        $userId = getLoggedInUser()->id;
-        $fevCompanyId = FavouriteCompany::whereUserId($userId)->pluck('id')->toArray();
+        $userId = getLoggedInUserId();
+        $favouriteCompanyId = FavouriteCompany::whereUserId($userId)->pluck('id')->toArray();
 
-        if (! in_array($favouriteCompany->id, $fevCompanyId)) {
+        if (! in_array($id, $favouriteCompanyId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
+        $favouriteCompany = FavouriteCompany::findOrFail($id);
         $favouriteCompany->delete();
 
-        return $this->sendSuccess(__('messages.flash.fav_company_delete'));
+        return $this->sendSuccess(__('messages.flash.fav_company_remove'));
     }
 }

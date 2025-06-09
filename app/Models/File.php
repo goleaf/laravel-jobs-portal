@@ -6,43 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class File extends Model
-{
-    use HasFactory;
-
+
     /**
-     * The attributes that are mass assignable.
+     * Scope a query to only include old records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected $fillable = [
-        'model_type',
-        'model_id',
-        'collection_name',
-        'name',
-        'file_name',
-        'mime_type',
-        'disk',
-        'path',
-        'size',
-        'order_column',
-        'custom_properties',
-        'responsive_images',
-        'created_at',
-        'updated_at',
-    ];
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("created_at", "asc");
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'custom_properties' => 'array',
-        'responsive_images' => 'array',
-        'size' => 'integer',
-        'order_column' => 'integer',
-    ];
+
+
 
     /**
      * Get the URL of the file.
@@ -83,3 +60,49 @@ class File extends Model
         return round($bytes, 2).' '.$units[$i];
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope a query to only include recent records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', \Carbon\Carbon::now()->subDays($days));
+    }
+
+    /**
+     * Scope a query to search records by name or relevant fields.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%');
+    }

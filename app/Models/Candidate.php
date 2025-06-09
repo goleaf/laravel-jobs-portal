@@ -171,9 +171,10 @@ class Candidate extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+
             'id' => 'integer',
             'user_id' => 'integer',
             'country_id' => 'integer',
@@ -198,8 +199,10 @@ class Candidate extends Model
             'is_immediate_available' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Validation rules with multilingual support

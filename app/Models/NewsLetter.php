@@ -23,31 +23,20 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class NewsLetter extends Model
-{
-    use HasFactory;
-    public $table = 'news_letters';
-
-    public $fillable = [
-        'email',
-    ];
-
+
     /**
-     * The attributes that should be casted to native types.
+     * Scope a query to only include popular records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected $casts = [
-        'id' => 'integer',
-        'email' => 'string',
-        'name' => 'string',
-        'is_active' => 'boolean',
-        'is_verified' => 'boolean',
-        'subscribed_at' => 'datetime',
-        'unsubscribed_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("views_count", "desc");
+    }
+
+
+
 
     /**
      * Validation rules

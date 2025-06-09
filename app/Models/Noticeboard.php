@@ -29,48 +29,20 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Noticeboard whereIsActive($value)
  */
-class Noticeboard extends Model
-{
-    use HasFactory;
-    const STATUS = [
-        1 => 'Active',
-        0 => 'Deactive',
-    ];
-
+
     /**
-     * Validation rules
+     * Scope a query to only include popular records.
      *
-     * @var array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static $rules = [
-        'title' => 'required',
-    ];
+    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("views_count", "desc");
+    }
 
-    public $table = 'noticeboards';
+
 
-    public $fillable = [
-        'title',
-        'description',
-        'is_active',
-    ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'title' => 'string',
-        'description' => 'string',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_urgent' => 'boolean',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
 
     /**
      * Scope for active notices.

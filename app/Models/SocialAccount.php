@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * Class SocialAccount
@@ -28,30 +29,68 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class SocialAccount extends Model
-{
-    use HasFactory;
-    const GOOGLE_PROVIDER = 'google';
+
+    /**
+     * Scope a query to only include old records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy("created_at", "asc");
+    }
 
-    const FACEBOOK_PROVIDER = 'facebook';
+
 
-    const LINKEDIN_PROVIDER = 'linkedin';
 
-    const SOCIAL_PROVIDERS = [
-        self::GOOGLE_PROVIDER,
-        self::FACEBOOK_PROVIDER,
-        self::LINKEDIN_PROVIDER,
-    ];
+    /**
+     * Scope a query to only include accounts of a specific provider.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $provider
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByProvider($query, $provider)
+    {
+        return $query->where('provider', $provider);
+    }
 
-    protected $table = 'social_accounts';
+    /**
+     * Scope a query to only include accounts linked to a specific user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $userId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
 
-    protected $fillable = [
-        'provider',
-        'identifier',
-        'device_id',
-        'token',
-        'token_secret',
-    ];
+    /**
+     * Scope a query to order accounts by creation date.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $direction
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrderByCreated($query, $direction = 'desc')
+    {
+        return $query->orderBy('created_at', $direction);
+    }
+
+    /**
+     * Scope a query to only include recent accounts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRecent($query, int $days = 30)
+    {
+        return $query->where('created_at', '>=', Carbon::now()->subDays($days));
+    }
 
     public static function facebookFields()
     {
@@ -70,3 +109,37 @@ class SocialAccount extends Model
         ];
     }
 }
+
+    /**
+     * Scope a query to only include active records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope a query to search records by name or relevant fields.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%');
+    }

@@ -54,16 +54,20 @@ class OwnerShipType extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+        protected function casts(): array
     {
         return [
+            'is_featured' => 'boolean',
+
             'id' => 'integer',
             'is_default' => 'boolean',
             'is_active' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        
         ];
     }
+
 
     /**
      * Get companies that use this ownership type.

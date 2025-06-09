@@ -28,44 +28,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class Country extends Model
-{
-    use HasFactory;
-    protected $table = 'countries';
-
-    protected $fillable = [
-        'short_code',
-        'name',
-        'phone_code',
-    ];
-
-    public static $rules = [
-        'name' => 'required|max:180|unique:countries,name',
-        'short_code' => 'required|unique:countries,short_code',
-        'phone_code' => 'nullable|numeric|unique:countries,phone_code',
-    ];
-
+
     /**
-     * Get the attributes that should be cast.
+     * Scope a query to only include featured records.
      *
-     * @return array<string, string>
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function casts(): array
+    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            'id' => 'integer',
-            'name' => 'string',
-            'code' => 'string',
-            'iso_code' => 'string',
-            'phone_code' => 'string',
-            'currency' => 'string',
-            'currency_symbol' => 'string',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
+        return $query->where("is_featured", true);
     }
+
+
+
 
     public function users(): HasMany
     {

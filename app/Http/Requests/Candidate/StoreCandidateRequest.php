@@ -1,15 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Candidate;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\NoMaliciousContent;
+use Illuminate\Validation\Rule;
 
-/**
- * Request validation for CandidateController::store
- * 
- * @enhanced by RequestValidationImprover
- */
 class StoreCandidateRequest extends FormRequest
 {
     /**
@@ -17,7 +12,7 @@ class StoreCandidateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // TODO: Implement proper authorization logic based on user permissions
+        return true;
     }
 
     /**
@@ -28,20 +23,15 @@ class StoreCandidateRequest extends FormRequest
     public function rules(): array
     {
         return [
-    "user.first_name" => "required|string|max:255",
-    "user.last_name" => "required|string|max:255",
-    "user.email" => "required|email|unique:users,email",
-    "user.password" => "required|string|min:8|confirmed",
-    "user.phone" => "nullable|string|max:20",
-    "user.dob" => "nullable|date|before:today",
-    "marital_status_id" => "nullable|exists:marital_statuses,id",
-    "nationality" => "nullable|string|max:100",
-    "country_id" => "nullable|exists:countries,id",
-    "state_id" => "nullable|exists:states,id",
-    "city_id" => "nullable|exists:cities,id",
-    "is_active" => "boolean",
-    "is_verified" => "boolean"
-];
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'nullable|string|max:20',
+            'password' => 'required|string|min:8|confirmed',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
+            'address' => 'nullable|string',
+        ];
     }
 
     /**
@@ -52,14 +42,23 @@ class StoreCandidateRequest extends FormRequest
     public function messages(): array
     {
         return [
-    "user.first_name.required" => "First name is required",
-    "user.last_name.required" => "Last name is required",
-    "user.email.required" => "Email is required",
-    "user.email.unique" => "Email already exists",
-    "user.password.required" => "Password is required",
-    "user.password.min" => "Password must be at least 8 characters",
-    "user.password.confirmed" => "Password confirmation does not match"
-];
+            'required' => 'The :attribute field is required.',
+            'email' => 'Please enter a valid email address.',
+            'unique' => 'This :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'max' => 'The :attribute may not be greater than :max characters.',
+            'confirmed' => 'The :attribute confirmation does not match.',
+            'exists' => 'The selected :attribute is invalid.',
+            'image' => 'The :attribute must be an image.',
+            'mimes' => 'The :attribute must be a file of type: :values.',
+            'numeric' => 'The :attribute must be a number.',
+            'date' => 'The :attribute is not a valid date.',
+            'after' => 'The :attribute must be a date after :date.',
+            'url' => 'The :attribute format is invalid.',
+            'boolean' => 'The :attribute field must be true or false.',
+            'array' => 'The :attribute must be an array.',
+            'accepted' => 'The :attribute must be accepted.',
+        ];
     }
 
     /**
@@ -70,15 +69,14 @@ class StoreCandidateRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'user.first_name' => 'first name',
-            'user.last_name' => 'last name',
-            'user.email' => 'email address',
-            'user.phone' => 'phone number',
-            'job_title' => 'job title',
-            'job_description' => 'job description',
-            'job_expiry_date' => 'job expiry date',
-            'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary'
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'password' => 'Password',
+            'date_of_birth' => 'Date Of Birth',
+            'gender' => 'Gender',
+            'address' => 'Address',
         ];
     }
 
@@ -87,45 +85,20 @@ class StoreCandidateRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Sanitize input data
-        if ($this->has('job_title')) {
-            $this->merge([
-                'job_title' => strip_tags($this->job_title)
-            ]);
-        }
-        
-        if ($this->has('job_description')) {
-            $this->merge([
-                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
-            ]);
-        }
+        // Add any data preparation logic here
+        // Example: Convert empty strings to null
+        $this->merge([
+            // Add any automatic data transformations
+        ]);
     }
 
     /**
      * Configure the validator instance.
-     *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
      */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            // Add custom validation logic here
-            if ($this->has('salary_from') && $this->has('salary_to')) {
-                if ($this->salary_from > $this->salary_to) {
-                    $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
-                }
-            }
-            
-            // Check for malicious content in text fields
-            foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
-                if ($this->has($field) && $this->{$field}) {
-                    $rule = new NoMaliciousContent();
-                    if (!$rule->passes($field, $this->{$field})) {
-                        $validator->errors()->add($field, $rule->message());
-                    }
-                }
-            }
+            // Add any custom validation logic here
         });
     }
 }

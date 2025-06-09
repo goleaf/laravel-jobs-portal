@@ -245,9 +245,26 @@ class User extends Authenticatable implements HasMedia
             'phone' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'dob' => 'date',
+            'gender' => 'integer',
             'is_active' => 'boolean',
             'is_verified' => 'boolean',
             'is_featured' => 'boolean',
+            'is_default' => 'boolean',
+            'profile_views' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'owner_id' => 'integer',
+            'owner_type' => 'string',
+            'language' => 'string',
+            'region_code' => 'string',
+            'facebook_url' => 'string',
+            'twitter_url' => 'string',
+            'linkedin_url' => 'string',
+            'google_plus_url' => 'string',
+            'pinterest_url' => 'string',
+            'stripe_id' => 'string',
             'last_login_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'created_at' => 'datetime',
@@ -646,6 +663,93 @@ class User extends Authenticatable implements HasMedia
         return $query->whereDoesntHave('subscriptions', function ($q) {
             $q->where('status', 'active')
               ->where('expires_at', '>', now());
+        });
+    }
+
+    /**
+     * Scope for users by gender.
+     */
+    public function scopeByGender($query, int $gender)
+    {
+        return $query->where('gender', $gender);
+    }
+
+    /**
+     * Scope for users by language.
+     */
+    public function scopeByLanguage($query, string $language)
+    {
+        return $query->where('language', $language);
+    }
+
+    /**
+     * Scope for users with high profile views.
+     */
+    public function scopePopular($query, int $minViews = 100)
+    {
+        return $query->where('profile_views', '>=', $minViews);
+    }
+
+    /**
+     * Scope for users with social media profiles.
+     */
+    public function scopeWithSocialMedia($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNotNull('facebook_url')
+              ->orWhereNotNull('twitter_url')
+              ->orWhereNotNull('linkedin_url')
+              ->orWhereNotNull('google_plus_url')
+              ->orWhereNotNull('pinterest_url');
+        });
+    }
+
+    /**
+     * Scope for users without social media profiles.
+     */
+    public function scopeWithoutSocialMedia($query)
+    {
+        return $query->whereNull('facebook_url')
+                    ->whereNull('twitter_url')
+                    ->whereNull('linkedin_url')
+                    ->whereNull('google_plus_url')
+                    ->whereNull('pinterest_url');
+    }
+
+    /**
+     * Scope for users with complete profiles.
+     */
+    public function scopeCompleteProfile($query)
+    {
+        return $query->whereNotNull('first_name')
+                    ->whereNotNull('last_name')
+                    ->whereNotNull('email')
+                    ->whereNotNull('phone')
+                    ->where(function ($q) {
+                        $q->whereHas('candidate', function ($candidate) {
+                            $candidate->whereNotNull('functional_area_id')
+                                    ->whereNotNull('career_level_id');
+                        })->orWhereHas('company', function ($company) {
+                            $company->whereNotNull('industry_id')
+                                  ->whereNotNull('company_size_id');
+                        });
+                    });
+    }
+
+    /**
+     * Scope for users with incomplete profiles.
+     */
+    public function scopeIncompleteProfile($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('first_name')
+              ->orWhereNull('last_name')
+              ->orWhereNull('email')
+              ->orWhereNull('phone')
+              ->orWhere(function ($subQ) {
+                  $subQ->whereDoesntHave('candidate')
+                       ->whereDoesntHave('company');
+              });
         });
     }
 

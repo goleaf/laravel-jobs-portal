@@ -14,6 +14,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 /**
  * Class Company
@@ -101,9 +106,9 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin Eloquent
  */
-class Company extends Model
+class Company extends Model implements HasMedia
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes, InteractsWithMedia, HasSlug;
     
     public $table = 'companies';
 
@@ -140,24 +145,22 @@ class Company extends Model
     ];
 
     public $fillable = [
-        'ceo',
-        'industry_id',
-        'ownership_type_id',
-        'company_size_id',
-        'established_in',
-        'details',
-        'website',
-        'location',
-        'location2',
-        'no_of_offices',
-        'fax',
-        'user_id',
-        'unique_id',
-        'last_change',
-        'logo_path',
-        'is_active',
-        'is_featured',
+        'user_id', 'name', 'slug', 'email', 'phone', 'website',
+        'description', 'short_description', 'founded_year', 'employee_count',
+        'industry_id', 'company_size_id', 'ownership_type_id',
+        'country_id', 'state_id', 'city_id', 'address', 'postal_code',
+        'latitude', 'longitude', 'is_active', 'is_featured', 'is_verified',
+        'is_private', 'logo', 'cover_image', 'social_facebook',
+        'social_twitter', 'social_linkedin', 'social_instagram',
+        'social_youtube', 'social_github', 'culture_description',
+        'benefits', 'technologies', 'certifications', 'awards',
+        'office_locations', 'working_hours', 'dress_code',
+        'company_type', 'revenue', 'market_cap', 'stock_symbol',
+        'headquarters', 'ceo_name', 'mission_statement', 'vision_statement',
+        'values', 'company_culture', 'diversity_policy'
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * Get the attributes that should be cast.
@@ -167,31 +170,23 @@ class Company extends Model
     protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'industry_id' => 'integer',
-            'ownership_type_id' => 'integer',
-            'company_size_id' => 'integer',
-            'country_id' => 'integer',
-            'state_id' => 'integer',
-            'city_id' => 'integer',
-            'name' => 'string',
-            'email' => 'string',
-            'phone' => 'string',
-            'website' => 'string',
-            'description' => 'string',
-            'established_in' => 'integer',
-            'no_of_offices' => 'integer',
+            'founded_year' => 'integer',
+            'employee_count' => 'integer',
             'is_active' => 'boolean',
-            'is_verified' => 'boolean',
             'is_featured' => 'boolean',
-            'facebook_url' => 'string',
-            'twitter_url' => 'string',
-            'linkedin_url' => 'string',
-            'google_plus_url' => 'string',
-            'pinterest_url' => 'string',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'is_verified' => 'boolean',
+            'is_private' => 'boolean',
+            'latitude' => 'decimal:6',
+            'longitude' => 'decimal:6',
+            'benefits' => 'array',
+            'technologies' => 'array',
+            'certifications' => 'array',
+            'awards' => 'array',
+            'office_locations' => 'array',
+            'working_hours' => 'array',
+            'values' => 'array',
+            'revenue' => 'decimal:2',
+            'market_cap' => 'decimal:2',
         ];
     }
 
@@ -259,7 +254,7 @@ class Company extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['ceo', 'industry_id', 'company_size_id', 'is_active', 'is_featured'])
+            ->logFillable()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
@@ -633,5 +628,144 @@ class Company extends Model
                 'company_age' => now()->year - $this->established_in,
             ];
         });
+    }
+
+    // Slug configuration
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
+    }
+
+    // Accessors
+    public function getLogoUrlAttribute()
+    {
+        if ($this->logo) {
+            return asset('storage/' . $this->logo);
+        }
+        return $this->getFirstMediaUrl('logo') ?: null;
+    }
+
+    public function getCoverImageUrlAttribute()
+    {
+        if ($this->cover_image) {
+            return asset('storage/' . $this->cover_image);
+        }
+        return $this->getFirstMediaUrl('cover') ?: null;
+    }
+
+    public function getCompanyAgeAttribute()
+    {
+        return $this->founded_year ? now()->year - $this->founded_year : null;
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        return $this->reviews()->count();
+    }
+
+    public function getFollowersCountAttribute()
+    {
+        return $this->followers()->count();
+    }
+
+    public function getActiveJobsCountAttribute()
+    {
+        return $this->activeJobs()->count();
+    }
+
+    public function getSizeCategoryAttribute()
+    {
+        if ($this->employee_count <= 10) return __('company.size.startup');
+        if ($this->employee_count <= 50) return __('company.size.small');
+        if ($this->employee_count <= 500) return __('company.size.medium');
+        return __('company.size.large');
+    }
+
+    public function getEstablishmentCategoryAttribute()
+    {
+        $age = $this->company_age;
+        if (!$age) return __('company.establishment.unknown');
+        if ($age <= 5) return __('company.establishment.startup');
+        if ($age <= 10) return __('company.establishment.growing');
+        if ($age <= 25) return __('company.establishment.established');
+        return __('company.establishment.legacy');
+    }
+
+    public function getLocationStringAttribute()
+    {
+        $parts = array_filter([
+            $this->city?->name,
+            $this->state?->name,
+            $this->country?->name
+        ]);
+        return implode(', ', $parts);
+    }
+
+    public function getSocialLinksAttribute()
+    {
+        return array_filter([
+            'facebook' => $this->social_facebook,
+            'twitter' => $this->social_twitter,
+            'linkedin' => $this->social_linkedin,
+            'instagram' => $this->social_instagram,
+            'youtube' => $this->social_youtube,
+            'github' => $this->social_github,
+        ]);
+    }
+
+    // Business Logic Methods
+    public function isActivelyHiring()
+    {
+        return $this->activeJobs()->count() > 0;
+    }
+
+    public function hasRecentActivity($days = 30)
+    {
+        return $this->jobs()
+            ->where('created_at', '>=', now()->subDays($days))
+            ->exists();
+    }
+
+    public function canPostJobs()
+    {
+        return $this->is_active && $this->is_verified;
+    }
+
+    public function getTotalApplications()
+    {
+        return $this->jobs()
+            ->withCount('applications')
+            ->get()
+            ->sum('applications_count');
+    }
+
+    public function getHiringStats()
+    {
+        return [
+            'total_jobs' => $this->jobs()->count(),
+            'active_jobs' => $this->activeJobs()->count(),
+            'total_applications' => $this->getTotalApplications(),
+            'avg_applications_per_job' => $this->jobs()->count() > 0 
+                ? round($this->getTotalApplications() / $this->jobs()->count(), 2) 
+                : 0,
+        ];
+    }
+
+    public function calculateEngagementScore()
+    {
+        $followers = $this->followers()->count();
+        $jobs = $this->jobs()->count();
+        $reviews = $this->reviews()->count();
+        $avgRating = $this->average_rating;
+        
+        return min(100, ($followers * 0.3) + ($jobs * 0.4) + ($reviews * 0.2) + ($avgRating * 10 * 0.1));
     }
 }

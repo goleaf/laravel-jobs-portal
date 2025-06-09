@@ -1,511 +1,491 @@
 <template>
-  <div class="bg-white shadow-sm rounded-lg">
+  <div class="company-management">
     <!-- Header Section -->
-    <div class="px-6 py-4 border-b border-gray-200">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+      <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-semibold text-gray-900">{{ $t('admin.companies.management_title') }}</h2>
-          <p class="mt-1 text-sm text-gray-600">{{ $t('admin.companies.management_description') }}</p>
+          <h1 class="text-2xl font-bold text-gray-900">
+            {{ $t('admin.company_management.title') }}
+          </h1>
+          <p class="mt-1 text-sm text-gray-600">
+            {{ $t('admin.company_management.subtitle') }}
+          </p>
         </div>
-        <div class="mt-4 sm:mt-0 flex space-x-3">
+        <div class="flex items-center space-x-3">
           <button
             @click="exportCompanies"
-            :disabled="isLoading"
+            :disabled="loading"
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
-            <DocumentArrowDownIcon class="h-4 w-4 mr-2" />
-            {{ $t('admin.companies.export') }}
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {{ $t('common.export') }}
           </button>
           <button
-            @click="openCreateModal"
+            @click="showCreateModal = true"
             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            <PlusIcon class="h-4 w-4 mr-2" />
-            {{ $t('admin.companies.create_company') }}
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            {{ $t('admin.company_management.add_company') }}
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Statistics Cards -->
-    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded-lg shadow-sm">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <BuildingOfficeIcon class="h-8 w-8 text-blue-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">{{ $t('admin.companies.total_companies') }}</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ statistics.total || 0 }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white p-4 rounded-lg shadow-sm">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <CheckCircleIcon class="h-8 w-8 text-green-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">{{ $t('admin.companies.active_companies') }}</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ statistics.active || 0 }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white p-4 rounded-lg shadow-sm">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <StarIcon class="h-8 w-8 text-yellow-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">{{ $t('admin.companies.featured_companies') }}</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ statistics.featured || 0 }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white p-4 rounded-lg shadow-sm">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <BriefcaseIcon class="h-8 w-8 text-purple-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">{{ $t('admin.companies.with_active_jobs') }}</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ statistics.withActiveJobs || 0 }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters and Search -->
-    <div class="px-6 py-4 border-b border-gray-200">
+    <!-- Filters Section -->
+    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Search -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.search') }}
+          </label>
+          <div class="relative">
+            <input
+              v-model="filters.search"
+              @input="debouncedSearch"
+              type="text"
+              :placeholder="$t('admin.company_management.search_placeholder')"
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
           </div>
-          <input
-            v-model="filters.search"
-            @input="debounceSearch"
-            type="text"
-            :placeholder="$t('admin.companies.search_placeholder')"
-            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          />
+        </div>
+
+        <!-- Status Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.status') }}
+          </label>
+          <select
+            v-model="filters.status"
+            @change="applyFilters"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.all_statuses') }}</option>
+            <option value="active">{{ $t('common.active') }}</option>
+            <option value="inactive">{{ $t('common.inactive') }}</option>
+            <option value="featured">{{ $t('common.featured') }}</option>
+            <option value="verified">{{ $t('common.verified') }}</option>
+          </select>
         </div>
 
         <!-- Industry Filter -->
-        <select
-          v-model="filters.industry_id"
-          @change="applyFilters"
-          class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="">{{ $t('admin.companies.all_industries') }}</option>
-          <option 
-            v-for="industry in industries" 
-            :key="industry.id" 
-            :value="industry.id"
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.industry') }}
+          </label>
+          <select
+            v-model="filters.industry_id"
+            @change="applyFilters"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
-            {{ industry.name }}
-          </option>
-        </select>
+            <option value="">{{ $t('common.all_industries') }}</option>
+            <option
+              v-for="industry in industries"
+              :key="industry.id"
+              :value="industry.id"
+            >
+              {{ industry.name }}
+            </option>
+          </select>
+        </div>
 
-        <!-- Company Size Filter -->
-        <select
-          v-model="filters.company_size_id"
-          @change="applyFilters"
-          class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="">{{ $t('admin.companies.all_sizes') }}</option>
-          <option 
-            v-for="size in companySizes" 
-            :key="size.id" 
-            :value="size.id"
+        <!-- Location Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.location') }}
+          </label>
+          <select
+            v-model="filters.country_id"
+            @change="applyFilters"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
-            {{ size.size }}
-          </option>
-        </select>
-
-        <!-- Status Filter -->
-        <select
-          v-model="filters.status"
-          @change="applyFilters"
-          class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="">{{ $t('admin.companies.all_statuses') }}</option>
-          <option value="active">{{ $t('admin.companies.active') }}</option>
-          <option value="inactive">{{ $t('admin.companies.inactive') }}</option>
-          <option value="featured">{{ $t('admin.companies.featured') }}</option>
-          <option value="verified">{{ $t('admin.companies.verified') }}</option>
-        </select>
+            <option value="">{{ $t('common.all_countries') }}</option>
+            <option
+              v-for="country in countries"
+              :key="country.id"
+              :value="country.id"
+            >
+              {{ country.name }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <!-- Advanced Filters Toggle -->
       <div class="mt-4">
         <button
           @click="showAdvancedFilters = !showAdvancedFilters"
-          class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-900"
+          class="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
         >
-          <AdjustmentsHorizontalIcon class="h-4 w-4 mr-1" />
-          {{ $t('admin.companies.advanced_filters') }}
-          <ChevronDownIcon :class="['h-4 w-4 ml-1 transition-transform', { 'rotate-180': showAdvancedFilters }]" />
+          {{ showAdvancedFilters ? $t('common.hide_advanced_filters') : $t('common.show_advanced_filters') }}
+          <svg
+            :class="{ 'rotate-180': showAdvancedFilters }"
+            class="inline-block w-4 h-4 ml-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
       </div>
 
-      <!-- Advanced Filters Panel -->
-      <div v-if="showAdvancedFilters" class="mt-4 p-4 bg-gray-50 rounded-lg">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Date Range -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              {{ $t('admin.companies.created_date_range') }}
-            </label>
-            <div class="grid grid-cols-2 gap-2">
-              <input
-                v-model="filters.created_after"
-                type="date"
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              <input
-                v-model="filters.created_before"
-                type="date"
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-          </div>
-
-          <!-- Location Filter -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              {{ $t('admin.companies.location') }}
-            </label>
-            <select
-              v-model="filters.country_id"
-              @change="applyFilters"
-              class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+      <!-- Advanced Filters -->
+      <div v-if="showAdvancedFilters" class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.company_size') }}
+          </label>
+          <select
+            v-model="filters.company_size_id"
+            @change="applyFilters"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.all_sizes') }}</option>
+            <option
+              v-for="size in companySizes"
+              :key="size.id"
+              :value="size.id"
             >
-              <option value="">{{ $t('admin.companies.all_countries') }}</option>
-              <option 
-                v-for="country in countries" 
-                :key="country.id" 
-                :value="country.id"
-              >
-                {{ country.name }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Employee Count Range -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              {{ $t('admin.companies.employee_count_range') }}
-            </label>
-            <div class="grid grid-cols-2 gap-2">
-              <input
-                v-model.number="filters.min_employees"
-                type="number"
-                min="0"
-                :placeholder="$t('admin.companies.min_employees')"
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              <input
-                v-model.number="filters.max_employees"
-                type="number"
-                min="0"
-                :placeholder="$t('admin.companies.max_employees')"
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-          </div>
+              {{ size.size }}
+            </option>
+          </select>
         </div>
 
-        <!-- Filter Actions -->
-        <div class="mt-4 flex justify-end space-x-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.established_year') }}
+          </label>
+          <input
+            v-model="filters.established_from"
+            @change="applyFilters"
+            type="number"
+            :placeholder="$t('common.from_year')"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.jobs_count') }}
+          </label>
+          <select
+            v-model="filters.jobs_count_range"
+            @change="applyFilters"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="">{{ $t('common.any_count') }}</option>
+            <option value="0">{{ $t('common.no_jobs') }}</option>
+            <option value="1-5">1-5 {{ $t('common.jobs') }}</option>
+            <option value="6-20">6-20 {{ $t('common.jobs') }}</option>
+            <option value="21+">21+ {{ $t('common.jobs') }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('common.created_date') }}
+          </label>
+          <input
+            v-model="filters.created_from"
+            @change="applyFilters"
+            type="date"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <div class="flex items-end">
           <button
             @click="clearFilters"
-            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {{ $t('admin.companies.clear_filters') }}
-          </button>
-          <button
-            @click="applyFilters"
-            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {{ $t('admin.companies.apply_filters') }}
+            {{ $t('common.clear_filters') }}
           </button>
         </div>
       </div>
     </div>
 
     <!-- Bulk Actions -->
-    <div v-if="selectedCompanies.length > 0" class="px-6 py-3 bg-indigo-50 border-b border-gray-200">
+    <div v-if="selectedCompanies.length > 0" class="bg-indigo-50 px-6 py-3 border-b border-indigo-200">
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <span class="text-sm text-indigo-700">
-            {{ $t('admin.companies.selected_count', { count: selectedCompanies.length }) }}
+          <span class="text-sm font-medium text-indigo-700">
+            {{ $t('common.selected_count', { count: selectedCompanies.length }) }}
           </span>
         </div>
-        <div class="flex space-x-2">
+        <div class="flex items-center space-x-2">
           <button
             @click="bulkAction('activate')"
-            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200"
+            :disabled="bulkActionLoading"
+            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
           >
-            {{ $t('admin.companies.bulk_activate') }}
+            {{ $t('common.activate') }}
           </button>
           <button
             @click="bulkAction('deactivate')"
-            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200"
+            :disabled="bulkActionLoading"
+            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
           >
-            {{ $t('admin.companies.bulk_deactivate') }}
+            {{ $t('common.deactivate') }}
           </button>
           <button
             @click="bulkAction('feature')"
-            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200"
+            :disabled="bulkActionLoading"
+            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 disabled:opacity-50"
           >
-            {{ $t('admin.companies.bulk_feature') }}
+            {{ $t('common.feature') }}
           </button>
           <button
-            @click="bulkAction('delete')"
-            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200"
+            @click="bulkAction('verify')"
+            :disabled="bulkActionLoading"
+            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
           >
-            {{ $t('admin.companies.bulk_delete') }}
+            {{ $t('common.verify') }}
+          </button>
+          <button
+            @click="clearSelection"
+            class="inline-flex items-center px-3 py-1 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {{ $t('common.clear_selection') }}
           </button>
         </div>
       </div>
     </div>
 
     <!-- Companies Table -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <input
-                type="checkbox"
-                @change="toggleAllCompanies"
-                :checked="allCompaniesSelected"
-                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button @click="sortBy('name')" class="flex items-center space-x-1 hover:text-gray-700">
-                <span>{{ $t('admin.companies.company_name') }}</span>
-                <ChevronUpDownIcon class="h-4 w-4" />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {{ $t('admin.companies.industry') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {{ $t('admin.companies.location') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button @click="sortBy('jobs_count')" class="flex items-center space-x-1 hover:text-gray-700">
-                <span>{{ $t('admin.companies.jobs_count') }}</span>
-                <ChevronUpDownIcon class="h-4 w-4" />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {{ $t('admin.companies.status') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button @click="sortBy('created_at')" class="flex items-center space-x-1 hover:text-gray-700">
-                <span>{{ $t('admin.companies.created_at') }}</span>
-                <ChevronUpDownIcon class="h-4 w-4" />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              {{ $t('admin.companies.actions') }}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-if="isLoading" v-for="n in 5" :key="`loading-${n}`" class="animate-pulse">
-            <td class="px-6 py-4">
-              <div class="h-4 w-4 bg-gray-200 rounded"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-4 bg-gray-200 rounded w-2/3"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-4 bg-gray-200 rounded w-1/4"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-6 bg-gray-200 rounded w-20"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-4 bg-gray-200 rounded w-1/3"></div>
-            </td>
-            <td class="px-6 py-4">
-              <div class="h-8 bg-gray-200 rounded w-24"></div>
-            </td>
-          </tr>
+    <div class="bg-white shadow overflow-hidden">
+      <div v-if="loading" class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <span class="ml-2 text-gray-600">{{ $t('common.loading') }}</span>
+      </div>
 
-          <tr v-else-if="companies.length === 0">
-            <td colspan="8" class="px-6 py-12 text-center">
-              <BuildingOfficeIcon class="mx-auto h-12 w-12 text-gray-400" />
-              <h3 class="mt-2 text-sm font-medium text-gray-900">{{ $t('admin.companies.no_companies') }}</h3>
-              <p class="mt-1 text-sm text-gray-500">{{ $t('admin.companies.no_companies_message') }}</p>
-              <div class="mt-6">
-                <button
-                  @click="openCreateModal"
-                  class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                >
-                  <PlusIcon class="h-4 w-4 mr-2" />
-                  {{ $t('admin.companies.create_first_company') }}
-                </button>
-              </div>
-            </td>
-          </tr>
+      <div v-else-if="companies.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">{{ $t('admin.company_management.no_companies') }}</h3>
+        <p class="mt-1 text-sm text-gray-500">{{ $t('admin.company_management.no_companies_description') }}</p>
+      </div>
 
-          <tr v-else v-for="company in companies" :key="company.id" class="hover:bg-gray-50">
-            <td class="px-6 py-4 whitespace-nowrap">
-              <input
-                type="checkbox"
-                :value="company.id"
-                v-model="selectedCompanies"
-                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 h-10 w-10">
-                  <img 
-                    v-if="company.logo_url" 
-                    :src="company.logo_url" 
-                    :alt="company.name"
-                    class="h-10 w-10 rounded-full object-cover"
-                  />
-                  <div v-else class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                    <BuildingOfficeIcon class="h-6 w-6 text-gray-600" />
+      <div v-else class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left">
+                <input
+                  type="checkbox"
+                  :checked="allSelected"
+                  @change="toggleSelectAll"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+              </th>
+              <th
+                v-for="column in tableColumns"
+                :key="column.key"
+                @click="sortBy(column.key)"
+                :class="[
+                  'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
+                  column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+                ]"
+              >
+                <div class="flex items-center">
+                  {{ $t(column.label) }}
+                  <svg
+                    v-if="column.sortable && sortField === column.key"
+                    :class="[
+                      'ml-1 w-4 h-4',
+                      sortDirection === 'asc' ? 'transform rotate-180' : ''
+                    ]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ $t('common.actions') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr
+              v-for="company in companies"
+              :key="company.id"
+              :class="[
+                'hover:bg-gray-50',
+                selectedCompanies.includes(company.id) ? 'bg-indigo-50' : ''
+              ]"
+            >
+              <td class="px-6 py-4 whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  :value="company.id"
+                  v-model="selectedCompanies"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img
+                      :src="company.logo || '/images/default-company-logo.png'"
+                      :alt="company.name"
+                      class="h-10 w-10 rounded-full object-cover"
+                    />
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ company.name }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      {{ company.email }}
+                    </div>
                   </div>
                 </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900">
-                    {{ company.name }}
-                  </div>
-                  <div class="text-sm text-gray-500">
-                    {{ company.email }}
-                  </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  {{ company.location?.city?.name || '-' }}
                 </div>
-              </div>
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {{ company.industry?.name || '-' }}
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <div>{{ company.city?.name || company.location }}</div>
-              <div class="text-xs text-gray-500">{{ company.country?.name }}</div>
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <div class="flex items-center">
-                <span class="font-medium">{{ company.jobs_count || 0 }}</span>
-                <span v-if="company.active_jobs_count" class="ml-2 text-xs text-green-600">
-                  ({{ company.active_jobs_count }} {{ $t('admin.companies.active') }})
-                </span>
-              </div>
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex flex-col space-y-1">
-                <span :class="[
-                  'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
-                  company.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                ]">
-                  {{ company.is_active ? $t('admin.companies.active') : $t('admin.companies.inactive') }}
-                </span>
-                <span v-if="company.is_featured" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                  {{ $t('admin.companies.featured') }}
-                </span>
-              </div>
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {{ formatDate(company.created_at) }}
-            </td>
-            
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <div class="flex items-center justify-end space-x-2">
-                <button
-                  @click="viewCompany(company)"
-                  class="text-indigo-600 hover:text-indigo-900"
-                  :title="$t('admin.companies.view_company')"
-                >
-                  <EyeIcon class="h-4 w-4" />
-                </button>
-                <button
-                  @click="editCompany(company)"
-                  class="text-blue-600 hover:text-blue-900"
-                  :title="$t('admin.companies.edit_company')"
-                >
-                  <PencilIcon class="h-4 w-4" />
-                </button>
-                <button
-                  @click="toggleCompanyStatus(company)"
-                  :class="[
-                    company.is_active ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'
-                  ]"
-                  :title="company.is_active ? $t('admin.companies.deactivate') : $t('admin.companies.activate')"
-                >
-                  <component :is="company.is_active ? XMarkIcon : CheckIcon" class="h-4 w-4" />
-                </button>
-                <button
-                  @click="deleteCompany(company)"
-                  class="text-red-600 hover:text-red-900"
-                  :title="$t('admin.companies.delete_company')"
-                >
-                  <TrashIcon class="h-4 w-4" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <div class="text-sm text-gray-500">
+                  {{ company.location?.country?.name || '-' }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  {{ company.industry?.name || '-' }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  {{ company.company_size?.size || '-' }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  {{ company.statistics?.jobs_count || 0 }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center space-x-2">
+                  <span
+                    :class="[
+                      'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                      company.is_active
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    ]"
+                  >
+                    {{ company.is_active ? $t('common.active') : $t('common.inactive') }}
+                  </span>
+                  <span
+                    v-if="company.is_featured"
+                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"
+                  >
+                    {{ $t('common.featured') }}
+                  </span>
+                  <span
+                    v-if="company.is_profile_verified"
+                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800"
+                  >
+                    {{ $t('common.verified') }}
+                  </span>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  {{ formatDate(company.created_at) }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex items-center justify-end space-x-2">
+                  <button
+                    @click="viewCompany(company)"
+                    class="text-indigo-600 hover:text-indigo-900"
+                    :title="$t('common.view')"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </button>
+                  <button
+                    @click="editCompany(company)"
+                    class="text-yellow-600 hover:text-yellow-900"
+                    :title="$t('common.edit')"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                  <button
+                    @click="toggleCompanyStatus(company)"
+                    :class="[
+                      company.is_active
+                        ? 'text-red-600 hover:text-red-900'
+                        : 'text-green-600 hover:text-green-900'
+                    ]"
+                    :title="company.is_active ? $t('common.deactivate') : $t('common.activate')"
+                  >
+                    <svg v-if="company.is_active" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
+                  <button
+                    @click="deleteCompany(company)"
+                    class="text-red-600 hover:text-red-900"
+                    :title="$t('common.delete')"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Pagination -->
-    <div v-if="pagination.total > 0" class="px-6 py-4 border-t border-gray-200">
+    <div v-if="pagination.total > 0" class="bg-white px-6 py-3 border-t border-gray-200">
       <div class="flex items-center justify-between">
         <div class="text-sm text-gray-700">
-          {{ $t('admin.companies.showing_results', {
+          {{ $t('common.showing_results', {
             from: pagination.from,
             to: pagination.to,
             total: pagination.total
           }) }}
         </div>
-        
         <div class="flex items-center space-x-2">
           <button
             @click="changePage(pagination.current_page - 1)"
             :disabled="pagination.current_page <= 1"
-            class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 rounded-l-md"
+            class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rounded-l-md"
           >
-            <ChevronLeftIcon class="h-5 w-5" />
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
           
           <template v-for="page in visiblePages" :key="page">
             <button
-              v-if="page === '...'"
-              disabled
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-            >
-              ...
-            </button>
-            <button
-              v-else
+              v-if="page !== '...'"
               @click="changePage(page)"
               :class="[
                 'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
@@ -516,305 +496,377 @@
             >
               {{ page }}
             </button>
+            <span v-else class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              ...
+            </span>
           </template>
           
           <button
             @click="changePage(pagination.current_page + 1)"
             :disabled="pagination.current_page >= pagination.last_page"
-            class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 rounded-r-md"
+            class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rounded-r-md"
           >
-            <ChevronRightIcon class="h-5 w-5" />
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
           </button>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Modals would be included here -->
-  <!-- Create/Edit Company Modal -->
-  <!-- View Company Modal -->
-  <!-- Delete Confirmation Modal -->
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { 
-  BuildingOfficeIcon, CheckCircleIcon, StarIcon, BriefcaseIcon,
-  PlusIcon, MagnifyingGlassIcon, AdjustmentsHorizontalIcon,
-  ChevronDownIcon, ChevronUpDownIcon, ChevronLeftIcon, ChevronRightIcon,
-  EyeIcon, PencilIcon, TrashIcon, CheckIcon, XMarkIcon,
-  DocumentArrowDownIcon
-} from '@heroicons/vue/24/outline'
+import { debounce } from 'lodash-es'
 
 // Composables
 const { t } = useI18n()
 
-// Reactive data
-const isLoading = ref(false)
+// Reactive state
+const loading = ref(false)
+const bulkActionLoading = ref(false)
+const showAdvancedFilters = ref(false)
+const showCreateModal = ref(false)
 const companies = ref([])
 const selectedCompanies = ref([])
-const showAdvancedFilters = ref(false)
-const searchTimeout = ref(null)
-
-// Statistics
-const statistics = reactive({
-  total: 0,
-  active: 0,
-  featured: 0,
-  withActiveJobs: 0
-})
+const industries = ref([])
+const countries = ref([])
+const companySizes = ref([])
 
 // Filters
 const filters = reactive({
   search: '',
-  industry_id: '',
-  company_size_id: '',
   status: '',
+  industry_id: '',
   country_id: '',
-  created_after: '',
-  created_before: '',
-  min_employees: '',
-  max_employees: ''
+  company_size_id: '',
+  established_from: '',
+  jobs_count_range: '',
+  created_from: '',
+  page: 1,
+  per_page: 15
 })
+
+// Sorting
+const sortField = ref('created_at')
+const sortDirection = ref('desc')
 
 // Pagination
 const pagination = reactive({
   current_page: 1,
   last_page: 1,
-  per_page: 20,
+  per_page: 15,
   total: 0,
   from: 0,
   to: 0
 })
 
-// Sorting
-const sorting = reactive({
-  field: 'created_at',
-  direction: 'desc'
-})
-
-// Reference data
-const industries = ref([])
-const companySizes = ref([])
-const countries = ref([])
+// Table columns configuration
+const tableColumns = [
+  { key: 'name', label: 'common.company', sortable: true },
+  { key: 'location', label: 'common.location', sortable: false },
+  { key: 'industry', label: 'common.industry', sortable: true },
+  { key: 'company_size', label: 'common.size', sortable: true },
+  { key: 'jobs_count', label: 'common.jobs', sortable: true },
+  { key: 'status', label: 'common.status', sortable: false },
+  { key: 'created_at', label: 'common.created_at', sortable: true }
+]
 
 // Computed properties
-const allCompaniesSelected = computed(() => {
+const allSelected = computed(() => {
   return companies.value.length > 0 && selectedCompanies.value.length === companies.value.length
 })
 
 const visiblePages = computed(() => {
+  const pages = []
   const current = pagination.current_page
   const last = pagination.last_page
-  const delta = 2
-  const range = []
-  const rangeWithDots = []
-
-  for (let i = Math.max(2, current - delta); i <= Math.min(last - 1, current + delta); i++) {
-    range.push(i)
-  }
-
-  if (current - delta > 2) {
-    rangeWithDots.push(1, '...')
+  
+  if (last <= 7) {
+    for (let i = 1; i <= last; i++) {
+      pages.push(i)
+    }
   } else {
-    rangeWithDots.push(1)
+    if (current <= 4) {
+      for (let i = 1; i <= 5; i++) {
+        pages.push(i)
+      }
+      pages.push('...')
+      pages.push(last)
+    } else if (current >= last - 3) {
+      pages.push(1)
+      pages.push('...')
+      for (let i = last - 4; i <= last; i++) {
+        pages.push(i)
+      }
+    } else {
+      pages.push(1)
+      pages.push('...')
+      for (let i = current - 1; i <= current + 1; i++) {
+        pages.push(i)
+      }
+      pages.push('...')
+      pages.push(last)
+    }
   }
-
-  rangeWithDots.push(...range)
-
-  if (current + delta < last - 1) {
-    rangeWithDots.push('...', last)
-  } else {
-    rangeWithDots.push(last)
-  }
-
-  return rangeWithDots.filter((page, index, array) => array.indexOf(page) === index)
+  
+  return pages
 })
 
 // Methods
-const loadCompanies = async () => {
-  isLoading.value = true
+const fetchCompanies = async () => {
+  loading.value = true
   try {
-    const params = {
-      page: pagination.current_page,
-      per_page: pagination.per_page,
-      sort: sorting.field,
-      direction: sorting.direction,
-      ...Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== ''))
-    }
-
-    const response = await window.axios.get('/api/admin/companies', { params })
+    const params = new URLSearchParams()
     
-    companies.value = response.data.data
-    Object.assign(pagination, response.data.meta)
+    // Add filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        params.append(key, value.toString())
+      }
+    })
     
-    // Update statistics
-    if (response.data.statistics) {
-      Object.assign(statistics, response.data.statistics)
+    // Add sorting
+    params.append('sort_by', sortField.value)
+    params.append('sort_direction', sortDirection.value)
+    
+    const response = await fetch(`/api/admin/companies?${params}`)
+    const data = await response.json()
+    
+    if (response.ok) {
+      companies.value = data.data
+      Object.assign(pagination, data.meta.pagination)
+    } else {
+      console.error('Failed to fetch companies:', data.message)
     }
   } catch (error) {
-    console.error('Error loading companies:', error)
-    // Handle error - show notification
+    console.error('Error fetching companies:', error)
   } finally {
-    isLoading.value = false
+    loading.value = false
   }
 }
 
-const loadReferenceData = async () => {
+const fetchFilterOptions = async () => {
   try {
-    const [industriesRes, sizesRes, countriesRes] = await Promise.all([
-      window.axios.get('/api/industries'),
-      window.axios.get('/api/company-sizes'),
-      window.axios.get('/api/countries')
+    const [industriesRes, countriesRes, sizesRes] = await Promise.all([
+      fetch('/api/industries'),
+      fetch('/api/countries'),
+      fetch('/api/company-sizes')
     ])
     
-    industries.value = industriesRes.data.data
-    companySizes.value = sizesRes.data.data
-    countries.value = countriesRes.data.data
+    const [industriesData, countriesData, sizesData] = await Promise.all([
+      industriesRes.json(),
+      countriesRes.json(),
+      sizesRes.json()
+    ])
+    
+    industries.value = industriesData.data || []
+    countries.value = countriesData.data || []
+    companySizes.value = sizesData.data || []
   } catch (error) {
-    console.error('Error loading reference data:', error)
+    console.error('Error fetching filter options:', error)
   }
 }
 
-const debounceSearch = () => {
-  if (searchTimeout.value) {
-    clearTimeout(searchTimeout.value)
-  }
-  
-  searchTimeout.value = setTimeout(() => {
-    applyFilters()
-  }, 500)
-}
+const debouncedSearch = debounce(() => {
+  filters.page = 1
+  fetchCompanies()
+}, 300)
 
 const applyFilters = () => {
-  pagination.current_page = 1
-  loadCompanies()
+  filters.page = 1
+  fetchCompanies()
 }
 
 const clearFilters = () => {
   Object.keys(filters).forEach(key => {
-    filters[key] = ''
+    if (key !== 'page' && key !== 'per_page') {
+      filters[key] = ''
+    }
   })
-  applyFilters()
+  filters.page = 1
+  fetchCompanies()
 }
 
-const sortBy = (field) => {
-  if (sorting.field === field) {
-    sorting.direction = sorting.direction === 'asc' ? 'desc' : 'asc'
+const sortBy = (field: string) => {
+  if (sortField.value === field) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
   } else {
-    sorting.field = field
-    sorting.direction = 'desc'
+    sortField.value = field
+    sortDirection.value = 'asc'
   }
-  loadCompanies()
+  fetchCompanies()
 }
 
-const changePage = (page) => {
+const changePage = (page: number) => {
   if (page >= 1 && page <= pagination.last_page) {
-    pagination.current_page = page
-    loadCompanies()
+    filters.page = page
+    fetchCompanies()
   }
 }
 
-const toggleAllCompanies = () => {
-  if (allCompaniesSelected.value) {
+const toggleSelectAll = () => {
+  if (allSelected.value) {
     selectedCompanies.value = []
   } else {
     selectedCompanies.value = companies.value.map(company => company.id)
   }
 }
 
-const toggleCompanyStatus = async (company) => {
-  try {
-    await window.axios.patch(`/api/admin/companies/${company.id}/toggle-status`)
-    company.is_active = !company.is_active
-    // Show success notification
-  } catch (error) {
-    console.error('Error toggling company status:', error)
-    // Show error notification
-  }
+const clearSelection = () => {
+  selectedCompanies.value = []
 }
 
-const bulkAction = async (action) => {
+const bulkAction = async (action: string) => {
   if (selectedCompanies.value.length === 0) return
   
+  bulkActionLoading.value = true
   try {
-    await window.axios.post('/api/admin/companies/bulk-action', {
-      action,
-      company_ids: selectedCompanies.value
+    const response = await fetch('/api/admin/companies/bulk-action', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+      },
+      body: JSON.stringify({
+        action,
+        company_ids: selectedCompanies.value
+      })
     })
     
-    selectedCompanies.value = []
-    loadCompanies()
-    // Show success notification
+    const data = await response.json()
+    
+    if (response.ok) {
+      // Show success message
+      console.log(`Bulk ${action} completed successfully`)
+      selectedCompanies.value = []
+      fetchCompanies()
+    } else {
+      console.error(`Bulk ${action} failed:`, data.message)
+    }
   } catch (error) {
-    console.error('Error performing bulk action:', error)
-    // Show error notification
+    console.error(`Error performing bulk ${action}:`, error)
+  } finally {
+    bulkActionLoading.value = false
   }
 }
 
-const viewCompany = (company) => {
-  // Open view modal or navigate to company detail page
+const viewCompany = (company: any) => {
+  // Navigate to company details
   window.open(`/admin/companies/${company.id}`, '_blank')
 }
 
-const editCompany = (company) => {
-  // Open edit modal
-  console.log('Edit company:', company)
+const editCompany = (company: any) => {
+  // Navigate to company edit form
+  window.location.href = `/admin/companies/${company.id}/edit`
 }
 
-const deleteCompany = async (company) => {
-  if (confirm(t('admin.companies.confirm_delete', { name: company.name }))) {
-    try {
-      await window.axios.delete(`/api/admin/companies/${company.id}`)
-      loadCompanies()
-      // Show success notification
-    } catch (error) {
-      console.error('Error deleting company:', error)
-      // Show error notification
+const toggleCompanyStatus = async (company: any) => {
+  try {
+    const response = await fetch(`/api/admin/companies/${company.id}/toggle-status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+      }
+    })
+    
+    const data = await response.json()
+    
+    if (response.ok) {
+      company.is_active = !company.is_active
+      console.log('Company status updated successfully')
+    } else {
+      console.error('Failed to update company status:', data.message)
     }
+  } catch (error) {
+    console.error('Error updating company status:', error)
   }
 }
 
-const openCreateModal = () => {
-  // Open create company modal
-  console.log('Open create modal')
+const deleteCompany = async (company: any) => {
+  if (!confirm(t('admin.company_management.confirm_delete', { name: company.name }))) {
+    return
+  }
+  
+  try {
+    const response = await fetch(`/api/admin/companies/${company.id}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+      }
+    })
+    
+    const data = await response.json()
+    
+    if (response.ok) {
+      console.log('Company deleted successfully')
+      fetchCompanies()
+    } else {
+      console.error('Failed to delete company:', data.message)
+    }
+  } catch (error) {
+    console.error('Error deleting company:', error)
+  }
 }
 
 const exportCompanies = async () => {
   try {
-    const response = await window.axios.get('/api/admin/companies/export', {
-      params: filters,
-      responseType: 'blob'
+    const params = new URLSearchParams()
+    
+    // Add current filters to export
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined && key !== 'page' && key !== 'per_page') {
+        params.append(key, value.toString())
+      }
     })
     
-    const url = window.URL.createObjectURL(new Blob([response.data]))
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `companies-${new Date().toISOString().split('T')[0]}.xlsx`)
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    window.URL.revokeObjectURL(url)
+    params.append('export_format', 'excel')
+    
+    const response = await fetch(`/api/admin/companies/export?${params}`)
+    
+    if (response.ok) {
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `companies-${new Date().toISOString().split('T')[0]}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } else {
+      console.error('Failed to export companies')
+    }
   } catch (error) {
     console.error('Error exporting companies:', error)
-    // Show error notification
   }
 }
 
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString()
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString()
 }
 
-// Lifecycle
+// Lifecycle hooks
 onMounted(() => {
-  loadReferenceData()
-  loadCompanies()
+  fetchCompanies()
+  fetchFilterOptions()
 })
 
 // Watchers
-watch(() => pagination.per_page, () => {
-  pagination.current_page = 1
-  loadCompanies()
+watch(() => filters.page, () => {
+  fetchCompanies()
 })
-</script> 
+</script>
+
+<style scoped>
+.company-management {
+  @apply min-h-screen bg-gray-50;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+</style> 

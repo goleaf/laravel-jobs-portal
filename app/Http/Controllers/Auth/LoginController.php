@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Auth;
 use Illuminate\Contracts\View\Factory;
-
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Redirect;
+
 class LoginController extends Controller
 {
     /*
@@ -25,6 +25,8 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -44,6 +46,16 @@ class LoginController extends Controller
     }
 
     /**
+     * Show the application's login form.
+     *
+     * @return Factory|View
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    /**
      * @return Factory|View
      */
     protected function showAdminLoginForm()
@@ -51,18 +63,10 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    //    /**
-    //     * @return Factory|View
-    //     */
-    //    protected function showLoginForm()
-    //    {
-    //        return view('web.auth.login');
-    //    }
-
     /**
      * Send the response after the user was authenticated.
      */
-    protected function sendLoginResponse(LoginRequest $request): RedirectResponse
+    protected function sendLoginResponse(Request $request): RedirectResponse
     {
         $request->session()->regenerate();
 
@@ -102,7 +106,7 @@ class LoginController extends Controller
         return view('auth.passwords.email');
     }
 
-    protected function showResetPassword(StoreRequest $request)
+    protected function showResetPassword(Request $request)
     {
         return view('auth.passwords.reset', ['request' => $request]);
     }

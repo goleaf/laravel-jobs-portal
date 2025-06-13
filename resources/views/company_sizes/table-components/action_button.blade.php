@@ -1,5 +1,5 @@
 {{-- Context7 Action Button Component for Company Sizes Table --}}
-@props(['item', 'route_prefix' => 'admin.company-sizes'])
+@props(['item', 'route_prefix' => 'admin.companySize'])
 
 <div class="flex items-center gap-2" x-data="{ deleting: false }">
     {{-- Edit Button --}}

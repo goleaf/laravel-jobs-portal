@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,13 +20,87 @@ use Illuminate\Support\Carbon;
  * @property float $expected_salary
  * @property string|null $status
  * @property string|null $notes
+ * @property bool $is_active
  * @property Carbon|null $applied_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read Job $job
  * @property-read Candidate $candidate
+ * @property-read Resume|null $resume
  */
-
+class Application extends Model
+{
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'applications';
+
+    /**
+     * Application status constants
+     */
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_REVIEWING = 'reviewing';
+    public const STATUS_SHORTLISTED = 'shortlisted';
+    public const STATUS_INTERVIEWED = 'interviewed';
+    public const STATUS_HIRED = 'hired';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_WITHDRAWN = 'withdrawn';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'job_id',
+        'candidate_id', 
+        'resume_id',
+        'expected_salary',
+        'status',
+        'notes',
+        'is_active',
+        'applied_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'job_id' => 'integer',
+            'candidate_id' => 'integer',
+            'resume_id' => 'integer',
+            'expected_salary' => 'decimal:2',
+            'is_active' => 'boolean',
+            'applied_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * Activity log configuration for spatie/laravel-activitylog
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['job_id', 'candidate_id', 'status', 'expected_salary', 'is_active'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Application has been {$eventName}");
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -34,9 +111,6 @@ use Illuminate\Support\Carbon;
     {
         return $query->orderBy("created_at", "asc");
     }
-
-
-
 
     // Relations
 
@@ -58,6 +132,16 @@ use Illuminate\Support\Carbon;
     public function candidate(): BelongsTo
     {
         return $this->belongsTo(Candidate::class);
+    }
+
+    /**
+     * Get the resume associated with this application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function resume(): BelongsTo
+    {
+        return $this->belongsTo(Resume::class);
     }
 
     // Scopes
@@ -118,5 +202,119 @@ use Illuminate\Support\Carbon;
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%');
+    }
+
+    // Context7 Enhanced Scopes
+
+    /**
+     * Scope a query to filter applications by candidate.
+     */
+    public function scopeByCandidate($query, int $candidateId)
+    {
+        return $query->where('candidate_id', $candidateId);
+    }
+
+    /**
+     * Scope a query to filter applications by job.
+     */
+    public function scopeByJob($query, int $jobId)
+    {
+        return $query->where('job_id', $jobId);
+    }
+
+    /**
+     * Scope a query to only include pending applications.
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', self::STATUS_PENDING);
+    }
+
+    /**
+     * Scope a query to only include hired applications.
+     */
+    public function scopeHired($query)
+    {
+        return $query->where('status', self::STATUS_HIRED);
+    }
+
+    /**
+     * Scope a query to only include rejected applications.
+     */
+    public function scopeRejected($query)
+    {
+        return $query->where('status', self::STATUS_REJECTED);
+    }
+
+    /**
+     * Scope a query to filter by salary range.
+     */
+    public function scopeBySalaryRange($query, float $min = null, float $max = null)
+    {
+        if ($min !== null) {
+            $query->where('expected_salary', '>=', $min);
+        }
+        if ($max !== null) {
+            $query->where('expected_salary', '<=', $max);
+        }
+        return $query;
+    }
+
+    /**
+     * Scope a query to order by latest applications.
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('applied_at', 'desc');
+    }
+
+    /**
+     * Scope a query to order by oldest applications.
+     */
+    public function scopeOldest($query)
+    {
+        return $query->orderBy('applied_at', 'asc');
+    }
+
+    // Context7 Helper Methods
+
+    /**
+     * Check if application is pending.
+     */
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    /**
+     * Check if application is hired.
+     */
+    public function isHired(): bool
+    {
+        return $this->status === self::STATUS_HIRED;
+    }
+
+    /**
+     * Check if application is rejected.
+     */
+    public function isRejected(): bool
+    {
+        return $this->status === self::STATUS_REJECTED;
+    }
+
+    /**
+     * Get formatted expected salary.
+     */
+    public function getFormattedSalaryAttribute(): string
+    {
+        return number_format($this->expected_salary, 2);
+    }
+
+    /**
+     * Get human readable applied date.
+     */
+    public function getAppliedDateAttribute(): string
+    {
+        return $this->applied_at ? $this->applied_at->format('M d, Y') : 'Not specified';
     }
 }

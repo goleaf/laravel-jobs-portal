@@ -63,7 +63,42 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-
+class Industry extends Model
+{
+    use HasFactory, LogsActivity;
+
+    public $table = 'industries';
+
+    public $fillable = [
+        'name',
+        'description',
+        'is_default',
+        'is_active',
+        'slug',
+        'icon',
+        'color',
+        'sort_order',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -74,9 +109,6 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->orderBy("created_at", "asc");
     }
-
-
-
 
     /**
      * Boot the model.

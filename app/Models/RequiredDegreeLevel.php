@@ -12,15 +12,15 @@ use Spatie\Activitylog\LogOptions;
 /**
  * Class RequiredDegreeLevel
  *
- * @version September 7, 2020, 7:42 am UTC
+ * @version June 20, 2020, 5:50 am UTC
  *
  * @property int $id
  * @property string $name
  * @property string|null $description
  * @property int $level_order
- * @property int $years_required
- * @property bool $is_active
+ * @property int|null $years_required
  * @property bool $is_default
+ * @property bool $is_active
  * @property string|null $certification_required
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -41,8 +41,8 @@ use Spatie\Activitylog\LogOptions;
  * @method static Builder|RequiredDegreeLevel whereDescription($value)
  * @method static Builder|RequiredDegreeLevel whereLevelOrder($value)
  * @method static Builder|RequiredDegreeLevel whereYearsRequired($value)
- * @method static Builder|RequiredDegreeLevel whereIsActive($value)
  * @method static Builder|RequiredDegreeLevel whereIsDefault($value)
+ * @method static Builder|RequiredDegreeLevel whereIsActive($value)
  * @method static Builder|RequiredDegreeLevel whereCertificationRequired($value)
  * @method static Builder|RequiredDegreeLevel whereUpdatedAt($value)
  * @method static Builder|RequiredDegreeLevel active()
@@ -72,7 +72,45 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-
+class RequiredDegreeLevel extends Model
+{
+    use HasFactory, LogsActivity;
+
+    public $table = 'required_degree_levels';
+
+    public $fillable = [
+        'name',
+        'description',
+        'level_order',
+        'years_required',
+        'is_default',
+        'is_active',
+        'certification_required',
+        'slug',
+        'icon',
+        'color',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'level_order' => 'integer',
+            'years_required' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -83,9 +121,6 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->orderBy("created_at", "asc");
     }
-
-
-
 
     /**
      * Boot the model.
@@ -285,7 +320,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for ordered by level (hierarchical).
+     * Scope for degree levels ordered by level.
      */
     public function scopeByLevel(Builder $query): Builder
     {
@@ -315,7 +350,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for entry level education requirements.
+     * Scope for entry level education.
      */
     public function scopeEntryLevel(Builder $query): Builder
     {
@@ -323,7 +358,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for intermediate level education requirements.
+     * Scope for intermediate level education.
      */
     public function scopeIntermediate(Builder $query): Builder
     {
@@ -331,7 +366,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for advanced level education requirements.
+     * Scope for advanced level education.
      */
     public function scopeAdvanced(Builder $query): Builder
     {
@@ -339,59 +374,62 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for postgraduate level requirements.
+     * Scope for postgraduate education.
      */
     public function scopePostgraduate(Builder $query): Builder
     {
-        return $query->where('level_order', '>=', 7)
-                    ->where(function ($q) {
-                        $q->where('name', 'like', '%master%')
-                          ->orWhere('name', 'like', '%doctoral%')
-                          ->orWhere('name', 'like', '%phd%');
-                    });
+        return $query->where(function ($q) {
+            $q->where('name', 'like', '%master%')
+              ->orWhere('name', 'like', '%doctoral%')
+              ->orWhere('name', 'like', '%phd%')
+              ->orWhere('level_order', '>=', 7);
+        });
     }
 
     /**
-     * Scope for undergraduate level requirements.
+     * Scope for undergraduate education.
      */
     public function scopeUndergraduate(Builder $query): Builder
     {
-        return $query->whereBetween('level_order', [3, 6])
-                    ->where(function ($q) {
-                        $q->where('name', 'like', '%bachelor%')
-                          ->orWhere('name', 'like', '%associate%')
-                          ->orWhere('name', 'like', '%undergraduate%');
-                    });
+        return $query->where(function ($q) {
+            $q->where('name', 'like', '%bachelor%')
+              ->orWhere('name', 'like', '%associate%')
+              ->orWhere('name', 'like', '%diploma%')
+              ->orWhereBetween('level_order', [3, 6]);
+        });
     }
 
     /**
-     * Scope for doctoral level requirements.
+     * Scope for doctoral level education.
      */
     public function scopeDoctoral(Builder $query): Builder
     {
-        return $query->where('name', 'like', '%doctoral%')
-                    ->orWhere('name', 'like', '%phd%')
-                    ->orWhere('name', 'like', '%doctorate%');
+        return $query->where(function ($q) {
+            $q->where('name', 'like', '%doctoral%')
+              ->orWhere('name', 'like', '%phd%')
+              ->orWhere('name', 'like', '%doctorate%');
+        });
     }
 
     /**
-     * Scope for professional certification requirements.
+     * Scope for professional certifications.
      */
     public function scopeProfessional(Builder $query): Builder
     {
-        return $query->where('name', 'like', '%professional%')
-                    ->orWhere('name', 'like', '%license%')
-                    ->orWhereNotNull('certification_required');
+        return $query->where(function ($q) {
+            $q->where('name', 'like', '%professional%')
+              ->orWhere('name', 'like', '%license%')
+              ->orWhere('name', 'like', '%certification%')
+              ->orWhereNotNull('certification_required');
+        });
     }
 
     /**
-     * Scope for certification-based requirements.
+     * Scope for certification requirements.
      */
     public function scopeCertification(Builder $query): Builder
     {
-        return $query->where('name', 'like', '%certificate%')
-                    ->orWhere('name', 'like', '%certification%')
-                    ->orWhereNotNull('certification_required');
+        return $query->whereNotNull('certification_required');
     }
 
     /**
@@ -423,7 +461,8 @@ use Spatie\Activitylog\LogOptions;
      */
     public function scopeRequiresCertification(Builder $query): Builder
     {
-        return $query->whereNotNull('certification_required');
+        return $query->whereNotNull('certification_required')
+                    ->where('certification_required', '!=', '');
     }
 
     /**
@@ -433,10 +472,10 @@ use Spatie\Activitylog\LogOptions;
     {
         return cache()->remember("required_degree_level.{$this->id}.average_salary", 3600, function () {
             return $this->jobs()
-                        ->where('hide_salary', false)
-                        ->whereNotNull('salary_from')
-                        ->whereNotNull('salary_to')
-                        ->avg(\DB::raw('(salary_from + salary_to) / 2')) ?? 0.0;
+                        ->whereNotNull('min_salary')
+                        ->whereNotNull('max_salary')
+                        ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
+                        ->value('avg_salary') ?? 0.0;
         });
     }
 
@@ -445,7 +484,8 @@ use Spatie\Activitylog\LogOptions;
      */
     public function isEquivalentTo(RequiredDegreeLevel $otherLevel): bool
     {
-        return abs($this->level_order - $otherLevel->level_order) <= 1;
+        return $this->level_order === $otherLevel->level_order ||
+               abs($this->level_order - $otherLevel->level_order) <= 1;
     }
 
     /**
@@ -457,44 +497,112 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Get progression path to next level.
+     * Get next higher degree level.
      */
     public function getNextLevel(): ?RequiredDegreeLevel
     {
         return static::where('level_order', '>', $this->level_order)
-                    ->where('is_active', true)
-                    ->orderBy('level_order')
+                    ->active()
+                    ->orderBy('level_order', 'asc')
                     ->first();
     }
 
     /**
-     * Get previous level in hierarchy.
+     * Get previous lower degree level.
      */
     public function getPreviousLevel(): ?RequiredDegreeLevel
     {
         return static::where('level_order', '<', $this->level_order)
-                    ->where('is_active', true)
-                    ->orderByDesc('level_order')
+                    ->active()
+                    ->orderBy('level_order', 'desc')
                     ->first();
     }
 
     /**
-     * Calculate education ROI based on salary difference.
+     * Get education ROI (Return on Investment).
      */
     public function getEducationROI(): float
     {
-        $previousLevel = $this->getPreviousLevel();
-        if (!$previousLevel) {
-            return 0.0;
-        }
-
-        $currentAvgSalary = $this->getAverageSalary();
-        $previousAvgSalary = $previousLevel->getAverageSalary();
+        $averageSalary = $this->getAverageSalary();
+        $yearsRequired = $this->years_required ?? 4;
+        $estimatedCost = $yearsRequired * 15000; // Estimated annual education cost
         
-        if ($previousAvgSalary == 0) {
+        if ($estimatedCost === 0) {
             return 0.0;
         }
+        
+        return round(($averageSalary * 10) / $estimatedCost, 2); // 10-year ROI
+    }
 
-        return (($currentAvgSalary - $previousAvgSalary) / $previousAvgSalary) * 100;
+    /**
+     * Get career advancement opportunities.
+     */
+    public function getCareerAdvancementOpportunities(): array
+    {
+        return cache()->remember("required_degree_level.{$this->id}.career_advancement", 3600, function () {
+            $nextLevel = $this->getNextLevel();
+            $averageSalary = $this->getAverageSalary();
+            $nextLevelSalary = $nextLevel ? $nextLevel->getAverageSalary() : 0;
+            
+            return [
+                'current_level' => $this->name,
+                'next_level' => $nextLevel?->name,
+                'salary_increase_potential' => $nextLevelSalary - $averageSalary,
+                'salary_increase_percentage' => $averageSalary > 0 ? round((($nextLevelSalary - $averageSalary) / $averageSalary) * 100, 2) : 0,
+                'career_progression_level' => $this->career_progression_level,
+                'education_roi' => $this->getEducationROI(),
+            ];
+        });
+    }
+
+    /**
+     * Get industry demand for this degree level.
+     */
+    public function getIndustryDemand(): array
+    {
+        return cache()->remember("required_degree_level.{$this->id}.industry_demand", 3600, function () {
+            $jobsByIndustry = $this->jobs()
+                                  ->with('company.industry')
+                                  ->get()
+                                  ->groupBy('company.industry.name')
+                                  ->map(function ($jobs) {
+                                      return $jobs->count();
+                                  })
+                                  ->sortDesc()
+                                  ->take(10);
+            
+            return [
+                'total_jobs' => $this->jobs()->count(),
+                'active_jobs' => $this->jobs()->active()->count(),
+                'top_industries' => $jobsByIndustry->toArray(),
+                'demand_trend' => $this->getDemandTrend(),
+            ];
+        });
+    }
+
+    /**
+     * Get demand trend for this degree level.
+     */
+    private function getDemandTrend(): string
+    {
+        $currentMonth = $this->jobs()->where('created_at', '>=', now()->subDays(30))->count();
+        $previousMonth = $this->jobs()->whereBetween('created_at', [
+            now()->subDays(60),
+            now()->subDays(30)
+        ])->count();
+        
+        if ($previousMonth === 0) {
+            return $currentMonth > 0 ? 'increasing' : 'stable';
+        }
+        
+        $changePercentage = (($currentMonth - $previousMonth) / $previousMonth) * 100;
+        
+        return match (true) {
+            $changePercentage > 10 => 'rapidly_increasing',
+            $changePercentage > 0 => 'increasing',
+            $changePercentage < -10 => 'rapidly_decreasing',
+            $changePercentage < 0 => 'decreasing',
+            default => 'stable'
+        };
     }
 }

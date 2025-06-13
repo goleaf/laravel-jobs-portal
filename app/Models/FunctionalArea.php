@@ -56,7 +56,43 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-
+class FunctionalArea extends Model
+{
+    use HasFactory, LogsActivity;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'is_default',
+        'is_active',
+        'sort_order',
+        'icon',
+        'color',
+        'is_featured',
+        'meta_title',
+        'meta_description',
+        'slug',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_default' => 'boolean',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     /**
      * Scope a query to only include featured records.
      *
@@ -67,9 +103,6 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->where("is_featured", true);
     }
-
-
-
 
     /**
      * Boot the model.

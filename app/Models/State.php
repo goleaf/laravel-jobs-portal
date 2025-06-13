@@ -29,7 +29,40 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read \App\Models\Country $country
  */
-
+class State extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'country_id',
+        'name',
+        'code',
+        'is_active',
+        'is_featured',
+        'latitude',
+        'longitude',
+        'timezone',
+        'population'
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+            'population' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include featured records.
      *
@@ -40,9 +73,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     {
         return $query->where("is_featured", true);
     }
-
-
-
 
     public static $rules = [
         'name' => 'required|max:180|unique:states,name',

@@ -64,7 +64,46 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin \Eloquent
  */
-
+class CareerLevel extends Model
+{
+    use HasFactory, LogsActivity;
+
+    public $table = 'career_levels';
+
+    public $fillable = [
+        'level_name',
+        'description',
+        'level_order',
+        'is_default',
+        'is_active',
+        'slug',
+        'icon',
+        'color',
+        'min_experience_years',
+        'max_experience_years',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'level_order' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'min_experience_years' => 'integer',
+            'max_experience_years' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -75,9 +114,6 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->orderBy("created_at", "asc");
     }
-
-
-
 
     /**
      * Boot the model.
@@ -330,7 +366,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for minimum level order.
+     * Scope for minimum order.
      */
     public function scopeMinOrder(Builder $query, int $order): Builder
     {
@@ -338,7 +374,7 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Scope for maximum level order.
+     * Scope for maximum order.
      */
     public function scopeMaxOrder(Builder $query, int $order): Builder
     {
@@ -358,7 +394,7 @@ use Spatie\Activitylog\LogOptions;
      */
     public function isSeniorLevel(): bool
     {
-        return $this->level_order >= 7;
+        return $this->level_order >= 7 && $this->level_order <= 8;
     }
 
     /**
@@ -376,10 +412,10 @@ use Spatie\Activitylog\LogOptions;
     {
         return cache()->remember("career_level.{$this->id}.average_salary", 3600, function () {
             return $this->jobs()
-                        ->where('hide_salary', false)
-                        ->whereNotNull('salary_from')
-                        ->whereNotNull('salary_to')
-                        ->avg(\DB::raw('(salary_from + salary_to) / 2')) ?? 0.0;
+                        ->whereNotNull('min_salary')
+                        ->whereNotNull('max_salary')
+                        ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
+                        ->value('avg_salary') ?? 0.0;
         });
     }
 
@@ -401,7 +437,7 @@ use Spatie\Activitylog\LogOptions;
     {
         return static::where('level_order', '<', $this->level_order)
                     ->active()
-                    ->orderByDesc('level_order')
+                    ->orderBy('level_order', 'desc')
                     ->first();
     }
 
@@ -412,25 +448,39 @@ use Spatie\Activitylog\LogOptions;
     {
         return cache()->remember("career_level.{$this->id}.progression_path", 3600, function () {
             return static::active()
-                        ->where('level_order', '>=', $this->level_order)
-                        ->orderBy('level_order', 'asc')
-                        ->limit(5)
-                        ->get();
+                          ->byOrder()
+                          ->get();
         });
     }
 
     /**
-     * Get typical experience range for this level.
+     * Get experience range for this level.
      */
     public function getExperienceRange(): array
     {
-        return match (true) {
-            $this->level_order <= 2 => ['min' => 0, 'max' => 2],
-            $this->level_order <= 4 => ['min' => 1, 'max' => 5],
-            $this->level_order <= 6 => ['min' => 3, 'max' => 8],
-            $this->level_order <= 8 => ['min' => 5, 'max' => 15],
-            $this->level_order <= 10 => ['min' => 10, 'max' => 25],
-            default => ['min' => 15, 'max' => 40]
-        };
+        return [
+            'min' => $this->min_experience_years ?? 0,
+            'max' => $this->max_experience_years ?? 0,
+            'description' => $this->getExperienceDescription(),
+        ];
+    }
+
+    /**
+     * Get experience description.
+     */
+    private function getExperienceDescription(): string
+    {
+        $min = $this->min_experience_years ?? 0;
+        $max = $this->max_experience_years ?? 0;
+
+        if ($min === 0 && $max === 0) {
+            return __('career_level.no_experience_required');
+        }
+
+        if ($min === $max) {
+            return __('career_level.exactly_years', ['years' => $min]);
+        }
+
+        return __('career_level.years_range', ['min' => $min, 'max' => $max]);
     }
 }

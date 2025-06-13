@@ -39,6 +39,7 @@
         "spatie/laravel-sluggable": "^3.7",
         "spatie/laravel-translatable": "^6.11",
         "stripe/stripe-php": "^16.2",
+        "tymon/jwt-auth": "^2.2",
         "wireui/wireui": "^2.4"
     },
     "require-dev": {

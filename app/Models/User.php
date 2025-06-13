@@ -409,7 +409,31 @@ class User extends Authenticatable implements HasMedia, JWTSubject
      */
     public function scopeOld($query, int $days = 365)
     {
-        return $query->where('created_at', '<=', Carbon::now()->subDays($days));
+        return $query->where('created_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * JWT Implementation
+     */
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 
     // Additional scopes and methods from the original file can be added here as needed for the job portal project

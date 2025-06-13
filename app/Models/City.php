@@ -29,7 +29,43 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read \App\Models\State $state
  */
-
+class City extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'state_id',
+        'name',
+        'is_active',
+        'is_featured',
+        'latitude',
+        'longitude',
+        'timezone',
+        'population',
+        'is_metropolitan',
+        'is_major'
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_metropolitan' => 'boolean',
+            'is_major' => 'boolean',
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+            'population' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include featured records.
      *
@@ -40,9 +76,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     {
         return $query->where("is_featured", true);
     }
-
-
-
 
     public function state(): BelongsTo
     {

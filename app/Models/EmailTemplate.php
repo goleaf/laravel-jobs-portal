@@ -3,84 +3,217 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
- * App\Models\EmailTemplate
+ * EmailTemplate Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $template_name
  * @property string $subject
  * @property string $body
- * @property string $variables
+ * @property string|null $variables
+ * @property string|null $description
+ * @property string|null $category
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_system
+ * @property array|null $placeholders
+ * @property string|null $preview_text
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  *
- * @method static Builder|EmailTemplate newModelQuery()
- * @method static Builder|EmailTemplate newQuery()
- * @method static Builder|EmailTemplate query()
- * @method static Builder|EmailTemplate whereBody($value)
- * @method static Builder|EmailTemplate whereCreatedAt($value)
- * @method static Builder|EmailTemplate whereId($value)
- * @method static Builder|EmailTemplate whereSubject($value)
- * @method static Builder|EmailTemplate whereTemplateName($value)
- * @method static Builder|EmailTemplate whereUpdatedAt($value)
- * @method static Builder|EmailTemplate whereVariables($value)
+ * @property-read string $display_name
+ * @property-read array $available_variables
+ * @property-read string $category_label
+ * @property-read string $preview_body
+ * @property-read int $usage_count
+ *
+ * Context7 Enhanced Scopes:
+ * @method static Builder active()
+ * @method static Builder inactive()
+ * @method static Builder default()
+ * @method static Builder custom()
+ * @method static Builder system()
+ * @method static Builder userDefined()
+ * @method static Builder byCategory(string $category)
+ * @method static Builder search(string $term)
+ * @method static Builder recent(int $days = 30)
+ * @method static Builder old(int $days = 365)
+ * @method static Builder popular()
+ * @method static Builder alphabetical()
+ * @method static Builder byUsage()
+ * @method static Builder withVariables()
+ * @method static Builder withoutVariables()
+ * @method static Builder notification()
+ * @method static Builder transactional()
+ * @method static Builder marketing()
+ * @method static Builder welcome()
+ * @method static Builder password()
+ * @method static Builder job()
+ * @method static Builder company()
+ * @method static Builder candidate()
  *
  * @mixin \Eloquent
  */
-
-    use Illuminate\Database\Eloquent\Factories\HasFactory;
+class EmailTemplate extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * @var string
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
      */
-    public $table = 'email_templates';
-
-    /**
-     * @var array
-     */
-    public $fillable = [
+    protected $fillable = [
         'template_name',
         'subject',
         'body',
         'variables',
+        'description',
+        'category',
+        'is_active',
+        'is_default',
+        'is_system',
+        'placeholders',
+        'preview_text',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'deleted_at',
     ];
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-            'is_featured' => 'boolean',
-
-            'id' => 'integer',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
-            'variables' => 'array',
+            'is_system' => 'boolean',
+            'placeholders' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-        
+            'deleted_at' => 'datetime',
         ];
     }
 
+    /**
+     * Configure activity logging.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'template_name',
+                'subject',
+                'body',
+                'variables',
+                'description',
+                'category',
+                'is_active',
+                'is_default',
+                'is_system',
+                'placeholders',
+                'preview_text',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
-     * Validation rules
+     * Validation rules for creating email templates.
      *
-     * @var array
+     * @var array<string, string>
      */
-    public static $rules = [
-        'subject' => 'required|max:150',
-        'body' => 'required',
+    public static array $rules = [
+        'template_name' => 'required|string|max:255|unique:email_templates,template_name',
+        'subject' => 'required|string|max:255',
+        'body' => 'required|string',
+        'variables' => 'nullable|string',
+        'description' => 'nullable|string|max:500',
+        'category' => 'nullable|string|max:100',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_system' => 'boolean',
+        'placeholders' => 'nullable|array',
+        'preview_text' => 'nullable|string|max:255',
     ];
 
     /**
-     * Scope for active email templates.
+     * Update validation rules for email templates.
+     *
+     * @param int $id
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
+    {
+        return [
+            'template_name' => 'required|string|max:255|unique:email_templates,template_name,' . $id,
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+            'variables' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
+            'category' => 'nullable|string|max:100',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_system' => 'boolean',
+            'placeholders' => 'nullable|array',
+            'preview_text' => 'nullable|string|max:255',
+        ];
+    }
+
+    // =============================================
+    // CONSTANTS
+    // =============================================
+
+    public const CATEGORIES = [
+        'notification' => 'Notification Emails',
+        'transactional' => 'Transactional Emails',
+        'marketing' => 'Marketing Emails',
+        'welcome' => 'Welcome Emails',
+        'password' => 'Password Reset Emails',
+        'job' => 'Job Related Emails',
+        'company' => 'Company Emails',
+        'candidate' => 'Candidate Emails',
+        'system' => 'System Emails',
+        'other' => 'Other Emails',
+    ];
+
+    public const COMMON_VARIABLES = [
+        'user_name' => 'User Name',
+        'user_email' => 'User Email',
+        'company_name' => 'Company Name',
+        'job_title' => 'Job Title',
+        'candidate_name' => 'Candidate Name',
+        'application_date' => 'Application Date',
+        'site_name' => 'Site Name',
+        'site_url' => 'Site URL',
+        'current_date' => 'Current Date',
+        'current_year' => 'Current Year',
+    ];
+
+    // =============================================
+    // SCOPES - Basic Status
+    // =============================================
+
+    /**
+     * Scope a query to only include active templates.
      */
     public function scopeActive($query)
     {
@@ -88,7 +221,15 @@ use Illuminate\Support\Carbon;
     }
 
     /**
-     * Scope for default email templates.
+     * Scope a query to only include inactive templates.
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope a query to only include default templates.
      */
     public function scopeDefault($query)
     {
@@ -96,7 +237,7 @@ use Illuminate\Support\Carbon;
     }
 
     /**
-     * Scope for custom email templates.
+     * Scope a query to only include custom templates.
      */
     public function scopeCustom($query)
     {
@@ -104,33 +245,72 @@ use Illuminate\Support\Carbon;
     }
 
     /**
-     * Scope for searching templates by name or subject.
+     * Scope a query to only include system templates.
+     */
+    public function scopeSystem($query)
+    {
+        return $query->where('is_system', true);
+    }
+
+    /**
+     * Scope a query to only include user-defined templates.
+     */
+    public function scopeUserDefined($query)
+    {
+        return $query->where('is_system', false);
+    }
+
+    // =============================================
+    // SCOPES - Filtering & Search
+    // =============================================
+
+    /**
+     * Scope for templates by category.
+     */
+    public function scopeByCategory($query, string $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope for searching templates.
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('template_name', 'like', "%{$term}%")
-                    ->orWhere('subject', 'like', "%{$term}%")
-                    ->orWhere('body', 'like', "%{$term}%");
+        return $query->where(function ($q) use ($term) {
+            $q->where('template_name', 'like', "%{$term}%")
+              ->orWhere('subject', 'like', "%{$term}%")
+              ->orWhere('body', 'like', "%{$term}%")
+              ->orWhere('description', 'like', "%{$term}%");
+        });
     }
 
     /**
-     * Scope for templates by name.
-     */
-    public function scopeByName($query, string $name)
-    {
-        return $query->where('template_name', $name);
-    }
-
-    /**
-     * Scope for recently created templates.
+     * Scope for recent templates.
      */
     public function scopeRecent($query, int $days = 30)
     {
-        return $query->where('created_at', '>=', now()->subDays($days));
+        return $query->where('updated_at', '>=', now()->subDays($days));
     }
 
     /**
-     * Scope for alphabetically ordered templates.
+     * Scope for old templates.
+     */
+    public function scopeOld($query, int $days = 365)
+    {
+        return $query->where('updated_at', '<', now()->subDays($days));
+    }
+
+    /**
+     * Scope for popular templates (most recently used).
+     */
+    public function scopePopular($query)
+    {
+        return $query->orderBy('updated_at', 'desc');
+    }
+
+    /**
+     * Scope for alphabetical ordering.
      */
     public function scopeAlphabetical($query)
     {
@@ -138,39 +318,353 @@ use Illuminate\Support\Carbon;
     }
 
     /**
+     * Scope for ordering by usage.
+     */
+    public function scopeByUsage($query)
+    {
+        return $query->orderBy('updated_at', 'desc');
+    }
+
+    // =============================================
+    // SCOPES - Content Based
+    // =============================================
+
+    /**
      * Scope for templates with variables.
      */
     public function scopeWithVariables($query)
     {
-        return $query->whereNotNull('variables');
+        return $query->whereNotNull('variables')
+                    ->where('variables', '!=', '');
     }
 
     /**
-     * Scope for system notification templates.
+     * Scope for templates without variables.
+     */
+    public function scopeWithoutVariables($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('variables')
+              ->orWhere('variables', '');
+        });
+    }
+
+    // =============================================
+    // SCOPES - Category Specific
+    // =============================================
+
+    /**
+     * Scope for notification templates.
      */
     public function scopeNotification($query)
     {
-        return $query->where('template_name', 'like', '%notification%')
-                    ->orWhere('template_name', 'like', '%alert%');
+        return $query->where('category', 'notification');
     }
 
     /**
-     * Scope for welcome/registration templates.
+     * Scope for transactional templates.
+     */
+    public function scopeTransactional($query)
+    {
+        return $query->where('category', 'transactional');
+    }
+
+    /**
+     * Scope for marketing templates.
+     */
+    public function scopeMarketing($query)
+    {
+        return $query->where('category', 'marketing');
+    }
+
+    /**
+     * Scope for welcome templates.
      */
     public function scopeWelcome($query)
     {
-        return $query->where('template_name', 'like', '%welcome%')
-                    ->orWhere('template_name', 'like', '%registration%');
+        return $query->where(function ($q) {
+            $q->where('category', 'welcome')
+              ->orWhere('template_name', 'like', '%welcome%');
+        });
+    }
+
+    /**
+     * Scope for password reset templates.
+     */
+    public function scopePassword($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'password')
+              ->orWhere('template_name', 'like', '%password%')
+              ->orWhere('template_name', 'like', '%reset%');
+        });
+    }
+
+    /**
+     * Scope for job-related templates.
+     */
+    public function scopeJob($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'job')
+              ->orWhere('template_name', 'like', '%job%')
+              ->orWhere('template_name', 'like', '%application%');
+        });
+    }
+
+    /**
+     * Scope for company-related templates.
+     */
+    public function scopeCompany($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'company')
+              ->orWhere('template_name', 'like', '%company%')
+              ->orWhere('template_name', 'like', '%employer%');
+        });
+    }
+
+    /**
+     * Scope for candidate-related templates.
+     */
+    public function scopeCandidate($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'candidate')
+              ->orWhere('template_name', 'like', '%candidate%')
+              ->orWhere('template_name', 'like', '%applicant%');
+        });
+    }
+
+    // =============================================
+    // CACHED METHODS
+    // =============================================
+
+    /**
+     * Get cached templates by category.
+     */
+    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            "email_templates_category_{$category}",
+            now()->addHours(12),
+            fn() => static::active()
+                ->byCategory($category)
+                ->alphabetical()
+                ->get()
+        );
+    }
+
+    /**
+     * Get cached active templates.
+     */
+    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            'email_templates_active',
+            now()->addHours(6),
+            fn() => static::active()
+                ->alphabetical()
+                ->get()
+        );
+    }
+
+    /**
+     * Get cached system templates.
+     */
+    public static function getCachedSystem(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            'email_templates_system',
+            now()->addHours(24),
+            fn() => static::active()
+                ->system()
+                ->alphabetical()
+                ->get()
+        );
+    }
+
+    /**
+     * Get cached template by name.
+     */
+    public static function getCachedByName(string $name): ?self
+    {
+        return Cache::remember(
+            "email_template_name_{$name}",
+            now()->addHours(12),
+            fn() => static::active()
+                ->where('template_name', $name)
+                ->first()
+        );
+    }
+
+    // =============================================
+    // HELPER METHODS & ATTRIBUTES
+    // =============================================
+
+    /**
+     * Get display name attribute.
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return ucwords(str_replace(['_', '-'], ' ', $this->template_name));
+    }
+
+    /**
+     * Get available variables attribute.
+     */
+    public function getAvailableVariablesAttribute(): array
+    {
+        if (!$this->variables) {
+            return [];
+        }
+
+        return array_map('trim', explode(',', $this->variables));
+    }
+
+    /**
+     * Get category label attribute.
+     */
+    public function getCategoryLabelAttribute(): string
+    {
+        return self::CATEGORIES[$this->category] ?? ucwords($this->category ?? 'Other');
+    }
+
+    /**
+     * Get preview body attribute (truncated).
+     */
+    public function getPreviewBodyAttribute(): string
+    {
+        return strlen($this->body) > 200 
+            ? substr(strip_tags($this->body), 0, 200) . '...'
+            : strip_tags($this->body);
+    }
+
+    /**
+     * Get usage count attribute (placeholder for future implementation).
+     */
+    public function getUsageCountAttribute(): int
+    {
+        // This would be implemented with actual usage tracking
+        return 0;
+    }
+
+    /**
+     * Replace variables in template content.
+     */
+    public function replaceVariables(array $variables): array
+    {
+        $subject = $this->subject;
+        $body = $this->body;
+
+        foreach ($variables as $key => $value) {
+            $placeholder = '{' . $key . '}';
+            $subject = str_replace($placeholder, $value, $subject);
+            $body = str_replace($placeholder, $value, $body);
+        }
+
+        return [
+            'subject' => $subject,
+            'body' => $body,
+        ];
+    }
+
+    /**
+     * Get all placeholders in template.
+     */
+    public function getPlaceholders(): array
+    {
+        $content = $this->subject . ' ' . $this->body;
+        preg_match_all('/\{([^}]+)\}/', $content, $matches);
+        
+        return array_unique($matches[1] ?? []);
+    }
+
+    /**
+     * Check if template has required variables.
+     */
+    public function hasRequiredVariables(array $variables): bool
+    {
+        $placeholders = $this->getPlaceholders();
+        $requiredVariables = $this->available_variables;
+
+        foreach ($requiredVariables as $required) {
+            if (!isset($variables[$required])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if template is editable.
+     */
+    public function isEditable(): bool
+    {
+        return !$this->is_system;
+    }
+
+    /**
+     * Check if template is deletable.
+     */
+    public function isDeletable(): bool
+    {
+        return !$this->is_system && !$this->is_default;
+    }
+
+    /**
+     * Clone template with new name.
+     */
+    public function cloneTemplate(string $newName): self
+    {
+        $clone = $this->replicate();
+        $clone->template_name = $newName;
+        $clone->is_default = false;
+        $clone->is_system = false;
+        $clone->save();
+
+        return $clone;
+    }
+
+    /**
+     * Clear template-related caches.
+     */
+    public function clearCaches(): void
+    {
+        $cacheKeys = [
+            'email_templates_active',
+            'email_templates_system',
+            "email_template_name_{$this->template_name}",
+        ];
+
+        if ($this->category) {
+            $cacheKeys[] = "email_templates_category_{$this->category}";
+        }
+
+        foreach ($cacheKeys as $key) {
+            Cache::forget($key);
+        }
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($template) {
+            $template->clearCaches();
+        });
+
+        static::deleted(function ($template) {
+            $template->clearCaches();
+        });
+
+        static::restored(function ($template) {
+            $template->clearCaches();
+        });
     }
 }
 
-    /**
-     * Scope a query to only include inactive records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('is_active', false);
-    }

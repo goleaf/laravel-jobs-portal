@@ -7,128 +7,262 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * App\Models\Post
+ * Post Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $title
  * @property string $description
+ * @property string|null $content
+ * @property string|null $excerpt
+ * @property string|null $slug
  * @property int $created_by
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property bool $is_published
+ * @property bool $is_default
+ * @property \Illuminate\Support\Carbon|null $published_at
+ * @property int|null $views_count
+ * @property int|null $likes_count
+ * @property int|null $comments_count
+ * @property array|null $meta_data
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property string|null $meta_keywords
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $postAssignCategories
- * @property-read int|null $post_assign_category_count
- * @property-read mixed $post_image_url
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read int|null $media_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereUpdatedAt($value)
- *
- * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \App\Models\User $user
- * @property-read mixed $blog_image_url
- * @property-read int|null $post_assign_categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostCategory[] $postAssignCategories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostComment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
+ * @property-read string $blog_image_url
+ * @property-read string $display_title
+ * @property-read string $reading_time
+ * @property-read string $status_label
+ * @property-read string $formatted_published_date
+ *
+ * Context7 Enhanced Scopes:
+ * @method static \Illuminate\Database\Eloquent\Builder active()
+ * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ * @method static \Illuminate\Database\Eloquent\Builder published()
+ * @method static \Illuminate\Database\Eloquent\Builder unpublished()
+ * @method static \Illuminate\Database\Eloquent\Builder featured()
+ * @method static \Illuminate\Database\Eloquent\Builder notFeatured()
+ * @method static \Illuminate\Database\Eloquent\Builder search(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder recent(int $days = 30)
+ * @method static \Illuminate\Database\Eloquent\Builder old(int $days = 365)
+ * @method static \Illuminate\Database\Eloquent\Builder byCategory(int $categoryId)
+ * @method static \Illuminate\Database\Eloquent\Builder byAuthor(int $authorId)
+ * @method static \Illuminate\Database\Eloquent\Builder withFeaturedImages()
+ * @method static \Illuminate\Database\Eloquent\Builder withoutFeaturedImages()
+ * @method static \Illuminate\Database\Eloquent\Builder withComments()
+ * @method static \Illuminate\Database\Eloquent\Builder withoutComments()
+ * @method static \Illuminate\Database\Eloquent\Builder popular(int $limit = 10)
+ * @method static \Illuminate\Database\Eloquent\Builder trending(int $days = 7)
+ * @method static \Illuminate\Database\Eloquent\Builder latest(int $limit = 10)
+ * @method static \Illuminate\Database\Eloquent\Builder alphabetical()
+ * @method static \Illuminate\Database\Eloquent\Builder mostViewed(int $limit = 10)
+ * @method static \Illuminate\Database\Eloquent\Builder mostLiked(int $limit = 10)
+ * @method static \Illuminate\Database\Eloquent\Builder mostCommented(int $limit = 10)
+ *
+ * @mixin \Eloquent
  */
 class Post extends Model implements HasMedia
 {
+    use HasFactory;
     use InteractsWithMedia;
-
-    public const PATH = 'posts';
-
-    public $table = 'posts';
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * @var array
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'posts';
+
+    /**
+     * Media collection path constant.
+     */
+    public const PATH = 'posts';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'description',
+        'content',
+        'excerpt',
+        'slug',
+        'created_by',
+        'is_active',
+        'is_featured',
+        'is_published',
+        'is_default',
+        'published_at',
+        'views_count',
+        'likes_count',
+        'comments_count',
+        'meta_data',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
      */
     protected $appends = ['blog_image_url'];
 
     /**
-     * Validation rules
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    public static $rules = [
-        'title' => 'required|max:180',
-        'description' => 'required',
-        'image' => 'nullable|mimes:png,jpg,jepg',
-    ];
-
-    /**
-     * @var string[]
-     */
-    public $fillable = [
-        'title',
-        'description',
-        'created_by',
-        'is_default',
-    ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'is_default' => 'boolean',
+            'published_at' => 'datetime',
+            'views_count' => 'integer',
+            'likes_count' => 'integer',
+            'comments_count' => 'integer',
+            'meta_data' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-
-        'id' => 'integer',
-        'title' => 'string',
-        'description' => 'string',
-        'created_by' => 'integer',
-        'is_default' => 'boolean',
-    
+            'deleted_at' => 'datetime',
         ];
     }
 
-
-
-
+    /**
+     * Get the activity log options for the model.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'title',
+                'description',
+                'content',
+                'slug',
+                'is_active',
+                'is_featured',
+                'is_published',
+                'published_at',
+                'meta_title',
+                'meta_description',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
-     * @return mixed
+     * Validation rules for creating posts.
+     *
+     * @var array<string, string>
      */
-    public function getBlogImageUrlAttribute()
-    {
-        /** @var Media $media */
-        $media = $this->media->first();
-        if (! empty($media)) {
-            return $media->getFullUrl();
-        }
+    public static array $rules = [
+        'title' => 'required|string|max:255|unique:posts,title',
+        'description' => 'required|string',
+        'content' => 'nullable|string',
+        'excerpt' => 'nullable|string|max:500',
+        'slug' => 'nullable|string|max:255|unique:posts,slug',
+        'created_by' => 'required|integer|exists:users,id',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+        'is_default' => 'boolean',
+        'published_at' => 'nullable|date',
+        'meta_title' => 'nullable|string|max:255',
+        'meta_description' => 'nullable|string|max:500',
+        'meta_keywords' => 'nullable|string|max:255',
+        'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+    ];
 
-        return asset('front_web/images/blog-1.png');
+    /**
+     * Update validation rules for posts.
+     *
+     * @param int $id
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
+    {
+        return [
+            'title' => 'required|string|max:255|unique:posts,title,' . $id,
+            'description' => 'required|string',
+            'content' => 'nullable|string',
+            'excerpt' => 'nullable|string|max:500',
+            'slug' => 'nullable|string|max:255|unique:posts,slug,' . $id,
+            'created_by' => 'required|integer|exists:users,id',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'is_default' => 'boolean',
+            'published_at' => 'nullable|date',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+        ];
     }
 
-    public function postAssignCategories(): BelongsToMany
-    {
-        return $this->belongsToMany(PostCategory::class, 'post_assigned_categories', 'post_id', 'post_categories_id');
-    }
+    // =============================================
+    // RELATIONSHIPS
+    // =============================================
 
+    /**
+     * Get the user who created the post.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * Get the categories assigned to the post.
+     */
+    public function postAssignCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(PostCategory::class, 'post_assigned_categories', 'post_id', 'post_categories_id');
+    }
+
+    /**
+     * Get the comments for the post.
+     */
     public function comments(): HasMany
     {
         return $this->hasMany(PostComment::class, 'post_id');
     }
+
+    // =============================================
+    // SCOPES
+    // =============================================
 
     /**
      * Scope for active posts.
@@ -185,9 +319,12 @@ class Post extends Model implements HasMedia
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('title', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%")
-                    ->orWhere('content', 'like', "%{$term}%");
+        return $query->where(function ($q) use ($term) {
+            $q->where('title', 'like', '%' . $term . '%')
+              ->orWhere('description', 'like', '%' . $term . '%')
+              ->orWhere('content', 'like', '%' . $term . '%')
+              ->orWhere('excerpt', 'like', '%' . $term . '%');
+        });
     }
 
     /**
@@ -203,7 +340,7 @@ class Post extends Model implements HasMedia
      */
     public function scopeOld($query, int $days = 365)
     {
-        return $query->where('created_at', '<', now()->subDays($days));
+        return $query->where('created_at', '<=', now()->subDays($days));
     }
 
     /**
@@ -211,7 +348,17 @@ class Post extends Model implements HasMedia
      */
     public function scopeByCategory($query, int $categoryId)
     {
-        return $query->where('post_category_id', $categoryId);
+        return $query->whereHas('postAssignCategories', function ($q) use ($categoryId) {
+            $q->where('post_categories_id', $categoryId);
+        });
+    }
+
+    /**
+     * Scope for posts by author.
+     */
+    public function scopeByAuthor($query, int $authorId)
+    {
+        return $query->where('created_by', $authorId);
     }
 
     /**
@@ -219,7 +366,7 @@ class Post extends Model implements HasMedia
      */
     public function scopeWithFeaturedImages($query)
     {
-        return $query->whereNotNull('featured_image')->where('featured_image', '!=', '');
+        return $query->has('media');
     }
 
     /**
@@ -227,9 +374,7 @@ class Post extends Model implements HasMedia
      */
     public function scopeWithoutFeaturedImages($query)
     {
-        return $query->where(function ($query) {
-            $query->whereNull('featured_image')->orWhere('featured_image', '');
-        });
+        return $query->doesntHave('media');
     }
 
     /**
@@ -249,23 +394,28 @@ class Post extends Model implements HasMedia
     }
 
     /**
-     * Scope for popular posts (with most comments).
+     * Scope for popular posts (most viewed).
      */
     public function scopePopular($query, int $limit = 10)
     {
-        return $query->withCount('comments')
-                    ->orderBy('comments_count', 'desc')
-                    ->limit($limit);
+        return $query->orderBy('views_count', 'desc')->limit($limit);
     }
 
     /**
-     * Scope for latest published posts.
+     * Scope for trending posts (recent with high engagement).
+     */
+    public function scopeTrending($query, int $days = 7)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days))
+                    ->orderByRaw('(views_count + likes_count + comments_count) DESC');
+    }
+
+    /**
+     * Scope for latest posts.
      */
     public function scopeLatest($query, int $limit = 10)
     {
-        return $query->published()
-                    ->orderBy('published_at', 'desc')
-                    ->limit($limit);
+        return $query->orderBy('created_at', 'desc')->limit($limit);
     }
 
     /**
@@ -273,6 +423,275 @@ class Post extends Model implements HasMedia
      */
     public function scopeAlphabetical($query)
     {
-        return $query->orderBy('title', 'asc');
+        return $query->orderBy('title');
+    }
+
+    /**
+     * Scope for most viewed posts.
+     */
+    public function scopeMostViewed($query, int $limit = 10)
+    {
+        return $query->orderBy('views_count', 'desc')->limit($limit);
+    }
+
+    /**
+     * Scope for most liked posts.
+     */
+    public function scopeMostLiked($query, int $limit = 10)
+    {
+        return $query->orderBy('likes_count', 'desc')->limit($limit);
+    }
+
+    /**
+     * Scope for most commented posts.
+     */
+    public function scopeMostCommented($query, int $limit = 10)
+    {
+        return $query->orderBy('comments_count', 'desc')->limit($limit);
+    }
+
+    // =============================================
+    // ACCESSOR METHODS
+    // =============================================
+
+    /**
+     * Get the blog image URL.
+     */
+    public function getBlogImageUrlAttribute(): string
+    {
+        $media = $this->media->first();
+        if (!empty($media)) {
+            return $media->getFullUrl();
+        }
+
+        return asset('front_web/images/blog-1.png');
+    }
+
+    /**
+     * Get the display title.
+     */
+    public function getDisplayTitleAttribute(): string
+    {
+        return $this->title ?: 'Untitled Post';
+    }
+
+    /**
+     * Get estimated reading time.
+     */
+    public function getReadingTimeAttribute(): string
+    {
+        $wordCount = str_word_count(strip_tags($this->content ?? $this->description));
+        $minutes = ceil($wordCount / 200); // Average reading speed
+        
+        return $minutes . ' min read';
+    }
+
+    /**
+     * Get status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        if (!$this->is_active) {
+            return 'Inactive';
+        }
+        
+        if (!$this->is_published) {
+            return 'Draft';
+        }
+        
+        if ($this->published_at && $this->published_at->isFuture()) {
+            return 'Scheduled';
+        }
+        
+        return 'Published';
+    }
+
+    /**
+     * Get formatted published date.
+     */
+    public function getFormattedPublishedDateAttribute(): string
+    {
+        if (!$this->published_at) {
+            return 'Not published';
+        }
+        
+        return $this->published_at->format('M d, Y');
+    }
+
+    // =============================================
+    // UTILITY METHODS
+    // =============================================
+
+    /**
+     * Check if post is published and visible.
+     */
+    public function isPublished(): bool
+    {
+        return $this->is_active && 
+               $this->is_published && 
+               $this->published_at && 
+               $this->published_at->isPast();
+    }
+
+    /**
+     * Check if post is scheduled for future publication.
+     */
+    public function isScheduled(): bool
+    {
+        return $this->is_published && 
+               $this->published_at && 
+               $this->published_at->isFuture();
+    }
+
+    /**
+     * Increment views count.
+     */
+    public function incrementViews(): void
+    {
+        $this->increment('views_count');
+        $this->clearCaches();
+    }
+
+    /**
+     * Increment likes count.
+     */
+    public function incrementLikes(): void
+    {
+        $this->increment('likes_count');
+        $this->clearCaches();
+    }
+
+    /**
+     * Update comments count.
+     */
+    public function updateCommentsCount(): void
+    {
+        $this->update(['comments_count' => $this->comments()->count()]);
+        $this->clearCaches();
+    }
+
+    /**
+     * Generate slug from title.
+     */
+    public function generateSlug(): string
+    {
+        $slug = \Str::slug($this->title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    // =============================================
+    // STATIC METHODS & CACHING
+    // =============================================
+
+    /**
+     * Get cached published posts.
+     */
+    public static function getCachedPublished(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("posts_published_{$limit}", 1800, function () use ($limit) {
+            return static::published()->active()->latest($limit)->get();
+        });
+    }
+
+    /**
+     * Get cached featured posts.
+     */
+    public static function getCachedFeatured(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("posts_featured_{$limit}", 1800, function () use ($limit) {
+            return static::featured()->published()->active()->latest($limit)->get();
+        });
+    }
+
+    /**
+     * Get cached popular posts.
+     */
+    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("posts_popular_{$limit}", 3600, function () use ($limit) {
+            return static::popular($limit)->published()->active()->get();
+        });
+    }
+
+    /**
+     * Get cached posts by category.
+     */
+    public static function getCachedByCategory(int $categoryId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("posts_category_{$categoryId}_{$limit}", 1800, function () use ($categoryId, $limit) {
+            return static::byCategory($categoryId)->published()->active()->latest($limit)->get();
+        });
+    }
+
+    /**
+     * Clear related caches.
+     */
+    public function clearCaches(): void
+    {
+        Cache::forget('posts_published_10');
+        Cache::forget('posts_featured_5');
+        Cache::forget('posts_popular_10');
+        
+        // Clear category-specific caches
+        $this->postAssignCategories->each(function ($category) {
+            Cache::forget("posts_category_{$category->id}_10");
+        });
+        
+        // Clear pattern-based caches
+        $this->clearCachePattern('posts_*');
+    }
+
+    /**
+     * Clear cache by pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        if (method_exists(Cache::getStore(), 'flush')) {
+            // For stores that support pattern clearing
+            $keys = Cache::getStore()->getRedis()->keys($pattern);
+            if (!empty($keys)) {
+                Cache::getStore()->getRedis()->del($keys);
+            }
+        }
+    }
+
+    // =============================================
+    // MODEL EVENTS
+    // =============================================
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $post->slug = $post->generateSlug();
+            }
+        });
+
+        static::updating(function ($post) {
+            if ($post->isDirty('title') && empty($post->slug)) {
+                $post->slug = $post->generateSlug();
+            }
+        });
+
+        static::saved(function ($post) {
+            $post->clearCaches();
+        });
+
+        static::deleted(function ($post) {
+            $post->clearCaches();
+        });
     }
 }

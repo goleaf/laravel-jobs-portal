@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Class SalaryCurrency
- *
- * @version September 15, 2021, 7:42 am UTC
+ * SalaryCurrency Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $currency_name
@@ -29,6 +29,7 @@ use Spatie\Activitylog\LogOptions;
  * @property \Illuminate\Support\Carbon|null $last_rate_update
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
  * @property-read int|null $jobs_count
  * @property-read mixed $usage_statistics
@@ -39,24 +40,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read mixed $conversion_data
  * @property-read mixed $regional_info
  *
- * @method static Builder|SalaryCurrency newModelQuery()
- * @method static Builder|SalaryCurrency newQuery()
- * @method static Builder|SalaryCurrency query()
- * @method static Builder|SalaryCurrency whereCreatedAt($value)
- * @method static Builder|SalaryCurrency whereId($value)
- * @method static Builder|SalaryCurrency whereCurrencyName($value)
- * @method static Builder|SalaryCurrency whereCurrencyCode($value)
- * @method static Builder|SalaryCurrency whereCurrencySymbol($value)
- * @method static Builder|SalaryCurrency whereExchangeRate($value)
- * @method static Builder|SalaryCurrency whereBaseCurrency($value)
- * @method static Builder|SalaryCurrency whereIsActive($value)
- * @method static Builder|SalaryCurrency whereIsDefault($value)
- * @method static Builder|SalaryCurrency whereIsCrypto($value)
- * @method static Builder|SalaryCurrency whereSupportedCountries($value)
- * @method static Builder|SalaryCurrency whereDecimalPlaces($value)
- * @method static Builder|SalaryCurrency whereNumberFormat($value)
- * @method static Builder|SalaryCurrency whereLastRateUpdate($value)
- * @method static Builder|SalaryCurrency whereUpdatedAt($value)
+ * Context7 Enhanced Scopes:
  * @method static Builder|SalaryCurrency active()
  * @method static Builder|SalaryCurrency inactive()
  * @method static Builder|SalaryCurrency default()
@@ -78,64 +62,361 @@ use Spatie\Activitylog\LogOptions;
  * @method static Builder|SalaryCurrency orderByRate(string $direction = 'asc')
  * @method static Builder|SalaryCurrency orderByUsage()
  * @method static Builder|SalaryCurrency orderByTrend()
+ * @method static Builder|SalaryCurrency recent(int $days = 30)
+ * @method static Builder|SalaryCurrency old(int $days = 365)
  *
  * @mixin \Eloquent
  */
-
+class SalaryCurrency extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
+
     /**
-     * Scope a query to only include old records.
+     * The attributes that are mass assignable.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @var array<int, string>
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
-    {
-        return $query->orderBy("created_at", "asc");
-    }
-
-
-
+    protected $fillable = [
+        'currency_name',
+        'currency_code',
+        'currency_symbol',
+        'exchange_rate',
+        'base_currency',
+        'is_active',
+        'is_default',
+        'is_crypto',
+        'supported_countries',
+        'decimal_places',
+        'number_format',
+        'last_rate_update',
+    ];
 
     /**
-     * Boot the model.
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
      */
-    protected static function boot(): void
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        parent::boot();
-
-        // Clear cache when currency is updated
-        static::updated(function ($currency) {
-            cache()->forget("currency.{$currency->id}");
-            cache()->forget("currencies.active");
-            cache()->forget("currencies.popular");
-            cache()->tags(['currencies', 'currency-' . $currency->id])->flush();
-        });
-
-        // Ensure only one default currency
-        static::saving(function ($currency) {
-            if ($currency->is_default) {
-                static::where('id', '!=', $currency->id)->update(['is_default' => false]);
-            }
-        });
+        return [
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_crypto' => 'boolean',
+            'exchange_rate' => 'decimal:8',
+            'decimal_places' => 'integer',
+            'supported_countries' => 'array',
+            'last_rate_update' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     /**
-     * Activity log options
+     * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['currency_name', 'currency_code', 'exchange_rate', 'is_active', 'is_default'])
+            ->logOnly([
+                'currency_name',
+                'currency_code',
+                'currency_symbol',
+                'exchange_rate',
+                'is_active',
+                'is_default',
+                'is_crypto',
+                'supported_countries',
+                'decimal_places',
+            ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
+
+    /**
+     * Validation rules for creating salary currencies.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name',
+        'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code',
+        'currency_symbol' => 'required|string|max:10',
+        'exchange_rate' => 'nullable|numeric|min:0',
+        'base_currency' => 'nullable|string|size:3',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_crypto' => 'boolean',
+        'supported_countries' => 'nullable|array',
+        'decimal_places' => 'integer|min:0|max:8',
+        'number_format' => 'nullable|string|max:50',
+    ];
+
+    /**
+     * Update validation rules for salary currencies.
+     *
+     * @param int $id
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
+    {
+        return [
+            'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name,' . $id,
+            'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code,' . $id,
+            'currency_symbol' => 'required|string|max:10',
+            'exchange_rate' => 'nullable|numeric|min:0',
+            'base_currency' => 'nullable|string|size:3',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_crypto' => 'boolean',
+            'supported_countries' => 'nullable|array',
+            'decimal_places' => 'integer|min:0|max:8',
+            'number_format' => 'nullable|string|max:50',
+        ];
+    }
+
+    // =============================================
+    // RELATIONSHIPS
+    // =============================================
+
+    /**
+     * Get the jobs that use this currency.
+     */
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class, 'salary_currency_id');
+    }
+
+    // =============================================
+    // SCOPES
+    // =============================================
+
+    /**
+     * Scope for active currencies.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive currencies.
+     */
+    public function scopeInactive(Builder $query): Builder
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope for default currency.
+     */
+    public function scopeDefault(Builder $query): Builder
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope for cryptocurrency.
+     */
+    public function scopeCrypto(Builder $query): Builder
+    {
+        return $query->where('is_crypto', true);
+    }
+
+    /**
+     * Scope for fiat currency.
+     */
+    public function scopeFiat(Builder $query): Builder
+    {
+        return $query->where('is_crypto', false);
+    }
+
+    /**
+     * Scope for major currencies (USD, EUR, GBP, JPY, etc.).
+     */
+    public function scopeMajor(Builder $query): Builder
+    {
+        $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
+        return $query->whereIn('currency_code', $majorCurrencies);
+    }
+
+    /**
+     * Scope for minor currencies.
+     */
+    public function scopeMinor(Builder $query): Builder
+    {
+        $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
+        return $query->whereNotIn('currency_code', $majorCurrencies);
+    }
+
+    /**
+     * Scope to search currencies by name, code, or symbol.
+     */
+    public function scopeSearch(Builder $query, string $term): Builder
+    {
+        return $query->where(function ($q) use ($term) {
+            $q->where('currency_name', 'like', '%' . $term . '%')
+              ->orWhere('currency_code', 'like', '%' . $term . '%')
+              ->orWhere('currency_symbol', 'like', '%' . $term . '%');
+        });
+    }
+
+    /**
+     * Scope to filter by currency code.
+     */
+    public function scopeByCode(Builder $query, string $code): Builder
+    {
+        return $query->where('currency_code', strtoupper($code));
+    }
+
+    /**
+     * Scope to filter by supported country.
+     */
+    public function scopeByCountry(Builder $query, string $country): Builder
+    {
+        return $query->whereJsonContains('supported_countries', $country);
+    }
+
+    /**
+     * Scope for popular currencies (most used in jobs).
+     */
+    public function scopePopular(Builder $query): Builder
+    {
+        return $query->withCount(['jobs' => function ($q) {
+            $q->active();
+        }])->orderBy('jobs_count', 'desc');
+    }
+
+    /**
+     * Scope for trending currencies (recently gaining popularity).
+     */
+    public function scopeTrending(Builder $query): Builder
+    {
+        return $query->withCount([
+            'jobs as recent_jobs_count' => function ($q) {
+                $q->active()->where('created_at', '>=', now()->subDays(30));
+            }
+        ])->orderBy('recent_jobs_count', 'desc');
+    }
+
+    /**
+     * Scope for stable currencies (low volatility).
+     */
+    public function scopeStable(Builder $query): Builder
+    {
+        return $query->where('is_crypto', false)
+                    ->whereIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
+    }
+
+    /**
+     * Scope for volatile currencies (high volatility).
+     */
+    public function scopeVolatile(Builder $query): Builder
+    {
+        return $query->where('is_crypto', true)
+                    ->orWhereNotIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
+    }
+
+    /**
+     * Scope for recently updated exchange rates.
+     */
+    public function scopeRecentlyUpdated(Builder $query, int $hours = 24): Builder
+    {
+        return $query->where('last_rate_update', '>=', now()->subHours($hours));
+    }
+
+    /**
+     * Scope for currencies that need rate updates.
+     */
+    public function scopeNeedsUpdate(Builder $query, int $hours = 24): Builder
+    {
+        return $query->where(function ($q) use ($hours) {
+            $q->whereNull('last_rate_update')
+              ->orWhere('last_rate_update', '<', now()->subHours($hours));
+        });
+    }
+
+    /**
+     * Scope for currencies with exchange rates.
+     */
+    public function scopeWithExchangeRate(Builder $query): Builder
+    {
+        return $query->whereNotNull('exchange_rate');
+    }
+
+    /**
+     * Scope for currencies without exchange rates.
+     */
+    public function scopeWithoutExchangeRate(Builder $query): Builder
+    {
+        return $query->whereNull('exchange_rate');
+    }
+
+    /**
+     * Scope to order by exchange rate.
+     */
+    public function scopeOrderByRate(Builder $query, string $direction = 'asc'): Builder
+    {
+        return $query->orderBy('exchange_rate', $direction);
+    }
+
+    /**
+     * Scope to order by usage (job count).
+     */
+    public function scopeOrderByUsage(Builder $query): Builder
+    {
+        return $query->withCount('jobs')->orderBy('jobs_count', 'desc');
+    }
+
+    /**
+     * Scope to order by trend (recent usage).
+     */
+    public function scopeOrderByTrend(Builder $query): Builder
+    {
+        return $query->withCount([
+            'jobs as recent_jobs_count' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            }
+        ])->orderBy('recent_jobs_count', 'desc');
+    }
+
+    /**
+     * Scope a query to only include recent records.
+     */
+    public function scopeRecent(Builder $query, int $days = 30): Builder
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope a query to only include old records.
+     */
+    public function scopeOld(Builder $query, int $days = 365): Builder
+    {
+        return $query->where('created_at', '<=', now()->subDays($days));
+    }
+
+    // =============================================
+    // ACCESSOR METHODS
+    // =============================================
 
     /**
      * Get usage statistics.
      */
     public function getUsageStatisticsAttribute(): array
     {
-        return cache()->remember("currency.{$this->id}.usage_stats", 3600, function () {
+        return Cache::remember("currency.{$this->id}.usage_stats", 3600, function () {
             $jobCount = $this->jobs()->count();
             $activeJobCount = $this->jobs()->active()->count();
             $totalSalaryPosted = $this->jobs()->sum('salary_from');
@@ -238,210 +519,12 @@ use Spatie\Activitylog\LogOptions;
         ];
     }
 
-    public function jobs(): HasMany
-    {
-        return $this->hasMany(Job::class, 'salary_currency_id');
-    }
+    // =============================================
+    // UTILITY METHODS
+    // =============================================
 
     /**
-     * Scope for active currencies.
-     */
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope for inactive currencies.
-     */
-    public function scopeInactive(Builder $query): Builder
-    {
-        return $query->where('is_active', false);
-    }
-
-    /**
-     * Scope for default currency.
-     */
-    public function scopeDefault(Builder $query): Builder
-    {
-        return $query->where('is_default', true);
-    }
-
-    /**
-     * Scope for cryptocurrency.
-     */
-    public function scopeCrypto(Builder $query): Builder
-    {
-        return $query->where('is_crypto', true);
-    }
-
-    /**
-     * Scope for fiat currency.
-     */
-    public function scopeFiat(Builder $query): Builder
-    {
-        return $query->where('is_crypto', false);
-    }
-
-    /**
-     * Scope for major currencies.
-     */
-    public function scopeMajor(Builder $query): Builder
-    {
-        $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
-        return $query->whereIn('currency_code', $majorCurrencies);
-    }
-
-    /**
-     * Scope for minor currencies.
-     */
-    public function scopeMinor(Builder $query): Builder
-    {
-        $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
-        return $query->whereNotIn('currency_code', $majorCurrencies);
-    }
-
-    /**
-     * Scope for searching currencies by name or code.
-     */
-    public function scopeSearch(Builder $query, string $term): Builder
-    {
-        return $query->where('currency_name', 'like', "%{$term}%")
-                    ->orWhere('currency_code', 'like', "%{$term}%")
-                    ->orWhere('currency_symbol', 'like', "%{$term}%");
-    }
-
-    /**
-     * Scope for finding currency by code.
-     */
-    public function scopeByCode(Builder $query, string $code): Builder
-    {
-        return $query->where('currency_code', strtoupper($code));
-    }
-
-    /**
-     * Scope for currencies used in specific country.
-     */
-    public function scopeByCountry(Builder $query, string $country): Builder
-    {
-        return $query->whereJsonContains('supported_countries', strtoupper($country));
-    }
-
-    /**
-     * Scope for popular currencies based on usage.
-     */
-    public function scopePopular(Builder $query): Builder
-    {
-        return $query->withCount(['jobs' => function ($q) {
-                        $q->active();
-                    }])
-                    ->orderByDesc('jobs_count')
-                    ->having('jobs_count', '>', 0);
-    }
-
-    /**
-     * Scope for trending currencies.
-     */
-    public function scopeTrending(Builder $query): Builder
-    {
-        return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Scope for stable currencies.
-     */
-    public function scopeStable(Builder $query): Builder
-    {
-        return $query->where(function ($q) {
-            $q->where('is_crypto', false)
-              ->whereIn('currency_code', ['USD', 'EUR', 'GBP', 'JPY', 'CHF']);
-        });
-    }
-
-    /**
-     * Scope for volatile currencies.
-     */
-    public function scopeVolatile(Builder $query): Builder
-    {
-        return $query->where('is_crypto', true)
-                    ->orWhereIn('currency_code', ['TRY', 'ARS', 'VEF', 'IRR']);
-    }
-
-    /**
-     * Scope for recently updated exchange rates.
-     */
-    public function scopeRecentlyUpdated(Builder $query, int $hours = 24): Builder
-    {
-        return $query->where('last_rate_update', '>=', now()->subHours($hours));
-    }
-
-    /**
-     * Scope for currencies needing rate updates.
-     */
-    public function scopeNeedsUpdate(Builder $query, int $hours = 24): Builder
-    {
-        return $query->where('last_rate_update', '<', now()->subHours($hours))
-                    ->orWhereNull('last_rate_update')
-                    ->where('is_active', true);
-    }
-
-    /**
-     * Scope for currencies with exchange rates.
-     */
-    public function scopeWithExchangeRate(Builder $query): Builder
-    {
-        return $query->whereNotNull('exchange_rate')
-                    ->where('exchange_rate', '>', 0);
-    }
-
-    /**
-     * Scope for currencies without exchange rates.
-     */
-    public function scopeWithoutExchangeRate(Builder $query): Builder
-    {
-        return $query->whereNull('exchange_rate')
-                    ->orWhere('exchange_rate', '<=', 0);
-    }
-
-    /**
-     * Scope for ordering by exchange rate.
-     */
-    public function scopeOrderByRate(Builder $query, string $direction = 'asc'): Builder
-    {
-        return $query->orderBy('exchange_rate', $direction);
-    }
-
-    /**
-     * Scope for ordering by usage.
-     */
-    public function scopeOrderByUsage(Builder $query): Builder
-    {
-        return $query->withCount(['jobs' => function ($q) {
-                        $q->active();
-                    }])
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Scope for ordering by trend.
-     */
-    public function scopeOrderByTrend(Builder $query): Builder
-    {
-        return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(7));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Convert amount to this currency from another.
+     * Convert amount from another currency to this currency.
      */
     public function convertFrom(float $amount, SalaryCurrency $fromCurrency): float
     {
@@ -450,27 +533,16 @@ use Spatie\Activitylog\LogOptions;
         }
 
         if (!$this->exchange_rate || !$fromCurrency->exchange_rate) {
-            throw new \Exception(__('currency.conversion.missing_rate'));
+            throw new \InvalidArgumentException('Exchange rates not available for conversion');
         }
 
-        // Convert through base currency if needed
-        $baseCurrency = $this->base_currency ?? 'USD';
-        
-        if ($fromCurrency->currency_code === $baseCurrency) {
-            return $amount * $this->exchange_rate;
-        }
-        
-        if ($this->currency_code === $baseCurrency) {
-            return $amount / $fromCurrency->exchange_rate;
-        }
-
-        // Convert via base currency
+        // Convert through base currency (usually USD)
         $baseAmount = $amount / $fromCurrency->exchange_rate;
         return $baseAmount * $this->exchange_rate;
     }
 
     /**
-     * Convert amount from this currency to another.
+     * Convert amount from this currency to another currency.
      */
     public function convertTo(float $amount, SalaryCurrency $toCurrency): float
     {
@@ -478,21 +550,21 @@ use Spatie\Activitylog\LogOptions;
     }
 
     /**
-     * Format amount in this currency.
+     * Format amount with currency symbol and proper decimal places.
      */
     public function formatAmount(float $amount, bool $includeSymbol = true): string
     {
-        $formattedAmount = number_format($amount, $this->decimal_places);
+        $formatted = number_format($amount, $this->decimal_places);
         
         if ($includeSymbol) {
-            return $this->currency_symbol . $formattedAmount;
+            return $this->currency_symbol . ' ' . $formatted;
         }
         
-        return $formattedAmount;
+        return $formatted;
     }
 
     /**
-     * Check if exchange rate is stale.
+     * Check if exchange rate is stale and needs updating.
      */
     public function isExchangeRateStale(): bool
     {
@@ -500,47 +572,43 @@ use Spatie\Activitylog\LogOptions;
             return true;
         }
 
-        $maxAge = $this->is_crypto ? 1 : 24; // 1 hour for crypto, 24 hours for fiat
-        return $this->last_rate_update->diffInHours(now()) > $maxAge;
+        $staleHours = $this->is_crypto ? 1 : 24; // Crypto rates update more frequently
+        return $this->last_rate_update->lt(now()->subHours($staleHours));
     }
 
     /**
-     * Calculate usage percentage.
+     * Calculate usage percentage compared to all currencies.
      */
     public function calculateUsagePercentage(): float
     {
         $totalJobs = Job::count();
+        if ($totalJobs === 0) {
+            return 0;
+        }
+
         $currencyJobs = $this->jobs()->count();
-        
-        return $totalJobs > 0 ? ($currencyJobs / $totalJobs) * 100 : 0;
+        return ($currencyJobs / $totalJobs) * 100;
     }
 
     /**
-     * Get popularity rank.
+     * Get popularity rank among all currencies.
      */
     public function getPopularityRank(): int
     {
-        return cache()->remember("currency.{$this->id}.popularity_rank", 1800, function () {
-            $currencies = static::withCount(['jobs' => function ($q) {
-                            $q->active();
-                        }])
-                        ->orderByDesc('jobs_count')
-                        ->pluck('id')
-                        ->toArray();
-
-            $rank = array_search($this->id, $currencies);
-            return $rank !== false ? $rank + 1 : count($currencies) + 1;
-        });
+        return static::withCount('jobs')
+            ->orderBy('jobs_count', 'desc')
+            ->pluck('id')
+            ->search($this->id) + 1;
     }
 
     /**
-     * Get trend direction.
+     * Get trend direction based on recent usage.
      */
     public function getTrendDirection(): string
     {
-        $recentJobs = $this->jobs()->where('created_at', '>=', now()->subDays(7))->count();
+        $recentJobs = $this->jobs()->where('created_at', '>=', now()->subDays(30))->count();
         $previousJobs = $this->jobs()
-            ->whereBetween('created_at', [now()->subDays(14), now()->subDays(7)])
+            ->whereBetween('created_at', [now()->subDays(60), now()->subDays(30)])
             ->count();
 
         if ($recentJobs > $previousJobs) {
@@ -548,23 +616,22 @@ use Spatie\Activitylog\LogOptions;
         } elseif ($recentJobs < $previousJobs) {
             return 'down';
         }
-        
+
         return 'stable';
     }
 
     /**
-     * Calculate adoption rate.
+     * Calculate adoption rate (percentage of active jobs using this currency).
      */
     public function calculateAdoptionRate(): float
     {
-        $currentMonth = $this->jobs()->whereMonth('created_at', now()->month)->count();
-        $previousMonth = $this->jobs()->whereMonth('created_at', now()->subMonth()->month)->count();
-        
-        if ($previousMonth === 0) {
-            return $currentMonth > 0 ? 100.0 : 0.0;
+        $activeJobs = Job::active()->count();
+        if ($activeJobs === 0) {
+            return 0;
         }
-        
-        return (($currentMonth - $previousMonth) / $previousMonth) * 100;
+
+        $currencyActiveJobs = $this->jobs()->active()->count();
+        return ($currencyActiveJobs / $activeJobs) * 100;
     }
 
     /**
@@ -572,173 +639,322 @@ use Spatie\Activitylog\LogOptions;
      */
     public function getUpdateFrequency(): int
     {
-        return $this->is_crypto ? 1 : 24; // Hourly for crypto, daily for fiat
+        return $this->is_crypto ? 1 : 24;
     }
 
     /**
-     * Calculate volatility index.
+     * Calculate volatility index (0-100, higher = more volatile).
      */
     public function calculateVolatilityIndex(): float
     {
-        // Simplified volatility calculation
         if ($this->is_crypto) {
-            return rand(60, 95); // High volatility for crypto
+            return 85.0; // High volatility for crypto
         }
-        
-        $stableCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF'];
-        
+
+        $stableCurrencies = ['USD', 'EUR', 'CHF', 'JPY'];
         if (in_array($this->currency_code, $stableCurrencies)) {
-            return rand(5, 15); // Low volatility for major currencies
+            return 15.0; // Low volatility for stable currencies
         }
-        
-        return rand(20, 50); // Medium volatility for others
+
+        return 45.0; // Medium volatility for other fiat currencies
     }
 
     /**
-     * Get confidence score for exchange rate.
+     * Get confidence score for exchange rate accuracy (0-100).
      */
     public function getConfidenceScore(): float
     {
-        $score = 100;
-        
-        // Reduce score if rate is stale
-        if ($this->isExchangeRateStale()) {
-            $score -= 30;
+        if (!$this->last_rate_update) {
+            return 0;
         }
-        
-        // Reduce score for volatile currencies
-        if ($this->is_crypto) {
-            $score -= 20;
-        }
-        
-        // Increase score for major currencies
-        if (in_array($this->currency_code, ['USD', 'EUR', 'GBP', 'JPY'])) {
-            $score += 10;
-        }
-        
-        return max(0, min(100, $score));
+
+        $hoursOld = $this->last_rate_update->diffInHours(now());
+        $maxHours = $this->is_crypto ? 24 : 168; // 1 day for crypto, 1 week for fiat
+
+        return max(0, 100 - ($hoursOld / $maxHours * 100));
     }
 
+    // =============================================
+    // PROTECTED HELPER METHODS
+    // =============================================
+
     /**
-     * Additional helper methods for complex calculations
+     * Calculate strength index based on various factors.
      */
     protected function calculateStrengthIndex(): float
     {
-        // Implement currency strength calculation
-        return rand(40, 80);
+        $factors = [
+            'usage' => $this->calculateUsagePercentage(),
+            'stability' => $this->getStabilityRating() === 'stable' ? 100 : 50,
+            'liquidity' => $this->getLiquidityScore(),
+            'adoption' => count($this->supported_countries ?? []) * 2,
+        ];
+
+        return array_sum($factors) / count($factors);
     }
 
+    /**
+     * Get stability rating.
+     */
     protected function getStabilityRating(): string
     {
         $volatility = $this->calculateVolatilityIndex();
         
-        if ($volatility < 20) return 'stable';
-        if ($volatility < 50) return 'moderate';
+        if ($volatility < 25) {
+            return 'stable';
+        } elseif ($volatility < 60) {
+            return 'moderate';
+        }
+        
         return 'volatile';
     }
 
+    /**
+     * Get liquidity score.
+     */
     protected function getLiquidityScore(): float
     {
-        // Based on trading volume and market depth
-        return $this->is_crypto ? rand(30, 70) : rand(70, 95);
+        $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD'];
+        return in_array($this->currency_code, $majorCurrencies) ? 95.0 : 60.0;
     }
 
+    /**
+     * Get crypto market cap rank.
+     */
     protected function getCryptoRank(): ?int
     {
-        if (!$this->is_crypto) return null;
-        
-        // Mock crypto ranking
-        return rand(1, 1000);
+        if (!$this->is_crypto) {
+            return null;
+        }
+
+        $cryptoRanks = [
+            'BTC' => 1, 'ETH' => 2, 'BNB' => 3, 'XRP' => 4, 'ADA' => 5,
+            'SOL' => 6, 'DOGE' => 7, 'DOT' => 8, 'MATIC' => 9, 'LTC' => 10,
+        ];
+
+        return $cryptoRanks[$this->currency_code] ?? 999;
     }
 
+    /**
+     * Get estimated inflation rate.
+     */
     protected function getInflationRate(): float
     {
-        // Mock inflation rate data
-        return rand(-2, 8) + (rand(0, 99) / 100);
+        $inflationRates = [
+            'USD' => 3.2, 'EUR' => 2.8, 'GBP' => 4.1, 'JPY' => 1.5,
+            'CHF' => 1.8, 'CAD' => 3.5, 'AUD' => 3.8, 'NZD' => 4.2,
+        ];
+
+        return $inflationRates[$this->currency_code] ?? 5.0;
     }
 
+    /**
+     * Calculate weekly change percentage.
+     */
     protected function calculateWeeklyChange(): float
     {
-        return rand(-10, 10) + (rand(0, 99) / 100);
+        // Placeholder - would integrate with real exchange rate API
+        return rand(-5, 5) / 10;
     }
 
+    /**
+     * Calculate monthly change percentage.
+     */
     protected function calculateMonthlyChange(): float
     {
-        return rand(-25, 25) + (rand(0, 99) / 100);
+        // Placeholder - would integrate with real exchange rate API
+        return rand(-15, 15) / 10;
     }
 
+    /**
+     * Calculate yearly change percentage.
+     */
     protected function calculateYearlyChange(): float
     {
-        return rand(-50, 100) + (rand(0, 99) / 100);
+        // Placeholder - would integrate with real exchange rate API
+        return rand(-50, 50) / 10;
     }
 
+    /**
+     * Get prediction for currency trend.
+     */
     protected function getPrediction(): string
     {
-        $predictions = ['bullish', 'bearish', 'neutral', 'uncertain'];
-        return $predictions[array_rand($predictions)];
+        $trend = $this->getTrendDirection();
+        $predictions = [
+            'up' => 'bullish',
+            'down' => 'bearish',
+            'stable' => 'neutral',
+        ];
+
+        return $predictions[$trend] ?? 'neutral';
     }
 
+    /**
+     * Get support level for technical analysis.
+     */
     protected function getSupportLevel(): float
     {
-        return $this->exchange_rate * 0.95; // 5% below current rate
+        return $this->exchange_rate ? $this->exchange_rate * 0.95 : 0;
     }
 
+    /**
+     * Get resistance level for technical analysis.
+     */
     protected function getResistanceLevel(): float
     {
-        return $this->exchange_rate * 1.05; // 5% above current rate
+        return $this->exchange_rate ? $this->exchange_rate * 1.05 : 0;
     }
 
+    /**
+     * Get conversion fee percentage.
+     */
     protected function getConversionFee(): float
     {
-        return $this->is_crypto ? 0.01 : 0.005; // 1% for crypto, 0.5% for fiat
+        return $this->is_crypto ? 0.5 : 0.25; // Higher fees for crypto
     }
 
+    /**
+     * Get primary regions where currency is used.
+     */
     protected function getPrimaryRegions(): array
     {
-        // Map currencies to primary regions
         $regionMap = [
-            'USD' => ['North America'],
+            'USD' => ['North America', 'Global'],
             'EUR' => ['Europe'],
             'GBP' => ['Europe', 'Commonwealth'],
-            'JPY' => ['Asia Pacific'],
-            'CNY' => ['Asia Pacific'],
-            'INR' => ['Asia Pacific'],
+            'JPY' => ['Asia'],
+            'CHF' => ['Europe'],
+            'CAD' => ['North America'],
+            'AUD' => ['Oceania'],
+            'CNY' => ['Asia'],
         ];
-        
-        return $regionMap[$this->currency_code] ?? ['Other'];
+
+        return $regionMap[$this->currency_code] ?? ['Global'];
     }
 
+    /**
+     * Get timezone coverage.
+     */
     protected function getTimezoneCoverage(): array
     {
-        // Mock timezone coverage
-        return ['UTC-8', 'UTC+0', 'UTC+8'];
+        return $this->supported_countries ?? [];
     }
 
+    /**
+     * Get economic bloc association.
+     */
     protected function getEconomicBloc(): ?string
     {
         $blocMap = [
             'EUR' => 'European Union',
             'USD' => 'NAFTA',
             'GBP' => 'Commonwealth',
+            'JPY' => 'ASEAN+3',
         ];
-        
+
         return $blocMap[$this->currency_code] ?? null;
     }
 
+    /**
+     * Get regulatory status.
+     */
     protected function getRegulatoryStatus(): string
     {
-        return $this->is_crypto ? 'Emerging' : 'Established';
+        if ($this->is_crypto) {
+            return 'regulated'; // Simplified - would check actual regulations
+        }
+
+        return 'legal_tender';
     }
-}
+
+    // =============================================
+    // STATIC METHODS & CACHING
+    // =============================================
 
     /**
-     * Scope a query to only include recent records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $days
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Get cached active currencies.
      */
-    public function scopeRecent($query, int $days = 30)
+    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
     {
-        return $query->where('created_at', '>=', \Carbon\Carbon::now()->subDays($days));
+        return Cache::remember('salary_currencies_active', 3600, function () {
+            return static::active()->orderBy('currency_name')->get();
+        });
     }
+
+    /**
+     * Get cached default currency.
+     */
+    public static function getCachedDefault(): ?SalaryCurrency
+    {
+        return Cache::remember('salary_currency_default', 3600, function () {
+            return static::default()->first();
+        });
+    }
+
+    /**
+     * Get cached popular currencies.
+     */
+    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("salary_currencies_popular_{$limit}", 1800, function () use ($limit) {
+            return static::popular()->active()->limit($limit)->get();
+        });
+    }
+
+    /**
+     * Clear related caches.
+     */
+    public function clearCaches(): void
+    {
+        Cache::forget('salary_currencies_active');
+        Cache::forget('salary_currency_default');
+        Cache::forget("currency.{$this->id}.usage_stats");
+        
+        // Clear pattern-based caches
+        $this->clearCachePattern('salary_currencies_*');
+        $this->clearCachePattern("currency.{$this->id}.*");
+    }
+
+    /**
+     * Clear cache by pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        if (method_exists(Cache::getStore(), 'flush')) {
+            // For stores that support pattern clearing
+            $keys = Cache::getStore()->getRedis()->keys($pattern);
+            if (!empty($keys)) {
+                Cache::getStore()->getRedis()->del($keys);
+            }
+        }
+    }
+
+    // =============================================
+    // MODEL EVENTS
+    // =============================================
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when currency is updated
+        static::updated(function ($currency) {
+            $currency->clearCaches();
+        });
+
+        static::deleted(function ($currency) {
+            $currency->clearCaches();
+        });
+
+        // Ensure only one default currency
+        static::saving(function ($currency) {
+            if ($currency->is_default) {
+                static::where('id', '!=', $currency->id)->update(['is_default' => false]);
+            }
+        });
+    }
+}

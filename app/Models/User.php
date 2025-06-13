@@ -412,6 +412,48 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return $query->where('created_at', '<', now()->subDays($days));
     }
 
+    // Relationships
+
+    /**
+     * Get the candidate associated with the user.
+     */
+    public function candidate()
+    {
+        return $this->hasOne(Candidate::class);
+    }
+
+    /**
+     * Get the company associated with the user.
+     */
+    public function company()
+    {
+        return $this->hasOne(Company::class);
+    }
+
+    /**
+     * Get the country that the user belongs to.
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Get the state that the user belongs to.
+     */
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    /**
+     * Get the city that the user belongs to.
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
     /**
      * JWT Implementation
      */

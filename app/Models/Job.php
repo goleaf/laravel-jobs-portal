@@ -382,5 +382,23 @@ class Job extends Model
         return $query->where('created_at', '>=', Carbon::now()->subDays($days));
     }
 
+    // Relationships
+
+    /**
+     * Get the company that owns the job.
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the applied jobs for this job.
+     */
+    public function appliedJobs(): HasMany
+    {
+        return $this->hasMany(AppliedJob::class);
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

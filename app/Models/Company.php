@@ -396,5 +396,23 @@ class Company extends Model implements HasMedia
         return 'slug';
     }
 
+    // Relationships
+
+    /**
+     * Get the user that owns the company.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the jobs for the company.
+     */
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class);
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

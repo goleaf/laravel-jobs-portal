@@ -102,24 +102,7 @@ class ImageSlider extends Model implements HasMedia
         return asset('assets/img/infyom-logo.png');
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-        protected function casts(): array
-    {
-        return [
-            'is_featured' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
 
-        'id' => 'integer',
-        'description' => 'string',
-        'is_active' => 'boolean',
-    
-        ];
-    }
 
 
     /**

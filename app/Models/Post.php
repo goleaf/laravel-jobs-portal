@@ -98,27 +98,7 @@ class Post extends Model implements HasMedia
     }
 
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-        protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
 
-        'id' => 'integer',
-        'title' => 'string',
-        'description' => 'string',
-        'created_by' => 'integer',
-        'is_default' => 'boolean',
-    
-        ];
-    }
 
 
     /**

@@ -364,5 +364,37 @@ class Company extends Model implements HasMedia
         return $jobTypes->first();
     }
 
+    /**
+     * Activity log configuration for spatie/laravel-activitylog
+     */
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'email', 'phone', 'website', 'is_active', 'is_featured', 'is_verified'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Company has been {$eventName}");
+    }
+
+    /**
+     * Slug configuration for spatie/laravel-sluggable
+     */
+    public function getSlugOptions(): \Spatie\Sluggable\SlugOptions
+    {
+        return \Spatie\Sluggable\SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate()
+            ->slugsShouldBeNoLongerThan(255);
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

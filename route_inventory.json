@@ -1,0 +1,7 @@
+
+In ClassLoader.php line 576:
+                                                                                                           
+  include(/www/wwwroot/jobportal.prus.dev/vendor/composer/../../app/Http/Controllers/Controller.php): Fai  
+  led to open stream: No such file or directory                                                            
+                                                                                                           
+

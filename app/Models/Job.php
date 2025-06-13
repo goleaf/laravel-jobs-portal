@@ -50,7 +50,72 @@ use Spatie\Activitylog\LogOptions;
  * @property-read Position $position
  * @property-read SalaryPeriod $salaryPeriod
  */
-
+class Job extends Model
+{
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public $table = 'jobs';
+
+    /**
+     * Job status constants
+     */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_OPEN = 'open';
+    public const STATUS_CLOSED = 'closed';
+    public const STATUS_PAUSED = 'paused';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'job_title', 'title', 'description', 'requirements', 'benefits',
+        'company_id', 'user_id', 'job_type_id', 'career_level_id', 
+        'functional_area_id', 'job_shift_id', 'degree_level_id', 'position_id',
+        'currency_id', 'salary_period_id', 'country_id', 'state_id', 'city_id',
+        'salary_from', 'salary_to', 'salary_min', 'salary_max',
+        'job_expiry_date', 'expires_at', 'published_at',
+        'country', 'state', 'city', 'location', 'address',
+        'no_preference', 'hide_salary', 'is_freelance', 'is_suspended',
+        'is_remote', 'is_featured', 'is_active', 'status'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'salary_from' => 'decimal:2',
+            'salary_to' => 'decimal:2',
+            'salary_min' => 'decimal:2',
+            'salary_max' => 'decimal:2',
+            'no_preference' => 'boolean',
+            'hide_salary' => 'boolean',
+            'is_freelance' => 'boolean',
+            'is_suspended' => 'boolean',
+            'is_remote' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_active' => 'boolean',
+            'job_expiry_date' => 'date',
+            'expires_at' => 'datetime',
+            'published_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Activity log configuration for spatie/laravel-activitylog
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['job_title', 'title', 'status', 'is_active', 'is_featured'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Job has been {$eventName}");
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -62,7 +127,7 @@ use Spatie\Activitylog\LogOptions;
         return $query->orderBy("created_at", "asc");
     }
 
-
+
 
 
     /**

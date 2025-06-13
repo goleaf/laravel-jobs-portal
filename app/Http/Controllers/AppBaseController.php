@@ -2,77 +2,149 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
 
+/**
+ * App Base Controller
+ * 
+ * Extended base controller for the Job Portal application with API response methods,
+ * caching capabilities, and Context7 enterprise patterns.
+ * 
+ * Features:
+ * - Standardized JSON API responses
+ * - Advanced caching strategies
+ * - Performance monitoring
+ * - Error handling and logging
+ * - Context7 job portal patterns
+ */
 class AppBaseController extends Controller
 {
     /**
-     * Send success response with data
+     * Default cache TTL in seconds (1 hour)
      */
-    public function sendResponse($result, $message = 'Operation successful', $status = 200): JsonResponse
+    protected int $cacheTTL = 3600;
+
+    /**
+     * Enable/disable query logging for performance monitoring
+     */
+    protected bool $logQueries = false;
+
+    /**
+     * Success response with data
+     */
+    public function sendResponse($result, string $message = 'Success', int $code = 200): JsonResponse
     {
-        return $this->successResponse($result, $message, $status);
+        $response = [
+            'success' => true,
+            'message' => $message,
+            'data' => $result,
+            'meta' => [
+                'timestamp' => now()->toISOString(),
+                'version' => config('app.version', '1.0.0'),
+                'request_id' => request()->header('X-Request-ID', uniqid())
+            ]
+        ];
+
+        return response()->json($response, $code);
     }
 
     /**
-     * Send error response
+     * Error response
      */
-    public function sendError($error, $errorMessages = [], $code = 400): JsonResponse
+    public function sendError(string $error, $errorMessages = [], int $code = 404): JsonResponse
     {
-        return $this->errorResponse($error, $code, $errorMessages);
+        $response = [
+            'success' => false,
+            'message' => $error,
+            'errors' => $errorMessages,
+            'meta' => [
+                'timestamp' => now()->toISOString(),
+                'version' => config('app.version', '1.0.0'),
+                'request_id' => request()->header('X-Request-ID', uniqid())
+            ]
+        ];
+
+        // Log error for monitoring
+        Log::warning('API Error Response', [
+            'message' => $error,
+            'errors' => $errorMessages,
+            'code' => $code,
+            'url' => request()->url(),
+            'method' => request()->method(),
+            'user_id' => auth()->id(),
+            'ip' => request()->ip()
+        ]);
+
+        return response()->json($response, $code);
     }
 
     /**
-     * Send success response without data
+     * Success response without data
      */
-    public function sendSuccess($message = 'Operation completed successfully'): JsonResponse
+    public function sendSuccess(string $message = 'Operation completed successfully', int $code = 200): JsonResponse
     {
-        return $this->successResponse(null, $message);
+        return $this->sendResponse(null, $message, $code);
     }
 
     /**
-     * Handle API pagination
+     * Paginated response with meta information
+     */
+    protected function sendPaginatedResponse(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully'): JsonResponse
+    {
+        $response = [
+            'success' => true,
+            'message' => $message,
+            'data' => $paginator->items(),
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page' => $paginator->lastPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'from' => $paginator->firstItem(),
+                'to' => $paginator->lastItem(),
+                'has_more_pages' => $paginator->hasMorePages()
+            ],
+            'meta' => [
+                'timestamp' => now()->toISOString(),
+                'version' => config('app.version', '1.0.0'),
+                'request_id' => request()->header('X-Request-ID', uniqid())
+            ]
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    /**
+     * Handle API pagination with filters and search
      */
     protected function sendPaginated($query, Request $request, $resource = null)
     {
         $params = $this->getPaginationParams($request);
-        $filters = $this->getFilterParams($request);
-
+        
         // Apply search if provided
-        if (!empty($filters['search'])) {
-            $query = $this->applySearch($query, $filters['search']);
+        if ($request->filled('search')) {
+            $query = $this->applySearch($query, $request->get('search'));
         }
 
+        // Apply job portal specific filters
+        $query = $this->applyJobPortalFilters($query, $request);
+
         // Apply sorting
-        $query = $query->orderBy($filters['sort_by'], $filters['sort_direction']);
+        $sortBy = $params['sort'] ?? 'id';
+        $sortDirection = $params['direction'] ?? 'desc';
+        $query = $query->orderBy($sortBy, $sortDirection);
 
         // Paginate results
         $results = $query->paginate($params['per_page']);
 
-        // Transform with resource if provided
-        if ($resource) {
-            $results->getCollection()->transform(function ($item) use ($resource) {
-                return new $resource($item);
-            });
-        }
-
-        return $this->sendResponse([
-            'data' => $results->items(),
-            'pagination' => [
-                'current_page' => $results->currentPage(),
-                'last_page' => $results->lastPage(),
-                'per_page' => $results->perPage(),
-                'total' => $results->total(),
-                'from' => $results->firstItem(),
-                'to' => $results->lastItem(),
-            ]
-        ]);
+        return $this->sendPaginatedResponse($results);
     }
 
     /**
@@ -86,6 +158,92 @@ class AppBaseController extends Controller
               ->orWhere('title', 'LIKE', "%{$search}%")
               ->orWhere('description', 'LIKE', "%{$search}%");
         });
+    }
+
+    /**
+     * Apply standard filters for job portal entities
+     */
+    protected function applyJobPortalFilters($query, Request $request)
+    {
+        // Apply common filters first
+        $query = $this->applyCommonFilters($query, $request);
+
+        // Job portal specific filters
+        if ($request->filled('category_id')) {
+            $query->where('job_category_id', $request->get('category_id'));
+        }
+
+        if ($request->filled('company_id')) {
+            $query->where('company_id', $request->get('company_id'));
+        }
+
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%' . $request->get('location') . '%');
+        }
+
+        if ($request->filled('salary_min')) {
+            $query->where('salary_from', '>=', $request->get('salary_min'));
+        }
+
+        if ($request->filled('salary_max')) {
+            $query->where('salary_to', '<=', $request->get('salary_max'));
+        }
+
+        if ($request->filled('experience_level')) {
+            $query->where('experience_from', '<=', $request->get('experience_level'))
+                  ->where('experience_to', '>=', $request->get('experience_level'));
+        }
+
+        if ($request->filled('job_type')) {
+            $query->where('job_type_id', $request->get('job_type'));
+        }
+
+        if ($request->filled('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        if ($request->filled('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Validation error response
+     */
+    protected function sendValidationError($validator): JsonResponse
+    {
+        return $this->sendError('Validation Error', $validator->errors(), 422);
+    }
+
+    /**
+     * Unauthorized response
+     */
+    protected function sendUnauthorized(string $message = 'Unauthorized access'): JsonResponse
+    {
+        return $this->sendError($message, [], 401);
+    }
+
+    /**
+     * Forbidden response
+     */
+    protected function sendForbidden(string $message = 'Access forbidden'): JsonResponse
+    {
+        return $this->sendError($message, [], 403);
+    }
+
+    /**
+     * Server error response
+     */
+    protected function sendServerError(string $message = 'Internal server error', $debug = null): JsonResponse
+    {
+        $errors = [];
+        if (config('app.debug') && $debug) {
+            $errors['debug'] = $debug;
+        }
+
+        return $this->sendError($message, $errors, 500);
     }
 
     /**
@@ -122,6 +280,45 @@ class AppBaseController extends Controller
     }
 
     /**
+     * Cache response data with key
+     */
+    protected function cacheResponse(string $key, $data, int $ttl = null): void
+    {
+        $ttl = $ttl ?? $this->cacheTTL;
+        Cache::put($key, $data, $ttl);
+    }
+
+    /**
+     * Get cached response data
+     */
+    protected function getCachedResponse(string $key)
+    {
+        return Cache::get($key);
+    }
+
+    /**
+     * Get resource with caching
+     */
+    protected function getCachedResource(string $cacheKey, callable $callback, int $ttl = null)
+    {
+        return Cache::remember($cacheKey, $ttl ?? $this->cacheTTL, $callback);
+    }
+
+    /**
+     * Build cache key with prefix
+     */
+    protected function buildCacheKey(string $base, ...$params): string
+    {
+        $key = config('app.name', 'jobportal') . ':' . $base;
+        
+        foreach ($params as $param) {
+            $key .= ':' . (is_array($param) ? md5(serialize($param)) : $param);
+        }
+        
+        return $key;
+    }
+
+    /**
      * Cache key generator for consistent naming
      */
     protected function getCacheKey(string $prefix, ...$params): string
@@ -130,6 +327,151 @@ class AppBaseController extends Controller
         $paramString = implode('_', array_filter($params));
         
         return "app_{$prefix}_{$userId}_{$paramString}";
+    }
+
+    /**
+     * Execute query with performance monitoring
+     */
+    protected function executeWithMonitoring(callable $callback, string $operation = 'database_query')
+    {
+        $startTime = microtime(true);
+        
+        if ($this->logQueries) {
+            DB::enableQueryLog();
+        }
+
+        try {
+            $result = $callback();
+            
+            $executionTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
+            
+            // Log performance metrics
+            Log::info('Performance Metric', [
+                'operation' => $operation,
+                'execution_time_ms' => round($executionTime, 2),
+                'memory_usage_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
+                'queries_count' => $this->logQueries ? count(DB::getQueryLog()) : null,
+                'controller' => static::class,
+                'user_id' => auth()->id()
+            ]);
+
+            return $result;
+            
+        } catch (\Exception $e) {
+            Log::error('Operation Failed', [
+                'operation' => $operation,
+                'error' => $e->getMessage(),
+                'execution_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
+                'controller' => static::class,
+                'user_id' => auth()->id()
+            ]);
+            
+            throw $e;
+        } finally {
+            if ($this->logQueries) {
+                DB::disableQueryLog();
+            }
+        }
+    }
+
+    /**
+     * Handle resource creation with logging
+     */
+    protected function handleResourceCreation(Model $model, array $data, string $resourceName = 'Resource'): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $resource = $model->create($data);
+            
+            $this->logAction('create', $resource, $data);
+            
+            DB::commit();
+
+            return $this->sendResponse(
+                $resource->fresh(),
+                "{$resourceName} created successfully",
+                201
+            );
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error("Failed to create {$resourceName}", [
+                'error' => $e->getMessage(),
+                'data' => $data,
+                'user_id' => auth()->id()
+            ]);
+
+            return $this->sendServerError("Failed to create {$resourceName}");
+        }
+    }
+
+    /**
+     * Handle resource update with logging
+     */
+    protected function handleResourceUpdate(Model $resource, array $data, string $resourceName = 'Resource'): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $originalData = $resource->toArray();
+            $resource->update($data);
+            
+            $this->logAction('update', $resource, [
+                'original' => $originalData,
+                'updated' => $data
+            ]);
+            
+            DB::commit();
+
+            return $this->sendResponse(
+                $resource->fresh(),
+                "{$resourceName} updated successfully"
+            );
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error("Failed to update {$resourceName}", [
+                'error' => $e->getMessage(),
+                'resource_id' => $resource->id,
+                'data' => $data,
+                'user_id' => auth()->id()
+            ]);
+
+            return $this->sendServerError("Failed to update {$resourceName}");
+        }
+    }
+
+    /**
+     * Handle resource deletion with logging
+     */
+    protected function handleResourceDeletion(Model $resource, string $resourceName = 'Resource'): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $resourceData = $resource->toArray();
+            $resource->delete();
+            
+            $this->logAction('delete', $resource, $resourceData);
+            
+            DB::commit();
+
+            return $this->sendSuccess("{$resourceName} deleted successfully");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error("Failed to delete {$resourceName}", [
+                'error' => $e->getMessage(),
+                'resource_id' => $resource->id,
+                'user_id' => auth()->id()
+            ]);
+
+            return $this->sendServerError("Failed to delete {$resourceName}");
+        }
     }
 
     /**
@@ -150,7 +492,7 @@ class AppBaseController extends Controller
         // Store file and return path
         $filePath = $file->store($path, 'public');
         
-        $this->logUserAction('file_upload', [
+        $this->logAction('file_upload', null, [
             'field' => $field,
             'original_name' => $file->getClientOriginalName(),
             'stored_path' => $filePath,
@@ -162,84 +504,10 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Validate request with custom rules
+     * Check if request is API request
      */
-    protected function validateRequest(Request $request, array $rules, array $messages = []): array
+    protected function isApiRequest(Request $request): bool
     {
-        $validator = validator($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            if ($this->isApiRequest($request)) {
-                throw new \Illuminate\Validation\ValidationException($validator);
-            }
-            
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        return $validator->validated();
-    }
-
-    /**
-     * Handle bulk operations
-     */
-    protected function handleBulkOperation(Request $request, callable $operation): JsonResponse
-    {
-        $ids = $request->input('ids', []);
-        
-        if (empty($ids) || !is_array($ids)) {
-            return $this->sendError('No valid IDs provided for bulk operation');
-        }
-
-        $successCount = 0;
-        $errors = [];
-
-        foreach ($ids as $id) {
-            try {
-                $operation($id);
-                $successCount++;
-            } catch (\Exception $e) {
-                $errors[] = "ID {$id}: " . $e->getMessage();
-            }
-        }
-
-        $message = "Bulk operation completed. {$successCount} successful";
-        if (!empty($errors)) {
-            $message .= ", " . count($errors) . " failed";
-        }
-
-        return $this->sendResponse([
-            'successful' => $successCount,
-            'failed' => count($errors),
-            'errors' => $errors,
-        ], $message);
-    }
-
-    /**
-     * Handle model not found
-     */
-    protected function handleNotFound(string $model = 'Resource'): JsonResponse
-    {
-        return $this->sendError("{$model} not found", [], 404);
-    }
-
-    /**
-     * Handle server error
-     */
-    protected function handleServerError(\Exception $e, string $action = 'operation'): JsonResponse
-    {
-        Log::error("Server error during {$action}", [
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-            'user_id' => Auth::id(),
-            'request_data' => request()->all(),
-        ]);
-
-        if (config('app.debug')) {
-            return $this->sendError("Server error: " . $e->getMessage(), [], 500);
-        }
-
-        return $this->sendError("An error occurred during {$action}", [], 500);
+        return $request->is('api/*') || $request->wantsJson();
     }
 } 

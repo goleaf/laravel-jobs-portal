@@ -201,7 +201,64 @@ class Application extends Model
      */
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%');
+        return $query->whereHas('candidate', function ($q) use ($search) {
+            $q->where('first_name', 'like', "%{$search}%")
+              ->orWhere('last_name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%");
+        })->orWhereHas('job', function ($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
+        })->orWhere('notes', 'like', "%{$search}%")
+          ->orWhere('expected_salary', 'like', "%{$search}%");
+    }
+
+    /**
+     * Scope for applications created today
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    /**
+     * Scope for applications created this week
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    }
+
+    /**
+     * Scope for applications created this month
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Scope for shortlisted applications
+     */
+    public function scopeShortlisted($query)
+    {
+        return $query->where('status', self::STATUS_SHORTLISTED);
+    }
+
+    /**
+     * Scope for interviewed applications
+     */
+    public function scopeInterviewed($query)
+    {
+        return $query->where('status', self::STATUS_INTERVIEWED);
+    }
+
+    /**
+     * Scope for reviewing applications
+     */
+    public function scopeReviewing($query)
+    {
+        return $query->where('status', self::STATUS_REVIEWING);
     }
 
     // Context7 Enhanced Scopes

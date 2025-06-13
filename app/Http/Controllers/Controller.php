@@ -10,9 +10,26 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Base Controller Class
+ * 
+ * This is the base controller class that all other controllers should extend.
+ * It provides common functionality and follows Laravel 12 best practices.
+ * 
+ * Features:
+ * - Request authorization capabilities
+ * - Request validation functionality  
+ * - Context7 enterprise patterns
+ * - Modern Laravel 12 structure
+ */
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    /**
+     * Default items per page for pagination
+     */
+    protected int $perPage = 15;
 
     /**
      * Response structure for consistent API responses
@@ -111,8 +128,10 @@ abstract class Controller extends BaseController
     protected function getPaginationParams(Request $request): array
     {
         return [
-            'per_page' => min((int) $request->get('per_page', 15), 100),
-            'page' => max((int) $request->get('page', 1), 1),
+            'per_page' => min($request->get('per_page', $this->perPage), 100),
+            'page' => $request->get('page', 1),
+            'sort' => $request->get('sort', 'id'),
+            'direction' => $request->get('direction', 'desc')
         ];
     }
 
@@ -130,5 +149,117 @@ abstract class Controller extends BaseController
             'status' => $request->get('status'),
             'category' => $request->get('category'),
         ];
+    }
+
+    /**
+     * Apply common filters to query
+     */
+    protected function applyCommonFilters($query, $request)
+    {
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->get('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $this->applySearchFilter($q, $searchTerm);
+            });
+        }
+
+        // Date range filtering
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->get('start_date'));
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->get('end_date'));
+        }
+
+        // Status filtering
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Override this method in child controllers to define search fields
+     */
+    protected function applySearchFilter($query, string $searchTerm)
+    {
+        // Default implementation - override in child controllers
+        if (method_exists($query->getModel(), 'searchable')) {
+            $query->search($searchTerm);
+        }
+    }
+
+    /**
+     * Get validation rules for the controller
+     * Override in child controllers
+     */
+    protected function getValidationRules(string $action = 'store'): array
+    {
+        return [];
+    }
+
+    /**
+     * Get validation messages for the controller
+     * Override in child controllers  
+     */
+    protected function getValidationMessages(): array
+    {
+        return [];
+    }
+
+    /**
+     * Log controller action for audit trail
+     */
+    protected function logAction(string $action, $model = null, array $data = []): void
+    {
+        if (config('app.log_controller_actions', false)) {
+            \Log::info("Controller Action: {$action}", [
+                'controller' => static::class,
+                'user_id' => auth()->id(),
+                'model' => $model ? get_class($model) : null,
+                'model_id' => $model?->id ?? null,
+                'data' => $data,
+                'timestamp' => now(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
+        }
+    }
+
+    /**
+     * Handle model not found exceptions gracefully
+     */
+    protected function handleModelNotFound(string $modelName = 'Record'): array
+    {
+        return $this->errorResponse(
+            message: "{$modelName} not found",
+            status: 404
+        );
+    }
+
+    /**
+     * Handle authorization failures gracefully
+     */
+    protected function handleUnauthorized(string $action = 'perform this action'): array
+    {
+        return $this->errorResponse(
+            message: "You are not authorized to {$action}",
+            status: 403
+        );
+    }
+
+    /**
+     * Handle validation failures gracefully
+     */
+    protected function handleValidationFailure($validator): array
+    {
+        return $this->errorResponse(
+            message: 'Validation failed',
+            errors: $validator->errors(),
+            status: 422
+        );
     }
 } 

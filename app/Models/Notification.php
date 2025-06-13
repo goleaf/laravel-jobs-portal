@@ -4,168 +4,287 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
- * App\Models\Notification
+ * Notification Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property int $type
  * @property int $notification_for
  * @property int $user_id
  * @property string $title
- * @property mixed|null $text
+ * @property string|null $text
+ * @property string|null $data
+ * @property string|null $action_url
+ * @property string|null $icon
  * @property string|null $read_at
+ * @property bool $is_read
+ * @property bool $is_important
+ * @property string|null $category
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereNotificationFor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereReadAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserId($value)
+ * @property-read \App\Models\User $user
+ * @property-read string $type_label
+ * @property-read string $category_label
+ * @property-read string $time_ago
+ * @property-read bool $is_recent
+ * @property-read array $parsed_data
+ *
+ * Context7 Enhanced Scopes:
+ * @method static \Illuminate\Database\Eloquent\Builder read()
+ * @method static \Illuminate\Database\Eloquent\Builder unread()
+ * @method static \Illuminate\Database\Eloquent\Builder important()
+ * @method static \Illuminate\Database\Eloquent\Builder normal()
+ * @method static \Illuminate\Database\Eloquent\Builder byUser(int $userId)
+ * @method static \Illuminate\Database\Eloquent\Builder byType(int $type)
+ * @method static \Illuminate\Database\Eloquent\Builder byCategory(string $category)
+ * @method static \Illuminate\Database\Eloquent\Builder search(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder recent(int $days = 7)
+ * @method static \Illuminate\Database\Eloquent\Builder old(int $days = 30)
+ * @method static \Illuminate\Database\Eloquent\Builder today()
+ * @method static \Illuminate\Database\Eloquent\Builder thisWeek()
+ * @method static \Illuminate\Database\Eloquent\Builder thisMonth()
+ * @method static \Illuminate\Database\Eloquent\Builder job()
+ * @method static \Illuminate\Database\Eloquent\Builder application()
+ * @method static \Illuminate\Database\Eloquent\Builder company()
+ * @method static \Illuminate\Database\Eloquent\Builder system()
+ * @method static \Illuminate\Database\Eloquent\Builder marketing()
+ * @method static \Illuminate\Database\Eloquent\Builder security()
+ * @method static \Illuminate\Database\Eloquent\Builder latest()
+ * @method static \Illuminate\Database\Eloquent\Builder oldest()
  *
  * @mixin \Eloquent
- *
- * @property array|null $meta
- * @property-read string $notification_for_text
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereMeta($value)
  */
-
+class Notification extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
+
     /**
-     * Scope a query to only include popular records.
+     * The attributes that are mass assignable.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @var array<int, string>
      */
-    public function scopePopular(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
-    {
-        return $query->orderBy("views_count", "desc");
-    }
+    protected $fillable = [
+        'type',
+        'notification_for',
+        'user_id',
+        'title',
+        'text',
+        'data',
+        'action_url',
+        'icon',
+        'read_at',
+        'is_read',
+        'is_important',
+        'category',
+    ];
 
-
-
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
+            'is_read' => 'boolean',
+            'is_important' => 'boolean',
+            'read_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-
-        'type' => 'integer',
-        'notification_for' => 'integer',
-        'user_id' => 'integer',
-        'title' => 'string',
-        'text' => 'string',
-        'meta' => 'array',
-        'read_at' => 'datetime',
-    
+            'deleted_at' => 'datetime',
         ];
     }
 
+    /**
+     * Configure activity logging.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'type',
+                'notification_for',
+                'user_id',
+                'title',
+                'text',
+                'data',
+                'action_url',
+                'icon',
+                'read_at',
+                'is_read',
+                'is_important',
+                'category',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
-    const CANDIDATE = 1;
-
-    const EMPLOYER = 2;
-
-    const ADMIN = 3;
-
-    const notificationType = [
-        self::JOB_APPLICATION_SUBMITTED => 'APPLICATION SUBMITTED',
-        self::MARK_JOB_FEATURED => 'MARK JOB FEATURED',
-        self::MARK_COMPANY_FEATURED => 'MARK COMPANY FEATURED',
-        self::CANDIDATE_SELECTED_FOR_JOB => 'SELECTED FOR JOB',
-        self::CANDIDATE_REJECTED_FOR_JOB => 'REJECTED FOR JOB',
-        self::CANDIDATE_SHORTLISTED_FOR_JOB => 'SHORTLISTED FOR JOB',
-        self::NEW_EMPLOYER_REGISTERED => 'EMPLOYER REGISTERED',
-        self::NEW_CANDIDATE_REGISTERED => 'CANDIDATE REGISTERED',
-        self::EMPLOYER_PURCHASE_PLAN => 'PURCHASE PLAN',
-        self::FOLLOW_COMPANY => 'FOLLOW COMPANY',
-        self::FOLLOW_JOB => 'FOLLOW JOB',
-        self::JOB_ALERT => 'JOB ALERT',
-        self::MARK_COMPANY_FEATURED_ADMIN => 'MARK COMPANY FEATURED',
-        self::MARK_JOB_FEATURED_ADMIN => 'MARK JOB FEATURED',
+    /**
+     * Validation rules for creating notifications.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'type' => 'required|integer|min:1',
+        'notification_for' => 'required|integer|min:1',
+        'user_id' => 'required|integer|exists:users,id',
+        'title' => 'required|string|max:255',
+        'text' => 'nullable|string',
+        'data' => 'nullable|string',
+        'action_url' => 'nullable|string|max:500',
+        'icon' => 'nullable|string|max:100',
+        'is_read' => 'boolean',
+        'is_important' => 'boolean',
+        'category' => 'nullable|string|max:100',
     ];
 
-    const JOB_APPLICATION_SUBMITTED = 1;
-
-    const MARK_JOB_FEATURED = 2;
-
-    const MARK_COMPANY_FEATURED = 3;
-
-    const CANDIDATE_SELECTED_FOR_JOB = 4;
-
-    const CANDIDATE_REJECTED_FOR_JOB = 5;
-
-    const CANDIDATE_SHORTLISTED_FOR_JOB = 6;
-
-    const NEW_EMPLOYER_REGISTERED = 7;
-
-    const NEW_CANDIDATE_REGISTERED = 8;
-
-    const EMPLOYER_PURCHASE_PLAN = 9;
-
-    const FOLLOW_COMPANY = 10;
-
-    const FOLLOW_JOB = 11;
-
-    const JOB_ALERT = 12;
-
-    const MARK_COMPANY_FEATURED_ADMIN = 13;
-
-    const MARK_JOB_FEATURED_ADMIN = 14;
-
-    public function getNotificationForTextAttribute(): string
+    /**
+     * Update validation rules for notifications.
+     *
+     * @param int $id
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
     {
-        if (! empty($this->type)) {
-            return self::notificationType[$this->type];
-        }
+        return [
+            'type' => 'required|integer|min:1',
+            'notification_for' => 'required|integer|min:1',
+            'user_id' => 'required|integer|exists:users,id',
+            'title' => 'required|string|max:255',
+            'text' => 'nullable|string',
+            'data' => 'nullable|string',
+            'action_url' => 'nullable|string|max:500',
+            'icon' => 'nullable|string|max:100',
+            'is_read' => 'boolean',
+            'is_important' => 'boolean',
+            'category' => 'nullable|string|max:100',
+        ];
     }
+
+    // =============================================
+    // CONSTANTS
+    // =============================================
+
+    public const TYPE_JOB_APPLICATION = 1;
+    public const TYPE_JOB_APPROVED = 2;
+    public const TYPE_JOB_REJECTED = 3;
+    public const TYPE_COMPANY_APPROVED = 4;
+    public const TYPE_COMPANY_REJECTED = 5;
+    public const TYPE_PROFILE_UPDATE = 6;
+    public const TYPE_SYSTEM_NOTIFICATION = 7;
+    public const TYPE_MARKETING = 8;
+    public const TYPE_SECURITY = 9;
+    public const TYPE_REMINDER = 10;
+
+    public const TYPES = [
+        self::TYPE_JOB_APPLICATION => 'Job Application',
+        self::TYPE_JOB_APPROVED => 'Job Approved',
+        self::TYPE_JOB_REJECTED => 'Job Rejected',
+        self::TYPE_COMPANY_APPROVED => 'Company Approved',
+        self::TYPE_COMPANY_REJECTED => 'Company Rejected',
+        self::TYPE_PROFILE_UPDATE => 'Profile Update',
+        self::TYPE_SYSTEM_NOTIFICATION => 'System Notification',
+        self::TYPE_MARKETING => 'Marketing',
+        self::TYPE_SECURITY => 'Security Alert',
+        self::TYPE_REMINDER => 'Reminder',
+    ];
+
+    public const CATEGORIES = [
+        'job' => 'Job Related',
+        'application' => 'Application Related',
+        'company' => 'Company Related',
+        'system' => 'System Notifications',
+        'marketing' => 'Marketing',
+        'security' => 'Security',
+        'reminder' => 'Reminders',
+        'update' => 'Updates',
+        'other' => 'Other',
+    ];
+
+    public const NOTIFICATION_FOR_CANDIDATE = 1;
+    public const NOTIFICATION_FOR_COMPANY = 2;
+    public const NOTIFICATION_FOR_ADMIN = 3;
+
+    // =============================================
+    // RELATIONSHIPS
+    // =============================================
 
     /**
      * Get the user that owns the notification.
      */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Scope for unread notifications.
-     */
-    public function scopeUnread($query)
-    {
-        return $query->whereNull('read_at');
-    }
+    // =============================================
+    // SCOPES - Basic Status
+    // =============================================
 
     /**
-     * Scope for read notifications.
+     * Scope a query to only include read notifications.
      */
     public function scopeRead($query)
     {
-        return $query->whereNotNull('read_at');
+        return $query->where('is_read', true);
     }
 
     /**
-     * Scope for active notifications.
+     * Scope a query to only include unread notifications.
      */
-    public function scopeActive($query)
+    public function scopeUnread($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_read', false);
+    }
+
+    /**
+     * Scope a query to only include important notifications.
+     */
+    public function scopeImportant($query)
+    {
+        return $query->where('is_important', true);
+    }
+
+    /**
+     * Scope a query to only include normal notifications.
+     */
+    public function scopeNormal($query)
+    {
+        return $query->where('is_important', false);
+    }
+
+    // =============================================
+    // SCOPES - Filtering
+    // =============================================
+
+    /**
+     * Scope for notifications by user.
+     */
+    public function scopeByUser($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
     }
 
     /**
@@ -177,36 +296,35 @@ use Illuminate\Database\Eloquent\Model;
     }
 
     /**
-     * Scope for notifications for specific audience.
+     * Scope for notifications by category.
      */
-    public function scopeForAudience($query, int $audience)
+    public function scopeByCategory($query, string $category)
     {
-        return $query->where('notification_for', $audience);
+        return $query->where('category', $category);
     }
 
     /**
-     * Scope for candidate notifications.
+     * Scope for notifications by notification_for.
      */
-    public function scopeForCandidates($query)
+    public function scopeByNotificationFor($query, int $notificationFor)
     {
-        return $query->where('notification_for', self::CANDIDATE);
+        return $query->where('notification_for', $notificationFor);
     }
 
     /**
-     * Scope for employer notifications.
+     * Scope for searching notifications.
      */
-    public function scopeForEmployers($query)
+    public function scopeSearch($query, string $term)
     {
-        return $query->where('notification_for', self::EMPLOYER);
+        return $query->where(function ($q) use ($term) {
+            $q->where('title', 'like', "%{$term}%")
+              ->orWhere('text', 'like', "%{$term}%");
+        });
     }
 
-    /**
-     * Scope for admin notifications.
-     */
-    public function scopeForAdmins($query)
-    {
-        return $query->where('notification_for', self::ADMIN);
-    }
+    // =============================================
+    // SCOPES - Time Based
+    // =============================================
 
     /**
      * Scope for recent notifications.
@@ -225,25 +343,75 @@ use Illuminate\Database\Eloquent\Model;
     }
 
     /**
-     * Scope for searching notifications.
+     * Scope for today's notifications.
      */
-    public function scopeSearch($query, string $term)
+    public function scopeToday($query)
     {
-        return $query->where('title', 'like', "%{$term}%")
-                    ->orWhere('text', 'like', "%{$term}%");
+        return $query->whereDate('created_at', today());
     }
 
     /**
-     * Scope for job application notifications.
+     * Scope for this week's notifications.
      */
-    public function scopeJobApplications($query)
+    public function scopeThisWeek($query)
     {
-        return $query->whereIn('type', [
-            self::JOB_APPLICATION_SUBMITTED,
-            self::CANDIDATE_SELECTED_FOR_JOB,
-            self::CANDIDATE_REJECTED_FOR_JOB,
-            self::CANDIDATE_SHORTLISTED_FOR_JOB
+        return $query->whereBetween('created_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek()
         ]);
+    }
+
+    /**
+     * Scope for this month's notifications.
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    // =============================================
+    // SCOPES - Category Specific
+    // =============================================
+
+    /**
+     * Scope for job-related notifications.
+     */
+    public function scopeJob($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'job')
+              ->orWhereIn('type', [
+                  self::TYPE_JOB_APPLICATION,
+                  self::TYPE_JOB_APPROVED,
+                  self::TYPE_JOB_REJECTED
+              ]);
+        });
+    }
+
+    /**
+     * Scope for application-related notifications.
+     */
+    public function scopeApplication($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'application')
+              ->orWhere('type', self::TYPE_JOB_APPLICATION);
+        });
+    }
+
+    /**
+     * Scope for company-related notifications.
+     */
+    public function scopeCompany($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'company')
+              ->orWhereIn('type', [
+                  self::TYPE_COMPANY_APPROVED,
+                  self::TYPE_COMPANY_REJECTED
+              ]);
+        });
     }
 
     /**
@@ -251,21 +419,255 @@ use Illuminate\Database\Eloquent\Model;
      */
     public function scopeSystem($query)
     {
-        return $query->whereIn('type', [
-            self::NEW_EMPLOYER_REGISTERED,
-            self::NEW_CANDIDATE_REGISTERED,
-            self::EMPLOYER_PURCHASE_PLAN
-        ]);
+        return $query->where(function ($q) {
+            $q->where('category', 'system')
+              ->orWhere('type', self::TYPE_SYSTEM_NOTIFICATION);
+        });
     }
-}
 
     /**
-     * Scope a query to only include inactive records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Scope for marketing notifications.
      */
-    public function scopeInactive($query)
+    public function scopeMarketing($query)
     {
-        return $query->where('is_active', false);
+        return $query->where(function ($q) {
+            $q->where('category', 'marketing')
+              ->orWhere('type', self::TYPE_MARKETING);
+        });
     }
+
+    /**
+     * Scope for security notifications.
+     */
+    public function scopeSecurity($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('category', 'security')
+              ->orWhere('type', self::TYPE_SECURITY);
+        });
+    }
+
+    // =============================================
+    // SCOPES - Ordering
+    // =============================================
+
+    /**
+     * Scope for latest notifications.
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for oldest notifications.
+     */
+    public function scopeOldest($query)
+    {
+        return $query->orderBy('created_at', 'asc');
+    }
+
+    // =============================================
+    // CACHED METHODS
+    // =============================================
+
+    /**
+     * Get cached unread count for user.
+     */
+    public static function getCachedUnreadCount(int $userId): int
+    {
+        return Cache::remember(
+            "notifications_unread_count_{$userId}",
+            now()->addMinutes(5),
+            fn() => static::unread()
+                ->byUser($userId)
+                ->count()
+        );
+    }
+
+    /**
+     * Get cached recent notifications for user.
+     */
+    public static function getCachedRecent(int $userId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            "notifications_recent_{$userId}_{$limit}",
+            now()->addMinutes(10),
+            fn() => static::byUser($userId)
+                ->with('user')
+                ->latest()
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    /**
+     * Get cached important notifications for user.
+     */
+    public static function getCachedImportant(int $userId): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            "notifications_important_{$userId}",
+            now()->addMinutes(15),
+            fn() => static::byUser($userId)
+                ->important()
+                ->unread()
+                ->latest()
+                ->get()
+        );
+    }
+
+    // =============================================
+    // HELPER METHODS & ATTRIBUTES
+    // =============================================
+
+    /**
+     * Get type label attribute.
+     */
+    public function getTypeLabelAttribute(): string
+    {
+        return self::TYPES[$this->type] ?? 'Unknown';
+    }
+
+    /**
+     * Get category label attribute.
+     */
+    public function getCategoryLabelAttribute(): string
+    {
+        return self::CATEGORIES[$this->category] ?? ucwords($this->category ?? 'Other');
+    }
+
+    /**
+     * Get time ago attribute.
+     */
+    public function getTimeAgoAttribute(): string
+    {
+        return $this->created_at->diffForHumans();
+    }
+
+    /**
+     * Get is recent attribute.
+     */
+    public function getIsRecentAttribute(): bool
+    {
+        return $this->created_at->isAfter(now()->subHours(24));
+    }
+
+    /**
+     * Get parsed data attribute.
+     */
+    public function getParsedDataAttribute(): array
+    {
+        if (!$this->data) {
+            return [];
+        }
+
+        return json_decode($this->data, true) ?? [];
+    }
+
+    /**
+     * Mark notification as read.
+     */
+    public function markAsRead(): bool
+    {
+        if ($this->is_read) {
+            return true;
+        }
+
+        $this->update([
+            'is_read' => true,
+            'read_at' => now(),
+        ]);
+
+        $this->clearUserCaches();
+
+        return true;
+    }
+
+    /**
+     * Mark notification as unread.
+     */
+    public function markAsUnread(): bool
+    {
+        if (!$this->is_read) {
+            return true;
+        }
+
+        $this->update([
+            'is_read' => false,
+            'read_at' => null,
+        ]);
+
+        $this->clearUserCaches();
+
+        return true;
+    }
+
+    /**
+     * Check if notification is for candidate.
+     */
+    public function isForCandidate(): bool
+    {
+        return $this->notification_for === self::NOTIFICATION_FOR_CANDIDATE;
+    }
+
+    /**
+     * Check if notification is for company.
+     */
+    public function isForCompany(): bool
+    {
+        return $this->notification_for === self::NOTIFICATION_FOR_COMPANY;
+    }
+
+    /**
+     * Check if notification is for admin.
+     */
+    public function isForAdmin(): bool
+    {
+        return $this->notification_for === self::NOTIFICATION_FOR_ADMIN;
+    }
+
+    /**
+     * Set notification data.
+     */
+    public function setData(array $data): void
+    {
+        $this->data = json_encode($data);
+    }
+
+    /**
+     * Clear user-related caches.
+     */
+    public function clearUserCaches(): void
+    {
+        $cacheKeys = [
+            "notifications_unread_count_{$this->user_id}",
+            "notifications_recent_{$this->user_id}_10",
+            "notifications_important_{$this->user_id}",
+        ];
+
+        foreach ($cacheKeys as $key) {
+            Cache::forget($key);
+        }
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($notification) {
+            $notification->clearUserCaches();
+        });
+
+        static::deleted(function ($notification) {
+            $notification->clearUserCaches();
+        });
+
+        static::restored(function ($notification) {
+            $notification->clearUserCaches();
+        });
+    }
+}

@@ -6,142 +6,230 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
- * App\Models\Skill
+ * Skill Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property string|null $description
+ * @property string|null $category
+ * @property string|null $level
  * @property bool $is_active
  * @property bool $is_default
+ * @property bool $is_featured
+ * @property bool $is_technical
+ * @property int|null $sort_order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill whereIsDefault($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill default()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill custom()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill popular(int $limit = 10)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill search(string $term)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill usedInJobs()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill usedByCandidates()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill alphabetical()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill recent(int $days = 30)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skill trending(int $days = 7)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
+ * @property-read string $display_name
+ * @property-read string $category_label
+ * @property-read string $level_label
+ * @property-read int $candidates_count
+ * @property-read int $jobs_count
+ * @property-read int $usage_count
+ *
+ * Context7 Enhanced Scopes:
+ * @method static \Illuminate\Database\Eloquent\Builder active()
+ * @method static \Illuminate\Database\Eloquent\Builder inactive()
+ * @method static \Illuminate\Database\Eloquent\Builder default()
+ * @method static \Illuminate\Database\Eloquent\Builder custom()
+ * @method static \Illuminate\Database\Eloquent\Builder featured()
+ * @method static \Illuminate\Database\Eloquent\Builder nonFeatured()
+ * @method static \Illuminate\Database\Eloquent\Builder technical()
+ * @method static \Illuminate\Database\Eloquent\Builder nonTechnical()
+ * @method static \Illuminate\Database\Eloquent\Builder byCategory(string $category)
+ * @method static \Illuminate\Database\Eloquent\Builder byLevel(string $level)
+ * @method static \Illuminate\Database\Eloquent\Builder search(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder recent(int $days = 30)
+ * @method static \Illuminate\Database\Eloquent\Builder old(int $days = 365)
+ * @method static \Illuminate\Database\Eloquent\Builder popular()
+ * @method static \Illuminate\Database\Eloquent\Builder alphabetical()
+ * @method static \Illuminate\Database\Eloquent\Builder bySortOrder()
+ * @method static \Illuminate\Database\Eloquent\Builder withCandidates()
+ * @method static \Illuminate\Database\Eloquent\Builder withJobs()
+ * @method static \Illuminate\Database\Eloquent\Builder trending()
+ * @method static \Illuminate\Database\Eloquent\Builder inDemand()
+ * @method static \Illuminate\Database\Eloquent\Builder programming()
+ * @method static \Illuminate\Database\Eloquent\Builder design()
+ * @method static \Illuminate\Database\Eloquent\Builder management()
+ * @method static \Illuminate\Database\Eloquent\Builder communication()
+ * @method static \Illuminate\Database\Eloquent\Builder beginner()
+ * @method static \Illuminate\Database\Eloquent\Builder intermediate()
+ * @method static \Illuminate\Database\Eloquent\Builder advanced()
+ * @method static \Illuminate\Database\Eloquent\Builder expert()
  *
  * @mixin \Eloquent
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidate
- * @property-read int|null $candidate_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
  */
 class Skill extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * Validation rules
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    public static $rules = [
-        'name' => 'required|unique:skills,name|max:150',
-        'description' => 'nullable|string|max:500',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-    ];
-
-    public $table = 'skills';
-
-    public $fillable = [
+    protected $fillable = [
         'name',
         'description',
+        'category',
+        'level',
         'is_active',
         'is_default',
+        'is_featured',
+        'is_technical',
+        'sort_order',
     ];
 
     /**
-     * Default eager loading for performance
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
      */
-    protected $with = [];
+    protected $hidden = [
+        'deleted_at',
+    ];
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-
-            'id' => 'integer',
-            'name' => 'string',
-            'description' => 'string',
-            'category' => 'string',
             'is_active' => 'boolean',
+            'is_default' => 'boolean',
             'is_featured' => 'boolean',
             'is_technical' => 'boolean',
-            'is_soft_skill' => 'boolean',
-            'popularity_score' => 'integer',
+            'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-        
+            'deleted_at' => 'datetime',
         ];
     }
 
+    /**
+     * Configure activity logging.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'description',
+                'category',
+                'level',
+                'is_active',
+                'is_default',
+                'is_featured',
+                'is_technical',
+                'sort_order',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
-     * Boot the model.
+     * Validation rules for creating skills.
+     *
+     * @var array<string, string>
      */
-    protected static function boot(): void
+    public static array $rules = [
+        'name' => 'required|string|max:255|unique:skills,name',
+        'description' => 'nullable|string|max:500',
+        'category' => 'nullable|string|max:100',
+        'level' => 'nullable|string|in:beginner,intermediate,advanced,expert',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_technical' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0',
+    ];
+
+    /**
+     * Update validation rules for skills.
+     *
+     * @param int $id
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
     {
-        parent::boot();
-
-        // Clear cache when skill is updated
-        static::updated(function ($skill) {
-            cache()->forget("skill.{$skill->id}");
-            cache()->forget("skills.popular");
-            cache()->forget("skills.active");
-            cache()->tags(['skills', 'skill-' . $skill->id])->flush();
-        });
-
-        // Clear cache when skill is deleted
-        static::deleted(function ($skill) {
-            cache()->forget("skill.{$skill->id}");
-            cache()->forget("skills.popular");
-            cache()->forget("skills.active");
-            cache()->tags(['skills', 'skill-' . $skill->id])->flush();
-        });
+        return [
+            'name' => 'required|string|max:255|unique:skills,name,' . $id,
+            'description' => 'nullable|string|max:500',
+            'category' => 'nullable|string|max:100',
+            'level' => 'nullable|string|in:beginner,intermediate,advanced,expert',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_technical' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
+        ];
     }
 
-    public function candidate(): BelongsToMany
+    // =============================================
+    // CONSTANTS
+    // =============================================
+
+    public const CATEGORIES = [
+        'programming' => 'Programming & Development',
+        'design' => 'Design & Creative',
+        'management' => 'Management & Leadership',
+        'communication' => 'Communication & Soft Skills',
+        'marketing' => 'Marketing & Sales',
+        'finance' => 'Finance & Accounting',
+        'technical' => 'Technical & Engineering',
+        'language' => 'Language Skills',
+        'other' => 'Other Skills',
+    ];
+
+    public const LEVELS = [
+        'beginner' => 'Beginner',
+        'intermediate' => 'Intermediate',
+        'advanced' => 'Advanced',
+        'expert' => 'Expert',
+    ];
+
+    // =============================================
+    // RELATIONSHIPS
+    // =============================================
+
+    /**
+     * Get the candidates that have this skill.
+     */
+    public function candidates(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'candidate_skills');
+        return $this->belongsToMany(Candidate::class, 'candidate_skills')
+                    ->withPivot(['level', 'years_of_experience'])
+                    ->withTimestamps();
     }
 
+    /**
+     * Get the jobs that require this skill.
+     */
     public function jobs(): BelongsToMany
     {
-        return $this->belongsToMany(Job::class, 'jobs_skill');
+        return $this->belongsToMany(Job::class, 'job_skills')
+                    ->withPivot(['level', 'is_required'])
+                    ->withTimestamps();
     }
 
-    public function jobsSkill(): HasMany
-    {
-        return $this->hasMany(Job::class, 'jobs_skill', 'job_id', 'skill_id');
-    }
+    // =============================================
+    // SCOPES - Basic Status
+    // =============================================
 
     /**
-     * Scope for active skills.
+     * Scope a query to only include active skills.
      */
     public function scopeActive($query)
     {
@@ -149,7 +237,7 @@ class Skill extends Model
     }
 
     /**
-     * Scope for inactive skills.
+     * Scope a query to only include inactive skills.
      */
     public function scopeInactive($query)
     {
@@ -157,7 +245,23 @@ class Skill extends Model
     }
 
     /**
-     * Scope for featured skills.
+     * Scope a query to only include default skills.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope a query to only include custom skills.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope a query to only include featured skills.
      */
     public function scopeFeatured($query)
     {
@@ -165,15 +269,15 @@ class Skill extends Model
     }
 
     /**
-     * Scope for non-featured skills.
+     * Scope a query to only include non-featured skills.
      */
-    public function scopeNotFeatured($query)
+    public function scopeNonFeatured($query)
     {
         return $query->where('is_featured', false);
     }
 
     /**
-     * Scope for technical skills.
+     * Scope a query to only include technical skills.
      */
     public function scopeTechnical($query)
     {
@@ -181,28 +285,16 @@ class Skill extends Model
     }
 
     /**
-     * Scope for non-technical skills.
+     * Scope a query to only include non-technical skills.
      */
     public function scopeNonTechnical($query)
     {
         return $query->where('is_technical', false);
     }
 
-    /**
-     * Scope for soft skills.
-     */
-    public function scopeSoftSkills($query)
-    {
-        return $query->where('is_soft_skill', true);
-    }
-
-    /**
-     * Scope for hard skills.
-     */
-    public function scopeHardSkills($query)
-    {
-        return $query->where('is_soft_skill', false);
-    }
+    // =============================================
+    // SCOPES - Filtering & Search
+    // =============================================
 
     /**
      * Scope for skills by category.
@@ -213,13 +305,23 @@ class Skill extends Model
     }
 
     /**
+     * Scope for skills by level.
+     */
+    public function scopeByLevel($query, string $level)
+    {
+        return $query->where('level', $level);
+    }
+
+    /**
      * Scope for searching skills.
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%")
-                    ->orWhere('category', 'like', "%{$term}%");
+        return $query->where(function ($q) use ($term) {
+            $q->where('name', 'like', "%{$term}%")
+              ->orWhere('description', 'like', "%{$term}%")
+              ->orWhere('category', 'like', "%{$term}%");
+        });
     }
 
     /**
@@ -239,23 +341,12 @@ class Skill extends Model
     }
 
     /**
-     * Scope for popular skills.
+     * Scope for popular skills (most used).
      */
-    public function scopePopular($query, int $limit = 10)
+    public function scopePopular($query)
     {
-        return $query->orderBy('popularity_score', 'desc')->limit($limit);
-    }
-
-    /**
-     * Scope for trending skills.
-     */
-    public function scopeTrending($query, int $limit = 10)
-    {
-        return $query->withCount(['candidates' => function ($q) {
-            $q->where('created_at', '>=', now()->subDays(30));
-        }])
-        ->orderBy('candidates_count', 'desc')
-        ->limit($limit);
+        return $query->withCount(['candidates', 'jobs'])
+                    ->orderByRaw('(candidates_count + jobs_count) DESC');
     }
 
     /**
@@ -267,19 +358,24 @@ class Skill extends Model
     }
 
     /**
+     * Scope for ordering by sort order.
+     */
+    public function scopeBySortOrder($query)
+    {
+        return $query->orderBy('sort_order', 'asc')
+                    ->orderBy('name', 'asc');
+    }
+
+    // =============================================
+    // SCOPES - Relationships
+    // =============================================
+
+    /**
      * Scope for skills with candidates.
      */
     public function scopeWithCandidates($query)
     {
         return $query->has('candidates');
-    }
-
-    /**
-     * Scope for skills without candidates.
-     */
-    public function scopeWithoutCandidates($query)
-    {
-        return $query->doesntHave('candidates');
     }
 
     /**
@@ -291,22 +387,37 @@ class Skill extends Model
     }
 
     /**
-     * Scope for skills without jobs.
+     * Scope for trending skills (recently added to jobs).
      */
-    public function scopeWithoutJobs($query)
+    public function scopeTrending($query)
     {
-        return $query->doesntHave('jobs');
+        return $query->whereHas('jobs', function ($q) {
+            $q->where('created_at', '>=', now()->subDays(30));
+        })->withCount(['jobs' => function ($q) {
+            $q->where('created_at', '>=', now()->subDays(30));
+        }])->orderBy('jobs_count', 'desc');
     }
+
+    /**
+     * Scope for in-demand skills (high job count).
+     */
+    public function scopeInDemand($query)
+    {
+        return $query->withCount('jobs')
+                    ->having('jobs_count', '>', 5)
+                    ->orderBy('jobs_count', 'desc');
+    }
+
+    // =============================================
+    // SCOPES - Category Specific
+    // =============================================
 
     /**
      * Scope for programming skills.
      */
     public function scopeProgramming($query)
     {
-        return $query->where('category', 'programming')
-                    ->orWhere('name', 'like', '%programming%')
-                    ->orWhere('name', 'like', '%coding%')
-                    ->orWhere('name', 'like', '%development%');
+        return $query->where('category', 'programming');
     }
 
     /**
@@ -314,21 +425,7 @@ class Skill extends Model
      */
     public function scopeDesign($query)
     {
-        return $query->where('category', 'design')
-                    ->orWhere('name', 'like', '%design%')
-                    ->orWhere('name', 'like', '%ui%')
-                    ->orWhere('name', 'like', '%ux%');
-    }
-
-    /**
-     * Scope for marketing skills.
-     */
-    public function scopeMarketing($query)
-    {
-        return $query->where('category', 'marketing')
-                    ->orWhere('name', 'like', '%marketing%')
-                    ->orWhere('name', 'like', '%seo%')
-                    ->orWhere('name', 'like', '%social media%');
+        return $query->where('category', 'design');
     }
 
     /**
@@ -336,22 +433,7 @@ class Skill extends Model
      */
     public function scopeManagement($query)
     {
-        return $query->where('category', 'management')
-                    ->orWhere('name', 'like', '%management%')
-                    ->orWhere('name', 'like', '%leadership%')
-                    ->orWhere('name', 'like', '%project%');
-    }
-
-    /**
-     * Scope for language skills.
-     */
-    public function scopeLanguages($query)
-    {
-        return $query->where('category', 'language')
-                    ->orWhere('name', 'like', '%language%')
-                    ->orWhere('name', 'like', '%english%')
-                    ->orWhere('name', 'like', '%spanish%')
-                    ->orWhere('name', 'like', '%french%');
+        return $query->where('category', 'management');
     }
 
     /**
@@ -359,101 +441,253 @@ class Skill extends Model
      */
     public function scopeCommunication($query)
     {
-        return $query->where('category', 'communication')
-                    ->orWhere('name', 'like', '%communication%')
-                    ->orWhere('name', 'like', '%presentation%')
-                    ->orWhere('name', 'like', '%writing%');
+        return $query->where('category', 'communication');
     }
 
+    // =============================================
+    // SCOPES - Level Specific
+    // =============================================
+
     /**
-     * Scope for skills by popularity score range.
+     * Scope for beginner level skills.
      */
-    public function scopeByPopularityRange($query, int $min, int $max)
+    public function scopeBeginner($query)
     {
-        return $query->whereBetween('popularity_score', [$min, $max]);
+        return $query->where('level', 'beginner');
     }
 
     /**
-     * Scope for highly popular skills.
+     * Scope for intermediate level skills.
      */
-    public function scopeHighlyPopular($query, int $threshold = 80)
+    public function scopeIntermediate($query)
     {
-        return $query->where('popularity_score', '>=', $threshold);
+        return $query->where('level', 'intermediate');
     }
 
     /**
-     * Scope for emerging skills.
+     * Scope for advanced level skills.
      */
-    public function scopeEmerging($query)
+    public function scopeAdvanced($query)
     {
-        return $query->where('created_at', '>=', now()->subYear())
-                    ->where('popularity_score', '>=', 50);
+        return $query->where('level', 'advanced');
     }
 
     /**
-     * Scope for in-demand skills.
+     * Scope for expert level skills.
      */
-    public function scopeInDemand($query, int $limit = 20)
+    public function scopeExpert($query)
     {
-        return $query->withCount(['jobs' => function ($q) {
-            $q->where('created_at', '>=', now()->subDays(30))
-              ->where('status', 1);
-        }])
-        ->orderBy('jobs_count', 'desc')
-        ->limit($limit);
+        return $query->where('level', 'expert');
     }
 
+    // =============================================
+    // CACHED METHODS
+    // =============================================
+
     /**
-     * Scope for skills required by specific job.
+     * Get cached skills by category.
      */
-    public function scopeRequiredByJob($query, int $jobId)
+    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
     {
-        return $query->whereHas('jobs', function ($q) use ($jobId) {
-            $q->where('job_id', $jobId);
-        });
+        return Cache::remember(
+            "skills_category_{$category}",
+            now()->addHours(12),
+            fn() => static::active()
+                ->byCategory($category)
+                ->bySortOrder()
+                ->get()
+        );
     }
 
     /**
-     * Scope for skills possessed by candidate.
+     * Get cached active skills.
      */
-    public function scopePossessedByCandidate($query, int $candidateId)
+    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
     {
-        return $query->whereHas('candidates', function ($q) use ($candidateId) {
-            $q->where('candidate_id', $candidateId);
-        });
+        return Cache::remember(
+            'skills_active',
+            now()->addHours(6),
+            fn() => static::active()
+                ->bySortOrder()
+                ->get()
+        );
     }
 
     /**
-     * Get skills usage statistics.
+     * Get cached featured skills.
      */
-    public function getUsageStatsAttribute(): array
+    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
     {
-        return cache()->remember("skill.{$this->id}.usage_stats", 3600, function () {
-            return [
-                'candidates_count' => $this->candidate()->count(),
-                'jobs_count' => $this->jobs()->count(),
-                'total_usage' => $this->candidate()->count() + $this->jobs()->count(),
-                'last_used' => max(
-                    $this->candidate()->latest()->first()?->created_at ?? '1970-01-01',
-                    $this->jobs()->latest()->first()?->created_at ?? '1970-01-01'
-                ),
-            ];
-        });
+        return Cache::remember(
+            'skills_featured',
+            now()->addHours(6),
+            fn() => static::active()
+                ->featured()
+                ->bySortOrder()
+                ->get()
+        );
     }
 
     /**
-     * Check if skill is popular (above average usage).
+     * Get cached popular skills.
+     */
+    public static function getCachedPopular(int $limit = 20): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember(
+            "skills_popular_{$limit}",
+            now()->addHours(4),
+            fn() => static::active()
+                ->popular()
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    // =============================================
+    // HELPER METHODS & ATTRIBUTES
+    // =============================================
+
+    /**
+     * Get display name attribute.
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->name . ($this->level ? " ({$this->level_label})" : '');
+    }
+
+    /**
+     * Get category label attribute.
+     */
+    public function getCategoryLabelAttribute(): string
+    {
+        return self::CATEGORIES[$this->category] ?? ucwords($this->category ?? 'Other');
+    }
+
+    /**
+     * Get level label attribute.
+     */
+    public function getLevelLabelAttribute(): string
+    {
+        return self::LEVELS[$this->level] ?? ucwords($this->level ?? 'Not Specified');
+    }
+
+    /**
+     * Get candidates count with caching.
+     */
+    public function getCandidatesCountAttribute(): int
+    {
+        return Cache::remember(
+            "skill_{$this->id}_candidates_count",
+            now()->addHours(6),
+            fn() => $this->candidates()->count()
+        );
+    }
+
+    /**
+     * Get jobs count with caching.
+     */
+    public function getJobsCountAttribute(): int
+    {
+        return Cache::remember(
+            "skill_{$this->id}_jobs_count",
+            now()->addHours(6),
+            fn() => $this->jobs()->count()
+        );
+    }
+
+    /**
+     * Get usage count (candidates + jobs).
+     */
+    public function getUsageCountAttribute(): int
+    {
+        return $this->candidates_count + $this->jobs_count;
+    }
+
+    /**
+     * Check if skill is in demand.
+     */
+    public function isInDemand(): bool
+    {
+        return $this->jobs_count > 5;
+    }
+
+    /**
+     * Check if skill is trending.
+     */
+    public function isTrending(): bool
+    {
+        $recentJobsCount = $this->jobs()
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
+        
+        return $recentJobsCount > 2;
+    }
+
+    /**
+     * Check if skill is popular.
      */
     public function isPopular(): bool
     {
-        $totalUsage = $this->candidate()->count() + $this->jobs()->count();
-        $averageUsage = cache()->remember('skills.average_usage', 3600, function () {
-            return self::withCount(['candidate', 'jobs'])->get()
-                      ->avg(function ($skill) {
-                          return $skill->candidate_count + $skill->jobs_count;
-                      });
+        return $this->usage_count > 10;
+    }
+
+    /**
+     * Get skill level numeric value.
+     */
+    public function getLevelNumeric(): int
+    {
+        return match ($this->level) {
+            'beginner' => 1,
+            'intermediate' => 2,
+            'advanced' => 3,
+            'expert' => 4,
+            default => 0,
+        };
+    }
+
+    /**
+     * Clear skill-related caches.
+     */
+    public function clearCaches(): void
+    {
+        $cacheKeys = [
+            'skills_active',
+            'skills_featured',
+            "skill_{$this->id}_candidates_count",
+            "skill_{$this->id}_jobs_count",
+        ];
+
+        if ($this->category) {
+            $cacheKeys[] = "skills_category_{$this->category}";
+        }
+
+        // Clear popular skills cache
+        for ($i = 10; $i <= 50; $i += 10) {
+            $cacheKeys[] = "skills_popular_{$i}";
+        }
+
+        foreach ($cacheKeys as $key) {
+            Cache::forget($key);
+        }
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($skill) {
+            $skill->clearCaches();
         });
 
-        return $totalUsage > $averageUsage;
+        static::deleted(function ($skill) {
+            $skill->clearCaches();
+        });
+
+        static::restored(function ($skill) {
+            $skill->clearCaches();
+        });
     }
 }

@@ -17,6 +17,18 @@ use Illuminate\Support\Collection;
 trait HasTaxonomy
 {
     /**
+     * Get all taxonomies for this model through terms.
+     */
+    public function taxonomies(): Collection
+    {
+        return $this->terms()
+                    ->with('taxonomy')
+                    ->get()
+                    ->pluck('taxonomy')
+                    ->unique('id');
+    }
+
+    /**
      * Get all terms for this model.
      */
     public function terms(): MorphToMany

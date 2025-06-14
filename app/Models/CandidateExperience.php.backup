@@ -86,13 +86,6 @@ use Spatie\Activitylog\LogOptions;
  * @method static Builder|CandidateExperience partTime()
  * @method static Builder|CandidateExperience contract()
  * @method static Builder|CandidateExperience internship()
- * @method static Builder|CandidateExperience alphabetical()
- * @method static Builder|CandidateExperience latestFirst()
- * @method static Builder|CandidateExperience oldestFirst()
- * @method static Builder|CandidateExperience search(string $term)
- *
- * @mixin Eloquent
- */
 class CandidateExperience extends Model
 {
     use HasFactory, LogsActivity;
@@ -129,6 +122,14 @@ class CandidateExperience extends Model
         ];
     }
 
+ * @method static Builder|CandidateExperience alphabetical()
+ * @method static Builder|CandidateExperience latestFirst()
+ * @method static Builder|CandidateExperience oldestFirst()
+ * @method static Builder|CandidateExperience search(string $term)
+ *
+ * @mixin Eloquent
+ */
+
     /**
      * Scope a query to only include old records.
      *
@@ -139,6 +140,9 @@ class CandidateExperience extends Model
     {
         return $query->orderBy("created_at", "asc");
     }
+
+
+
 
     /**
      * Validation rules with multilingual support
@@ -611,6 +615,7 @@ class CandidateExperience extends Model
         
         return $thisStart <= $otherEnd && $otherStart <= $thisEnd;
     }
+}
 
     /**
      * Scope a query to only include active records.
@@ -633,4 +638,3 @@ class CandidateExperience extends Model
     {
         return $query->where('is_active', false);
     }
-}

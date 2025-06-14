@@ -479,7 +479,7 @@ class CustomMedia extends Media
     /**
      * Scope to order media by order column and creation date.
      */
-    public function scopeOrdered($query)
+    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->orderBy('order_column', 'asc')
                     ->orderBy('created_at', 'desc');

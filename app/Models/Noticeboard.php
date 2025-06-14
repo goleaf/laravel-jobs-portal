@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Noticeboard whereIsActive($value)
  */
-
+
     /**
      * Scope a query to only include popular records.
      *

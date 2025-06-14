@@ -88,7 +88,39 @@ use Spatie\Activitylog\LogOptions;
  *
  * @mixin Eloquent
  */
-
+class CandidateEducation extends Model
+{
+    use HasFactory, LogsActivity;
+
+    protected $table = 'candidate_education';
+
+    protected $fillable = [
+        'candidate_id',
+        'degree_level_id',
+        'degree_title',
+        'country_id',
+        'state_id',
+        'city_id',
+        'institute',
+        'result',
+        'year',
+        'grade_percentage',
+        'field_of_study',
+        'description',
+        'is_verified',
+    ];
+ 
+    protected function casts(): array
+    {
+        return [
+            'is_verified' => 'boolean',
+            'grade_percentage' => 'float',
+            'year' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     /**
      * Scope a query to only include old records.
      *
@@ -99,9 +131,6 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->orderBy("created_at", "asc");
     }
-
-
-
 
     /**
      * Validation rules with multilingual support
@@ -550,7 +579,6 @@ use Spatie\Activitylog\LogOptions;
         
         return implode(' ', $parts);
     }
-}
 
     /**
      * Scope a query to only include active records.
@@ -573,3 +601,4 @@ use Spatie\Activitylog\LogOptions;
     {
         return $query->where('is_active', false);
     }
+}

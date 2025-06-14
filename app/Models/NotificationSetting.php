@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $key
  * @property string $value
+ * @property string|null $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -21,15 +23,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|NotificationSetting whereKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotificationSetting whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotificationSetting whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NotificationSetting whereType($value)
  *
  * @mixin \Eloquent
- *
- * @property string|null $type
- *
- * @method static \Illuminate\Database\Eloquent\Builder|NotificationSetting whereType($value)
  */
-
-    use Illuminate\Database\Eloquent\Factories\HasFactory;
+class NotificationSetting extends Model
+{
+    use HasFactory;
 
     public $table = 'notification_settings';
 
@@ -51,25 +51,18 @@ use Illuminate\Database\Eloquent\Model;
 
     /**
      * The attributes that should be casted to native types.
-     *
-     * @var array
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
+            'id' => 'integer',
+            'key' => 'string',
+            'value' => 'string',
+            'type' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-
-        'id' => 'integer',
-        'key' => 'string',
-        'value' => 'string',
-    
         ];
     }
-
-}
 
     /**
      * Scope a query to only include active records.
@@ -114,5 +107,7 @@ use Illuminate\Database\Eloquent\Model;
      */
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%');
+        return $query->where('key', 'like', '%' . $search . '%')
+                     ->orWhere('value', 'like', '%' . $search . '%');
     }
+}

@@ -454,9 +454,21 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return $this->belongsTo(City::class);
     }
 
+    // =============================================
+    // ACCESSOR METHODS
+    // =============================================
+
     /**
-     * JWT Implementation
+     * Get the user's full name.
      */
+    public function getFullNameAttribute(): string
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    // =============================================
+    // JWT IMPLEMENTATION
+    // =============================================
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

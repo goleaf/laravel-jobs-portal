@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Enhanced;
 
+use App\Http\Controllers\AppBaseController;
 use App\Models\Plan;
 use App\Models\SalaryCurrency;
 use App\Repositories\PlanRepository;
@@ -22,10 +23,15 @@ use App\Http\Requests\Plan\DestroyPlanRequest;
 use App\Http\Requests\Plan\ChangeTrialPlanRequest;
 
 /**
- * PlanController - Enhanced with Context7 patterns
+ * Enhanced PlanController - Context7 patterns implementation
  * 
- * Manages subscription plan operations with advanced caching, error handling,
- * and performance optimization using Context7 enterprise patterns.
+ * Demonstrates modern Laravel controller patterns with:
+ * - Advanced caching strategies
+ * - Comprehensive error handling
+ * - Performance optimization
+ * - Enhanced repository usage
+ * - Bulk operations support
+ * - Subscription management
  */
 class PlanController extends AppBaseController
 {
@@ -44,10 +50,6 @@ class PlanController extends AppBaseController
 
     /**
      * Display a listing of plans with enhanced filtering and search
-     *
-     * @param IndexPlanRequest $request
-     * @return Factory|View|JsonResponse
-     * @throws Exception
      */
     public function index(IndexPlanRequest $request)
     {
@@ -131,67 +133,7 @@ class PlanController extends AppBaseController
     }
 
     /**
-     * Prepare data for plans index view
-     */
-    private function preparePlansIndexData(Request $request): array
-    {
-        $cacheKey = $this->buildCacheKey('plans.index.data', $request->all());
-
-        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
-            // Get currencies with enhanced caching
-            $currency = SalaryCurrency::active()->orderBy('id')->pluck('currency_name', 'id')->toArray();
-            $currencyIcon = SalaryCurrency::active()->orderBy('id')->pluck('currency_icon', 'id')->toArray();
-
-            // Get plans with enhanced scopes
-            $plans = Plan::with(['currency', 'activeSubscriptions'])
-                        ->when($request->filled('search'), function ($query) use ($request) {
-                            $query->search($request->get('search'));
-                        })
-                        ->when($request->filled('currency_id'), function ($query) use ($request) {
-                            $query->byCurrency($request->get('currency_id'));
-                        })
-                        ->active()
-                        ->alphabetical()
-                        ->paginate(20);
-
-            // Get plan statistics
-            $statistics = $this->getPlanStatistics();
-
-            // Get popular plans
-            $popularPlans = Plan::popular()->with('currency')->limit(5)->get();
-
-            return [
-                'currency' => $currency,
-                'currencyIcon' => $currencyIcon,
-                'plans' => $plans,
-                'statistics' => $statistics,
-                'popularPlans' => $popularPlans,
-                'filters' => $request->only(['search', 'currency_id'])
-            ];
-        });
-    }
-
-    /**
-     * Get plan statistics for dashboard
-     */
-    private function getPlanStatistics(): array
-    {
-        return Cache::remember('plans.statistics', self::CACHE_TTL, function () {
-            return [
-                'total_plans' => Plan::count(),
-                'active_plans' => Plan::active()->count(),
-                'trial_plans' => Plan::trial()->count(),
-                'popular_plans' => Plan::popular()->count(),
-                'total_subscriptions' => Plan::withCount('activeSubscriptions')->get()->sum('active_subscriptions_count'),
-                'average_price' => Plan::active()->avg('price'),
-                'most_expensive_plan' => Plan::active()->orderBy('price', 'desc')->first()?->name ?? 'N/A',
-                'most_popular_plan' => Plan::popular()->first()?->name ?? 'N/A'
-            ];
-        });
-    }
-
-    /**
-     * Store a newly created plan with enhanced validation and error handling
+     * Store a newly created plan with enhanced validation
      */
     public function store(CreatePlanRequest $request): JsonResponse
     {
@@ -279,7 +221,7 @@ class PlanController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified plan with enhanced data
+     * Show the form for editing the specified plan
      */
     public function edit(Plan $plan, EditPlanRequest $request): JsonResponse
     {
@@ -313,7 +255,7 @@ class PlanController extends AppBaseController
     }
 
     /**
-     * Update the specified plan with enhanced validation and error handling
+     * Update the specified plan with enhanced validation
      */
     public function update(UpdatePlanUpdatePlanRequest $request, Plan $plan): JsonResponse
     {
@@ -584,6 +526,66 @@ class PlanController extends AppBaseController
     }
 
     /**
+     * Prepare data for plans index view
+     */
+    private function preparePlansIndexData(Request $request): array
+    {
+        $cacheKey = $this->buildCacheKey('plans.index.data', $request->all());
+
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
+            // Get currencies with enhanced caching
+            $currency = SalaryCurrency::active()->orderBy('id')->pluck('currency_name', 'id')->toArray();
+            $currencyIcon = SalaryCurrency::active()->orderBy('id')->pluck('currency_icon', 'id')->toArray();
+
+            // Get plans with enhanced scopes
+            $plans = Plan::with(['currency', 'activeSubscriptions'])
+                        ->when($request->filled('search'), function ($query) use ($request) {
+                            $query->search($request->get('search'));
+                        })
+                        ->when($request->filled('currency_id'), function ($query) use ($request) {
+                            $query->byCurrency($request->get('currency_id'));
+                        })
+                        ->active()
+                        ->alphabetical()
+                        ->paginate(20);
+
+            // Get plan statistics
+            $statistics = $this->getPlanStatistics();
+
+            // Get popular plans
+            $popularPlans = Plan::popular()->with('currency')->limit(5)->get();
+
+            return [
+                'currency' => $currency,
+                'currencyIcon' => $currencyIcon,
+                'plans' => $plans,
+                'statistics' => $statistics,
+                'popularPlans' => $popularPlans,
+                'filters' => $request->only(['search', 'currency_id'])
+            ];
+        });
+    }
+
+    /**
+     * Get plan statistics for dashboard
+     */
+    private function getPlanStatistics(): array
+    {
+        return Cache::remember('plans.statistics', self::CACHE_TTL, function () {
+            return [
+                'total_plans' => Plan::count(),
+                'active_plans' => Plan::active()->count(),
+                'trial_plans' => Plan::trial()->count(),
+                'popular_plans' => Plan::popular()->count(),
+                'total_subscriptions' => Plan::withCount('activeSubscriptions')->get()->sum('active_subscriptions_count'),
+                'average_price' => Plan::active()->avg('price'),
+                'most_expensive_plan' => Plan::active()->orderBy('price', 'desc')->first()?->name ?? 'N/A',
+                'most_popular_plan' => Plan::popular()->first()?->name ?? 'N/A'
+            ];
+        });
+    }
+
+    /**
      * Calculate conversion rate for a plan
      */
     private function calculateConversionRate(Plan $plan): float
@@ -617,4 +619,4 @@ class PlanController extends AppBaseController
         Cache::forget('plans.statistics');
         Cache::forget('plans.currencies');
     }
-}
+} 

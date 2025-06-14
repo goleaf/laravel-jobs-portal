@@ -1,6 +1,7 @@
 <?php
 
-namespace Tests\Helpers;
+namespace Tests\Support;
+namespace Tests\Support;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;

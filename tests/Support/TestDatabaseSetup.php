@@ -1,4 +1,6 @@
 <?php
+namespace Tests\Support;
+
 
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;

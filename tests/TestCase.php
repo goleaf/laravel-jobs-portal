@@ -4,7 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Helpers\TestHelpers;
+use Tests\Support\TestHelpers;
 use Illuminate\Support\Facades\DB;
 use Database\Seeders\UsersSeeder;
 use Database\Seeders\CountriesSeeder;
@@ -76,8 +76,8 @@ abstract class TestCase extends BaseTestCase
         // Optimize memory usage
         ini_set('memory_limit', '2G');
         
-        // Create basic test data only if needed
-        $this->createBasicTestDataIfNeeded();
+        // Create basic test data
+        TestHelpers::createBasicTestData();
         
         // Set up testing environment efficiently
         $this->setTestingConfig();
@@ -102,33 +102,6 @@ abstract class TestCase extends BaseTestCase
         }
         
         parent::tearDown();
-    }
-
-    private function createBasicTestDataIfNeeded(): void
-    {
-        // Only create test data if we're actually testing database functionality
-        if ($this->shouldCreateTestData()) {
-            TestHelpers::createBasicTestData();
-        }
-    }
-
-    private function shouldCreateTestData(): bool
-    {
-        // Check if this test actually needs database data
-        $reflection = new \ReflectionClass($this);
-        $methods = $reflection->getMethods();
-        
-        foreach ($methods as $method) {
-            if (strpos($method->getName(), 'test') === 0) {
-                $docComment = $method->getDocComment();
-                if ($docComment && strpos($docComment, '@database') !== false) {
-                    return true;
-                }
-            }
-        }
-        
-        // Default to creating data for safety, but this can be optimized per test
-        return true;
     }
 
     private function setTestingConfig(): void

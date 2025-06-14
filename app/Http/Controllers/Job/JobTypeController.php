@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Job;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Job\StoreJobTypeRequest;
+use App\Http\Requests\Job\UpdateJobTypeRequest;
 use App\Models\JobType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class JobTypeController extends Controller
@@ -27,28 +28,13 @@ class JobTypeController extends Controller
     /**
      * Store a newly created job type.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreJobTypeRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:job_types',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $jobType = JobType::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $jobType = JobType::create($request->validated());
 
         return response()->json([
             'success' => true,
-            'message' => __('messages.common.created_successfully', ['model' => __('messages.job_type.job_type')]),
+            'message' => __('job_type.messages.created_successfully'),
             'data' => $jobType,
         ]);
     }
@@ -69,30 +55,14 @@ class JobTypeController extends Controller
     /**
      * Update the specified job type.
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(UpdateJobTypeRequest $request, $id): JsonResponse
     {
         $jobType = JobType::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:job_types,name,'.$id,
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $jobType->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $jobType->update($request->validated());
 
         return response()->json([
             'success' => true,
-            'message' => __('messages.common.updated_successfully', ['model' => __('messages.job_type.job_type')]),
+            'message' => __('job_type.messages.updated_successfully'),
             'data' => $jobType,
         ]);
     }
@@ -107,7 +77,7 @@ class JobTypeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('messages.common.deleted_successfully', ['model' => __('messages.job_type.job_type')]),
+            'message' => __('job_type.messages.deleted_successfully'),
         ]);
     }
 } 

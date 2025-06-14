@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\MasterData;
 
 use App\Models\Skill;
 use Illuminate\Foundation\Http\FormRequest;

@@ -182,7 +182,8 @@ class AppServiceProvider extends ServiceProvider
             ->namespace($this->app->getNamespace())
             ->group(function () {
                 // Candidate Applications API
-                Route::apiResource('applications', CandidateApplicationController::class);
+                Route::apiResource('applications', CandidateApplicationController::class)
+                    ->names('candidate.applications');
             });
 
         // Register API routes for employer controllers
@@ -191,7 +192,8 @@ class AppServiceProvider extends ServiceProvider
             ->namespace($this->app->getNamespace())
             ->group(function () {
                 // Employer Applications API
-                Route::apiResource('applications', EmployerApplicationController::class);
+                Route::apiResource('applications', EmployerApplicationController::class)
+                    ->names('employer.applications');
             });
 
         // Register API routes for front-end controllers

@@ -119,6 +119,11 @@ class BrandingSliders extends Model implements HasMedia
         'start_date',
         'end_date',
         'meta',
+        'branding_slider_url',
+        'status_label',
+        'is_live',
+        'has_link',
+        'has_image',
     ];
 
     /**

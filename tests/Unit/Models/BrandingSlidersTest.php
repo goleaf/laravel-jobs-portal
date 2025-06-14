@@ -45,14 +45,21 @@ class BrandingSlidersTest extends TestCase
     public function it_can_be_updated()
     {
         $model = BrandingSliders::factory()->create();
-        $originalData = $model->toArray();
         
-        // Update with factory data
-        $newData = BrandingSliders::factory()->make()->toArray();
-        $model->update($newData);
+        // Use only fillable attributes for mass assignment
+        $updateData = [
+            'title' => 'Updated Title',
+            'description' => 'Updated Description',
+            'is_active' => false,
+        ];
+        
+        $model->update($updateData);
         
         $this->assertDatabaseHas('branding_sliders', [
-            'id' => $model->id
+            'id' => $model->id,
+            'title' => 'Updated Title',
+            'description' => 'Updated Description',
+            'is_active' => false,
         ]);
     }
 
@@ -64,8 +71,12 @@ class BrandingSlidersTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('branding_sliders', [
+        // Check that record is soft deleted (not actually removed)
+        $this->assertDatabaseHas('branding_sliders', [
             'id' => $modelId
         ]);
+        
+        // Check that deleted_at is not null
+        $this->assertNotNull($model->fresh()->deleted_at);
     }
 }

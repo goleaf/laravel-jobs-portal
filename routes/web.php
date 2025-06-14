@@ -208,8 +208,8 @@ Route::get('/admin/dashboard', function () {
         abort(403, 'Access denied. User does not have admin role.');
     }
     
-    return view('admin.dashboard');
-})->middleware(['auth'])->name('admin.dashboard');
+    return view('admin.dashboard.main');
+})->middleware(['auth'])->name('admin.dashboard.main.main');
 
 // Post storage route (referenced in components/forms/readme.blade.php)
 Route::post('/posts', function (Illuminate\Http\Request $request) {
@@ -556,8 +556,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin routes
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
         // Admin users management
         Route::resource('admin', App\Http\Controllers\AdminController::class, ['as' => 'admin']);
         
@@ -792,7 +790,7 @@ Route::middleware(['auth'])->group(function () {
         
         // Admin dashboard route
         Route::get('/', function () {
-            return view('admin.dashboard.index');
+            return view('admin.dashboard.main.index');
         })->name('dashboard.main');
     });
     
@@ -1039,7 +1037,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('edit');
     
     Route::get('/index', function () {
-        return view('admin.dashboard.index');
+        return view('admin.dashboard.main.index');
     })->name('index');
 });
 
@@ -1383,10 +1381,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 
-// Universal Critical Missing Routes
+// Universal Critical Missing Routes - FIXED: Removed duplicate admin.dashboard route
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/candidates/create', [App\Http\Controllers\Web\CandidateController::class, 'create'])->name('candidates.create');
-    Route::get('/dashboard', function () { return view('admin.dashboard.index'); })->name('dashboard');
+    // REMOVED: Duplicate dashboard route - main admin.dashboard defined in comprehensive admin section below
 });
 
 // Candidate Dashboard Routes

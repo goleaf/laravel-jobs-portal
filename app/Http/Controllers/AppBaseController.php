@@ -506,8 +506,9 @@ class AppBaseController extends Controller
     /**
      * Check if request is API request
      */
-    protected function isApiRequest(Request $request): bool
+    protected function isApiRequest(Request $request = null): bool
     {
+        $request = $request ?? request();
         return $request->is('api/*') || $request->wantsJson();
     }
 } 

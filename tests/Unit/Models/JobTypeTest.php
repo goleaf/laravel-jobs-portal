@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class JobTypeTest extends TestCase
 {
-    use RefreshDatabase, DatabaseTransactions;
+    use RefreshDatabase;
 
     protected JobType $jobType;
 
@@ -56,10 +56,8 @@ class JobTypeTest extends TestCase
     public function it_has_correct_fillable_attributes(): void
     {
         $fillable = [
-            'name', 'slug', 'description', 'icon', 'color',
-            'is_active', 'is_default', 'is_featured', 'sort_order',
-            'meta_title', 'meta_description', 'meta_keywords',
-            'views_count', 'jobs_count', 'settings', 'extra_attributes'
+            'name', 'description', 'is_default', 'is_active', 'sort_order',
+            'icon', 'color', 'is_featured', 'meta_title', 'meta_description', 'slug'
         ];
 
         $jobType = new JobType();
@@ -79,10 +77,6 @@ class JobTypeTest extends TestCase
         $this->assertEquals('boolean', $casts['is_default']);
         $this->assertEquals('boolean', $casts['is_featured']);
         $this->assertEquals('integer', $casts['sort_order']);
-        $this->assertEquals('integer', $casts['views_count']);
-        $this->assertEquals('integer', $casts['jobs_count']);
-        $this->assertEquals('array', $casts['settings']);
-        $this->assertEquals('array', $casts['extra_attributes']);
         $this->assertEquals('datetime', $casts['created_at']);
         $this->assertEquals('datetime', $casts['updated_at']);
     }

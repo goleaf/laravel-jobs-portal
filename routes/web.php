@@ -717,7 +717,7 @@ Route::middleware(['auth'])->group(function () {
         // Job applications management
         Route::get('/job-applications', function () {
             return view('admin.job_applications.index');
-        })->name('admin.job-applications.index');
+        })->name('admin.job-applications.list');
         
         // Email templates management
         Route::get('/email-template/edit/{template}', function ($template) {
@@ -1631,7 +1631,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     Route::get('/job-applications', function () {
         return view('admin.job_applications.index');
-    })->name('job-applications.index');
+    })->name('admin.job-applications.list');
     
     Route::get('/job-types', function () {
         return view('admin.job_types.index');
@@ -1779,5 +1779,3 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 Route::get('/{any}', function () {
     return view('app');
 })->where('any', '.*');
-// SPA Route - catch all routes and serve Vue3 app (MOVED TO BOTTOM TO AVOID API CONFLICTS)
-Route::get('/{any}', function () { return view('app'); })->where('any', '.*');

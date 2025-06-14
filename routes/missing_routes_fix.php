@@ -95,7 +95,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Job applications management
     Route::get('/job-applications', function () {
         return view('admin.job_applications.index');
-    })->name('job-applications.index');
+    })->name('missing.job-applications.index');
     
     // Email templates management (using unique names)
     Route::get('/email-template/edit/{template}', function ($template) {

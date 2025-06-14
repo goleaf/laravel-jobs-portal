@@ -69,7 +69,7 @@ class Company extends Model implements HasMedia
     /**
      * Default eager loading for performance
      */
-    protected $with = ['industry', 'companySize', 'user'];
+    protected $with = [];
 
     public const COMPANY_LOGIN_TYPE = 0;
     public const ISACTIVE = 1;

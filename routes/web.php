@@ -361,7 +361,7 @@ Route::prefix('notification')->name('notification.')->middleware(['auth'])->grou
 // CMS Services
 Route::prefix('cms')->name('cms.')->middleware(['auth'])->group(function () {
     Route::get('/services', function () {
-        return view('cms_services.index');
+        return view('cms.services.web.index');
     })->name('services.index');
     
     Route::get('/about-us/service', function () {
@@ -681,8 +681,8 @@ Route::middleware(['auth'])->group(function () {
         })->name('inquires.show');
         
         Route::get('/notification-settings', function () {
-            return view('admin.notification_settings.index');
-        })->name('notification.settings.index');
+    return view('admin.notification_settings.index');
+})->name('notification.settings.web.index');
         
         Route::get('/privacy-policy', function () {
             return view('admin.privacy_policy.index');
@@ -704,7 +704,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/branding-sliders', [App\Http\Controllers\Admin\CmsController::class, 'brandingSliders'])->name('branding.sliders.index');
         Route::get('/header-sliders', [App\Http\Controllers\Admin\CmsController::class, 'headerSliders'])->name('header.sliders.index');
         Route::get('/image-sliders', [App\Http\Controllers\Admin\CmsController::class, 'imageSliders'])->name('image-sliders.index');
-        Route::get('/cms-services', [App\Http\Controllers\Admin\CmsController::class, 'cmsServices'])->name('cms.services.index');
+        Route::get('/cms-services', [App\Http\Controllers\Admin\CmsController::class, 'cmsServices'])->name('cms.services.web.index');
         Route::get('/cms-about-us', [App\Http\Controllers\Admin\CmsController::class, 'cmsAboutUs'])->name('cms.about-us.service');
         
         // Job stages management
@@ -1707,20 +1707,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('image-sliders.index');
     
     // Notification Settings
-    Route::get('/notification/settings', function () {
-        return view('admin.notification_settings.index');
-    })->name('notification.settings.index');
     
     // File Management
     Route::get('/download-all-resume', function () {
         return response()->download(storage_path('app/all_resumes.zip'));
     })->name('download-all-resume');
     
-    // CMS Routes
-    Route::get('/cms/services', function () {
-        return view('admin.cms.services.index');
-    })->name('cms.services.index');
-    
+    // CMS Routes  
     Route::get('/cms/about-us', function () {
         return view('admin.cms.about.index');
     })->name('cms.about-us.index');

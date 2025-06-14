@@ -1,10 +1,6 @@
 <?php
 
 if (!function_exists('settings')) {
-    /**
-     * Get application settings
-     * @return array
-     */
     function settings()
     {
         return [
@@ -17,10 +13,6 @@ if (!function_exists('settings')) {
 }
 
 if (!function_exists('getAppName')) {
-    /**
-     * Get application name
-     * @return string
-     */
     function getAppName()
     {
         return config('app.name', 'Job Portal');
@@ -28,12 +20,6 @@ if (!function_exists('getAppName')) {
 }
 
 if (!function_exists('getSettingValue')) {
-    /**
-     * Get a specific setting value
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
-     */
     function getSettingValue($key, $default = null)
     {
         $settings = [
@@ -49,25 +35,7 @@ if (!function_exists('getSettingValue')) {
     }
 }
 
-if (!function_exists('googleJobSchema')) {
-    /**
-     * Generate Google job schema
-     * @return array
-     */
-    function googleJobSchema()
-    {
-        // Return empty array for now - this would typically generate JSON-LD schema for jobs
-        return [];
-    }
-}
-
 if (!function_exists('formatCurrency')) {
-    /**
-     * Format currency
-     * @param float $amount
-     * @param string $currency
-     * @return string
-     */
     function formatCurrency($amount, $currency = 'USD')
     {
         return '$' . number_format($amount, 2);
@@ -75,11 +43,6 @@ if (!function_exists('formatCurrency')) {
 }
 
 if (!function_exists('timeAgo')) {
-    /**
-     * Get time ago string
-     * @param string|Carbon $date
-     * @return string
-     */
     function timeAgo($date)
     {
         $carbon = \Carbon\Carbon::parse($date);
@@ -87,118 +50,24 @@ if (!function_exists('timeAgo')) {
     }
 }
 
-if (!function_exists('isActiveRoute')) {
-    /**
-     * Check if route is active
-     * @param string $route
-     * @return bool
-     */
-    function isActiveRoute($route)
-    {
-        return request()->routeIs($route);
-    }
-}
-
-if (!function_exists('truncateText')) {
-    /**
-     * Truncate text
-     * @param string $text
-     * @param int $length
-     * @return string
-     */
-    function truncateText($text, $length = 100)
-    {
-        return Str::limit($text, $length);
-    }
-}
-
-if (!function_exists('numberFormatShort')) {
-    /**
-     * Format numbers in short format (1K, 1M, etc.)
-     * @param int|float $number
-     * @return string
-     */
-    function numberFormatShort($number)
-    {
-        if ($number < 1000) {
-            return (string) $number;
-        }
-        
-        if ($number < 1000000) {
-            return round($number / 1000, 1) . 'K';
-        }
-        
-        if ($number < 1000000000) {
-            return round($number / 1000000, 1) . 'M';
-        }
-        
-        return round($number / 1000000000, 1) . 'B';
-    }
-}
-
 if (!function_exists('getCountries')) {
-    /**
-     * Get list of countries
-     * @return array
-     */
     function getCountries()
     {
         try {
-            $countries = \App\Models\Country::orderBy('name')->pluck('name')->toArray();
-            return $countries;
+            return \App\Models\Country::orderBy('name')->pluck('name')->toArray();
         } catch (\Exception $e) {
-            // Return empty array if countries table doesn't exist or error occurs
             return [];
         }
     }
 }
 
 if (!function_exists('getUniqueCompanyId')) {
-    /**
-     * Generate a unique company ID
-     * @return string
-     */
     function getUniqueCompanyId(): string
     {
         $companyUniqueId = \Illuminate\Support\Str::random(12);
-        while (true) {
-            $isExist = \App\Models\Company::where('unique_id', $companyUniqueId)->exists();
-            if ($isExist) {
-                $companyUniqueId = \Illuminate\Support\Str::random(12);
-                continue;
-            }
-            break;
+        while (\App\Models\Company::where('unique_id', $companyUniqueId)->exists()) {
+            $companyUniqueId = \Illuminate\Support\Str::random(12);
         }
-        
         return $companyUniqueId;
     }
 }
-
-// Simple Flash helper class to replace Laracasts Flash
-if (!class_exists('Laracasts\Flash\Flash')) {
-    class Flash
-    {
-        public static function success($message)
-        {
-            session()->flash('success', $message);
-        }
-        
-        public static function error($message)
-        {
-            session()->flash('error', $message);
-        }
-        
-        public static function warning($message)
-        {
-            session()->flash('warning', $message);
-        }
-        
-        public static function info($message)
-        {
-            session()->flash('info', $message);
-        }
-    }
-    
-    // Create the namespace alias
-    class_alias('Flash', 'Laracasts\Flash\Flash');
-} 

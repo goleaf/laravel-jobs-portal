@@ -114,7 +114,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Notification settings
     Route::get('/notification/settings', function () {
         return view('admin.notification_settings.index');
-    })->name('notification.settings.index');
+    })->name('missing.notification.settings.index');
     
     // Master data management routes
     Route::get('/degree-levels', function () {
@@ -198,8 +198,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('image-sliders.index');
     
     Route::get('/cms/services', function () {
-        return view('admin.cms_services.index');
-    })->name('cms.services.index');
+        return view('admin.cms.services.missing.index');
+    })->name('cms.services.missing.index');
     
     Route::get('/cms/about-us/service', function () {
         return view('admin.cms_about_us.index');
@@ -597,7 +597,7 @@ Route::middleware(['auth'])->group(function () {
 | ✅ branding.sliders.index - Branding sliders
 | ✅ header.sliders.index - Header sliders
 | ✅ image-sliders.index - Image sliders
-| ✅ cms.services.index - CMS services
+| ✅ cms.services.missing.index - CMS services
 | ✅ cms.about-us.service - CMS about us service
 | ✅ job.stage.change - Job stage change
 | ✅ interview.slot.view - Interview slot view

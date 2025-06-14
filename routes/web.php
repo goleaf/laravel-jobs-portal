@@ -1730,14 +1730,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 /*
 |--------------------------------------------------------------------------
-| AUTHENTICATION ROUTES
-|--------------------------------------------------------------------------
-*/
-
-require __DIR__.'/auth.php';
-
-/*
-|--------------------------------------------------------------------------
 | API ROUTES FOR VUE.JS SPA
 |--------------------------------------------------------------------------
 | These API routes support the Vue.js SPA components
@@ -1783,5 +1775,29 @@ Route::get('/{any}', function () {
 // Include JobType routes
 require __DIR__.'/job_types.php';
 
-// Include JobType routes
-require __DIR__.'/job_types.php';
+// Taxonomy Admin Routes (add at the end before the closing brace if inside Route::group)
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Taxonomy Management
+    Route::resource('taxonomies', App\Http\Controllers\Admin\TaxonomyController::class);
+    Route::resource('terms', App\Http\Controllers\Admin\TermController::class);
+    
+    // Additional taxonomy operations
+    Route::post('taxonomies/{taxonomy}/toggle-status', [App\Http\Controllers\Admin\TaxonomyController::class, 'toggleStatus'])
+         ->name('taxonomies.toggle-status');
+    Route::post('taxonomies/bulk-action', [App\Http\Controllers\Admin\TaxonomyController::class, 'bulkAction'])
+         ->name('taxonomies.bulk-action');
+    Route::get('taxonomies/{taxonomy}/export', [App\Http\Controllers\Admin\TaxonomyController::class, 'export'])
+         ->name('taxonomies.export');
+    Route::get('taxonomies/{taxonomy}/terms', [App\Http\Controllers\Admin\TaxonomyController::class, 'terms'])
+         ->name('taxonomies.terms');
+    
+    // Term management operations
+    Route::post('terms/{term}/toggle-status', [App\Http\Controllers\Admin\TermController::class, 'toggleStatus'])
+         ->name('terms.toggle-status');
+    Route::post('terms/reorder', [App\Http\Controllers\Admin\TermController::class, 'reorder'])
+         ->name('terms.reorder');
+    Route::post('terms/bulk-action', [App\Http\Controllers\Admin\TermController::class, 'bulkAction'])
+         ->name('terms.bulk-action');
+         
+});

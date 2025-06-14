@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Models;
-
-use App\Services\FileService;
 use App\Traits\HasTaxonomy;
+use App\Services\FileService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -113,7 +112,7 @@ use Spatie\Activitylog\LogOptions;
  */
 class Candidate extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, HasTaxonomy;
 
     public $table = 'candidates';
 

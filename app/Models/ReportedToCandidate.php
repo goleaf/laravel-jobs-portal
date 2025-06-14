@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\ReportedToCandidate;
+namespace App\Models;
 
 use App\Models\Candidate;
 use App\Models\User;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\ReportedToCandidate
+ * App\Models\ReportedToCandidate
  *
  * @property int $id
  * @property int $user_id

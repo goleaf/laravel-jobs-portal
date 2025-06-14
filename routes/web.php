@@ -1333,10 +1333,10 @@ Route::get('/dashboard/realtime', function () {
 // Candidate and Employer Applications (from blade analysis)
 Route::middleware(['auth'])->group(function () {
     Route::get('/candidate/applications', [App\Http\Controllers\Candidate\ApplicationController::class, 'index'])
-        ->name('candidate.applications.index');
+        ->name('candidate.applications.web');
     
     Route::get('/employer/applications', [App\Http\Controllers\Employer\ApplicationController::class, 'index'])
-        ->name('employer.applications.index');
+        ->name('employer.applications.web');
 });
 
 // Blog Comment Routes (from blade analysis)

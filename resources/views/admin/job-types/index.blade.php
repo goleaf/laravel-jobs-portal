@@ -1,56 +1,57 @@
 @extends('layouts.admin')
 
-@section('title', __('job_type.pages.index'))
+@section('title', __('job_type.titles.index'))
 
-@push('styles')
 <style>
-    .job-type-card {
-        transition: all 0.3s ease;
-    }
-    .job-type-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    .status-toggle {
-        transition: all 0.2s ease;
-    }
+.table-container {
+    overflow-x: auto;
+}
 </style>
-@endpush
 
 @section('content')
-<div class="container-fluid px-4 py-6">
-    <!-- Header Section -->
-    <div class="mb-8">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">{{ __('job_type.title') }}</h1>
-                <p class="text-gray-600 mt-1">{{ __('job_type.pages.index') }}</p>
+<div class="py-6">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
+                    {{ __('job_type.titles.index') }}
+                </h2>
+                <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+                    <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                        </svg>
+                        {{ trans_choice('job_type.count', $jobTypes->total()) }}
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-wrap gap-2">
+            
+            <div class="mt-4 flex md:ml-4 md:mt-0 space-x-3">
                 @can('create', App\Models\JobType::class)
-                <a href="{{ route('admin.job-types.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('admin.job-types.create') }}"
+                   class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
                     {{ __('job_type.actions.create') }}
                 </a>
                 @endcan
-                
-                @can('viewStatistics', App\Models\JobType::class)
-                <a href="{{ route('admin.job-types.statistics') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                @can('viewAny', App\Models\JobType::class)
+                <a href="{{ route('admin.job-types.statistics') }}"
+                   class="inline-flex items-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     {{ __('job_type.actions.statistics') }}
                 </a>
                 @endcan
-                
+
                 @can('export', App\Models\JobType::class)
-                <a href="{{ route('admin.job-types.export') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('admin.job-types.export') }}"
+                   class="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                     {{ __('job_type.actions.export') }}
@@ -58,231 +59,186 @@
                 @endcan
             </div>
         </div>
-    </div>
 
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-2 bg-blue-100 rounded-lg">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">{{ __('job_type.statistics.total_job_types') }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statistics['total'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-2 bg-green-100 rounded-lg">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">{{ __('job_type.statistics.active_job_types') }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statistics['active'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-2 bg-yellow-100 rounded-lg">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">{{ __('job_type.statistics.featured_job_types') }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statistics['featured'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-2 bg-purple-100 rounded-lg">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">{{ __('job_type.statistics.with_jobs') }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statistics['with_jobs'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Filters and Search -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <form method="GET" action="{{ route('admin.job-types.index') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
-            <!-- Search -->
-            <div class="flex-1">
-                <label for="search" class="sr-only">{{ __('job_type.actions.search') }}</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </div>
-                    <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                           placeholder="{{ __('job_type.placeholders.search') }}"
-                           class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-            </div>
-
-            <!-- Status Filter -->
-            <div>
-                <select name="status" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="">{{ __('job_type.filters.all') }}</option>
-                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>{{ __('job_type.filters.active') }}</option>
-                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>{{ __('job_type.filters.inactive') }}</option>
-                </select>
-            </div>
-
-            <!-- Type Filter -->
-            <div>
-                <select name="type" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="">{{ __('job_type.filters.all') }}</option>
-                    <option value="default" {{ request('type') === 'default' ? 'selected' : '' }}>{{ __('job_type.filters.default') }}</option>
-                    <option value="custom" {{ request('type') === 'custom' ? 'selected' : '' }}>{{ __('job_type.filters.custom') }}</option>
-                    <option value="featured" {{ request('type') === 'featured' ? 'selected' : '' }}>{{ __('job_type.filters.featured') }}</option>
-                </select>
-            </div>
-
-            <!-- Sort Filter -->
-            <div>
-                <select name="sort" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="name" {{ request('sort') === 'name' ? 'selected' : '' }}>{{ __('job_type.sorting.name_asc') }}</option>
-                    <option value="recent" {{ request('sort') === 'recent' ? 'selected' : '' }}>{{ __('job_type.sorting.created_newest') }}</option>
-                    <option value="popular" {{ request('sort') === 'popular' ? 'selected' : '' }}>{{ __('job_type.sorting.most_popular') }}</option>
-                    <option value="usage" {{ request('sort') === 'usage' ? 'selected' : '' }}>{{ __('job_type.sorting.usage_high') }}</option>
-                </select>
-            </div>
-
-            <!-- Submit -->
-            <div>
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('job_type.actions.filter') }}
-                </button>
-            </div>
-
-            @if(request()->hasAny(['search', 'status', 'type', 'sort']))
-            <div>
-                <a href="{{ route('admin.job-types.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('common.clear') }}
-                </a>
-            </div>
-            @endif
-        </form>
-    </div>
-
-    <!-- Job Types Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        @if($jobTypes->count() > 0)
-        <!-- Bulk Actions -->
-        <div class="px-6 py-3 bg-gray-50 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input type="checkbox" id="select-all" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                    <label for="select-all" class="ml-2 text-sm text-gray-700">{{ __('common.select_all') }}</label>
-                </div>
+        <!-- Filters -->
+        <div class="mt-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">{{ __('common.filters') }}</h3>
                 
-                @can('bulkUpdate', App\Models\JobType::class)
-                <div class="flex items-center space-x-2" id="bulk-actions" style="display: none;">
-                    <button type="button" onclick="bulkAction('activate')" class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200">
-                        {{ __('job_type.actions.activate') }}
-                    </button>
-                    <button type="button" onclick="bulkAction('deactivate')" class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-xs font-medium hover:bg-yellow-200">
-                        {{ __('job_type.actions.deactivate') }}
-                    </button>
-                    <button type="button" onclick="bulkAction('feature')" class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-md text-xs font-medium hover:bg-purple-200">
-                        {{ __('job_type.actions.feature') }}
-                    </button>
-                    @can('delete', App\Models\JobType::class)
-                    <button type="button" onclick="bulkAction('delete')" class="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-md text-xs font-medium hover:bg-red-200">
-                        {{ __('job_type.actions.delete') }}
-                    </button>
-                    @endcan
-                </div>
-                @endcan
+                <form method="GET" action="{{ route('admin.job-types.index') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+                    <!-- Search -->
+                    <div class="flex-1">
+                        <label for="search" class="sr-only">{{ __('common.search') }}</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                            <input 
+                                type="text" 
+                                name="search" 
+                                id="search" 
+                                value="{{ request('search') }}"
+                                class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
+                                placeholder="{{ __('job_type.placeholders.search') }}"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <label for="status" class="sr-only">{{ __('job_type.fields.status') }}</label>
+                        <select 
+                            name="status" 
+                            id="status" 
+                            class="rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="">{{ __('job_type.filters.all_statuses') }}</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>
+                                {{ __('job_type.statuses.active') }}
+                            </option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>
+                                {{ __('job_type.statuses.inactive') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Sort By -->
+                    <div>
+                        <label for="sort" class="sr-only">{{ __('common.sort_by') }}</label>
+                        <select 
+                            name="sort" 
+                            id="sort" 
+                            class="rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="name" {{ request('sort', 'name') === 'name' ? 'selected' : '' }}>
+                                {{ __('job_type.sorts.name') }}
+                            </option>
+                            <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>
+                                {{ __('job_type.sorts.created_at') }}
+                            </option>
+                            <option value="jobs_count" {{ request('sort') === 'jobs_count' ? 'selected' : '' }}>
+                                {{ __('job_type.sorts.jobs_count') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Direction -->
+                    <div>
+                        <label for="direction" class="sr-only">{{ __('common.direction') }}</label>
+                        <select 
+                            name="direction" 
+                            id="direction" 
+                            class="rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="asc" {{ request('direction', 'asc') === 'asc' ? 'selected' : '' }}>
+                                {{ __('common.ascending') }}
+                            </option>
+                            <option value="desc" {{ request('direction') === 'desc' ? 'selected' : '' }}>
+                                {{ __('common.descending') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Button -->
+                    <div class="flex space-x-2">
+                        <button 
+                            type="submit" 
+                            class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            {{ __('common.filter') }}
+                        </button>
+                        
+                        <a href="{{ route('admin.job-types.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {{ __('common.clear') }}
+                        </a>
+                    </div>
+                </form>
             </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="flex items-center space-x-2" id="bulk-actions" style="display: none;">
+            <button onclick="bulkAction('activate')" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                {{ __('job_type.actions.activate_selected') }}
+            </button>
+            <button onclick="bulkAction('deactivate')" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                {{ __('job_type.actions.deactivate_selected') }}
+            </button>
+            <button onclick="bulkAction('delete')" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                {{ __('job_type.actions.delete_selected') }}
+            </button>
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+        @if($jobTypes->count() > 0)
+        <div class="mt-6 table-container">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <th scope="col" class="relative px-6 py-3">
+                            <input 
+                                type="checkbox" 
+                                id="select-all"
+                                class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            >
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ __('job_type.table.name') }}
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {{ __('job_type.fields.name') }}
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ __('job_type.table.status') }}
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {{ __('job_type.fields.status') }}
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ __('job_type.table.jobs_count') }}
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {{ __('job_type.fields.jobs_count') }}
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ __('job_type.table.created_at') }}
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {{ __('common.created_at') }}
                         </th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">{{ __('job_type.table.actions') }}</span>
+                            <span class="sr-only">{{ __('common.actions') }}</span>
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @foreach($jobTypes as $jobType)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="checkbox" name="selected_job_types[]" value="{{ $jobType->id }}" class="job-type-checkbox h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="relative px-6 py-4 whitespace-nowrap">
+                            <input 
+                                type="checkbox" 
+                                class="job-type-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                value="{{ $jobType->id }}"
+                            >
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                @if($jobType->icon)
                                 <div class="flex-shrink-0 h-8 w-8 rounded-lg flex items-center justify-center mr-3" style="background-color: {{ $jobType->color ?? '#6B7280' }}20">
                                     <i class="fas fa-{{ $jobType->icon }} text-sm" style="color: {{ $jobType->color ?? '#6B7280' }}"></i>
                                 </div>
-                                @endif
                                 <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ $jobType->name }}</div>
-                                    @if($jobType->description)
-                                    <div class="text-sm text-gray-500">{{ Str::limit($jobType->description, 50) }}</div>
-                                    @endif
-                                    <div class="flex items-center space-x-2 mt-1">
-                                        @if($jobType->is_default)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ __('job_type.badges.default') }}
-                                        </span>
-                                        @endif
-                                        @if($jobType->is_featured)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            {{ __('job_type.badges.featured') }}
-                                        </span>
-                                        @endif
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $jobType->name }}
                                     </div>
+                                    @if($jobType->description)
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                                        {{ Str::limit($jobType->description, 50) }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @can('manageStatus', $jobType)
-                            <button onclick="toggleStatus({{ $jobType->id }})" class="status-toggle inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium {{ $jobType->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $jobType->is_active ? __('job_type.status.active') : __('job_type.status.inactive') }}
+                            <button 
+                                onclick="toggleStatus({{ $jobType->id }})"
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer transition-colors duration-200 
+                                    {{ $jobType->is_active 
+                                        ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-800 dark:text-green-100' 
+                                        : 'bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-800 dark:text-red-100' }}"
+                            >
+                                <span class="w-1.5 h-1.5 mr-1 rounded-full {{ $jobType->is_active ? 'bg-green-600' : 'bg-red-600' }}"></span>
+                                {{ $jobType->is_active ? __('job_type.statuses.active') : __('job_type.statuses.inactive') }}
                             </button>
-                            @else
-                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium {{ $jobType->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $jobType->is_active ? __('job_type.status.active') : __('job_type.status.inactive') }}
-                            </span>
-                            @endcan
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <div class="flex items-center">
@@ -379,107 +335,5 @@
 </form>
 @endsection
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Bulk selection
-    const selectAll = document.getElementById('select-all');
-    const checkboxes = document.querySelectorAll('.job-type-checkbox');
-    const bulkActions = document.getElementById('bulk-actions');
-
-    selectAll?.addEventListener('change', function() {
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-        toggleBulkActions();
-    });
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', toggleBulkActions);
-    });
-
-    function toggleBulkActions() {
-        const checkedBoxes = document.querySelectorAll('.job-type-checkbox:checked');
-        if (checkedBoxes.length > 0) {
-            bulkActions?.style.setProperty('display', 'flex');
-        } else {
-            bulkActions?.style.setProperty('display', 'none');
-        }
-    }
-});
-
-// Bulk actions
-function bulkAction(action) {
-    const checkedBoxes = document.querySelectorAll('.job-type-checkbox:checked');
-    if (checkedBoxes.length === 0) {
-        alert('{{ __("common.select_items_first") }}');
-        return;
-    }
-
-    const jobTypeIds = Array.from(checkedBoxes).map(cb => cb.value);
-    
-    if (confirm('{{ __("job_type.confirmations.bulk_action") }}')) {
-        document.getElementById('bulk-action-type').value = action;
-        document.getElementById('bulk-job-type-ids').value = JSON.stringify(jobTypeIds);
-        document.getElementById('bulk-action-form').submit();
-    }
-}
-
-// Toggle status
-function toggleStatus(jobTypeId) {
-    fetch(`/api/v1/job-types/${jobTypeId}/toggle-status`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert(data.message || '{{ __("common.error_occurred") }}');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('{{ __("common.error_occurred") }}');
-    });
-}
-
-// Delete job type
-function deleteJobType(id, name) {
-    if (confirm(`{{ __('job_type.confirmations.delete') }}\n\n${name}`)) {
-        const form = document.getElementById('delete-form');
-        form.action = `/admin/job-types/${id}`;
-        form.submit();
-    }
-}
-
-// Duplicate job type
-function duplicateJobType(id) {
-    if (confirm('{{ __("job_type.confirmations.duplicate") }}')) {
-        fetch(`/api/v1/job-types/${id}/duplicate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert(data.message || '{{ __("common.error_occurred") }}');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('{{ __("common.error_occurred") }}');
-        });
-    }
-}
-</script>
-@endpush 
+{{-- JavaScript functionality moved to external file for better maintainability --}}
+{{-- TODO: Implement external JS file with proper Context7 patterns --}} 

@@ -165,13 +165,8 @@ class Taggable extends Model
 
     public function clearCaches(): void
     {
-        $types = ['App\\Models\\Job', 'App\\Models\\Candidate', 'App\\Models\\Company', 'App\\Models\\Post'];
-        
-        foreach ($types as $type) {
-            for ($i = 5; $i <= 20; $i += 5) {
-                Cache::forget("taggables.popular.{$type}.{$i}");
-            }
-        }
+        Cache::forget('taggables.popular');
+        Cache::forget('taggables.trending');
     }
 
     protected static function boot()

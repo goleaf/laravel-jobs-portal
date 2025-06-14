@@ -92,7 +92,7 @@ class CandidateEducation extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $table = 'candidate_education';
+    protected $table = 'candidate_educations';
 
     protected $fillable = [
         'candidate_id',

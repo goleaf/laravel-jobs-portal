@@ -162,7 +162,6 @@ class Candidate extends Model
         'resume_path',
         'available_at',
         'immediate_available',
-        'is_active',
         'job_alert',
     ];
 
@@ -171,18 +170,18 @@ class Candidate extends Model
      *
      * @return array<string, string>
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-
             'id' => 'integer',
             'user_id' => 'integer',
             'country_id' => 'integer',
             'state_id' => 'integer',
             'city_id' => 'integer',
-            'career_level_id' => 'integer',
-            'functional_area_id' => 'integer',
             'marital_status_id' => 'integer',
+            'career_level_id' => 'integer',
+            'industry_id' => 'integer',
+            'functional_area_id' => 'integer',
             'first_name' => 'string',
             'last_name' => 'string',
             'email' => 'string',
@@ -192,14 +191,14 @@ class Candidate extends Model
             'experience_years' => 'integer',
             'current_salary' => 'decimal:2',
             'expected_salary' => 'decimal:2',
-            'is_active' => 'boolean',
+            'immediate_available' => 'integer',
+            'is_active' => 'integer',
             'is_verified' => 'boolean',
             'is_featured' => 'boolean',
             'is_available' => 'boolean',
             'is_immediate_available' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-        
         ];
     }
 

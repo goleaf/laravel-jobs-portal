@@ -37,8 +37,6 @@ class CandidateFactory extends Factory
             'functional_area_id' => null, // Nullable to avoid foreign key constraints
             'current_salary' => fake()->numberBetween(30000, 80000),
             'expected_salary' => fake()->numberBetween(40000, 100000),
-            'salary_currency' => 'USD',
-            'address' => fake()->address(),
             'immediate_available' => fake()->boolean(),
         ];
     }

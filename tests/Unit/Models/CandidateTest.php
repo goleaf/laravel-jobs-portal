@@ -45,14 +45,23 @@ class CandidateTest extends TestCase
     public function it_can_be_updated()
     {
         $model = Candidate::factory()->create();
-        $originalData = $model->toArray();
         
-        // Update with factory data
-        $newData = Candidate::factory()->make()->toArray();
-        $model->update($newData);
+        // Update with only fillable attributes
+        $fillableData = [
+            'father_name' => 'Updated Father Name',
+            'nationality' => 'Updated Nationality',
+            'experience' => 5,
+            'current_salary' => 60000,
+            'expected_salary' => 70000,
+            'immediate_available' => 1,
+        ];
+        
+        $model->update($fillableData);
         
         $this->assertDatabaseHas('candidates', [
-            'id' => $model->id
+            'id' => $model->id,
+            'father_name' => 'Updated Father Name',
+            'nationality' => 'Updated Nationality',
         ]);
     }
 

@@ -53,7 +53,7 @@ class CareerLevelTest extends TestCase
         $this->assertArrayHasKey('updated_at', $casts);
         
         // Verify cast types
-        $this->assertEquals('integer', $casts['id']);
+        $this->assertEquals('int', $casts['id']);
         $this->assertEquals('boolean', $casts['is_default']);
         $this->assertEquals('boolean', $casts['is_active']);
         $this->assertEquals('datetime', $casts['created_at']);

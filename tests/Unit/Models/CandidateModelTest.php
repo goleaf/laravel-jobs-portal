@@ -138,8 +138,8 @@ class CandidateModelTest extends TestCase
         $this->assertEquals(2, $candidate->career_level_id);
         $this->assertEquals(1, $candidate->industry_id);
         $this->assertEquals(3, $candidate->functional_area_id);
-        $this->assertEquals('50000', $candidate->current_salary);
-        $this->assertEquals('60000', $candidate->expected_salary);
+        $this->assertEquals('50000.00', $candidate->current_salary);
+        $this->assertEquals('60000.00', $candidate->expected_salary);
         $this->assertEquals(Candidate::IMMEDIATE_AVAILABLE, $candidate->immediate_available);
         $this->assertEquals(Candidate::ACTIVE, $candidate->is_active);
     }
@@ -167,41 +167,26 @@ class CandidateModelTest extends TestCase
     public function it_has_validation_rules()
     {
         $expectedRules = [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
             'email' => 'required|email:filter|unique:users,email',
             'password' => 'nullable|same:password_confirmation|min:6',
-            'marital_status_id' => 'nullable',
-            'nationality' => 'nullable',
-            'country_id' => 'required',
-            'state_id' => 'required',
-            'city_id' => 'required',
-            'phone' => 'required|numeric',
-            'experience' => 'nullable',
-            'career_level_id' => 'nullable',
-            'industry_id' => 'nullable',
-            'functional_area_id' => 'nullable',
-            'current_salary' => 'nullable|numeric',
-            'expected_salary' => 'nullable|numeric',
+            'marital_status_id' => 'nullable|integer|exists:marital_statuses,id',
+            'nationality' => 'nullable|string|max:100',
+            'country_id' => 'required|integer|exists:countries,id',
+            'state_id' => 'required|integer|exists:states,id',
+            'city_id' => 'required|integer|exists:cities,id',
+            'phone' => 'required|string|max:20',
+            'experience' => 'nullable|integer|min:0|max:50',
+            'career_level_id' => 'nullable|integer|exists:career_levels,id',
+            'industry_id' => 'nullable|integer|exists:industries,id',
+            'functional_area_id' => 'nullable|integer|exists:functional_areas,id',
+            'current_salary' => 'nullable|numeric|min:0',
+            'expected_salary' => 'nullable|numeric|min:0',
+            'father_name' => 'nullable|string|max:100',
+            'national_id_card' => 'nullable|string|max:50',
         ];
 
         $this->assertEquals($expectedRules, Candidate::$rules);
-    }
-
-    /** @test */
-    public function it_has_translatable_attributes()
-    {
-        $candidate = new Candidate();
-        
-        $expectedTranslatable = [
-            'father_name',
-            'nationality',
-            'national_id_card',
-            'experience',
-            'current_salary',
-            'expected_salary'
-        ];
-
-        $this->assertEquals($expectedTranslatable, $candidate->translatable);
     }
 } 

@@ -395,7 +395,7 @@ trait HasTaxonomy
         $this->terms()->attach($term->id, [
             'taxonomy_id' => $term->taxonomy_id,
             'sort_order' => $sortOrder,
-            'meta' => $meta,
+            'meta' => empty($meta) ? null : json_encode($meta),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use App\Traits\HasTaxonomy;
 
 /**
  * App\Models\Job
@@ -52,7 +53,7 @@ use Spatie\Activitylog\LogOptions;
  */
 class Job extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes, HasTaxonomy;
 
     public $table = 'jobs';
 

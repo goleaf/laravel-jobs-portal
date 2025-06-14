@@ -19,6 +19,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use App\Traits\HasTaxonomy;
 
 /**
  * Class Company
@@ -62,7 +63,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Company extends Model implements HasMedia
 {
-    use HasFactory, LogsActivity, SoftDeletes, InteractsWithMedia, HasSlug;
+    use HasFactory, LogsActivity, SoftDeletes, InteractsWithMedia, HasSlug, HasTaxonomy;
     
     public $table = 'companies';
 

@@ -1779,3 +1779,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 Route::get('/{any}', function () {
     return view('app');
 })->where('any', '.*');
+
+// Include JobType routes
+require __DIR__.'/job_types.php';
+
+// Include JobType routes
+require __DIR__.'/job_types.php';

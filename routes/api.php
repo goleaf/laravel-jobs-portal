@@ -237,4 +237,17 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\Api\V1\AdminApiController::class, 'destroy']);
         Route::patch('/{id}/toggle-status', [\App\Http\Controllers\Api\V1\AdminApiController::class, 'toggleStatus']);
     });
+
+    // Job Types API Routes
+    Route::get('job-types', [\App\Http\Controllers\Api\JobTypeController::class, 'index']);
+    Route::get('job-types/{jobType}', [\App\Http\Controllers\Api\JobTypeController::class, 'show']);
+    Route::get('job-types/search', [\App\Http\Controllers\Api\JobTypeController::class, 'search']);
+    
+    // Protected job types routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('job-types', [\App\Http\Controllers\Api\JobTypeController::class, 'store']);
+        Route::put('job-types/{jobType}', [\App\Http\Controllers\Api\JobTypeController::class, 'update']);
+        Route::delete('job-types/{jobType}', [\App\Http\Controllers\Api\JobTypeController::class, 'destroy']);
+        Route::get('job-types/statistics', [\App\Http\Controllers\Api\JobTypeController::class, 'statistics']);
+    });
 });

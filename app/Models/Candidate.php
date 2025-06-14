@@ -192,7 +192,6 @@ class Candidate extends Model
             'current_salary' => 'decimal:2',
             'expected_salary' => 'decimal:2',
             'immediate_available' => 'integer',
-            'is_active' => 'integer',
             'is_verified' => 'boolean',
             'is_featured' => 'boolean',
             'is_available' => 'boolean',

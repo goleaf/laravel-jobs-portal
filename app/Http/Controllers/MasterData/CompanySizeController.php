@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MasterData;
 
 use App\Http\Requests\CreateCompanySizeRequest;
 use App\Http\Requests\UpdateCompanySizeRequest;

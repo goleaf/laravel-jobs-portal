@@ -216,7 +216,7 @@ class ConvertRappasoftTables extends Command
         return <<<PHP
 <?php
 
-namespace App\Livewire;
+namespace App\Console\Commands;
 
 use App\Models\\{$modelName};
 use Illuminate\Database\Eloquent\Builder;

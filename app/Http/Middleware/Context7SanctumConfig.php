@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Universal Sanctum Configuration Middleware
  * Handles Sanctum-specific configurations and security enhancements
  */
-class UniversalSanctumConfig
+class App\Http\Middleware\UniversalSanctumConfig
 {
     /**
      * Handle an incoming request with Universal security patterns

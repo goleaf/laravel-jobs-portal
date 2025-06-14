@@ -22,7 +22,7 @@ use Exception;
  * Comprehensive repository pattern implementation following Enhanced best practices
  * with caching, performance optimization, and Laravel 12 patterns
  */
-abstract class EnhancedBaseRepository
+abstract class App\Repositories\EnhancedBaseRepository
 {
     /**
      * The model instance

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Job;
 
 use App\Models\JobCategory;
 use Illuminate\Foundation\Http\FormRequest;

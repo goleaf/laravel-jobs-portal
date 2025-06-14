@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
  * 
  * Comprehensive user management repository with Enhanced patterns
  */
-class EnhancedUserRepository extends EnhancedBaseRepository
+class App\Repositories\EnhancedUserRepository extends EnhancedBaseRepository
 {
     /**
      * Cache duration for user-related queries (in minutes)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ReportedToCandidate;
 
 use App\Models\Candidate;
 use App\Models\User;

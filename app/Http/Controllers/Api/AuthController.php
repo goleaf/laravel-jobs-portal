@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 /**
- * Context7 API Authentication Controller
+ * Enhanced API Authentication Controller
  * Level 4 Complex System - Vue3 SPA Authentication
  */
 class AuthController extends Controller

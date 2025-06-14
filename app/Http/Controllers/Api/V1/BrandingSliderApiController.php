@@ -9,7 +9,7 @@ use App\Models\BrandingSlider;
 use App\Http\Resources\BrandingSliderResource;
 
 /**
- * Context7 API Controller for BrandingSlider
+ * Enhanced API Controller for BrandingSlider
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

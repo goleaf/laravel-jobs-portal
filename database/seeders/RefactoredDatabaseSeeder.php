@@ -13,9 +13,9 @@ class RefactoredDatabaseSeeder extends Seeder
 
     public function run()
     {
-        $this->command->info('🚀 Starting refactored database seeding with Context7 patterns...');
+        $this->command->info('🚀 Starting refactored database seeding with Enhanced patterns...');
         
-        // Use Context7 pattern: Disable foreign key constraints during seeding
+        // Use Enhanced pattern: Disable foreign key constraints during seeding
         Schema::withoutForeignKeyConstraints(function () {
             $this->seedInOrder();
         });

@@ -2,7 +2,7 @@ import { ref, computed, reactive, watch } from 'vue'
 import type { Ref } from 'vue'
 
 /**
- * Context7 Internationalization System
+ * Enhanced Internationalization System
  * 
  * Comprehensive multilingual support with RTL, caching, and performance optimization
  * Supports 9 languages: EN, AR, DE, ES, FR, PT, RU, TR, ZH
@@ -111,13 +111,13 @@ const translations: TranslationCache = reactive({})
 const loadingStates: Record<string, boolean> = reactive({})
 
 // Storage keys
-const LOCALE_STORAGE_KEY = 'context7_locale'
-const TRANSLATIONS_CACHE_KEY = 'context7_translations'
+const LOCALE_STORAGE_KEY = 'enhanced_locale'
+const TRANSLATIONS_CACHE_KEY = 'enhanced_translations'
 
 /**
- * Context7 I18n Composable
+ * Enhanced I18n Composable
  */
-export function useContext7I18n() {
+export function useEnhancedI18n() {
   // Computed properties
   const locale = computed(() => currentLocale.value)
   
@@ -141,7 +141,7 @@ export function useContext7I18n() {
   // Set locale
   const setLocale = async (newLocale: string) => {
     if (!SUPPORTED_LANGUAGES[newLocale]) {
-      console.warn(`Context7I18n: Unsupported locale "${newLocale}", falling back to "${fallbackLocale}"`)
+      console.warn(`EnhancedI18n: Unsupported locale "${newLocale}", falling back to "${fallbackLocale}"`)
       newLocale = fallbackLocale
     }
 
@@ -157,7 +157,7 @@ export function useContext7I18n() {
     await loadTranslations(newLocale)
     
     // Emit event for other components
-    window.dispatchEvent(new CustomEvent('context7-locale-changed', {
+    window.dispatchEvent(new CustomEvent('enhanced-locale-changed', {
       detail: { locale: newLocale, language: SUPPORTED_LANGUAGES[newLocale] }
     }))
   }
@@ -218,7 +218,7 @@ export function useContext7I18n() {
       saveToCache(locale, namespace, data)
 
     } catch (error) {
-      console.error(`Context7I18n: Failed to load translations for ${locale}/${namespace}:`, error)
+      console.error(`EnhancedI18n: Failed to load translations for ${locale}/${namespace}:`, error)
       
       // Fallback to default locale if not already trying fallback
       if (locale !== fallbackLocale) {
@@ -339,7 +339,7 @@ export function useContext7I18n() {
       }
       localStorage.setItem(cacheKey, JSON.stringify(cacheData))
     } catch (error) {
-      console.warn('Context7I18n: Failed to save translations to cache:', error)
+      console.warn('EnhancedI18n: Failed to save translations to cache:', error)
     }
   }
 
@@ -361,7 +361,7 @@ export function useContext7I18n() {
       
       return cacheData.data
     } catch (error) {
-      console.warn('Context7I18n: Failed to load translations from cache:', error)
+      console.warn('EnhancedI18n: Failed to load translations from cache:', error)
       return null
     }
   }
@@ -375,7 +375,7 @@ export function useContext7I18n() {
         }
       })
     } catch (error) {
-      console.warn('Context7I18n: Failed to clear translations cache:', error)
+      console.warn('EnhancedI18n: Failed to clear translations cache:', error)
     }
   }
 
@@ -434,13 +434,13 @@ export function useContext7I18n() {
 }
 
 // Global instance for use outside of Vue components
-export const context7I18n = useContext7I18n()
+export const enhancedI18n = useEnhancedI18n()
 
 // Auto-initialize
 if (typeof window !== 'undefined') {
   // Load common translations for current locale
-  context7I18n.loadTranslations(context7I18n.locale.value, 'common')
+  enhancedI18n.loadTranslations(enhancedI18n.locale.value, 'common')
   
   // Preload critical namespaces
-  context7I18n.preloadTranslations([context7I18n.locale.value], ['common', 'navigation', 'forms', 'validation'])
+  enhancedI18n.preloadTranslations([enhancedI18n.locale.value], ['common', 'navigation', 'forms', 'validation'])
 } 

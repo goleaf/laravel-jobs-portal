@@ -9,7 +9,7 @@ use App\Models\ReportedJob;
 use App\Http\Resources\ReportedJobResource;
 
 /**
- * Context7 API Controller for ReportedJob
+ * Enhanced API Controller for ReportedJob
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

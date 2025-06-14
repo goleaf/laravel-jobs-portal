@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { PencilSquareIcon, TrashIcon, EyeIcon } from '@heroicons/vue/24/outline'
-import { useContext7I18n } from '@/composables/useContext7I18n'
+import { useEnhancedI18n } from '@/composables/useEnhancedI18n'
 import { useToast } from '@/composables/useToast'
 import Swal from 'sweetalert2'
 
@@ -93,7 +93,7 @@ const props = withDefaults(defineProps<ActionButtonsProps>(), {
 const emit = defineEmits<ActionButtonsEmits>()
 
 // Composables
-const { t } = useContext7I18n()
+const { t } = useEnhancedI18n()
 const { showSuccess, showError } = useToast()
 
 // State

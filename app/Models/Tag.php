@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Tag Model - Enhanced with Context7 patterns
+ * Tag Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name
@@ -33,7 +33,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int $active_jobs_count
  * @property-read bool $is_popular
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -397,7 +397,7 @@ class Tag extends Model
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

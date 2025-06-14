@@ -137,7 +137,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
 </script>
 
 <style scoped>
-/* Additional Context7 Button Styles */
+/* Additional Enhanced Button Styles */
 .btn-ripple {
   position: relative;
   overflow: hidden;

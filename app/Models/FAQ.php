@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * FAQ Model - Enhanced with Context7 patterns
+ * FAQ Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $title
@@ -41,7 +41,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $display_text
  * @property-read string $excerpt
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -507,7 +507,7 @@ class FAQ extends Model
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

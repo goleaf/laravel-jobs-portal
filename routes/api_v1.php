@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | API Routes V1
 |--------------------------------------------------------------------------
-| Context7 Level 4 Complex System Transformation
+| Enhanced Level 4 Complex System Transformation
 | Generated RESTful API routes for Vue3 SPA
 */
 

@@ -9,7 +9,7 @@ use App\Models\Location;
 use App\Http\Resources\LocationResource;
 
 /**
- * Context7 API Controller for Location
+ * Enhanced API Controller for Location
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

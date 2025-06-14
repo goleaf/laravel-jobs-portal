@@ -17,7 +17,7 @@ use Illuminate\View\View;
  * CompanySizeController
  * 
  * Handles company size management for the Laravel Job Portal
- * Context7 Level 4 transformation - Universal CRUD patterns
+ * Enhanced Level 4 transformation - Universal CRUD patterns
  */
 class CompanySizeController extends AppBaseController
 {

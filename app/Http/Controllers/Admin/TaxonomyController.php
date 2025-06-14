@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
- * TaxonomyController - Enhanced with Context7 patterns
+ * TaxonomyController - Enhanced with Enhanced patterns
  * 
  * Manages taxonomies with full CRUD operations, search, filtering,
  * and bulk operations following Laravel best practices.

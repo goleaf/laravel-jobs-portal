@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for FunctionalAreaController
+ * Enhanced Feature Test for FunctionalAreaController
  * Comprehensive testing for FunctionalArea controller functionality
  */
 class FunctionalAreaControllerTest extends TestCase

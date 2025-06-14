@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Taxonomy Model - Enhanced with Context7 patterns
+ * Taxonomy Model - Enhanced with Enhanced patterns
  * 
  * Organizes terms into logical categories for the job portal system.
  * Supports hierarchical structures and flexible metadata.
@@ -38,7 +38,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $display_name
  * @property-read string $type_label
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder public()

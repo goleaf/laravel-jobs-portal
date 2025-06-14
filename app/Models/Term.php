@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Term Model - Enhanced with Context7 patterns
+ * Term Model - Enhanced with Enhanced patterns
  * 
  * Individual terms within taxonomies with hierarchical support.
  * Can be attached to any model via polymorphic relationships.
@@ -49,7 +49,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_root
  * @property-read bool $is_leaf
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()

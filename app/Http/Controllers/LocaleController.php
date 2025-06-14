@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Cache;
  * LocaleController
  * 
  * Handles language switching and locale management for the Laravel Job Portal
- * Context7 Level 4 transformation - Universal locale management
+ * Enhanced Level 4 transformation - Universal locale management
  */
 class LocaleController extends Controller
 {
     /**
-     * Available languages with Context7 configuration
+     * Available languages with Enhanced configuration
      */
     private const AVAILABLE_LOCALES = [
         'en' => ['name' => 'English', 'native' => 'English', 'dir' => 'ltr'],

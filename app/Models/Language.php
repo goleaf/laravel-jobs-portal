@@ -14,7 +14,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Language Model - Enhanced with Context7 patterns
+ * Language Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $language
@@ -35,7 +35,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_major
  * @property-read bool $is_european
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()

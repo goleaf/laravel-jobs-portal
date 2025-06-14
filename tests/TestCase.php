@@ -82,7 +82,7 @@ abstract class TestCase extends BaseTestCase
         // Set up testing environment efficiently
         $this->setTestingConfig();
 
-        // Context7 Pattern: Disable foreign key constraints for testing
+        // Enhanced Pattern: Disable foreign key constraints for testing
         $this->configureDatabaseForTesting();
 
         // Only seed if the test uses RefreshDatabase and needs foreign key data
@@ -93,7 +93,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
-        // Context7 Pattern: Re-enable foreign key constraints after testing
+        // Enhanced Pattern: Re-enable foreign key constraints after testing
         $this->restoreDatabaseConstraints();
         
         // Force garbage collection

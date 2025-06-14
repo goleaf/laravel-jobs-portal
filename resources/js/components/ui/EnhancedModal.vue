@@ -146,7 +146,7 @@
 import { computed, watch, nextTick } from 'vue'
 
 // Props interface
-interface Context7ModalProps {
+interface EnhancedModalProps {
   modelValue: boolean
   title?: string
   description?: string
@@ -164,7 +164,7 @@ interface Context7ModalProps {
 }
 
 // Props with defaults
-const props = withDefaults(defineProps<Context7ModalProps>(), {
+const props = withDefaults(defineProps<EnhancedModalProps>(), {
   size: 'md',
   closable: true,
   closeOnBackdrop: true,

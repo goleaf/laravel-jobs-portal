@@ -1,4 +1,4 @@
-{{-- Context7 Action Button Component for Company Sizes Table --}}
+{{-- Enhanced Action Button Component for Company Sizes Table --}}
 @props(['item', 'route_prefix' => 'admin.companySize'])
 
 <div class="flex items-center gap-2" x-data="{ deleting: false }">
@@ -23,7 +23,7 @@
     </button>
 </div>
 
-{{-- Context7 Alpine.js Delete Confirmation --}}
+{{-- Enhanced Alpine.js Delete Confirmation --}}
 @push('scripts')
 <script>
 document.addEventListener('alpine:init', () => {

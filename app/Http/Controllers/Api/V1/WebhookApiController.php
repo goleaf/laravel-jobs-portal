@@ -9,7 +9,7 @@ use App\Models\Webhook;
 use App\Http\Resources\WebhookResource;
 
 /**
- * Context7 API Controller for Webhook
+ * Enhanced API Controller for Webhook
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

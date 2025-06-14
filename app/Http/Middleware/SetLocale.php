@@ -40,7 +40,7 @@ class SetLocale
     }
 
     /**
-     * Detect the appropriate locale using Context7 patterns
+     * Detect the appropriate locale using Enhanced patterns
      */
     private function detectLocale(Request $request): string
     {

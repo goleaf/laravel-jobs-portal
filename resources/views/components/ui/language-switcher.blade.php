@@ -1,4 +1,4 @@
-{{-- Context7 Language Switcher Component --}}
+{{-- Enhanced Language Switcher Component --}}
 @props([
     'type' => 'dropdown', // dropdown, select, flags, compact
     'position' => 'bottom-right',

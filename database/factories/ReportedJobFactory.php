@@ -6,7 +6,7 @@ use App\Models\ReportedJob;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for ReportedJob
+ * Enhanced Factory for ReportedJob
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReportedJob>
@@ -21,7 +21,7 @@ class ReportedJobFactory extends Factory
     protected $model = ReportedJob::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * EmailTemplate Model - Enhanced with Context7 patterns
+ * EmailTemplate Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $template_name
@@ -36,7 +36,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $preview_body
  * @property-read int $usage_count
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder default()

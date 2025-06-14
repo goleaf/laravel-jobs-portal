@@ -8,8 +8,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for Company index
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for Company index
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Auto-generated for Level 4 Complex System Transformation
  */
 class IndexCompanyRequest extends FormRequest
@@ -362,12 +362,12 @@ class IndexCompanyRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Enhanced Pattern: Enhanced validation logic
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
+            if ($this->hasEnhancedValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.conflict_detected'));
             }
             
@@ -378,16 +378,16 @@ class IndexCompanyRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Enhanced Pattern: Enhanced business logic validation
      */
-    private function hasContext7ValidationConflicts(): bool
+    private function hasEnhancedValidationConflicts(): bool
     {
         // Add specific business logic validation here
         return false;
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Enhanced Pattern: Content security validation
      */
     private function hasSuspiciousContent(): bool
     {
@@ -405,11 +405,11 @@ class IndexCompanyRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring
      */
     protected function failedValidation(Validator $validator): void
     {
-        logger()->warning('Context7 validation failed for IndexCompanyRequest', [
+        logger()->warning('Enhanced validation failed for IndexCompanyRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'CompanyController',
             'method' => 'index',

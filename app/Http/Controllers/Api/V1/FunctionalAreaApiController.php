@@ -9,7 +9,7 @@ use App\Models\FunctionalArea;
 use App\Http\Resources\FunctionalAreaResource;
 
 /**
- * Context7 API Controller for FunctionalArea
+ * Enhanced API Controller for FunctionalArea
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

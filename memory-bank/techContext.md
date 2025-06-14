@@ -702,7 +702,7 @@ The following technologies and frameworks are utilized in the comprehensive tran
 
 ### API and Integration
 - **Laravel API Resources**: For creating consistent and optimized JSON responses for API endpoints.
-- **Rate Limiting**: Implemented with Laravel's built-in middleware and Context7 patterns to prevent API abuse.
+- **Rate Limiting**: Implemented with Laravel's built-in middleware and Enhanced patterns to prevent API abuse.
 - **RESTful API Design**: Following best practices for creating scalable and maintainable API endpoints.
 
 ### Testing and Quality Assurance
@@ -737,7 +737,7 @@ The following technologies and frameworks are utilized in the comprehensive tran
 - **No Docker**: As per user rules, Docker is not used in this project.
 - **Local Asset Hosting**: All CSS and JS files are hosted locally via NPM packages, avoiding CDN usage as per user guidelines.
 
-This technology stack is aligned with Context7 best practices and user-specific rules to ensure a modern, secure, and efficient job portal system. 
+This technology stack is aligned with Enhanced best practices and user-specific rules to ensure a modern, secure, and efficient job portal system. 
 
 # Technical Context: Laravel Job Portal Modernization
 
@@ -760,8 +760,8 @@ This technology stack is aligned with Context7 best practices and user-specific 
   - For source code management with a clean main branch workflow.
 
 ## Development Practices
-- **Context7 Patterns**: All code follows Context7 design principles for consistency and scalability.
-- **Multilingual System**: JSON-based translations supporting 9 languages with RTL for Arabic, integrated with Context7 I18n.
+- **Enhanced Patterns**: All code follows Enhanced design principles for consistency and scalability.
+- **Multilingual System**: JSON-based translations supporting 9 languages with RTL for Arabic, integrated with Enhanced I18n.
 - **Build Process**: Run `npm run build` after CSS/JS edits to compile assets.
 - **Environment**: Development and production environments with specific configurations (e.g., HTTPS forced in production).
 

@@ -9,7 +9,7 @@ use App\Models\BlogComment;
 use App\Http\Resources\BlogCommentResource;
 
 /**
- * Context7 API Controller for BlogComment
+ * Enhanced API Controller for BlogComment
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

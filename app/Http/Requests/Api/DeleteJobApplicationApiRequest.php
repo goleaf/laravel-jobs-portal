@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for JobApplicationApi destroy
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for JobApplicationApi destroy
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Auto-generated for Level 4 Complex System Transformation
  */
 class DeleteJobApplicationApiRequest extends FormRequest
@@ -18,7 +18,7 @@ class DeleteJobApplicationApiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
+        // Enhanced Pattern: Enhanced authorization with null checks
         if (!auth()->check()) {
             return false;
         }
@@ -33,7 +33,7 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
+     * Enhanced Pattern: Comprehensive validation with security
      */
     public function rules(): array
     {
@@ -58,7 +58,7 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -73,7 +73,7 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -87,7 +87,7 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Enhanced Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -100,12 +100,12 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Enhanced Pattern: Enhanced validation logic
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
+            if ($this->hasEnhancedValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.conflict_detected'));
             }
             
@@ -116,16 +116,16 @@ class DeleteJobApplicationApiRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Enhanced Pattern: Enhanced business logic validation
      */
-    private function hasContext7ValidationConflicts(): bool
+    private function hasEnhancedValidationConflicts(): bool
     {
         // Add specific business logic validation here
         return false;
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Enhanced Pattern: Content security validation
      */
     private function hasSuspiciousContent(): bool
     {
@@ -143,11 +143,11 @@ class DeleteJobApplicationApiRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring
      */
     protected function failedValidation(Validator $validator): void
     {
-        logger()->warning('Context7 validation failed for DeleteJobApplicationApiRequest', [
+        logger()->warning('Enhanced validation failed for DeleteJobApplicationApiRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'JobApplicationApiController',
             'method' => 'destroy',

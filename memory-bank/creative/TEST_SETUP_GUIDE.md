@@ -1,4 +1,4 @@
-# Context7 Test Database Setup
+# Enhanced Test Database Setup
 
 ## Required for Test Execution
 

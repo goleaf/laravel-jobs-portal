@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for IndustryController
+ * Enhanced Feature Test for IndustryController
  * Comprehensive testing for Industry controller functionality
  */
 class IndustryControllerTest extends TestCase

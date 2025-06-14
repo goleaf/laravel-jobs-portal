@@ -8,7 +8,7 @@ use Tests\DuskTestCase;
 class BasicFunctionalityTest extends DuskTestCase
 {
     /**
-     * Context7 pattern: Essential smoke test - most critical check
+     * Enhanced pattern: Essential smoke test - most critical check
      * 
      * @test
      */
@@ -19,7 +19,7 @@ class BasicFunctionalityTest extends DuskTestCase
                 ->waitFor('body', 30)  // Increased timeout for CI
                 ->assertPresent('body');
             
-            // Context7 pattern: Verify basic page structure
+            // Enhanced pattern: Verify basic page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -29,7 +29,7 @@ class BasicFunctionalityTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test core public routes work
+     * Enhanced pattern: Test core public routes work
      * 
      * @test
      */
@@ -54,7 +54,7 @@ class BasicFunctionalityTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Verify no critical HTTP errors
+     * Enhanced pattern: Verify no critical HTTP errors
      * 
      * @test
      */
@@ -70,7 +70,7 @@ class BasicFunctionalityTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test basic navigation works
+     * Enhanced pattern: Test basic navigation works
      * 
      * @test
      */
@@ -94,7 +94,7 @@ class BasicFunctionalityTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Verify JavaScript basics work
+     * Enhanced pattern: Verify JavaScript basics work
      * 
      * @test
      */

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 /**
- * Context7 Locale Middleware
+ * Enhanced Locale Middleware
  * Handles automatic language detection and locale switching
  * 
  * Features:

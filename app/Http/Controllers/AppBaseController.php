@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Log;
  * App Base Controller
  * 
  * Extended base controller for the Job Portal application with API response methods,
- * caching capabilities, and Context7 enterprise patterns.
+ * caching capabilities, and Enhanced enterprise patterns.
  * 
  * Features:
  * - Standardized JSON API responses
  * - Advanced caching strategies
  * - Performance monitoring
  * - Error handling and logging
- * - Context7 job portal patterns
+ * - Enhanced job portal patterns
  */
 class AppBaseController extends Controller
 {

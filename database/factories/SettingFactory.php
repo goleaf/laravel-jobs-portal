@@ -6,7 +6,7 @@ use App\Models\Setting;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for Setting
+ * Enhanced Factory for Setting
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Setting>
@@ -21,7 +21,7 @@ class SettingFactory extends Factory
     protected $model = Setting::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

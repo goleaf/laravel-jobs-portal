@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for UpdateJobTypeRequest
+ * Enhanced Unit Test for UpdateJobTypeRequest
  * Testing validation rules and authorization
  */
 class UpdateJobTypeRequestTest extends TestCase

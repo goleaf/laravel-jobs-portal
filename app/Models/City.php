@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * City Model - Enhanced with Context7 patterns
+ * City Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $state_id
@@ -48,7 +48,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int $active_candidates_count
  * @property-read int $users_count
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()

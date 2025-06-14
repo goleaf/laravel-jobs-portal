@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 /**
- * Enhanced DashboardController - Context7 patterns implementation
+ * Enhanced DashboardController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel dashboard controller patterns with:
  * - Advanced analytics and KPI tracking

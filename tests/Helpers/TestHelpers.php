@@ -37,7 +37,7 @@ class TestHelpers
     }
 
     /**
-     * Create basic test data using Context7 patterns
+     * Create basic test data using Enhanced patterns
      */
     public static function createBasicTestData(): void
     {

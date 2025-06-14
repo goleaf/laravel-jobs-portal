@@ -6,7 +6,7 @@ use App\Models\ReportedToCompany;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for ReportedToCompany
+ * Enhanced Factory for ReportedToCompany
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReportedToCompany>
@@ -21,7 +21,7 @@ class ReportedToCompanyFactory extends Factory
     protected $model = ReportedToCompany::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

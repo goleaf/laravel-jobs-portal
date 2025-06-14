@@ -9,7 +9,7 @@ use App\Models\FilePreview;
 use App\Http\Resources\FilePreviewResource;
 
 /**
- * Context7 API Controller for FilePreview
+ * Enhanced API Controller for FilePreview
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

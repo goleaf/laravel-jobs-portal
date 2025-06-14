@@ -1,5 +1,5 @@
 /**
- * Admin Job Types Management - Context7 Enhanced Module
+ * Admin Job Types Management - Enhanced Enhanced Module
  */
 
 class JobTypesManager {

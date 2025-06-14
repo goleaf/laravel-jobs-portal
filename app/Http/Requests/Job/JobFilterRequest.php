@@ -228,7 +228,7 @@ class JobFilterRequest extends FormRequest
     }
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Enhanced Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {

@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * SalaryPeriod Model - Enhanced with Context7 patterns
+ * SalaryPeriod Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $period
@@ -37,7 +37,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int $candidates_count
  * @property-read int $active_candidates_count
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()

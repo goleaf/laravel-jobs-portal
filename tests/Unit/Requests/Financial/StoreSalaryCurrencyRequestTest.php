@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for StoreSalaryCurrencyRequest
+ * Enhanced Unit Test for StoreSalaryCurrencyRequest
  * Testing validation rules and authorization
  */
 class StoreSalaryCurrencyRequestTest extends TestCase

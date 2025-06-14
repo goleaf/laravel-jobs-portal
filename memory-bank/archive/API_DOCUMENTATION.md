@@ -1,4 +1,4 @@
-# Context7 Job Portal API Documentation
+# Enhanced Job Portal API Documentation
 
 ## Overview
 RESTful API for Vue3 SPA frontend following Laravel 12 best practices.

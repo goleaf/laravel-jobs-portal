@@ -6,7 +6,7 @@ use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for Post
+ * Enhanced Factory for Post
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -21,7 +21,7 @@ class PostFactory extends Factory
     protected $model = Post::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

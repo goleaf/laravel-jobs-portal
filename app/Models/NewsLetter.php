@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * NewsLetter Model - Enhanced with Context7 patterns
+ * NewsLetter Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $email
@@ -39,7 +39,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $domain
  * @property-read int $days_since_subscription
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder verified()

@@ -9,7 +9,7 @@ use App\Models\Application;
 use App\Http\Resources\ApplicationResource;
 
 /**
- * Context7 API Controller for Application
+ * Enhanced API Controller for Application
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

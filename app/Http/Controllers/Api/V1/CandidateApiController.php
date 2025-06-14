@@ -11,7 +11,7 @@ use App\Http\Requests\Api\Universal\UpdateRequest;
 use App\Http\Requests\Api\Universal\IndexRequest;
 
 /**
- * Context7 API Controller for Candidate Management
+ * Enhanced API Controller for Candidate Management
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class LocaleController extends Controller
 {
     /**
-     * Available languages with Context7 configuration
+     * Available languages with Enhanced configuration
      */
     private const AVAILABLE_LOCALES = [
         'en' => ['name' => 'English', 'native' => 'English', 'dir' => 'ltr'],

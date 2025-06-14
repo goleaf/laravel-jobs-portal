@@ -7,7 +7,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
- * Context7 Blade Translation Converter Command
+ * Enhanced Blade Translation Converter Command
  * Laravel Artisan command to convert hardcoded strings to translation functions
  */
 class ConvertBladeTranslations extends Command
@@ -27,7 +27,7 @@ class ConvertBladeTranslations extends Command
      *
      * @var string
      */
-    protected $description = 'Convert hardcoded strings in Blade templates to translation functions using Context7 patterns';
+    protected $description = 'Convert hardcoded strings in Blade templates to translation functions using Enhanced patterns';
 
     private $processedFiles = 0;
     private $convertedStrings = 0;
@@ -64,7 +64,7 @@ class ConvertBladeTranslations extends Command
     {
         $this->dryRun = $this->option('dry-run');
         
-        $this->info('🌍 Context7 Blade Translation Converter');
+        $this->info('🌍 Enhanced Blade Translation Converter');
         $this->info('=====================================');
         
         if ($this->dryRun) {
@@ -341,7 +341,7 @@ class ConvertBladeTranslations extends Command
     private function generateReport()
     {
         $this->newLine();
-        $this->info('🎉 CONTEXT7 BLADE TRANSLATION CONVERSION COMPLETED');
+        $this->info('🎉 ENHANCED BLADE TRANSLATION CONVERSION COMPLETED');
         $this->info(str_repeat('=', 60));
         
         $this->table(['Metric', 'Count'], [

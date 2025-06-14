@@ -85,13 +85,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\JobCategoryService::class);
         $this->app->singleton(\App\Services\SeoService::class);
 
-        // Universal Repository Pattern - Context7 Implementation (Phase 2)
+        // Universal Repository Pattern - Enhanced Implementation (Phase 2)
         // $this->app->singleton(\App\Repositories\JobRepository::class);
         // $this->app->singleton(\App\Repositories\CompanyRepository::class);
         // $this->app->singleton(\App\Repositories\CandidateRepository::class);
         // $this->app->singleton(\App\Repositories\UserRepository::class);
 
-        // Universal Service Layer - Context7 Implementation (Phase 2)
+        // Universal Service Layer - Enhanced Implementation (Phase 2)
         // $this->app->singleton(\App\Services\UniversalJobService::class);
         // $this->app->singleton(\App\Services\UniversalCompanyService::class);
         // $this->app->singleton(\App\Services\UniversalCandidateService::class);

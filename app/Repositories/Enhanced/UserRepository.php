@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Enhanced User Repository - Context7 Laravel Pattern
+ * Enhanced User Repository - Enhanced Laravel Pattern
  * 
  * Domain-specific repository for User model with authentication,
  * profile management, and role-based queries.

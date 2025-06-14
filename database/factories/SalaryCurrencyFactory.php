@@ -6,7 +6,7 @@ use App\Models\SalaryCurrency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for SalaryCurrency
+ * Enhanced Factory for SalaryCurrency
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SalaryCurrency>
@@ -21,7 +21,7 @@ class SalaryCurrencyFactory extends Factory
     protected $model = SalaryCurrency::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

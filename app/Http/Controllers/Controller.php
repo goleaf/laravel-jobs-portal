@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
  * Features:
  * - Request authorization capabilities
  * - Request validation functionality  
- * - Context7 enterprise patterns
+ * - Enhanced enterprise patterns
  * - Modern Laravel 12 structure
  */
 abstract class Controller extends BaseController

@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * Testimonial Model - Enhanced with Context7 patterns
+ * Testimonial Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $customer_name
@@ -44,7 +44,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read string $status_label
  * @property-read string $display_text
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -455,7 +455,7 @@ class Testimonial extends Model implements HasMedia
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

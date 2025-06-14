@@ -9,7 +9,7 @@ use App\Models\FrontendAssets;
 use App\Http\Resources\FrontendAssetsResource;
 
 /**
- * Context7 API Controller for FrontendAssets
+ * Enhanced API Controller for FrontendAssets
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

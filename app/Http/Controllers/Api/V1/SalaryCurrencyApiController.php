@@ -9,7 +9,7 @@ use App\Models\SalaryCurrency;
 use App\Http\Resources\SalaryCurrencyResource;
 
 /**
- * Context7 API Controller for SalaryCurrency
+ * Enhanced API Controller for SalaryCurrency
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

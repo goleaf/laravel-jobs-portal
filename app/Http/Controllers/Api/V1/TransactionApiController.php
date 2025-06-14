@@ -9,7 +9,7 @@ use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
 
 /**
- * Context7 API Controller for Transaction
+ * Enhanced API Controller for Transaction
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

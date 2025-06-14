@@ -12,7 +12,7 @@ class JobPortalTest extends DuskTestCase
     use DatabaseMigrations;
 
     /**
-     * Context7 pattern: Test basic homepage functionality
+     * Enhanced pattern: Test basic homepage functionality
      * 
      * @test
      */
@@ -26,7 +26,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertDontSee('404')
                 ->assertDontSee('Fatal error');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -34,7 +34,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test navigation to key pages
+     * Enhanced pattern: Test navigation to key pages
      * 
      * @test
      */
@@ -65,7 +65,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test basic form functionality
+     * Enhanced pattern: Test basic form functionality
      * 
      * @test
      */
@@ -75,7 +75,7 @@ class JobPortalTest extends DuskTestCase
             $browser->visit('/login')
                 ->waitFor('body', 10);
             
-            // Context7 pattern: Check for form elements without assuming specific implementation
+            // Enhanced pattern: Check for form elements without assuming specific implementation
             $pageSource = $browser->driver->getPageSource();
             
             // Basic checks that a login form exists
@@ -88,7 +88,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test register form displays correctly
+     * Enhanced pattern: Test register form displays correctly
      * 
      * @test
      */
@@ -98,7 +98,7 @@ class JobPortalTest extends DuskTestCase
             $browser->visit('/register')
                 ->waitFor('body', 10);
             
-            // Context7 pattern: Check for form elements without assuming specific implementation
+            // Enhanced pattern: Check for form elements without assuming specific implementation
             $pageSource = $browser->driver->getPageSource();
             
             // Basic checks that a register form exists
@@ -111,7 +111,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test jobs listing functionality
+     * Enhanced pattern: Test jobs listing functionality
      * 
      * @test
      */
@@ -127,7 +127,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertDontSee('Undefined variable')
                 ->assertDontSee('Call to a member function');
             
-            // Context7 pattern: Verify page loaded successfully
+            // Enhanced pattern: Verify page loaded successfully
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             
@@ -139,7 +139,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test companies page functionality
+     * Enhanced pattern: Test companies page functionality
      * 
      * @test
      */
@@ -153,7 +153,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertDontSee('404')
                 ->assertDontSee('Fatal error');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -161,7 +161,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test basic navigation functionality
+     * Enhanced pattern: Test basic navigation functionality
      * 
      * @test
      */
@@ -189,7 +189,7 @@ class JobPortalTest extends DuskTestCase
     }
 
     /**
-     * Context7 pattern: Test responsive behavior
+     * Enhanced pattern: Test responsive behavior
      * 
      * @test
      */

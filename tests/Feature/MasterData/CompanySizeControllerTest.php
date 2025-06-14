@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for CompanySizeController
+ * Enhanced Feature Test for CompanySizeController
  * Comprehensive testing for CompanySize controller functionality
  */
 class CompanySizeControllerTest extends TestCase

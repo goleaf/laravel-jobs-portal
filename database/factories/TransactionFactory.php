@@ -6,7 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for Transaction
+ * Enhanced Factory for Transaction
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -21,7 +21,7 @@ class TransactionFactory extends Factory
     protected $model = Transaction::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

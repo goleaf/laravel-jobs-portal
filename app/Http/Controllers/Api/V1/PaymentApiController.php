@@ -9,7 +9,7 @@ use App\Models\Payment;
 use App\Http\Resources\PaymentResource;
 
 /**
- * Context7 API Controller for Payment
+ * Enhanced API Controller for Payment
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

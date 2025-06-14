@@ -5,8 +5,8 @@ namespace App\Http\Requests\Financial;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Context7 Enhanced Form Request for Delete Action
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for Delete Action
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  */
 class DeleteSalaryCurrencyRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class DeleteSalaryCurrencyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Enhanced authorization with null checks
+        // Enhanced Pattern: Enhanced authorization with null checks
         if (!auth()->check()) {
             return false;
         }
@@ -59,7 +59,7 @@ class DeleteSalaryCurrencyRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Enhanced Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {

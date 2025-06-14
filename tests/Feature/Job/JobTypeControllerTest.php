@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for JobTypeController
+ * Enhanced Feature Test for JobTypeController
  * Comprehensive testing for JobType controller functionality
  */
 class JobTypeControllerTest extends TestCase

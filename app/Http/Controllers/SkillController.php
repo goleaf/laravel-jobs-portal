@@ -20,10 +20,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * SkillController - Enhanced with Context7 patterns
+ * SkillController - Enhanced with Enhanced patterns
  * 
  * Manages skill operations with advanced caching, error handling,
- * and performance optimization using Context7 enterprise patterns.
+ * and performance optimization using Enhanced enterprise patterns.
  */
 class SkillController extends AppBaseController
 {
@@ -84,7 +84,7 @@ class SkillController extends AppBaseController
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             $query = Skill::query();
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('search')) {
                 $query->search($request->get('search'));
             }

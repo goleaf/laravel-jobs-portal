@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * Universal Repository Interface - Context7 Contract
+ * Universal Repository Interface - Enhanced Contract
  * 
  * Defines the standard contract for all repository implementations
  * following Laravel best practices and service layer patterns

@@ -17,12 +17,12 @@ use InvalidArgumentException;
 use Exception;
 
 /**
- * Context7 Base Repository
+ * Enhanced Base Repository
  * 
- * Comprehensive repository pattern implementation following Context7 best practices
+ * Comprehensive repository pattern implementation following Enhanced best practices
  * with caching, performance optimization, and Laravel 12 patterns
  */
-abstract class Context7BaseRepository
+abstract class EnhancedBaseRepository
 {
     /**
      * The model instance
@@ -150,7 +150,7 @@ abstract class Context7BaseRepository
             
             DB::commit();
             
-            Log::info("Context7Repository: Created {$this->getModelClass()}", [
+            Log::info("EnhancedRepository: Created {$this->getModelClass()}", [
                 'id' => $model->id,
                 'data' => $data
             ]);
@@ -158,7 +158,7 @@ abstract class Context7BaseRepository
             return $model;
         } catch (QueryException $e) {
             DB::rollBack();
-            Log::error("Context7Repository: Failed to create {$this->getModelClass()}", [
+            Log::error("EnhancedRepository: Failed to create {$this->getModelClass()}", [
                 'error' => $e->getMessage(),
                 'data' => $data
             ]);
@@ -182,7 +182,7 @@ abstract class Context7BaseRepository
             
             DB::commit();
             
-            Log::info("Context7Repository: Updated {$this->getModelClass()}", [
+            Log::info("EnhancedRepository: Updated {$this->getModelClass()}", [
                 'id' => $id,
                 'data' => $data
             ]);
@@ -190,7 +190,7 @@ abstract class Context7BaseRepository
             return $model->fresh();
         } catch (QueryException $e) {
             DB::rollBack();
-            Log::error("Context7Repository: Failed to update {$this->getModelClass()}", [
+            Log::error("EnhancedRepository: Failed to update {$this->getModelClass()}", [
                 'id' => $id,
                 'error' => $e->getMessage(),
                 'data' => $data
@@ -215,14 +215,14 @@ abstract class Context7BaseRepository
             
             DB::commit();
             
-            Log::info("Context7Repository: Deleted {$this->getModelClass()}", [
+            Log::info("EnhancedRepository: Deleted {$this->getModelClass()}", [
                 'id' => $id
             ]);
             
             return $result;
         } catch (QueryException $e) {
             DB::rollBack();
-            Log::error("Context7Repository: Failed to delete {$this->getModelClass()}", [
+            Log::error("EnhancedRepository: Failed to delete {$this->getModelClass()}", [
                 'id' => $id,
                 'error' => $e->getMessage()
             ]);
@@ -349,7 +349,7 @@ abstract class Context7BaseRepository
         // you might want to use Redis tags or a more sophisticated approach
         Cache::flush();
         
-        Log::info("Context7Repository: Cleared caches for {$this->getModelClass()}");
+        Log::info("EnhancedRepository: Cleared caches for {$this->getModelClass()}");
     }
 
     /**
@@ -458,14 +458,14 @@ abstract class Context7BaseRepository
             
             DB::commit();
             
-            Log::info("Context7Repository: Bulk inserted {$this->getModelClass()}", [
+            Log::info("EnhancedRepository: Bulk inserted {$this->getModelClass()}", [
                 'count' => count($data)
             ]);
             
             return $result;
         } catch (QueryException $e) {
             DB::rollBack();
-            Log::error("Context7Repository: Failed to bulk insert {$this->getModelClass()}", [
+            Log::error("EnhancedRepository: Failed to bulk insert {$this->getModelClass()}", [
                 'error' => $e->getMessage(),
                 'count' => count($data)
             ]);
@@ -488,7 +488,7 @@ abstract class Context7BaseRepository
             
             DB::commit();
             
-            Log::info("Context7Repository: Updated or created {$this->getModelClass()}", [
+            Log::info("EnhancedRepository: Updated or created {$this->getModelClass()}", [
                 'id' => $model->id,
                 'attributes' => $attributes,
                 'values' => $values
@@ -497,7 +497,7 @@ abstract class Context7BaseRepository
             return $model;
         } catch (QueryException $e) {
             DB::rollBack();
-            Log::error("Context7Repository: Failed to update or create {$this->getModelClass()}", [
+            Log::error("EnhancedRepository: Failed to update or create {$this->getModelClass()}", [
                 'error' => $e->getMessage(),
                 'attributes' => $attributes,
                 'values' => $values

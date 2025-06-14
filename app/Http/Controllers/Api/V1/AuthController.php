@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 
 /**
- * Context7 Authentication Controller for SPA
+ * Enhanced Authentication Controller for SPA
  * Handles login, logout, registration, and user management
  * Uses Laravel Sanctum for SPA authentication
  */

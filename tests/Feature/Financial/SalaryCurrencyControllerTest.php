@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for SalaryCurrencyController
+ * Enhanced Feature Test for SalaryCurrencyController
  * Comprehensive testing for SalaryCurrency controller functionality
  */
 class SalaryCurrencyControllerTest extends TestCase

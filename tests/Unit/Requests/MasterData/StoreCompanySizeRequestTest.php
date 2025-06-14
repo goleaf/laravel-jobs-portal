@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for StoreCompanySizeRequest
+ * Enhanced Unit Test for StoreCompanySizeRequest
  * Testing validation rules and authorization
  */
 class StoreCompanySizeRequestTest extends TestCase

@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for Store Skill
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for Store Skill
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Following proven MasterData pattern
  */
 class StoreSkillRequest extends FormRequest
@@ -18,7 +18,7 @@ class StoreSkillRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Role-based authorization
+        // Enhanced Pattern: Role-based authorization
         return auth()->check() && (
             auth()->user()->hasRole('Admin') || 
             auth()->user()->hasRole('Employer')
@@ -27,7 +27,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive skill validation with security
+     * Enhanced Pattern: Comprehensive skill validation with security
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -95,7 +95,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -124,7 +124,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -145,7 +145,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Enhanced Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -176,12 +176,12 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation logic
+     * Enhanced Pattern: Enhanced validation logic
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
+            if ($this->hasEnhancedValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.skill_conflict'));
             }
             
@@ -204,9 +204,9 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Enhanced Pattern: Enhanced business logic validation
      */
-    private function hasContext7ValidationConflicts(): bool
+    private function hasEnhancedValidationConflicts(): bool
     {
         // Check for similar skill names (case-insensitive, ignoring spaces)
         if ($this->name) {
@@ -222,7 +222,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Enhanced Pattern: Content security validation
      */
     private function hasSuspiciousContent(): bool
     {
@@ -243,7 +243,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Related skills validation
+     * Enhanced Pattern: Related skills validation
      */
     private function hasInvalidRelatedSkills(): bool
     {
@@ -270,7 +270,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Skill format validation
+     * Enhanced Pattern: Skill format validation
      */
     private function hasInvalidSkillFormat(): bool
     {
@@ -301,7 +301,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Keywords validation
+     * Enhanced Pattern: Keywords validation
      */
     private function hasExcessiveKeywords(): bool
     {
@@ -327,7 +327,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Tags normalization
+     * Enhanced Pattern: Tags normalization
      */
     private function normalizeTags(?string $tags): ?string
     {
@@ -343,7 +343,7 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Keywords normalization
+     * Enhanced Pattern: Keywords normalization
      */
     private function normalizeKeywords(?string $keywords): ?string
     {
@@ -360,11 +360,11 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring
      */
     protected function failedValidation(Validator $validator): void
     {
-        logger()->warning('Context7 validation failed for StoreSkillRequest', [
+        logger()->warning('Enhanced validation failed for StoreSkillRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'Skill',
             'action' => 'Store',

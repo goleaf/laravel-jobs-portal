@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for DeleteCompanySizeRequest
+ * Enhanced Unit Test for DeleteCompanySizeRequest
  * Testing validation rules and authorization
  */
 class DeleteCompanySizeRequestTest extends TestCase

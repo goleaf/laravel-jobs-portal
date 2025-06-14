@@ -322,7 +322,7 @@ class Plan extends Model
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

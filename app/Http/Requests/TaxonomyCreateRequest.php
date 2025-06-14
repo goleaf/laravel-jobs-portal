@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * TaxonomyCreateRequest - Enhanced with Context7 patterns
+ * TaxonomyCreateRequest - Enhanced with Enhanced patterns
  * 
  * Validates taxonomy creation with comprehensive rules,
  * multilingual error messages, and custom validation.

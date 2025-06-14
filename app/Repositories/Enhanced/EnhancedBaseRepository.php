@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 
 /**
- * Enhanced Base Repository - Context7 Laravel Pattern
+ * Enhanced Base Repository - Enhanced Laravel Pattern
  * 
  * Advanced repository implementation with caching, events, search,
  * transaction management, and performance optimization.

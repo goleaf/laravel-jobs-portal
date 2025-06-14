@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for Store Company
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for Store Company
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Following proven MasterData pattern
  */
 class StoreCompanyEnhancedRequest extends FormRequest
@@ -18,7 +18,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Role-based authorization
+        // Enhanced Pattern: Role-based authorization
         return auth()->check() && (
             auth()->user()->hasRole('Admin') || 
             auth()->user()->hasRole('Employer')
@@ -27,7 +27,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Comprehensive validation with security
+     * Enhanced Pattern: Comprehensive validation with security
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -98,7 +98,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -145,7 +145,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -180,7 +180,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization
+     * Enhanced Pattern: Data normalization
      */
     protected function prepareForValidation(): void
     {
@@ -204,12 +204,12 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Performance optimization
+     * Enhanced Pattern: Performance optimization
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
-            if ($this->hasContext7ValidationConflicts()) {
+            if ($this->hasEnhancedValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.company_conflict'));
             }
             
@@ -224,9 +224,9 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Enhanced business logic validation
+     * Enhanced Pattern: Enhanced business logic validation
      */
-    private function hasContext7ValidationConflicts(): bool
+    private function hasEnhancedValidationConflicts(): bool
     {
         // Check for existing company with similar name/email
         if ($this->name && $this->email) {
@@ -243,7 +243,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Enhanced Pattern: Content security validation
      */
     private function hasSuspiciousContent(): bool
     {
@@ -266,7 +266,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Social media URL validation
+     * Enhanced Pattern: Social media URL validation
      */
     private function hasInvalidSocialMediaUrls(): bool
     {
@@ -287,7 +287,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: URL normalization helper
+     * Enhanced Pattern: URL normalization helper
      */
     private function normalizeUrl(?string $url): ?string
     {
@@ -305,11 +305,11 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring
      */
     protected function failedValidation(Validator $validator): void
     {
-        logger()->warning('Context7 validation failed for StoreCompanyEnhancedRequest', [
+        logger()->warning('Enhanced validation failed for StoreCompanyEnhancedRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'Company',
             'action' => 'Store',

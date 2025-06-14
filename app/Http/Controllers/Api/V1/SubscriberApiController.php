@@ -9,7 +9,7 @@ use App\Models\Subscriber;
 use App\Http\Resources\SubscriberResource;
 
 /**
- * Context7 API Controller for Subscriber
+ * Enhanced API Controller for Subscriber
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

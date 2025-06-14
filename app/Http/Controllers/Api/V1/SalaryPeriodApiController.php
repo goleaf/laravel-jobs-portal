@@ -9,7 +9,7 @@ use App\Models\SalaryPeriod;
 use App\Http\Resources\SalaryPeriodResource;
 
 /**
- * Context7 API Controller for SalaryPeriod
+ * Enhanced API Controller for SalaryPeriod
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

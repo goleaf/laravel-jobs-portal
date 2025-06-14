@@ -1,5 +1,5 @@
 <template>
-  <div class="context7-data-table relative">
+  <div class="enhanced-data-table relative">
     <!-- Table Header -->
     <div class="bg-white shadow rounded-lg">
       <div class="px-6 py-4 border-b border-gray-200">
@@ -206,8 +206,8 @@
 <script setup lang="ts">
 import { computed, ref, watch, useSlots } from 'vue'
 
-// Context7 Interfaces
-interface Context7Column {
+// Enhanced Interfaces
+interface EnhancedColumn {
   key: string
   label: string
   type?: 'text' | 'date' | 'badge' | 'switch' | 'image' | 'custom'
@@ -216,10 +216,10 @@ interface Context7Column {
   formatter?: (value: any) => string
 }
 
-interface Context7TableProps {
+interface EnhancedTableProps {
   title: string
   items: any[]
-  columns: Context7Column[]
+  columns: EnhancedColumn[]
   searchable?: boolean
   addable?: boolean
   editable?: boolean
@@ -231,7 +231,7 @@ interface Context7TableProps {
 }
 
 // Props & Emits
-const props = withDefaults(defineProps<Context7TableProps>(), {
+const props = withDefaults(defineProps<EnhancedTableProps>(), {
   searchable: true,
   addable: true,
   editable: true,
@@ -414,7 +414,7 @@ watch(searchQuery, () => {
 </script>
 
 <style scoped>
-.context7-data-table {
+.enhanced-data-table {
   @apply relative;
 }
 </style> 

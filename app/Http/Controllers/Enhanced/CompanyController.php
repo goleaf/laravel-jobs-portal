@@ -30,7 +30,7 @@ use Carbon\Carbon;
 use Exception;
 
 /**
- * Enhanced CompanyController - Context7 patterns implementation
+ * Enhanced CompanyController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel company management patterns with:
  * - Advanced company analytics and insights

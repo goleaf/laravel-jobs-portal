@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for UpdateFunctionalAreaRequest
+ * Enhanced Unit Test for UpdateFunctionalAreaRequest
  * Testing validation rules and authorization
  */
 class UpdateFunctionalAreaRequestTest extends TestCase

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
 /**
- * Enhanced RealTimeController - Context7 patterns implementation
+ * Enhanced RealTimeController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel real-time controller patterns with:
  * - Advanced WebSocket management

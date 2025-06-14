@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * HeaderSlider Model - Enhanced with Context7 patterns
+ * HeaderSlider Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string|null $title
@@ -48,7 +48,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|Media[] $media
  * @property-read int|null $media_count
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder featured()

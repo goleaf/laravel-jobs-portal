@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for DeleteJobTypeRequest
+ * Enhanced Unit Test for DeleteJobTypeRequest
  * Testing validation rules and authorization
  */
 class DeleteJobTypeRequestTest extends TestCase

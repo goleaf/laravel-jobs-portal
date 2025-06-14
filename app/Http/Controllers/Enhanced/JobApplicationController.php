@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 /**
- * Enhanced JobApplicationController - Context7 patterns implementation
+ * Enhanced JobApplicationController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel controller patterns with:
  * - Advanced caching strategies
@@ -105,7 +105,7 @@ class JobApplicationController extends AppBaseController
             $query = JobApplication::where('job_id', $jobId)
                                   ->with(['candidate.user', 'job', 'jobStage']);
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('status')) {
                 $query->byStatus($request->get('status'));
             }

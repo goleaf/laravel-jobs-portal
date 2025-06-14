@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class IndexJobShiftRequest
- * Context7 Enhanced Index Request for JobShift
+ * Enhanced Enhanced Index Request for JobShift
  */
 class IndexJobShiftRequest extends FormRequest
 {

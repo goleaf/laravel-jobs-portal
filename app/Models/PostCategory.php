@@ -1,7 +1,7 @@
 <?php namespace App\Models; use Illuminate\Database\Eloquent\Factories\HasFactory; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\BelongsToMany; use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Support\Facades\Cache; use Spatie\Activitylog\Traits\LogsActivity; use Spatie\Activitylog\LogOptions;
 
 /**
- * PostCategory Model - Enhanced with Context7 patterns
+ * PostCategory Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name
@@ -26,7 +26,7 @@
  * @property-read int $active_posts_count
  * @property-read array $stats
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()

@@ -9,7 +9,7 @@ use App\Models\HeaderSlider;
 use App\Http\Resources\HeaderSliderResource;
 
 /**
- * Context7 API Controller for HeaderSlider
+ * Enhanced API Controller for HeaderSlider
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

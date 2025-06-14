@@ -9,7 +9,7 @@ use App\Models\Admin;
 use App\Http\Resources\AdminResource;
 
 /**
- * Context7 API Controller for Admin
+ * Enhanced API Controller for Admin
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

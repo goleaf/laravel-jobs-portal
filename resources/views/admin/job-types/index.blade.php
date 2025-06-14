@@ -336,4 +336,4 @@
 @endsection
 
 {{-- JavaScript functionality moved to external file for better maintainability --}}
-{{-- TODO: Implement external JS file with proper Context7 patterns --}} 
+{{-- TODO: Implement external JS file with proper Enhanced patterns --}} 

@@ -9,7 +9,7 @@ use App\Models\EmailTemplate;
 use App\Http\Resources\EmailTemplateResource;
 
 /**
- * Context7 API Controller for EmailTemplate
+ * Enhanced API Controller for EmailTemplate
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

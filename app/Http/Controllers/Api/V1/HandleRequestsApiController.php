@@ -9,7 +9,7 @@ use App\Models\HandleRequests;
 use App\Http\Resources\HandleRequestsResource;
 
 /**
- * Context7 API Controller for HandleRequests
+ * Enhanced API Controller for HandleRequests
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

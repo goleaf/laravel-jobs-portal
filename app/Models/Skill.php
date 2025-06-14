@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Skill Model - Enhanced with Context7 patterns
+ * Skill Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name
@@ -37,7 +37,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int $jobs_count
  * @property-read int $usage_count
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder default()

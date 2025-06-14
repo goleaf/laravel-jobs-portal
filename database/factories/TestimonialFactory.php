@@ -6,7 +6,7 @@ use App\Models\Testimonial;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for Testimonial
+ * Enhanced Factory for Testimonial
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Testimonial>
@@ -21,7 +21,7 @@ class TestimonialFactory extends Factory
     protected $model = Testimonial::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

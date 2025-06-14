@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * FrontSetting Model - Enhanced with Context7 patterns
+ * FrontSetting Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $key
@@ -35,7 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read string $display_value
  * @property-read bool $is_recent
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder featured()

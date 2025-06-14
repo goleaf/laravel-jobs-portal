@@ -9,7 +9,7 @@ use App\Models\Home;
 use App\Http\Resources\HomeResource;
 
 /**
- * Context7 API Controller for Home
+ * Enhanced API Controller for Home
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

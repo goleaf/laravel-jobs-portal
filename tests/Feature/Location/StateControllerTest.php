@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for StateController
+ * Enhanced Feature Test for StateController
  * Comprehensive testing for State controller functionality
  */
 class StateControllerTest extends TestCase

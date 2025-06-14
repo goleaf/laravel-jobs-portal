@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 /**
- * SalaryPeriod Model Test Suite - Context7 Enhanced
+ * SalaryPeriod Model Test Suite - Enhanced Enhanced
  * 
  * Testing comprehensive SalaryPeriod model functionality including:
  * - Model attributes and relationships

@@ -23,7 +23,7 @@ use App\Http\Requests\Plan\DestroyPlanRequest;
 use App\Http\Requests\Plan\ChangeTrialPlanRequest;
 
 /**
- * Enhanced PlanController - Context7 patterns implementation
+ * Enhanced PlanController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel controller patterns with:
  * - Advanced caching strategies
@@ -88,7 +88,7 @@ class PlanController extends AppBaseController
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             $query = Plan::query();
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('search')) {
                 $query->search($request->get('search'));
             }

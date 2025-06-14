@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * SalaryCurrency Model - Enhanced with Context7 patterns
+ * SalaryCurrency Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $currency_name
@@ -40,7 +40,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read mixed $conversion_data
  * @property-read mixed $regional_info
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder|SalaryCurrency active()
  * @method static Builder|SalaryCurrency inactive()
  * @method static Builder|SalaryCurrency default()

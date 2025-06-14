@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * FavouriteJob Model - Enhanced with Context7 patterns
+ * FavouriteJob Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $user_id
@@ -29,7 +29,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $job_is_active
  * @property-read bool $job_is_featured
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder recent(int $days = 30)

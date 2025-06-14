@@ -9,7 +9,7 @@ use App\Models\ImageSlider;
 use App\Http\Resources\ImageSliderResource;
 
 /**
- * Context7 API Controller for ImageSlider
+ * Enhanced API Controller for ImageSlider
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

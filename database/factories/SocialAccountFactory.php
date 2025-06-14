@@ -6,7 +6,7 @@ use App\Models\SocialAccount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for SocialAccount
+ * Enhanced Factory for SocialAccount
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialAccount>
@@ -21,7 +21,7 @@ class SocialAccountFactory extends Factory
     protected $model = SocialAccount::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

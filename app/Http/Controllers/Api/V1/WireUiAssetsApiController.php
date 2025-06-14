@@ -9,7 +9,7 @@ use App\Models\WireUiAssets;
 use App\Http\Resources\WireUiAssetsResource;
 
 /**
- * Context7 API Controller for WireUiAssets
+ * Enhanced API Controller for WireUiAssets
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

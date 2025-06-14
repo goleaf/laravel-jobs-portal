@@ -16,7 +16,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Notification Model - Enhanced with Context7 patterns
+ * Notification Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $type
@@ -42,7 +42,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_recent
  * @property-read array $parsed_data
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder read()
  * @method static \Illuminate\Database\Eloquent\Builder unread()
  * @method static \Illuminate\Database\Eloquent\Builder important()

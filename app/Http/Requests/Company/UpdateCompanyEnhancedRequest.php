@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for Update Company
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for Update Company
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Following proven MasterData pattern with update-specific rules
  */
 class UpdateCompanyEnhancedRequest extends FormRequest
@@ -18,7 +18,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Context7 Pattern: Role-based authorization with ownership check
+        // Enhanced Pattern: Role-based authorization with ownership check
         if (!auth()->check()) {
             return false;
         }
@@ -32,7 +32,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Context7 Pattern: Update-specific validation with security
+     * Enhanced Pattern: Update-specific validation with security
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -121,7 +121,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Context7 Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages
      */
     public function messages(): array
     {
@@ -166,7 +166,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Context7 Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names
      */
     public function attributes(): array
     {
@@ -203,7 +203,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Context7 Pattern: Data normalization for updates
+     * Enhanced Pattern: Data normalization for updates
      */
     protected function prepareForValidation(): void
     {
@@ -233,7 +233,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Configure the validator instance.
-     * Context7 Pattern: Enhanced validation with update logic
+     * Enhanced Pattern: Enhanced validation with update logic
      */
     public function withValidator(Validator $validator): void
     {
@@ -257,7 +257,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Check for unauthorized changes
+     * Enhanced Pattern: Check for unauthorized changes
      */
     private function hasUnauthorizedChanges(): bool
     {
@@ -280,7 +280,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Content security validation
+     * Enhanced Pattern: Content security validation
      */
     private function hasSuspiciousContent(): bool
     {
@@ -304,7 +304,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Social media URL validation
+     * Enhanced Pattern: Social media URL validation
      */
     private function hasInvalidSocialMediaUrls(): bool
     {
@@ -325,7 +325,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: Location validation for updates
+     * Enhanced Pattern: Location validation for updates
      */
     private function hasInvalidLocationChanges(): bool
     {
@@ -351,7 +351,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Context7 Pattern: URL normalization helper
+     * Enhanced Pattern: URL normalization helper
      */
     private function normalizeUrl(?string $url): ?string
     {
@@ -369,13 +369,13 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     * Context7 Pattern: Enhanced error handling with audit trail
+     * Enhanced Pattern: Enhanced error handling with audit trail
      */
     protected function failedValidation(Validator $validator): void
     {
         $company = $this->route('company');
         
-        logger()->warning('Context7 validation failed for UpdateCompanyEnhancedRequest', [
+        logger()->warning('Enhanced validation failed for UpdateCompanyEnhancedRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'Company',
             'action' => 'Update',

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Enhanced AdminController - Context7 patterns implementation
+ * Enhanced AdminController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel controller patterns with:
  * - Advanced caching strategies
@@ -73,7 +73,7 @@ class AdminController extends AppBaseController
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             $query = User::where('role', 'admin')->with(['profile']);
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('search')) {
                 $query->where(function ($q) use ($request) {
                     $search = $request->get('search');

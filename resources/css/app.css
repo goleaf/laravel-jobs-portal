@@ -2,7 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* Context7 Custom Styles */
+/* Enhanced Custom Styles */
 @layer base {
   body {
     @apply font-sans antialiased;

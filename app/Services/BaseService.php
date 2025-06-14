@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 
 /**
- * Base Service - Context7 Laravel Pattern
+ * Base Service - Enhanced Laravel Pattern
  * 
  * Abstract base service providing common functionality for business logic services
  * including validation, logging, exception handling, and transaction management.

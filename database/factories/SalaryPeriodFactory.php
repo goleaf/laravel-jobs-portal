@@ -6,7 +6,7 @@ use App\Models\SalaryPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Context7 Factory for SalaryPeriod
+ * Enhanced Factory for SalaryPeriod
  * Generated using Laravel 12 best practices
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SalaryPeriod>
@@ -21,7 +21,7 @@ class SalaryPeriodFactory extends Factory
     protected $model = SalaryPeriod::class;
 
     /**
-     * Define the model's default state using Context7 patterns.
+     * Define the model's default state using Enhanced patterns.
      *
      * @return array<string, mixed>
      */

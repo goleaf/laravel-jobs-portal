@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Setting Model - Enhanced with Context7 patterns
+ * Setting Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $key
@@ -33,7 +33,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $category_label
  * @property-read string $type_label
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder public()

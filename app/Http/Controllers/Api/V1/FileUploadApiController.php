@@ -9,7 +9,7 @@ use App\Models\FileUpload;
 use App\Http\Resources\FileUploadResource;
 
 /**
- * Context7 API Controller for FileUpload
+ * Enhanced API Controller for FileUpload
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { AcademicCapIcon, CalendarIcon, StarIcon } from '@heroicons/vue/24/outline'
-import { useContext7I18n } from '@/composables/useContext7I18n'
+import { useEnhancedI18n } from '@/composables/useEnhancedI18n'
 import { useToast } from '@/composables/useToast'
 import ActionButtons from '@/components/ui/ActionButtons.vue'
 
@@ -137,7 +137,7 @@ const props = withDefaults(defineProps<CandidateEducationCardProps>(), {
 const emit = defineEmits<CandidateEducationCardEmits>()
 
 // Composables
-const { t, formatDate: formatDateBase } = useContext7I18n()
+const { t, formatDate: formatDateBase } = useEnhancedI18n()
 const { showSuccess } = useToast()
 
 // Computed

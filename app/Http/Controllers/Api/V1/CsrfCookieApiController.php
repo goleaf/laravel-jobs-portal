@@ -9,7 +9,7 @@ use App\Models\CsrfCookie;
 use App\Http\Resources\CsrfCookieResource;
 
 /**
- * Context7 API Controller for CsrfCookie
+ * Enhanced API Controller for CsrfCookie
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

@@ -1223,7 +1223,7 @@ These patterns ensure:
 # System Patterns: Laravel Job Portal Modernization
 
 ## Core Patterns
-- **Context7 Patterns**: Used for all implementations to ensure consistency and scalability.
+- **Enhanced Patterns**: Used for all implementations to ensure consistency and scalability.
 - **Modular Architecture**: Code organized into distinct modules for maintainability.
 - **RESTful API Design**: Consistent resource-based routing and response structures.
 
@@ -1239,11 +1239,11 @@ These patterns ensure:
 
 ## Multilingual Patterns
 - **JSON Translations**: Strings managed in JSON files for 9 languages with RTL support.
-- **Dynamic Switching**: Context7 I18n integrated with Laravel localization.
+- **Dynamic Switching**: Enhanced I18n integrated with Laravel localization.
 
 ## Testing & Performance Patterns
 - **Comprehensive Testing**: Aim for 95%+ coverage with unit, feature, and integration tests.
 - **Caching & Optimization**: Redis caching and optimized Eloquent queries for performance.
 - **Concurrent Support**: Designed for 1000+ concurrent users.
 
-These patterns are aligned with Context7 best practices and Laravel 12 standards to ensure the job portal transformation results in a modern, efficient, and user-friendly system. 
+These patterns are aligned with Enhanced best practices and Laravel 12 standards to ensure the job portal transformation results in a modern, efficient, and user-friendly system. 

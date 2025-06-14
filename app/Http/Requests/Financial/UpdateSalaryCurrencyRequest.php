@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
 /**
- * Context7 Enhanced Form Request for UpdateSalaryCurrencyRequest
- * Implements Laravel 12 best practices with Context7 MCP patterns
+ * Enhanced Enhanced Form Request for UpdateSalaryCurrencyRequest
+ * Implements Laravel 12 best practices with Enhanced MCP patterns
  * Following proven MasterData pattern
  */
 class UpdateSalaryCurrencyRequest extends FormRequest

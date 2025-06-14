@@ -9,7 +9,7 @@ use App\Models\Cms;
 use App\Http\Resources\CmsResource;
 
 /**
- * Context7 API Controller for Cms
+ * Enhanced API Controller for Cms
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

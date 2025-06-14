@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 /**
- * City Model Test Suite - Context7 Enhanced
+ * City Model Test Suite - Enhanced Enhanced
  * 
  * Testing comprehensive City model functionality including:
  * - Model attributes and relationships

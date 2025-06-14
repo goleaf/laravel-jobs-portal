@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Universal Job Service - Context7 Implementation
+ * Universal Job Service - Enhanced Implementation
  * 
  * Business logic layer for job operations following Laravel best practices:
  * - Clean separation of concerns

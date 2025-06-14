@@ -9,7 +9,7 @@ use App\Models\Unknown;
 use App\Http\Resources\UnknownResource;
 
 /**
- * Context7 API Controller for Unknown
+ * Enhanced API Controller for Unknown
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

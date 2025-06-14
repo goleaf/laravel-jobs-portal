@@ -1,5 +1,5 @@
 <template>
-  <div class="context7-candidate-profile">
+  <div class="enhanced-candidate-profile">
     <!-- Experience Section -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-6">
@@ -131,7 +131,7 @@
     </div>
 
     <!-- Experience Modal -->
-    <Context7Modal
+    <EnhancedModal
       v-model="showExperienceModal"
       :title="editingExperience ? $t('candidate.edit_experience') : $t('candidate.add_experience')"
       size="lg"
@@ -245,10 +245,10 @@
           </button>
         </div>
       </form>
-    </Context7Modal>
+    </EnhancedModal>
 
     <!-- Education Modal -->
-    <Context7Modal
+    <EnhancedModal
       v-model="showEducationModal"
       :title="editingEducation ? $t('candidate.edit_education') : $t('candidate.add_education')"
       size="lg"
@@ -347,14 +347,14 @@
           </button>
         </div>
       </form>
-    </Context7Modal>
+    </EnhancedModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useContext7Notifications } from '@/composables/useContext7Notifications'
-import Context7Modal from '@/components/ui/Context7Modal.vue'
+import { useEnhancedNotifications } from '@/composables/useEnhancedNotifications'
+import EnhancedModal from '@/components/ui/EnhancedModal.vue'
 
 // Interfaces
 interface Experience {
@@ -403,7 +403,7 @@ const emit = defineEmits<{
 }>()
 
 // Composables
-const { showSuccess, showError, showConfirmation } = useContext7Notifications()
+const { showSuccess, showError, showConfirmation } = useEnhancedNotifications()
 
 // Reactive Data
 const experiences = ref<Experience[]>(props.experiences || [])

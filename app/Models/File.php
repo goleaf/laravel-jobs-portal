@@ -14,7 +14,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * File Model - Enhanced with Context7 patterns
+ * File Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name
@@ -45,7 +45,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_audio
  * @property-read bool $exists
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder public()

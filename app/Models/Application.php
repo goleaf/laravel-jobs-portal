@@ -13,7 +13,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Carbon;
 
 /**
- * Application Model - Enhanced with Context7 patterns
+ * Application Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $job_id
@@ -40,7 +40,7 @@ use Illuminate\Support\Carbon;
  * @property-read bool $is_hired
  * @property-read bool $is_rejected
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder byStatus(string $status)

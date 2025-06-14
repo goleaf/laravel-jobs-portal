@@ -9,7 +9,7 @@ use App\Models\CompanySize;
 use App\Http\Resources\CompanySizeResource;
 
 /**
- * Context7 API Controller for CompanySize
+ * Enhanced API Controller for CompanySize
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

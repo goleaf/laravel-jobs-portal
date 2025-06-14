@@ -22,10 +22,10 @@ use App\Http\Requests\Plan\DestroyPlanRequest;
 use App\Http\Requests\Plan\ChangeTrialPlanRequest;
 
 /**
- * PlanController - Enhanced with Context7 patterns
+ * PlanController - Enhanced with Enhanced patterns
  * 
  * Manages subscription plan operations with advanced caching, error handling,
- * and performance optimization using Context7 enterprise patterns.
+ * and performance optimization using Enhanced enterprise patterns.
  */
 class PlanController extends AppBaseController
 {
@@ -86,7 +86,7 @@ class PlanController extends AppBaseController
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             $query = Plan::query();
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('search')) {
                 $query->search($request->get('search'));
             }

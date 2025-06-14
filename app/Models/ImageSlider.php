@@ -221,7 +221,7 @@ class ImageSlider extends Model implements HasMedia
     }
 
     // =============================================
-    // ADDITIONAL CONTEXT7 SCOPES
+    // ADDITIONAL ENHANCED SCOPES
     // =============================================
 
     /**

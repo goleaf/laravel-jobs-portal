@@ -20,7 +20,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('404')
                     ->assertDontSee('Error');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -39,7 +39,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -58,7 +58,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -77,7 +77,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -96,7 +96,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -115,7 +115,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -134,7 +134,7 @@ class PublicPagesTest extends DuskTestCase
                     ->assertDontSee('500')
                     ->assertDontSee('404');
             
-            // Context7 pattern: Verify page structure
+            // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
             $this->assertStringContainsString('<html', $pageSource);
@@ -158,7 +158,7 @@ class PublicPagesTest extends DuskTestCase
                 // Navigation link may not exist, continue test
             }
             
-            // Context7 pattern: Verify we can navigate back
+            // Enhanced pattern: Verify we can navigate back
             $browser->back()
                     ->forward()
                     ->assertPresent('body');

@@ -9,7 +9,7 @@ use App\Models\Sitemap;
 use App\Http\Resources\SitemapResource;
 
 /**
- * Context7 API Controller for Sitemap
+ * Enhanced API Controller for Sitemap
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

@@ -1,5 +1,5 @@
 /**
- * Context7 Notifications Composable
+ * Enhanced Notifications Composable
  * Provides consistent notification handling across the Vue3 application
  * Integrates with SweetAlert2 and toast notifications
  */
@@ -34,7 +34,7 @@ interface ConfirmationOptions {
   reverseButtons?: boolean
 }
 
-export function useContext7Notifications() {
+export function useEnhancedNotifications() {
   
   /**
    * Show a success notification

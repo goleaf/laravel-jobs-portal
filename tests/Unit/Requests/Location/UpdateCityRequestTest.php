@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for UpdateCityRequest
+ * Enhanced Unit Test for UpdateCityRequest
  * Testing validation rules and authorization
  */
 class UpdateCityRequestTest extends TestCase

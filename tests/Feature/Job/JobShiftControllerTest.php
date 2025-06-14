@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 
 /**
- * Context7 Feature Test for JobShiftController
+ * Enhanced Feature Test for JobShiftController
  * Comprehensive testing for JobShift controller functionality
  */
 class JobShiftControllerTest extends TestCase

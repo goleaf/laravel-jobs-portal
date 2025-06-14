@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * MaritalStatus Model - Enhanced with Context7 patterns
+ * MaritalStatus Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $marital_status
@@ -39,7 +39,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_divorced
  * @property-read bool $is_widowed
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -504,7 +504,7 @@ class MaritalStatus extends Model
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

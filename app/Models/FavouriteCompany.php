@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * FavouriteCompany Model - Enhanced with Context7 patterns
+ * FavouriteCompany Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $user_id
@@ -30,7 +30,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $is_recent
  * @property-read string $status_label
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder featured()

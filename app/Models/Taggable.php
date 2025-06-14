@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Taggable Model - Enhanced with Context7 patterns
+ * Taggable Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $tag_id
@@ -21,7 +21,7 @@ use Spatie\Activitylog\LogOptions;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder forTag(int $tagId)
  * @method static \Illuminate\Database\Eloquent\Builder forModel(string $type)
  * @method static \Illuminate\Database\Eloquent\Builder forEntity(string $type, int $id)

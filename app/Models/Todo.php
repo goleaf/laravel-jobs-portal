@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Todo Model - Enhanced with Context7 patterns
+ * Todo Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $user_id
@@ -43,7 +43,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read int $days_overdue
  * @property-read string $completion_status
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder completed()
@@ -512,7 +512,7 @@ class Todo extends Model
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

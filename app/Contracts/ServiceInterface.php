@@ -3,7 +3,7 @@
 namespace App\Contracts;
 
 /**
- * Base Service Interface - Context7 Laravel Pattern
+ * Base Service Interface - Enhanced Laravel Pattern
  * 
  * Provides standardized contract for business logic services
  * following Laravel best practices and clean architecture.

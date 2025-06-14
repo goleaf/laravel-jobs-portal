@@ -9,7 +9,7 @@ use App\Models\Dashboard;
 use App\Http\Resources\DashboardResource;
 
 /**
- * Context7 API Controller for Dashboard
+ * Enhanced API Controller for Dashboard
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

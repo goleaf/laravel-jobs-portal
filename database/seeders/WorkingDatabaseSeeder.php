@@ -14,7 +14,7 @@ class WorkingDatabaseSeeder extends Seeder
     {
         $this->command->info('🚀 Starting working database seeding...');
         
-        // Use Context7 pattern: Disable foreign key constraints during seeding
+        // Use Enhanced pattern: Disable foreign key constraints during seeding
         Schema::withoutForeignKeyConstraints(function () {
             $this->seedInOrder();
         });

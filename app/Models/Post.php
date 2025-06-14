@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * Post Model - Enhanced with Context7 patterns
+ * Post Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $title
@@ -50,7 +50,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read string $status_label
  * @property-read string $formatted_published_date
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder published()

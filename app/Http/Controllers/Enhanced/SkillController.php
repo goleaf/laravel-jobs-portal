@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Enhanced SkillController - Context7 patterns implementation
+ * Enhanced SkillController - Enhanced patterns implementation
  * 
  * Demonstrates modern Laravel controller patterns with:
  * - Advanced caching strategies
@@ -85,7 +85,7 @@ class SkillController extends AppBaseController
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             $query = Skill::query();
 
-            // Apply Context7 scopes for filtering
+            // Apply Enhanced scopes for filtering
             if ($request->filled('search')) {
                 $query->search($request->get('search'));
             }

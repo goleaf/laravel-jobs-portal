@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * SocialAccount Model - Enhanced with Context7 patterns
+ * SocialAccount Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property int $user_id
@@ -36,7 +36,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read bool $has_avatar
  * @property-read bool $is_verified
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder byProvider(string $provider)

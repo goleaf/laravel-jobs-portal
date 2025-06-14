@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| Context7 Level 4 Complex System Transformation
+| Enhanced Level 4 Complex System Transformation
 | All routes now serve Vue3 SPA - Blade files removed
 */
 

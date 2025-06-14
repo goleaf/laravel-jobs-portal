@@ -16,7 +16,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare(): void
     {
-        // Context7 pattern: Increase memory limit for tests
+        // Enhanced pattern: Increase memory limit for tests
         ini_set('memory_limit', '4G');
         ini_set('max_execution_time', '600');
         
@@ -61,7 +61,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-features=VizDisplayCompositor,VizServiceDisplayCompositor',
         ]);
 
-        // Context7 pattern: Add platform-specific configurations
+        // Enhanced pattern: Add platform-specific configurations
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $options->addArguments([
                 '--disable-features=VizDisplayCompositor',
@@ -78,7 +78,7 @@ abstract class DuskTestCase extends BaseTestCase
             ]);
         }
 
-        // Context7 pattern: CI environment optimizations
+        // Enhanced pattern: CI environment optimizations
         if (getenv('CI') || getenv('GITHUB_ACTIONS')) {
             $options->addArguments([
                 '--disable-dev-shm-usage',
@@ -91,20 +91,20 @@ abstract class DuskTestCase extends BaseTestCase
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
         
-        // Context7 pattern: Enhanced timeouts for CI environments
+        // Enhanced pattern: Enhanced timeouts for CI environments
         $capabilities->setCapability('timeouts', [
             'script' => 60000,      // 60 seconds for scripts
             'pageLoad' => 60000,    // 60 seconds for page loads
             'implicit' => 15000,    // 15 seconds for implicit waits
         ]);
 
-        // Context7 pattern: Improved logging for debugging
+        // Enhanced pattern: Improved logging for debugging
         $capabilities->setCapability('loggingPrefs', [
             'browser' => 'INFO',
             'driver' => 'INFO',
         ]);
 
-        // Context7 pattern: Add Chrome options for better stability
+        // Enhanced pattern: Add Chrome options for better stability
         $capabilities->setCapability('chrome.switches', [
             '--disable-blink-features=AutomationControlled',
             '--disable-extensions',
@@ -115,7 +115,7 @@ abstract class DuskTestCase extends BaseTestCase
         try {
             return RemoteWebDriver::create($driverUrl, $capabilities);
         } catch (\Exception $e) {
-            // Context7 pattern: Better error reporting
+            // Enhanced pattern: Better error reporting
             throw new \Exception(
                 "Failed to create ChromeDriver connection to {$driverUrl}. " .
                 "Error: " . $e->getMessage() . ". " .
@@ -133,19 +133,19 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * Context7 pattern: Prepare test environment
+     * Enhanced pattern: Prepare test environment
      */
     protected function setUp(): void
     {
         parent::setUp();
         
-        // Context7 pattern: Ensure screenshots directory exists
+        // Enhanced pattern: Ensure screenshots directory exists
         $screenshotsPath = base_path('tests/Browser/screenshots');
         if (!is_dir($screenshotsPath)) {
             mkdir($screenshotsPath, 0755, true);
         }
         
-        // Context7 pattern: Ensure console logs directory exists
+        // Enhanced pattern: Ensure console logs directory exists
         $consolePath = base_path('tests/Browser/console');
         if (!is_dir($consolePath)) {
             mkdir($consolePath, 0755, true);
@@ -153,11 +153,11 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * Context7 pattern: Clean up after tests
+     * Enhanced pattern: Clean up after tests
      */
     protected function tearDown(): void
     {
-        // Context7 pattern: Clean up temporary Chrome user data directories
+        // Enhanced pattern: Clean up temporary Chrome user data directories
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $tempDir = sys_get_temp_dir();
             $chromeDirs = glob($tempDir . DIRECTORY_SEPARATOR . 'chrome-dusk-*');
@@ -172,7 +172,7 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * Context7 pattern: Helper method to remove directory recursively
+     * Enhanced pattern: Helper method to remove directory recursively
      */
     private function removeDirectory(string $dir): void
     {
@@ -196,14 +196,14 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * Context7 pattern: Override browse method with better error handling
+     * Enhanced pattern: Override browse method with better error handling
      */
     public function browse(\Closure $callback)
     {
         try {
             return parent::browse($callback);
         } catch (\Exception $e) {
-            // Context7 pattern: Enhanced error reporting for debugging
+            // Enhanced pattern: Enhanced error reporting for debugging
             $message = "Dusk test failed: " . $e->getMessage();
             
             if (getenv('CI') || getenv('GITHUB_ACTIONS')) {

@@ -9,7 +9,7 @@ use App\Models\Swagger;
 use App\Http\Resources\SwaggerResource;
 
 /**
- * Context7 API Controller for Swagger
+ * Enhanced API Controller for Swagger
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

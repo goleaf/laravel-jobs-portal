@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Inquiry Model - Enhanced with Context7 patterns
+ * Inquiry Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name
@@ -40,7 +40,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $priority_label
  * @property-read string $category_label
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder read()

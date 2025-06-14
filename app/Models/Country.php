@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Country Model - Enhanced with Context7 patterns
+ * Country Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $name

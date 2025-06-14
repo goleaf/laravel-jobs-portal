@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * BrandingSliders Model - Enhanced with Context7 patterns
+ * BrandingSliders Model - Enhanced with Enhanced patterns
  *
  * @property int $id
  * @property string $title
@@ -43,7 +43,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read float $click_through_rate
  * @property-read string $display_text
  *
- * Context7 Enhanced Scopes:
+ * Enhanced Enhanced Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -460,7 +460,7 @@ class BrandingSliders extends Model implements HasMedia
     }
 
     // =============================================
-    // CACHE METHODS - Context7 Caching Strategy
+    // CACHE METHODS - Enhanced Caching Strategy
     // =============================================
 
     /**

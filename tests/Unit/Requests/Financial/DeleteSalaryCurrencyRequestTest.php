@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 /**
- * Context7 Unit Test for DeleteSalaryCurrencyRequest
+ * Enhanced Unit Test for DeleteSalaryCurrencyRequest
  * Testing validation rules and authorization
  */
 class DeleteSalaryCurrencyRequestTest extends TestCase

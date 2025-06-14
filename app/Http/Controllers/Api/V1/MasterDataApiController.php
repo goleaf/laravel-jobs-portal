@@ -9,7 +9,7 @@ use App\Models\MasterData;
 use App\Http\Resources\MasterDataResource;
 
 /**
- * Context7 API Controller for MasterData
+ * Enhanced API Controller for MasterData
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

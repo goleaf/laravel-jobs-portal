@@ -11,7 +11,7 @@ use App\Http\Requests\Api\Universal\UpdateRequest;
 use App\Http\Requests\Api\Universal\IndexRequest;
 
 /**
- * Context7 API Controller for Company Management
+ * Enhanced API Controller for Company Management
  * Generated for Level 4 Complex System Transformation
  * RESTful API following Laravel 12 best practices
  */

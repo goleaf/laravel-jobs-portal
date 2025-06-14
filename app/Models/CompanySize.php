@@ -9,6 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class CompanySize
@@ -38,6 +39,23 @@ class CompanySize extends Model
     public const INACTIVE = 0;
 
     /**
+     * Company size categories
+     */
+    public const CATEGORY_STARTUP = 'startup';
+    public const CATEGORY_SMALL = 'small';
+    public const CATEGORY_MEDIUM = 'medium';
+    public const CATEGORY_LARGE = 'large';
+    public const CATEGORY_ENTERPRISE = 'enterprise';
+
+    /**
+     * Standard employee ranges
+     */
+    public const STARTUP_MAX = 10;
+    public const SMALL_MAX = 50;
+    public const MEDIUM_MAX = 250;
+    public const LARGE_MAX = 1000;
+
+    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
@@ -50,7 +68,10 @@ class CompanySize extends Model
         'min_employees',
         'max_employees',
         'display_name',
-        'short_description'
+        'short_description',
+        'is_featured',
+        'color',
+        'icon',
     ];
 
     /**
@@ -129,5 +150,337 @@ class CompanySize extends Model
     public function getCompanyCountAttribute()
     {
         return $this->companies()->count();
+    }
+
+    /**
+     * Get the active companies for the company size.
+     */
+    public function activeCompanies(): HasMany
+    {
+        return $this->companies()->where('companies.is_active', true);
+    }
+
+    /**
+     * Get the featured companies for the company size.
+     */
+    public function featuredCompanies(): HasMany
+    {
+        return $this->companies()->where('companies.is_featured', true);
+    }
+
+    /**
+     * Get the recent companies for the company size.
+     */
+    public function recentCompanies(): HasMany
+    {
+        return $this->companies()->where('companies.created_at', '>=', now()->subDays(30));
+    }
+
+    /**
+     * Get the range description attribute.
+     */
+    public function getRangeDescriptionAttribute(): string
+    {
+        if ($this->min_employees && $this->max_employees) {
+            return "{$this->min_employees}-{$this->max_employees} employees";
+        } elseif ($this->min_employees) {
+            return "{$this->min_employees}+ employees";
+        } elseif ($this->max_employees) {
+            return "Up to {$this->max_employees} employees";
+        }
+        return $this->name ?? $this->size;
+    }
+
+    /**
+     * Get the employee range attribute.
+     */
+    public function getEmployeeRangeAttribute(): string
+    {
+        if ($this->min_employees && $this->max_employees) {
+            return "{$this->min_employees}-{$this->max_employees}";
+        } elseif ($this->min_employees) {
+            return "{$this->min_employees}+";
+        } elseif ($this->max_employees) {
+            return "≤{$this->max_employees}";
+        }
+        return 'N/A';
+    }
+
+    /**
+     * Get the size category attribute.
+     */
+    public function getSizeCategoryAttribute(): string
+    {
+        if (!$this->max_employees) {
+            return self::CATEGORY_ENTERPRISE;
+        }
+
+        if ($this->max_employees <= self::STARTUP_MAX) {
+            return self::CATEGORY_STARTUP;
+        } elseif ($this->max_employees <= self::SMALL_MAX) {
+            return self::CATEGORY_SMALL;
+        } elseif ($this->max_employees <= self::MEDIUM_MAX) {
+            return self::CATEGORY_MEDIUM;
+        } elseif ($this->max_employees <= self::LARGE_MAX) {
+            return self::CATEGORY_LARGE;
+        }
+
+        return self::CATEGORY_ENTERPRISE;
+    }
+
+    /**
+     * Get companies count attribute.
+     */
+    public function getCompaniesCountAttribute(): int
+    {
+        return $this->companies()->count();
+    }
+
+    /**
+     * Get active companies count attribute.
+     */
+    public function getActiveCompaniesCountAttribute(): int
+    {
+        return $this->activeCompanies()->count();
+    }
+
+    /**
+     * Get featured companies count attribute.
+     */
+    public function getFeaturedCompaniesCountAttribute(): int
+    {
+        return $this->featuredCompanies()->count();
+    }
+
+    /**
+     * Check if company size is startup category.
+     */
+    public function getIsStartupAttribute(): bool
+    {
+        return $this->size_category === self::CATEGORY_STARTUP;
+    }
+
+    /**
+     * Check if company size is small category.
+     */
+    public function getIsSmallAttribute(): bool
+    {
+        return $this->size_category === self::CATEGORY_SMALL;
+    }
+
+    /**
+     * Check if company size is medium category.
+     */
+    public function getIsMediumAttribute(): bool
+    {
+        return $this->size_category === self::CATEGORY_MEDIUM;
+    }
+
+    /**
+     * Check if company size is large category.
+     */
+    public function getIsLargeAttribute(): bool
+    {
+        return $this->size_category === self::CATEGORY_LARGE;
+    }
+
+    /**
+     * Check if company size is enterprise category.
+     */
+    public function getIsEnterpriseAttribute(): bool
+    {
+        return $this->size_category === self::CATEGORY_ENTERPRISE;
+    }
+
+    /**
+     * Check if company size is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * Check if company size is featured.
+     */
+    public function isFeatured(): bool
+    {
+        return $this->is_featured;
+    }
+
+    /**
+     * Check if company size is default.
+     */
+    public function isDefault(): bool
+    {
+        return $this->is_default;
+    }
+
+    /**
+     * Check if company size has companies.
+     */
+    public function hasCompanies(): bool
+    {
+        return $this->companies()->count() > 0;
+    }
+
+    /**
+     * Check if company size has active companies.
+     */
+    public function hasActiveCompanies(): bool
+    {
+        return $this->activeCompanies()->count() > 0;
+    }
+
+    /**
+     * Check if company size has featured companies.
+     */
+    public function hasFeaturedCompanies(): bool
+    {
+        return $this->featuredCompanies()->count() > 0;
+    }
+
+    /**
+     * Check if company size has a color.
+     */
+    public function hasColor(): bool
+    {
+        return !empty($this->color);
+    }
+
+    /**
+     * Check if company size has an icon.
+     */
+    public function hasIcon(): bool
+    {
+        return !empty($this->icon);
+    }
+
+    /**
+     * Check if employee count fits this size.
+     */
+    public function fitsEmployeeCount(int $employeeCount): bool
+    {
+        if ($this->min_employees && $employeeCount < $this->min_employees) {
+            return false;
+        }
+        if ($this->max_employees && $employeeCount > $this->max_employees) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get badge HTML for the company size.
+     */
+    public function getBadgeHtml(): string
+    {
+        $color = $this->color ?: '#6c757d';
+        $name = $this->display_name ?: $this->name;
+        return "<span class=\"badge\" style=\"background-color: {$color};\">{$name}</span>";
+    }
+
+    /**
+     * Get icon HTML.
+     */
+    public function getIconHtml(): string
+    {
+        if ($this->icon) {
+            return "<i class=\"{$this->icon}\"></i>";
+        }
+        return '';
+    }
+
+    /**
+     * Get cached active company sizes.
+     */
+    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember('company_sizes.active', now()->addHours(12), function () {
+            return static::active()->ordered()->get();
+        });
+    }
+
+    /**
+     * Get cached featured company sizes.
+     */
+    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember('company_sizes.featured', now()->addHours(6), function () {
+            return static::featured()->active()->ordered()->get();
+        });
+    }
+
+    /**
+     * Get cached popular company sizes.
+     */
+    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("company_sizes.popular.{$limit}", now()->addHours(6), function () use ($limit) {
+            return static::popular($limit)->active()->get();
+        });
+    }
+
+    /**
+     * Get cached company sizes by category.
+     */
+    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
+    {
+        return Cache::remember("company_sizes.category.{$category}", now()->addHours(12), function () use ($category) {
+            return static::byCategory($category)->active()->ordered()->get();
+        });
+    }
+
+    /**
+     * Clear all related caches.
+     */
+    public function clearCaches(): void
+    {
+        $cacheKeys = [
+            'company_sizes.active',
+            'company_sizes.featured',
+        ];
+
+        // Clear popular cache variants
+        for ($i = 5; $i <= 20; $i += 5) {
+            $cacheKeys[] = "company_sizes.popular.{$i}";
+        }
+
+        // Clear category cache variants
+        $categories = [
+            self::CATEGORY_STARTUP,
+            self::CATEGORY_SMALL,
+            self::CATEGORY_MEDIUM,
+            self::CATEGORY_LARGE,
+            self::CATEGORY_ENTERPRISE,
+        ];
+        foreach ($categories as $category) {
+            $cacheKeys[] = "company_sizes.category.{$category}";
+        }
+
+        foreach ($cacheKeys as $key) {
+            Cache::forget($key);
+        }
+    }
+
+    /**
+     * Boot the model and register model events.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Clear caches when model is modified
+        static::saved(function ($model) {
+            $model->clearCaches();
+        });
+
+        static::deleted(function ($model) {
+            $model->clearCaches();
+        });
+
+        static::restored(function ($model) {
+            $model->clearCaches();
+        });
     }
 }

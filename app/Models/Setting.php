@@ -315,7 +315,7 @@ class Setting extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', "%{$term}%")
-              ->orWhere('value', 'like', "%{$term}%")
+                    ->orWhere('value', 'like', "%{$term}%")
               ->orWhere('category', 'like', "%{$term}%")
               ->orWhere('description', 'like', "%{$term}%");
         });
@@ -356,8 +356,8 @@ class Setting extends Model
     {
         return $query->where(function ($q) {
             $q->where('category', 'email')
-              ->orWhere('key', 'like', '%email%')
-              ->orWhere('key', 'like', '%mail%');
+                    ->orWhere('key', 'like', '%email%')
+                    ->orWhere('key', 'like', '%mail%');
         });
     }
 
@@ -368,9 +368,9 @@ class Setting extends Model
     {
         return $query->where(function ($q) {
             $q->where('category', 'payment')
-              ->orWhere('key', 'like', '%payment%')
-              ->orWhere('key', 'like', '%stripe%')
-              ->orWhere('key', 'like', '%paypal%');
+                    ->orWhere('key', 'like', '%payment%')
+                    ->orWhere('key', 'like', '%stripe%')
+                    ->orWhere('key', 'like', '%paypal%');
         });
     }
 
@@ -381,8 +381,8 @@ class Setting extends Model
     {
         return $query->where(function ($q) {
             $q->where('category', 'notification')
-              ->orWhere('key', 'like', '%notification%')
-              ->orWhere('key', 'like', '%alert%');
+                    ->orWhere('key', 'like', '%notification%')
+                    ->orWhere('key', 'like', '%alert%');
         });
     }
 
@@ -393,9 +393,9 @@ class Setting extends Model
     {
         return $query->where(function ($q) {
             $q->where('category', 'security')
-              ->orWhere('key', 'like', '%security%')
-              ->orWhere('key', 'like', '%password%')
-              ->orWhere('key', 'like', '%auth%');
+                    ->orWhere('key', 'like', '%security%')
+                    ->orWhere('key', 'like', '%password%')
+                    ->orWhere('key', 'like', '%auth%');
         });
     }
 
@@ -502,7 +502,7 @@ class Setting extends Model
     public function scopeJson($query)
     {
         return $query->where('type', 'json');
-    }
+}
 
     /**
      * Scope for text type settings.
@@ -799,4 +799,4 @@ class Setting extends Model
             $setting->clearCaches();
         });
     }
-}
+    }

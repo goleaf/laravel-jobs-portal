@@ -717,7 +717,7 @@ Route::middleware(['auth'])->group(function () {
         // Job applications management
         Route::get('/job-applications', function () {
             return view('admin.job_applications.index');
-        })->name('job-applications.index');
+        })->name('admin.job-applications.index');
         
         // Email templates management
         Route::get('/email-template/edit/{template}', function ($template) {

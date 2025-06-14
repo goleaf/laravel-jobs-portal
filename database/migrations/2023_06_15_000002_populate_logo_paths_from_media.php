@@ -29,35 +29,35 @@ return new class extends Migration
         }
 
         try {
-            $companies = Company::all();
+        $companies = Company::all();
 
-            foreach ($companies as $company) {
-                if (! $company->user) {
-                    continue;
-                }
+        foreach ($companies as $company) {
+            if (! $company->user) {
+                continue;
+            }
 
-                $media = Media::where('model_type', User::class)
-                    ->where('model_id', $company->user->id)
-                    ->where('collection_name', User::PROFILE)
-                    ->first();
+            $media = Media::where('model_type', User::class)
+                ->where('model_id', $company->user->id)
+                ->where('collection_name', User::PROFILE)
+                ->first();
 
-                if (! $media) {
-                    continue;
-                }
+            if (! $media) {
+                continue;
+            }
 
-                $sourcePath = $media->getPath();
+            $sourcePath = $media->getPath();
 
-                if (file_exists($sourcePath)) {
-                    $newPath = 'companies/logos/'.$media->file_name;
+            if (file_exists($sourcePath)) {
+                $newPath = 'companies/logos/'.$media->file_name;
 
-                    Storage::disk('public')->put(
-                        $newPath,
-                        file_get_contents($sourcePath)
-                    );
+                Storage::disk('public')->put(
+                    $newPath,
+                    file_get_contents($sourcePath)
+                );
 
-                    $company->update(['logo_path' => $newPath]);
-                    echo "Migrated logo for company #{$company->id}\n";
-                }
+                $company->update(['logo_path' => $newPath]);
+                echo "Migrated logo for company #{$company->id}\n";
+            }
             }
         } catch (\Exception $e) {
             // Silently fail if there are any issues during migration

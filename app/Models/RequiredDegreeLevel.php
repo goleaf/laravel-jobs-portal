@@ -379,11 +379,11 @@ class RequiredDegreeLevel extends Model
     public function scopePostgraduate(Builder $query): Builder
     {
         return $query->where(function ($q) {
-            $q->where('name', 'like', '%master%')
-              ->orWhere('name', 'like', '%doctoral%')
+                        $q->where('name', 'like', '%master%')
+                          ->orWhere('name', 'like', '%doctoral%')
               ->orWhere('name', 'like', '%phd%')
               ->orWhere('level_order', '>=', 7);
-        });
+                    });
     }
 
     /**
@@ -392,11 +392,11 @@ class RequiredDegreeLevel extends Model
     public function scopeUndergraduate(Builder $query): Builder
     {
         return $query->where(function ($q) {
-            $q->where('name', 'like', '%bachelor%')
-              ->orWhere('name', 'like', '%associate%')
+                        $q->where('name', 'like', '%bachelor%')
+                          ->orWhere('name', 'like', '%associate%')
               ->orWhere('name', 'like', '%diploma%')
               ->orWhereBetween('level_order', [3, 6]);
-        });
+                    });
     }
 
     /**
@@ -406,8 +406,8 @@ class RequiredDegreeLevel extends Model
     {
         return $query->where(function ($q) {
             $q->where('name', 'like', '%doctoral%')
-              ->orWhere('name', 'like', '%phd%')
-              ->orWhere('name', 'like', '%doctorate%');
+                    ->orWhere('name', 'like', '%phd%')
+                    ->orWhere('name', 'like', '%doctorate%');
         });
     }
 
@@ -418,9 +418,9 @@ class RequiredDegreeLevel extends Model
     {
         return $query->where(function ($q) {
             $q->where('name', 'like', '%professional%')
-              ->orWhere('name', 'like', '%license%')
+                    ->orWhere('name', 'like', '%license%')
               ->orWhere('name', 'like', '%certification%')
-              ->orWhereNotNull('certification_required');
+                    ->orWhereNotNull('certification_required');
         });
     }
 
@@ -530,7 +530,7 @@ class RequiredDegreeLevel extends Model
         if ($estimatedCost === 0) {
             return 0.0;
         }
-        
+
         return round(($averageSalary * 10) / $estimatedCost, 2); // 10-year ROI
     }
 
@@ -543,7 +543,7 @@ class RequiredDegreeLevel extends Model
             $nextLevel = $this->getNextLevel();
             $averageSalary = $this->getAverageSalary();
             $nextLevelSalary = $nextLevel ? $nextLevel->getAverageSalary() : 0;
-            
+        
             return [
                 'current_level' => $this->name,
                 'next_level' => $nextLevel?->name,

@@ -54,7 +54,7 @@ class CandidateModelTest extends TestCase
             'resume_path',
             'available_at',
             'immediate_available',
-            'is_active',
+            'job_alert',
         ];
 
         foreach ($expectedFillable as $attribute) {
@@ -76,7 +76,6 @@ class CandidateModelTest extends TestCase
             'industry_id' => 'integer',
             'functional_area_id' => 'integer',
             'immediate_available' => 'integer',
-            'is_active' => 'integer',
         ];
 
         foreach ($expectedCasts as $attribute => $cast) {
@@ -125,7 +124,6 @@ class CandidateModelTest extends TestCase
             'current_salary' => '50000',
             'expected_salary' => '60000',
             'immediate_available' => Candidate::IMMEDIATE_AVAILABLE,
-            'is_active' => Candidate::ACTIVE,
         ]);
 
         $this->assertEquals(1, $candidate->user_id);
@@ -141,7 +139,6 @@ class CandidateModelTest extends TestCase
         $this->assertEquals('50000.00', $candidate->current_salary);
         $this->assertEquals('60000.00', $candidate->expected_salary);
         $this->assertEquals(Candidate::IMMEDIATE_AVAILABLE, $candidate->immediate_available);
-        $this->assertEquals(Candidate::ACTIVE, $candidate->is_active);
     }
 
     /** @test */

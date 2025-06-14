@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -59,7 +58,6 @@ use Spatie\Activitylog\LogOptions;
 class Taxonomy extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -85,7 +83,7 @@ class Taxonomy extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'deleted_at',
+        // removed deleted_at since not using SoftDeletes
     ];
 
     /**
@@ -101,7 +99,7 @@ class Taxonomy extends Model
             'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
+            // removed deleted_at since not using SoftDeletes
         ];
     }
 

@@ -173,6 +173,14 @@ class Language extends Model
     }
 
     /**
+     * Scope for languages without candidates.
+     */
+    public function scopeWithoutCandidates($query)
+    {
+        return $query->whereDoesntHave('candidates');
+    }
+
+    /**
      * Scope for recent languages.
      */
     public function scopeRecent($query, int $days = 30)
@@ -207,6 +215,14 @@ class Language extends Model
     }
 
     /**
+     * Scope for non-featured languages.
+     */
+    public function scopeNonFeatured($query)
+    {
+        return $query->where('is_featured', false);
+    }
+
+    /**
      * Scope for languages by ISO code.
      */
     public function scopeByIsoCode($query, string $code)
@@ -219,7 +235,8 @@ class Language extends Model
      */
     public function scopeEuropean($query)
     {
-        return $query->whereIn('iso_code', ['en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru']);
+        $europeanCodes = ['en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru', 'sv', 'da', 'no', 'fi'];
+        return $query->whereIn('iso_code', $europeanCodes);
     }
 
     /**
@@ -227,7 +244,42 @@ class Language extends Model
      */
     public function scopeMajor($query)
     {
-        return $query->whereIn('iso_code', ['en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr']);
+        $majorCodes = ['en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr'];
+        return $query->whereIn('iso_code', $majorCodes);
+    }
+
+    /**
+     * Scope for regional languages.
+     */
+    public function scopeRegional($query, string $region)
+    {
+        $regionalCodes = [
+            'europe' => ['en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru', 'sv', 'da', 'no', 'fi'],
+            'asia' => ['zh', 'ja', 'ko', 'hi', 'th', 'vi', 'id', 'ms', 'tl'],
+            'america' => ['en', 'es', 'pt', 'fr'],
+            'africa' => ['ar', 'sw', 'am', 'ha', 'yo', 'ig'],
+            'middle_east' => ['ar', 'fa', 'he', 'tr', 'ku'],
+        ];
+
+        $codes = $regionalCodes[strtolower($region)] ?? [];
+        return $query->whereIn('iso_code', $codes);
+    }
+
+    /**
+     * Scope for languages with counts loaded.
+     */
+    public function scopeWithCounts($query)
+    {
+        return $query->withCount(['candidates']);
+    }
+
+    /**
+     * Scope for ordered languages (by sort_order, then alphabetical).
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc')
+                    ->orderBy('language', 'asc');
     }
 
     /**

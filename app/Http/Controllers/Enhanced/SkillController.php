@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Enhanced;
 
+use App\Http\Controllers\AppBaseController;
 use App\Models\Skill;
 use App\Repositories\SkillRepository;
 use App\Http\Requests\Skill\CreateSkillRequest;
@@ -20,10 +21,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * SkillController - Enhanced with Context7 patterns
+ * Enhanced SkillController - Context7 patterns implementation
  * 
- * Manages skill operations with advanced caching, error handling,
- * and performance optimization using Context7 enterprise patterns.
+ * Demonstrates modern Laravel controller patterns with:
+ * - Advanced caching strategies
+ * - Comprehensive error handling
+ * - Performance optimization
+ * - Enhanced repository usage
+ * - Bulk operations support
  */
 class SkillController extends AppBaseController
 {
@@ -42,10 +47,6 @@ class SkillController extends AppBaseController
 
     /**
      * Display a listing of skills with enhanced filtering and search
-     *
-     * @param IndexSkillRequest $request
-     * @return Factory|View|JsonResponse
-     * @throws Exception
      */
     public function index(IndexSkillRequest $request)
     {
@@ -55,7 +56,7 @@ class SkillController extends AppBaseController
                 return $this->getSkillsApi($request);
             }
 
-            // For web requests, return the view
+            // For web requests, return the view with enhanced data
             $data = $this->prepareSkillsIndexData($request);
             return view('skills.index', $data);
 
@@ -118,59 +119,7 @@ class SkillController extends AppBaseController
     }
 
     /**
-     * Prepare data for skills index view
-     */
-    private function prepareSkillsIndexData(Request $request): array
-    {
-        $cacheKey = $this->buildCacheKey('skills.index.data', $request->all());
-
-        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
-            // Get skills with enhanced scopes
-            $skills = Skill::with(['jobs', 'candidates'])
-                          ->when($request->filled('search'), function ($query) use ($request) {
-                              $query->search($request->get('search'));
-                          })
-                          ->when($request->filled('category'), function ($query) use ($request) {
-                              $query->byCategory($request->get('category'));
-                          })
-                          ->active()
-                          ->alphabetical()
-                          ->paginate(20);
-
-            // Get skill statistics
-            $statistics = $this->getSkillStatistics();
-
-            // Get popular skills
-            $popularSkills = Skill::popular()->limit(10)->get();
-
-            return [
-                'skills' => $skills,
-                'statistics' => $statistics,
-                'popularSkills' => $popularSkills,
-                'filters' => $request->only(['search', 'category'])
-            ];
-        });
-    }
-
-    /**
-     * Get skill statistics for dashboard
-     */
-    private function getSkillStatistics(): array
-    {
-        return Cache::remember('skills.statistics', self::CACHE_TTL, function () {
-            return [
-                'total_skills' => Skill::count(),
-                'active_skills' => Skill::active()->count(),
-                'skills_with_jobs' => Skill::has('jobs')->count(),
-                'skills_with_candidates' => Skill::has('candidates')->count(),
-                'most_popular_skill' => Skill::popular()->first()?->name ?? 'N/A',
-                'recent_skills_count' => Skill::recent(7)->count()
-            ];
-        });
-    }
-
-    /**
-     * Store a newly created skill with enhanced validation and error handling
+     * Store a newly created skill with enhanced validation
      */
     public function store(CreateSkillRequest $request): JsonResponse
     {
@@ -231,7 +180,7 @@ class SkillController extends AppBaseController
                 ]);
             });
 
-            // Get skill statistics
+            // Get skill statistics using model scopes
             $statistics = [
                 'total_jobs' => $skill->jobs()->active()->count(),
                 'total_candidates' => $skill->candidates()->active()->count(),
@@ -255,27 +204,7 @@ class SkillController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified skill
-     */
-    public function edit(Skill $skill, EditSkillRequest $request): JsonResponse
-    {
-        try {
-            $skillData = $skill->load(['jobs', 'candidates']);
-
-            return $this->sendResponse($skillData, 'Skill retrieved for editing');
-
-        } catch (Exception $e) {
-            Log::error('Error retrieving skill for editing', [
-                'skill_id' => $skill->id,
-                'error' => $e->getMessage()
-            ]);
-
-            return $this->sendServerError('Failed to retrieve skill for editing');
-        }
-    }
-
-    /**
-     * Update the specified skill with enhanced validation and caching
+     * Update the specified skill with enhanced validation
      */
     public function update(UpdateSkillUpdateSkillRequest $request, Skill $skill): JsonResponse
     {
@@ -323,9 +252,9 @@ class SkillController extends AppBaseController
         try {
             DB::beginTransaction();
 
-            // Enhanced dependency checking using model relationships
-            $jobsCount = $skill->jobs()->count();
-            $candidatesCount = $skill->candidates()->count();
+            // Enhanced dependency checking using model relationships and scopes
+            $jobsCount = $skill->jobs()->active()->count();
+            $candidatesCount = $skill->candidates()->active()->count();
 
             if ($jobsCount > 0 || $candidatesCount > 0) {
                 return $this->sendError(
@@ -434,7 +363,7 @@ class SkillController extends AppBaseController
                     break;
 
                 case 'delete':
-                    // Check for dependencies before deletion
+                    // Check for dependencies before deletion using scopes
                     $skillsWithDependencies = Skill::whereIn('id', $skillIds)
                         ->where(function ($query) {
                             $query->has('jobs')->orHas('candidates');
@@ -483,6 +412,48 @@ class SkillController extends AppBaseController
     }
 
     /**
+     * Prepare data for skills index view
+     */
+    private function prepareSkillsIndexData(Request $request): array
+    {
+        $cacheKey = $this->buildCacheKey('skills.index.data', $request->all());
+
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
+            // Get skills with enhanced scopes
+            $skills = Skill::with(['jobs', 'candidates'])
+                          ->when($request->filled('search'), function ($query) use ($request) {
+                              $query->search($request->get('search'));
+                          })
+                          ->when($request->filled('category'), function ($query) use ($request) {
+                              $query->byCategory($request->get('category'));
+                          })
+                          ->active()
+                          ->alphabetical()
+                          ->paginate(20);
+
+            // Get skill statistics using model scopes
+            $statistics = [
+                'total_skills' => Skill::count(),
+                'active_skills' => Skill::active()->count(),
+                'skills_with_jobs' => Skill::has('jobs')->count(),
+                'skills_with_candidates' => Skill::has('candidates')->count(),
+                'most_popular_skill' => Skill::popular()->first()?->name ?? 'N/A',
+                'recent_skills_count' => Skill::recent(7)->count()
+            ];
+
+            // Get popular skills using scopes
+            $popularSkills = Skill::popular()->limit(10)->get();
+
+            return [
+                'skills' => $skills,
+                'statistics' => $statistics,
+                'popularSkills' => $popularSkills,
+                'filters' => $request->only(['search', 'category'])
+            ];
+        });
+    }
+
+    /**
      * Clear skill-related caches
      */
     private function clearSkillCaches(?int $skillId = null): void
@@ -500,12 +471,10 @@ class SkillController extends AppBaseController
 
         foreach ($cacheKeys as $pattern) {
             if (str_contains($pattern, '*')) {
-                // For wildcard patterns, we'd need a more sophisticated cache clearing mechanism
-                // For now, we'll clear the main cache tags
                 Cache::tags(['skills'])->flush();
             } else {
                 Cache::forget($pattern);
             }
         }
     }
-}
+} 

@@ -219,4 +219,160 @@ class ImageSlider extends Model implements HasMedia
     {
         return $query->active()->featured()->withLinks();
     }
+
+    // =============================================
+    // ADDITIONAL CONTEXT7 SCOPES
+    // =============================================
+
+    /**
+     * Scope for latest image sliders.
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Scope for oldest image sliders.
+     */
+    public function scopeOldest($query)
+    {
+        return $query->orderBy('created_at', 'asc');
+    }
+
+    /**
+     * Scope for today's image sliders.
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    /**
+     * Scope for this week's image sliders.
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    }
+
+    /**
+     * Scope for this month's image sliders.
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Scope for popular image sliders (active + featured).
+     */
+    public function scopePopular($query)
+    {
+        return $query->active()->featured()->ordered();
+    }
+
+    /**
+     * Scope for homepage display.
+     */
+    public function scopeHomepage($query)
+    {
+        return $query->active()->withImages()->ordered();
+    }
+
+    // =============================================
+    // HELPER METHODS
+    // =============================================
+
+    /**
+     * Check if slider is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * Check if slider is featured.
+     */
+    public function isFeatured(): bool
+    {
+        return $this->is_featured ?? false;
+    }
+
+    /**
+     * Check if slider has image.
+     */
+    public function hasImage(): bool
+    {
+        return $this->media->isNotEmpty() || !empty($this->image_url);
+    }
+
+    /**
+     * Get display description.
+     */
+    public function getDisplayDescriptionAttribute(): string
+    {
+        return $this->description ?: 'No description';
+    }
+
+    /**
+     * Get next sort order.
+     */
+    public static function getNextSortOrder(): int
+    {
+        return static::max('sort_order') + 1;
+    }
+
+    // =============================================
+    // CACHING METHODS
+    // =============================================
+
+    /**
+     * Get cached active sliders.
+     */
+    public static function getCachedActive()
+    {
+        return \Illuminate\Support\Facades\Cache::remember('image_sliders.active', 3600, function () {
+            return static::active()->ordered()->get();
+        });
+    }
+
+    /**
+     * Get cached homepage sliders.
+     */
+    public static function getCachedHomepage()
+    {
+        return \Illuminate\Support\Facades\Cache::remember('image_sliders.homepage', 3600, function () {
+            return static::homepage()->get();
+        });
+    }
+
+    /**
+     * Clear slider caches.
+     */
+    public function clearCaches(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget('image_sliders.active');
+        \Illuminate\Support\Facades\Cache::forget('image_sliders.homepage');
+        \Illuminate\Support\Facades\Cache::forget('image_sliders.featured');
+    }
+
+    // =============================================
+    // MODEL EVENTS
+    // =============================================
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function ($model) {
+            $model->clearCaches();
+        });
+
+        static::deleted(function ($model) {
+            $model->clearCaches();
+        });
+    }
 }

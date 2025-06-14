@@ -576,42 +576,16 @@ class Term extends Model
             if (empty($model->slug)) {
                 $model->slug = Str::slug($model->name);
             }
-            
-            // Ensure unique slug within taxonomy
-            $originalSlug = $model->slug;
-            $counter = 1;
-            
-            while (self::where('taxonomy_id', $model->taxonomy_id)
-                      ->where('slug', $model->slug)
-                      ->exists()) {
-                $model->slug = $originalSlug . '-' . $counter;
-                $counter++;
-            }
-        });
-
-        static::created(function ($model) {
-            $model->updatePath();
         });
 
         static::updating(function ($model) {
             if ($model->isDirty('name') && empty($model->slug)) {
                 $model->slug = Str::slug($model->name);
             }
-            
-            if ($model->isDirty('parent_id')) {
-                $model->updatePath();
-            }
         });
 
         static::saved(function ($model) {
             $model->clearCaches();
-            
-            // Update children paths if parent changed
-            if ($model->wasChanged('parent_id') || $model->wasChanged('name')) {
-                $model->children->each(function ($child) {
-                    $child->updatePath();
-                });
-            }
         });
 
         static::deleted(function ($model) {

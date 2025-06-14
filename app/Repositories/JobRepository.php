@@ -79,7 +79,10 @@ class JobRepository extends BaseRepository
         'last_change'
     ];
 
-    protected function getModelClass(): string
+    /**
+     * Specify Model class name (required by BaseRepository)
+     */
+    public function model()
     {
         return Job::class;
     }

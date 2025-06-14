@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Job;
 
+use App\Http\Controllers\Controller;
 use App\Models\JobType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+
 class JobTypeController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware(['auth']);
     }
+    
     /**
      * Display the job types page.
      */
@@ -25,7 +27,7 @@ class JobTypeController extends Controller
     /**
      * Store a newly created job type.
      */
-    public function store(JobStoreStoreJobTypeRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:job_types',
@@ -53,8 +55,6 @@ class JobTypeController extends Controller
 
     /**
      * Get job type details for editing.
-     *
-     * @param  int  $id
      */
     public function edit($id): JsonResponse
     {
@@ -68,10 +68,8 @@ class JobTypeController extends Controller
 
     /**
      * Update the specified job type.
-     *
-     * @param  int  $id
      */
-    public function update(JobUpdateUpdateJobTypeRequest $request, $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $jobType = JobType::findOrFail($id);
 
@@ -101,8 +99,6 @@ class JobTypeController extends Controller
 
     /**
      * Remove the specified job type.
-     *
-     * @param  int  $id
      */
     public function destroy($id): JsonResponse
     {
@@ -114,4 +110,4 @@ class JobTypeController extends Controller
             'message' => __('messages.common.deleted_successfully', ['model' => __('messages.job_type.job_type')]),
         ]);
     }
-}
+} 

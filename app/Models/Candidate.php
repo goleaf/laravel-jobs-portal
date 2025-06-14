@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\FileService;
+use App\Traits\HasTaxonomy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

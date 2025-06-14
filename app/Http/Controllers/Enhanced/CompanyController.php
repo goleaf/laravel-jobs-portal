@@ -326,7 +326,7 @@ class CompanyController extends AppBaseController
             }
 
             // Update company
-            $updatedCompany = $this->companyRepository->update($input, $company);
+            $updatedCompany = $this->companyRepository->updateCompany($input, $company);
 
             // Clear related caches
             $this->clearCompanyCaches($company);

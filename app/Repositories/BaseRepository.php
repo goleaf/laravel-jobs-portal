@@ -27,10 +27,28 @@ abstract class BaseRepository
     protected array $with = [];
     protected array $withCount = [];
 
-    public function __construct(Model $model)
+    public function __construct(?Model $model = null)
     {
-        $this->model = $model;
+        if ($model) {
+            $this->model = $model;
+        } else {
+            $this->model = $this->makeModel();
+        }
     }
+
+    /**
+     * Make model instance
+     */
+    public function makeModel(): Model
+    {
+        $modelClass = $this->model();
+        return app($modelClass);
+    }
+
+    /**
+     * Specify Model class name
+     */
+    abstract public function model();
 
     /**
      * Get model instance
@@ -43,7 +61,7 @@ abstract class BaseRepository
     /**
      * Get all records with optional filtering
      */
-    public function all(array $filters = [], array $relations = [], array $columns = ['*']): Collection
+    public function all(array $filters = [], array $relations = [], array $columns = ['*'], bool $useCache = true): Collection
     {
         $cacheKey = $this->getCacheKey('all', $columns);
 
@@ -198,7 +216,6 @@ abstract class BaseRepository
             }
             
             foreach ($records as $record) {
-                // Default processing - can be overridden
                 $this->processRecord($record);
             }
         });
@@ -216,6 +233,10 @@ abstract class BaseRepository
         }
 
         $query = $this->newQuery();
+        
+        if (!empty($this->with)) {
+            $query->with($this->with);
+        }
 
         foreach ($criteria as $field => $value) {
             if (is_array($value)) {
@@ -223,10 +244,6 @@ abstract class BaseRepository
             } else {
                 $query->where($field, $value);
             }
-        }
-
-        if (!empty($this->with)) {
-            $query->with($this->with);
         }
 
         $results = $query->get($columns);
@@ -239,25 +256,25 @@ abstract class BaseRepository
     }
 
     /**
-     * Find first record by criteria
+     * Find single record by criteria
      */
     public function findOneBy(array $criteria, array $columns = ['*']): ?Model
     {
         $query = $this->newQuery();
+        
+        if (!empty($this->with)) {
+            $query->with($this->with);
+        }
 
         foreach ($criteria as $field => $value) {
             $query->where($field, $value);
-        }
-
-        if (!empty($this->with)) {
-            $query->with($this->with);
         }
 
         return $query->first($columns);
     }
 
     /**
-     * Count records with criteria
+     * Count records by criteria
      */
     public function count(array $criteria = []): int
     {
@@ -275,7 +292,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Check if record exists
+     * Check if records exist by criteria
      */
     public function exists(array $criteria): bool
     {
@@ -289,16 +306,14 @@ abstract class BaseRepository
     }
 
     /**
-     * Get first record or create if not exists
+     * First or create record
      */
     public function firstOrCreate(array $attributes, array $values = []): Model
     {
         $record = $this->model->firstOrCreate($attributes, $values);
         
-        if ($record->wasRecentlyCreated) {
-            $this->clearModelCache();
-        }
-
+        $this->clearModelCache();
+        
         return $record;
     }
 
@@ -310,7 +325,7 @@ abstract class BaseRepository
         $record = $this->model->updateOrCreate($attributes, $values);
         
         $this->clearModelCache();
-
+        
         return $record;
     }
 
@@ -321,24 +336,26 @@ abstract class BaseRepository
     {
         $inserted = $this->model->insert($data);
         
-        if ($inserted) {
-            $this->clearModelCache();
-            
-            Log::info('Universal Repository: Bulk insert completed', [
-                'model' => get_class($this->model),
-                'count' => count($data)
-            ]);
-        }
+        $this->clearModelCache();
+        
+        Log::info('Universal Repository: Bulk insert completed', [
+            'model' => get_class($this->model),
+            'count' => count($data)
+        ]);
 
         return $inserted;
     }
 
     /**
-     * Search records with full-text search capabilities
+     * Search records by term in specified fields
      */
     public function search(string $term, array $fields = [], array $columns = ['*']): Collection
     {
         $query = $this->newQuery();
+        
+        if (!empty($this->with)) {
+            $query->with($this->with);
+        }
 
         if (empty($fields)) {
             $fields = $this->getSearchableFields();
@@ -349,10 +366,6 @@ abstract class BaseRepository
                 $q->orWhere($field, 'LIKE', "%{$term}%");
             }
         });
-
-        if (!empty($this->with)) {
-            $query->with($this->with);
-        }
 
         return $query->get($columns);
     }
@@ -367,7 +380,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Set relationship counts to load
+     * Set relationships to count
      */
     public function withCount(array $relations)
     {
@@ -376,7 +389,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Create new query instance
+     * Get new query builder instance
      */
     protected function newQuery(): Builder
     {
@@ -384,15 +397,17 @@ abstract class BaseRepository
     }
 
     /**
-     * Apply filters to query - can be overridden in child classes
+     * Apply filters to query
      */
     protected function applyFilters(Builder $query, array $filters): Builder
     {
-        // Basic filter implementation - override in child repositories
         foreach ($filters as $field => $value) {
             if ($value !== null && $value !== '') {
                 if (is_array($value)) {
                     $query->whereIn($field, $value);
+                } elseif (strpos($field, '_like') !== false) {
+                    $actualField = str_replace('_like', '', $field);
+                    $query->where($actualField, 'LIKE', "%{$value}%");
                 } else {
                     $query->where($field, $value);
                 }
@@ -403,15 +418,15 @@ abstract class BaseRepository
     }
 
     /**
-     * Process individual record - override in child classes
+     * Process individual record (override in child classes)
      */
     protected function processRecord(Model $record): void
     {
-        // Default implementation - override in child repositories
+        // Override in child classes for custom processing
     }
 
     /**
-     * Get searchable fields - override in child classes
+     * Get searchable fields (override in child classes)
      */
     protected function getSearchableFields(): array
     {
@@ -430,36 +445,38 @@ abstract class BaseRepository
     }
 
     /**
-     * Clear model-specific cache
+     * Clear model cache
      */
     protected function clearModelCache($id = null): void
     {
         $modelName = class_basename($this->model);
         $pattern = "{$this->cachePrefix}:{$modelName}:*";
         
-        // Clear all cached entries for this model
+        // Clear all cache keys matching the pattern
         $keys = Cache::getRedis()->keys($pattern);
         if (!empty($keys)) {
             Cache::getRedis()->del($keys);
         }
-        
-        Log::debug('Universal Repository: Cache cleared', [
-            'model' => $modelName,
-            'pattern' => $pattern,
-            'id' => $id
-        ]);
+
+        // Clear specific record cache if ID provided
+        if ($id) {
+            $specificKey = "{$this->cachePrefix}:{$modelName}:find:" . md5(serialize([$id, ['*']]));
+            Cache::forget($specificKey);
+        }
     }
 
     /**
-     * Get fresh instance without cache
+     * Reset repository to fresh state
      */
     public function fresh(): self
     {
-        return new static($this->model);
+        $this->with = [];
+        $this->withCount = [];
+        return $this;
     }
 
     /**
-     * Enable query logging for debugging
+     * Enable query logging
      */
     public function enableQueryLog(): self
     {
@@ -468,7 +485,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Get executed queries for debugging
+     * Get query log
      */
     public function getQueryLog(): array
     {

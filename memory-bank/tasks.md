@@ -320,7 +320,7 @@ Completed System Models:
     - Comprehensive caching and activity logging
     - Badge generation and slug management
 
-19. ✅ Resume - Integrated into Candidate Model
+19. ✅ Resume - Integrated into Candidate model
     - Resume functionality handled as part of Candidate model (no separate model needed)
     - Upload/download functionality, path management, URL generation
     - Scopes: withResumes, withoutResumes integrated into Candidate model

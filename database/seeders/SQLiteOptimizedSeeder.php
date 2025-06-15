@@ -31,7 +31,7 @@ use App\Models\Job;
 use App\Models\Candidate;
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
-use App\Models\JobApplication;
+use App\Models\Application;
 use App\Models\Plan;
 use App\Models\Setting;
 use App\Models\FrontSetting;
@@ -482,7 +482,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('📝 Seeding job applications...');
         
-        if (JobApplication::count() == 0) {
+        if (Application::count() == 0) {
             $candidates = $this->generatedData['candidates'] ?? Candidate::all();
             $jobs = $this->generatedData['jobs'] ?? Job::where('status', 1)->get();
             
@@ -494,12 +494,12 @@ class SQLiteOptimizedSeeder extends Seeder
                 $job = $jobs->random();
                 
                 // Avoid duplicates
-                $exists = JobApplication::where('candidate_id', $candidate->id)
+                $exists = Application::where('candidate_id', $candidate->id)
                     ->where('job_id', $job->id)
                     ->exists();
                 
                 if (!$exists) {
-                    $application = JobApplication::factory()->create([
+                    $application = Application::factory()->create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
                         'status' => rand(0, 4),
@@ -512,7 +512,7 @@ class SQLiteOptimizedSeeder extends Seeder
             $this->seedingProgress['job_applications'] = $applications->count();
             $this->command->info("✅ Job Applications: {$applications->count()}");
         } else {
-            $this->seedingProgress['job_applications'] = JobApplication::count();
+            $this->seedingProgress['job_applications'] = Application::count();
             $this->command->info("✅ Job applications already exist");
         }
     }

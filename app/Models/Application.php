@@ -76,7 +76,7 @@ class Application extends Model
     /**
      * The table associated with the model.
      */
-    protected $table = 'applications';
+    protected $table = 'job_applications';
 
     /**
      * Application status constants

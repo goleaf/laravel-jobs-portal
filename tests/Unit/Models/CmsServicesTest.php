@@ -16,7 +16,7 @@ class CmsServicesTest extends TestCase
         $model = CmsServices::factory()->create();
         
         $this->assertInstanceOf(CmsServices::class, $model);
-        $this->assertDatabaseHas('cmsserviceses', [
+        $this->assertDatabaseHas('cms_services', [
             'id' => $model->id
         ]);
     }
@@ -51,7 +51,7 @@ class CmsServicesTest extends TestCase
         $newData = CmsServices::factory()->make()->toArray();
         $model->update($newData);
         
-        $this->assertDatabaseHas('cmsserviceses', [
+        $this->assertDatabaseHas('cms_services', [
             'id' => $model->id
         ]);
     }
@@ -64,7 +64,8 @@ class CmsServicesTest extends TestCase
         
         $model->delete();
         
-        $this->assertDatabaseMissing('cmsserviceses', [
+        // With SoftDeletes, the record still exists but with deleted_at timestamp
+        $this->assertSoftDeleted('cms_services', [
             'id' => $modelId
         ]);
     }

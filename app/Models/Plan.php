@@ -35,14 +35,7 @@ class Plan extends Model
         'allowed_jobs',
         'amount',
         'is_trial_plan',
-        'is_active',
-        'is_featured',
-        'description',
-        'salary_currency_id',
-        'duration_days',
-        'max_featured_jobs',
-        'priority_support',
-        'analytics_access'
+        'salary_currency_id'
     ];
 
     /**
@@ -54,14 +47,8 @@ class Plan extends Model
     {
         return [
             'is_trial_plan' => 'boolean',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'priority_support' => 'boolean',
-            'analytics_access' => 'boolean',
             'amount' => 'decimal:2',
             'allowed_jobs' => 'integer',
-            'duration_days' => 'integer',
-            'max_featured_jobs' => 'integer',
             'salary_currency_id' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
@@ -86,22 +73,6 @@ class Plan extends Model
      */
 
     /**
-     * Scope for active plans.
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope for inactive plans.
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('is_active', false);
-    }
-
-    /**
      * Scope for trial plans.
      */
     public function scopeTrial($query)
@@ -115,14 +86,6 @@ class Plan extends Model
     public function scopePaid($query)
     {
         return $query->where('is_trial_plan', false);
-    }
-
-    /**
-     * Scope for featured plans.
-     */
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true);
     }
 
     /**
@@ -182,28 +145,11 @@ class Plan extends Model
     }
 
     /**
-     * Scope for plans with priority support.
-     */
-    public function scopeWithPrioritySupport($query)
-    {
-        return $query->where('priority_support', true);
-    }
-
-    /**
-     * Scope for plans with analytics access.
-     */
-    public function scopeWithAnalytics($query)
-    {
-        return $query->where('analytics_access', true);
-    }
-
-    /**
      * Scope for searching plans.
      */
     public function scopeSearch($query, string $term)
     {
-        return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+        return $query->where('name', 'like', "%{$term}%");
     }
 
     /**

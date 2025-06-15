@@ -37,6 +37,9 @@ return new class extends Migration
             if (!Schema::hasColumn('cities', 'population')) {
                 $table->unsignedBigInteger('population')->nullable()->after('name');
             }
+            if (!Schema::hasColumn('cities', 'deleted_at')) {
+                $table->softDeletes()->after('updated_at');
+            }
         });
     }
 

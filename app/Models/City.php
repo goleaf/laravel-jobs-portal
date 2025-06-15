@@ -107,7 +107,7 @@ class City extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['deleted_at'];
 
     /**
      * Get the attributes that should be cast.

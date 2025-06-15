@@ -415,5 +415,24 @@ class Company extends Model implements HasMedia
         return $this->hasMany(Job::class);
     }
 
+    /**
+     * Get the featured records.
+     */
+    public function featured(): MorphOne
+    {
+        return $this->morphOne(FeaturedRecord::class, 'record');
+    }
+
+    /**
+     * Get the active featured records.
+     */
+    public function activeFeatured(): MorphOne
+    {
+        return $this->morphOne(FeaturedRecord::class, 'record')
+                    ->where('start_date', '<=', now())
+                    ->where('end_date', '>=', now())
+                    ->where('is_active', true);
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

@@ -57,7 +57,7 @@ class SimpleModelTest extends TestCase
         $this->assertArrayHasKey('user_id', $casts);
         $this->assertArrayHasKey('immediate_available', $casts);
         
-        // Laravel 12 uses 'int' instead of 'integer'
+        // Laravel 12 uses 'int' for auto-generated casts
         $this->assertEquals('int', $casts['id']);
         $this->assertEquals('int', $casts['user_id']);
     }

@@ -499,9 +499,12 @@ class SQLiteOptimizedSeeder extends Seeder
                     ->exists();
                 
                 if (!$exists) {
-                    $application = Application::factory()->create([
+                    $application = Application::create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
+                        'resume_id' => 1,
+                        'expected_salary' => rand(40000, 120000),
+                        'notes' => fake()->optional(0.7)->paragraph(),
                         'status' => rand(0, 4),
                     ]);
                     

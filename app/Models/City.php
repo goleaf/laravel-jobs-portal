@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
@@ -28,7 +27,6 @@ use Spatie\Activitylog\LogOptions;
  * @property int|null $population
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \App\Models\State $state
  * @property-read \App\Models\Country $country
@@ -82,7 +80,6 @@ use Spatie\Activitylog\LogOptions;
 class City extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -108,9 +105,7 @@ class City extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'deleted_at',
-    ];
+    protected $hidden = [];
 
     /**
      * Get the attributes that should be cast.
@@ -129,7 +124,6 @@ class City extends Model
             'population' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -904,8 +898,5 @@ class City extends Model
             $city->clearCaches();
         });
 
-        static::restored(function ($city) {
-            $city->clearCaches();
-        });
     }
 } 

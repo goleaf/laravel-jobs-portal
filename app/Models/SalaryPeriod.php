@@ -26,7 +26,6 @@ use Spatie\Activitylog\LogOptions;
  * @property float|null $multiplier_years
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
@@ -63,7 +62,6 @@ use Spatie\Activitylog\LogOptions;
 class SalaryPeriod extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -97,7 +95,6 @@ class SalaryPeriod extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'deleted_at',
     ];
 
     /**
@@ -118,7 +115,6 @@ class SalaryPeriod extends Model
             'multiplier_years' => 'decimal:4',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -741,8 +737,5 @@ class SalaryPeriod extends Model
             $salaryPeriod->clearCaches();
         });
 
-        static::restored(function ($salaryPeriod) {
-            $salaryPeriod->clearCaches();
-        });
     }
 }

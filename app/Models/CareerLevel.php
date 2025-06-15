@@ -108,11 +108,13 @@ class CareerLevel extends Model
      * Scope a query to only include old records.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $days
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query, int $days = 365): \Illuminate\Database\Eloquent\Builder
     {
-        return $query->orderBy("created_at", "asc");
+        return $query->where('created_at', '<', now()->subDays($days))
+                    ->orderBy("created_at", "asc");
     }
 
     /**

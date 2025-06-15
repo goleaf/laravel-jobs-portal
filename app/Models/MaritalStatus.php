@@ -26,7 +26,6 @@ use Spatie\Activitylog\LogOptions;
  * @property string|null $icon
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidates
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $activeCandidates
@@ -69,7 +68,6 @@ use Spatie\Activitylog\LogOptions;
 class MaritalStatus extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -124,7 +122,6 @@ class MaritalStatus extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'deleted_at',
     ];
 
     /**
@@ -142,7 +139,6 @@ class MaritalStatus extends Model
             'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -779,8 +775,5 @@ class MaritalStatus extends Model
             $model->clearCaches();
         });
 
-        static::restored(function ($model) {
-            $model->clearCaches();
-        });
     }
 }

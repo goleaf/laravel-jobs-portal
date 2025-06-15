@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Setting Model - Enhanced with Enhanced patterns
+ * Setting Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $key
@@ -25,7 +24,6 @@ use Spatie\Activitylog\LogOptions;
  * @property int|null $sort_order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read string $logo_url
  * @property-read mixed $parsed_value
@@ -33,7 +31,7 @@ use Spatie\Activitylog\LogOptions;
  * @property-read string $category_label
  * @property-read string $type_label
  *
- * Enhanced Enhanced Scopes:
+ * Context7 Scopes:
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder public()
@@ -68,7 +66,6 @@ use Spatie\Activitylog\LogOptions;
 class Setting extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -94,9 +91,7 @@ class Setting extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'deleted_at',
-    ];
+    protected $hidden = [];
 
     /**
      * Get the attributes that should be cast.
@@ -111,7 +106,6 @@ class Setting extends Model
             'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -502,7 +496,7 @@ class Setting extends Model
     public function scopeJson($query)
     {
         return $query->where('type', 'json');
-}
+    }
 
     /**
      * Scope for text type settings.
@@ -799,4 +793,4 @@ class Setting extends Model
             $setting->clearCaches();
         });
     }
-    }
+}

@@ -95,7 +95,6 @@ use Spatie\Activitylog\LogOptions;
 class Country extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**

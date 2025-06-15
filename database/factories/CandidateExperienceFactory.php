@@ -20,17 +20,36 @@ class CandidateExperienceFactory extends Factory
      */
     public function definition(): array
     {
+        // Get existing country, state, city records to avoid foreign key issues
+        $country = Country::inRandomOrder()->first();
+        $state = null;
+        $city = null;
+        
+        if ($country) {
+            $state = State::where('country_id', $country->id)->inRandomOrder()->first();
+            if ($state) {
+                $city = City::where('state_id', $state->id)->inRandomOrder()->first();
+            }
+        }
+        
+        $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year');
+        $currentlyWorking = $this->faker->boolean(30);
+        
         return [
             'candidate_id' => Candidate::factory(),
             'experience_title' => $this->faker->jobTitle,
             'company' => $this->faker->company,
-            'country_id' => Country::factory(),
-            'state_id' => State::factory(), 
-            'city_id' => City::factory(),
-            'start_date' => $this->faker->date(),
-            'end_date' => $this->faker->optional()->date(),
-            'currently_working' => $this->faker->boolean,
+            'country_id' => $country?->id ?? 1, // Fallback to first country
+            'state_id' => $state?->id ?? 1, // Fallback to first state
+            'city_id' => $city?->id ?? 1, // Fallback to first city
+            'start_date' => $startDate,
+            'end_date' => $currentlyWorking ? null : $this->faker->dateTimeBetween($startDate, 'now'),
+            'currently_working' => $currentlyWorking,
             'description' => $this->faker->paragraph,
+            'job_level' => $this->faker->randomElement(['Entry', 'Mid', 'Senior', 'Lead', 'Manager']),
+            'employment_type' => $this->faker->randomElement(['Full-time', 'Part-time', 'Contract', 'Internship']),
+            'salary' => $this->faker->numberBetween(30000, 150000),
+            'is_verified' => $this->faker->boolean(60),
         ];
     }
 }

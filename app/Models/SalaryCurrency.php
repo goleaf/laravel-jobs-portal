@@ -29,7 +29,6 @@ use Spatie\Activitylog\LogOptions;
  * @property \Illuminate\Support\Carbon|null $last_rate_update
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
  * @property-read int|null $jobs_count
  * @property-read mixed $usage_statistics
@@ -70,7 +69,6 @@ use Spatie\Activitylog\LogOptions;
 class SalaryCurrency extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
 
     /**
@@ -99,7 +97,6 @@ class SalaryCurrency extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'deleted_at',
     ];
 
     /**
@@ -119,7 +116,6 @@ class SalaryCurrency extends Model
             'last_rate_update' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 

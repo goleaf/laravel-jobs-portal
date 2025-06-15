@@ -1,0 +1,1 @@
+@extends("layouts.app") @section("title", __("Jobs")) @section("content") <div class="container mx-auto px-4 py-8"> <div class="bg-white rounded-lg shadow-md p-6"> <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ __("Jobs") }}</h1> <div class="text-center py-12"> <div class="text-gray-500 text-lg">{{ __("Jobs listing page") }}</div> </div> </div> </div> @endsection

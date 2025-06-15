@@ -308,36 +308,60 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_entry_returns_entry_level_career_levels()
     {
-        CareerLevel::factory()->create(['level_name' => 'Entry Level']);
-        CareerLevel::factory()->create(['level_name' => 'Junior Position']);
-        CareerLevel::factory()->create(['level_name' => 'Senior Management']);
+        // Get initial count to work with existing data
+        $initialEntryCount = CareerLevel::entry()->count();
+        
+        $entryLevel1 = CareerLevel::factory()->create(['level_name' => 'TestUniqueEntry Level']);
+        $entryLevel2 = CareerLevel::factory()->create(['level_name' => 'TestUniqueJunior Position']);
+        CareerLevel::factory()->create(['level_name' => 'TestSenior Management']);
         
         $entryCareerLevels = CareerLevel::entry()->get();
         
-        $this->assertCount(2, $entryCareerLevels);
+        // Should have initial count + 2 new entry levels
+        $this->assertCount($initialEntryCount + 2, $entryCareerLevels);
+        
+        // Verify our specific entry levels are included
+        $this->assertTrue($entryCareerLevels->contains('id', $entryLevel1->id));
+        $this->assertTrue($entryCareerLevels->contains('id', $entryLevel2->id));
     }
 
     /** @test */
     public function scope_senior_returns_senior_level_career_levels()
     {
-        CareerLevel::factory()->create(['level_name' => 'Senior Developer']);
-        CareerLevel::factory()->create(['level_name' => 'Senior Manager']);
-        CareerLevel::factory()->create(['level_name' => 'Junior Developer']);
+        // Get initial count to work with existing data
+        $initialSeniorCount = CareerLevel::senior()->count();
+        
+        $seniorLevel1 = CareerLevel::factory()->create(['level_name' => 'TestUniqueSenior Developer']);
+        $seniorLevel2 = CareerLevel::factory()->create(['level_name' => 'TestUniqueSenior Manager']);
+        CareerLevel::factory()->create(['level_name' => 'TestJunior Developer']);
         
         $seniorCareerLevels = CareerLevel::senior()->get();
         
-        $this->assertCount(2, $seniorCareerLevels);
+        // Should have initial count + 2 new senior levels
+        $this->assertCount($initialSeniorCount + 2, $seniorCareerLevels);
+        
+        // Verify our specific senior levels are included
+        $this->assertTrue($seniorCareerLevels->contains('id', $seniorLevel1->id));
+        $this->assertTrue($seniorCareerLevels->contains('id', $seniorLevel2->id));
     }
 
     /** @test */
     public function scope_management_returns_management_career_levels()
     {
-        CareerLevel::factory()->create(['level_name' => 'Manager']);
-        CareerLevel::factory()->create(['level_name' => 'Executive Level']);
-        CareerLevel::factory()->create(['level_name' => 'Developer']);
+        // Get initial count to work with existing data
+        $initialManagementCount = CareerLevel::management()->count();
+        
+        $managerLevel = CareerLevel::factory()->create(['level_name' => 'TestUniqueManager']);
+        $executiveLevel = CareerLevel::factory()->create(['level_name' => 'TestUniqueExecutive Level']);
+        CareerLevel::factory()->create(['level_name' => 'TestDeveloper']);
         
         $managementCareerLevels = CareerLevel::management()->get();
         
-        $this->assertCount(2, $managementCareerLevels);
+        // Should have initial count + 2 new management levels
+        $this->assertCount($initialManagementCount + 2, $managementCareerLevels);
+        
+        // Verify our specific management levels are included
+        $this->assertTrue($managementCareerLevels->contains('id', $managerLevel->id));
+        $this->assertTrue($managementCareerLevels->contains('id', $executiveLevel->id));
     }
 }

@@ -454,6 +454,14 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return $this->belongsTo(City::class);
     }
 
+    /**
+     * Get the skills associated with the candidate user.
+     */
+    public function candidateSkill()
+    {
+        return $this->belongsToMany(Skill::class, 'candidate_skills', 'user_id', 'skill_id');
+    }
+
     // =============================================
     // ACCESSOR METHODS
     // =============================================

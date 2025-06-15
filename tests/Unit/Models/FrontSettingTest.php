@@ -21,7 +21,7 @@ class FrontSettingTest extends TestCase
         $model = FrontSetting::factory()->create();
 
         $this->assertInstanceOf(FrontSetting::class, $model);
-        $this->assertDatabaseHas('frontsettings', [
+        $this->assertDatabaseHas('front_settings', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class FrontSettingTest extends TestCase
         $newData = FrontSetting::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('frontsettings', [
+        $this->assertDatabaseHas('front_settings', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class FrontSettingTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('frontsettings', [
+        $this->assertDatabaseMissing('front_settings', [
             'id' => $modelId,
         ]);
     }

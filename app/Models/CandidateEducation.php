@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -92,6 +93,7 @@ class CandidateEducation extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use HasSettingsField;
 
     /**
      * Validation rules with multilingual support.
@@ -128,6 +130,131 @@ class CandidateEducation extends Model
         'field_of_study',
         'description',
         'is_verified',
+    ];
+
+    /**
+     * Default settings for education model.
+     */
+    public $defaultSettings = [
+        'display' => [
+            'show_grade' => true,
+            'show_field_of_study' => true,
+            'show_description' => true,
+            'show_institute_details' => true,
+            'show_location' => true,
+            'show_year' => true,
+            'highlight_honors' => true,
+            'priority_order' => 0, // for sorting in profile
+        ],
+        'privacy' => [
+            'public_visibility' => true,
+            'recruiter_access' => true,
+            'hide_from_alumni' => false,
+            'hide_from_current_institute' => false,
+            'anonymous_institute' => false,
+            'grade_visibility' => 'all', // all, recruiters_only, private
+        ],
+        'verification' => [
+            'verification_required' => false,
+            'auto_verify_threshold' => 80.0, // GPA/grade threshold for auto-verification
+            'verification_documents' => [], // array of document types
+            'verification_status' => 'pending', // pending, verified, rejected
+            'verified_by' => null,
+            'verified_at' => null,
+        ],
+        'achievements' => [
+            'honors_and_awards' => [],
+            'scholarships' => [],
+            'academic_projects' => [],
+            'publications' => [],
+            'relevant_coursework' => [],
+            'extracurricular_activities' => [],
+        ],
+        'matching' => [
+            'skill_relevance_score' => 0, // calculated based on field of study
+            'job_market_relevance' => 'high', // high, medium, low
+            'industry_alignment' => [], // array of relevant industries
+            'weight_in_profile' => 1.0, // multiplier for profile scoring
+            'boost_recent_graduates' => true,
+        ],
+        'analytics' => [
+            'profile_views_education' => 0,
+            'recruiter_interest_score' => 0,
+            'education_ranking' => null, // institute ranking if available
+            'field_demand_score' => 0, // market demand for this field
+            'completion_impact' => 0, // impact on profile completion %
+        ],
+        'formatting' => [
+            'date_format' => 'year_only', // year_only, month_year, full_date
+            'grade_format' => 'percentage', // percentage, gpa, letter, pass_fail
+            'institute_display' => 'full_name', // full_name, abbreviation, custom
+            'location_format' => 'city_country', // city_country, full, city_only
+            'description_length' => 200, // max characters in summary
+        ],
+        'notifications' => [
+            'verification_updates' => true,
+            'institute_news' => false,
+            'alumni_connections' => true,
+            'career_opportunities' => true,
+            'field_insights' => false,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'display.show_grade' => 'boolean',
+        'display.show_field_of_study' => 'boolean',
+        'display.show_description' => 'boolean',
+        'display.show_institute_details' => 'boolean',
+        'display.show_location' => 'boolean',
+        'display.show_year' => 'boolean',
+        'display.highlight_honors' => 'boolean',
+        'display.priority_order' => 'integer|min:0|max:100',
+        
+        'privacy.public_visibility' => 'boolean',
+        'privacy.recruiter_access' => 'boolean',
+        'privacy.hide_from_alumni' => 'boolean',
+        'privacy.hide_from_current_institute' => 'boolean',
+        'privacy.anonymous_institute' => 'boolean',
+        'privacy.grade_visibility' => 'string|in:all,recruiters_only,private',
+        
+        'verification.verification_required' => 'boolean',
+        'verification.auto_verify_threshold' => 'numeric|min:0|max:100',
+        'verification.verification_documents' => 'array',
+        'verification.verification_status' => 'string|in:pending,verified,rejected',
+        
+        'achievements.honors_and_awards' => 'array',
+        'achievements.scholarships' => 'array',
+        'achievements.academic_projects' => 'array',
+        'achievements.publications' => 'array',
+        'achievements.relevant_coursework' => 'array',
+        'achievements.extracurricular_activities' => 'array',
+        
+        'matching.skill_relevance_score' => 'numeric|min:0|max:100',
+        'matching.job_market_relevance' => 'string|in:high,medium,low',
+        'matching.industry_alignment' => 'array',
+        'matching.weight_in_profile' => 'numeric|min:0|max:5',
+        'matching.boost_recent_graduates' => 'boolean',
+        
+        'analytics.profile_views_education' => 'integer|min:0',
+        'analytics.recruiter_interest_score' => 'numeric|min:0|max:100',
+        'analytics.education_ranking' => 'nullable|integer|min:1',
+        'analytics.field_demand_score' => 'numeric|min:0|max:100',
+        'analytics.completion_impact' => 'numeric|min:0|max:100',
+        
+        'formatting.date_format' => 'string|in:year_only,month_year,full_date',
+        'formatting.grade_format' => 'string|in:percentage,gpa,letter,pass_fail',
+        'formatting.institute_display' => 'string|in:full_name,abbreviation,custom',
+        'formatting.location_format' => 'string|in:city_country,full,city_only',
+        'formatting.description_length' => 'integer|min:50|max:1000',
+        
+        'notifications.verification_updates' => 'boolean',
+        'notifications.institute_news' => 'boolean',
+        'notifications.alumni_connections' => 'boolean',
+        'notifications.career_opportunities' => 'boolean',
+        'notifications.field_insights' => 'boolean',
     ];
 
     /**

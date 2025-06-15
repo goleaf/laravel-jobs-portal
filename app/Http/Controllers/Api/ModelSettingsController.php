@@ -179,10 +179,15 @@ class ModelSettingsController extends Controller
             
             // Validate specific setting if rules are defined
             if (property_exists($instance, 'settingsRules') && isset($instance->settingsRules[$key])) {
-                $validator = Validator::make(
-                    [$key => $value],
-                    [$key => $instance->settingsRules[$key]]
-                );
+                // Convert dot notation key to nested array for Laravel validator
+                $validationData = [];
+                $validationRules = [];
+                
+                // Set nested value using dot notation
+                data_set($validationData, $key, $value);
+                $validationRules[$key] = $instance->settingsRules[$key];
+                
+                $validator = Validator::make($validationData, $validationRules);
                 
                 if ($validator->fails()) {
                     return response()->json([

@@ -309,6 +309,9 @@ Route::prefix('model-settings')->group(function () {
     Route::get('/models', [ModelSettingsController::class, 'listSupportedModels']);
     Route::get('/demo/comprehensive', [ModelSettingsController::class, 'comprehensiveDemo']);
     
+    // Model schema information (must be before {model}/{id} routes)
+    Route::get('/{model}/schema', [ModelSettingsController::class, 'getModelSchema']);
+    
     // Dynamic model settings routes
     Route::get('/{model}/{id}', [ModelSettingsController::class, 'getModelSettings']);
     Route::put('/{model}/{id}', [ModelSettingsController::class, 'updateModelSettings']);
@@ -318,9 +321,6 @@ Route::prefix('model-settings')->group(function () {
     Route::get('/{model}/{id}/{key}', [ModelSettingsController::class, 'getSpecificSetting']);
     Route::put('/{model}/{id}/{key}', [ModelSettingsController::class, 'setSpecificSetting']);
     Route::delete('/{model}/{id}/{key}', [ModelSettingsController::class, 'deleteSpecificSetting']);
-    
-    // Model schema information
-    Route::get('/{model}/schema', [ModelSettingsController::class, 'getModelSchema']);
     
     // Legacy endpoints for backward compatibility
     Route::get('/users/{userId}', [ModelSettingsController::class, 'getUserSettings']);

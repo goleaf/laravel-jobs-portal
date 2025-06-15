@@ -21,7 +21,7 @@ class FeaturedRecordTest extends TestCase
         $model = FeaturedRecord::factory()->create();
 
         $this->assertInstanceOf(FeaturedRecord::class, $model);
-        $this->assertDatabaseHas('featuredrecords', [
+        $this->assertDatabaseHas('featured_records', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class FeaturedRecordTest extends TestCase
         $newData = FeaturedRecord::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('featuredrecords', [
+        $this->assertDatabaseHas('featured_records', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class FeaturedRecordTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('featuredrecords', [
+        $this->assertDatabaseMissing('featured_records', [
             'id' => $modelId,
         ]);
     }

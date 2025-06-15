@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -97,6 +98,178 @@ class CandidateExperience extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use HasSettingsField;
+
+    /**
+     * Default settings for experience model.
+     */
+    public $defaultSettings = [
+        'display' => [
+            'show_salary' => false,
+            'show_company_details' => true,
+            'show_location' => true,
+            'show_description' => true,
+            'show_employment_type' => true,
+            'show_job_level' => true,
+            'show_duration' => true,
+            'highlight_current_role' => true,
+            'priority_order' => 0, // for sorting in profile
+        ],
+        'privacy' => [
+            'public_visibility' => true,
+            'recruiter_access' => true,
+            'hide_from_competitors' => false,
+            'hide_from_current_employer' => true,
+            'anonymous_company' => false,
+            'salary_visibility' => 'private', // all, recruiters_only, private
+            'reference_contact_allowed' => false,
+        ],
+        'verification' => [
+            'verification_required' => false,
+            'employment_verification' => 'pending', // pending, verified, rejected
+            'reference_check_status' => 'not_requested',
+            'hr_verification' => false,
+            'verification_documents' => [],
+            'verified_by' => null,
+            'verified_at' => null,
+        ],
+        'achievements' => [
+            'key_accomplishments' => [],
+            'awards_received' => [],
+            'promotions' => [],
+            'projects_led' => [],
+            'team_size_managed' => 0,
+            'budget_managed' => 0,
+            'revenue_generated' => 0,
+            'cost_savings' => 0,
+        ],
+        'skills' => [
+            'technical_skills' => [],
+            'soft_skills' => [],
+            'tools_used' => [],
+            'technologies' => [],
+            'certifications_earned' => [],
+            'training_completed' => [],
+        ],
+        'matching' => [
+            'relevance_score' => 0, // calculated based on job market needs
+            'industry_experience_weight' => 1.0,
+            'role_level_progression' => 'stable', // ascending, stable, descending
+            'leadership_experience' => false,
+            'remote_work_experience' => false,
+            'startup_experience' => false,
+            'enterprise_experience' => false,
+        ],
+        'analytics' => [
+            'profile_views_experience' => 0,
+            'recruiter_interest_score' => 0,
+            'company_reputation_score' => 0,
+            'role_market_demand' => 0,
+            'career_progression_score' => 0,
+            'skill_relevance_score' => 0,
+        ],
+        'formatting' => [
+            'date_format' => 'month_year', // month_year, year_only, full_date
+            'description_length' => 300, // max characters in summary
+            'company_display' => 'full_name', // full_name, abbreviation, anonymous
+            'location_format' => 'city_country', // city_country, full, city_only
+            'duration_format' => 'years_months', // years_months, months_only, custom
+        ],
+        'references' => [
+            'reference_available' => false,
+            'reference_contacts' => [],
+            'reference_permission' => 'ask_first', // always_allow, ask_first, never
+            'reference_notes' => '',
+            'hr_contact_info' => [],
+        ],
+        'notifications' => [
+            'verification_updates' => true,
+            'reference_requests' => true,
+            'industry_updates' => false,
+            'company_news' => false,
+            'role_opportunities' => true,
+            'skill_endorsements' => true,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'display.show_salary' => 'boolean',
+        'display.show_company_details' => 'boolean',
+        'display.show_location' => 'boolean',
+        'display.show_description' => 'boolean',
+        'display.show_employment_type' => 'boolean',
+        'display.show_job_level' => 'boolean',
+        'display.show_duration' => 'boolean',
+        'display.highlight_current_role' => 'boolean',
+        'display.priority_order' => 'integer|min:0|max:100',
+        
+        'privacy.public_visibility' => 'boolean',
+        'privacy.recruiter_access' => 'boolean',
+        'privacy.hide_from_competitors' => 'boolean',
+        'privacy.hide_from_current_employer' => 'boolean',
+        'privacy.anonymous_company' => 'boolean',
+        'privacy.salary_visibility' => 'string|in:all,recruiters_only,private',
+        'privacy.reference_contact_allowed' => 'boolean',
+        
+        'verification.verification_required' => 'boolean',
+        'verification.employment_verification' => 'string|in:pending,verified,rejected',
+        'verification.reference_check_status' => 'string|in:not_requested,pending,completed,declined',
+        'verification.hr_verification' => 'boolean',
+        'verification.verification_documents' => 'array',
+        
+        'achievements.key_accomplishments' => 'array',
+        'achievements.awards_received' => 'array',
+        'achievements.promotions' => 'array',
+        'achievements.projects_led' => 'array',
+        'achievements.team_size_managed' => 'integer|min:0',
+        'achievements.budget_managed' => 'numeric|min:0',
+        'achievements.revenue_generated' => 'numeric|min:0',
+        'achievements.cost_savings' => 'numeric|min:0',
+        
+        'skills.technical_skills' => 'array',
+        'skills.soft_skills' => 'array',
+        'skills.tools_used' => 'array',
+        'skills.technologies' => 'array',
+        'skills.certifications_earned' => 'array',
+        'skills.training_completed' => 'array',
+        
+        'matching.relevance_score' => 'numeric|min:0|max:100',
+        'matching.industry_experience_weight' => 'numeric|min:0|max:5',
+        'matching.role_level_progression' => 'string|in:ascending,stable,descending',
+        'matching.leadership_experience' => 'boolean',
+        'matching.remote_work_experience' => 'boolean',
+        'matching.startup_experience' => 'boolean',
+        'matching.enterprise_experience' => 'boolean',
+        
+        'analytics.profile_views_experience' => 'integer|min:0',
+        'analytics.recruiter_interest_score' => 'numeric|min:0|max:100',
+        'analytics.company_reputation_score' => 'numeric|min:0|max:100',
+        'analytics.role_market_demand' => 'numeric|min:0|max:100',
+        'analytics.career_progression_score' => 'numeric|min:0|max:100',
+        'analytics.skill_relevance_score' => 'numeric|min:0|max:100',
+        
+        'formatting.date_format' => 'string|in:month_year,year_only,full_date',
+        'formatting.description_length' => 'integer|min:100|max:2000',
+        'formatting.company_display' => 'string|in:full_name,abbreviation,anonymous',
+        'formatting.location_format' => 'string|in:city_country,full,city_only',
+        'formatting.duration_format' => 'string|in:years_months,months_only,custom',
+        
+        'references.reference_available' => 'boolean',
+        'references.reference_contacts' => 'array',
+        'references.reference_permission' => 'string|in:always_allow,ask_first,never',
+        'references.reference_notes' => 'string|max:500',
+        'references.hr_contact_info' => 'array',
+        
+        'notifications.verification_updates' => 'boolean',
+        'notifications.reference_requests' => 'boolean',
+        'notifications.industry_updates' => 'boolean',
+        'notifications.company_news' => 'boolean',
+        'notifications.role_opportunities' => 'boolean',
+        'notifications.skill_endorsements' => 'boolean',
+    ];
 
     /**
      * Validation rules with multilingual support.

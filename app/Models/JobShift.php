@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,6 +64,198 @@ class JobShift extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use HasSettingsField;
+
+    /**
+     * Default settings for job shift model.
+     */
+    public $defaultSettings = [
+        'schedule' => [
+            'flexible_hours' => false,
+            'core_hours_required' => false,
+            'core_hours_start' => '09:00',
+            'core_hours_end' => '17:00',
+            'break_duration_minutes' => 60,
+            'overtime_allowed' => true,
+            'weekend_work' => false,
+            'holiday_work' => false,
+            'shift_rotation' => false,
+        ],
+        'compensation' => [
+            'shift_differential' => 0.0, // percentage or fixed amount
+            'overtime_multiplier' => 1.5,
+            'night_shift_bonus' => 0.0,
+            'weekend_bonus' => 0.0,
+            'holiday_bonus' => 0.0,
+            'hazard_pay' => 0.0,
+            'compensation_type' => 'percentage', // percentage, fixed
+        ],
+        'requirements' => [
+            'minimum_age' => 18,
+            'physical_demands' => 'light', // light, moderate, heavy
+            'security_clearance' => false,
+            'special_licenses' => [],
+            'health_requirements' => [],
+            'background_check' => false,
+            'drug_screening' => false,
+        ],
+        'work_environment' => [
+            'location_type' => 'office', // office, remote, hybrid, field, factory
+            'travel_required' => false,
+            'travel_percentage' => 0,
+            'uniform_required' => false,
+            'equipment_provided' => true,
+            'climate_controlled' => true,
+            'noise_level' => 'low', // low, moderate, high
+            'safety_training' => false,
+        ],
+        'flexibility' => [
+            'work_from_home' => false,
+            'compressed_workweek' => false,
+            'job_sharing' => false,
+            'part_time_available' => false,
+            'seasonal_work' => false,
+            'temporary_positions' => false,
+            'contract_work' => false,
+        ],
+        'benefits' => [
+            'health_insurance' => false,
+            'dental_insurance' => false,
+            'vision_insurance' => false,
+            'retirement_plan' => false,
+            'paid_time_off' => true,
+            'sick_leave' => true,
+            'maternity_leave' => false,
+            'professional_development' => false,
+            'tuition_reimbursement' => false,
+        ],
+        'analytics' => [
+            'popularity_score' => 0,
+            'demand_trend' => 'stable', // increasing, stable, decreasing
+            'average_salary_range' => [],
+            'turnover_rate' => 0.0,
+            'satisfaction_score' => 0.0,
+            'retention_rate' => 0.0,
+            'performance_metrics' => [],
+        ],
+        'display' => [
+            'show_salary_info' => true,
+            'show_benefits' => true,
+            'show_requirements' => true,
+            'highlight_popular' => true,
+            'featured_positions' => false,
+            'urgent_hiring' => false,
+            'priority_order' => 0,
+            'icon_color' => '#3B82F6',
+        ],
+        'matching' => [
+            'skill_weight' => 1.0,
+            'experience_weight' => 1.0,
+            'location_weight' => 1.0,
+            'salary_weight' => 0.8,
+            'availability_weight' => 1.2,
+            'cultural_fit_weight' => 0.6,
+            'auto_match_enabled' => true,
+        ],
+        'notifications' => [
+            'new_job_alerts' => true,
+            'application_updates' => true,
+            'shift_changes' => true,
+            'schedule_updates' => true,
+            'overtime_opportunities' => false,
+            'policy_updates' => true,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'schedule.flexible_hours' => 'boolean',
+        'schedule.core_hours_required' => 'boolean',
+        'schedule.core_hours_start' => 'string|date_format:H:i',
+        'schedule.core_hours_end' => 'string|date_format:H:i',
+        'schedule.break_duration_minutes' => 'integer|min:0|max:480',
+        'schedule.overtime_allowed' => 'boolean',
+        'schedule.weekend_work' => 'boolean',
+        'schedule.holiday_work' => 'boolean',
+        'schedule.shift_rotation' => 'boolean',
+        
+        'compensation.shift_differential' => 'numeric|min:0',
+        'compensation.overtime_multiplier' => 'numeric|min:1|max:3',
+        'compensation.night_shift_bonus' => 'numeric|min:0',
+        'compensation.weekend_bonus' => 'numeric|min:0',
+        'compensation.holiday_bonus' => 'numeric|min:0',
+        'compensation.hazard_pay' => 'numeric|min:0',
+        'compensation.compensation_type' => 'string|in:percentage,fixed',
+        
+        'requirements.minimum_age' => 'integer|min:16|max:65',
+        'requirements.physical_demands' => 'string|in:light,moderate,heavy',
+        'requirements.security_clearance' => 'boolean',
+        'requirements.special_licenses' => 'array',
+        'requirements.health_requirements' => 'array',
+        'requirements.background_check' => 'boolean',
+        'requirements.drug_screening' => 'boolean',
+        
+        'work_environment.location_type' => 'string|in:office,remote,hybrid,field,factory',
+        'work_environment.travel_required' => 'boolean',
+        'work_environment.travel_percentage' => 'integer|min:0|max:100',
+        'work_environment.uniform_required' => 'boolean',
+        'work_environment.equipment_provided' => 'boolean',
+        'work_environment.climate_controlled' => 'boolean',
+        'work_environment.noise_level' => 'string|in:low,moderate,high',
+        'work_environment.safety_training' => 'boolean',
+        
+        'flexibility.work_from_home' => 'boolean',
+        'flexibility.compressed_workweek' => 'boolean',
+        'flexibility.job_sharing' => 'boolean',
+        'flexibility.part_time_available' => 'boolean',
+        'flexibility.seasonal_work' => 'boolean',
+        'flexibility.temporary_positions' => 'boolean',
+        'flexibility.contract_work' => 'boolean',
+        
+        'benefits.health_insurance' => 'boolean',
+        'benefits.dental_insurance' => 'boolean',
+        'benefits.vision_insurance' => 'boolean',
+        'benefits.retirement_plan' => 'boolean',
+        'benefits.paid_time_off' => 'boolean',
+        'benefits.sick_leave' => 'boolean',
+        'benefits.maternity_leave' => 'boolean',
+        'benefits.professional_development' => 'boolean',
+        'benefits.tuition_reimbursement' => 'boolean',
+        
+        'analytics.popularity_score' => 'numeric|min:0|max:100',
+        'analytics.demand_trend' => 'string|in:increasing,stable,decreasing',
+        'analytics.average_salary_range' => 'array',
+        'analytics.turnover_rate' => 'numeric|min:0|max:100',
+        'analytics.satisfaction_score' => 'numeric|min:0|max:10',
+        'analytics.retention_rate' => 'numeric|min:0|max:100',
+        'analytics.performance_metrics' => 'array',
+        
+        'display.show_salary_info' => 'boolean',
+        'display.show_benefits' => 'boolean',
+        'display.show_requirements' => 'boolean',
+        'display.highlight_popular' => 'boolean',
+        'display.featured_positions' => 'boolean',
+        'display.urgent_hiring' => 'boolean',
+        'display.priority_order' => 'integer|min:0|max:100',
+        'display.icon_color' => 'string|regex:/^#[0-9A-Fa-f]{6}$/',
+        
+        'matching.skill_weight' => 'numeric|min:0|max:5',
+        'matching.experience_weight' => 'numeric|min:0|max:5',
+        'matching.location_weight' => 'numeric|min:0|max:5',
+        'matching.salary_weight' => 'numeric|min:0|max:5',
+        'matching.availability_weight' => 'numeric|min:0|max:5',
+        'matching.cultural_fit_weight' => 'numeric|min:0|max:5',
+        'matching.auto_match_enabled' => 'boolean',
+        
+        'notifications.new_job_alerts' => 'boolean',
+        'notifications.application_updates' => 'boolean',
+        'notifications.shift_changes' => 'boolean',
+        'notifications.schedule_updates' => 'boolean',
+        'notifications.overtime_opportunities' => 'boolean',
+        'notifications.policy_updates' => 'boolean',
+    ];
 
     /**
      * The attributes that are mass assignable.

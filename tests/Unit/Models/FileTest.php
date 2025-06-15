@@ -69,7 +69,7 @@ class FileTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('files', [
+        $this->assertSoftDeleted('files', [
             'id' => $modelId,
         ]);
     }

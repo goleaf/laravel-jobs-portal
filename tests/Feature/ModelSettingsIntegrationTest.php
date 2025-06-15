@@ -8,6 +8,10 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\UserSettings;
+use App\Models\Job;
+use App\Models\Candidate;
+use App\Models\JobCategory;
+use App\Models\JobType;
 
 /**
  * ModelSettingsIntegrationTest - Comprehensive testing for Laravel Model Settings
@@ -21,14 +25,22 @@ class ModelSettingsIntegrationTest extends TestCase
 
     protected $user;
     protected $company;
+    protected $job;
+    protected $candidate;
+    protected $jobCategory;
+    protected $jobType;
 
     protected function setUp(): void
     {
         parent::setUp();
         
-        // Create test user and company
+        // Create test data
         $this->user = User::factory()->create();
         $this->company = Company::factory()->create();
+        $this->job = Job::factory()->create();
+        $this->candidate = Candidate::factory()->create();
+        $this->jobCategory = JobCategory::factory()->create();
+        $this->jobType = JobType::factory()->create();
     }
 
     /** @test */
@@ -374,5 +386,363 @@ class ModelSettingsIntegrationTest extends TestCase
         $this->assertEquals('light', $userSettings->getTheme());
         $this->assertEquals('en', $userSettings->getLanguage());
         $this->assertTrue($userSettings->hasJobAlertsEnabled());
+    }
+
+    /** @test */
+    public function it_can_list_all_supported_models()
+    {
+        $response = $this->getJson('/api/model-settings/models');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'supported_models',
+                    'total_models'
+                ])
+                ->assertJson([
+                    'success' => true
+                ]);
+
+        $models = $response->json('supported_models');
+        $this->assertArrayHasKey('users', $models);
+        $this->assertArrayHasKey('companies', $models);
+        $this->assertArrayHasKey('jobs', $models);
+        $this->assertArrayHasKey('candidates', $models);
+        $this->assertArrayHasKey('job-categories', $models);
+        $this->assertArrayHasKey('job-types', $models);
+    }
+
+    /** @test */
+    public function it_can_get_user_settings()
+    {
+        $response = $this->getJson("/api/model-settings/users/{$this->user->id}");
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'model',
+                    'id',
+                    'settings',
+                    'default_settings'
+                ])
+                ->assertJson([
+                    'success' => true,
+                    'model' => 'users',
+                    'id' => $this->user->id
+                ]);
+    }
+
+    /** @test */
+    public function it_can_update_user_settings()
+    {
+        $newSettings = [
+            'settings' => [
+                'profile' => [
+                    'theme' => 'dark',
+                    'language' => 'es'
+                ]
+            ]
+        ];
+
+        $response = $this->putJson("/api/model-settings/users/{$this->user->id}", $newSettings);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true,
+                    'message' => 'Settings updated successfully'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_get_job_settings()
+    {
+        $response = $this->getJson("/api/model-settings/jobs/{$this->job->id}");
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'model',
+                    'id',
+                    'settings',
+                    'default_settings'
+                ]);
+
+        $settings = $response->json('settings');
+        $this->assertArrayHasKey('visibility', $settings);
+        $this->assertArrayHasKey('application', $settings);
+        $this->assertArrayHasKey('notifications', $settings);
+        $this->assertArrayHasKey('display', $settings);
+        $this->assertArrayHasKey('seo', $settings);
+        $this->assertArrayHasKey('social', $settings);
+        $this->assertArrayHasKey('analytics', $settings);
+        $this->assertArrayHasKey('workflow', $settings);
+        $this->assertArrayHasKey('premium', $settings);
+    }
+
+    /** @test */
+    public function it_can_update_job_settings()
+    {
+        $newSettings = [
+            'settings' => [
+                'visibility' => [
+                    'featured' => true,
+                    'urgent' => true
+                ],
+                'application' => [
+                    'require_cover_letter' => true,
+                    'max_applications' => 50
+                ]
+            ]
+        ];
+
+        $response = $this->putJson("/api/model-settings/jobs/{$this->job->id}", $newSettings);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true
+                ]);
+    }
+
+    /** @test */
+    public function it_can_get_candidate_settings()
+    {
+        $response = $this->getJson("/api/model-settings/candidates/{$this->candidate->id}");
+
+        $response->assertStatus(200);
+
+        $settings = $response->json('settings');
+        $this->assertArrayHasKey('profile', $settings);
+        $this->assertArrayHasKey('privacy', $settings);
+        $this->assertArrayHasKey('job_preferences', $settings);
+        $this->assertArrayHasKey('notifications', $settings);
+        $this->assertArrayHasKey('dashboard', $settings);
+        $this->assertArrayHasKey('search', $settings);
+        $this->assertArrayHasKey('career', $settings);
+        $this->assertArrayHasKey('social', $settings);
+    }
+
+    /** @test */
+    public function it_can_update_candidate_settings()
+    {
+        $newSettings = [
+            'settings' => [
+                'profile' => [
+                    'visibility' => 'recruiters_only',
+                    'show_salary_expectations' => false
+                ],
+                'privacy' => [
+                    'allow_recruiter_contact' => false,
+                    'hide_from_current_employer' => true
+                ]
+            ]
+        ];
+
+        $response = $this->putJson("/api/model-settings/candidates/{$this->candidate->id}", $newSettings);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true
+                ]);
+    }
+
+    /** @test */
+    public function it_can_get_specific_setting()
+    {
+        $response = $this->getJson("/api/model-settings/candidates/{$this->candidate->id}/profile.visibility");
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'model',
+                    'id',
+                    'key',
+                    'value'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_set_specific_setting()
+    {
+        $response = $this->putJson("/api/model-settings/candidates/{$this->candidate->id}/dashboard.default_view", [
+            'value' => 'applications'
+        ]);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true,
+                    'key' => 'dashboard.default_view',
+                    'value' => 'applications'
+                ]);
+    }
+
+    /** @test */
+    public function it_validates_setting_values()
+    {
+        $response = $this->putJson("/api/model-settings/candidates/{$this->candidate->id}/dashboard.default_view", [
+            'value' => 'invalid_view'
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJson([
+                    'success' => false,
+                    'message' => 'Validation failed'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_delete_specific_setting()
+    {
+        // First set a setting
+        $this->putJson("/api/model-settings/candidates/{$this->candidate->id}/career.career_goals", [
+            'value' => 'Become a senior developer'
+        ]);
+
+        // Then delete it
+        $response = $this->deleteJson("/api/model-settings/candidates/{$this->candidate->id}/career.career_goals");
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true,
+                    'message' => 'Setting deleted successfully'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_clear_all_model_settings()
+    {
+        $response = $this->deleteJson("/api/model-settings/candidates/{$this->candidate->id}");
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true,
+                    'message' => 'All settings cleared successfully'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_get_model_schema()
+    {
+        $response = $this->getJson('/api/model-settings/jobs/schema');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'model',
+                    'default_settings',
+                    'validation_rules',
+                    'supported_operations'
+                ]);
+    }
+
+    /** @test */
+    public function it_can_get_job_category_settings()
+    {
+        $response = $this->getJson("/api/model-settings/job-categories/{$this->jobCategory->id}");
+
+        $response->assertStatus(200);
+
+        $settings = $response->json('settings');
+        $this->assertArrayHasKey('display', $settings);
+        $this->assertArrayHasKey('filtering', $settings);
+        $this->assertArrayHasKey('seo', $settings);
+        $this->assertArrayHasKey('content', $settings);
+        $this->assertArrayHasKey('notifications', $settings);
+        $this->assertArrayHasKey('analytics', $settings);
+        $this->assertArrayHasKey('features', $settings);
+        $this->assertArrayHasKey('moderation', $settings);
+    }
+
+    /** @test */
+    public function it_can_get_job_type_settings()
+    {
+        $response = $this->getJson("/api/model-settings/job-types/{$this->jobType->id}");
+
+        $response->assertStatus(200);
+
+        $settings = $response->json('settings');
+        $this->assertArrayHasKey('display', $settings);
+        $this->assertArrayHasKey('filtering', $settings);
+        $this->assertArrayHasKey('features', $settings);
+        $this->assertArrayHasKey('analytics', $settings);
+    }
+
+    /** @test */
+    public function it_handles_non_existent_model()
+    {
+        $response = $this->getJson('/api/model-settings/invalid-model/1');
+
+        $response->assertStatus(500)
+                ->assertJson([
+                    'success' => false
+                ]);
+    }
+
+    /** @test */
+    public function it_handles_non_existent_record()
+    {
+        $response = $this->getJson('/api/model-settings/users/99999');
+
+        $response->assertStatus(500)
+                ->assertJson([
+                    'success' => false
+                ]);
+    }
+
+    /** @test */
+    public function it_can_run_comprehensive_demo()
+    {
+        $response = $this->getJson('/api/model-settings/demo/comprehensive');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'message',
+                    'models_demonstrated',
+                    'total_models',
+                    'features_demonstrated'
+                ])
+                ->assertJson([
+                    'success' => true
+                ]);
+
+        $models = $response->json('models_demonstrated');
+        $this->assertNotEmpty($models);
+    }
+
+    /** @test */
+    public function it_preserves_default_settings_structure()
+    {
+        $user = User::factory()->create();
+        
+        // Get settings without any modifications
+        $response = $this->getJson("/api/model-settings/users/{$user->id}");
+        
+        $settings = $response->json('settings');
+        $defaultSettings = $response->json('default_settings');
+        
+        // Settings should match default settings initially
+        $this->assertEquals($defaultSettings, $settings);
+    }
+
+    /** @test */
+    public function it_maintains_settings_after_model_updates()
+    {
+        // Set custom settings
+        $this->putJson("/api/model-settings/jobs/{$this->job->id}", [
+            'settings' => [
+                'visibility' => [
+                    'featured' => true
+                ]
+            ]
+        ]);
+
+        // Update the job model
+        $this->job->update(['job_title' => 'Updated Job Title']);
+
+        // Check settings are preserved
+        $response = $this->getJson("/api/model-settings/jobs/{$this->job->id}");
+        $settings = $response->json('settings');
+        
+        $this->assertTrue($settings['visibility']['featured']);
     }
 }

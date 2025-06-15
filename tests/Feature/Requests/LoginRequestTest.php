@@ -114,14 +114,13 @@ class LoginRequestTest extends TestCase
         $request = new LoginRequest();
         $rules = $request->rules();
         
-        $this->assertArrayHasKey('boolean', $rules);
+        // The remember field should have boolean validation
+        $this->assertArrayHasKey('remember', $rules);
         
-        // Test field-specific validation rules
-        $fieldRules = $rules['boolean'];
-        $this->assertNotEmpty($fieldRules);
+        // Test field-specific validation rules for remember field
+        $fieldRules = $rules['remember'];
+        $this->assertEquals('boolean', $fieldRules);
     }
-
-
 
     /** @test */
     public function test_valid_data_passes_validation()
@@ -129,8 +128,7 @@ class LoginRequestTest extends TestCase
         $validData = [
             'email' => 'test@example.com',
             'password' => 'SecureP@ssw0rd123!',
-            'remember' => 'Test Value',
-            'boolean' => 'Test Value',
+            'remember' => true, // Boolean value for remember field
         ];
         
         $request = new LoginRequest();
@@ -147,7 +145,8 @@ class LoginRequestTest extends TestCase
         $request = new LoginRequest();
         $validator = validator($emptyData, $request->rules());
         
-        // Should handle empty data according to rules
+        // Should handle empty data according to rules - email and password are required
+        $this->assertTrue($validator->fails());
         $this->assertIsArray($validator->errors()->toArray());
     }
 
@@ -155,38 +154,31 @@ class LoginRequestTest extends TestCase
     public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
-            'name' => '<script>alert("xss")</script>',
-            'description' => 'javascript:alert("xss")',
-            'content' => '<img src=x onerror=alert("xss")>'
+            'email' => 'test<script>alert("xss")</script>@example.com',
+            'password' => 'password<script>alert("xss")</script>',
         ];
         
         $request = new LoginRequest();
         $validator = validator($maliciousData, $request->rules());
         
-        // XSS data should either fail validation or be properly sanitized
-        if ($validator->passes()) {
-            foreach ($maliciousData as $field => $value) {
-                if (is_string($value)) {
-                    $this->assertStringNotContainsString('<script>', $value);
-                    $this->assertStringNotContainsString('javascript:', $value);
-                }
-            }
-        }
+        // Email validation should fail for malicious content
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('email', $validator->errors()->toArray());
     }
 
     /** @test */
     public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
-            'name' => "'; DROP TABLE users; --",
-            'search' => "1' OR '1'='1",
-            'filter' => "UNION SELECT * FROM passwords"
+            'email' => "test'; DROP TABLE users; --@example.com",
+            'password' => "1' OR '1'='1",
         ];
         
         $request = new LoginRequest();
         $validator = validator($sqlInjectionData, $request->rules());
         
-        // SQL injection patterns should be handled safely
-        $this->assertIsArray($validator->errors()->toArray());
+        // SQL injection patterns should be handled safely - email should fail validation
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('email', $validator->errors()->toArray());
     }
 }

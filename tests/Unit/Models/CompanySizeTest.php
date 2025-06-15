@@ -100,12 +100,16 @@ class CompanySizeTest extends TestCase
     /** @test */
     public function scope_active_returns_active_company_sizes()
     {
+        // Get initial count of active company sizes
+        $initialActiveCount = CompanySize::active()->count();
+        
         CompanySize::factory()->count(3)->create(['is_active' => true]);
         CompanySize::factory()->count(2)->create(['is_active' => false]);
         
         $activeCompanySizes = CompanySize::active()->get();
         
-        $this->assertCount(3, $activeCompanySizes);
+        // Should have 3 more active company sizes than before
+        $this->assertCount($initialActiveCount + 3, $activeCompanySizes);
         $activeCompanySizes->each(function ($companySize) {
             $this->assertTrue($companySize->is_active);
         });

@@ -144,6 +144,96 @@ class CompanySize extends Model
     }
 
     /**
+     * Scope a query to only include default company sizes.
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope a query to only include custom (non-default) company sizes.
+     */
+    public function scopeCustom($query)
+    {
+        return $query->where('is_default', false);
+    }
+
+    /**
+     * Scope a query to only include recently created company sizes.
+     */
+    public function scopeRecent($query, $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope a query to only include old company sizes.
+     */
+    public function scopeOld($query, $days = 365)
+    {
+        return $query->where('created_at', '<=', now()->subDays($days));
+    }
+
+    /**
+     * Scope a query to only include company sizes that have companies.
+     */
+    public function scopeWithCompanies($query)
+    {
+        return $query->has('companies');
+    }
+
+    /**
+     * Scope a query to order company sizes alphabetically by name.
+     */
+    public function scopeAlphabetical($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
+
+    /**
+     * Scope a query to get most popular company sizes by company count.
+     */
+    public function scopePopular($query, $limit = null)
+    {
+        $query = $query->withCount('companies')
+                       ->orderBy('companies_count', 'desc');
+        
+        if ($limit) {
+            $query = $query->limit($limit);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope a query to only include small company sizes.
+     */
+    public function scopeSmall($query)
+    {
+        return $query->where('size', 'like', '%small%')
+                     ->orWhere('size', 'like', '%startup%');
+    }
+
+    /**
+     * Scope a query to only include medium company sizes.
+     */
+    public function scopeMedium($query)
+    {
+        return $query->where('size', 'like', '%medium%')
+                     ->orWhere('size', 'like', '%mid%');
+    }
+
+    /**
+     * Scope a query to only include large company sizes.
+     */
+    public function scopeLarge($query)
+    {
+        return $query->where('size', 'like', '%large%')
+                     ->orWhere('size', 'like', '%enterprise%');
+    }
+
+    /**
      * Get the company count for this size.
      */
     public function getCompanyCountAttribute()

@@ -7,10 +7,6 @@
 
     <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'Laravel Job Portal') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -52,13 +48,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
                         </svg>
-                        Dashboard
+                        {{ __('Dashboard') }}
                     </a>
 
                     <!-- Content Management Section -->
                     <div class="mt-6">
                         <h3 class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Content Management
+                            {{ __('Content Management') }}
                         </h3>
                         <div class="mt-2 space-y-1">
                             <!-- Taxonomies -->
@@ -66,7 +62,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.taxonomies.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                                 </svg>
-                                Taxonomies
+                                {{ __('Taxonomies') }}
                             </a>
 
                             <!-- Terms -->
@@ -74,7 +70,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.terms.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                 </svg>
-                                Terms
+                                {{ __('Terms') }}
                             </a>
 
                             <!-- Job Types -->
@@ -82,7 +78,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.job-types.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
                                 </svg>
-                                Job Types
+                                {{ __('Job Types') }}
                             </a>
                         </div>
                     </div>
@@ -113,7 +109,7 @@
                                                 <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
                                                 </svg>
-                                                <span class="sr-only">Home</span>
+                                                <span class="sr-only">{{ __('Home') }}</span>
                                             </a>
                                         </div>
                                     </li>
@@ -138,8 +134,10 @@
 
                             <!-- User Profile -->
                             <div class="flex items-center">
-                                <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=Admin&color=7c3aed&background=ede9fe" alt="Admin">
-                                <span class="ml-3 text-gray-700 dark:text-gray-200 text-sm font-medium hidden md:block">Admin</span>
+                                <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                                    <span class="text-white text-sm font-medium">A</span>
+                                </div>
+                                <span class="ml-3 text-gray-700 dark:text-gray-200 text-sm font-medium hidden md:block">{{ __('Admin') }}</span>
                             </div>
                         </div>
                     </div>
@@ -152,11 +150,11 @@
                     <!-- Flash Messages -->
                     @if (session('success'))
                         <div id="success-toast" class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                            <strong class="font-bold">Success!</strong>
+                            <strong class="font-bold">{{ __('Success') }}!</strong>
                             <span class="block sm:inline">{{ session('success') }}</span>
                             <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none'">
                                 <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <title>Close</title>
+                                    <title>{{ __('Close') }}</title>
                                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
                                 </svg>
                             </span>
@@ -165,11 +163,11 @@
 
                     @if (session('error'))
                         <div id="error-toast" class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong class="font-bold">Error!</strong>
+                            <strong class="font-bold">{{ __('Error') }}!</strong>
                             <span class="block sm:inline">{{ session('error') }}</span>
                             <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none'">
                                 <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <title>Close</title>
+                                    <title>{{ __('Close') }}</title>
                                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
                                 </svg>
                             </span>
@@ -199,49 +197,32 @@
         // Theme toggle
         function toggleTheme() {
             const html = document.documentElement;
+            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
             html.classList.toggle('dark');
+            
+            // Save theme preference
+            fetch('/locale/switch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ theme: newTheme })
+            });
         }
 
-        // Auto-hide flash messages
+        // Auto-hide flash messages after 5 seconds
         setTimeout(() => {
-            const successToast = document.getElementById('success-toast');
-            const errorToast = document.getElementById('error-toast');
-            if (successToast) successToast.style.display = 'none';
-            if (errorToast) errorToast.style.display = 'none';
+            const toast = document.getElementById('success-toast') || document.getElementById('error-toast');
+            if (toast) {
+                toast.style.display = 'none';
+            }
         }, 5000);
-
-        // Toast notification function
-        function showToast(type, message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
-            
-            toast.className = `${bgColor} text-white px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
-            toast.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            container.appendChild(toast);
-            
-            // Animate in
-            setTimeout(() => toast.classList.remove('translate-x-full'), 100);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => toast.remove(), 300);
-            }, 5000);
-        }
     </script>
 
+    <!-- Additional Scripts -->
     @stack('scripts')
 </body>
 </html> 

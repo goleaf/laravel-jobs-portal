@@ -35,7 +35,13 @@ class Plan extends Model
         'allowed_jobs',
         'amount',
         'is_trial_plan',
-        'salary_currency_id'
+        'salary_currency_id',
+        'is_active',
+        'is_featured',
+        'priority_support',
+        'analytics_access',
+        'max_featured_jobs',
+        'duration_days'
     ];
 
     /**
@@ -47,8 +53,14 @@ class Plan extends Model
     {
         return [
             'is_trial_plan' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'priority_support' => 'boolean',
+            'analytics_access' => 'boolean',
             'amount' => 'decimal:2',
             'allowed_jobs' => 'integer',
+            'max_featured_jobs' => 'integer',
+            'duration_days' => 'integer',
             'salary_currency_id' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

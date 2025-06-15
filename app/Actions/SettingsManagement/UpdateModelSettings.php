@@ -115,7 +115,7 @@ class UpdateModelSettings
         $model = $modelType::find($modelId);
 
         if (!$model) {
-            throw new \ModelNotFoundException("Model {$modelType} with ID {$modelId} not found");
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Model {$modelType} with ID {$modelId} not found");
         }
 
         if (!method_exists($model, 'settings')) {

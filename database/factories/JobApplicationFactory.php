@@ -25,7 +25,7 @@ class JobApplicationFactory extends Factory
             'resume_id' => 1, // Use a default resume ID
             'expected_salary' => fake()->numberBetween(40000, 100000),
             'notes' => fake()->text(500),
-            'status' => JobApplication::STATUS_APPLIED,
+            'status' => JobApplication::STATUS_PENDING,
         ];
     }
 

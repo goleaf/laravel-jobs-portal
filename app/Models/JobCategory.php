@@ -107,6 +107,7 @@ class JobCategory extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'parent_id' => 'integer',
+        'description' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

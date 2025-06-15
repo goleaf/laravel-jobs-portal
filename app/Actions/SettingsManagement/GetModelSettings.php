@@ -6,7 +6,7 @@ use App\Data\SettingsManagement\ModelSettingsData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use LumoSolutions\Actionable\Action;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 use LumoSolutions\Actionable\Traits\IsDispatchable;
 
 /**
@@ -15,9 +15,9 @@ use LumoSolutions\Actionable\Traits\IsDispatchable;
  * Comprehensive action for retrieving model settings with intelligent caching,
  * performance optimization, and flexible retrieval options.
  */
-class GetModelSettings extends Action
+class GetModelSettings
 {
-    use IsDispatchable;
+    use IsRunnable, IsDispatchable;
 
     /**
      * Execute the settings retrieval action

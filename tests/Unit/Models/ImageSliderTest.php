@@ -21,7 +21,7 @@ class ImageSliderTest extends TestCase
         $model = ImageSlider::factory()->create();
 
         $this->assertInstanceOf(ImageSlider::class, $model);
-        $this->assertDatabaseHas('imagesliders', [
+        $this->assertDatabaseHas('image_sliders', [
             'id' => $model->id,
         ]);
     }
@@ -52,12 +52,16 @@ class ImageSliderTest extends TestCase
         $model = ImageSlider::factory()->create();
         $originalData = $model->toArray();
 
-        // Update with factory data
-        $newData = ImageSlider::factory()->make()->toArray();
-        $model->update($newData);
+        // Update with specific attributes that exist in fillable
+        $updateData = [
+            'description' => 'Updated description',
+            'is_active' => !$model->is_active,
+        ];
+        $model->update($updateData);
 
-        $this->assertDatabaseHas('imagesliders', [
+        $this->assertDatabaseHas('image_sliders', [
             'id' => $model->id,
+            'description' => 'Updated description',
         ]);
     }
 
@@ -69,7 +73,7 @@ class ImageSliderTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('imagesliders', [
+        $this->assertDatabaseMissing('image_sliders', [
             'id' => $modelId,
         ]);
     }

@@ -63,7 +63,7 @@ require __DIR__.'/api_universal.php';
 
 /*
 |--------------------------------------------------------------------------
-| Settings Management API Routes (Phase 3: Advanced Integration)
+| Settings Management API Routes (Phase 3A: Advanced Integration)
 |--------------------------------------------------------------------------
 */
 require __DIR__.'/settings-api.php';

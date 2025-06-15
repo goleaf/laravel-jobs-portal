@@ -57,6 +57,8 @@ class ImageSlider extends Model implements HasMedia
     public $fillable = [
         'description',
         'is_active',
+        'image_path',
+        'settings',
     ];
 
     /**

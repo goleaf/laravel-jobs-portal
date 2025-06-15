@@ -30,7 +30,7 @@ class StoreImageSliderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:imagesliders,name'],
+            'name' => ['required', 'string', 'max:255', 'unique:image_sliders,name'],
             'description' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],

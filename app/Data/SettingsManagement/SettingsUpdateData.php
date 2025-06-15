@@ -17,7 +17,7 @@ use LumoSolutions\Actionable\Attributes\Ignore;
 class SettingsUpdateData
 {
     use ArrayConvertible;
-{
+
     public function __construct(
         #[FieldName('model_type')]
         public string $modelType,

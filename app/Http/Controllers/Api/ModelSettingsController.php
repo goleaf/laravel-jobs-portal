@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Job;
-use App\Models\UserSettings;
+use App\Models\Candidate;
+use App\Models\JobCategory;
+use App\Models\JobType;
+use App\Models\Skill;
+use App\Models\Post;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -29,399 +34,356 @@ use Illuminate\Validation\ValidationException;
 class ModelSettingsController extends Controller
 {
     /**
-     * Get user settings with defaults.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @return JsonResponse
+     * Supported models for settings management.
      */
-    public function getUserSettings(Request $request, int $userId): JsonResponse
+    protected array $supportedModels = [
+        'users' => User::class,
+        'companies' => Company::class,
+        'jobs' => Job::class,
+        'candidates' => Candidate::class,
+        'job-categories' => JobCategory::class,
+        'job-types' => JobType::class,
+        'skills' => Skill::class,
+        'posts' => Post::class,
+        'settings' => Setting::class,
+    ];
+
+    /**
+     * Get all settings for a specific model instance.
+     */
+    public function getModelSettings(string $model, int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
             
-            // Get all settings with defaults applied
-            $settings = $user->settings()->all();
+            $settings = $instance->settings()->all();
             
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'user_id' => $user->id,
-                    'settings' => $settings,
-                    'has_settings' => $user->settings()->exist(),
-                    'is_empty' => $user->settings()->empty(),
-                ]
+                'model' => $model,
+                'id' => $id,
+                'settings' => $settings,
+                'default_settings' => $instance->defaultSettings ?? [],
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve user settings',
-                'error' => $e->getMessage()
+                'message' => 'Failed to retrieve settings: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Update user settings with validation.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @return JsonResponse
+     * Update settings for a specific model instance.
      */
-    public function updateUserSettings(Request $request, int $userId): JsonResponse
+    public function updateModelSettings(Request $request, string $model, int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
+            
             $settings = $request->input('settings', []);
             
-            // Apply settings with automatic validation
-            $user->settings()->apply($settings);
+            // Validate settings if rules are defined
+            if (property_exists($instance, 'settingsRules') && !empty($instance->settingsRules)) {
+                $validator = Validator::make($settings, $instance->settingsRules);
+                
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+            }
+            
+            // Update settings
+            foreach ($settings as $key => $value) {
+                $instance->settings()->set($key, $value);
+            }
             
             return response()->json([
                 'success' => true,
-                'message' => 'User settings updated successfully',
-                'data' => [
-                    'user_id' => $user->id,
-                    'updated_settings' => $user->settings()->all()
-                ]
+                'message' => 'Settings updated successfully',
+                'model' => $model,
+                'id' => $id,
+                'updated_settings' => $settings,
             ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update user settings',
-                'error' => $e->getMessage()
+                'message' => 'Failed to update settings: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Get specific setting value.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @param string $key
-     * @return JsonResponse
+     * Get a specific setting for a model instance.
      */
-    public function getUserSetting(Request $request, int $userId, string $key): JsonResponse
+    public function getSpecificSetting(string $model, int $id, string $key): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
-            $default = $request->input('default');
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
             
-            $value = $user->settings()->get($key, $default);
+            $value = $instance->settings()->get($key);
             
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'user_id' => $user->id,
-                    'key' => $key,
-                    'value' => $value,
-                    'has_setting' => $user->settings()->has($key)
-                ]
+                'model' => $model,
+                'id' => $id,
+                'key' => $key,
+                'value' => $value,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve setting',
-                'error' => $e->getMessage()
+                'message' => 'Failed to retrieve setting: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Set specific setting value.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @param string $key
-     * @return JsonResponse
+     * Set a specific setting for a model instance.
      */
-    public function setUserSetting(Request $request, int $userId, string $key): JsonResponse
+    public function setSpecificSetting(Request $request, string $model, int $id, string $key): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
+            
             $value = $request->input('value');
             
-            $user->settings()->set($key, $value);
+            // Validate specific setting if rules are defined
+            if (property_exists($instance, 'settingsRules') && isset($instance->settingsRules[$key])) {
+                $validator = Validator::make(
+                    [$key => $value],
+                    [$key => $instance->settingsRules[$key]]
+                );
+                
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+            }
+            
+            $instance->settings()->set($key, $value);
             
             return response()->json([
                 'success' => true,
                 'message' => 'Setting updated successfully',
-                'data' => [
-                    'user_id' => $user->id,
-                    'key' => $key,
-                    'value' => $value
-                ]
+                'model' => $model,
+                'id' => $id,
+                'key' => $key,
+                'value' => $value,
             ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to set setting',
-                'error' => $e->getMessage()
+                'message' => 'Failed to update setting: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Delete specific setting.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @param string $key
-     * @return JsonResponse
+     * Delete a specific setting for a model instance.
      */
-    public function deleteUserSetting(Request $request, int $userId, string $key): JsonResponse
+    public function deleteSpecificSetting(string $model, int $id, string $key): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
             
-            $user->settings()->delete($key);
+            $instance->settings()->forget($key);
             
             return response()->json([
                 'success' => true,
                 'message' => 'Setting deleted successfully',
-                'data' => [
-                    'user_id' => $user->id,
-                    'deleted_key' => $key
-                ]
+                'model' => $model,
+                'id' => $id,
+                'key' => $key,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete setting',
-                'error' => $e->getMessage()
+                'message' => 'Failed to delete setting: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Clear all user settings.
-     * 
-     * @param Request $request
-     * @param int $userId
-     * @return JsonResponse
+     * Clear all settings for a model instance.
      */
-    public function clearUserSettings(Request $request, int $userId): JsonResponse
+    public function clearModelSettings(string $model, int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($userId);
+            $modelClass = $this->getModelClass($model);
+            $instance = $modelClass::findOrFail($id);
             
-            $user->settings()->clear();
+            $instance->settings()->clear();
             
             return response()->json([
                 'success' => true,
-                'message' => 'All user settings cleared successfully',
-                'data' => [
-                    'user_id' => $user->id,
-                    'settings' => $user->settings()->all() // Should show defaults
-                ]
+                'message' => 'All settings cleared successfully',
+                'model' => $model,
+                'id' => $id,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to clear settings',
-                'error' => $e->getMessage()
+                'message' => 'Failed to clear settings: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Get company settings.
-     * 
-     * @param Request $request
-     * @param int $companyId
-     * @return JsonResponse
+     * Get settings schema for a specific model.
      */
-    public function getCompanySettings(Request $request, int $companyId): JsonResponse
+    public function getModelSchema(string $model): JsonResponse
     {
         try {
-            $company = Company::findOrFail($companyId);
-            
-            $settings = $company->settings()->all();
+            $modelClass = $this->getModelClass($model);
+            $instance = new $modelClass();
             
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'company_id' => $company->id,
-                    'company_name' => $company->name,
-                    'settings' => $settings,
-                    'has_settings' => $company->settings()->exist(),
-                ]
+                'model' => $model,
+                'default_settings' => $instance->defaultSettings ?? [],
+                'validation_rules' => $instance->settingsRules ?? [],
+                'supported_operations' => [
+                    'get_all' => "GET /api/model-settings/{$model}/{id}",
+                    'update_all' => "PUT /api/model-settings/{$model}/{id}",
+                    'get_specific' => "GET /api/model-settings/{$model}/{id}/{key}",
+                    'set_specific' => "PUT /api/model-settings/{$model}/{id}/{key}",
+                    'delete_specific' => "DELETE /api/model-settings/{$model}/{id}/{key}",
+                    'clear_all' => "DELETE /api/model-settings/{$model}/{id}",
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve company settings',
-                'error' => $e->getMessage()
+                'message' => 'Failed to retrieve schema: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Update company settings.
-     * 
-     * @param Request $request
-     * @param int $companyId
-     * @return JsonResponse
+     * List all supported models and their capabilities.
      */
+    public function listSupportedModels(): JsonResponse
+    {
+        $models = [];
+        
+        foreach ($this->supportedModels as $key => $class) {
+            $instance = new $class();
+            $models[$key] = [
+                'class' => $class,
+                'has_default_settings' => property_exists($instance, 'defaultSettings'),
+                'has_validation_rules' => property_exists($instance, 'settingsRules'),
+                'settings_count' => is_array($instance->defaultSettings ?? null) 
+                    ? count($instance->defaultSettings ?? []) 
+                    : 0,
+            ];
+        }
+        
+        return response()->json([
+            'success' => true,
+            'supported_models' => $models,
+            'total_models' => count($models),
+        ]);
+    }
+
+    /**
+     * Comprehensive demo showcasing all model settings features.
+     */
+    public function comprehensiveDemo(): JsonResponse
+    {
+        $results = [];
+        
+        try {
+            // Demo for each supported model
+            foreach ($this->supportedModels as $modelKey => $modelClass) {
+                $instance = $modelClass::first();
+                
+                if ($instance) {
+                    // Get current settings
+                    $currentSettings = $instance->settings()->all();
+                    
+                    // Get default settings
+                    $defaultSettings = $instance->defaultSettings ?? [];
+                    
+                    // Get validation rules
+                    $validationRules = $instance->settingsRules ?? [];
+                    
+                    $results[$modelKey] = [
+                        'id' => $instance->id,
+                        'current_settings' => $currentSettings,
+                        'default_settings' => $defaultSettings,
+                        'validation_rules' => $validationRules,
+                        'settings_categories' => array_keys($defaultSettings),
+                        'total_settings' => count($defaultSettings),
+                    ];
+                }
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Comprehensive Laravel Model Settings demonstration',
+                'models_demonstrated' => $results,
+                'total_models' => count($results),
+                'features_demonstrated' => [
+                    'Multi-model settings support',
+                    'Default settings configuration',
+                    'Validation rules enforcement',
+                    'Nested settings structure',
+                    'Type-safe configuration',
+                    'RESTful API endpoints',
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Demo failed: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get the model class for a given model key.
+     */
+    protected function getModelClass(string $model): string
+    {
+        if (!isset($this->supportedModels[$model])) {
+            throw new \InvalidArgumentException("Model '{$model}' is not supported");
+        }
+        
+        return $this->supportedModels[$model];
+    }
+
+    /**
+     * Legacy methods for backward compatibility
+     */
+    public function getUserSettings(int $userId): JsonResponse
+    {
+        return $this->getModelSettings('users', $userId);
+    }
+    
+    public function updateUserSettings(Request $request, int $userId): JsonResponse
+    {
+        return $this->updateModelSettings($request, 'users', $userId);
+    }
+    
+    public function getCompanySettings(int $companyId): JsonResponse
+    {
+        return $this->getModelSettings('companies', $companyId);
+    }
+    
     public function updateCompanySettings(Request $request, int $companyId): JsonResponse
     {
-        try {
-            $company = Company::findOrFail($companyId);
-            $settings = $request->input('settings', []);
-            
-            $company->settings()->apply($settings);
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Company settings updated successfully',
-                'data' => [
-                    'company_id' => $company->id,
-                    'updated_settings' => $company->settings()->all()
-                ]
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update company settings',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Demonstrate multiple settings operations.
-     * 
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function demonstrateFeatures(Request $request): JsonResponse
-    {
-        try {
-            // Create a test user if needed
-            $user = User::first();
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No users found for demonstration'
-                ], 404);
-            }
-
-            $demo = [];
-
-            // 1. Check if settings exist
-            $demo['settings_exist'] = $user->settings()->exist();
-            $demo['settings_empty'] = $user->settings()->empty();
-
-            // 2. Get all settings (with defaults)
-            $demo['all_settings'] = $user->settings()->all();
-
-            // 3. Get specific setting with default
-            $demo['theme'] = $user->settings()->get('profile.theme', 'light');
-            $demo['language'] = $user->settings()->get('profile.language', 'en');
-
-            // 4. Get multiple settings
-            $demo['multiple_settings'] = $user->settings()->getMultiple([
-                'profile.theme',
-                'profile.language',
-                'job_preferences.job_alerts'
-            ], 'default_value');
-
-            // 5. Check if specific setting exists
-            $demo['has_theme'] = $user->settings()->has('profile.theme');
-            $demo['has_custom_setting'] = $user->settings()->has('custom.non_existent');
-
-            // 6. Set some test settings
-            $user->settings()->set('demo.test_setting', 'test_value');
-            $user->settings()->setMultiple([
-                'demo.setting1' => 'value1',
-                'demo.setting2' => 'value2'
-            ]);
-
-            // 7. Get updated settings
-            $demo['updated_settings'] = $user->settings()->get('demo');
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Laravel Model Settings demonstration completed',
-                'data' => [
-                    'user_id' => $user->id,
-                    'demonstration' => $demo,
-                    'package_info' => [
-                        'name' => 'glorand/laravel-model-settings',
-                        'version' => '8.0.1',
-                        'features' => [
-                            'Field-based settings (JSON column)',
-                            'Table-based settings (separate table)',
-                            'Redis-based settings',
-                            'Default settings configuration',
-                            'Validation rules enforcement',
-                            'Nested settings structure',
-                            'Multiple get/set operations',
-                            'Settings persistence control'
-                        ]
-                    ]
-                ]
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Demonstration failed',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Get settings schema/structure.
-     * 
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getSettingsSchema(Request $request): JsonResponse
-    {
-        try {
-            $userSettings = new UserSettings();
-            
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'user_settings' => [
-                        'default_settings' => $userSettings->defaultSettings,
-                        'validation_rules' => $userSettings->settingsRules,
-                    ],
-                    'package_config' => [
-                        'settings_field_name' => config('model_settings.settings_field_name'),
-                        'settings_table_name' => config('model_settings.settings_table_name'),
-                        'settings_persistent' => config('model_settings.settings_persistent'),
-                        'settings_table_use_cache' => config('model_settings.settings_table_use_cache'),
-                    ]
-                ]
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve settings schema',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return $this->updateModelSettings($request, 'companies', $companyId);
     }
 }

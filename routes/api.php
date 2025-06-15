@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\JobApiController;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ModelSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -297,31 +298,37 @@ Route::prefix('v1')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Laravel Model Settings API Routes
+| Laravel Model Settings API Routes - Comprehensive System-Wide Implementation
 |--------------------------------------------------------------------------
 | These routes demonstrate the full functionality of the glorand/laravel-model-settings
 | package with comprehensive CRUD operations for settings management.
 */
 
-Route::prefix('model-settings')->name('model-settings.')->group(function () {
-    // User Settings Routes
-    Route::prefix('users/{userId}')->name('users.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'getUserSettings'])->name('get');
-        Route::put('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'updateUserSettings'])->name('update');
-        Route::delete('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'clearUserSettings'])->name('clear');
-        
-        Route::get('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'getUserSetting'])->name('get-setting');
-        Route::put('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'setUserSetting'])->name('set-setting');
-        Route::delete('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'deleteUserSetting'])->name('delete-setting');
-    });
+Route::prefix('model-settings')->group(function () {
+    // General model settings endpoints
+    Route::get('/models', [ModelSettingsController::class, 'listSupportedModels']);
+    Route::get('/demo/comprehensive', [ModelSettingsController::class, 'comprehensiveDemo']);
     
-    // Company Settings Routes
-    Route::prefix('companies/{companyId}')->name('companies.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'getCompanySettings'])->name('get');
-        Route::put('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'updateCompanySettings'])->name('update');
-    });
+    // Dynamic model settings routes
+    Route::get('/{model}/{id}', [ModelSettingsController::class, 'getModelSettings']);
+    Route::put('/{model}/{id}', [ModelSettingsController::class, 'updateModelSettings']);
+    Route::delete('/{model}/{id}', [ModelSettingsController::class, 'clearModelSettings']);
     
-    // Demonstration and Schema Routes
-    Route::get('/demo', [App\Http\Controllers\Api\ModelSettingsController::class, 'demonstrateFeatures'])->name('demo');
-    Route::get('/schema', [App\Http\Controllers\Api\ModelSettingsController::class, 'getSettingsSchema'])->name('schema');
+    // Specific setting management
+    Route::get('/{model}/{id}/{key}', [ModelSettingsController::class, 'getSpecificSetting']);
+    Route::put('/{model}/{id}/{key}', [ModelSettingsController::class, 'setSpecificSetting']);
+    Route::delete('/{model}/{id}/{key}', [ModelSettingsController::class, 'deleteSpecificSetting']);
+    
+    // Model schema information
+    Route::get('/{model}/schema', [ModelSettingsController::class, 'getModelSchema']);
+    
+    // Legacy endpoints for backward compatibility
+    Route::get('/users/{userId}', [ModelSettingsController::class, 'getUserSettings']);
+    Route::put('/users/{userId}', [ModelSettingsController::class, 'updateUserSettings']);
+    Route::get('/companies/{companyId}', [ModelSettingsController::class, 'getCompanySettings']);
+    Route::put('/companies/{companyId}', [ModelSettingsController::class, 'updateCompanySettings']);
+    
+    // Original demo endpoints
+    Route::get('/demo', [ModelSettingsController::class, 'demo']);
+    Route::get('/schema', [ModelSettingsController::class, 'getSchema']);
 });

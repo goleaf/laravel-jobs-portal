@@ -473,6 +473,7 @@ CREATE TABLE IF NOT EXISTS "candidate_educations"(
   "field_of_study" varchar,
   "description" text,
   "is_verified" tinyint(1) not null default '0',
+  "settings" text,
   foreign key("candidate_id") references "candidates"("id") on delete cascade on update cascade,
   foreign key("degree_level_id") references "required_degree_levels"("id") on delete cascade on update cascade,
   foreign key("country_id") references "countries"("id") on delete set null on update cascade,
@@ -530,7 +531,8 @@ CREATE TABLE IF NOT EXISTS "inquiries"(
   "status" varchar not null default 'pending',
   "priority" integer not null default '1',
   "category" varchar not null default 'general',
-  "phone" varchar
+  "phone" varchar,
+  "deleted_at" datetime
 );
 CREATE TABLE IF NOT EXISTS "post_categories"(
   "id" integer primary key autoincrement not null,
@@ -714,7 +716,20 @@ CREATE TABLE IF NOT EXISTS "header_sliders"(
   "image_path" varchar,
   "deleted_at" datetime
   ,
-  "settings" text
+  "settings" text,
+  "title" varchar,
+  "sub_title" varchar,
+  "description" text,
+  "button_text" varchar,
+  "button_url" varchar,
+  "image_url" varchar,
+  "is_featured" tinyint(1) not null default '0',
+  "sort_order" integer not null default '0',
+  "target" varchar not null default '_self',
+  "css_class" varchar,
+  "metadata" text,
+  "published_at" datetime,
+  "expires_at" datetime
 );
 CREATE TABLE IF NOT EXISTS "subscriptions"(
   "id" integer primary key autoincrement not null,
@@ -1591,3 +1606,10 @@ INSERT INTO migrations VALUES(198,'2025_06_15_215857_add_settings_field_to_job_t
 INSERT INTO migrations VALUES(199,'2025_06_15_220000_add_missing_columns_to_env_settings_table',27);
 INSERT INTO migrations VALUES(200,'2025_06_15_220001_add_missing_columns_to_files_table',27);
 INSERT INTO migrations VALUES(201,'2025_06_15_220600_add_soft_deletes_to_multiple_tables',28);
+INSERT INTO migrations VALUES(202,'2025_06_15_221207_add_settings_field_to_skills_table',29);
+INSERT INTO migrations VALUES(203,'2025_06_15_221211_add_settings_field_to_job_applications_table',29);
+INSERT INTO migrations VALUES(204,'2025_06_15_221749_add_missing_columns_to_env_settings_table',29);
+INSERT INTO migrations VALUES(205,'2025_06_15_221753_add_missing_columns_to_files_table',29);
+INSERT INTO migrations VALUES(206,'2025_06_15_221757_add_soft_deletes_to_multiple_tables',29);
+INSERT INTO migrations VALUES(207,'2025_06_15_223350_add_settings_field_to_candidate_educations_table',30);
+INSERT INTO migrations VALUES(208,'2025_06_15_230000_fix_missing_table_columns',31);

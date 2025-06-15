@@ -21,7 +21,7 @@ class HeaderSliderTest extends TestCase
         $model = HeaderSlider::factory()->create();
 
         $this->assertInstanceOf(HeaderSlider::class, $model);
-        $this->assertDatabaseHas('headersliders', [
+        $this->assertDatabaseHas('header_sliders', [
             'id' => $model->id,
         ]);
     }
@@ -50,14 +50,18 @@ class HeaderSliderTest extends TestCase
     public function itCanBeUpdated()
     {
         $model = HeaderSlider::factory()->create();
-        $originalData = $model->toArray();
 
-        // Update with factory data
-        $newData = HeaderSlider::factory()->make()->toArray();
-        $model->update($newData);
+        // Update with specific fillable data to avoid appended attributes
+        $updateData = [
+            'title' => 'Updated Title',
+            'description' => 'Updated description',
+            'is_active' => !$model->is_active,
+        ];
+        $model->update($updateData);
 
-        $this->assertDatabaseHas('headersliders', [
+        $this->assertDatabaseHas('header_sliders', [
             'id' => $model->id,
+            'title' => 'Updated Title',
         ]);
     }
 
@@ -69,7 +73,7 @@ class HeaderSliderTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('headersliders', [
+        $this->assertSoftDeleted('header_sliders', [
             'id' => $modelId,
         ]);
     }

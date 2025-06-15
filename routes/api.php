@@ -61,6 +61,13 @@ require __DIR__.'/auth_universal.php';
 */
 require __DIR__.'/api_universal.php';
 
+/*
+|--------------------------------------------------------------------------
+| Settings Management API Routes (Phase 3: Advanced Integration)
+|--------------------------------------------------------------------------
+*/
+require __DIR__.'/settings-api.php';
+
 // Universal Language API Routes
 Route::group(['prefix' => 'i18n'], function () {
     // Get available languages

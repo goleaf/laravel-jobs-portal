@@ -69,7 +69,7 @@ class InquiryTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('inquiries', [
+        $this->assertSoftDeleted('inquiries', [
             'id' => $modelId,
         ]);
     }

@@ -574,7 +574,7 @@ class Job extends Model
      */
     public function featured(): MorphOne
     {
-        return $this->morphOne(FeaturedRecord::class, 'record');
+        return $this->morphOne(FeaturedRecord::class, 'owner');
     }
 
     /**
@@ -582,9 +582,9 @@ class Job extends Model
      */
     public function activeFeatured(): MorphOne
     {
-        return $this->morphOne(FeaturedRecord::class, 'record')
-                    ->where('start_date', '<=', now())
-                    ->where('end_date', '>=', now())
+        return $this->morphOne(FeaturedRecord::class, 'owner')
+                    ->where('start_time', '<=', now())
+                    ->where('end_time', '>=', now())
                     ->where('is_active', true);
     }
 

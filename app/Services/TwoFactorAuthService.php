@@ -176,19 +176,28 @@ class TwoFactorAuthService
                 return false;
             }
 
-            foreach ($backupCodes as $index => $hashedCode) {
+            // Convert to collection for enhanced manipulation
+            $backupCodesCollection = collect($backupCodes);
+            
+            foreach ($backupCodesCollection as $index => $hashedCode) {
                 if (Hash::check($code, $hashedCode)) {
-                    // Remove used backup code
-                    unset($backupCodes[$index]);
+                    // Enhanced removal with forget() - maintains collection integrity
+                    $backupCodesCollection->forget($index);
                     
                     $user->update([
-                        'two_factor_backup_codes' => Crypt::encrypt(json_encode(array_values($backupCodes)))
+                        'two_factor_backup_codes' => Crypt::encrypt($backupCodesCollection->values()->toJson())
                     ]);
 
-                    // Warn if running low on backup codes
-                    if (count($backupCodes) <= 2) {
-                        $this->logSecurityEvent('2fa_backup_codes_low', $user, ['remaining' => count($backupCodes)]);
+                    // Enhanced low backup codes alert with better notification
+                    if ($backupCodesCollection->count() <= 2) {
+                        $this->sendLowBackupCodesAlert($user, $backupCodesCollection->count());
                     }
+
+                    // Log successful backup code usage
+                    $this->logSecurityEvent('2fa_backup_code_used', $user, [
+                        'remaining' => $backupCodesCollection->count(),
+                        'code_index' => $index
+                    ]);
 
                     return true;
                 }
@@ -520,5 +529,39 @@ class TwoFactorAuthService
         }
 
         return $results;
+    }
+
+    /**
+     * Send enhanced alert when backup codes are running low.
+     */
+    protected function sendLowBackupCodesAlert($user, int $remainingCount): void
+    {
+        // Log the security event
+        $this->logSecurityEvent('2fa_backup_codes_low', $user, ['remaining' => $remainingCount]);
+
+        // Send email notification if user has email
+        if ($user->email) {
+            try {
+                \Mail::to($user->email)->send(new \App\Mail\LowBackupCodesNotification($user, $remainingCount));
+            } catch (\Exception $e) {
+                \Log::warning('Failed to send low backup codes email', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        // Create in-app notification
+        if (method_exists($user, 'notifications')) {
+            $user->notifications()->create([
+                'type' => 'low_backup_codes',
+                'data' => [
+                    'message' => "You have only {$remainingCount} backup codes remaining. Consider generating new ones.",
+                    'remaining_codes' => $remainingCount,
+                    'action_url' => route('profile.2fa.backup-codes')
+                ],
+                'read_at' => null
+            ]);
+        }
     }
 } 

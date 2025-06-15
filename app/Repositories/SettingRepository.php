@@ -78,12 +78,28 @@ class SettingRepository extends BaseRepository
      */
     public function updateSetting(array $input): bool
     {
-
-        $input['cookie_consent_enabled'] = empty($input['cookie_consent_enabled']) ? false : true;
-
-        $envSettingInputArray = Arr::only($input, [
-            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect', 'pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster', 'stripe_key', 'stripe_secret', 'stripe_webhook_key', 'paypal_client_id', 'paypal_secret', 'paystack_key', 'paystack_secret', 'paystack_payment_url', 'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect', 'cookie_consent_enabled',
+        // Enhanced setting update with Collection forget() patterns
+        $settingsData = collect($input);
+        
+        // Clean form metadata with forget()
+        $formMetadata = ['_token', '_method', 'submit', 'csrf_token', 'redirect'];
+        $settingsData->forget($formMetadata);
+        
+        // Process cookie consent
+        $settingsData->put('cookie_consent_enabled', !empty($input['cookie_consent_enabled']));
+        
+        // Define environment setting keys using collection operations
+        $envKeys = collect([
+            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect', 
+            'pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster', 
+            'stripe_key', 'stripe_secret', 'stripe_webhook_key', 
+            'paypal_client_id', 'paypal_secret', 'paystack_key', 'paystack_secret', 'paystack_payment_url', 
+            'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect', 
+            'cookie_consent_enabled'
         ]);
+        
+        // Extract environment settings using collection operations
+        $envSettingInputArray = $settingsData->only($envKeys->toArray())->toArray();
 
         foreach ($envSettingInputArray as $key => $value) {
             $value = is_null($value) ? '' : $value;

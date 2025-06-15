@@ -63,7 +63,7 @@ class CompanyRepository extends BaseRepository
     }
 
     /**
-     * Update company with enhanced data processing
+     * Update company with enhanced data processing using Collection forget()
      */
     public function updateCompany(array $input, Company $company): Company
     {
@@ -81,10 +81,82 @@ class CompanyRepository extends BaseRepository
             }
         }
 
-        // Update company data
-        $companyData = collect($input)->except(['first_name', 'last_name', 'email', 'password'])->toArray();
-        $company->update($companyData);
-
+        // Enhanced company data processing with dynamic field removal
+        $companyData = collect($input);
+        
+        // Core fields that should never be in company data
+        $coreUserFields = ['first_name', 'last_name', 'email', 'password', 'password_confirmation'];
+        $companyData->forget($coreUserFields);
+        
+        // Role-based field removal
+        $currentUser = auth()->user();
+        if ($currentUser && !$currentUser->hasRole('admin')) {
+            $adminOnlyFields = ['is_featured', 'priority_score', 'admin_notes', 'internal_rating'];
+            $companyData->forget($adminOnlyFields);
+        }
+        
+        // Subscription-based field removal
+        if ($currentUser && !$currentUser->hasActiveSubscription()) {
+            $premiumFields = ['premium_branding', 'advanced_analytics', 'priority_support'];
+            $companyData->forget($premiumFields);
+        }
+        
+        // Remove temporary/deprecated fields
+        $temporaryFields = $this->getTemporaryFields();
+        $companyData->forget($temporaryFields);
+        
+        // Log data changes for audit trail
+        $this->logCompanyDataChanges($company, $companyData->toArray());
+        
+        $company->update($companyData->toArray());
         return $company->fresh();
+    }
+
+    /**
+     * Get temporary fields that should be removed
+     */
+    protected function getTemporaryFields(): array
+    {
+        return [
+            'temp_logo_url',
+            'draft_description',
+            'legacy_company_id',
+            'import_source',
+            'session_data',
+            'cache_key'
+        ];
+    }
+
+    /**
+     * Log company data changes for audit trail
+     */
+    protected function logCompanyDataChanges(Company $company, array $newData): void
+    {
+        try {
+            $originalData = $company->toArray();
+            $changes = [];
+            
+            foreach ($newData as $key => $value) {
+                if (isset($originalData[$key]) && $originalData[$key] !== $value) {
+                    $changes[$key] = [
+                        'old' => $originalData[$key],
+                        'new' => $value
+                    ];
+                }
+            }
+            
+            if (!empty($changes)) {
+                \Log::info('Company data updated', [
+                    'company_id' => $company->id,
+                    'user_id' => auth()->id(),
+                    'changes' => $changes
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Failed to log company changes', [
+                'company_id' => $company->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

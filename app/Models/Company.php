@@ -125,16 +125,25 @@ class Company extends Model implements HasMedia
      *
      * @return array<string, string>
      */
-        protected function casts(): array
+    protected function casts(): array
     {
         return [
-
+            'user_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'industry_id' => 'integer',
+            'ownership_type_id' => 'integer',
+            'company_size_id' => 'integer',
+            'established_in' => 'integer',
+            'no_of_employees' => 'integer',
             'founded_year' => 'integer',
             'employee_count' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'is_verified' => 'boolean',
             'is_private' => 'boolean',
+            'verified_at' => 'datetime',
             'latitude' => 'decimal:6',
             'longitude' => 'decimal:6',
             'benefits' => 'array',
@@ -149,10 +158,8 @@ class Company extends Model implements HasMedia
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'founded_at' => 'date',
-        
         ];
     }
-
 
     /**
      * Scope a query to only include verified companies.
@@ -184,7 +191,10 @@ class Company extends Model implements HasMedia
      */
     public function scopeActive($query)
     {
-        return $query->where('status', 'active')->orWhere('is_active', true);
+        return $query->where(function ($query) {
+            $query->where('is_active', true)
+                  ->orWhere('status', 'active');
+        });
     }
 
     /**
@@ -195,7 +205,7 @@ class Company extends Model implements HasMedia
      */
     public function scopeInactive($query)
     {
-        return $query->where('status', '!=', 'active')->orWhere('is_active', false);
+        return $query->where('is_active', false);
     }
 
     /**
@@ -432,6 +442,54 @@ class Company extends Model implements HasMedia
                     ->where('start_date', '<=', now())
                     ->where('end_date', '>=', now())
                     ->where('is_active', true);
+    }
+
+    /**
+     * Get the country that the company belongs to.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Get the state that the company belongs to.
+     */
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    /**
+     * Get the city that the company belongs to.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Get the industry that the company belongs to.
+     */
+    public function industry(): BelongsTo
+    {
+        return $this->belongsTo(Industry::class);
+    }
+
+    /**
+     * Get the company size that the company belongs to.
+     */
+    public function companySize(): BelongsTo
+    {
+        return $this->belongsTo(CompanySize::class);
+    }
+
+    /**
+     * Get the ownership type that the company belongs to.
+     */
+    public function ownershipType(): BelongsTo
+    {
+        return $this->belongsTo(OwnershipType::class);
     }
 
     // Additional scopes and methods can be added here as needed for the job portal project

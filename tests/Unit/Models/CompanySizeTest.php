@@ -227,14 +227,28 @@ class CompanySizeTest extends TestCase
     /** @test */
     public function scope_alphabetical_orders_company_sizes_by_size_name()
     {
-        CompanySize::factory()->create(['size' => 'Zebra Company']);
-        CompanySize::factory()->create(['size' => 'Alpha Corporation']);
-        CompanySize::factory()->create(['size' => 'Beta Business']);
+        $testCompanySize1 = CompanySize::factory()->create(['size' => 'Zebra Company']);
+        $testCompanySize2 = CompanySize::factory()->create(['size' => 'Alpha Corporation']);
+        $testCompanySize3 = CompanySize::factory()->create(['size' => 'Beta Business']);
         
         $orderedCompanySizes = CompanySize::alphabetical()->get();
         
-        $this->assertEquals('Alpha Corporation', $orderedCompanySizes->first()->size);
-        $this->assertEquals('Zebra Company', $orderedCompanySizes->last()->size);
+        // Find positions of our test company sizes
+        $alphaPosition = $orderedCompanySizes->search(function ($companySize) use ($testCompanySize2) {
+            return $companySize->id === $testCompanySize2->id;
+        });
+        
+        $betaPosition = $orderedCompanySizes->search(function ($companySize) use ($testCompanySize3) {
+            return $companySize->id === $testCompanySize3->id;
+        });
+        
+        $zebraPosition = $orderedCompanySizes->search(function ($companySize) use ($testCompanySize1) {
+            return $companySize->id === $testCompanySize1->id;
+        });
+        
+        // Alpha should come before Beta, and Beta should come before Zebra
+        $this->assertLessThan($betaPosition, $alphaPosition, 'Alpha Corporation should come before Beta Business');
+        $this->assertLessThan($zebraPosition, $betaPosition, 'Beta Business should come before Zebra Company');
     }
 
     /** @test */

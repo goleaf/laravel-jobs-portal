@@ -188,7 +188,7 @@ class CompanySize extends Model
      */
     public function scopeAlphabetical($query)
     {
-        return $query->orderBy('name', 'asc');
+        return $query->orderBy('size', 'asc');
     }
 
     /**

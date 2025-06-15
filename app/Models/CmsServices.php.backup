@@ -319,41 +319,28 @@ class CmsServices extends Model implements HasMedia
     }
 
     /**
-     * Clear cache by pattern - Fixed to handle different cache stores.
+     * Clear cache by pattern.
      */
     private function clearCachePattern(string $pattern): void
     {
         $store = Cache::getStore();
         
-        // Only use Redis pattern clearing if we are actually using Redis
+        // Only use Redis pattern clearing if we're actually using Redis
         if (method_exists($store, 'getRedis') && method_exists($store, 'connection')) {
             try {
                 $redis = $store->getRedis();
-                if (method_exists($redis, 'keys')) {
-                    $keys = $redis->keys($pattern);
-                    if (!empty($keys)) {
-                        $redis->del($keys);
-                    }
+                $keys = $redis->keys($pattern);
+                if (!empty($keys)) {
+                    $redis->del($keys);
                 }
             } catch (\Exception $e) {
-                // Fallback to individual cache clearing
-                $this->fallbackCacheClear();
+                // Fallback to standard cache clearing for non-Redis stores
+                Cache::flush();
             }
         } else {
-            // For non-Redis stores (like array store in tests), use individual clearing
-            $this->fallbackCacheClear();
+            // For non-Redis stores (like array store in tests), just flush all
+            Cache::flush();
         }
-    }
-
-    /**
-     * Fallback cache clearing method.
-     */
-    private function fallbackCacheClear(): void
-    {
-        // Clear specific known cache keys instead of using patterns
-        Cache::forget('cms_services_active');
-        Cache::forget('cms_services_featured');
-        Cache::forget("cms_service_key_{$this->key}");
     }
 
     // =============================================

@@ -69,7 +69,7 @@ class CandidateModelTest extends TestCase
         $casts = $candidate->getCasts();
 
         $expectedCasts = [
-            'id' => 'integer',
+            'id' => 'integer',  // Laravel 12 returns 'integer' not 'int'
             'user_id' => 'integer',
             'marital_status_id' => 'integer',
             'career_level_id' => 'integer',

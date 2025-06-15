@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 /**
- * Country Model - Enhanced with Enhanced patterns
+ * Country Model - Enhanced with Context7 patterns
  *
  * @property int $id
  * @property string $name
@@ -33,7 +33,6 @@ use Spatie\Activitylog\LogOptions;
  * @property array|null $languages
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\State[] $states
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
@@ -128,9 +127,7 @@ class Country extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'deleted_at',
-    ];
+    protected $hidden = [];
 
     /**
      * Get the attributes that should be cast.
@@ -148,7 +145,6 @@ class Country extends Model
             'languages' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -1002,10 +998,6 @@ class Country extends Model
         });
 
         static::deleted(function ($country) {
-            $country->clearCaches();
-        });
-
-        static::restored(function ($country) {
             $country->clearCaches();
         });
     }

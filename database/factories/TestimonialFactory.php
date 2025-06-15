@@ -28,8 +28,51 @@ class TestimonialFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_name' => fake()->word(),
-            'description' => fake()->paragraph()
+            'customer_name' => fake()->name(),
+            'customer_title' => fake()->jobTitle(),
+            'customer_company' => fake()->company(),
+            'customer_email' => fake()->email(),
+            'description' => fake()->paragraph(),
+            'rating' => fake()->numberBetween(1, 5),
+            'is_active' => fake()->boolean(80),
+            'is_featured' => fake()->boolean(20),
+            'is_verified' => fake()->boolean(70),
+            'location' => fake()->city(),
+            'project_type' => fake()->randomElement(['web_development', 'mobile_development', 'design', 'consulting', 'other']),
+            'sort_order' => fake()->numberBetween(1, 100),
+            'testimonial_date' => fake()->dateTimeBetween('-2 years', 'now'),
         ];
+    }
+
+    /**
+     * Make a featured testimonial.
+     */
+    public function featured(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_featured' => true,
+            'is_active' => true,
+            'is_verified' => true,
+        ]);
+    }
+
+    /**
+     * Make an active testimonial.
+     */
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Make an inactive testimonial.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
     }
 }

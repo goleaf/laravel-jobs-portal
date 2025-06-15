@@ -789,8 +789,5 @@ class Setting extends Model
             $setting->clearCaches();
         });
 
-        static::restored(function ($setting) {
-            $setting->clearCaches();
-        });
     }
 }

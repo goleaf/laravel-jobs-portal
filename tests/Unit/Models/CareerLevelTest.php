@@ -112,6 +112,9 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_active_returns_active_career_levels()
     {
+        // Ensure clean state by truncating table
+        CareerLevel::truncate();
+        
         CareerLevel::factory()->count(3)->create(['is_active' => true]);
         CareerLevel::factory()->count(2)->create(['is_active' => false]);
         

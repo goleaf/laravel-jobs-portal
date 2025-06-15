@@ -6,7 +6,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Spatie\ActivityLog\Traits\LogsActivity;
@@ -28,7 +27,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property array|null $metadata
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
  *
  * @property-read MediaCollection|Media[] $media
  * @property-read int|null $media_count
@@ -53,7 +51,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class FrontSetting extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, LogsActivity;
+    use HasFactory, InteractsWithMedia, LogsActivity;
 
     /**
      * The table associated with the model.
@@ -86,7 +84,6 @@ class FrontSetting extends Model implements HasMedia
      * The attributes that should be hidden for serialization.
      */
     protected $hidden = [
-        'deleted_at',
     ];
 
     /**
@@ -101,7 +98,6 @@ class FrontSetting extends Model implements HasMedia
             'metadata' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 

@@ -257,4 +257,71 @@ Route::prefix('v1')->group(function () {
         Route::delete('job-types/{jobType}', [JobTypeController::class, 'destroy']);
         Route::get('job-types/statistics', [JobTypeController::class, 'statistics']);
     });
+
+    /**
+     * ELOQUENT HAS MANY DEEP INTEGRATION ROUTES
+     * 
+     * Package: staudenmeir/eloquent-has-many-deep v1.21
+     * Source: https://github.com/staudenmeir/eloquent-has-many-deep
+     * Reference: https://madewithlaravel.com/eloquent-has-many-deep
+     * 
+     * These routes demonstrate complex multi-level relationships
+     * that replace multiple queries with single optimized calls.
+     */
+    Route::middleware(['auth:sanctum'])->prefix('deep-relationships')->group(function () {
+        // User Location Jobs: User -> Country -> State -> City -> Jobs
+        Route::get('/location-jobs', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getUserLocationJobs'])
+            ->name('api.deep.location-jobs');
+        
+        // Company Applications: User -> Company -> Jobs -> JobApplications  
+        Route::get('/company-applications', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getCompanyApplications'])
+            ->name('api.deep.company-applications');
+        
+        // Region Candidates: User -> Country -> State -> City -> Users (Candidates)
+        Route::get('/region-candidates', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getRegionCandidates'])
+            ->name('api.deep.region-candidates');
+        
+        // Applied Skills: User -> JobApplications -> Jobs -> JobSkills -> Skills
+        Route::get('/applied-skills', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getCandidateAppliedSkills'])
+            ->name('api.deep.applied-skills');
+        
+        // Similar Candidates: User -> JobApplications -> Jobs -> JobApplications -> Users
+        Route::get('/similar-candidates', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getSimilarCandidates'])
+            ->name('api.deep.similar-candidates');
+        
+        // Comprehensive Analytics using multiple deep relationships
+        Route::get('/analytics', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getDeepAnalytics'])
+            ->name('api.deep.analytics');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Laravel Model Settings API Routes
+|--------------------------------------------------------------------------
+| These routes demonstrate the full functionality of the glorand/laravel-model-settings
+| package with comprehensive CRUD operations for settings management.
+*/
+
+Route::prefix('model-settings')->name('model-settings.')->group(function () {
+    // User Settings Routes
+    Route::prefix('users/{userId}')->name('users.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'getUserSettings'])->name('get');
+        Route::put('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'updateUserSettings'])->name('update');
+        Route::delete('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'clearUserSettings'])->name('clear');
+        
+        Route::get('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'getUserSetting'])->name('get-setting');
+        Route::put('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'setUserSetting'])->name('set-setting');
+        Route::delete('/{key}', [App\Http\Controllers\Api\ModelSettingsController::class, 'deleteUserSetting'])->name('delete-setting');
+    });
+    
+    // Company Settings Routes
+    Route::prefix('companies/{companyId}')->name('companies.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'getCompanySettings'])->name('get');
+        Route::put('/', [App\Http\Controllers\Api\ModelSettingsController::class, 'updateCompanySettings'])->name('update');
+    });
+    
+    // Demonstration and Schema Routes
+    Route::get('/demo', [App\Http\Controllers\Api\ModelSettingsController::class, 'demonstrateFeatures'])->name('demo');
+    Route::get('/schema', [App\Http\Controllers\Api\ModelSettingsController::class, 'getSettingsSchema'])->name('schema');
 });

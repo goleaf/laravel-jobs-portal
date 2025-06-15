@@ -13,6 +13,7 @@
         "blade-ui-kit/blade-heroicons": "^2.6",
         "blade-ui-kit/blade-icons": "^1.8",
         "darkaonline/l5-swagger": "^9.0",
+        "glorand/laravel-model-settings": "^8.0",
         "guzzlehttp/guzzle": "^7.9",
         "laravel/cashier": "^15.0",
         "laravel/framework": "^12.17",

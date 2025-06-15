@@ -21,6 +21,8 @@ use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Traits\HasDeepJobPortalRelationships;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 
 /**
  * App\Models\User.
@@ -44,6 +46,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property null|string                       $remember_token
  * @property null|Carbon                       $created_at
  * @property null|Carbon                       $updated_at
+ * @property null|array                        $settings
  * @property null|Candidate                    $candidate
  * @property Collection|Skill[]                $candidateSkill
  * @property null|int                          $candidate_skill_count
@@ -72,7 +75,10 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     use InteractsWithMedia;
     use Notifiable;
     use SoftDeletes;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use HasRelationships;
+    use HasDeepJobPortalRelationships;
+    use HasSettingsField;
 
     public const DARK_MODE = 1;
     public const LIGHT_MODE = 0;
@@ -523,4 +529,258 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     }
 
     // Additional scopes and methods from the original file can be added here as needed for the job portal project
+
+    /**
+     * DEEP RELATIONSHIPS USING ELOQUENT HAS MANY DEEP
+     * 
+     * Package: staudenmeir/eloquent-has-many-deep v1.21
+     * Source: https://github.com/staudenmeir/eloquent-has-many-deep
+     * Reference: https://madewithlaravel.com/eloquent-has-many-deep
+     * 
+     * These methods provide complex multi-level relationships
+     * for advanced querying in the job portal system.
+     */
+
+    /**
+     * Get all jobs in the user's location (Country->State->City->Jobs).
+     * 
+     * This allows finding all jobs available in a user's location
+     * without complex joins or multiple queries.
+     * 
+     * Usage: $user->locationJobs()->where('is_active', true)->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function locationJobs()
+    {
+        return $this->hasManyDeep(
+            \App\Models\Job::class,
+            [\App\Models\Country::class, \App\Models\State::class, \App\Models\City::class],
+            [
+                'id',        // User.country_id = Country.id
+                'country_id', // Country.id = State.country_id  
+                'state_id',  // State.id = City.state_id
+                'city_id'    // City.id = Job.city_id
+            ],
+            [
+                'country_id', // User.country_id
+                'id',        // Country.id
+                'id',        // State.id  
+                'id'         // City.id
+            ]
+        );
+    }
+
+    /**
+     * Get all job applications for jobs in user's company.
+     * 
+     * Path: User -> Company -> Jobs -> JobApplications
+     * Perfect for employers to see all applications across all their jobs.
+     * 
+     * Usage: $employer->companyJobApplications()->with('candidate')->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function companyJobApplications()
+    {
+        return $this->hasManyDeep(
+            \App\Models\JobApplication::class,
+            [\App\Models\Company::class, \App\Models\Job::class],
+            [
+                'id',         // User.id = Company.user_id
+                'company_id', // Company.id = Job.company_id
+                'job_id'      // Job.id = JobApplication.job_id
+            ],
+            [
+                'id',         // User.id
+                'user_id',    // Company.user_id  
+                'id'          // Job.id
+            ]
+        );
+    }
+
+    /**
+     * Get all candidates in the same region.
+     * 
+     * Path: User -> Country -> State -> City -> Users (Candidates)
+     * Useful for finding local talent or networking.
+     * 
+     * Usage: $user->regionCandidates()->active()->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function regionCandidates()
+    {
+        return $this->hasManyDeep(
+            \App\Models\User::class,
+            [\App\Models\Country::class, \App\Models\State::class, \App\Models\City::class],
+            [
+                'id',        // User.country_id = Country.id
+                'country_id', // Country.id = State.country_id
+                'state_id',  // State.id = City.state_id  
+                'city_id'    // City.id = User.city_id
+            ],
+            [
+                'country_id', // User.country_id
+                'id',        // Country.id
+                'id',        // State.id
+                'id'         // City.id
+            ]
+        )->where('users.id', '!=', $this->id)
+         ->whereHas('candidate'); // Only candidates
+    }
+
+    /**
+     * Get all skills through job applications.
+     * 
+     * Path: User -> JobApplications -> Jobs -> JobSkills -> Skills
+     * Shows all skills required for jobs a candidate has applied to.
+     * 
+     * Usage: $candidate->appliedJobSkills()->distinct()->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function appliedJobSkills()
+    {
+        return $this->hasManyDeep(
+            \App\Models\Skill::class,
+            [\App\Models\JobApplication::class, \App\Models\Job::class, 'job_skill'],
+            [
+                'id',      // User.id = JobApplication.candidate_id
+                'job_id',  // JobApplication.job_id = Job.id
+                'job_id',  // Job.id = job_skill.job_id
+                'skill_id' // job_skill.skill_id = Skill.id
+            ],
+            [
+                'id',          // User.id  
+                'candidate_id', // JobApplication.candidate_id
+                'id',          // Job.id
+                'id'           // Skill.id
+            ]
+        );
+    }
+
+    /**
+     * Get similar candidates who applied to same jobs.
+     * 
+     * Path: User -> JobApplications -> Jobs -> JobApplications -> Users
+     * Great for networking with candidates who have similar interests.
+     * 
+     * Usage: $candidate->similarCandidates()->limit(10)->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function similarCandidates()
+    {
+        return $this->hasManyDeep(
+            \App\Models\User::class,
+            [\App\Models\JobApplication::class, \App\Models\Job::class, \App\Models\JobApplication::class],
+            [
+                'id',          // User.id = JobApplication.candidate_id
+                'job_id',      // JobApplication.job_id = Job.id
+                'id',          // Job.id = JobApplication.job_id
+                'candidate_id' // JobApplication.candidate_id = User.id
+            ],
+            [
+                'id',          // User.id
+                'candidate_id', // JobApplication.candidate_id
+                'id',          // Job.id
+                'job_id'       // JobApplication.job_id
+            ]
+        )->where('users.id', '!=', $this->id) // Exclude self
+         ->distinct(); // Avoid duplicates
+    }
+
+    /**
+     * Default settings for User model.
+     * 
+     * These settings provide user preferences and configuration options
+     * that can be customized per user without database schema changes.
+     * 
+     * @return array
+     */
+    public $defaultSettings = [
+        'profile' => [
+            'theme' => 'light',
+            'language' => 'en',
+            'timezone' => 'UTC',
+            'notifications_enabled' => true,
+            'email_notifications' => true,
+            'sms_notifications' => false,
+            'profile_visibility' => 'public',
+            'show_email' => false,
+            'show_phone' => false,
+        ],
+        'job_preferences' => [
+            'job_alerts' => true,
+            'preferred_job_types' => [],
+            'preferred_locations' => [],
+            'salary_range' => [
+                'min' => 0,
+                'max' => 999999,
+                'currency' => 'USD'
+            ],
+            'remote_work' => false,
+            'travel_willingness' => 0, // 0-100%
+        ],
+        'privacy' => [
+            'profile_searchable' => true,
+            'allow_recruiter_contact' => true,
+            'show_activity_status' => true,
+            'data_sharing_consent' => false,
+        ],
+        'dashboard' => [
+            'widgets' => [
+                'recent_jobs' => true,
+                'applications_status' => true,
+                'profile_views' => true,
+                'recommendations' => true,
+            ],
+            'layout' => 'grid',
+            'items_per_page' => 10,
+        ]
+    ];
+
+    /**
+     * Validation rules for settings data.
+     * 
+     * These rules ensure data integrity when updating user settings
+     * and provide clear validation messages for the frontend.
+     * 
+     * @return array
+     */
+    public $settingsRules = [
+        'profile' => 'array',
+        'profile.theme' => 'string|in:light,dark,auto',
+        'profile.language' => 'string|in:en,es,fr,de,pt,ru,ar,zh,tr',
+        'profile.timezone' => 'string|timezone',
+        'profile.notifications_enabled' => 'boolean',
+        'profile.email_notifications' => 'boolean',
+        'profile.sms_notifications' => 'boolean',
+        'profile.profile_visibility' => 'string|in:public,private,contacts',
+        'profile.show_email' => 'boolean',
+        'profile.show_phone' => 'boolean',
+        
+        'job_preferences' => 'array',
+        'job_preferences.job_alerts' => 'boolean',
+        'job_preferences.preferred_job_types' => 'array',
+        'job_preferences.preferred_locations' => 'array',
+        'job_preferences.salary_range' => 'array',
+        'job_preferences.salary_range.min' => 'integer|min:0',
+        'job_preferences.salary_range.max' => 'integer|min:0',
+        'job_preferences.salary_range.currency' => 'string|size:3',
+        'job_preferences.remote_work' => 'boolean',
+        'job_preferences.travel_willingness' => 'integer|min:0|max:100',
+        
+        'privacy' => 'array',
+        'privacy.profile_searchable' => 'boolean',
+        'privacy.allow_recruiter_contact' => 'boolean',
+        'privacy.show_activity_status' => 'boolean',
+        'privacy.data_sharing_consent' => 'boolean',
+        
+        'dashboard' => 'array',
+        'dashboard.widgets' => 'array',
+        'dashboard.layout' => 'string|in:grid,list',
+        'dashboard.items_per_page' => 'integer|min:5|max:100',
+    ];
 }

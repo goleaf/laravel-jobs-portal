@@ -12,7 +12,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // Temporarily disabled to fix memory issues
+        // Laravel Defibrillator Health Monitoring
+        $schedule->command('defibrillator:check')->everyFiveMinutes()->withoutOverlapping();
+        
+        // Laravel Health package monitoring  
+        $schedule->command('health:check')->everyMinute()->withoutOverlapping();
+        
+        // Original disabled commands (kept commented due to memory issues)
         // $schedule->command('cache:prune-stale-tags')->hourly();
         // $schedule->command('delete:expired-featured-company')->daily();
     }
@@ -33,6 +39,7 @@ class Kernel extends ConsoleKernel
         // Add the TranslationCommand to the commands array
         $this->commands = array_merge($this->commands, [
             Commands\TranslationCommand::class,
+            Commands\SystemHealthCheck::class, // Laravel Defibrillator command
         ]);
 
         require base_path('routes/console.php');

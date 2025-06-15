@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Cache;
 
 /*
 |--------------------------------------------------------------------------
@@ -1841,4 +1842,25 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         ->name('terms.reorder');
     Route::post('terms/bulk-action', [TermController::class, 'bulkAction'])
         ->name('terms.bulk-action');
+});
+
+// Laravel Defibrillator Health Check Routes
+Route::prefix('health')->name('health.')->group(function () {
+    Route::get('/', [App\Http\Controllers\HealthCheckController::class, 'index'])->name('index');
+    Route::get('/ping', [App\Http\Controllers\HealthCheckController::class, 'ping'])->name('ping');
+    Route::get('/detailed', [App\Http\Controllers\HealthCheckController::class, 'detailed'])->name('detailed');
+    Route::get('/heartbeat', [App\Http\Controllers\HealthCheckController::class, 'heartbeat'])->name('heartbeat');
+    Route::post('/check', [App\Http\Controllers\HealthCheckController::class, 'check'])->name('check');
+});
+
+// Laravel Defibrillator System Monitoring Routes (Admin only)
+Route::middleware(['auth', 'role:admin'])->prefix('defibrillator')->name('defibrillator.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('defibrillator.dashboard');
+    })->name('dashboard');
+    
+    Route::get('/metrics', function () {
+        $healthStatus = Cache::get('defibrillator:last_health_check');
+        return response()->json($healthStatus);
+    })->name('metrics');
 });

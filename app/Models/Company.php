@@ -18,6 +18,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 
 /**
  * Class Company.
@@ -67,6 +69,7 @@ class Company extends Model implements HasMedia
     use InteractsWithMedia;
     use HasSlug;
     use HasTaxonomy;
+    use HasSettingsField;
 
     public const COMPANY_LOGIN_TYPE = 0;
     public const ISACTIVE = 1;
@@ -686,6 +689,219 @@ class Company extends Model implements HasMedia
             'founded_at' => 'date',
         ];
     }
+
+    /**
+     * ELOQUENT HAS MANY DEEP INTEGRATION
+     * 
+     * Package: staudenmeir/eloquent-has-many-deep v1.21
+     * Source: https://github.com/staudenmeir/eloquent-has-many-deep
+     * Reference: https://madewithlaravel.com/eloquent-has-many-deep
+     * 
+     * Deep relationships for advanced company analytics and querying.
+     */
+
+    /**
+     * Get all candidates who applied to company jobs.
+     * 
+     * Path: Company -> Jobs -> JobApplications -> Users (Candidates)
+     * 
+     * This replaces multiple queries with a single optimized relationship.
+     * 
+     * Usage: $company->jobApplicants()->with('candidate')->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function jobApplicants()
+    {
+        return $this->hasManyDeep(
+            \App\Models\User::class,
+            [\App\Models\Job::class, \App\Models\JobApplication::class],
+            [
+                'company_id',  // Company.id = Job.company_id
+                'job_id',      // Job.id = JobApplication.job_id
+                'candidate_id' // JobApplication.candidate_id = User.id
+            ],
+            [
+                'id',          // Company.id
+                'id',          // Job.id
+                'id'           // User.id
+            ]
+        )->distinct();
+    }
+
+    /**
+     * Get all skills required across company jobs.
+     * 
+     * Path: Company -> Jobs -> JobSkills -> Skills
+     * 
+     * Shows all skills the company is hiring for.
+     * 
+     * Usage: $company->requiredSkills()->orderBy('name')->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function requiredSkills()
+    {
+        return $this->hasManyDeep(
+            \App\Models\Skill::class,
+            [\App\Models\Job::class, 'job_skill'],
+            [
+                'company_id', // Company.id = Job.company_id
+                'job_id',     // Job.id = job_skill.job_id
+                'skill_id'    // job_skill.skill_id = Skill.id
+            ],
+            [
+                'id',         // Company.id
+                'id',         // Job.id
+                'id'          // Skill.id
+            ]
+        )->distinct();
+    }
+
+    /**
+     * Get companies in same industry and location.
+     * 
+     * Path: Company -> Industry -> Companies (in same city)
+     * 
+     * Find local competitors in the same industry.
+     * 
+     * Usage: $company->localCompetitors()->active()->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function localCompetitors()
+    {
+        return $this->hasManyDeep(
+            \App\Models\Company::class,
+            [\App\Models\Industry::class],
+            [
+                'industry_id', // Company.industry_id = Industry.id
+                'id'          // Industry.id = Company.industry_id
+            ],
+            [
+                'id',         // Company.id
+                'industry_id' // Industry.industry_id
+            ]
+        )->where('companies.city_id', $this->city_id)
+         ->where('companies.id', '!=', $this->id);
+    }
+
+    /**
+     * Get all regions where company has received applications.
+     * 
+     * Path: Company -> Jobs -> JobApplications -> Users -> Cities
+     * 
+     * Shows geographic reach of company's talent attraction.
+     * 
+     * Usage: $company->applicantRegions()->get()
+     * 
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function applicantRegions()
+    {
+        return $this->hasManyDeep(
+            \App\Models\City::class,
+            [\App\Models\Job::class, \App\Models\JobApplication::class, \App\Models\User::class],
+            [
+                'company_id',  // Company.id = Job.company_id
+                'job_id',      // Job.id = JobApplication.job_id
+                'candidate_id', // JobApplication.candidate_id = User.id
+                'city_id'      // User.city_id = City.id
+            ],
+            [
+                'id',          // Company.id
+                'id',          // Job.id
+                'id',          // User.id
+                'id'           // City.id
+            ]
+        )->distinct();
+    }
+
+    /**
+     * Default settings for Company model.
+     * 
+     * These settings provide company-specific configuration options
+     * for branding, recruitment preferences, and operational settings.
+     * 
+     * @var array
+     */
+    public $defaultSettings = [
+        'branding' => [
+            'primary_color' => '#007bff',
+            'secondary_color' => '#6c757d',
+            'logo_style' => 'standard',
+            'company_tagline' => '',
+            'brand_voice' => 'professional',
+        ],
+        'recruitment' => [
+            'auto_publish_jobs' => false,
+            'application_deadline_days' => 30,
+            'require_cover_letter' => false,
+            'allow_remote_applications' => true,
+            'screening_questions_enabled' => false,
+            'interview_scheduling_enabled' => true,
+            'candidate_rating_system' => true,
+        ],
+        'notifications' => [
+            'new_applications' => true,
+            'application_status_updates' => true,
+            'job_expiry_reminders' => true,
+            'weekly_analytics' => false,
+            'candidate_recommendations' => true,
+        ],
+        'privacy' => [
+            'company_profile_public' => true,
+            'show_employee_count' => true,
+            'show_salary_ranges' => false,
+            'allow_anonymous_reviews' => false,
+            'data_retention_months' => 24,
+        ],
+        'features' => [
+            'job_analytics' => true,
+            'candidate_search' => true,
+            'bulk_messaging' => false,
+            'custom_application_forms' => false,
+            'integration_ats' => false,
+        ]
+    ];
+
+    /**
+     * Validation rules for company settings data.
+     * 
+     * @var array
+     */
+    public $settingsRules = [
+        'branding.primary_color' => 'string|regex:/^#[0-9A-Fa-f]{6}$/',
+        'branding.secondary_color' => 'string|regex:/^#[0-9A-Fa-f]{6}$/',
+        'branding.logo_style' => 'string|in:standard,minimal,modern,classic',
+        'branding.brand_voice' => 'string|in:professional,casual,friendly,corporate',
+        
+        'recruitment.auto_publish_jobs' => 'boolean',
+        'recruitment.application_deadline_days' => 'integer|min:1|max:365',
+        'recruitment.require_cover_letter' => 'boolean',
+        'recruitment.allow_remote_applications' => 'boolean',
+        'recruitment.screening_questions_enabled' => 'boolean',
+        'recruitment.interview_scheduling_enabled' => 'boolean',
+        'recruitment.candidate_rating_system' => 'boolean',
+        
+        'notifications.new_applications' => 'boolean',
+        'notifications.application_status_updates' => 'boolean',
+        'notifications.job_expiry_reminders' => 'boolean',
+        'notifications.weekly_analytics' => 'boolean',
+        'notifications.candidate_recommendations' => 'boolean',
+        
+        'privacy.company_profile_public' => 'boolean',
+        'privacy.show_employee_count' => 'boolean',
+        'privacy.show_salary_ranges' => 'boolean',
+        'privacy.allow_anonymous_reviews' => 'boolean',
+        'privacy.data_retention_months' => 'integer|min:1|max:120',
+        
+        'features.job_analytics' => 'boolean',
+        'features.candidate_search' => 'boolean',
+        'features.bulk_messaging' => 'boolean',
+        'features.custom_application_forms' => 'boolean',
+        'features.integration_ats' => 'boolean',
+    ];
 
     // Additional scopes and methods can be added here as needed for the job portal project
 }

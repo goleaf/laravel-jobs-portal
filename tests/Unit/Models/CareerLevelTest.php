@@ -199,6 +199,9 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_recent_returns_recently_created_career_levels()
     {
+        // Ensure clean state by truncating table
+        CareerLevel::truncate();
+        
         // Create old career levels
         CareerLevel::factory()->count(2)->create(['created_at' => now()->subDays(60)]);
         

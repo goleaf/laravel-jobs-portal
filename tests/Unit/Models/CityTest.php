@@ -105,7 +105,12 @@ class CityTest extends TestCase
             'deleted_at' => 'datetime'
         ];
 
-        $this->assertEquals($expected, $this->city->getCasts());
+        $casts = $this->city->getCasts();
+        
+        // Remove auto-generated Laravel casts to focus on model-defined casts
+        unset($casts['id']);
+        
+        $this->assertEquals($expected, $casts);
     }
 
     /** @test */

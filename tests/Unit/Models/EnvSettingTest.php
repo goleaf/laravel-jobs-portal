@@ -21,7 +21,7 @@ class EnvSettingTest extends TestCase
         $model = EnvSetting::factory()->create();
 
         $this->assertInstanceOf(EnvSetting::class, $model);
-        $this->assertDatabaseHas('envsettings', [
+        $this->assertDatabaseHas('env_settings', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class EnvSettingTest extends TestCase
         $newData = EnvSetting::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('envsettings', [
+        $this->assertDatabaseHas('env_settings', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class EnvSettingTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('envsettings', [
+        $this->assertSoftDeleted('env_settings', [
             'id' => $modelId,
         ]);
     }

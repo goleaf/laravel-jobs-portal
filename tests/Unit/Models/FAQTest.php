@@ -50,14 +50,20 @@ class FAQTest extends TestCase
     public function itCanBeUpdated()
     {
         $model = FAQ::factory()->create();
-        $originalData = $model->toArray();
 
-        // Update with factory data
-        $newData = FAQ::factory()->make()->toArray();
-        $model->update($newData);
+        // Update with only database fields, not computed properties
+        $updateData = [
+            'title' => 'Updated FAQ Title',
+            'description' => 'Updated FAQ Description', 
+            'category' => 'updated',
+            'is_active' => true,
+        ];
+        
+        $model->update($updateData);
 
         $this->assertDatabaseHas('faqs', [
             'id' => $model->id,
+            'title' => 'Updated FAQ Title',
         ]);
     }
 
@@ -69,7 +75,7 @@ class FAQTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('faqs', [
+        $this->assertSoftDeleted('faqs', [
             'id' => $modelId,
         ]);
     }

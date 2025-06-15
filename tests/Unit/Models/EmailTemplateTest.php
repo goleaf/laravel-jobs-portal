@@ -21,7 +21,7 @@ class EmailTemplateTest extends TestCase
         $model = EmailTemplate::factory()->create();
 
         $this->assertInstanceOf(EmailTemplate::class, $model);
-        $this->assertDatabaseHas('emailtemplates', [
+        $this->assertDatabaseHas('email_templates', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class EmailTemplateTest extends TestCase
         $newData = EmailTemplate::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('emailtemplates', [
+        $this->assertDatabaseHas('email_templates', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class EmailTemplateTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('emailtemplates', [
+        $this->assertSoftDeleted('email_templates', [
             'id' => $modelId,
         ]);
     }

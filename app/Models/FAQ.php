@@ -139,9 +139,6 @@ class FAQ extends Model
         'tags',
         'meta',
         'published_at',
-        'category_label',
-        'helpfulness_ratio',
-        'excerpt',
     ];
 
     /**

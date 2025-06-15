@@ -38,6 +38,7 @@
         "spatie/laravel-ray": "^1.40",
         "spatie/laravel-sluggable": "^3.7",
         "spatie/laravel-translatable": "^6.11",
+        "staudenmeir/eloquent-has-many-deep": "^1.21",
         "stripe/stripe-php": "^16.2",
         "tymon/jwt-auth": "^2.2",
         "wireui/wireui": "^2.4"

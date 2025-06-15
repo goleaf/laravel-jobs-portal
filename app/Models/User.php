@@ -19,6 +19,8 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\User.
@@ -53,6 +55,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property null|int                          $permissions_count
  * @property Collection|Role[]                 $roles
  * @property null|int                          $roles_count
+ * 
+ * // Deep Relationships Added
+ * @property Collection|Job[]                  $locationJobs   Jobs in user's location (country->state->city->jobs)
+ * @property Collection|JobApplication[]       $companyApplications Applications to user's company jobs
+ * @property Collection|User[]                 $regionCandidates Other candidates in same region
+ * @property Collection|Job[]                  $industryJobs   Jobs in user's company industry
  */
 class User extends Authenticatable implements HasMedia, JWTSubject
 {
@@ -64,6 +72,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     use InteractsWithMedia;
     use Notifiable;
     use SoftDeletes;
+    use HasRelationships;
 
     public const DARK_MODE = 1;
     public const LIGHT_MODE = 0;

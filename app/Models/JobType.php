@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,6 +64,7 @@ class JobType extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use HasSettingsField;
 
     /**
      * The attributes that are mass assignable.
@@ -95,6 +97,67 @@ class JobType extends Model
         'sort_order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+    ];
+
+    /**
+     * Default settings for job type model.
+     */
+    public $defaultSettings = [
+        'display' => [
+            'show_in_filters' => true,
+            'show_job_count' => true,
+            'show_description' => true,
+            'show_icon' => true,
+            'color_scheme' => 'default',
+            'featured_placement' => false,
+            'priority_order' => 0,
+        ],
+        'filtering' => [
+            'enable_filtering' => true,
+            'default_sort' => 'name',
+            'group_similar_types' => false,
+            'min_jobs_to_show' => 1,
+            'hide_empty_types' => false,
+        ],
+        'features' => [
+            'enable_job_alerts' => true,
+            'enable_saved_searches' => true,
+            'enable_salary_insights' => true,
+            'premium_features_enabled' => false,
+        ],
+        'analytics' => [
+            'track_views' => true,
+            'track_applications' => true,
+            'google_analytics_enabled' => false,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'display.show_in_filters' => 'boolean',
+        'display.show_job_count' => 'boolean',
+        'display.show_description' => 'boolean',
+        'display.show_icon' => 'boolean',
+        'display.color_scheme' => 'string|in:default,blue,green,red,purple',
+        'display.featured_placement' => 'boolean',
+        'display.priority_order' => 'integer|min:0|max:100',
+        
+        'filtering.enable_filtering' => 'boolean',
+        'filtering.default_sort' => 'string|in:name,job_count,recent,popular',
+        'filtering.group_similar_types' => 'boolean',
+        'filtering.min_jobs_to_show' => 'integer|min:0|max:100',
+        'filtering.hide_empty_types' => 'boolean',
+        
+        'features.enable_job_alerts' => 'boolean',
+        'features.enable_saved_searches' => 'boolean',
+        'features.enable_salary_insights' => 'boolean',
+        'features.premium_features_enabled' => 'boolean',
+        
+        'analytics.track_views' => 'boolean',
+        'analytics.track_applications' => 'boolean',
+        'analytics.google_analytics_enabled' => 'boolean',
     ];
 
     /**

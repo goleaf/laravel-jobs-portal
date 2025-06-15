@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,6 +67,7 @@ class JobCategory extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use HasSettingsField;
 
     /**
      * Media path constant for file uploads
@@ -107,6 +109,131 @@ class JobCategory extends Model
         'parent_id' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+    ];
+
+    /**
+     * Default settings for job category model.
+     */
+    public $defaultSettings = [
+        'display' => [
+            'show_in_navigation' => true,
+            'show_job_count' => true,
+            'show_description' => true,
+            'show_icon' => true,
+            'layout' => 'grid', // grid, list, card
+            'color_scheme' => 'default',
+            'featured_placement' => false,
+            'priority_order' => 0,
+        ],
+        'filtering' => [
+            'enable_filtering' => true,
+            'default_sort' => 'name', // name, job_count, recent, popular
+            'show_subcategories' => true,
+            'group_by_parent' => false,
+            'min_jobs_to_show' => 1,
+            'hide_empty_categories' => false,
+        ],
+        'seo' => [
+            'custom_meta_title' => '',
+            'custom_meta_description' => '',
+            'custom_keywords' => '',
+            'canonical_url' => '',
+            'robots_index' => true,
+            'robots_follow' => true,
+            'structured_data_enabled' => true,
+        ],
+        'content' => [
+            'show_related_categories' => true,
+            'show_trending_jobs' => true,
+            'show_salary_insights' => true,
+            'show_location_breakdown' => true,
+            'enable_category_blog' => false,
+            'custom_description' => '',
+        ],
+        'notifications' => [
+            'notify_new_jobs' => false,
+            'notify_trending_changes' => false,
+            'weekly_digest' => false,
+            'admin_alerts' => true,
+        ],
+        'analytics' => [
+            'track_views' => true,
+            'track_job_clicks' => true,
+            'track_search_queries' => true,
+            'google_analytics_enabled' => false,
+            'custom_tracking_code' => '',
+        ],
+        'features' => [
+            'enable_job_alerts' => true,
+            'enable_saved_searches' => true,
+            'enable_category_following' => false,
+            'enable_expert_advice' => false,
+            'premium_features_enabled' => false,
+        ],
+        'moderation' => [
+            'auto_approve_jobs' => true,
+            'require_admin_review' => false,
+            'spam_detection_enabled' => true,
+            'quality_score_threshold' => 70,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'display.show_in_navigation' => 'boolean',
+        'display.show_job_count' => 'boolean',
+        'display.show_description' => 'boolean',
+        'display.show_icon' => 'boolean',
+        'display.layout' => 'string|in:grid,list,card',
+        'display.color_scheme' => 'string|in:default,blue,green,red,purple,orange',
+        'display.featured_placement' => 'boolean',
+        'display.priority_order' => 'integer|min:0|max:100',
+        
+        'filtering.enable_filtering' => 'boolean',
+        'filtering.default_sort' => 'string|in:name,job_count,recent,popular',
+        'filtering.show_subcategories' => 'boolean',
+        'filtering.group_by_parent' => 'boolean',
+        'filtering.min_jobs_to_show' => 'integer|min:0|max:100',
+        'filtering.hide_empty_categories' => 'boolean',
+        
+        'seo.custom_meta_title' => 'string|max:60',
+        'seo.custom_meta_description' => 'string|max:160',
+        'seo.custom_keywords' => 'string|max:255',
+        'seo.canonical_url' => 'url|nullable',
+        'seo.robots_index' => 'boolean',
+        'seo.robots_follow' => 'boolean',
+        'seo.structured_data_enabled' => 'boolean',
+        
+        'content.show_related_categories' => 'boolean',
+        'content.show_trending_jobs' => 'boolean',
+        'content.show_salary_insights' => 'boolean',
+        'content.show_location_breakdown' => 'boolean',
+        'content.enable_category_blog' => 'boolean',
+        'content.custom_description' => 'string|max:1000',
+        
+        'notifications.notify_new_jobs' => 'boolean',
+        'notifications.notify_trending_changes' => 'boolean',
+        'notifications.weekly_digest' => 'boolean',
+        'notifications.admin_alerts' => 'boolean',
+        
+        'analytics.track_views' => 'boolean',
+        'analytics.track_job_clicks' => 'boolean',
+        'analytics.track_search_queries' => 'boolean',
+        'analytics.google_analytics_enabled' => 'boolean',
+        'analytics.custom_tracking_code' => 'string|max:500',
+        
+        'features.enable_job_alerts' => 'boolean',
+        'features.enable_saved_searches' => 'boolean',
+        'features.enable_category_following' => 'boolean',
+        'features.enable_expert_advice' => 'boolean',
+        'features.premium_features_enabled' => 'boolean',
+        
+        'moderation.auto_approve_jobs' => 'boolean',
+        'moderation.require_admin_review' => 'boolean',
+        'moderation.spam_detection_enabled' => 'boolean',
+        'moderation.quality_score_threshold' => 'integer|min:0|max:100',
     ];
 
     /**

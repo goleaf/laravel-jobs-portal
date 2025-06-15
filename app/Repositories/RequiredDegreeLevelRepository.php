@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\RequiredDegreeLevel;
 
 /**
- * Class RequiredDegreeLevelRepository
+ * Class RequiredDegreeLevelRepository.
  *
  * @version June 30, 2020, 12:30 pm UTC
  */
@@ -19,7 +19,7 @@ class RequiredDegreeLevelRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class RequiredDegreeLevelRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return RequiredDegreeLevel::class;

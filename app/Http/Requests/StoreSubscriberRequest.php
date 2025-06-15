@@ -2,19 +2,19 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Universal Form Request for storing Subscriber
- * Implements Laravel 12 best practices with Universal MCP patterns
+ * Implements Laravel 12 best practices with Universal MCP patterns.
  */
 class StoreSubscriberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Universal Pattern: Simple authorization check
+     * Universal Pattern: Simple authorization check.
      */
     public function authorize(): bool
     {
@@ -23,9 +23,9 @@ class StoreSubscriberRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: Comprehensive validation with security
+     * Universal Pattern: Comprehensive validation with security.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -47,7 +47,7 @@ class StoreSubscriberRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Universal Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -62,7 +62,7 @@ class StoreSubscriberRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -75,21 +75,8 @@ class StoreSubscriberRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Universal Pattern: Data normalization
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => strtolower(trim($this->email ?? '')),
-            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-        ]);
-    }
-
-    /**
      * Configure the validator instance.
-     * Universal Pattern: Performance optimization
+     * Universal Pattern: Performance optimization.
      */
     public function withValidator(Validator $validator): void
     {
@@ -102,17 +89,21 @@ class StoreSubscriberRequest extends FormRequest
     }
 
     /**
-     * Universal Pattern: Custom business logic check
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization.
      */
-    private function hasConflictingData(): bool
+    protected function prepareForValidation(): void
     {
-        // Add specific business logic here
-        return false;
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'email' => strtolower(trim($this->email ?? '')),
+            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
+        ]);
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: Enhanced error handling
+     * Universal Pattern: Enhanced error handling.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -125,5 +116,14 @@ class StoreSubscriberRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Universal Pattern: Custom business logic check.
+     */
+    private function hasConflictingData(): bool
+    {
+        // Add specific business logic here
+        return false;
     }
 }

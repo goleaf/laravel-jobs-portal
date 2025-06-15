@@ -4,24 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\NotificationSetting;
+use App\Models\Plan;
 use App\Models\Plan as SubscriptionPlan;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Unicodeveloper\Paystack\Facades\Paystack;
+
 class PaystackController extends Controller
 {
     public function __construct()
     {
-        $publicKey = ! empty(getEnvSetting()['paystack_key']) ? getEnvSetting()['paystack_key'] : config('paystack.publicKey');
-        $secrtKey = ! empty(getEnvSetting()['paystack_secret']) ? getEnvSetting()['paystack_secret'] : config('paystack.secretKey');
-        $paymentUrl = ! empty(getEnvSetting()['paystack_payment_url']) ? getEnvSetting()['paystack_payment_url'] : config('paystack.paymentUrl');
+        $publicKey = !empty(getEnvSetting()['paystack_key']) ? getEnvSetting()['paystack_key'] : config('paystack.publicKey');
+        $secrtKey = !empty(getEnvSetting()['paystack_secret']) ? getEnvSetting()['paystack_secret'] : config('paystack.secretKey');
+        $paymentUrl = !empty(getEnvSetting()['paystack_payment_url']) ? getEnvSetting()['paystack_payment_url'] : config('paystack.paymentUrl');
 
         config([
             'paystack.publicKey' => $publicKey,
@@ -40,7 +41,7 @@ class PaystackController extends Controller
 
             return redirect()->route('manage-subscription.index');
         }
-        if ($plan->salaryCurrency != null && ! in_array(
+        if (null != $plan->salaryCurrency && !in_array(
             $plan->salaryCurrency->currency_code,
             getPaystackSupportedCurrencies()
         )) {
@@ -65,7 +66,7 @@ class PaystackController extends Controller
             ];
 
             return Paystack::getAuthorizationUrl($data)->redirectNow();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Flash::error('Error initiating Paystack payment.');
 
             return redirect()->route('manage-subscription.index');
@@ -76,7 +77,7 @@ class PaystackController extends Controller
     {
         $paymentDetails = Paystack::getPaymentData();
 
-        if (! $paymentDetails['status']) {
+        if (!$paymentDetails['status']) {
             Flash::error(__('messages.payment_failed'));
 
             return redirect(route('manage-subscription.index'));
@@ -90,14 +91,15 @@ class PaystackController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        /** @var \App\Models\Plan $plan */
+        /** @var Plan $plan */
         $plan = SubscriptionPlan::findOrFail($planId);
 
         /** @var Subscription $existingSubscription */
         $existingSubscription = Subscription::NotOnTrial()
             ->whereUserId($user->id)
             ->active()
-            ->first();
+            ->first()
+        ;
         // end trial subscription
         Subscription::whereUserId($user->id)->where(function (Builder $query) {
             $query->where('stripe_status', '=', 'trialing');
@@ -105,7 +107,8 @@ class PaystackController extends Controller
             ->update([
                 'ends_at' => Carbon::now(),
                 'trial_ends_at' => Carbon::now(),
-            ]);
+            ])
+        ;
 
         /** @var Subscription $tsSubscription */
         $tsSubscription = Subscription::create([
@@ -118,8 +121,8 @@ class PaystackController extends Controller
         ]);
 
         $adminId = User::role('Admin')->first()->id;
-        NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value == 1 ?
-                 addNotification([
+        1 == NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value
+                 ? addNotification([
                      Notification::EMPLOYER_PURCHASE_PLAN,
                      $adminId,
                      Notification::ADMIN,

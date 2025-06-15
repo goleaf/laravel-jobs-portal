@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\User;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 
 class UserLoginRequest extends FormRequest
 {
@@ -21,7 +25,7 @@ class UserLoginRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -63,8 +67,7 @@ class UserLoginRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
@@ -73,12 +76,12 @@ class UserLoginRequest extends FormRequest
             if ($this->hasTooManyLoginAttempts()) {
                 $this->fireLockoutEvent();
                 $seconds = RateLimiter::availableIn($this->throttleKey());
-                
+
                 $validator->errors()->add('email', trans('auth.throttle', [
                     'seconds' => $seconds,
                     'minutes' => ceil($seconds / 60),
                 ]));
-                
+
                 return;
             }
 
@@ -93,7 +96,7 @@ class UserLoginRequest extends FormRequest
             if (!$validator->errors()->any()) {
                 if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
                     RateLimiter::hit($this->throttleKey());
-                    
+
                     $validator->errors()->add('email', 'The provided credentials are incorrect.');
                 }
             }
@@ -101,15 +104,23 @@ class UserLoginRequest extends FormRequest
     }
 
     /**
-     * Handle a passed validation attempt.
+     * Get the authenticated user after successful login.
      *
-     * @return void
+     * @return User
+     */
+    public function authenticate()
+    {
+        return Auth::user();
+    }
+
+    /**
+     * Handle a passed validation attempt.
      */
     protected function passedValidation(): void
     {
         // Clear login attempts on successful validation
         RateLimiter::clear($this->throttleKey());
-        
+
         // Set defaults
         $this->merge([
             'remember' => $this->boolean('remember', false),
@@ -118,41 +129,33 @@ class UserLoginRequest extends FormRequest
 
     /**
      * Determine if the user has too many failed login attempts.
-     *
-     * @return bool
      */
     protected function hasTooManyLoginAttempts(): bool
     {
         return RateLimiter::tooManyAttempts(
-            $this->throttleKey(), 
+            $this->throttleKey(),
             5 // Maximum 5 attempts
         );
     }
 
     /**
      * Fire an event when a lockout occurs.
-     *
-     * @return void
      */
     protected function fireLockoutEvent(): void
     {
-        event(new \Illuminate\Auth\Events\Lockout($this));
+        event(new Lockout($this));
     }
 
     /**
      * Get the rate limiting throttle key for the request.
-     *
-     * @return string
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
     }
 
     /**
      * Determine if captcha verification is needed.
-     *
-     * @return bool
      */
     protected function needsCaptcha(): bool
     {
@@ -162,13 +165,11 @@ class UserLoginRequest extends FormRequest
 
     /**
      * Verify Google reCAPTCHA response.
-     *
-     * @return bool
      */
     protected function verifyCaptcha(): bool
     {
         $recaptchaSecret = config('services.recaptcha.secret_key');
-        
+
         if (!$recaptchaSecret) {
             return true; // Skip if not configured
         }
@@ -195,26 +196,13 @@ class UserLoginRequest extends FormRequest
         $result = file_get_contents($url, false, $context);
         $resultJson = json_decode($result, true);
 
-        return isset($resultJson['success']) && $resultJson['success'] === true;
-    }
-
-    /**
-     * Get the authenticated user after successful login.
-     *
-     * @return \App\Models\User
-     */
-    public function authenticate()
-    {
-        return Auth::user();
+        return isset($resultJson['success']) && true === $resultJson['success'];
     }
 
     /**
      * Handle failed validation.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
@@ -228,4 +216,4 @@ class UserLoginRequest extends FormRequest
 
         parent::failedValidation($validator);
     }
-} 
+}

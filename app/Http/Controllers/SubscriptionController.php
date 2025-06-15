@@ -2,6 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Subscription\CancelSubscriptionSubscriptionRequest;
+use App\Http\Requests\Subscription\ChangeTransactionStatusSubscriptionRequest;
+use App\Http\Requests\Subscription\HandleFailedPaymentSubscriptionRequest;
+use App\Http\Requests\Subscription\IndexSubscriptionRequest;
+use App\Http\Requests\Subscription\ManuallyPaymentSubscriptionRequest;
+use App\Http\Requests\Subscription\PaymentSuccessSubscriptionRequest;
+use App\Http\Requests\Subscription\PurchaseSubscriptionSubscriptionRequest;
+use App\Http\Requests\Subscription\PurchaseTrialSubscriptionRequest;
+use App\Http\Requests\Subscription\ShowPaymentSelectSubscriptionRequest;
+use App\Http\Requests\Subscription\UpdateSubscriptionSubscriptionRequest;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Transaction;
@@ -9,13 +19,11 @@ use App\Models\User;
 use App\Repositories\PlanRepository;
 use App\Repositories\SubscriptionRepository;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
@@ -25,17 +33,6 @@ use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use UnexpectedValueException;
-use App\Http\Requests\Subscription\PurchaseSubscriptionSubscriptionRequest;
-use App\Http\Requests\Subscription\PaymentSuccessSubscriptionRequest;
-use App\Http\Requests\Subscription\CancelSubscriptionSubscriptionRequest;
-use App\Http\Requests\Subscription\UpdateSubscriptionSubscriptionRequest;
-use App\Http\Requests\Subscription\ChangeTransactionStatusSubscriptionRequest;
-use App\Http\Requests\Subscription\IndexSubscriptionRequest;
-use App\Http\Requests\Subscription\HandleFailedPaymentSubscriptionRequest;
-use App\Http\Requests\Subscription\PurchaseTrialSubscriptionRequest;
-use App\Http\Requests\Subscription\ShowPaymentSelectSubscriptionRequest;
-use App\Http\Requests\Subscription\ManuallyPaymentSubscriptionRequest;
 
 class SubscriptionController extends AppBaseController
 {
@@ -49,7 +46,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(IndexSubscriptionRequest $request): View
     {
@@ -63,7 +60,7 @@ class SubscriptionController extends AppBaseController
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function purchaseSubscription(PurchaseSubscriptionSubscriptionRequest $request)
     {
@@ -75,13 +72,13 @@ class SubscriptionController extends AppBaseController
         }
         $planId = $request->get('plan_id');
         if (empty($planId)) {
-            throw new Exception('plan_id required', Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw new \Exception('plan_id required', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         /** @var Plan $plan */
         $plan = Plan::with('salaryCurrency')->findOrFail($planId);
 
-        if (! $plan->stripe_plan_id) {
+        if (!$plan->stripe_plan_id) {
             createStripePlan($plan);
         }
 
@@ -112,9 +109,9 @@ class SubscriptionController extends AppBaseController
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function paymentSuccess(PaymentSuccessSubscriptionRequest $request): RedirectResponse
     {
@@ -147,10 +144,11 @@ class SubscriptionController extends AppBaseController
         $user = Auth::user();
 
         setStripeApiKey();
+
         /** @var Subscription $subscription */
         $subscription = $user->subscriptions()->active()->first();
 
-        if (! $subscription) {
+        if (!$subscription) {
             return $this->sendError(__('messages.flash.your_are_not_author'));
         }
 
@@ -164,7 +162,7 @@ class SubscriptionController extends AppBaseController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function purchaseTrialSubscription(PurchaseTrialSubscriptionRequest $request): JsonResponse
     {
@@ -185,7 +183,7 @@ class SubscriptionController extends AppBaseController
     public function updateSubscription(UpdateSubscriptionSubscriptionRequest $request)
     {
         $envSetting = getEnvSetting();
-        if (! empty($envSetting['stripe_webhook_key'])) {
+        if (!empty($envSetting['stripe_webhook_key'])) {
             $stripeWebHookSecret = $envSetting['stripe_webhook_key'];
         } else {
             $stripeWebHookSecret = config('services.stripe.webhook_secret_key');
@@ -207,14 +205,16 @@ class SubscriptionController extends AppBaseController
             $this->subscriptionRepository->updateSubscription($input);
 
             return true;
-        } catch (UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             // Invalid payload
             http_response_code(400);
-            exit();
+
+            exit;
         } catch (SignatureVerificationException $e) {
             // Invalid signature
             http_response_code(400);
-            exit();
+
+            exit;
         }
     }
 
@@ -237,6 +237,7 @@ class SubscriptionController extends AppBaseController
 
             if ($pendingApproval) {
                 Flash::error(__('messages.flash.pending_manual_purchase'));
+
                 return redirect()->back();
             }
 
@@ -272,7 +273,7 @@ class SubscriptionController extends AppBaseController
             Flash::success(__('messages.flash.manual_payment_request_sent'));
 
             return redirect(route('manage-subscription.index'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Flash::error(__('messages.flash.something_went_wrong'));
 
             return redirect()->back();
@@ -288,7 +289,7 @@ class SubscriptionController extends AppBaseController
         $approve_by = Auth::user()->id;
         $transaction = Transaction::where('id', $input['id'])->first();
         $subscription = Subscription::where('id', $transaction->owner_id)->first();
-        if ($input['status'] == Transaction::APPROVED) {
+        if (Transaction::APPROVED == $input['status']) {
             $transaction->is_approved = Transaction::APPROVED;
             $transaction->approved_id = $approve_by;
             $transaction->save();
@@ -296,7 +297,8 @@ class SubscriptionController extends AppBaseController
             $existingSubscription = Subscription::NotOnTrial()
                 ->whereUserId($transaction->user_id)
                 ->where('stripe_status', '!=', Subscription::PENDING)
-                ->first();
+                ->first()
+            ;
 
             if ($existingSubscription && $existingSubscription->user_id === $transaction->user_id) {
                 $existingSubscription->update(['ends_at' => Carbon::now()]);
@@ -308,7 +310,8 @@ class SubscriptionController extends AppBaseController
             })->whereNotNull('trial_ends_at')
                 ->update([
                     'trial_ends_at' => Carbon::now(),
-                ]);
+                ])
+            ;
 
             $subscription->stripe_status = 'active';
             $subscription->current_period_start = Carbon::now();

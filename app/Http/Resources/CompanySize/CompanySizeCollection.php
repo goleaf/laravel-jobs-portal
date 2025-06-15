@@ -59,7 +59,8 @@ class CompanySizeCollection extends ResourceCollection
     {
         $mostPopular = $this->collection
             ->sortByDesc('companies_count')
-            ->first();
+            ->first()
+        ;
 
         if (!$mostPopular) {
             return null;
@@ -71,7 +72,7 @@ class CompanySizeCollection extends ResourceCollection
             'companies_count' => $mostPopular->companies_count ?? 0,
             'message' => __('company_sizes.statistics.most_popular', [
                 'size' => $mostPopular->size,
-                'count' => $mostPopular->companies_count ?? 0
+                'count' => $mostPopular->companies_count ?? 0,
             ]),
         ];
     }
@@ -83,7 +84,8 @@ class CompanySizeCollection extends ResourceCollection
     {
         $leastPopular = $this->collection
             ->sortBy('companies_count')
-            ->first();
+            ->first()
+        ;
 
         if (!$leastPopular) {
             return null;
@@ -95,7 +97,7 @@ class CompanySizeCollection extends ResourceCollection
             'companies_count' => $leastPopular->companies_count ?? 0,
             'message' => __('company_sizes.statistics.least_popular', [
                 'size' => $leastPopular->size,
-                'count' => $leastPopular->companies_count ?? 0
+                'count' => $leastPopular->companies_count ?? 0,
             ]),
         ];
     }
@@ -107,7 +109,8 @@ class CompanySizeCollection extends ResourceCollection
     {
         $newest = $this->collection
             ->sortByDesc('created_at')
-            ->first();
+            ->first()
+        ;
 
         if (!$newest) {
             return null;
@@ -119,7 +122,7 @@ class CompanySizeCollection extends ResourceCollection
             'created_at' => $newest->created_at?->toISOString(),
             'message' => __('company_sizes.statistics.newest', [
                 'size' => $newest->size,
-                'date' => $newest->created_at?->format(__('formats.date'))
+                'date' => $newest->created_at?->format(__('formats.date')),
             ]),
         ];
     }
@@ -131,7 +134,8 @@ class CompanySizeCollection extends ResourceCollection
     {
         $oldest = $this->collection
             ->sortBy('created_at')
-            ->first();
+            ->first()
+        ;
 
         if (!$oldest) {
             return null;
@@ -143,8 +147,8 @@ class CompanySizeCollection extends ResourceCollection
             'created_at' => $oldest->created_at?->toISOString(),
             'message' => __('company_sizes.statistics.oldest', [
                 'size' => $oldest->size,
-                'date' => $oldest->created_at?->format(__('formats.date'))
+                'date' => $oldest->created_at?->format(__('formats.date')),
             ]),
         ];
     }
-} 
+}

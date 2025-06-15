@@ -10,12 +10,12 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
 /**
- * Class PrivacyPolicyController
+ * Class PrivacyPolicyController.
  */
 class PrivacyPolicyController extends AppBaseController
 {
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function showPrivacyPolicy(): View
     {

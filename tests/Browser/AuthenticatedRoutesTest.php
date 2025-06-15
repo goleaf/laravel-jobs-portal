@@ -7,6 +7,11 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AuthenticatedRoutesTest extends DuskTestCase
 {
     use DatabaseMigrations;
@@ -16,7 +21,7 @@ class AuthenticatedRoutesTest extends DuskTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
@@ -27,30 +32,32 @@ class AuthenticatedRoutesTest extends DuskTestCase
     /**
      * Test dashboard access for authenticated users.
      */
-    public function test_dashboard_requires_authentication(): void
+    public function testDashboardRequiresAuthentication(): void
     {
         $this->browse(function (Browser $browser) {
             // Test unauthenticated access redirects to login
             $browser->visit('https://jobportal.prus.dev/dashboard')
-                    ->pause(2000)
-                    ->assertPathIs('/login');
+                ->pause(2000)
+                ->assertPathIs('/login')
+            ;
 
             // Test authenticated access works
             $browser->visit('https://jobportal.prus.dev/login')
-                    ->type('email', 'test@example.com')
-                    ->type('password', 'password123')
-                    ->press('Login')
-                    ->pause(3000)
-                    ->assertPathIs('/dashboard')
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->type('email', 'test@example.com')
+                ->type('password', 'password123')
+                ->press('Login')
+                ->pause(3000)
+                ->assertPathIs('/dashboard')
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
      * Test candidate profile routes.
      */
-    public function test_candidate_profile_routes(): void
+    public function testCandidateProfileRoutes(): void
     {
         $candidate = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -61,47 +68,53 @@ class AuthenticatedRoutesTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) {
             $browser->visit('https://jobportal.prus.dev/login')
-                    ->type('email', 'candidate@example.com')
-                    ->type('password', 'password123')
-                    ->press('Login')
-                    ->pause(3000);
+                ->type('email', 'candidate@example.com')
+                ->type('password', 'password123')
+                ->press('Login')
+                ->pause(3000)
+            ;
 
             // Test candidate profile
             $browser->visit('https://jobportal.prus.dev/candidate/profile')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test candidate profile edit
             $browser->visit('https://jobportal.prus.dev/candidate/profile/edit')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test applied jobs
             $browser->visit('https://jobportal.prus.dev/candidate/applied-jobs')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test favorite jobs
             $browser->visit('https://jobportal.prus.dev/candidate/favorite-jobs')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test job alerts
             $browser->visit('https://jobportal.prus.dev/candidate/job-alerts')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
      * Test employer routes.
      */
-    public function test_employer_routes(): void
+    public function testEmployerRoutes(): void
     {
         $employer = User::factory()->create([
             'email' => 'employer@example.com',
@@ -112,67 +125,75 @@ class AuthenticatedRoutesTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) {
             $browser->visit('https://jobportal.prus.dev/login')
-                    ->type('email', 'employer@example.com')
-                    ->type('password', 'password123')
-                    ->press('Login')
-                    ->pause(3000);
+                ->type('email', 'employer@example.com')
+                ->type('password', 'password123')
+                ->press('Login')
+                ->pause(3000)
+            ;
 
             // Test employer company profile
             $browser->visit('https://jobportal.prus.dev/employer/company')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test employer company edit
             $browser->visit('https://jobportal.prus.dev/employer/company/edit')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test employer jobs
             $browser->visit('https://jobportal.prus.dev/employer/jobs')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test job applications
             $browser->visit('https://jobportal.prus.dev/employer/jobs/applications')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
 
             // Test create job
             $browser->visit('https://jobportal.prus.dev/employer/jobs/create')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
      * Test company routes.
      */
-    public function test_company_routes(): void
+    public function testCompanyRoutes(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('https://jobportal.prus.dev/login')
-                    ->type('email', 'test@example.com')
-                    ->type('password', 'password123')
-                    ->press('Login')
-                    ->pause(3000);
+                ->type('email', 'test@example.com')
+                ->type('password', 'password123')
+                ->press('Login')
+                ->pause(3000)
+            ;
 
             // Test company index
             $browser->visit('https://jobportal.prus.dev/company')
-                    ->pause(2000)
-                    ->assertDontSee('Error')
-                    ->assertPresent('body');
+                ->pause(2000)
+                ->assertDontSee('Error')
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
      * Test protected routes redirect unauthenticated users.
      */
-    public function test_protected_routes_redirect_guests(): void
+    public function testProtectedRoutesRedirectGuests(): void
     {
         $protectedRoutes = [
             'https://jobportal.prus.dev/dashboard',
@@ -191,8 +212,9 @@ class AuthenticatedRoutesTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($protectedRoutes) {
             foreach ($protectedRoutes as $route) {
                 $browser->visit($route)
-                        ->pause(1000);
-                
+                    ->pause(1000)
+                ;
+
                 // Should redirect to login page
                 $this->assertTrue(
                     str_contains($browser->driver->getCurrentURL(), '/login'),
@@ -201,4 +223,4 @@ class AuthenticatedRoutesTest extends DuskTestCase
             }
         });
     }
-} 
+}

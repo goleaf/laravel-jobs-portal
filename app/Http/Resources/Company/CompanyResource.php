@@ -61,7 +61,7 @@ class CompanyResource extends JsonResource
                 return [
                     'id' => $this->companySize->id,
                     'size' => $this->companySize->size,
-                    'range' => $this->companySize->from . '-' . $this->companySize->to,
+                    'range' => $this->companySize->from.'-'.$this->companySize->to,
                 ];
             }),
 
@@ -136,9 +136,9 @@ class CompanyResource extends JsonResource
             // SEO
             'seo' => [
                 'title' => $this->name,
-                'description' => $this->description ? 
-                    \Str::limit(strip_tags($this->description), 160) : 
-                    __('company.default_description', ['name' => $this->name]),
+                'description' => $this->description
+                    ? \Str::limit(strip_tags($this->description), 160)
+                    : __('company.default_description', ['name' => $this->name]),
                 'image' => $this->logo ?: asset('images/default-company-logo.png'),
             ],
         ];

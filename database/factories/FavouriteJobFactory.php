@@ -17,7 +17,6 @@ class FavouriteJobFactory extends Factory
     public function definition(): array
     {
         return [
-            //
         ];
     }
 }

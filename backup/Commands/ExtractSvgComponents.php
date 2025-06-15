@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Symfony\Component\Finder\Finder;
 
 class ExtractSvgComponents extends Command
 {
@@ -23,7 +24,7 @@ class ExtractSvgComponents extends Command
     protected $description = 'Extract inline SVG elements from blade files into SVG components';
 
     /**
-     * The target directory for SVG components
+     * The target directory for SVG components.
      */
     protected $componentsDir = 'resources/views/components/icons';
 
@@ -33,7 +34,7 @@ class ExtractSvgComponents extends Command
     public function handle()
     {
         // Create components directory if it doesn't exist
-        if (! File::isDirectory($this->componentsDir)) {
+        if (!File::isDirectory($this->componentsDir)) {
             File::makeDirectory($this->componentsDir, 0755, true);
             $this->info("Created SVG components directory: {$this->componentsDir}");
         }
@@ -44,18 +45,17 @@ class ExtractSvgComponents extends Command
                 $this->processFile($singleFile);
 
                 return Command::SUCCESS;
-            } else {
-                $this->error("File not found or not a blade file: {$singleFile}");
-
-                return Command::FAILURE;
             }
+            $this->error("File not found or not a blade file: {$singleFile}");
+
+            return Command::FAILURE;
         }
 
         // Process multiple files from directory
         $searchDir = $this->option('dir');
         $chunkSize = (int) $this->option('chunk-size');
 
-        if (! File::isDirectory($searchDir)) {
+        if (!File::isDirectory($searchDir)) {
             $this->error("Directory not found: {$searchDir}");
 
             return Command::FAILURE;
@@ -72,12 +72,12 @@ class ExtractSvgComponents extends Command
     }
 
     /**
-     * Process a directory in chunks
+     * Process a directory in chunks.
      */
     protected function processDirectoryInChunks(string $directory, int $chunkSize): void
     {
         $pattern = $directory.'/**/*.blade.php';
-        $finder = new \Symfony\Component\Finder\Finder;
+        $finder = new Finder();
         $finder->files()->name('*.blade.php')->in($directory);
 
         $totalFiles = iterator_count($finder);
@@ -89,10 +89,10 @@ class ExtractSvgComponents extends Command
 
         foreach ($finder as $file) {
             $currentChunk[] = $file->getPathname();
-            $processedFiles++;
+            ++$processedFiles;
 
             if (count($currentChunk) >= $chunkSize || $processedFiles === $totalFiles) {
-                $chunkCount++;
+                ++$chunkCount;
                 $this->info("Processing chunk {$chunkCount} ({$processedFiles}/{$totalFiles} files)...");
 
                 foreach ($currentChunk as $filePath) {
@@ -106,7 +106,7 @@ class ExtractSvgComponents extends Command
     }
 
     /**
-     * Process a single file to extract SVGs
+     * Process a single file to extract SVGs.
      */
     protected function processFile(string $filePath): void
     {
@@ -136,7 +136,7 @@ class ExtractSvgComponents extends Command
     }
 
     /**
-     * Generate a component name based on the file and SVG content
+     * Generate a component name based on the file and SVG content.
      */
     protected function generateComponentName(string $filePath, string $svg, int $index): string
     {
@@ -174,6 +174,7 @@ class ExtractSvgComponents extends Command
                 foreach ($patterns as $pattern) {
                     if (preg_match($pattern, $path)) {
                         $componentName = $name;
+
                         break 2;
                     }
                 }
@@ -192,13 +193,11 @@ class ExtractSvgComponents extends Command
         }
 
         // Clean up the name
-        $componentName = preg_replace('/[^a-z0-9\-]/', '', $componentName);
-
-        return $componentName;
+        return preg_replace('/[^a-z0-9\-]/', '', $componentName);
     }
 
     /**
-     * Clean the SVG for use as a component
+     * Clean the SVG for use as a component.
      */
     protected function cleanSvg(string $svg): string
     {
@@ -212,13 +211,11 @@ class ExtractSvgComponents extends Command
         $svg = preg_replace('/<svg([^>]*)>/', '<svg{{ $attributes->merge([\'class\' => \'\']) }}$1>', $svg);
 
         // Format properly
-        $svg = trim($svg);
-
-        return $svg;
+        return trim($svg);
     }
 
     /**
-     * Save the SVG as a component
+     * Save the SVG as a component.
      */
     protected function saveSvgComponent(string $name, string $svg): void
     {
@@ -227,7 +224,7 @@ class ExtractSvgComponents extends Command
 
         // Check if component already exists
         if (File::exists($componentPath)) {
-            if (! $this->option('force') && ! $this->confirm("Component {$filename} already exists. Overwrite?", false)) {
+            if (!$this->option('force') && !$this->confirm("Component {$filename} already exists. Overwrite?", false)) {
                 return;
             }
         }

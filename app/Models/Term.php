@@ -2,54 +2,56 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Term Model - Enhanced with Enhanced patterns
- * 
+ * Term Model - Enhanced with Enhanced patterns.
+ *
  * Individual terms within taxonomies with hierarchical support.
  * Can be attached to any model via polymorphic relationships.
  *
- * @property int $id
- * @property int $taxonomy_id
- * @property string $name
- * @property string $slug
- * @property string|null $description
- * @property string|null $color
- * @property string|null $icon
- * @property string|null $image
- * @property bool $is_active
- * @property bool $is_featured
- * @property int $sort_order
- * @property array|null $meta
- * @property int|null $parent_id
- * @property int $level
- * @property string|null $path
- * @property int $usage_count
- * @property \Illuminate\Support\Carbon|null $last_used_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \App\Models\Taxonomy $taxonomy
- * @property-read \App\Models\Term|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $descendants
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $ancestors
- * @property-read string $display_name
- * @property-read string $full_path
- * @property-read bool $has_children
- * @property-read bool $is_root
- * @property-read bool $is_leaf
+ * @property int               $id
+ * @property int               $taxonomy_id
+ * @property string            $name
+ * @property string            $slug
+ * @property null|string       $description
+ * @property null|string       $color
+ * @property null|string       $icon
+ * @property null|string       $image
+ * @property bool              $is_active
+ * @property bool              $is_featured
+ * @property int               $sort_order
+ * @property null|array        $meta
+ * @property null|int          $parent_id
+ * @property int               $level
+ * @property null|string       $path
+ * @property int               $usage_count
+ * @property null|Carbon       $last_used_at
+ * @property null|Carbon       $created_at
+ * @property null|Carbon       $updated_at
+ * @property Taxonomy          $taxonomy
+ * @property null|Term         $parent
+ * @property Collection|Term[] $children
+ * @property Collection|Term[] $descendants
+ * @property Collection|Term[] $ancestors
+ * @property string            $display_name
+ * @property string            $full_path
+ * @property bool              $has_children
+ * @property bool              $is_root
+ * @property bool              $is_leaf
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -72,6 +74,26 @@ class Term extends Model
 {
     use HasFactory;
     use LogsActivity;
+
+    /**
+     * Validation rules for creating terms.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'taxonomy_id' => 'required|integer|exists:taxonomies,id',
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+        'icon' => 'nullable|string|max:255',
+        'image' => 'nullable|string|max:255',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0',
+        'meta' => 'nullable|array',
+        'parent_id' => 'nullable|integer|exists:terms,id',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -107,25 +129,6 @@ class Term extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'meta' => 'array',
-            'level' => 'integer',
-            'usage_count' => 'integer',
-            'last_used_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Configure activity logging.
      */
     public function getActivitylogOptions(): LogOptions
@@ -148,33 +151,13 @@ class Term extends Model
                 'path',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating terms.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'taxonomy_id' => 'required|integer|exists:taxonomies,id',
-        'name' => 'required|string|max:255',
-        'slug' => 'required|string|max:255',
-        'description' => 'nullable|string|max:1000',
-        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-        'icon' => 'nullable|string|max:255',
-        'image' => 'nullable|string|max:255',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0',
-        'meta' => 'nullable|array',
-        'parent_id' => 'nullable|integer|exists:terms,id',
-    ];
 
     /**
      * Update validation rules for terms.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
@@ -238,12 +221,12 @@ class Term extends Model
     {
         $ancestors = collect();
         $parent = $this->parent;
-        
+
         while ($parent) {
             $ancestors->prepend($parent);
             $parent = $parent->parent;
         }
-        
+
         return $ancestors;
     }
 
@@ -277,6 +260,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include active terms.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -285,6 +270,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include inactive terms.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -293,6 +280,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include featured terms.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -301,6 +290,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include non-featured terms.
+     *
+     * @param mixed $query
      */
     public function scopeNotFeatured($query)
     {
@@ -313,6 +304,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include root terms.
+     *
+     * @param mixed $query
      */
     public function scopeRoots($query)
     {
@@ -321,6 +314,8 @@ class Term extends Model
 
     /**
      * Scope a query to only include leaf terms.
+     *
+     * @param mixed $query
      */
     public function scopeLeaves($query)
     {
@@ -329,6 +324,8 @@ class Term extends Model
 
     /**
      * Scope a query to filter by taxonomy.
+     *
+     * @param mixed $query
      */
     public function scopeByTaxonomy($query, int $taxonomyId)
     {
@@ -337,6 +334,8 @@ class Term extends Model
 
     /**
      * Scope a query to filter by parent.
+     *
+     * @param mixed $query
      */
     public function scopeByParent($query, ?int $parentId)
     {
@@ -345,6 +344,8 @@ class Term extends Model
 
     /**
      * Scope a query to filter by level.
+     *
+     * @param mixed $query
      */
     public function scopeByLevel($query, int $level)
     {
@@ -357,12 +358,15 @@ class Term extends Model
 
     /**
      * Scope a query to search terms.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+                ->orWhere('description', 'like', "%{$term}%")
+            ;
         });
     }
 
@@ -372,6 +376,8 @@ class Term extends Model
 
     /**
      * Scope a query to order alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -380,6 +386,8 @@ class Term extends Model
 
     /**
      * Scope a query to order by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
@@ -388,6 +396,8 @@ class Term extends Model
 
     /**
      * Scope a query to order by popularity.
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -396,11 +406,14 @@ class Term extends Model
 
     /**
      * Scope a query to get recent terms.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     // =============================================
@@ -409,6 +422,8 @@ class Term extends Model
 
     /**
      * Scope a query to include usage statistics.
+     *
+     * @param mixed $query
      */
     public function scopeWithUsageStats($query)
     {
@@ -422,7 +437,7 @@ class Term extends Model
     /**
      * Get cached terms by taxonomy.
      */
-    public static function getCachedByTaxonomy(int $taxonomyId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByTaxonomy(int $taxonomyId): Collection
     {
         return Cache::remember("terms.taxonomy.{$taxonomyId}", 3600, function () use ($taxonomyId) {
             return self::active()->byTaxonomy($taxonomyId)->ordered()->get();
@@ -432,7 +447,7 @@ class Term extends Model
     /**
      * Get cached root terms by taxonomy.
      */
-    public static function getCachedRootsByTaxonomy(int $taxonomyId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedRootsByTaxonomy(int $taxonomyId): Collection
     {
         return Cache::remember("terms.roots.taxonomy.{$taxonomyId}", 3600, function () use ($taxonomyId) {
             return self::active()->byTaxonomy($taxonomyId)->roots()->ordered()->get();
@@ -442,7 +457,7 @@ class Term extends Model
     /**
      * Get cached popular terms.
      */
-    public static function getCachedPopular(int $limit = 20): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 20): Collection
     {
         return Cache::remember("terms.popular.{$limit}", 3600, function () use ($limit) {
             return self::active()->popular($limit)->get();
@@ -467,9 +482,9 @@ class Term extends Model
     public function getFullPathAttribute(): string
     {
         if ($this->path) {
-            return $this->path . ' > ' . $this->name;
+            return $this->path.' > '.$this->name;
         }
-        
+
         return $this->name;
     }
 
@@ -528,9 +543,10 @@ class Term extends Model
     public function getSiblings()
     {
         return self::where('parent_id', $this->parent_id)
-                  ->where('id', '!=', $this->id)
-                  ->ordered()
-                  ->get();
+            ->where('id', '!=', $this->id)
+            ->ordered()
+            ->get()
+        ;
     }
 
     /**
@@ -556,9 +572,28 @@ class Term extends Model
     {
         Cache::forget("terms.taxonomy.{$this->taxonomy_id}");
         Cache::forget("terms.roots.taxonomy.{$this->taxonomy_id}");
-        Cache::forget("terms.popular.20");
+        Cache::forget('terms.popular.20');
         Cache::forget("term.{$this->id}.children");
         Cache::forget("term.{$this->slug}.data");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'meta' => 'array',
+            'level' => 'integer',
+            'usage_count' => 'integer',
+            'last_used_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

@@ -70,6 +70,8 @@ class DestroyJobResource extends JsonResource
 
     /**
      * Customize the response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -77,4 +79,4 @@ class DestroyJobResource extends JsonResource
         $response->header('X-Job-Deleted', 'true');
         $response->header('X-Recovery-Until', now()->addDays(30)->toISOString());
     }
-} 
+}

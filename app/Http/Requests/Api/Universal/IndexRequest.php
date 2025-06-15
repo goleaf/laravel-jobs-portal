@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class IndexRequest extends FormRequest
@@ -105,41 +105,6 @@ class IndexRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Invalid search parameters',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'per_page' => $this->per_page ?? 20,
-            'sort_direction' => $this->sort_direction ?? 'desc',
-        ]);
-
-        // Convert boolean strings
-        foreach (['featured_only', 'verified_only', 'popular_only', 'remote_only'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -171,4 +136,39 @@ class IndexRequest extends FormRequest
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Invalid search parameters',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Set default values
+        $this->merge([
+            'per_page' => $this->per_page ?? 20,
+            'sort_direction' => $this->sort_direction ?? 'desc',
+        ]);
+
+        // Convert boolean strings
+        foreach (['featured_only', 'verified_only', 'popular_only', 'remote_only'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+    }
+}

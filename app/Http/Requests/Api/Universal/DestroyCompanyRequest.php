@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Company;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DestroyCompanyRequest extends FormRequest
@@ -16,8 +17,8 @@ class DestroyCompanyRequest extends FormRequest
         // Check if user can delete companies
         // This should be restricted to admins or company owners
         return $this->user() && (
-            $this->user()->hasRole('admin') || 
-            $this->user()->hasRole('employer') && $this->userOwnsCompany()
+            $this->user()->hasRole('admin')
+            || $this->user()->hasRole('employer') && $this->userOwnsCompany()
         );
     }
 
@@ -59,6 +60,36 @@ class DestroyCompanyRequest extends FormRequest
             'reason' => __('validation.attributes.reason'),
             'transfer_data_to' => __('validation.attributes.transfer_data_to'),
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Check if company has active jobs
+            $companyId = $this->route('id');
+            $company = Company::find($companyId);
+
+            if ($company && $company->jobs()->where('status', 'active')->count() > 0) {
+                if (!$this->has('transfer_data_to')) {
+                    $validator->errors()->add('transfer_data_to', __('validation.required_when_active_jobs'));
+                }
+            }
+
+            // Check if user owns the company (for non-admins)
+            if ($this->user() && !$this->user()->hasRole('admin')) {
+                if (!$this->userOwnsCompany()) {
+                    $validator->errors()->add('authorization', __('auth.forbidden'));
+                }
+            }
+
+            // Validate transfer company is different
+            if ($this->has('transfer_data_to') && $this->transfer_data_to == $companyId) {
+                $validator->errors()->add('transfer_data_to', __('validation.different', ['attribute' => __('validation.attributes.transfer_data_to'), 'other' => __('validation.attributes.company')]));
+            }
+        });
     }
 
     /**
@@ -110,49 +141,19 @@ class DestroyCompanyRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Check if company has active jobs
-            $companyId = $this->route('id');
-            $company = \App\Models\Company::find($companyId);
-            
-            if ($company && $company->jobs()->where('status', 'active')->count() > 0) {
-                if (!$this->has('transfer_data_to')) {
-                    $validator->errors()->add('transfer_data_to', __('validation.required_when_active_jobs'));
-                }
-            }
-
-            // Check if user owns the company (for non-admins)
-            if ($this->user() && !$this->user()->hasRole('admin')) {
-                if (!$this->userOwnsCompany()) {
-                    $validator->errors()->add('authorization', __('auth.forbidden'));
-                }
-            }
-
-            // Validate transfer company is different
-            if ($this->has('transfer_data_to') && $this->transfer_data_to == $companyId) {
-                $validator->errors()->add('transfer_data_to', __('validation.different', ['attribute' => __('validation.attributes.transfer_data_to'), 'other' => __('validation.attributes.company')]));
-            }
-        });
-    }
-
-    /**
-     * Check if the authenticated user owns the company
+     * Check if the authenticated user owns the company.
      */
     private function userOwnsCompany(): bool
     {
         $companyId = $this->route('id');
         $user = $this->user();
-        
+
         if (!$user || !$companyId) {
             return false;
         }
 
         // Check if user has a company relationship
-        return $user->companies()->where('companies.id', $companyId)->exists() ||
-               $user->company_id == $companyId;
+        return $user->companies()->where('companies.id', $companyId)->exists()
+               || $user->company_id == $companyId;
     }
-} 
+}

@@ -2,9 +2,13 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Models\City;
+use App\Models\Job;
+use App\Models\State;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\Job;
+use Illuminate\Validation\Validator;
 
 class JobFilterRequest extends FormRequest
 {
@@ -19,7 +23,7 @@ class JobFilterRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -50,8 +54,8 @@ class JobFilterRequest extends FormRequest
             'is_freelance' => ['nullable', 'boolean'],
             'hide_salary' => ['nullable', 'boolean'],
             'sort_by' => ['nullable', 'string', Rule::in([
-                'relevance', 'date_desc', 'date_asc', 'salary_desc', 'salary_asc', 
-                'company_name', 'location', 'popularity'
+                'relevance', 'date_desc', 'date_asc', 'salary_desc', 'salary_asc',
+                'company_name', 'location', 'popularity',
             ])],
             'per_page' => ['nullable', 'integer', 'min:10', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
@@ -112,28 +116,29 @@ class JobFilterRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             // Additional validation for location hierarchy
             if ($this->filled('state_id') && $this->filled('country_id')) {
-                $stateExists = \App\Models\State::where('id', $this->input('state_id'))
+                $stateExists = State::where('id', $this->input('state_id'))
                     ->where('country_id', $this->input('country_id'))
-                    ->exists();
-                
+                    ->exists()
+                ;
+
                 if (!$stateExists) {
                     $validator->errors()->add('state_id', 'The selected state does not belong to the selected country.');
                 }
             }
 
             if ($this->filled('city_id') && $this->filled('state_id')) {
-                $cityExists = \App\Models\City::where('id', $this->input('city_id'))
+                $cityExists = City::where('id', $this->input('city_id'))
                     ->where('state_id', $this->input('state_id'))
-                    ->exists();
-                
+                    ->exists()
+                ;
+
                 if (!$cityExists) {
                     $validator->errors()->add('city_id', 'The selected city does not belong to the selected state.');
                 }
@@ -152,38 +157,7 @@ class JobFilterRequest extends FormRequest
     }
 
     /**
-     * Handle a passed validation attempt.
-     *
-     * @return void
-     */
-    protected function passedValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'sort_by' => $this->input('sort_by', 'relevance'),
-            'per_page' => $this->input('per_page', 20),
-            'page' => $this->input('page', 1),
-            'posted_within' => $this->input('posted_within', 30), // Default to last 30 days
-        ]);
-
-        // Convert boolean inputs properly
-        if ($this->has('is_featured')) {
-            $this->merge(['is_featured' => $this->boolean('is_featured')]);
-        }
-
-        if ($this->has('is_freelance')) {
-            $this->merge(['is_freelance' => $this->boolean('is_freelance')]);
-        }
-
-        if ($this->has('hide_salary')) {
-            $this->merge(['hide_salary' => $this->boolean('hide_salary')]);
-        }
-    }
-
-    /**
      * Get search filters as array for easy use in controllers.
-     *
-     * @return array
      */
     public function getFilters(): array
     {
@@ -226,9 +200,37 @@ class JobFilterRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        // Set default values
+        $this->merge([
+            'sort_by' => $this->input('sort_by', 'relevance'),
+            'per_page' => $this->input('per_page', 20),
+            'page' => $this->input('page', 1),
+            'posted_within' => $this->input('posted_within', 30), // Default to last 30 days
+        ]);
+
+        // Convert boolean inputs properly
+        if ($this->has('is_featured')) {
+            $this->merge(['is_featured' => $this->boolean('is_featured')]);
+        }
+
+        if ($this->has('is_freelance')) {
+            $this->merge(['is_freelance' => $this->boolean('is_freelance')]);
+        }
+
+        if ($this->has('hide_salary')) {
+            $this->merge(['hide_salary' => $this->boolean('hide_salary')]);
+        }
+    }
+
     /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
+     * Enhanced Pattern: Data normalization.
      */
     protected function prepareForValidation(): void
     {
@@ -237,4 +239,4 @@ class JobFilterRequest extends FormRequest
             'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
         ]);
     }
-} 
+}

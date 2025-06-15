@@ -1254,7 +1254,6 @@ return [
         'select_independent_work' => 'Is Freelance',
         'select_featured' => 'Select Featured Company',
         'select_immediate' => 'Select Immediate',
-
     ],
 
     'flash' => [

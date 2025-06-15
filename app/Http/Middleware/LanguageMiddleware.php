@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\TranslationHelper;
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -16,18 +15,18 @@ class LanguageMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response
     {
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
 
         // If running in debug mode and not an API or AJAX request, check for missing translations
-        if (config('app.debug') &&
-            ! $request->expectsJson() &&
-            ! $request->ajax() &&
-            ! $this->isExcludedPath($request->path())) {
+        if (config('app.debug')
+            && !$request->expectsJson()
+            && !$request->ajax()
+            && !$this->isExcludedPath($request->path())) {
             // Only check for missing translations if we're not using the default locale
             if ($locale !== config('app.fallback_locale')) {
                 $missingCount = count(TranslationHelper::getMissingTranslations($locale));
@@ -49,7 +48,7 @@ class LanguageMiddleware
     }
 
     /**
-     * Check if the current path should be excluded from translation checks
+     * Check if the current path should be excluded from translation checks.
      */
     private function isExcludedPath(string $path): bool
     {

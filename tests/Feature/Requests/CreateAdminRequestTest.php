@@ -3,27 +3,33 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\CreateAdminRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CreateAdminRequestTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Test that the request has proper validation rules.
      */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new CreateAdminRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
-        
+
         // Check specific rules exist
         $this->assertArrayHasKey('first_name', $rules);
         $this->assertArrayHasKey('last_name', $rules);
@@ -34,13 +40,13 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization requires admin role.
      */
-    public function test_admin_user_is_authorized()
+    public function testAdminUserIsAuthorized()
     {
         // Create admin user
         $admin = User::factory()->create();
         // Note: Update this when role system is implemented
         $this->actingAs($admin);
-        
+
         $request = new CreateAdminRequest();
         // This will return true for now since hasRole method needs implementation
         $this->assertTrue(true); // Placeholder until role system is implemented
@@ -49,11 +55,11 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization denies non-admin users.
      */
-    public function test_non_admin_user_is_not_authorized()
+    public function testNonAdminUserIsNotAuthorized()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        
+
         $request = new CreateAdminRequest();
         // This will return true for now since hasRole method needs implementation
         $this->assertTrue(true); // Placeholder until role system is implemented
@@ -62,7 +68,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization denies unauthenticated users.
      */
-    public function test_unauthenticated_user_is_not_authorized()
+    public function testUnauthenticatedUserIsNotAuthorized()
     {
         $request = new CreateAdminRequest();
         // This should return false when auth()->check() is false
@@ -72,7 +78,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test validation passes with valid data.
      */
-    public function test_validation_passes_with_valid_data()
+    public function testValidationPassesWithValidData()
     {
         $data = [
             'first_name' => 'John',
@@ -93,7 +99,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test first_name is required.
      */
-    public function test_first_name_is_required()
+    public function testFirstNameIsRequired()
     {
         $data = $this->getValidData();
         unset($data['first_name']);
@@ -108,7 +114,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test last_name is required.
      */
-    public function test_last_name_is_required()
+    public function testLastNameIsRequired()
     {
         $data = $this->getValidData();
         unset($data['last_name']);
@@ -123,7 +129,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email is required.
      */
-    public function test_email_is_required()
+    public function testEmailIsRequired()
     {
         $data = $this->getValidData();
         unset($data['email']);
@@ -138,7 +144,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email must be valid format.
      */
-    public function test_email_must_be_valid_format()
+    public function testEmailMustBeValidFormat()
     {
         $data = $this->getValidData();
         $data['email'] = 'invalid-email';
@@ -153,7 +159,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email must be unique.
      */
-    public function test_email_must_be_unique()
+    public function testEmailMustBeUnique()
     {
         // Create existing user with email
         User::factory()->create(['email' => 'existing@example.com']);
@@ -171,7 +177,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password is required.
      */
-    public function test_password_is_required()
+    public function testPasswordIsRequired()
     {
         $data = $this->getValidData();
         unset($data['password']);
@@ -186,7 +192,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password minimum length.
      */
-    public function test_password_minimum_length()
+    public function testPasswordMinimumLength()
     {
         $data = $this->getValidData();
         $data['password'] = '123';
@@ -202,7 +208,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password confirmation is required.
      */
-    public function test_password_confirmation_is_required()
+    public function testPasswordConfirmationIsRequired()
     {
         $data = $this->getValidData();
         unset($data['password_confirmation']);
@@ -217,7 +223,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password confirmation must match.
      */
-    public function test_password_confirmation_must_match()
+    public function testPasswordConfirmationMustMatch()
     {
         $data = $this->getValidData();
         $data['password'] = 'password123';
@@ -233,14 +239,14 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function test_custom_error_messages_are_defined()
+    public function testCustomErrorMessagesAreDefined()
     {
         $request = new CreateAdminRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
-            
+
             // Check specific custom messages
             $this->assertArrayHasKey('first_name.required', $messages);
             $this->assertArrayHasKey('email.unique', $messages);
@@ -252,10 +258,10 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function test_custom_attributes_are_defined()
+    public function testCustomAttributesAreDefined()
     {
         $request = new CreateAdminRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
@@ -267,10 +273,10 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test data preparation method.
      */
-    public function test_data_preparation()
+    public function testDataPreparation()
     {
         $request = new CreateAdminRequest();
-        
+
         if (method_exists($request, 'prepareForValidation')) {
             // Test that boolean fields are properly handled
             $this->assertTrue(true, 'prepareForValidation method exists');
@@ -312,4 +318,4 @@ class CreateAdminRequestTest extends TestCase
             'gender' => 5, // Invalid option
         ];
     }
-} 
+}

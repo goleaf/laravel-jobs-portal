@@ -20,20 +20,21 @@ foreach ($requestFiles as $file) {
         $className = $matches[1];
         foreach ($subDirs as $dir => $keywords) {
             foreach ($keywords as $keyword) {
-                if (stripos($className, $keyword) !== false) {
-                    $newDir = 'app/Http/Requests/' . $dir;
+                if (false !== stripos($className, $keyword)) {
+                    $newDir = 'app/Http/Requests/'.$dir;
                     if (!is_dir($newDir)) {
                         mkdir($newDir, 0755, true);
                     }
-                    $newPath = $newDir . '/' . basename($file);
+                    $newPath = $newDir.'/'.basename($file);
                     rename($file, $newPath);
-                    echo "Moved $file to $newPath\n";
+                    echo "Moved {$file} to {$newPath}\n";
+
                     continue 2;
                 }
             }
         }
-        echo "No matching subdirectory for $file\n";
+        echo "No matching subdirectory for {$file}\n";
     }
 }
 
-echo "Organization complete.\n"; 
+echo "Organization complete.\n";

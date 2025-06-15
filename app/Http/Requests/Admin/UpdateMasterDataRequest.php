@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Universal Form Request for updating MasterData
- * Implements Laravel 12 best practices with Universal MCP patterns
+ * Implements Laravel 12 best practices with Universal MCP patterns.
  */
 class UpdateMasterDataRequest extends FormRequest
 {
@@ -23,9 +23,9 @@ class UpdateMasterDataRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: Update-specific validation rules
+     * Universal Pattern: Update-specific validation rules.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -40,7 +40,7 @@ class UpdateMasterDataRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Universal Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -58,7 +58,7 @@ class UpdateMasterDataRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -72,21 +72,8 @@ class UpdateMasterDataRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Universal Pattern: Data normalization
-     */
-    protected function prepareForValidation(): void
-    {
-        if ($this->has('status')) {
-            $this->merge([
-                'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
-            ]);
-        }
-    }
-
-    /**
      * Configure the validator instance.
-     * Universal Pattern: Enhanced validation logic
+     * Universal Pattern: Enhanced validation logic.
      */
     public function withValidator(Validator $validator): void
     {
@@ -98,17 +85,21 @@ class UpdateMasterDataRequest extends FormRequest
     }
 
     /**
-     * Universal Pattern: Check for unauthorized changes
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization.
      */
-    private function hasUnauthorizedChanges(): bool
+    protected function prepareForValidation(): void
     {
-        // Add specific business logic for unauthorized changes
-        return false;
+        if ($this->has('status')) {
+            $this->merge([
+                'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            ]);
+        }
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: Enhanced error handling with audit logging
+     * Universal Pattern: Enhanced error handling with audit logging.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -120,5 +111,14 @@ class UpdateMasterDataRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Universal Pattern: Check for unauthorized changes.
+     */
+    private function hasUnauthorizedChanges(): bool
+    {
+        // Add specific business logic for unauthorized changes
+        return false;
     }
 }

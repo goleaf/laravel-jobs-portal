@@ -3,12 +3,12 @@
 /**
  * =============================================================================
  * MASTER TRANSLATION SYSTEM IMPLEMENTATION
- * =============================================================================
- * 
+ * =============================================================================.
+ *
  * This file contains the complete, production-ready internationalization (i18n)
  * system for the Job Portal application supporting 9 languages with advanced
  * management tools, automatic language detection, and comprehensive translation utilities.
- * 
+ *
  * System Features:
  * ✅ 9 Languages: English, Arabic, German, Spanish, French, Portuguese, Russian, Turkish, Chinese
  * ✅ RTL Support: Automatic right-to-left layout for Arabic
@@ -18,7 +18,7 @@
  * ✅ Frontend: JavaScript integration, Vue.js support, reactive UI
  * ✅ Validation: Translation coverage, missing key detection
  * ✅ Automation: Hardcoded string scanning, sync tools
- * 
+ *
  * =============================================================================
  */
 
@@ -30,7 +30,7 @@ namespace App\MasterTranslation;
 
 /**
  * Master Translation Configuration
- * Configure this in config/app.php
+ * Configure this in config/app.php.
  */
 $masterConfig = [
     'locale' => 'en',
@@ -135,7 +135,7 @@ $masterConfig = [
 // =============================================================================
 
 /**
- * Usage in Controllers
+ * Usage in Controllers.
  */
 class ExampleController
 {
@@ -143,69 +143,69 @@ class ExampleController
     {
         // Basic translation
         $welcomeMessage = __('messages.welcome');
-        
+
         // Translation with parameters
         $userGreeting = __('messages.user.greeting', ['name' => auth()->user()->name]);
-        
+
         // JSON translation (frontend-compatible)
         $frontendMessage = trans_json('app.loading');
-        
+
         // Check if translation exists
         if (trans_has('messages.custom.key')) {
             $customMessage = __('messages.custom.key');
         }
-        
+
         // Get all translations for frontend
         $allTranslations = app('translation.service')->getAllTranslations(app()->getLocale());
-        
+
         // Get translation statistics
         $stats = app('translation.service')->getStatistics();
-        
+
         return view('dashboard', compact(
             'welcomeMessage',
-            'userGreeting', 
+            'userGreeting',
             'frontendMessage',
             'allTranslations',
             'stats'
         ));
     }
-    
+
     public function switchLanguage(Request $request)
     {
         $locale = $request->input('locale');
-        
+
         // Validate locale
         $availableLocales = array_keys(config('app.available_locales', []));
-        
+
         if (!in_array($locale, $availableLocales)) {
             return response()->json([
                 'success' => false,
-                'message' => __('locale.invalid_locale')
+                'message' => __('locale.invalid_locale'),
             ], 400);
         }
-        
+
         // Switch locale
         app()->setLocale($locale);
         session(['locale' => $locale]);
-        
+
         // Update user preference if authenticated
         if (auth()->check()) {
             auth()->user()->update(['preferred_locale' => $locale]);
         }
-        
+
         return response()->json([
             'success' => true,
             'message' => __('locale.language_switched_successfully'),
             'locale' => $locale,
             'is_rtl' => is_rtl($locale),
             'direction' => lang_direction($locale),
-            'flag' => locale_flag($locale)
+            'flag' => locale_flag($locale),
         ]);
     }
 }
 
 /**
- * Usage in Models
+ * Usage in Models.
  */
 class Job extends Model
 {
@@ -215,15 +215,15 @@ class Job extends Model
         if ($this->hasTranslation('title')) {
             return $this->getTranslation('title', app()->getLocale());
         }
-        
+
         return $value;
     }
-    
+
     public function getLocalizedCreatedAtAttribute()
     {
         $localeConfig = current_locale_config();
         $format = $localeConfig['date_format'] ?? 'm/d/Y';
-        
+
         return $this->created_at->format($format);
     }
 }
@@ -234,7 +234,7 @@ class Job extends Model
 
 /**
  * Master Blade Template Example
- * resources/views/layouts/app.blade.php
+ * resources/views/layouts/app.blade.php.
  */
 $bladeTemplate = '
 <!DOCTYPE html>
@@ -301,7 +301,7 @@ $bladeTemplate = '
 // =============================================================================
 
 /**
- * Frontend Translation Usage Examples
+ * Frontend Translation Usage Examples.
  */
 $frontendExamples = '
 // Basic usage
@@ -375,7 +375,7 @@ function useTranslation() {
 // =============================================================================
 
 /**
- * Command Line Usage Examples
+ * Command Line Usage Examples.
  */
 $cliExamples = '
 # Show comprehensive translation statistics
@@ -410,7 +410,7 @@ done
 // =============================================================================
 
 /**
- * Complete API Reference
+ * Complete API Reference.
  */
 $apiDocumentation = [
     'Language Switching' => [
@@ -422,8 +422,8 @@ $apiDocumentation = [
                 'message' => 'Language switched successfully',
                 'locale' => 'de',
                 'is_rtl' => false,
-                'direction' => 'ltr'
-            ]
+                'direction' => 'ltr',
+            ],
         ],
         'GET /locale/current' => [
             'description' => 'Get current locale information',
@@ -432,18 +432,18 @@ $apiDocumentation = [
                 'config' => ['name' => 'English', 'native' => 'English'],
                 'direction' => 'ltr',
                 'is_rtl' => false,
-                'available_locales' => ['en' => [], 'de' => []]
-            ]
+                'available_locales' => ['en' => [], 'de' => []],
+            ],
         ],
         'GET /locale/available' => [
             'description' => 'Get all available locales',
             'response' => [
                 'locales' => [
-                    ['code' => 'en', 'name' => 'English', 'native' => 'English', 'flag' => '🇺🇸']
+                    ['code' => 'en', 'name' => 'English', 'native' => 'English', 'flag' => '🇺🇸'],
                 ],
-                'current' => 'en'
-            ]
-        ]
+                'current' => 'en',
+            ],
+        ],
     ],
     'Translation Management' => [
         'GET /locale/translations/{locale}' => [
@@ -452,25 +452,25 @@ $apiDocumentation = [
             'response' => [
                 'locale' => 'en',
                 'translations' => ['messages.welcome' => 'Welcome'],
-                'namespace' => 'messages'
-            ]
+                'namespace' => 'messages',
+            ],
         ],
         'GET /admin/translations/statistics' => [
             'description' => 'Get translation statistics',
             'response' => [
                 'en' => ['total_keys' => 1000, 'coverage_percentage' => 100],
-                'de' => ['total_keys' => 950, 'coverage_percentage' => 95]
-            ]
+                'de' => ['total_keys' => 950, 'coverage_percentage' => 95],
+            ],
         ],
         'POST /admin/translations/sync/{locale}' => [
             'description' => 'Sync translations from base locale',
             'body' => ['base_locale' => 'en'],
             'response' => [
                 'synced_keys' => 50,
-                'total_missing' => 50
-            ]
-        ]
-    ]
+                'total_missing' => 50,
+            ],
+        ],
+    ],
 ];
 
 // =============================================================================
@@ -478,7 +478,7 @@ $apiDocumentation = [
 // =============================================================================
 
 /**
- * Advanced Integration Patterns
+ * Advanced Integration Patterns.
  */
 
 // Database-driven translations
@@ -489,7 +489,8 @@ class DatabaseTranslationProvider
         return DB::table('translations')
             ->where('locale', $locale)
             ->pluck('value', 'key')
-            ->toArray();
+            ->toArray()
+        ;
     }
 }
 
@@ -508,16 +509,16 @@ class TranslationValidationMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        
+
         if (app()->environment('local')) {
             $content = $response->getContent();
             $missingKeys = $this->findMissingTranslations($content);
-            
+
             if (!empty($missingKeys)) {
                 Log::warning('Missing translations detected', ['keys' => $missingKeys]);
             }
         }
-        
+
         return $response;
     }
 }
@@ -529,7 +530,7 @@ class AutoTranslationService
     {
         $missing = TranslationService::getMissingKeys($toLocale, $fromLocale);
         $sourceTranslations = TranslationService::getAllTranslations($fromLocale);
-        
+
         foreach ($missing as $key) {
             if (isset($sourceTranslations[$key])) {
                 $translated = static::translate($sourceTranslations[$key], $fromLocale, $toLocale);
@@ -538,7 +539,7 @@ class AutoTranslationService
             }
         }
     }
-    
+
     private static function translate($text, $from, $to)
     {
         // Integration with Google Translate, DeepL, etc.
@@ -552,7 +553,7 @@ class AutoTranslationService
 // =============================================================================
 
 /**
- * Production Deployment Checklist
+ * Production Deployment Checklist.
  */
 $deploymentChecklist = [
     'Configuration' => [
@@ -560,36 +561,36 @@ $deploymentChecklist = [
         '✅ Configure available_locales in config/app.php',
         '✅ Set up Redis for translation caching',
         '✅ Configure session storage',
-        '✅ Set up proper file permissions for lang/ directory'
+        '✅ Set up proper file permissions for lang/ directory',
     ],
     'Performance' => [
         '✅ Enable translation caching',
         '✅ Preload critical translations',
         '✅ Optimize translation files (remove unused keys)',
         '✅ Set up CDN for static translation files',
-        '✅ Configure proper cache headers'
+        '✅ Configure proper cache headers',
     ],
     'Security' => [
         '✅ Validate locale input in all endpoints',
         '✅ Sanitize translation parameters',
         '✅ Implement rate limiting for translation APIs',
         '✅ Secure admin translation management',
-        '✅ Audit translation file permissions'
+        '✅ Audit translation file permissions',
     ],
     'Monitoring' => [
         '✅ Set up translation error logging',
         '✅ Monitor translation cache hit rates',
         '✅ Track missing translation metrics',
         '✅ Monitor language switching patterns',
-        '✅ Set up alerts for translation failures'
+        '✅ Set up alerts for translation failures',
     ],
     'Testing' => [
         '✅ Test all language switching scenarios',
         '✅ Verify RTL layout functionality',
         '✅ Test translation parameter substitution',
         '✅ Validate pluralization rules',
-        '✅ Test CLI command functionality'
-    ]
+        '✅ Test CLI command functionality',
+    ],
 ];
 
 // =============================================================================
@@ -597,7 +598,7 @@ $deploymentChecklist = [
 // =============================================================================
 
 /**
- * Common Issues and Solutions
+ * Common Issues and Solutions.
  */
 $troubleshooting = [
     'Translation not showing' => [
@@ -605,93 +606,93 @@ $troubleshooting = [
         'Verify locale is supported in config',
         'Clear translation cache: php artisan translation:manage cache:clear',
         'Check file permissions on lang/ directory',
-        'Verify JSON syntax in translation files'
+        'Verify JSON syntax in translation files',
     ],
     'Language not switching' => [
         'Check middleware is applied to routes',
         'Verify locale in available_locales config',
         'Check session configuration',
         'Verify CSRF token in AJAX requests',
-        'Check browser console for JavaScript errors'
+        'Check browser console for JavaScript errors',
     ],
     'RTL layout issues' => [
         'Verify Arabic locale has rtl: true in config',
         'Check CSS classes are applied (.rtl/.ltr)',
         'Verify dir attribute is set on html element',
         'Test with browser developer tools',
-        'Check for CSS conflicts with RTL styles'
+        'Check for CSS conflicts with RTL styles',
     ],
     'Performance issues' => [
         'Enable Redis caching',
         'Check cache hit rates',
         'Optimize translation files',
         'Implement preloading for critical translations',
-        'Monitor database query counts'
+        'Monitor database query counts',
     ],
     'Missing translations' => [
         'Run: php artisan translation:manage missing --locale=de',
         'Use sync command: php artisan translation:manage sync --locale=de',
         'Check translation coverage: php artisan translation:manage stats',
         'Verify translation files exist',
-        'Check for typos in translation keys'
-    ]
+        'Check for typos in translation keys',
+    ],
 ];
 
 // =============================================================================
 // 10. MASTER IMPLEMENTATION SUMMARY
 // =============================================================================
 
-/**
+/*
  * COMPLETE TRANSLATION SYSTEM IMPLEMENTATION
- * 
+ *
  * Your job portal application now includes:
- * 
+ *
  * ✅ BACKEND INFRASTRUCTURE
  *    • LocaleController with comprehensive API
  *    • TranslationService with caching and namespace support
  *    • LocaleMiddleware with enhanced detection
  *    • TranslationCommand for CLI management
  *    • TranslationServiceProvider with full integration
- * 
+ *
  * ✅ FRONTEND INTEGRATION
  *    • JavaScript TranslationManager class
  *    • Vue.js/React integration
  *    • Language switcher component
  *    • RTL layout support
  *    • Real-time language switching
- * 
+ *
  * ✅ TRANSLATION MANAGEMENT
  *    • Web-based admin interface
  *    • CLI tools for developers
  *    • Import/export functionality
  *    • Statistics and coverage reports
  *    • Missing translation detection
- * 
+ *
  * ✅ PERFORMANCE OPTIMIZATION
  *    • Redis caching with intelligent invalidation
  *    • Lazy loading of translation resources
  *    • Namespace-based loading
  *    • Translation preloading
  *    • Optimized middleware pipeline
- * 
+ *
  * ✅ DEVELOPER EXPERIENCE
  *    • Multiple translation methods
  *    • Custom Blade directives
  *    • Helper functions
  *    • Artisan commands
  *    • Comprehensive documentation
- * 
+ *
  * ✅ PRODUCTION READY
  *    • Security validations
  *    • Error handling
  *    • Monitoring capabilities
  *    • Deployment checklist
  *    • Troubleshooting guide
- * 
+ *
  * The system supports 9 languages with complete translation coverage,
  * RTL support for Arabic, advanced management tools, and is optimized
  * for both development and production environments.
- * 
+ *
  * All components work together seamlessly to provide a professional-grade
  * internationalization solution for your job portal application.
  */

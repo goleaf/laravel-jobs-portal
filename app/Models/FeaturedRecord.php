@@ -1,1 +1,22 @@
-<?php namespace App\Models; use Illuminate\Database\Eloquent\Factories\HasFactory; use Illuminate\Database\Eloquent\Model; class FeaturedRecord extends Model { use HasFactory; protected $fillable = ['model_type', 'model_id', 'is_featured', 'featured_until']; protected function casts(): array { return ['is_featured' => 'boolean', 'featured_until' => 'datetime', 'created_at' => 'datetime', 'updated_at' => 'datetime']; } public function scopeActive($query) { return $query->where('is_featured', true); } }
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class FeaturedRecord extends Model
+{
+    use HasFactory;
+    protected $fillable = ['model_type', 'model_id', 'is_featured', 'featured_until'];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    protected function casts(): array
+    {
+        return ['is_featured' => 'boolean', 'featured_until' => 'datetime', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    }
+}

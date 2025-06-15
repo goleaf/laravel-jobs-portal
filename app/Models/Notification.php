@@ -2,42 +2,44 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Notification Model - Enhanced with Enhanced patterns
+ * Notification Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $type
- * @property int $notification_for
- * @property int $user_id
- * @property string $title
- * @property string|null $text
- * @property string|null $data
- * @property string|null $action_url
- * @property string|null $icon
- * @property string|null $read_at
- * @property bool $is_read
- * @property bool $is_important
- * @property string|null $category
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \App\Models\User $user
- * @property-read string $type_label
- * @property-read string $category_label
- * @property-read string $time_ago
- * @property-read bool $is_recent
- * @property-read array $parsed_data
+ * @property int         $id
+ * @property int         $type
+ * @property int         $notification_for
+ * @property int         $user_id
+ * @property string      $title
+ * @property null|string $text
+ * @property null|string $data
+ * @property null|string $action_url
+ * @property null|string $icon
+ * @property null|string $read_at
+ * @property bool        $is_read
+ * @property bool        $is_important
+ * @property null|string $category
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property string      $type_label
+ * @property string      $category_label
+ * @property string      $time_ago
+ * @property bool        $is_recent
+ * @property array       $parsed_data
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder read()
  * @method static \Illuminate\Database\Eloquent\Builder unread()
  * @method static \Illuminate\Database\Eloquent\Builder important()
@@ -67,116 +69,6 @@ class Notification extends Model
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'type',
-        'notification_for',
-        'user_id',
-        'title',
-        'text',
-        'data',
-        'action_url',
-        'icon',
-        'read_at',
-        'is_read',
-        'is_important',
-        'category',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'deleted_at',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_read' => 'boolean',
-            'is_important' => 'boolean',
-            'read_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Configure activity logging.
-     */
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly([
-                'type',
-                'notification_for',
-                'user_id',
-                'title',
-                'text',
-                'data',
-                'action_url',
-                'icon',
-                'read_at',
-                'is_read',
-                'is_important',
-                'category',
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
-    /**
-     * Validation rules for creating notifications.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'type' => 'required|integer|min:1',
-        'notification_for' => 'required|integer|min:1',
-        'user_id' => 'required|integer|exists:users,id',
-        'title' => 'required|string|max:255',
-        'text' => 'nullable|string',
-        'data' => 'nullable|string',
-        'action_url' => 'nullable|string|max:500',
-        'icon' => 'nullable|string|max:100',
-        'is_read' => 'boolean',
-        'is_important' => 'boolean',
-        'category' => 'nullable|string|max:100',
-    ];
-
-    /**
-     * Update validation rules for notifications.
-     *
-     * @param int $id
-     * @return array<string, string>
-     */
-    public static function updateRules(int $id): array
-    {
-        return [
-            'type' => 'required|integer|min:1',
-            'notification_for' => 'required|integer|min:1',
-            'user_id' => 'required|integer|exists:users,id',
-            'title' => 'required|string|max:255',
-            'text' => 'nullable|string',
-            'data' => 'nullable|string',
-            'action_url' => 'nullable|string|max:500',
-            'icon' => 'nullable|string|max:100',
-            'is_read' => 'boolean',
-            'is_important' => 'boolean',
-            'category' => 'nullable|string|max:100',
-        ];
-    }
 
     // =============================================
     // CONSTANTS
@@ -222,6 +114,101 @@ class Notification extends Model
     public const NOTIFICATION_FOR_COMPANY = 2;
     public const NOTIFICATION_FOR_ADMIN = 3;
 
+    /**
+     * Validation rules for creating notifications.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'type' => 'required|integer|min:1',
+        'notification_for' => 'required|integer|min:1',
+        'user_id' => 'required|integer|exists:users,id',
+        'title' => 'required|string|max:255',
+        'text' => 'nullable|string',
+        'data' => 'nullable|string',
+        'action_url' => 'nullable|string|max:500',
+        'icon' => 'nullable|string|max:100',
+        'is_read' => 'boolean',
+        'is_important' => 'boolean',
+        'category' => 'nullable|string|max:100',
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'type',
+        'notification_for',
+        'user_id',
+        'title',
+        'text',
+        'data',
+        'action_url',
+        'icon',
+        'read_at',
+        'is_read',
+        'is_important',
+        'category',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * Configure activity logging.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'type',
+                'notification_for',
+                'user_id',
+                'title',
+                'text',
+                'data',
+                'action_url',
+                'icon',
+                'read_at',
+                'is_read',
+                'is_important',
+                'category',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+        ;
+    }
+
+    /**
+     * Update validation rules for notifications.
+     *
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
+    {
+        return [
+            'type' => 'required|integer|min:1',
+            'notification_for' => 'required|integer|min:1',
+            'user_id' => 'required|integer|exists:users,id',
+            'title' => 'required|string|max:255',
+            'text' => 'nullable|string',
+            'data' => 'nullable|string',
+            'action_url' => 'nullable|string|max:500',
+            'icon' => 'nullable|string|max:100',
+            'is_read' => 'boolean',
+            'is_important' => 'boolean',
+            'category' => 'nullable|string|max:100',
+        ];
+    }
+
     // =============================================
     // RELATIONSHIPS
     // =============================================
@@ -240,6 +227,8 @@ class Notification extends Model
 
     /**
      * Scope a query to only include read notifications.
+     *
+     * @param mixed $query
      */
     public function scopeRead($query)
     {
@@ -248,6 +237,8 @@ class Notification extends Model
 
     /**
      * Scope a query to only include unread notifications.
+     *
+     * @param mixed $query
      */
     public function scopeUnread($query)
     {
@@ -256,6 +247,8 @@ class Notification extends Model
 
     /**
      * Scope a query to only include important notifications.
+     *
+     * @param mixed $query
      */
     public function scopeImportant($query)
     {
@@ -264,6 +257,8 @@ class Notification extends Model
 
     /**
      * Scope a query to only include normal notifications.
+     *
+     * @param mixed $query
      */
     public function scopeNormal($query)
     {
@@ -276,6 +271,8 @@ class Notification extends Model
 
     /**
      * Scope for notifications by user.
+     *
+     * @param mixed $query
      */
     public function scopeByUser($query, int $userId)
     {
@@ -284,6 +281,8 @@ class Notification extends Model
 
     /**
      * Scope for notifications by type.
+     *
+     * @param mixed $query
      */
     public function scopeByType($query, int $type)
     {
@@ -292,6 +291,8 @@ class Notification extends Model
 
     /**
      * Scope for notifications by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -300,6 +301,8 @@ class Notification extends Model
 
     /**
      * Scope for notifications by notification_for.
+     *
+     * @param mixed $query
      */
     public function scopeByNotificationFor($query, int $notificationFor)
     {
@@ -308,12 +311,15 @@ class Notification extends Model
 
     /**
      * Scope for searching notifications.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('text', 'like', "%{$term}%");
+                ->orWhere('text', 'like', "%{$term}%")
+            ;
         });
     }
 
@@ -323,6 +329,8 @@ class Notification extends Model
 
     /**
      * Scope for recent notifications.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 7)
     {
@@ -331,6 +339,8 @@ class Notification extends Model
 
     /**
      * Scope for old notifications.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 30)
     {
@@ -339,6 +349,8 @@ class Notification extends Model
 
     /**
      * Scope for today's notifications.
+     *
+     * @param mixed $query
      */
     public function scopeToday($query)
     {
@@ -347,22 +359,27 @@ class Notification extends Model
 
     /**
      * Scope for this week's notifications.
+     *
+     * @param mixed $query
      */
     public function scopeThisWeek($query)
     {
         return $query->whereBetween('created_at', [
             now()->startOfWeek(),
-            now()->endOfWeek()
+            now()->endOfWeek(),
         ]);
     }
 
     /**
      * Scope for this month's notifications.
+     *
+     * @param mixed $query
      */
     public function scopeThisMonth($query)
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -371,74 +388,92 @@ class Notification extends Model
 
     /**
      * Scope for job-related notifications.
+     *
+     * @param mixed $query
      */
     public function scopeJob($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'job')
-              ->orWhereIn('type', [
-                  self::TYPE_JOB_APPLICATION,
-                  self::TYPE_JOB_APPROVED,
-                  self::TYPE_JOB_REJECTED
-              ]);
+                ->orWhereIn('type', [
+                    self::TYPE_JOB_APPLICATION,
+                    self::TYPE_JOB_APPROVED,
+                    self::TYPE_JOB_REJECTED,
+                ])
+            ;
         });
     }
 
     /**
      * Scope for application-related notifications.
+     *
+     * @param mixed $query
      */
     public function scopeApplication($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'application')
-              ->orWhere('type', self::TYPE_JOB_APPLICATION);
+                ->orWhere('type', self::TYPE_JOB_APPLICATION)
+            ;
         });
     }
 
     /**
      * Scope for company-related notifications.
+     *
+     * @param mixed $query
      */
     public function scopeCompany($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'company')
-              ->orWhereIn('type', [
-                  self::TYPE_COMPANY_APPROVED,
-                  self::TYPE_COMPANY_REJECTED
-              ]);
+                ->orWhereIn('type', [
+                    self::TYPE_COMPANY_APPROVED,
+                    self::TYPE_COMPANY_REJECTED,
+                ])
+            ;
         });
     }
 
     /**
      * Scope for system notifications.
+     *
+     * @param mixed $query
      */
     public function scopeSystem($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'system')
-              ->orWhere('type', self::TYPE_SYSTEM_NOTIFICATION);
+                ->orWhere('type', self::TYPE_SYSTEM_NOTIFICATION)
+            ;
         });
     }
 
     /**
      * Scope for marketing notifications.
+     *
+     * @param mixed $query
      */
     public function scopeMarketing($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'marketing')
-              ->orWhere('type', self::TYPE_MARKETING);
+                ->orWhere('type', self::TYPE_MARKETING)
+            ;
         });
     }
 
     /**
      * Scope for security notifications.
+     *
+     * @param mixed $query
      */
     public function scopeSecurity($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'security')
-              ->orWhere('type', self::TYPE_SECURITY);
+                ->orWhere('type', self::TYPE_SECURITY)
+            ;
         });
     }
 
@@ -448,6 +483,8 @@ class Notification extends Model
 
     /**
      * Scope for latest notifications.
+     *
+     * @param mixed $query
      */
     public function scopeLatest($query)
     {
@@ -456,6 +493,8 @@ class Notification extends Model
 
     /**
      * Scope for oldest notifications.
+     *
+     * @param mixed $query
      */
     public function scopeOldest($query)
     {
@@ -474,7 +513,7 @@ class Notification extends Model
         return Cache::remember(
             "notifications_unread_count_{$userId}",
             now()->addMinutes(5),
-            fn() => static::unread()
+            fn () => static::unread()
                 ->byUser($userId)
                 ->count()
         );
@@ -483,12 +522,12 @@ class Notification extends Model
     /**
      * Get cached recent notifications for user.
      */
-    public static function getCachedRecent(int $userId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedRecent(int $userId, int $limit = 10): Collection
     {
         return Cache::remember(
             "notifications_recent_{$userId}_{$limit}",
             now()->addMinutes(10),
-            fn() => static::byUser($userId)
+            fn () => static::byUser($userId)
                 ->with('user')
                 ->latest()
                 ->limit($limit)
@@ -499,12 +538,12 @@ class Notification extends Model
     /**
      * Get cached important notifications for user.
      */
-    public static function getCachedImportant(int $userId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedImportant(int $userId): Collection
     {
         return Cache::remember(
             "notifications_important_{$userId}",
             now()->addMinutes(15),
-            fn() => static::byUser($userId)
+            fn () => static::byUser($userId)
                 ->important()
                 ->unread()
                 ->latest()
@@ -603,7 +642,7 @@ class Notification extends Model
      */
     public function isForCandidate(): bool
     {
-        return $this->notification_for === self::NOTIFICATION_FOR_CANDIDATE;
+        return self::NOTIFICATION_FOR_CANDIDATE === $this->notification_for;
     }
 
     /**
@@ -611,7 +650,7 @@ class Notification extends Model
      */
     public function isForCompany(): bool
     {
-        return $this->notification_for === self::NOTIFICATION_FOR_COMPANY;
+        return self::NOTIFICATION_FOR_COMPANY === $this->notification_for;
     }
 
     /**
@@ -619,7 +658,7 @@ class Notification extends Model
      */
     public function isForAdmin(): bool
     {
-        return $this->notification_for === self::NOTIFICATION_FOR_ADMIN;
+        return self::NOTIFICATION_FOR_ADMIN === $this->notification_for;
     }
 
     /**
@@ -644,6 +683,21 @@ class Notification extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_read' => 'boolean',
+            'is_important' => 'boolean',
+            'read_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     /**

@@ -3,11 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\JobCategory;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class JobCategoryRepository
+ * Class JobCategoryRepository.
  */
 class JobCategoryRepository extends BaseRepository
 {
@@ -20,7 +19,7 @@ class JobCategoryRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -28,8 +27,8 @@ class JobCategoryRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return JobCategory::class;
@@ -43,13 +42,13 @@ class JobCategoryRepository extends BaseRepository
             /** @var JobCategory $jobCategory */
             $jobCategory = $this->create($input);
 
-            if (isset($input['customer_image']) && ! empty($input['customer_image'])) {
+            if (isset($input['customer_image']) && !empty($input['customer_image'])) {
                 $jobCategory->addMedia($input['customer_image'])->toMediaCollection(
                     JobCategory::PATH,
                     config('app.media_disc')
                 );
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
@@ -64,14 +63,14 @@ class JobCategoryRepository extends BaseRepository
             /** @var JobCategory $jobCategories */
             $jobCategories = $this->update($input, $id);
 
-            if (! empty($input['customer_image'])) {
+            if (!empty($input['customer_image'])) {
                 $jobCategories->clearMediaCollection(JobCategory::PATH);
                 $jobCategories->addMedia($input['customer_image'])->toMediaCollection(
                     JobCategory::PATH,
                     config('app.media_disc')
                 );
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 

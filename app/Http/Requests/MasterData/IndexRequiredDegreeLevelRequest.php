@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\MasterData;
 
+use App\Models\RequiredDegreeLevel;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IndexRequiredDegreeLevelRequest extends FormRequest
@@ -11,13 +13,13 @@ class IndexRequiredDegreeLevelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('viewAny', \App\Models\RequiredDegreeLevel::class);
+        return $this->user()->can('viewAny', RequiredDegreeLevel::class);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -88,19 +90,19 @@ class IndexRequiredDegreeLevelRequest extends FormRequest
         // Convert string booleans to actual booleans
         if ($this->has('active')) {
             $this->merge([
-                'active' => filter_var($this->input('active'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'active' => filter_var($this->input('active'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
 
         if ($this->has('default')) {
             $this->merge([
-                'default' => filter_var($this->input('default'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'default' => filter_var($this->input('default'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
 
         if ($this->has('with_jobs')) {
             $this->merge([
-                'with_jobs' => filter_var($this->input('with_jobs'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'with_jobs' => filter_var($this->input('with_jobs'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
 
@@ -112,4 +114,4 @@ class IndexRequiredDegreeLevelRequest extends FormRequest
             'page' => $this->input('page', 1),
         ]);
     }
-} 
+}

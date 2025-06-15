@@ -2,58 +2,58 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Country Model - Enhanced with Context7 patterns
+ * Country Model - Enhanced with Context7 patterns.
  *
- * @property int $id
- * @property string $name
- * @property string $short_code
- * @property string|null $phone_code
- * @property string|null $iso_code
- * @property string|null $currency
- * @property bool $is_active
- * @property bool $is_default
- * @property bool $is_featured
- * @property string|null $flag_url
- * @property string|null $region
- * @property string|null $continent
- * @property int|null $population
- * @property float|null $area_km2
- * @property string|null $capital
- * @property string|null $timezone
- * @property array|null $languages
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\State[] $states
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read string $display_name
- * @property-read string $full_name
- * @property-read string $flag_emoji
- * @property-read string $population_formatted
- * @property-read string $area_formatted
- * @property-read int $states_count
- * @property-read int $cities_count
- * @property-read int $companies_count
- * @property-read int $active_companies_count
- * @property-read int $jobs_count
- * @property-read int $active_jobs_count
- * @property-read int $candidates_count
- * @property-read int $active_candidates_count
- * @property-read int $users_count
+ * @property int                    $id
+ * @property string                 $name
+ * @property string                 $short_code
+ * @property null|string            $phone_code
+ * @property null|string            $iso_code
+ * @property null|string            $currency
+ * @property bool                   $is_active
+ * @property bool                   $is_default
+ * @property bool                   $is_featured
+ * @property null|string            $flag_url
+ * @property null|string            $region
+ * @property null|string            $continent
+ * @property null|int               $population
+ * @property null|float             $area_km2
+ * @property null|string            $capital
+ * @property null|string            $timezone
+ * @property null|array             $languages
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property Collection|State[]     $states
+ * @property City[]|Collection      $cities
+ * @property Collection|User[]      $users
+ * @property Collection|Company[]   $companies
+ * @property Collection|Job[]       $jobs
+ * @property Candidate[]|Collection $candidates
+ * @property string                 $display_name
+ * @property string                 $full_name
+ * @property string                 $flag_emoji
+ * @property string                 $population_formatted
+ * @property string                 $area_formatted
+ * @property int                    $states_count
+ * @property int                    $cities_count
+ * @property int                    $companies_count
+ * @property int                    $active_companies_count
+ * @property int                    $jobs_count
+ * @property int                    $active_jobs_count
+ * @property int                    $candidates_count
+ * @property int                    $active_candidates_count
+ * @property int                    $users_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Country newQuery()
@@ -98,6 +98,25 @@ class Country extends Model
     use LogsActivity;
 
     /**
+     * Validation rules for creating countries.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:180|unique:countries,name',
+        'short_code' => 'required|string|size:2|unique:countries,short_code',
+        'iso_code' => 'nullable|string|size:2|unique:countries,iso_code',
+        'phone_code' => 'nullable|string|max:10',
+        'currency' => 'nullable|string|max:10',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_featured' => 'boolean',
+        'flag_url' => 'nullable|url|max:255',
+        'region' => 'nullable|string|max:100',
+        'continent' => 'nullable|string|max:50',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -129,25 +148,6 @@ class Country extends Model
     protected $hidden = [];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_featured' => 'boolean',
-            'population' => 'integer',
-            'area_km2' => 'float',
-            'languages' => 'array',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -172,40 +172,21 @@ class Country extends Model
                 'languages',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating countries.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:180|unique:countries,name',
-        'short_code' => 'required|string|size:2|unique:countries,short_code',
-        'iso_code' => 'nullable|string|size:2|unique:countries,iso_code',
-        'phone_code' => 'nullable|string|max:10',
-        'currency' => 'nullable|string|max:10',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_featured' => 'boolean',
-        'flag_url' => 'nullable|url|max:255',
-        'region' => 'nullable|string|max:100',
-        'continent' => 'nullable|string|max:50',
-    ];
 
     /**
      * Update validation rules for countries.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'name' => 'required|string|max:180|unique:countries,name,' . $id,
-            'short_code' => 'required|string|size:2|unique:countries,short_code,' . $id,
-            'iso_code' => 'nullable|string|size:2|unique:countries,iso_code,' . $id,
+            'name' => 'required|string|max:180|unique:countries,name,'.$id,
+            'short_code' => 'required|string|size:2|unique:countries,short_code,'.$id,
+            'iso_code' => 'nullable|string|size:2|unique:countries,iso_code,'.$id,
             'phone_code' => 'nullable|string|max:10',
             'currency' => 'nullable|string|max:10',
             'is_active' => 'boolean',
@@ -275,6 +256,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include active countries.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -283,6 +266,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include inactive countries.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -291,6 +276,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include featured countries.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -299,6 +286,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include non-featured countries.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -307,6 +296,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include default countries.
+     *
+     * @param mixed $query
      */
     public function scopeDefault($query)
     {
@@ -315,6 +306,8 @@ class Country extends Model
 
     /**
      * Scope a query to only include custom countries.
+     *
+     * @param mixed $query
      */
     public function scopeCustom($query)
     {
@@ -327,19 +320,24 @@ class Country extends Model
 
     /**
      * Scope a query to search countries by name, code, or ISO code.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'LIKE', "%{$term}%")
-              ->orWhere('short_code', 'LIKE', "%{$term}%")
-              ->orWhere('iso_code', 'LIKE', "%{$term}%")
-              ->orWhere('capital', 'LIKE', "%{$term}%");
+                ->orWhere('short_code', 'LIKE', "%{$term}%")
+                ->orWhere('iso_code', 'LIKE', "%{$term}%")
+                ->orWhere('capital', 'LIKE', "%{$term}%")
+            ;
         });
     }
 
     /**
      * Scope a query to filter countries by short code.
+     *
+     * @param mixed $query
      */
     public function scopeByCode($query, string $code)
     {
@@ -348,6 +346,8 @@ class Country extends Model
 
     /**
      * Scope a query to filter countries by ISO code.
+     *
+     * @param mixed $query
      */
     public function scopeByIsoCode($query, string $isoCode)
     {
@@ -356,6 +356,8 @@ class Country extends Model
 
     /**
      * Scope a query to filter countries by phone code.
+     *
+     * @param mixed $query
      */
     public function scopeByPhoneCode($query, string $phoneCode)
     {
@@ -364,6 +366,8 @@ class Country extends Model
 
     /**
      * Scope a query to filter countries by currency.
+     *
+     * @param mixed $query
      */
     public function scopeByCurrency($query, string $currency)
     {
@@ -372,6 +376,8 @@ class Country extends Model
 
     /**
      * Scope a query to filter countries by region.
+     *
+     * @param mixed $query
      */
     public function scopeByRegion($query, string $region)
     {
@@ -380,6 +386,8 @@ class Country extends Model
 
     /**
      * Scope a query to filter countries by continent.
+     *
+     * @param mixed $query
      */
     public function scopeByContinent($query, string $continent)
     {
@@ -388,6 +396,8 @@ class Country extends Model
 
     /**
      * Scope a query to get recent countries.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query)
     {
@@ -396,6 +406,8 @@ class Country extends Model
 
     /**
      * Scope a query to get old countries.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -404,6 +416,8 @@ class Country extends Model
 
     /**
      * Scope a query to order countries alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -416,6 +430,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with states.
+     *
+     * @param mixed $query
      */
     public function scopeWithStates($query)
     {
@@ -424,6 +440,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries without states.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutStates($query)
     {
@@ -432,6 +450,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with active states.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveStates($query)
     {
@@ -442,6 +462,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with cities.
+     *
+     * @param mixed $query
      */
     public function scopeWithCities($query)
     {
@@ -450,6 +472,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with companies.
+     *
+     * @param mixed $query
      */
     public function scopeWithCompanies($query)
     {
@@ -458,6 +482,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with active companies.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCompanies($query)
     {
@@ -468,6 +494,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithJobs($query)
     {
@@ -476,6 +504,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with active jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -486,6 +516,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidates($query)
     {
@@ -494,6 +526,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with active candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -504,6 +538,8 @@ class Country extends Model
 
     /**
      * Scope a query to include countries with users.
+     *
+     * @param mixed $query
      */
     public function scopeWithUsers($query)
     {
@@ -512,36 +548,45 @@ class Country extends Model
 
     /**
      * Scope a query to get popular countries (with most companies).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query)
     {
         return $query->withCount(['companies', 'jobs'])
-                    ->orderBy('companies_count', 'desc')
-                    ->orderBy('jobs_count', 'desc');
+            ->orderBy('companies_count', 'desc')
+            ->orderBy('jobs_count', 'desc')
+        ;
     }
 
     /**
      * Scope a query to get popular countries by jobs.
+     *
+     * @param mixed $query
      */
     public function scopePopularByJobs($query, int $limit = 10)
     {
         return $query->withCount(['jobs' => function ($q) {
             $q->where('status', 'active');
         }])
-        ->orderBy('jobs_count', 'desc')
-        ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get popular countries by candidates.
+     *
+     * @param mixed $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
         return $query->withCount(['candidates' => function ($q) {
             $q->where('is_active', true);
         }])
-        ->orderBy('candidates_count', 'desc')
-        ->limit($limit);
+            ->orderBy('candidates_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     // =============================================
@@ -550,65 +595,83 @@ class Country extends Model
 
     /**
      * Scope a query to get European countries.
+     *
+     * @param mixed $query
      */
     public function scopeEuropean($query)
     {
         $europeanCodes = [
-            'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 
-            'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 
-            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'
+            'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+            'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
+            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB',
         ];
+
         return $query->whereIn('iso_code', $europeanCodes);
     }
 
     /**
      * Scope a query to get North American countries.
+     *
+     * @param mixed $query
      */
     public function scopeNorthAmerican($query)
     {
         $northAmericanCodes = ['US', 'CA', 'MX', 'GT', 'BZ', 'SV', 'HN', 'NI', 'CR', 'PA'];
+
         return $query->whereIn('iso_code', $northAmericanCodes);
     }
 
     /**
      * Scope a query to get Asian countries.
+     *
+     * @param mixed $query
      */
     public function scopeAsian($query)
     {
         $asianCodes = [
             'CN', 'IN', 'ID', 'JP', 'BD', 'PK', 'VN', 'TR', 'IR', 'TH',
-            'MM', 'KR', 'IQ', 'AF', 'MY', 'SA', 'UZ', 'NP', 'YE', 'LK'
+            'MM', 'KR', 'IQ', 'AF', 'MY', 'SA', 'UZ', 'NP', 'YE', 'LK',
         ];
+
         return $query->whereIn('iso_code', $asianCodes);
     }
 
     /**
      * Scope a query to get African countries.
+     *
+     * @param mixed $query
      */
     public function scopeAfrican($query)
     {
         $africanCodes = [
             'NG', 'ET', 'EG', 'ZA', 'KE', 'UG', 'DZ', 'SD', 'MA', 'AO',
-            'GH', 'MZ', 'MG', 'CM', 'CI', 'NE', 'BF', 'ML', 'MW', 'ZM'
+            'GH', 'MZ', 'MG', 'CM', 'CI', 'NE', 'BF', 'ML', 'MW', 'ZM',
         ];
+
         return $query->whereIn('iso_code', $africanCodes);
     }
 
     /**
      * Scope a query to get South American countries.
+     *
+     * @param mixed $query
      */
     public function scopeSouthAmerican($query)
     {
         $southAmericanCodes = ['BR', 'CO', 'AR', 'PE', 'VE', 'CL', 'EC', 'BO', 'PY', 'UY', 'GY', 'SR', 'FK'];
+
         return $query->whereIn('iso_code', $southAmericanCodes);
     }
 
     /**
      * Scope a query to get Oceanian countries.
+     *
+     * @param mixed $query
      */
     public function scopeOceanian($query)
     {
         $oceanianCodes = ['AU', 'PG', 'NZ', 'FJ', 'SB', 'NC', 'PF', 'VU', 'WS', 'KI'];
+
         return $query->whereIn('iso_code', $oceanianCodes);
     }
 
@@ -619,48 +682,48 @@ class Country extends Model
     /**
      * Get cached active countries.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember(
             'countries_active',
             now()->addHours(24),
-            fn() => static::active()->alphabetical()->get()
+            fn () => static::active()->alphabetical()->get()
         );
     }
 
     /**
      * Get cached featured countries.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember(
             'countries_featured',
             now()->addHours(12),
-            fn() => static::active()->featured()->alphabetical()->get()
+            fn () => static::active()->featured()->alphabetical()->get()
         );
     }
 
     /**
      * Get cached default countries.
      */
-    public static function getCachedDefault(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedDefault(): Collection
     {
         return Cache::remember(
             'countries_default',
             now()->addHours(24),
-            fn() => static::active()->default()->alphabetical()->get()
+            fn () => static::active()->default()->alphabetical()->get()
         );
     }
 
     /**
      * Get cached countries by continent.
      */
-    public static function getCachedByContinent(string $continent): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByContinent(string $continent): Collection
     {
         return Cache::remember(
             "countries_continent_{$continent}",
             now()->addHours(24),
-            fn() => static::active()
+            fn () => static::active()
                 ->byContinent($continent)
                 ->alphabetical()
                 ->get()
@@ -670,12 +733,12 @@ class Country extends Model
     /**
      * Get cached countries by region.
      */
-    public static function getCachedByRegion(string $region): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByRegion(string $region): Collection
     {
         return Cache::remember(
             "countries_region_{$region}",
             now()->addHours(24),
-            fn() => static::active()
+            fn () => static::active()
                 ->byRegion($region)
                 ->alphabetical()
                 ->get()
@@ -685,12 +748,12 @@ class Country extends Model
     /**
      * Get cached countries with states.
      */
-    public static function getCachedWithStates(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedWithStates(): Collection
     {
         return Cache::remember(
             'countries_with_states',
             now()->addHours(12),
-            fn() => static::active()
+            fn () => static::active()
                 ->withStates()
                 ->with('states')
                 ->alphabetical()
@@ -701,12 +764,12 @@ class Country extends Model
     /**
      * Get cached popular countries.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember(
             "countries_popular_{$limit}",
             now()->addHours(6),
-            fn() => static::active()
+            fn () => static::active()
                 ->popular($limit)
                 ->get()
         );
@@ -721,7 +784,7 @@ class Country extends Model
      */
     public function getDisplayNameAttribute(): string
     {
-        return $this->name . ($this->short_code ? " ({$this->short_code})" : '');
+        return $this->name.($this->short_code ? " ({$this->short_code})" : '');
     }
 
     /**
@@ -730,15 +793,15 @@ class Country extends Model
     public function getFullNameAttribute(): string
     {
         $parts = [$this->name];
-        
+
         if ($this->capital) {
             $parts[] = "Capital: {$this->capital}";
         }
-        
+
         if ($this->region) {
             $parts[] = "Region: {$this->region}";
         }
-        
+
         return implode(' | ', $parts);
     }
 
@@ -747,16 +810,16 @@ class Country extends Model
      */
     public function getFlagEmojiAttribute(): string
     {
-        if (!$this->short_code || strlen($this->short_code) !== 2) {
+        if (!$this->short_code || 2 !== strlen($this->short_code)) {
             return '🏳️';
         }
-        
+
         $flagEmojis = [
             'US' => '🇺🇸', 'CA' => '🇨🇦', 'GB' => '🇬🇧', 'DE' => '🇩🇪', 'FR' => '🇫🇷',
             'IT' => '🇮🇹', 'ES' => '🇪🇸', 'JP' => '🇯🇵', 'CN' => '🇨🇳', 'IN' => '🇮🇳',
             'AU' => '🇦🇺', 'BR' => '🇧🇷', 'MX' => '🇲🇽', 'RU' => '🇷🇺', 'ZA' => '🇿🇦',
         ];
-        
+
         return $flagEmojis[$this->short_code] ?? '🏳️';
     }
 
@@ -768,15 +831,17 @@ class Country extends Model
         if (!$this->population) {
             return 'N/A';
         }
-        
+
         if ($this->population >= 1000000000) {
-            return number_format($this->population / 1000000000, 1) . 'B';
-        } elseif ($this->population >= 1000000) {
-            return number_format($this->population / 1000000, 1) . 'M';
-        } elseif ($this->population >= 1000) {
-            return number_format($this->population / 1000, 1) . 'K';
+            return number_format($this->population / 1000000000, 1).'B';
         }
-        
+        if ($this->population >= 1000000) {
+            return number_format($this->population / 1000000, 1).'M';
+        }
+        if ($this->population >= 1000) {
+            return number_format($this->population / 1000, 1).'K';
+        }
+
         return number_format($this->population);
     }
 
@@ -788,8 +853,8 @@ class Country extends Model
         if (!$this->area_km2) {
             return 'N/A';
         }
-        
-        return number_format($this->area_km2, 0) . ' km²';
+
+        return number_format($this->area_km2, 0).' km²';
     }
 
     /**
@@ -800,7 +865,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_states_count",
             now()->addHours(6),
-            fn() => $this->states()->count()
+            fn () => $this->states()->count()
         );
     }
 
@@ -812,7 +877,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_cities_count",
             now()->addHours(6),
-            fn() => $this->cities()->count()
+            fn () => $this->cities()->count()
         );
     }
 
@@ -824,7 +889,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_companies_count",
             now()->addHours(2),
-            fn() => $this->companies()->count()
+            fn () => $this->companies()->count()
         );
     }
 
@@ -836,7 +901,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_active_companies_count",
             now()->addHours(2),
-            fn() => $this->companies()->where('is_active', true)->count()
+            fn () => $this->companies()->where('is_active', true)->count()
         );
     }
 
@@ -848,7 +913,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_jobs_count",
             now()->addHours(1),
-            fn() => $this->jobs()->count()
+            fn () => $this->jobs()->count()
         );
     }
 
@@ -860,7 +925,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_active_jobs_count",
             now()->addHours(1),
-            fn() => $this->jobs()->where('status', 'active')->count()
+            fn () => $this->jobs()->where('status', 'active')->count()
         );
     }
 
@@ -872,7 +937,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_candidates_count",
             now()->addHours(2),
-            fn() => $this->candidates()->count()
+            fn () => $this->candidates()->count()
         );
     }
 
@@ -884,7 +949,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_active_candidates_count",
             now()->addHours(2),
-            fn() => $this->candidates()->where('is_active', true)->count()
+            fn () => $this->candidates()->where('is_active', true)->count()
         );
     }
 
@@ -896,7 +961,7 @@ class Country extends Model
         return Cache::remember(
             "country_{$this->id}_users_count",
             now()->addHours(4),
-            fn() => $this->users()->count()
+            fn () => $this->users()->count()
         );
     }
 
@@ -906,9 +971,9 @@ class Country extends Model
     public function isEuropean(): bool
     {
         return in_array($this->iso_code, [
-            'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 
-            'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 
-            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'
+            'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+            'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
+            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB',
         ]);
     }
 
@@ -917,7 +982,7 @@ class Country extends Model
      */
     public function usesEuro(): bool
     {
-        return $this->currency === 'EUR';
+        return 'EUR' === $this->currency;
     }
 
     /**
@@ -925,7 +990,7 @@ class Country extends Model
      */
     public function getFormattedPhoneCode(): string
     {
-        return $this->phone_code ? '+' . $this->phone_code : '';
+        return $this->phone_code ? '+'.$this->phone_code : '';
     }
 
     /**
@@ -963,26 +1028,22 @@ class Country extends Model
     }
 
     /**
-     * Clear cache keys matching pattern.
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    private function clearCachePattern(string $pattern): void
+    protected function casts(): array
     {
-        $prefix = str_replace('*', '', $pattern);
-        $keys = [
-            $prefix . 'states_count',
-            $prefix . 'cities_count',
-            $prefix . 'companies_count',
-            $prefix . 'active_companies_count',
-            $prefix . 'jobs_count',
-            $prefix . 'active_jobs_count',
-            $prefix . 'candidates_count',
-            $prefix . 'active_candidates_count',
-            $prefix . 'users_count',
+        return [
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'population' => 'integer',
+            'area_km2' => 'float',
+            'languages' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
-
-        foreach ($keys as $key) {
-            Cache::forget($key);
-        }
     }
 
     /**
@@ -999,5 +1060,28 @@ class Country extends Model
         static::deleted(function ($country) {
             $country->clearCaches();
         });
+    }
+
+    /**
+     * Clear cache keys matching pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        $prefix = str_replace('*', '', $pattern);
+        $keys = [
+            $prefix.'states_count',
+            $prefix.'cities_count',
+            $prefix.'companies_count',
+            $prefix.'active_companies_count',
+            $prefix.'jobs_count',
+            $prefix.'active_jobs_count',
+            $prefix.'candidates_count',
+            $prefix.'active_candidates_count',
+            $prefix.'users_count',
+        ];
+
+        foreach ($keys as $key) {
+            Cache::forget($key);
+        }
     }
 }

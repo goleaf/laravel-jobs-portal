@@ -4,54 +4,50 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Job;
 use App\Models\Company;
-use App\Models\JobCategory;
-use App\Models\JobType;
-use App\Models\Skill;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use InvalidArgumentException;
 
 /**
- * Enhanced Job Repository
- * 
+ * Enhanced Job Repository.
+ *
  * Comprehensive job management repository with advanced patterns
  */
 class JobRepository extends BaseRepository
 {
     /**
-     * Cache duration for job-related queries (in minutes)
+     * Cache duration for job-related queries (in minutes).
      */
     private const CACHE_DURATION = 60;
 
     /**
-     * Maximum jobs per page for pagination
+     * Maximum jobs per page for pagination.
      */
     private const MAX_PER_PAGE = 100;
 
     protected array $defaultWith = [
-        'company', 
-        'jobCategory', 
-        'jobType', 
+        'company',
+        'jobCategory',
+        'jobType',
         'jobShift',
         'careerLevel',
         'functionalArea',
         'skills',
-        'salaryCurrency'
+        'salaryCurrency',
     ];
-    
+
     protected array $searchableFields = [
         'job_title',
         'description',
         'key_responsibilities',
-        'benefits'
+        'benefits',
     ];
-    
+
     protected array $filterableFields = [
         'company_id',
         'job_category_id',
@@ -65,9 +61,9 @@ class JobRepository extends BaseRepository
         'city_id',
         'is_active',
         'is_featured',
-        'status'
+        'status',
     ];
-    
+
     protected array $sortableFields = [
         'id',
         'job_title',
@@ -76,16 +72,8 @@ class JobRepository extends BaseRepository
         'salary_from',
         'salary_to',
         'job_expiry_date',
-        'last_change'
+        'last_change',
     ];
-
-    /**
-     * Specify Model class name (required by BaseRepository)
-     */
-    public function model()
-    {
-        return Job::class;
-    }
 
     public function __construct(Job $model)
     {
@@ -93,33 +81,42 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Find jobs with advanced filtering and search capabilities
+     * Specify Model class name (required by BaseRepository).
+     */
+    public function model()
+    {
+        return Job::class;
+    }
+
+    /**
+     * Find jobs with advanced filtering and search capabilities.
      */
     public function findJobsWithFilters(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $cacheKey = 'jobs:filtered:' . md5(serialize($filters) . $perPage);
+        $cacheKey = 'jobs:filtered:'.md5(serialize($filters).$perPage);
 
         return Cache::remember($cacheKey, self::CACHE_DURATION, function () use ($filters, $perPage) {
             $query = $this->model->newQuery()
                 ->with(['company', 'jobType', 'jobCategory', 'skills', 'salaryPeriod', 'requiredDegreeLevel'])
                 ->where('is_active', true)
-                ->where('is_suspended', false);
+                ->where('is_suspended', false)
+            ;
 
             // Apply search filters
             $this->applySearchFilters($query, $filters);
-            
+
             // Apply location filters
             $this->applyLocationFilters($query, $filters);
-            
+
             // Apply job attribute filters
             $this->applyJobAttributeFilters($query, $filters);
-            
+
             // Apply salary filters
             $this->applySalaryFilters($query, $filters);
-            
+
             // Apply company filters
             $this->applyCompanyFilters($query, $filters);
-            
+
             // Apply date filters
             $this->applyDateFilters($query, $filters);
 
@@ -133,7 +130,7 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Get popular jobs based on application count and views
+     * Get popular jobs based on application count and views.
      */
     public function getPopularJobs(int $limit = 10): Collection
     {
@@ -150,7 +147,7 @@ class JobRepository extends BaseRepository
                         COALESCE(jobs.views_count, 0) +
                         (CASE WHEN jobs.is_featured = 1 THEN 50 ELSE 0 END) +
                         (CASE WHEN jobs.created_at >= ? THEN 25 ELSE 0 END)
-                    ) as popularity_score')
+                    ) as popularity_score'),
                 ])
                 ->with(['company', 'jobType', 'jobCategory'])
                 ->where('is_active', true)
@@ -160,12 +157,13 @@ class JobRepository extends BaseRepository
                 ->orderBy('popularity_score', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get();
+                ->get()
+            ;
         });
     }
 
     /**
-     * Get featured jobs
+     * Get featured jobs.
      */
     public function getFeaturedJobs(int $limit = 10): Collection
     {
@@ -181,12 +179,13 @@ class JobRepository extends BaseRepository
                 ->orderBy('featured_until', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get();
+                ->get()
+            ;
         });
     }
 
     /**
-     * Get similar jobs based on category, skills, and location
+     * Get similar jobs based on category, skills, and location.
      */
     public function getSimilarJobs(Job $job, int $limit = 5): Collection
     {
@@ -194,13 +193,14 @@ class JobRepository extends BaseRepository
 
         return Cache::remember($cacheKey, self::CACHE_DURATION / 2, function () use ($job, $limit) {
             $skillIds = $job->skills->pluck('id')->toArray();
-            
+
             $query = $this->model->newQuery()
                 ->with(['company', 'jobType', 'jobCategory'])
                 ->where('id', '!=', $job->id)
                 ->where('is_active', true)
                 ->where('is_suspended', false)
-                ->where('expire_date', '>=', now());
+                ->where('expire_date', '>=', now())
+            ;
 
             // Score by relevance
             $query->select([
@@ -210,10 +210,10 @@ class JobRepository extends BaseRepository
                     (CASE WHEN country = ? THEN 20 ELSE 0 END) +
                     (CASE WHEN state = ? THEN 15 ELSE 0 END) +
                     (CASE WHEN city = ? THEN 10 ELSE 0 END) +
-                    (SELECT COUNT(*) * 5 FROM jobs_skill WHERE jobs_skill.job_id = jobs.id AND skill_id IN (' . 
-                    str_repeat('?,', count($skillIds) - 1) . '?)) +
+                    (SELECT COUNT(*) * 5 FROM jobs_skill WHERE jobs_skill.job_id = jobs.id AND skill_id IN ('
+                    .str_repeat('?,', count($skillIds) - 1).'?)) +
                     (CASE WHEN company_id = ? THEN 25 ELSE 0 END)
-                ) as relevance_score')
+                ) as relevance_score'),
             ]);
 
             // Bind parameters for relevance scoring
@@ -223,7 +223,7 @@ class JobRepository extends BaseRepository
                 $job->state,
                 $job->city,
                 ...$skillIds,
-                $job->company_id
+                $job->company_id,
             ];
 
             foreach ($bindings as $binding) {
@@ -234,12 +234,13 @@ class JobRepository extends BaseRepository
                 ->orderBy('relevance_score', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get();
+                ->get()
+            ;
         });
     }
 
     /**
-     * Get jobs by company with pagination
+     * Get jobs by company with pagination.
      */
     public function getJobsByCompany(Company $company, int $perPage = 10): LengthAwarePaginator
     {
@@ -250,11 +251,12 @@ class JobRepository extends BaseRepository
             ->where('is_suspended', false)
             ->where('expire_date', '>=', now())
             ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->paginate($perPage)
+        ;
     }
 
     /**
-     * Get job statistics for dashboard
+     * Get job statistics for dashboard.
      */
     public function getJobStatistics(): array
     {
@@ -265,24 +267,29 @@ class JobRepository extends BaseRepository
             $activeJobs = $this->model->where('is_active', true)
                 ->where('is_suspended', false)
                 ->where('expire_date', '>=', now())
-                ->count();
-            
+                ->count()
+            ;
+
             $featuredJobs = $this->model->where('is_active', true)
                 ->where('is_featured', true)
                 ->where('expire_date', '>=', now())
-                ->count();
+                ->count()
+            ;
 
             $expiredJobs = $this->model->where('is_active', true)
                 ->where('expire_date', '<', now())
-                ->count();
+                ->count()
+            ;
 
             $todayJobs = $this->model->where('is_active', true)
                 ->whereDate('created_at', today())
-                ->count();
+                ->count()
+            ;
 
             $weekJobs = $this->model->where('is_active', true)
                 ->where('created_at', '>=', now()->subDays(7))
-                ->count();
+                ->count()
+            ;
 
             return [
                 'total_jobs' => $totalJobs,
@@ -297,7 +304,7 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Get jobs expiring within specified days
+     * Get jobs expiring within specified days.
      */
     public function getExpiringJobs(int $days = 7): Collection
     {
@@ -308,19 +315,20 @@ class JobRepository extends BaseRepository
             ->where('expire_date', '>=', now())
             ->where('expire_date', '<=', now()->addDays($days))
             ->orderBy('expire_date', 'asc')
-            ->get();
+            ->get()
+        ;
     }
 
     /**
-     * Search jobs by keyword with relevance scoring
+     * Search jobs by keyword with relevance scoring.
      */
     public function searchJobsByKeyword(string $keyword, int $perPage = 15): LengthAwarePaginator
     {
-        $cacheKey = "jobs:search:" . md5($keyword) . ":{$perPage}";
+        $cacheKey = 'jobs:search:'.md5($keyword).":{$perPage}";
 
         return Cache::remember($cacheKey, self::CACHE_DURATION / 2, function () use ($keyword, $perPage) {
             $searchTerms = explode(' ', trim($keyword));
-            $searchPattern = '%' . implode('%', $searchTerms) . '%';
+            $searchPattern = '%'.implode('%', $searchTerms).'%';
 
             return $this->model->newQuery()
                 ->select([
@@ -336,7 +344,7 @@ class JobRepository extends BaseRepository
                          FROM companies c WHERE c.id = jobs.company_id) +
                         (SELECT CASE WHEN jc.name LIKE ? THEN 20 ELSE 0 END 
                          FROM job_categories jc WHERE jc.id = jobs.job_category_id)
-                    ) as relevance_score')
+                    ) as relevance_score'),
                 ])
                 ->with(['company', 'jobType', 'jobCategory', 'skills'])
                 ->where('is_active', true)
@@ -351,27 +359,167 @@ class JobRepository extends BaseRepository
                 ->having('relevance_score', '>', 0)
                 ->orderBy('relevance_score', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->paginate($perPage);
+                ->paginate($perPage)
+            ;
         });
     }
 
     /**
-     * Apply search filters to query
+     * Increment job view count.
+     */
+    public function incrementViews(int $jobId): bool
+    {
+        try {
+            $updated = $this->model->where('id', $jobId)
+                ->increment('views_count', 1, ['last_viewed_at' => now()])
+            ;
+
+            // Clear related caches
+            $this->clearJobCaches($jobId);
+
+            return $updated > 0;
+        } catch (\Exception $e) {
+            $this->logError('Failed to increment job views', [
+                'job_id' => $jobId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Mark job as featured.
+     */
+    public function markAsFeatured(int $jobId, ?Carbon $featuredUntil = null): bool
+    {
+        try {
+            $data = [
+                'is_featured' => true,
+                'featured_at' => now(),
+                'featured_until' => $featuredUntil ?? now()->addDays(30),
+            ];
+
+            $updated = $this->model->where('id', $jobId)->update($data);
+
+            $this->clearJobCaches($jobId);
+
+            return $updated > 0;
+        } catch (\Exception $e) {
+            $this->logError('Failed to mark job as featured', [
+                'job_id' => $jobId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Extend job expiry date.
+     */
+    public function extendExpiry(int $jobId, int $days): bool
+    {
+        try {
+            $job = $this->findById($jobId);
+            if (!$job) {
+                return false;
+            }
+
+            $newExpiryDate = Carbon::parse($job->expire_date)->addDays($days);
+
+            $updated = $this->model->where('id', $jobId)
+                ->update(['expire_date' => $newExpiryDate])
+            ;
+
+            $this->clearJobCaches($jobId);
+
+            return $updated > 0;
+        } catch (\Exception $e) {
+            $this->logError('Failed to extend job expiry', [
+                'job_id' => $jobId,
+                'days' => $days,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Get jobs by multiple IDs with caching.
+     */
+    public function findJobsByIds(array $jobIds): Collection
+    {
+        if (empty($jobIds)) {
+            return new Collection();
+        }
+
+        $cacheKey = 'jobs:multiple:'.md5(implode(',', $jobIds));
+
+        return Cache::remember($cacheKey, self::CACHE_DURATION, function () use ($jobIds) {
+            return $this->model->newQuery()
+                ->with(['company', 'jobType', 'jobCategory', 'skills'])
+                ->whereIn('id', $jobIds)
+                ->where('is_active', true)
+                ->get()
+                ->keyBy('id')
+            ;
+        });
+    }
+
+    /**
+     * Bulk update job status.
+     */
+    public function bulkUpdateStatus(array $jobIds, bool $isActive): int
+    {
+        try {
+            $updated = $this->model->whereIn('id', $jobIds)
+                ->update([
+                    'is_active' => $isActive,
+                    'updated_at' => now(),
+                ])
+            ;
+
+            // Clear all job caches after bulk update
+            Cache::tags(['jobs'])->flush();
+
+            $this->logActivity('Bulk status update', [
+                'job_ids' => $jobIds,
+                'is_active' => $isActive,
+                'updated_count' => $updated,
+            ]);
+
+            return $updated;
+        } catch (\Exception $e) {
+            $this->logError('Failed bulk status update', [
+                'job_ids' => $jobIds,
+                'is_active' => $isActive,
+                'error' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Apply search filters to query.
      */
     private function applySearchFilters(Builder $query, array $filters): void
     {
         if (!empty($filters['keyword'])) {
-            $keyword = '%' . $filters['keyword'] . '%';
+            $keyword = '%'.$filters['keyword'].'%';
             $query->where(function ($q) use ($keyword) {
                 $q->where('title', 'like', $keyword)
-                  ->orWhere('description', 'like', $keyword)
-                  ->orWhere('key_responsibilities', 'like', $keyword)
-                  ->orWhereHas('skills', function ($skillQuery) use ($keyword) {
-                      $skillQuery->where('name', 'like', $keyword);
-                  })
-                  ->orWhereHas('company', function ($companyQuery) use ($keyword) {
-                      $companyQuery->where('name', 'like', $keyword);
-                  });
+                    ->orWhere('description', 'like', $keyword)
+                    ->orWhere('key_responsibilities', 'like', $keyword)
+                    ->orWhereHas('skills', function ($skillQuery) use ($keyword) {
+                        $skillQuery->where('name', 'like', $keyword);
+                    })
+                    ->orWhereHas('company', function ($companyQuery) use ($keyword) {
+                        $companyQuery->where('name', 'like', $keyword);
+                    })
+                ;
             });
         }
 
@@ -384,7 +532,7 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Apply location filters to query
+     * Apply location filters to query.
      */
     private function applyLocationFilters(Builder $query, array $filters): void
     {
@@ -406,20 +554,20 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Apply job attribute filters to query
+     * Apply job attribute filters to query.
      */
     private function applyJobAttributeFilters(Builder $query, array $filters): void
     {
         if (!empty($filters['job_category_id'])) {
-            $categoryIds = is_array($filters['job_category_id']) 
-                ? $filters['job_category_id'] 
+            $categoryIds = is_array($filters['job_category_id'])
+                ? $filters['job_category_id']
                 : [$filters['job_category_id']];
             $query->whereIn('job_category_id', $categoryIds);
         }
 
         if (!empty($filters['job_type_id'])) {
-            $typeIds = is_array($filters['job_type_id']) 
-                ? $filters['job_type_id'] 
+            $typeIds = is_array($filters['job_type_id'])
+                ? $filters['job_type_id']
                 : [$filters['job_type_id']];
             $query->whereIn('job_type_id', $typeIds);
         }
@@ -446,7 +594,7 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Apply salary filters to query
+     * Apply salary filters to query.
      */
     private function applySalaryFilters(Builder $query, array $filters): void
     {
@@ -462,19 +610,19 @@ class JobRepository extends BaseRepository
             $query->where('salary_currency_id', $filters['salary_currency_id']);
         }
 
-        if (!empty($filters['hide_salary']) && $filters['hide_salary'] === false) {
+        if (!empty($filters['hide_salary']) && false === $filters['hide_salary']) {
             $query->where('hide_salary', false);
         }
     }
 
     /**
-     * Apply company filters to query
+     * Apply company filters to query.
      */
     private function applyCompanyFilters(Builder $query, array $filters): void
     {
         if (!empty($filters['company_id'])) {
-            $companyIds = is_array($filters['company_id']) 
-                ? $filters['company_id'] 
+            $companyIds = is_array($filters['company_id'])
+                ? $filters['company_id']
                 : [$filters['company_id']];
             $query->whereIn('company_id', $companyIds);
         }
@@ -493,7 +641,7 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Apply date filters to query
+     * Apply date filters to query.
      */
     private function applyDateFilters(Builder $query, array $filters): void
     {
@@ -519,203 +667,85 @@ class JobRepository extends BaseRepository
     }
 
     /**
-     * Apply sorting to query
+     * Apply sorting to query.
      */
     private function applySorting(Builder $query, string $sort): void
     {
         switch ($sort) {
             case 'latest':
                 $query->orderBy('created_at', 'desc');
+
                 break;
 
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
+
                 break;
 
             case 'salary_high':
                 $query->orderBy('salary_to', 'desc')->orderBy('salary_from', 'desc');
+
                 break;
 
             case 'salary_low':
                 $query->orderBy('salary_from', 'asc')->orderBy('salary_to', 'asc');
+
                 break;
 
             case 'title_asc':
                 $query->orderBy('title', 'asc');
+
                 break;
 
             case 'title_desc':
                 $query->orderBy('title', 'desc');
+
                 break;
 
             case 'company':
                 $query->join('companies', 'jobs.company_id', '=', 'companies.id')
-                      ->orderBy('companies.name', 'asc')
-                      ->select('jobs.*');
+                    ->orderBy('companies.name', 'asc')
+                    ->select('jobs.*')
+                ;
+
                 break;
 
             case 'expiring':
                 $query->orderBy('expire_date', 'asc');
+
                 break;
 
             case 'featured':
                 $query->orderBy('is_featured', 'desc')->orderBy('created_at', 'desc');
+
                 break;
 
             case 'relevance':
             default:
                 $query->orderBy('is_featured', 'desc')
-                      ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at', 'desc')
+                ;
+
                 break;
         }
     }
 
     /**
-     * Increment job view count
-     */
-    public function incrementViews(int $jobId): bool
-    {
-        try {
-            $updated = $this->model->where('id', $jobId)
-                ->increment('views_count', 1, ['last_viewed_at' => now()]);
-
-            // Clear related caches
-            $this->clearJobCaches($jobId);
-
-            return $updated > 0;
-        } catch (\Exception $e) {
-            $this->logError('Failed to increment job views', [
-                'job_id' => $jobId,
-                'error' => $e->getMessage()
-            ]);
-            return false;
-        }
-    }
-
-    /**
-     * Mark job as featured
-     */
-    public function markAsFeatured(int $jobId, ?Carbon $featuredUntil = null): bool
-    {
-        try {
-            $data = [
-                'is_featured' => true,
-                'featured_at' => now(),
-                'featured_until' => $featuredUntil ?? now()->addDays(30)
-            ];
-
-            $updated = $this->model->where('id', $jobId)->update($data);
-            
-            $this->clearJobCaches($jobId);
-            
-            return $updated > 0;
-        } catch (\Exception $e) {
-            $this->logError('Failed to mark job as featured', [
-                'job_id' => $jobId,
-                'error' => $e->getMessage()
-            ]);
-            return false;
-        }
-    }
-
-    /**
-     * Extend job expiry date
-     */
-    public function extendExpiry(int $jobId, int $days): bool
-    {
-        try {
-            $job = $this->findById($jobId);
-            if (!$job) {
-                return false;
-            }
-
-            $newExpiryDate = Carbon::parse($job->expire_date)->addDays($days);
-            
-            $updated = $this->model->where('id', $jobId)
-                ->update(['expire_date' => $newExpiryDate]);
-
-            $this->clearJobCaches($jobId);
-            
-            return $updated > 0;
-        } catch (\Exception $e) {
-            $this->logError('Failed to extend job expiry', [
-                'job_id' => $jobId,
-                'days' => $days,
-                'error' => $e->getMessage()
-            ]);
-            return false;
-        }
-    }
-
-    /**
-     * Get jobs by multiple IDs with caching
-     */
-    public function findJobsByIds(array $jobIds): Collection
-    {
-        if (empty($jobIds)) {
-            return new Collection();
-        }
-
-        $cacheKey = 'jobs:multiple:' . md5(implode(',', $jobIds));
-
-        return Cache::remember($cacheKey, self::CACHE_DURATION, function () use ($jobIds) {
-            return $this->model->newQuery()
-                ->with(['company', 'jobType', 'jobCategory', 'skills'])
-                ->whereIn('id', $jobIds)
-                ->where('is_active', true)
-                ->get()
-                ->keyBy('id');
-        });
-    }
-
-    /**
-     * Clear job-specific caches
+     * Clear job-specific caches.
      */
     private function clearJobCaches(int $jobId): void
     {
         $patterns = [
-            "jobs:*",
+            'jobs:*',
             "jobs:job:{$jobId}",
             "jobs:similar:{$jobId}:*",
-            "jobs:statistics",
-            "jobs:popular:*",
-            "jobs:featured:*",
+            'jobs:statistics',
+            'jobs:popular:*',
+            'jobs:featured:*',
         ];
 
         foreach ($patterns as $pattern) {
             Cache::forget($pattern);
-        }
-    }
-
-    /**
-     * Bulk update job status
-     */
-    public function bulkUpdateStatus(array $jobIds, bool $isActive): int
-    {
-        try {
-            $updated = $this->model->whereIn('id', $jobIds)
-                ->update([
-                    'is_active' => $isActive,
-                    'updated_at' => now()
-                ]);
-
-            // Clear all job caches after bulk update
-            Cache::tags(['jobs'])->flush();
-
-            $this->logActivity('Bulk status update', [
-                'job_ids' => $jobIds,
-                'is_active' => $isActive,
-                'updated_count' => $updated
-            ]);
-
-            return $updated;
-        } catch (\Exception $e) {
-            $this->logError('Failed bulk status update', [
-                'job_ids' => $jobIds,
-                'is_active' => $isActive,
-                'error' => $e->getMessage()
-            ]);
-            throw $e;
         }
     }
 }

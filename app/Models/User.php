@@ -2,58 +2,57 @@
 
 namespace App\Models;
 
-use App\Notifications\PasswordReset;
-use App\Notifications\UserVerifyNotification;
 use App\Traits\HasFiles;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Cashier\Billable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
- * App\Models\User
+ * App\Models\User.
  *
- * @property int $id
- * @property string $first_name
- * @property string|null $last_name
- * @property string $email
- * @property string|null $phone
- * @property Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $dob
- * @property int|null $gender
- * @property string|null $country
- * @property string|null $state
- * @property string|null $city
- * @property int $is_active
- * @property int $is_verified
- * @property int|null $owner_id
- * @property string|null $owner_type
- * @property string|null $remember_token
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read \App\Models\Candidate|null $candidate
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Skill[] $candidateSkill
- * @property-read int|null $candidate_skill_count
- * @property-read mixed $avatar
- * @property-read string $full_name
- * @property-read \Illuminate\Database\Eloquent\Collection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
- * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
- * @property-read int|null $roles_count
+ * @property int                               $id
+ * @property string                            $first_name
+ * @property null|string                       $last_name
+ * @property string                            $email
+ * @property null|string                       $phone
+ * @property null|Carbon                       $email_verified_at
+ * @property string                            $password
+ * @property null|string                       $dob
+ * @property null|int                          $gender
+ * @property null|string                       $country
+ * @property null|string                       $state
+ * @property null|string                       $city
+ * @property int                               $is_active
+ * @property int                               $is_verified
+ * @property null|int                          $owner_id
+ * @property null|string                       $owner_type
+ * @property null|string                       $remember_token
+ * @property null|Carbon                       $created_at
+ * @property null|Carbon                       $updated_at
+ * @property null|Candidate                    $candidate
+ * @property Collection|Skill[]                $candidateSkill
+ * @property null|int                          $candidate_skill_count
+ * @property mixed                             $avatar
+ * @property string                            $full_name
+ * @property Collection|DatabaseNotification[] $notifications
+ * @property null|int                          $notifications_count
+ * @property Collection|Permission[]           $permissions
+ * @property null|int                          $permissions_count
+ * @property Collection|Role[]                 $roles
+ * @property null|int                          $roles_count
  */
 class User extends Authenticatable implements HasMedia, JWTSubject
 {
@@ -66,17 +65,17 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     use Notifiable;
     use SoftDeletes;
 
-    const DARK_MODE = 1;
-    const LIGHT_MODE = 0;
-    const PROFILE = 'profile-pictures';
-    const ACTIVE = 1;
+    public const DARK_MODE = 1;
+    public const LIGHT_MODE = 0;
+    public const PROFILE = 'profile-pictures';
+    public const ACTIVE = 1;
 
     // User Types
-    const ADMIN = 'admin';
-    const EMPLOYER = 'employer';
-    const CANDIDATE = 'candidate';
+    public const ADMIN = 'admin';
+    public const EMPLOYER = 'employer';
+    public const CANDIDATE = 'candidate';
 
-    const LANGUAGES = [
+    public const LANGUAGES = [
         'ar' => 'Arabic',
         'zh' => 'Chinese',
         'en' => 'English',
@@ -88,7 +87,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         'tr' => 'Turkish',
     ];
 
-    const LANGUAGES_IMAGE = [
+    public const LANGUAGES_IMAGE = [
         'en' => 'assets/img/united-states.svg',
         'es' => 'assets/img/spain.svg',
         'fr' => 'assets/img/france.svg',
@@ -148,37 +147,11 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-        protected function casts(): array
-    {
-        return [
-            'is_featured' => 'boolean',
-
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'is_active' => 'boolean',
-            'is_admin' => 'boolean',
-            'last_login_at' => 'datetime',
-            'is_verified' => 'boolean',
-            'is_default' => 'boolean',
-            'dob' => 'date',
-            'profile_views' => 'integer',
-            'gender' => 'integer',
-        
-        ];
-    }
-
-
-    /**
      * Scope a query to only include active users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -188,8 +161,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include inactive users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeInactive($query)
     {
@@ -199,8 +173,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeAdmin($query)
     {
@@ -210,9 +185,10 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users with a specific role.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $role
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string  $role
+     *
+     * @return Builder
      */
     public function scopeWithRole($query, $role)
     {
@@ -222,8 +198,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users verified by email.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeVerified($query)
     {
@@ -233,8 +210,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include unverified users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeUnverified($query)
     {
@@ -244,9 +222,10 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users who logged in recently.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Carbon\Carbon  $date
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder        $query
+     * @param \Carbon\Carbon $date
+     *
+     * @return Builder
      */
     public function scopeRecentlyActive($query, $date)
     {
@@ -256,24 +235,27 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to search users by name or email.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $search
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string  $search
+     *
+     * @return Builder
      */
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-                     ->orWhere('email', 'like', '%' . $search . '%')
-                     ->orWhere('first_name', 'like', '%' . $search . '%')
-                     ->orWhere('last_name', 'like', '%' . $search . '%');
+        return $query->where('name', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%')
+            ->orWhere('first_name', 'like', '%'.$search.'%')
+            ->orWhere('last_name', 'like', '%'.$search.'%')
+        ;
     }
 
     /**
      * Scope a query to order users by creation date.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $direction
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string  $direction
+     *
+     * @return Builder
      */
     public function scopeOrderByCreated($query, $direction = 'desc')
     {
@@ -283,9 +265,10 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to order users by last login.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $direction
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string  $direction
+     *
+     * @return Builder
      */
     public function scopeOrderByLastLogin($query, $direction = 'desc')
     {
@@ -295,10 +278,11 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users created within a date range.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Carbon\Carbon  $start
-     * @param  \Carbon\Carbon  $end
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder        $query
+     * @param \Carbon\Carbon $start
+     * @param \Carbon\Carbon $end
+     *
+     * @return Builder
      */
     public function scopeCreatedBetween($query, $start, $end)
     {
@@ -308,9 +292,10 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users with a specific status.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $status
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @param string  $status
+     *
+     * @return Builder
      */
     public function scopeWithStatus($query, $status)
     {
@@ -320,8 +305,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include featured users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeFeatured($query)
     {
@@ -333,8 +319,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include non-featured users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeNotFeatured($query)
     {
@@ -346,9 +333,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users by role.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $role
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeByRole($query, string $role)
     {
@@ -358,8 +345,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeAdmins($query)
     {
@@ -369,8 +357,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include candidate users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeCandidates($query)
     {
@@ -380,8 +369,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include employer users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeEmployers($query)
     {
@@ -391,9 +381,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include recent users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $days
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -403,9 +393,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include old users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $days
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -471,7 +461,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
      */
     public function getFullNameAttribute(): string
     {
-        return trim($this->first_name . ' ' . $this->last_name);
+        return trim($this->first_name.' '.$this->last_name);
     }
 
     // =============================================
@@ -498,5 +488,30 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return [];
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'is_active' => 'boolean',
+            'is_admin' => 'boolean',
+            'last_login_at' => 'datetime',
+            'is_verified' => 'boolean',
+            'is_default' => 'boolean',
+            'dob' => 'date',
+            'profile_views' => 'integer',
+            'gender' => 'integer',
+        ];
+    }
+
     // Additional scopes and methods from the original file can be added here as needed for the job portal project
-} 
+}

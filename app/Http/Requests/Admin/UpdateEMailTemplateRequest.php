@@ -6,7 +6,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateEMailTemplateRequest
+ * Class UpdateEMailTemplateRequest.
  */
 class UpdateEMailTemplateRequest extends FormRequest
 {

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\MasterData;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CreateSalaryCurrencyRequest extends FormRequest
 {
@@ -25,28 +26,28 @@ class CreateSalaryCurrencyRequest extends FormRequest
                 'required',
                 'string',
                 'max:150',
-                'unique:salary_currencies,currency_name'
+                'unique:salary_currencies,currency_name',
             ],
             'currency_code' => [
                 'required',
                 'string',
                 'size:3',
                 'uppercase',
-                'unique:salary_currencies,currency_code'
+                'unique:salary_currencies,currency_code',
             ],
             'currency_icon' => [
                 'required',
                 'string',
                 'max:10',
-                'unique:salary_currencies,currency_icon'
+                'unique:salary_currencies,currency_icon',
             ],
             'is_default' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
             'is_active' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
         ];
     }
@@ -61,18 +62,18 @@ class CreateSalaryCurrencyRequest extends FormRequest
             'currency_name.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_name')]),
             'currency_name.max' => __('validation.max.string', ['attribute' => __('validation.attributes.currency_name'), 'max' => 150]),
             'currency_name.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_name')]),
-            
+
             'currency_code.required' => __('validation.required', ['attribute' => __('validation.attributes.currency_code')]),
             'currency_code.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_code')]),
             'currency_code.size' => __('validation.size.string', ['attribute' => __('validation.attributes.currency_code'), 'size' => 3]),
             'currency_code.uppercase' => __('validation.uppercase', ['attribute' => __('validation.attributes.currency_code')]),
             'currency_code.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_code')]),
-            
+
             'currency_icon.required' => __('validation.required', ['attribute' => __('validation.attributes.currency_icon')]),
             'currency_icon.string' => __('validation.string', ['attribute' => __('validation.attributes.currency_icon')]),
             'currency_icon.max' => __('validation.max.string', ['attribute' => __('validation.attributes.currency_icon'), 'max' => 10]),
             'currency_icon.unique' => __('validation.unique', ['attribute' => __('validation.attributes.currency_icon')]),
-            
+
             'is_default.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_default')]),
             'is_active.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_active')]),
         ];
@@ -114,14 +115,14 @@ class CreateSalaryCurrencyRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            throw new HttpResponseException(
                 response()->json([
                     'success' => false,
                     'message' => __('validation.failed'),
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422)
             );
         }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,16 @@ class EmailJobFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'job_id' => Job::factory(),
+            'job_url' => $this->faker->url(),
+            'friend_name' => $this->faker->name(),
+            'friend_email' => $this->faker->email(),
+            'is_active' => true,
+            'is_sent' => false,
+            'status' => 'pending',
+            'open_count' => 0,
+            'click_count' => 0,
         ];
     }
 }

@@ -2,12 +2,11 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -36,13 +35,13 @@ return new class extends Migration
             $slug = Str::slug($jobType->name);
             $originalSlug = $slug;
             $counter = 1;
-            
+
             // Ensure slug uniqueness
             while (DB::table('job_types')->where('slug', $slug)->where('id', '!=', $jobType->id)->exists()) {
-                $slug = $originalSlug . '-' . $counter;
-                $counter++;
+                $slug = $originalSlug.'-'.$counter;
+                ++$counter;
             }
-            
+
             DB::table('job_types')->where('id', $jobType->id)->update(['slug' => $slug]);
         }
 
@@ -71,10 +70,10 @@ return new class extends Migration
             $table->dropIndex('job_types_sort_name_index');
             $table->dropIndex('job_types_default_active_index');
             $table->dropIndex('job_types_jobs_count_index');
-            
+
             // Drop unique constraint
             $table->dropUnique(['slug']);
-            
+
             // Drop columns
             $table->dropColumn([
                 'slug',
@@ -89,7 +88,7 @@ return new class extends Migration
                 'views_count',
                 'jobs_count',
                 'settings',
-                'extra_attributes'
+                'extra_attributes',
             ]);
         });
     }

@@ -24,7 +24,7 @@ class FileUploadService
     }
 
     /**
-     * Get the URL for a file
+     * Get the URL for a file.
      */
     public function getUrl(string $path, string $disk = 'public'): string
     {
@@ -32,7 +32,7 @@ class FileUploadService
     }
 
     /**
-     * Delete a file
+     * Delete a file.
      */
     public function delete(string $path, string $disk = 'public'): bool
     {
@@ -44,7 +44,7 @@ class FileUploadService
     }
 
     /**
-     * Move a file from one location to another
+     * Move a file from one location to another.
      */
     public function move(string $oldPath, string $newPath, string $disk = 'public'): bool
     {
@@ -59,7 +59,7 @@ class FileUploadService
     }
 
     /**
-     * Copy a file from one location to another
+     * Copy a file from one location to another.
      */
     public function copy(string $oldPath, string $newPath, string $disk = 'public'): bool
     {
@@ -73,7 +73,7 @@ class FileUploadService
     }
 
     /**
-     * Get the file size
+     * Get the file size.
      */
     public function getSize(string $path, string $disk = 'public'): int
     {
@@ -85,7 +85,7 @@ class FileUploadService
     }
 
     /**
-     * Check if a file exists
+     * Check if a file exists.
      */
     public function exists(string $path, string $disk = 'public'): bool
     {

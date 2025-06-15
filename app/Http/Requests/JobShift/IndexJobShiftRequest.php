@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests\JobShift;
 
-use App\Http\Requests\BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class IndexJobShiftRequest
- * Enhanced Enhanced Index Request for JobShift
+ * Enhanced Enhanced Index Request for JobShift.
  */
 class IndexJobShiftRequest extends FormRequest
 {
@@ -16,9 +15,9 @@ class IndexJobShiftRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() && 
-               ($this->user()->hasRole(['admin', 'super_admin']) || 
-                $this->user()->can('view job_shifts'));
+        return $this->user()
+               && ($this->user()->hasRole(['admin', 'super_admin'])
+                || $this->user()->can('view job_shifts'));
     }
 
     /**
@@ -30,23 +29,23 @@ class IndexJobShiftRequest extends FormRequest
             // Pagination parameters
             'page' => ['sometimes', 'integer', 'min:1'],
             'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
-            
+
             // Sorting parameters
             'sort_by' => ['sometimes', 'string', 'in:name,description,created_at,updated_at'],
             'sort_direction' => ['sometimes', 'string', 'in:asc,desc'],
-            
+
             // Filter parameters
             'search' => ['sometimes', 'string', 'max:255'],
             'status' => ['sometimes', 'in:active,inactive,all'],
             'is_active' => ['sometimes', 'boolean'],
             'date_from' => ['sometimes', 'date', 'before_or_equal:date_to'],
             'date_to' => ['sometimes', 'date', 'after_or_equal:date_from'],
-            
+
             // Advanced filters
             'shift_type' => ['sometimes', 'string', 'max:50'],
             'time_range' => ['sometimes', 'array'],
             'time_range.*' => ['string', 'in:morning,afternoon,evening,night,flexible'],
-            
+
             // Output format
             'format' => ['sometimes', 'string', 'in:json,excel,pdf'],
             'include' => ['sometimes', 'array'],
@@ -65,27 +64,27 @@ class IndexJobShiftRequest extends FormRequest
             'per_page.integer' => __('validation.integer', ['attribute' => __('pagination.per_page')]),
             'per_page.min' => __('validation.min.numeric', ['attribute' => __('pagination.per_page'), 'min' => 1]),
             'per_page.max' => __('validation.max.numeric', ['attribute' => __('pagination.per_page'), 'max' => 100]),
-            
+
             'sort_by.in' => __('validation.in', ['attribute' => __('sorting.sort_by')]),
             'sort_direction.in' => __('validation.in', ['attribute' => __('sorting.sort_direction')]),
-            
+
             'search.string' => __('validation.string', ['attribute' => __('common.search')]),
             'search.max' => __('validation.max.string', ['attribute' => __('common.search'), 'max' => 255]),
-            
+
             'status.in' => __('validation.in', ['attribute' => __('common.status')]),
             'is_active.boolean' => __('validation.boolean', ['attribute' => __('common.is_active')]),
-            
+
             'date_from.date' => __('validation.date', ['attribute' => __('common.date_from')]),
             'date_to.date' => __('validation.date', ['attribute' => __('common.date_to')]),
             'date_from.before_or_equal' => __('validation.before_or_equal', ['attribute' => __('common.date_from'), 'date' => __('common.date_to')]),
             'date_to.after_or_equal' => __('validation.after_or_equal', ['attribute' => __('common.date_to'), 'date' => __('common.date_from')]),
-            
+
             'shift_type.string' => __('validation.string', ['attribute' => __('job_shift.shift_type')]),
             'shift_type.max' => __('validation.max.string', ['attribute' => __('job_shift.shift_type'), 'max' => 50]),
-            
+
             'time_range.array' => __('validation.array', ['attribute' => __('job_shift.time_range')]),
             'time_range.*.in' => __('validation.in', ['attribute' => __('job_shift.time_range')]),
-            
+
             'format.in' => __('validation.in', ['attribute' => __('common.format')]),
             'include.array' => __('validation.array', ['attribute' => __('common.include')]),
             'include.*.in' => __('validation.in', ['attribute' => __('common.include')]),
@@ -115,6 +114,29 @@ class IndexJobShiftRequest extends FormRequest
     }
 
     /**
+     * Get the validated data with defaults.
+     */
+    public function getFilters(): array
+    {
+        $validated = $this->validated();
+
+        return [
+            'page' => $validated['page'] ?? 1,
+            'per_page' => $validated['per_page'] ?? 15,
+            'sort_by' => $validated['sort_by'] ?? 'name',
+            'sort_direction' => $validated['sort_direction'] ?? 'asc',
+            'search' => $validated['search'] ?? null,
+            'is_active' => $validated['is_active'] ?? null,
+            'date_from' => $validated['date_from'] ?? null,
+            'date_to' => $validated['date_to'] ?? null,
+            'shift_type' => $validated['shift_type'] ?? null,
+            'time_range' => $validated['time_range'] ?? [],
+            'format' => $validated['format'] ?? 'json',
+            'include' => $validated['include'] ?? [],
+        ];
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -132,38 +154,15 @@ class IndexJobShiftRequest extends FormRequest
         // Clean and prepare search term
         if ($this->has('search')) {
             $this->merge([
-                'search' => trim($this->search)
+                'search' => trim($this->search),
             ]);
         }
 
         // Convert status to boolean for is_active filter
-        if ($this->status === 'active') {
+        if ('active' === $this->status) {
             $this->merge(['is_active' => true]);
-        } elseif ($this->status === 'inactive') {
+        } elseif ('inactive' === $this->status) {
             $this->merge(['is_active' => false]);
         }
     }
-
-    /**
-     * Get the validated data with defaults.
-     */
-    public function getFilters(): array
-    {
-        $validated = $this->validated();
-        
-        return [
-            'page' => $validated['page'] ?? 1,
-            'per_page' => $validated['per_page'] ?? 15,
-            'sort_by' => $validated['sort_by'] ?? 'name',
-            'sort_direction' => $validated['sort_direction'] ?? 'asc',
-            'search' => $validated['search'] ?? null,
-            'is_active' => $validated['is_active'] ?? null,
-            'date_from' => $validated['date_from'] ?? null,
-            'date_to' => $validated['date_to'] ?? null,
-            'shift_type' => $validated['shift_type'] ?? null,
-            'time_range' => $validated['time_range'] ?? [],
-            'format' => $validated['format'] ?? 'json',
-            'include' => $validated['include'] ?? [],
-        ];
-    }
-} 
+}

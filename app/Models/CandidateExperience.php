@@ -8,40 +8,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * App\Models\CandidateExperience
+ * App\Models\CandidateExperience.
  *
- * @property int $id
- * @property int $candidate_id
- * @property string $experience_title
- * @property string $company
- * @property int|null $country_id
- * @property int|null $state_id
- * @property int|null $city_id
- * @property Carbon $start_date
- * @property Carbon|null $end_date
- * @property bool $currently_working
- * @property string|null $description
- * @property string|null $job_level
- * @property string|null $employment_type
- * @property float|null $salary
- * @property bool $is_verified
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Candidate $candidate
- * @property-read Country|null $country
- * @property-read State|null $state
- * @property-read City|null $city
- * @property-read string $full_location
- * @property-read string $duration_description
- * @property-read int $duration_in_months
- * @property-read string $formatted_salary
- * @property-read bool $is_current
- * @property-read bool $is_recent
- * @property-read string $experience_level
+ * @property int          $id
+ * @property int          $candidate_id
+ * @property string       $experience_title
+ * @property string       $company
+ * @property null|int     $country_id
+ * @property null|int     $state_id
+ * @property null|int     $city_id
+ * @property Carbon       $start_date
+ * @property null|Carbon  $end_date
+ * @property bool         $currently_working
+ * @property null|string  $description
+ * @property null|string  $job_level
+ * @property null|string  $employment_type
+ * @property null|float   $salary
+ * @property bool         $is_verified
+ * @property null|Carbon  $created_at
+ * @property null|Carbon  $updated_at
+ * @property Candidate    $candidate
+ * @property null|Country $country
+ * @property null|State   $state
+ * @property null|City    $city
+ * @property string       $full_location
+ * @property string       $duration_description
+ * @property int          $duration_in_months
+ * @property string       $formatted_salary
+ * @property bool         $is_current
+ * @property bool         $is_recent
+ * @property string       $experience_level
  *
  * @method static Builder|CandidateExperience newModelQuery()
  * @method static Builder|CandidateExperience newQuery()
@@ -95,7 +95,28 @@ use Spatie\Activitylog\LogOptions;
  */
 class CandidateExperience extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
+
+    /**
+     * Validation rules with multilingual support.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'experience_title' => 'required|string|max:150',
+        'company' => 'required|string|max:150',
+        'country_id' => 'required|integer|exists:countries,id',
+        'state_id' => 'nullable|integer|exists:states,id',
+        'city_id' => 'nullable|integer|exists:cities,id',
+        'start_date' => 'required|date|before_or_equal:today',
+        'end_date' => 'nullable|date|after:start_date|before_or_equal:today',
+        'currently_working' => 'boolean',
+        'description' => 'nullable|string|max:1000',
+        'job_level' => 'nullable|string|max:50',
+        'employment_type' => 'nullable|string|max:50',
+        'salary' => 'nullable|numeric|min:0',
+    ];
 
     protected $table = 'candidate_experiences';
 
@@ -116,85 +137,24 @@ class CandidateExperience extends Model
         'is_verified',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'currently_working' => 'boolean',
-            'is_verified' => 'boolean',
-            'salary' => 'float',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
     /**
      * Scope a query to only include old records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOld(Builder $query): Builder
     {
-        return $query->orderBy("created_at", "asc");
+        return $query->orderBy('created_at', 'asc');
     }
 
     /**
-     * Validation rules with multilingual support
-     *
-     * @var array
-     */
-    public static $rules = [
-        'experience_title' => 'required|string|max:150',
-        'company' => 'required|string|max:150',
-        'country_id' => 'required|integer|exists:countries,id',
-        'state_id' => 'nullable|integer|exists:states,id',
-        'city_id' => 'nullable|integer|exists:cities,id',
-        'start_date' => 'required|date|before_or_equal:today',
-        'end_date' => 'nullable|date|after:start_date|before_or_equal:today',
-        'currently_working' => 'boolean',
-        'description' => 'nullable|string|max:1000',
-        'job_level' => 'nullable|string|max:50',
-        'employment_type' => 'nullable|string|max:50',
-        'salary' => 'nullable|numeric|min:0',
-    ];
-
-    /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Auto-set end_date to null if currently working
-        static::saving(function ($experience) {
-            if ($experience->currently_working) {
-                $experience->end_date = null;
-            }
-        });
-
-        // Clear related caches when experience is updated
-        static::saved(function ($experience) {
-            cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
-            cache()->tags(['candidate-experience', 'candidate-' . $experience->candidate_id])->flush();
-        });
-
-        static::deleted(function ($experience) {
-            cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
-            cache()->tags(['candidate-experience', 'candidate-' . $experience->candidate_id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['experience_title', 'company', 'start_date', 'end_date', 'currently_working', 'is_verified'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     // ==============================================
@@ -228,11 +188,17 @@ class CandidateExperience extends Model
     public function getFullLocationAttribute(): string
     {
         $location = [];
-        
-        if ($this->city?->name) $location[] = $this->city->name;
-        if ($this->state?->name) $location[] = $this->state->name;
-        if ($this->country?->name) $location[] = $this->country->name;
-        
+
+        if ($this->city?->name) {
+            $location[] = $this->city->name;
+        }
+        if ($this->state?->name) {
+            $location[] = $this->state->name;
+        }
+        if ($this->country?->name) {
+            $location[] = $this->country->name;
+        }
+
         return implode(', ', $location) ?: __('common.location_not_specified');
     }
 
@@ -240,25 +206,26 @@ class CandidateExperience extends Model
     {
         $start = $this->start_date;
         $end = $this->end_date ?? now();
-        
+
         $months = $start->diffInMonths($end);
         $years = floor($months / 12);
         $remainingMonths = $months % 12;
-        
-        if ($years === 0) {
-            return $months === 1 ? __('experience.one_month') : __('experience.months', ['count' => $months]);
-        } elseif ($remainingMonths === 0) {
-            return $years === 1 ? __('experience.one_year') : __('experience.years', ['count' => $years]);
-        } else {
-            return __('experience.years_months', ['years' => $years, 'months' => $remainingMonths]);
+
+        if (0 === $years) {
+            return 1 === $months ? __('experience.one_month') : __('experience.months', ['count' => $months]);
         }
+        if (0 === $remainingMonths) {
+            return 1 === $years ? __('experience.one_year') : __('experience.years', ['count' => $years]);
+        }
+
+        return __('experience.years_months', ['years' => $years, 'months' => $remainingMonths]);
     }
 
     public function getDurationInMonthsAttribute(): int
     {
         $start = $this->start_date;
         $end = $this->end_date ?? now();
-        
+
         return $start->diffInMonths($end);
     }
 
@@ -267,6 +234,7 @@ class CandidateExperience extends Model
         if (!$this->salary) {
             return __('common.not_specified');
         }
+
         return number_format($this->salary, 2);
     }
 
@@ -283,7 +251,7 @@ class CandidateExperience extends Model
     public function getExperienceLevelAttribute(): string
     {
         $months = $this->duration_in_months;
-        
+
         return match (true) {
             $months < 6 => __('experience.entry_level'),
             $months < 24 => __('experience.junior_level'),
@@ -407,9 +375,10 @@ class CandidateExperience extends Model
     public function scopeByDuration(Builder $query, int $minMonths, ?int $maxMonths = null): Builder
     {
         return $query->whereRaw('DATEDIFF(COALESCE(end_date, NOW()), start_date) / 30 >= ?', [$minMonths])
-                     ->when($maxMonths, function ($q) use ($maxMonths) {
-                         return $q->whereRaw('DATEDIFF(COALESCE(end_date, NOW()), start_date) / 30 <= ?', [$maxMonths]);
-                     });
+            ->when($maxMonths, function ($q) use ($maxMonths) {
+                return $q->whereRaw('DATEDIFF(COALESCE(end_date, NOW()), start_date) / 30 <= ?', [$maxMonths]);
+            })
+        ;
     }
 
     /**
@@ -435,9 +404,10 @@ class CandidateExperience extends Model
     {
         return $query->where(function ($q) {
             $q->where('job_level', 'LIKE', '%senior%')
-              ->orWhere('job_level', 'LIKE', '%lead%')
-              ->orWhere('experience_title', 'LIKE', '%senior%')
-              ->orWhere('experience_title', 'LIKE', '%lead%');
+                ->orWhere('job_level', 'LIKE', '%lead%')
+                ->orWhere('experience_title', 'LIKE', '%senior%')
+                ->orWhere('experience_title', 'LIKE', '%lead%')
+            ;
         });
     }
 
@@ -448,10 +418,11 @@ class CandidateExperience extends Model
     {
         return $query->where(function ($q) {
             $q->where('job_level', 'LIKE', '%manager%')
-              ->orWhere('job_level', 'LIKE', '%director%')
-              ->orWhere('job_level', 'LIKE', '%head%')
-              ->orWhere('experience_title', 'LIKE', '%manager%')
-              ->orWhere('experience_title', 'LIKE', '%director%');
+                ->orWhere('job_level', 'LIKE', '%director%')
+                ->orWhere('job_level', 'LIKE', '%head%')
+                ->orWhere('experience_title', 'LIKE', '%manager%')
+                ->orWhere('experience_title', 'LIKE', '%director%')
+            ;
         });
     }
 
@@ -462,9 +433,10 @@ class CandidateExperience extends Model
     {
         return $query->where(function ($q) {
             $q->where('job_level', 'LIKE', '%junior%')
-              ->orWhere('job_level', 'LIKE', '%entry%')
-              ->orWhere('experience_title', 'LIKE', '%junior%')
-              ->orWhere('experience_title', 'LIKE', '%entry%');
+                ->orWhere('job_level', 'LIKE', '%entry%')
+                ->orWhere('experience_title', 'LIKE', '%junior%')
+                ->orWhere('experience_title', 'LIKE', '%entry%')
+            ;
         });
     }
 
@@ -531,10 +503,11 @@ class CandidateExperience extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('experience_title', 'LIKE', "%{$term}%")
-              ->orWhere('company', 'LIKE', "%{$term}%")
-              ->orWhere('job_level', 'LIKE', "%{$term}%")
-              ->orWhere('employment_type', 'LIKE', "%{$term}%")
-              ->orWhere('description', 'LIKE', "%{$term}%");
+                ->orWhere('company', 'LIKE', "%{$term}%")
+                ->orWhere('job_level', 'LIKE', "%{$term}%")
+                ->orWhere('employment_type', 'LIKE', "%{$term}%")
+                ->orWhere('description', 'LIKE', "%{$term}%")
+            ;
         });
     }
 
@@ -549,15 +522,15 @@ class CandidateExperience extends Model
     {
         $title = strtolower($this->experience_title);
         $level = strtolower($this->job_level ?? '');
-        
+
         $highLevelKeywords = ['manager', 'director', 'head', 'lead', 'senior', 'principal', 'chief'];
-        
+
         foreach ($highLevelKeywords as $keyword) {
             if (str_contains($title, $keyword) || str_contains($level, $keyword)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -583,19 +556,19 @@ class CandidateExperience extends Model
     public function getExperienceSummary(): string
     {
         $parts = [];
-        
+
         if ($this->experience_title) {
             $parts[] = $this->experience_title;
         }
-        
+
         if ($this->company) {
-            $parts[] = 'at ' . $this->company;
+            $parts[] = 'at '.$this->company;
         }
-        
+
         if ($this->duration_description) {
-            $parts[] = '(' . $this->duration_description . ')';
+            $parts[] = '('.$this->duration_description.')';
         }
-        
+
         return implode(' ', $parts);
     }
 
@@ -608,15 +581,16 @@ class CandidateExperience extends Model
         $thisEnd = $this->end_date ?? now();
         $otherStart = $other->start_date;
         $otherEnd = $other->end_date ?? now();
-        
+
         return $thisStart <= $otherEnd && $otherStart <= $thisEnd;
     }
 
     /**
      * Scope a query to only include active records.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -626,11 +600,51 @@ class CandidateExperience extends Model
     /**
      * Scope a query to only include inactive records.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
     public function scopeInactive($query)
     {
         return $query->where('is_active', false);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+            'end_date' => 'date',
+            'currently_working' => 'boolean',
+            'is_verified' => 'boolean',
+            'salary' => 'float',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Auto-set end_date to null if currently working
+        static::saving(function ($experience) {
+            if ($experience->currently_working) {
+                $experience->end_date = null;
+            }
+        });
+
+        // Clear related caches when experience is updated
+        static::saved(function ($experience) {
+            cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
+            cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+        });
+
+        static::deleted(function ($experience) {
+            cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
+            cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+        });
     }
 }

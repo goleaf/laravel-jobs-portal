@@ -2,32 +2,31 @@
 
 namespace App\Http\Controllers\Settings;
 
-use Illuminate\Http\Request;
+use App\Helpers\LanguageHelper;
+use App\Services\TranslationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cache;
-use App\Services\TranslationService;
-use App\Helpers\LanguageHelper;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 
 /**
  * LocaleController
- * Handles language switching and locale management
+ * Handles language switching and locale management.
  */
 class LocaleController extends Controller
 {
     /**
-     * Switch application locale
+     * Switch application locale.
      *
-     * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
     public function switch(Request $request)
     {
         $request->validate([
-            'locale' => 'required|string|size:2|in:' . implode(',', array_keys(Config::get('app.available_locales', [])))
+            'locale' => 'required|string|size:2|in:'.implode(',', array_keys(Config::get('app.available_locales', []))),
         ]);
 
         $locale = $request->input('locale');
@@ -37,10 +36,10 @@ class LocaleController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('locale.invalid_locale')
+                    'message' => __('locale.invalid_locale'),
                 ], 400);
             }
-            
+
             return redirect()->back()->withErrors(__('locale.invalid_locale'));
         }
 
@@ -59,7 +58,7 @@ class LocaleController extends Controller
                 'message' => $message,
                 'locale' => $locale,
                 'direction' => LanguageHelper::getDirection($locale),
-                'is_rtl' => LanguageHelper::isRtl($locale)
+                'is_rtl' => LanguageHelper::isRtl($locale),
             ]);
         }
 
@@ -67,9 +66,7 @@ class LocaleController extends Controller
     }
 
     /**
-     * Get current locale information
-     *
-     * @return JsonResponse
+     * Get current locale information.
      */
     public function current(): JsonResponse
     {
@@ -81,14 +78,12 @@ class LocaleController extends Controller
             'config' => $availableLocales[$currentLocale] ?? [],
             'direction' => LanguageHelper::getDirection($currentLocale),
             'is_rtl' => LanguageHelper::isRtl($currentLocale),
-            'available_locales' => $availableLocales
+            'available_locales' => $availableLocales,
         ]);
     }
 
     /**
-     * Get all available locales
-     *
-     * @return JsonResponse
+     * Get all available locales.
      */
     public function available(): JsonResponse
     {
@@ -103,37 +98,33 @@ class LocaleController extends Controller
                 'native' => $config['native'] ?? $code,
                 'flag' => $this->getFlag($code),
                 'rtl' => $config['rtl'] ?? false,
-                'current' => $code === $currentLocale
+                'current' => $code === $currentLocale,
             ];
         }
 
         return response()->json([
             'locales' => $formattedLocales,
-            'current' => $currentLocale
+            'current' => $currentLocale,
         ]);
     }
 
     /**
-     * Get translations for a specific locale
-     *
-     * @param Request $request
-     * @param string $locale
-     * @return JsonResponse
+     * Get translations for a specific locale.
      */
-    public function translations(Request $request, string $locale = null): JsonResponse
+    public function translations(Request $request, ?string $locale = null): JsonResponse
     {
         $locale = $locale ?: App::getLocale();
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
         if (!in_array($locale, $availableLocales)) {
             return response()->json([
-                'error' => __('locale.invalid_locale')
+                'error' => __('locale.invalid_locale'),
             ], 400);
         }
 
         // Get specific namespace if requested
         $namespace = $request->query('namespace');
-        
+
         if ($namespace) {
             $translations = TranslationService::getNamespaceTranslations($locale, $namespace);
         } else {
@@ -143,14 +134,12 @@ class LocaleController extends Controller
         return response()->json([
             'locale' => $locale,
             'translations' => $translations,
-            'namespace' => $namespace
+            'namespace' => $namespace,
         ]);
     }
 
     /**
-     * Clear translation cache
-     *
-     * @return JsonResponse
+     * Clear translation cache.
      */
     public function clearCache(): JsonResponse
     {
@@ -159,15 +148,12 @@ class LocaleController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('locale.cache_cleared_successfully')
+            'message' => __('locale.cache_cleared_successfully'),
         ]);
     }
 
     /**
-     * Get flag emoji for locale
-     *
-     * @param string $locale
-     * @return string
+     * Get flag emoji for locale.
      */
     private function getFlag(string $locale): string
     {
@@ -180,9 +166,9 @@ class LocaleController extends Controller
             'pt' => '🇵🇹',
             'ru' => '🇷🇺',
             'tr' => '🇹🇷',
-            'zh' => '🇨🇳'
+            'zh' => '🇨🇳',
         ];
 
         return $flags[$locale] ?? '🌐';
     }
-} 
+}

@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\City;
+use App\Models\Company;
 use App\Models\State;
+use App\Models\User;
 use App\Repositories\JobRepository;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
@@ -19,8 +21,9 @@ class CreateJobSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = \App\Models\User::whereOwnerType(\App\Models\Company::class)->pluck('id')->toArray();
-        /** @var \App\Repositories\JobRepository $jobRepo */
+        $users = User::whereOwnerType(Company::class)->pluck('id')->toArray();
+
+        /** @var JobRepository $jobRepo */
         $jobRepo = App::make(JobRepository::class);
         $faker = Faker::create();
         foreach (range(1, 40) as $index) {

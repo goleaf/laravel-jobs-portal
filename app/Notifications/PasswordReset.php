@@ -21,7 +21,7 @@ class PasswordReset extends Notification
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param mixed $token
      */
     public function __construct($token)
     {
@@ -48,8 +48,9 @@ class PasswordReset extends Notification
         $body = str_replace($keyVariable, $value, $templateBody->body);
         $data['body'] = $body;
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject($templateBody->subject)
-            ->view('emails.password_reset_email', $data);
+            ->view('emails.password_reset_email', $data)
+        ;
     }
 }

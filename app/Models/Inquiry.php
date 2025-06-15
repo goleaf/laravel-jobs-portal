@@ -5,42 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Inquiry Model - Enhanced with Enhanced patterns
+ * Inquiry Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string|null $phone_no
- * @property string $subject
- * @property string $message
- * @property bool $is_read
- * @property bool $is_resolved
- * @property bool $is_active
- * @property int|null $priority
- * @property string|null $status
- * @property string|null $category
- * @property int|null $assigned_to
- * @property Carbon|null $resolved_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User|null $assignedUser
- * @property-read bool $is_recent
- * @property-read bool $is_pending
- * @property-read bool $is_high_priority
- * @property-read string $status_label
- * @property-read string $priority_label
- * @property-read string $category_label
+ * @property int         $id
+ * @property string      $name
+ * @property string      $email
+ * @property null|string $phone_no
+ * @property string      $subject
+ * @property string      $message
+ * @property bool        $is_read
+ * @property bool        $is_resolved
+ * @property bool        $is_active
+ * @property null|int    $priority
+ * @property null|string $status
+ * @property null|string $category
+ * @property null|int    $assigned_to
+ * @property null|Carbon $resolved_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property null|User   $assignedUser
+ * @property bool        $is_recent
+ * @property bool        $is_pending
+ * @property bool        $is_high_priority
+ * @property string      $status_label
+ * @property string      $priority_label
+ * @property string      $category_label
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder read()
@@ -72,15 +73,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class Inquiry extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'inquiries';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_IN_PROGRESS = 'in_progress';
@@ -88,7 +86,7 @@ class Inquiry extends Model
     public const STATUS_CLOSED = 'closed';
 
     /**
-     * Priority constants
+     * Priority constants.
      */
     public const PRIORITY_LOW = 1;
     public const PRIORITY_MEDIUM = 2;
@@ -96,7 +94,7 @@ class Inquiry extends Model
     public const PRIORITY_URGENT = 4;
 
     /**
-     * Category constants
+     * Category constants.
      */
     public const CATEGORY_GENERAL = 'general';
     public const CATEGORY_TECHNICAL = 'technical';
@@ -104,6 +102,30 @@ class Inquiry extends Model
     public const CATEGORY_SUPPORT = 'support';
     public const CATEGORY_FEATURE_REQUEST = 'feature_request';
     public const CATEGORY_BUG_REPORT = 'bug_report';
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone_no' => 'nullable|string|max:20',
+        'subject' => 'required|string|max:255',
+        'message' => 'required|string|max:5000',
+        'is_read' => 'boolean',
+        'is_resolved' => 'boolean',
+        'is_active' => 'boolean',
+        'priority' => 'nullable|integer|min:1|max:4',
+        'status' => 'nullable|string|in:pending,in_progress,resolved,closed',
+        'category' => 'nullable|string|in:general,technical,billing,support,feature_request,bug_report',
+        'assigned_to' => 'nullable|integer|exists:users,id',
+        'resolved_at' => 'nullable|date',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'inquiries';
 
     /**
      * The attributes that are mass assignable.
@@ -132,45 +154,7 @@ class Inquiry extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_read' => 'boolean',
-            'is_resolved' => 'boolean',
-            'is_active' => 'boolean',
-            'priority' => 'integer',
-            'assigned_to' => 'integer',
-            'resolved_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone_no' => 'nullable|string|max:20',
-        'subject' => 'required|string|max:255',
-        'message' => 'required|string|max:5000',
-        'is_read' => 'boolean',
-        'is_resolved' => 'boolean',
-        'is_active' => 'boolean',
-        'priority' => 'nullable|integer|min:1|max:4',
-        'status' => 'nullable|string|in:pending,in_progress,resolved,closed',
-        'category' => 'nullable|string|in:general,technical,billing,support,feature_request,bug_report',
-        'assigned_to' => 'nullable|integer|exists:users,id',
-        'resolved_at' => 'nullable|date',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -178,7 +162,8 @@ class Inquiry extends Model
             ->logOnly(['name', 'email', 'subject', 'is_read', 'is_resolved', 'priority', 'status'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Inquiry has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Inquiry has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -188,7 +173,7 @@ class Inquiry extends Model
     /**
      * Get the user assigned to this inquiry.
      */
-    public function assignedUser(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function assignedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
@@ -411,9 +396,10 @@ class Inquiry extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('email', 'like', "%{$term}%")
-                    ->orWhere('subject', 'like', "%{$term}%")
-                    ->orWhere('message', 'like', "%{$term}%");
+            ->orWhere('email', 'like', "%{$term}%")
+            ->orWhere('subject', 'like', "%{$term}%")
+            ->orWhere('message', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -457,7 +443,7 @@ class Inquiry extends Model
      */
     public function getIsPendingAttribute(): bool
     {
-        return $this->status === self::STATUS_PENDING || (!$this->is_read && !$this->is_resolved);
+        return self::STATUS_PENDING === $this->status || (!$this->is_read && !$this->is_resolved);
     }
 
     /**
@@ -473,7 +459,7 @@ class Inquiry extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_PENDING => 'Pending',
             self::STATUS_IN_PROGRESS => 'In Progress',
             self::STATUS_RESOLVED => 'Resolved',
@@ -487,7 +473,7 @@ class Inquiry extends Model
      */
     public function getPriorityLabelAttribute(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             self::PRIORITY_LOW => 'Low',
             self::PRIORITY_MEDIUM => 'Medium',
             self::PRIORITY_HIGH => 'High',
@@ -501,7 +487,7 @@ class Inquiry extends Model
      */
     public function getCategoryLabelAttribute(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             self::CATEGORY_GENERAL => 'General',
             self::CATEGORY_TECHNICAL => 'Technical',
             self::CATEGORY_BILLING => 'Billing',
@@ -545,7 +531,7 @@ class Inquiry extends Model
      */
     public function isPending(): bool
     {
-        return $this->status === self::STATUS_PENDING || (!$this->is_read && !$this->is_resolved);
+        return self::STATUS_PENDING === $this->status || (!$this->is_read && !$this->is_resolved);
     }
 
     /**
@@ -646,6 +632,25 @@ class Inquiry extends Model
 
         // Clear email specific cache
         Cache::forget("inquiries.email.{$this->email}.count");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_read' => 'boolean',
+            'is_resolved' => 'boolean',
+            'is_active' => 'boolean',
+            'priority' => 'integer',
+            'assigned_to' => 'integer',
+            'resolved_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

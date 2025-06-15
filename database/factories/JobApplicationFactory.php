@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\JobApplication;
-use App\Models\Job;
-use App\Models\Candidate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -80,4 +78,4 @@ class JobApplicationFactory extends Factory
             'status' => JobApplication::REJECTED,
         ]);
     }
-} 
+}

@@ -4,6 +4,7 @@ namespace App\Http\Requests\JobApplication;
 
 use App\Models\Job;
 use App\Models\Resume;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,44 +16,45 @@ class CreateJobApplicationRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->user();
-        
+
         // Only authenticated candidates can apply for jobs
         if (!$user || !$user->hasRole('candidate')) {
             return false;
         }
-        
+
         // Check if job exists and is active
         $jobId = $this->input('job_id');
         if (!$jobId) {
             return false;
         }
-        
+
         $job = Job::find($jobId);
         if (!$job || !$job->is_active || $job->deadline < now()) {
             return false;
         }
-        
+
         // Check if user already applied for this job
         $existingApplication = $user->jobApplications()
             ->where('job_id', $jobId)
-            ->exists();
-            
+            ->exists()
+        ;
+
         if ($existingApplication) {
             return false;
         }
-        
+
         // Check if user has a complete profile
         if (!$user->candidate || !$user->candidate->is_profile_complete) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -66,30 +68,34 @@ class CreateJobApplicationRequest extends FormRequest
                     $job = Job::find($value);
                     if (!$job) {
                         $fail(__('validation.job_not_found'));
+
                         return;
                     }
-                    
+
                     if (!$job->is_active) {
                         $fail(__('validation.job_not_active'));
+
                         return;
                     }
-                    
+
                     if ($job->deadline && $job->deadline < now()) {
                         $fail(__('validation.job_deadline_passed'));
+
                         return;
                     }
-                    
+
                     // Check if user already applied
                     $existingApplication = $this->user()->jobApplications()
                         ->where('job_id', $value)
-                        ->exists();
-                        
+                        ->exists()
+                    ;
+
                     if ($existingApplication) {
                         $fail(__('validation.already_applied_for_job'));
                     }
-                }
+                },
             ],
-            
+
             'resume_id' => [
                 'required',
                 'integer',
@@ -99,9 +105,9 @@ class CreateJobApplicationRequest extends FormRequest
                     if (!$resume || $resume->candidate_id !== $this->user()->id) {
                         $fail(__('validation.resume_not_owned'));
                     }
-                }
+                },
             ],
-            
+
             // Optional fields
             'cover_letter' => ['nullable', 'string', 'max:5000'],
             'expected_salary' => ['nullable', 'numeric', 'min:0', 'max:99999999.99'],
@@ -111,12 +117,12 @@ class CreateJobApplicationRequest extends FormRequest
             'willing_to_relocate' => ['nullable', 'boolean'],
             'willing_to_travel' => ['nullable', 'boolean'],
             'remote_work_preference' => ['nullable', 'string', Rule::in(['no', 'partial', 'full'])],
-            
+
             // Additional information
             'motivation' => ['nullable', 'string', 'max:2000'],
             'relevant_experience' => ['nullable', 'string', 'max:3000'],
             'additional_notes' => ['nullable', 'string', 'max:1000'],
-            
+
             // Skills and qualifications
             'skills' => ['nullable', 'array', 'max:20'],
             'skills.*' => ['integer', 'exists:skills,id'],
@@ -124,13 +130,13 @@ class CreateJobApplicationRequest extends FormRequest
             'certifications.*' => ['string', 'max:255'],
             'languages' => ['nullable', 'array', 'max:10'],
             'languages.*' => ['integer', 'exists:languages,id'],
-            
+
             // Portfolio and documents
             'portfolio_url' => ['nullable', 'url', 'max:255'],
             'linkedin_profile' => ['nullable', 'url', 'max:255'],
             'github_profile' => ['nullable', 'url', 'max:255'],
             'personal_website' => ['nullable', 'url', 'max:255'],
-            
+
             // File uploads
             'additional_documents' => ['nullable', 'array', 'max:5'],
             'additional_documents.*' => [
@@ -138,24 +144,24 @@ class CreateJobApplicationRequest extends FormRequest
                 'mimes:pdf,doc,docx,txt',
                 'max:5120', // 5MB
             ],
-            
+
             // Application preferences
             'preferred_interview_time' => ['nullable', 'string', Rule::in(['morning', 'afternoon', 'evening', 'flexible'])],
             'preferred_interview_method' => ['nullable', 'string', Rule::in(['in_person', 'video_call', 'phone_call', 'flexible'])],
             'preferred_contact_method' => ['nullable', 'string', Rule::in(['email', 'phone', 'sms', 'whatsapp'])],
-            
+
             // Privacy and consent
             'consent_data_processing' => ['required', 'accepted'],
             'consent_marketing_communications' => ['nullable', 'boolean'],
             'consent_profile_sharing' => ['nullable', 'boolean'],
-            
+
             // Tracking and analytics
             'source' => ['nullable', 'string', 'max:100'],
             'referrer_url' => ['nullable', 'url', 'max:500'],
             'utm_source' => ['nullable', 'string', 'max:100'],
             'utm_medium' => ['nullable', 'string', 'max:100'],
             'utm_campaign' => ['nullable', 'string', 'max:100'],
-            
+
             // reCAPTCHA (if enabled)
             'g-recaptcha-response' => [
                 Rule::requiredIf(function () {
@@ -163,12 +169,12 @@ class CreateJobApplicationRequest extends FormRequest
                 }),
                 'string',
             ],
-            
+
             // Questionnaire responses (if job has custom questions)
             'questionnaire_responses' => ['nullable', 'array'],
             'questionnaire_responses.*.question_id' => ['required_with:questionnaire_responses', 'integer'],
             'questionnaire_responses.*.answer' => ['required_with:questionnaire_responses', 'string', 'max:1000'],
-            
+
             // Timezone and locale
             'timezone' => ['nullable', 'string', 'max:50'],
             'locale' => ['nullable', 'string', 'size:2', Rule::in(['en', 'ar', 'es', 'fr', 'de', 'pt', 'ru', 'tr', 'zh'])],
@@ -186,113 +192,113 @@ class CreateJobApplicationRequest extends FormRequest
             'job_id.required' => __('validation.job_id_required'),
             'job_id.integer' => __('validation.job_id_must_be_integer'),
             'job_id.exists' => __('validation.job_not_found'),
-            
+
             'resume_id.required' => __('validation.resume_id_required'),
             'resume_id.integer' => __('validation.resume_id_must_be_integer'),
             'resume_id.exists' => __('validation.resume_not_found'),
-            
+
             'cover_letter.string' => __('validation.cover_letter_must_be_string'),
             'cover_letter.max' => __('validation.cover_letter_too_long'),
-            
+
             'expected_salary.numeric' => __('validation.expected_salary_must_be_numeric'),
             'expected_salary.min' => __('validation.expected_salary_negative'),
             'expected_salary.max' => __('validation.expected_salary_too_high'),
-            
+
             'salary_currency.string' => __('validation.salary_currency_must_be_string'),
             'salary_currency.size' => __('validation.salary_currency_invalid_length'),
             'salary_currency.exists' => __('validation.salary_currency_not_found'),
-            
+
             'availability_date.date' => __('validation.availability_date_invalid'),
             'availability_date.after_or_equal' => __('validation.availability_date_past'),
-            
+
             'notice_period.integer' => __('validation.notice_period_must_be_integer'),
             'notice_period.min' => __('validation.notice_period_negative'),
             'notice_period.max' => __('validation.notice_period_too_long'),
-            
+
             'willing_to_relocate.boolean' => __('validation.willing_to_relocate_must_be_boolean'),
             'willing_to_travel.boolean' => __('validation.willing_to_travel_must_be_boolean'),
             'remote_work_preference.in' => __('validation.invalid_remote_work_preference'),
-            
+
             'motivation.string' => __('validation.motivation_must_be_string'),
             'motivation.max' => __('validation.motivation_too_long'),
-            
+
             'relevant_experience.string' => __('validation.relevant_experience_must_be_string'),
             'relevant_experience.max' => __('validation.relevant_experience_too_long'),
-            
+
             'additional_notes.string' => __('validation.additional_notes_must_be_string'),
             'additional_notes.max' => __('validation.additional_notes_too_long'),
-            
+
             'skills.array' => __('validation.skills_must_be_array'),
             'skills.max' => __('validation.too_many_skills'),
             'skills.*.integer' => __('validation.skill_id_must_be_integer'),
             'skills.*.exists' => __('validation.skill_not_found'),
-            
+
             'certifications.array' => __('validation.certifications_must_be_array'),
             'certifications.max' => __('validation.too_many_certifications'),
             'certifications.*.string' => __('validation.certification_must_be_string'),
             'certifications.*.max' => __('validation.certification_too_long'),
-            
+
             'languages.array' => __('validation.languages_must_be_array'),
             'languages.max' => __('validation.too_many_languages'),
             'languages.*.integer' => __('validation.language_id_must_be_integer'),
             'languages.*.exists' => __('validation.language_not_found'),
-            
+
             'portfolio_url.url' => __('validation.portfolio_url_invalid'),
             'portfolio_url.max' => __('validation.portfolio_url_too_long'),
-            
+
             'linkedin_profile.url' => __('validation.linkedin_profile_invalid'),
             'linkedin_profile.max' => __('validation.linkedin_profile_too_long'),
-            
+
             'github_profile.url' => __('validation.github_profile_invalid'),
             'github_profile.max' => __('validation.github_profile_too_long'),
-            
+
             'personal_website.url' => __('validation.personal_website_invalid'),
             'personal_website.max' => __('validation.personal_website_too_long'),
-            
+
             'additional_documents.array' => __('validation.additional_documents_must_be_array'),
             'additional_documents.max' => __('validation.too_many_additional_documents'),
             'additional_documents.*.file' => __('validation.additional_document_must_be_file'),
             'additional_documents.*.mimes' => __('validation.additional_document_invalid_type'),
             'additional_documents.*.max' => __('validation.additional_document_too_large'),
-            
+
             'preferred_interview_time.in' => __('validation.invalid_preferred_interview_time'),
             'preferred_interview_method.in' => __('validation.invalid_preferred_interview_method'),
             'preferred_contact_method.in' => __('validation.invalid_preferred_contact_method'),
-            
+
             'consent_data_processing.required' => __('validation.consent_data_processing_required'),
             'consent_data_processing.accepted' => __('validation.consent_data_processing_must_be_accepted'),
-            
+
             'consent_marketing_communications.boolean' => __('validation.consent_marketing_communications_must_be_boolean'),
             'consent_profile_sharing.boolean' => __('validation.consent_profile_sharing_must_be_boolean'),
-            
+
             'source.string' => __('validation.source_must_be_string'),
             'source.max' => __('validation.source_too_long'),
-            
+
             'referrer_url.url' => __('validation.referrer_url_invalid'),
             'referrer_url.max' => __('validation.referrer_url_too_long'),
-            
+
             'utm_source.string' => __('validation.utm_source_must_be_string'),
             'utm_source.max' => __('validation.utm_source_too_long'),
-            
+
             'utm_medium.string' => __('validation.utm_medium_must_be_string'),
             'utm_medium.max' => __('validation.utm_medium_too_long'),
-            
+
             'utm_campaign.string' => __('validation.utm_campaign_must_be_string'),
             'utm_campaign.max' => __('validation.utm_campaign_too_long'),
-            
+
             'g-recaptcha-response.required' => __('validation.recaptcha_required'),
             'g-recaptcha-response.string' => __('validation.recaptcha_invalid'),
-            
+
             'questionnaire_responses.array' => __('validation.questionnaire_responses_must_be_array'),
             'questionnaire_responses.*.question_id.required_with' => __('validation.question_id_required'),
             'questionnaire_responses.*.question_id.integer' => __('validation.question_id_must_be_integer'),
             'questionnaire_responses.*.answer.required_with' => __('validation.answer_required'),
             'questionnaire_responses.*.answer.string' => __('validation.answer_must_be_string'),
             'questionnaire_responses.*.answer.max' => __('validation.answer_too_long'),
-            
+
             'timezone.string' => __('validation.timezone_must_be_string'),
             'timezone.max' => __('validation.timezone_too_long'),
-            
+
             'locale.string' => __('validation.locale_must_be_string'),
             'locale.size' => __('validation.locale_invalid_length'),
             'locale.in' => __('validation.locale_not_supported'),
@@ -347,6 +353,110 @@ class CreateJobApplicationRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $user = $this->user();
+
+            // Validate user profile completeness
+            if (!$user->candidate || !$user->candidate->is_profile_complete) {
+                $validator->errors()->add('profile', __('validation.profile_incomplete'));
+            }
+
+            // Validate job requirements match
+            $jobId = $this->input('job_id');
+            if ($jobId) {
+                $job = Job::with(['requiredSkills', 'requiredDegreeLevel', 'careerLevel'])->find($jobId);
+                if ($job) {
+                    // Check required skills
+                    if ($job->requiredSkills->isNotEmpty() && $this->filled('skills')) {
+                        $userSkills = $this->input('skills');
+                        $requiredSkills = $job->requiredSkills->pluck('id')->toArray();
+                        $matchingSkills = array_intersect($userSkills, $requiredSkills);
+
+                        if (empty($matchingSkills)) {
+                            $validator->errors()->add('skills', __('validation.no_matching_required_skills'));
+                        }
+                    }
+
+                    // Check minimum experience
+                    if ($job->min_experience && $user->candidate) {
+                        $userExperience = $user->candidate->total_experience ?? 0;
+                        if ($userExperience < $job->min_experience) {
+                            $validator->errors()->add(
+                                'experience',
+                                __('validation.insufficient_experience', [
+                                    'required' => $job->min_experience,
+                                    'current' => $userExperience,
+                                ])
+                            );
+                        }
+                    }
+
+                    // Check salary expectations
+                    if ($this->filled('expected_salary') && $job->max_salary) {
+                        $expectedSalary = $this->input('expected_salary');
+                        if ($expectedSalary > $job->max_salary * 1.2) { // Allow 20% buffer
+                            $validator->errors()->add(
+                                'expected_salary',
+                                __('validation.salary_expectation_too_high', [
+                                    'max_salary' => number_format($job->max_salary),
+                                ])
+                            );
+                        }
+                    }
+                }
+            }
+
+            // Validate reCAPTCHA if enabled
+            if (config('services.recaptcha.enabled') && $this->filled('g-recaptcha-response')) {
+                $recaptchaResponse = $this->input('g-recaptcha-response');
+                $secretKey = config('services.recaptcha.secret_key');
+
+                $response = \Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => $secretKey,
+                    'response' => $recaptchaResponse,
+                    'remoteip' => $this->ip(),
+                ]);
+
+                $result = $response->json();
+                if (!$result['success']) {
+                    $validator->errors()->add('g-recaptcha-response', __('validation.recaptcha_failed'));
+                }
+            }
+
+            // Validate file uploads
+            if ($this->hasFile('additional_documents')) {
+                $files = $this->file('additional_documents');
+                foreach ($files as $index => $file) {
+                    if ($file && $file->isValid()) {
+                        // Check for malicious content
+                        $content = file_get_contents($file->getPathname());
+                        if ($this->containsSuspiciousContent($content)) {
+                            $validator->errors()->add(
+                                "additional_documents.{$index}",
+                                __('validation.suspicious_file_content')
+                            );
+                        }
+                    }
+                }
+            }
+
+            // Validate timezone
+            if ($this->filled('timezone')) {
+                $timezone = $this->input('timezone');
+                if (!in_array($timezone, timezone_identifiers_list())) {
+                    $validator->errors()->add('timezone', __('validation.invalid_timezone'));
+                }
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -375,9 +485,9 @@ class CreateJobApplicationRequest extends FormRequest
         // Convert string booleans to actual booleans
         $booleanFields = [
             'willing_to_relocate', 'willing_to_travel', 'consent_data_processing',
-            'consent_marketing_communications', 'consent_profile_sharing'
+            'consent_marketing_communications', 'consent_profile_sharing',
         ];
-        
+
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
@@ -413,110 +523,11 @@ class CreateJobApplicationRequest extends FormRequest
             if ($this->filled($field)) {
                 $url = trim($this->input($field));
                 if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
-                    $url = 'https://' . $url;
+                    $url = 'https://'.$url;
                 }
                 $this->merge([$field => $url]);
             }
         }
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            $user = $this->user();
-            
-            // Validate user profile completeness
-            if (!$user->candidate || !$user->candidate->is_profile_complete) {
-                $validator->errors()->add('profile', __('validation.profile_incomplete'));
-            }
-            
-            // Validate job requirements match
-            $jobId = $this->input('job_id');
-            if ($jobId) {
-                $job = Job::with(['requiredSkills', 'requiredDegreeLevel', 'careerLevel'])->find($jobId);
-                if ($job) {
-                    // Check required skills
-                    if ($job->requiredSkills->isNotEmpty() && $this->filled('skills')) {
-                        $userSkills = $this->input('skills');
-                        $requiredSkills = $job->requiredSkills->pluck('id')->toArray();
-                        $matchingSkills = array_intersect($userSkills, $requiredSkills);
-                        
-                        if (empty($matchingSkills)) {
-                            $validator->errors()->add('skills', __('validation.no_matching_required_skills'));
-                        }
-                    }
-                    
-                    // Check minimum experience
-                    if ($job->min_experience && $user->candidate) {
-                        $userExperience = $user->candidate->total_experience ?? 0;
-                        if ($userExperience < $job->min_experience) {
-                            $validator->errors()->add('experience', 
-                                __('validation.insufficient_experience', [
-                                    'required' => $job->min_experience,
-                                    'current' => $userExperience
-                                ])
-                            );
-                        }
-                    }
-                    
-                    // Check salary expectations
-                    if ($this->filled('expected_salary') && $job->max_salary) {
-                        $expectedSalary = $this->input('expected_salary');
-                        if ($expectedSalary > $job->max_salary * 1.2) { // Allow 20% buffer
-                            $validator->errors()->add('expected_salary', 
-                                __('validation.salary_expectation_too_high', [
-                                    'max_salary' => number_format($job->max_salary)
-                                ])
-                            );
-                        }
-                    }
-                }
-            }
-            
-            // Validate reCAPTCHA if enabled
-            if (config('services.recaptcha.enabled') && $this->filled('g-recaptcha-response')) {
-                $recaptchaResponse = $this->input('g-recaptcha-response');
-                $secretKey = config('services.recaptcha.secret_key');
-                
-                $response = \Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                    'secret' => $secretKey,
-                    'response' => $recaptchaResponse,
-                    'remoteip' => $this->ip(),
-                ]);
-                
-                $result = $response->json();
-                if (!$result['success']) {
-                    $validator->errors()->add('g-recaptcha-response', __('validation.recaptcha_failed'));
-                }
-            }
-            
-            // Validate file uploads
-            if ($this->hasFile('additional_documents')) {
-                $files = $this->file('additional_documents');
-                foreach ($files as $index => $file) {
-                    if ($file && $file->isValid()) {
-                        // Check for malicious content
-                        $content = file_get_contents($file->getPathname());
-                        if ($this->containsSuspiciousContent($content)) {
-                            $validator->errors()->add("additional_documents.{$index}", 
-                                __('validation.suspicious_file_content')
-                            );
-                        }
-                    }
-                }
-            }
-            
-            // Validate timezone
-            if ($this->filled('timezone')) {
-                $timezone = $this->input('timezone');
-                if (!in_array($timezone, timezone_identifiers_list())) {
-                    $validator->errors()->add('timezone', __('validation.invalid_timezone'));
-                }
-            }
-        });
     }
 
     /**
@@ -532,13 +543,13 @@ class CreateJobApplicationRequest extends FormRequest
             '/onerror\s*=/i',
             '/onclick\s*=/i',
         ];
-        
+
         foreach ($suspiciousPatterns as $pattern) {
             if (preg_match($pattern, $content)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-} 
+}

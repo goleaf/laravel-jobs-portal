@@ -8,11 +8,9 @@ use App\Models\Company;
 use App\Providers\RouteServiceProvider;
 use Auth;
 use Illuminate\Contracts\View\Factory;
-
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class LoginController extends Controller
 {
     /*
@@ -35,8 +33,6 @@ class LoginController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -84,14 +80,14 @@ class LoginController extends Controller
 
         $this->clearLoginAttempts($request);
 
-        if (Auth::user()->hasRole('Employer') && $type == Company::COMPANY_LOGIN_TYPE) {
+        if (\Auth::user()->hasRole('Employer') && Company::COMPANY_LOGIN_TYPE == $type) {
             $this->redirectTo = RouteServiceProvider::EMPLOYER_HOME;
         } else {
-            if (Auth::user()->hasRole('Candidate') && $type == Candidate::CANDIDATE_LOGIN_TYPE) {
+            if (\Auth::user()->hasRole('Candidate') && Candidate::CANDIDATE_LOGIN_TYPE == $type) {
                 $this->redirectTo = RouteServiceProvider::CANDIDATE_HOME;
             } else {
-                Auth::logout();
-                $section = ($type == Company::COMPANY_LOGIN_TYPE) ? 'users/employee-login' : 'users/candidate-login';
+                \Auth::logout();
+                $section = (Company::COMPANY_LOGIN_TYPE == $type) ? 'users/employee-login' : 'users/candidate-login';
 
                 return redirect('/'.$section)->withInput()->withErrors([
                     'error' => 'These credentials do not match our records.',
@@ -104,13 +100,15 @@ class LoginController extends Controller
                 ?: redirect()->intended($this->redirectPath())
                     ->withCookie(\Cookie::make('email', $request->email, 3600))
                     ->withCookie(\Cookie::make('password', $request->password, 3600))
-                    ->withCookie(\Cookie::make('remember', 1, 3600));
+                    ->withCookie(\Cookie::make('remember', 1, 3600))
+            ;
         }
 
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath())
                 ->withCookie(\Cookie::forget('email'))
                 ->withCookie(\Cookie::forget('password'))
-                ->withCookie(\Cookie::forget('remember'));
+                ->withCookie(\Cookie::forget('remember'))
+        ;
     }
 }

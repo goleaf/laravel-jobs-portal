@@ -47,9 +47,11 @@ class LogoutResource extends JsonResource
 
     /**
      * Customize the response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
         $response->setStatusCode(200);
     }
-} 
+}

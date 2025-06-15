@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -27,11 +26,9 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @return void
-     *
-     * @throws Exception
+     * @throws \Exception
      */
-    public function report(Throwable $exception)
+    public function report(\Throwable $exception)
     {
         parent::report($exception);
     }
@@ -39,12 +36,13 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, \Throwable $exception)
     {
         $code = $exception->getCode();
         $message = $exception->getMessage();
@@ -56,7 +54,7 @@ class Handler extends ExceptionHandler
             $message = $exception->getMessage();
             $code = \Illuminate\Http\Response::HTTP_NOT_FOUND;
 
-            if (preg_match('@\\\\(\w+)\]@', $message, $matches)) {
+            if (preg_match('@\\\(\w+)\]@', $message, $matches)) {
                 $model = $matches[1];
                 $model = preg_replace('/Table/i', '', $model);
                 $message = "{$model} not found.";
@@ -68,7 +66,7 @@ class Handler extends ExceptionHandler
             $message = $validator->errors()->first();
             $code = \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY;
 
-            if (! $request->expectsJson() and ! $request->isXmlHttpRequest()) {
+            if (!$request->expectsJson() and !$request->isXmlHttpRequest()) {
                 return Redirect::back()->withInput()->withErrors($message);
             }
         }

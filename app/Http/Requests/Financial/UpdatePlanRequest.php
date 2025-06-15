@@ -16,15 +16,6 @@ class UpdatePlanRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $amount = $this->request->get('amount');
-        $this->request->set('amount', removeCommaFromNumbers($amount));
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
@@ -35,5 +26,14 @@ class UpdatePlanRequest extends FormRequest
         $rules['amount'] = 'sometimes|required|numeric|min:1|max:99999';
 
         return $rules;
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $amount = $this->request->get('amount');
+        $this->request->set('amount', removeCommaFromNumbers($amount));
     }
 }

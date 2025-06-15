@@ -2,28 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * CmsServices Model - Enhanced with Enhanced patterns
+ * CmsServices Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $key
- * @property string|null $value
- * @property bool $is_active
- * @property bool $is_featured
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int         $id
+ * @property string      $key
+ * @property null|string $value
+ * @property bool        $is_active
+ * @property bool        $is_featured
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -46,16 +49,28 @@ class CmsServices extends Model implements HasMedia
     use LogsActivity;
 
     /**
+     * Media collection path constant.
+     */
+    public const PATH = 'settings';
+
+    /**
+     * Validation rules for creating CMS services.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'key' => 'required|string|max:255|unique:cms_services,key',
+        'value' => 'nullable|string',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+    ];
+
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'cms_services';
-
-    /**
-     * Media collection path constant.
-     */
-    public const PATH = 'settings';
 
     /**
      * The attributes that are mass assignable.
@@ -79,22 +94,6 @@ class CmsServices extends Model implements HasMedia
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -102,31 +101,19 @@ class CmsServices extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly(['key', 'value', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating CMS services.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'key' => 'required|string|max:255|unique:cms_services,key',
-        'value' => 'nullable|string',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-    ];
 
     /**
      * Update validation rules for CMS services.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'key' => 'required|string|max:255|unique:cms_services,key,' . $id,
+            'key' => 'required|string|max:255|unique:cms_services,key,'.$id,
             'value' => 'nullable|string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -139,6 +126,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include active records.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -147,6 +136,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include inactive records.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -155,6 +146,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include featured records.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -163,6 +156,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include non-featured records.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -171,17 +166,22 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to search by key or value.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('key', 'like', '%' . $term . '%')
-              ->orWhere('value', 'like', '%' . $term . '%');
+            $q->where('key', 'like', '%'.$term.'%')
+                ->orWhere('value', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope a query to filter by specific key.
+     *
+     * @param mixed $query
      */
     public function scopeByKey($query, string $key)
     {
@@ -190,6 +190,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include recent records.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -198,6 +200,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to only include old records.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -206,6 +210,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to order records alphabetically by key.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -214,6 +220,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to include records with media.
+     *
+     * @param mixed $query
      */
     public function scopeWithMedia($query)
     {
@@ -222,6 +230,8 @@ class CmsServices extends Model implements HasMedia
 
     /**
      * Scope a query to include records without media.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutMedia($query)
     {
@@ -235,7 +245,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Get cached active CMS services.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('cms_services_active', 3600, function () {
             return static::active()->get();
@@ -245,7 +255,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Get cached featured CMS services.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('cms_services_featured', 3600, function () {
             return static::featured()->active()->get();
@@ -259,6 +269,7 @@ class CmsServices extends Model implements HasMedia
     {
         return Cache::remember("cms_service_key_{$key}", 3600, function () use ($key) {
             $service = static::where('key', $key)->first();
+
             return $service ? $service->value : null;
         });
     }
@@ -294,7 +305,7 @@ class CmsServices extends Model implements HasMedia
 
         // Try to decode JSON values
         $decoded = json_decode($this->value, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
             return implode(', ', array_values($decoded));
         }
 
@@ -313,9 +324,45 @@ class CmsServices extends Model implements HasMedia
         Cache::forget('cms_services_active');
         Cache::forget('cms_services_featured');
         Cache::forget("cms_service_key_{$this->key}");
-        
+
         // Clear pattern-based caches
         $this->clearCachePattern('cms_services_*');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+    // =============================================
+    // MODEL EVENTS
+    // =============================================
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($model) {
+            $model->clearCaches();
+        });
+
+        static::deleted(function ($model) {
+            $model->clearCaches();
+        });
     }
 
     /**
@@ -324,7 +371,7 @@ class CmsServices extends Model implements HasMedia
     private function clearCachePattern(string $pattern): void
     {
         $store = Cache::getStore();
-        
+
         // Only use Redis pattern clearing if we are actually using Redis
         if (method_exists($store, 'getRedis') && method_exists($store, 'connection')) {
             try {
@@ -354,25 +401,5 @@ class CmsServices extends Model implements HasMedia
         Cache::forget('cms_services_active');
         Cache::forget('cms_services_featured');
         Cache::forget("cms_service_key_{$this->key}");
-    }
-
-    // =============================================
-    // MODEL EVENTS
-    // =============================================
-
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saved(function ($model) {
-            $model->clearCaches();
-        });
-
-        static::deleted(function ($model) {
-            $model->clearCaches();
-        });
     }
 }

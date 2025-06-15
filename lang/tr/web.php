@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
@@ -263,7 +262,6 @@ return [
         'don\'t_have_an_account' => 'Hesabınız yok mu?',
         'enter_email' => 'E-posta Adresinizi Girin',
         'enter_password' => 'Şifrenizi Girin',
-
     ],
 
     // header keys

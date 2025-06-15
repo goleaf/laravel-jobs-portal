@@ -4,13 +4,12 @@ namespace App\Traits;
 
 use App\Models\Taxonomy;
 use App\Models\Term;
-use App\Models\Taggable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
 /**
- * HasTaxonomy Trait
- * 
+ * HasTaxonomy Trait.
+ *
  * Provides taxonomy functionality to any Eloquent model.
  * Allows models to be tagged with terms from various taxonomies.
  */
@@ -22,10 +21,11 @@ trait HasTaxonomy
     public function taxonomies(): Collection
     {
         return $this->terms()
-                    ->with('taxonomy')
-                    ->get()
-                    ->pluck('taxonomy')
-                    ->unique('id');
+            ->with('taxonomy')
+            ->get()
+            ->pluck('taxonomy')
+            ->unique('id')
+        ;
     }
 
     /**
@@ -34,10 +34,11 @@ trait HasTaxonomy
     public function terms(): MorphToMany
     {
         return $this->morphToMany(Term::class, 'taggable')
-                    ->withPivot(['taxonomy_id', 'sort_order', 'meta'])
-                    ->withTimestamps()
-                    ->orderBy('pivot_sort_order')
-                    ->orderBy('name');
+            ->withPivot(['taxonomy_id', 'sort_order', 'meta'])
+            ->withTimestamps()
+            ->orderBy('pivot_sort_order')
+            ->orderBy('name')
+        ;
     }
 
     /**
@@ -46,13 +47,14 @@ trait HasTaxonomy
     public function termsByTaxonomy(string $taxonomyType): MorphToMany
     {
         return $this->morphToMany(Term::class, 'taggable')
-                    ->withPivot(['taxonomy_id', 'sort_order', 'meta'])
-                    ->withTimestamps()
-                    ->whereHas('taxonomy', function ($query) use ($taxonomyType) {
-                        $query->where('type', $taxonomyType);
-                    })
-                    ->orderBy('pivot_sort_order')
-                    ->orderBy('name');
+            ->withPivot(['taxonomy_id', 'sort_order', 'meta'])
+            ->withTimestamps()
+            ->whereHas('taxonomy', function ($query) use ($taxonomyType) {
+                $query->where('type', $taxonomyType);
+            })
+            ->orderBy('pivot_sort_order')
+            ->orderBy('name')
+        ;
     }
 
     /**
@@ -77,11 +79,13 @@ trait HasTaxonomy
 
     /**
      * Add a single term to this model.
+     *
+     * @param mixed $term
      */
-    public function addTerm($term, string $taxonomyType = null, int $sortOrder = 0, array $meta = []): void
+    public function addTerm($term, ?string $taxonomyType = null, int $sortOrder = 0, array $meta = []): void
     {
         $termModel = $this->resolveTerm($term, $taxonomyType);
-        
+
         if ($termModel) {
             $this->attachTerm($termModel, $sortOrder, $meta);
         }
@@ -90,7 +94,7 @@ trait HasTaxonomy
     /**
      * Add multiple terms to this model.
      */
-    public function addTerms(array $terms, string $taxonomyType = null): void
+    public function addTerms(array $terms, ?string $taxonomyType = null): void
     {
         foreach ($terms as $index => $term) {
             $this->addTerm($term, $taxonomyType, $index);
@@ -103,16 +107,17 @@ trait HasTaxonomy
     public function syncTerms(array $terms, string $taxonomyType): void
     {
         $taxonomy = Taxonomy::where('type', $taxonomyType)->first();
-        
+
         if (!$taxonomy) {
             return;
         }
 
         // Get current term IDs for this taxonomy
         $currentTermIds = $this->terms()
-                              ->where('taxonomy_id', $taxonomy->id)
-                              ->pluck('terms.id')
-                              ->toArray();
+            ->where('taxonomy_id', $taxonomy->id)
+            ->pluck('terms.id')
+            ->toArray()
+        ;
 
         // Resolve new terms
         $newTermIds = [];
@@ -145,11 +150,13 @@ trait HasTaxonomy
 
     /**
      * Remove a term from this model.
+     *
+     * @param mixed $term
      */
-    public function removeTerm($term, string $taxonomyType = null): void
+    public function removeTerm($term, ?string $taxonomyType = null): void
     {
         $termModel = $this->resolveTerm($term, $taxonomyType);
-        
+
         if ($termModel) {
             $this->detachTerm($termModel->id);
         }
@@ -158,7 +165,7 @@ trait HasTaxonomy
     /**
      * Remove multiple terms from this model.
      */
-    public function removeTerms(array $terms, string $taxonomyType = null): void
+    public function removeTerms(array $terms, ?string $taxonomyType = null): void
     {
         foreach ($terms as $term) {
             $this->removeTerm($term, $taxonomyType);
@@ -179,11 +186,12 @@ trait HasTaxonomy
     public function removeTermsByTaxonomy(string $taxonomyType): void
     {
         $taxonomy = Taxonomy::where('type', $taxonomyType)->first();
-        
+
         if ($taxonomy) {
             $this->terms()
-                 ->wherePivot('taxonomy_id', $taxonomy->id)
-                 ->detach();
+                ->wherePivot('taxonomy_id', $taxonomy->id)
+                ->detach()
+            ;
         }
     }
 
@@ -202,30 +210,32 @@ trait HasTaxonomy
     /**
      * Get a specific term.
      */
-    public function getTerm(string $termName, string $taxonomyType = null): ?Term
+    public function getTerm(string $termName, ?string $taxonomyType = null): ?Term
     {
         $query = $this->terms()->where('terms.name', $termName);
-        
+
         if ($taxonomyType) {
             $query->whereHas('taxonomy', function ($q) use ($taxonomyType) {
                 $q->where('type', $taxonomyType);
             });
         }
-        
+
         return $query->first();
     }
 
     /**
      * Check if model has a specific term.
+     *
+     * @param mixed $term
      */
-    public function hasTerm($term, string $taxonomyType = null): bool
+    public function hasTerm($term, ?string $taxonomyType = null): bool
     {
         $termModel = $this->resolveTerm($term, $taxonomyType);
-        
+
         if (!$termModel) {
             return false;
         }
-        
+
         return $this->terms()->where('terms.id', $termModel->id)->exists();
     }
 
@@ -259,13 +269,15 @@ trait HasTaxonomy
 
     /**
      * Scope models with specific terms.
+     *
+     * @param mixed $query
      */
-    public function scopeWithTerms($query, array $terms, string $taxonomyType = null)
+    public function scopeWithTerms($query, array $terms, ?string $taxonomyType = null)
     {
         return $query->whereHas('terms', function ($q) use ($terms, $taxonomyType) {
             if (is_array($terms[0])) {
                 // Multiple term conditions
-                $q->where(function ($subQuery) use ($terms, $taxonomyType) {
+                $q->where(function ($subQuery) use ($terms) {
                     foreach ($terms as $termGroup) {
                         $subQuery->orWhereIn('terms.name', $termGroup);
                     }
@@ -274,7 +286,7 @@ trait HasTaxonomy
                 // Single term condition
                 $q->whereIn('terms.name', $terms);
             }
-            
+
             if ($taxonomyType) {
                 $q->whereHas('taxonomy', function ($taxonomyQuery) use ($taxonomyType) {
                     $taxonomyQuery->where('type', $taxonomyType);
@@ -285,8 +297,11 @@ trait HasTaxonomy
 
     /**
      * Scope models with a specific term.
+     *
+     * @param mixed $query
+     * @param mixed $term
      */
-    public function scopeWithTerm($query, $term, string $taxonomyType = null)
+    public function scopeWithTerm($query, $term, ?string $taxonomyType = null)
     {
         return $query->whereHas('terms', function ($q) use ($term, $taxonomyType) {
             if (is_string($term)) {
@@ -296,7 +311,7 @@ trait HasTaxonomy
             } elseif ($term instanceof Term) {
                 $q->where('terms.id', $term->id);
             }
-            
+
             if ($taxonomyType) {
                 $q->whereHas('taxonomy', function ($taxonomyQuery) use ($taxonomyType) {
                     $taxonomyQuery->where('type', $taxonomyType);
@@ -307,12 +322,14 @@ trait HasTaxonomy
 
     /**
      * Scope models without specific terms.
+     *
+     * @param mixed $query
      */
-    public function scopeWithoutTerms($query, array $terms, string $taxonomyType = null)
+    public function scopeWithoutTerms($query, array $terms, ?string $taxonomyType = null)
     {
         return $query->whereDoesntHave('terms', function ($q) use ($terms, $taxonomyType) {
             $q->whereIn('terms.name', $terms);
-            
+
             if ($taxonomyType) {
                 $q->whereHas('taxonomy', function ($taxonomyQuery) use ($taxonomyType) {
                     $taxonomyQuery->where('type', $taxonomyType);
@@ -323,99 +340,14 @@ trait HasTaxonomy
 
     /**
      * Scope models by taxonomy type.
+     *
+     * @param mixed $query
      */
     public function scopeByTaxonomy($query, string $taxonomyType)
     {
         return $query->whereHas('terms.taxonomy', function ($q) use ($taxonomyType) {
             $q->where('type', $taxonomyType);
         });
-    }
-
-    // =============================================
-    // HELPER METHODS
-    // =============================================
-
-    /**
-     * Resolve term from various input types.
-     */
-    protected function resolveTerm($term, string $taxonomyType = null): ?Term
-    {
-        if ($term instanceof Term) {
-            return $term;
-        }
-        
-        if (is_numeric($term)) {
-            return Term::find($term);
-        }
-        
-        if (is_string($term)) {
-            $query = Term::where('name', $term);
-            
-            if ($taxonomyType) {
-                $query->whereHas('taxonomy', function ($q) use ($taxonomyType) {
-                    $q->where('type', $taxonomyType);
-                });
-            }
-            
-            $existingTerm = $query->first();
-            
-            if ($existingTerm) {
-                return $existingTerm;
-            }
-            
-            // Create new term if taxonomy type is provided
-            if ($taxonomyType) {
-                $taxonomy = Taxonomy::firstOrCreate(
-                    ['type' => $taxonomyType],
-                    [
-                        'name' => ucfirst(str_replace('_', ' ', $taxonomyType)),
-                        'slug' => $taxonomyType,
-                        'is_active' => true,
-                        'is_public' => true,
-                    ]
-                );
-                
-                return $taxonomy->getOrCreateTerm($term);
-            }
-        }
-        
-        return null;
-    }
-
-    /**
-     * Attach a term to this model.
-     */
-    protected function attachTerm(Term $term, int $sortOrder = 0, array $meta = []): void
-    {
-        // Check if already attached
-        if ($this->terms()->where('terms.id', $term->id)->exists()) {
-            return;
-        }
-        
-        $this->terms()->attach($term->id, [
-            'taxonomy_id' => $term->taxonomy_id,
-            'sort_order' => $sortOrder,
-            'meta' => empty($meta) ? null : json_encode($meta),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        // Increment term usage
-        $term->incrementUsage();
-    }
-
-    /**
-     * Detach a term from this model.
-     */
-    protected function detachTerm(int $termId): void
-    {
-        $this->terms()->detach($termId);
-        
-        // Decrement term usage
-        $term = Term::find($termId);
-        if ($term && $term->usage_count > 0) {
-            $term->decrement('usage_count');
-        }
     }
 
     // =============================================
@@ -501,4 +433,93 @@ trait HasTaxonomy
     {
         return $this->getTerms('benefit');
     }
-} 
+
+    // =============================================
+    // HELPER METHODS
+    // =============================================
+
+    /**
+     * Resolve term from various input types.
+     *
+     * @param mixed $term
+     */
+    protected function resolveTerm($term, ?string $taxonomyType = null): ?Term
+    {
+        if ($term instanceof Term) {
+            return $term;
+        }
+
+        if (is_numeric($term)) {
+            return Term::find($term);
+        }
+
+        if (is_string($term)) {
+            $query = Term::where('name', $term);
+
+            if ($taxonomyType) {
+                $query->whereHas('taxonomy', function ($q) use ($taxonomyType) {
+                    $q->where('type', $taxonomyType);
+                });
+            }
+
+            $existingTerm = $query->first();
+
+            if ($existingTerm) {
+                return $existingTerm;
+            }
+
+            // Create new term if taxonomy type is provided
+            if ($taxonomyType) {
+                $taxonomy = Taxonomy::firstOrCreate(
+                    ['type' => $taxonomyType],
+                    [
+                        'name' => ucfirst(str_replace('_', ' ', $taxonomyType)),
+                        'slug' => $taxonomyType,
+                        'is_active' => true,
+                        'is_public' => true,
+                    ]
+                );
+
+                return $taxonomy->getOrCreateTerm($term);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Attach a term to this model.
+     */
+    protected function attachTerm(Term $term, int $sortOrder = 0, array $meta = []): void
+    {
+        // Check if already attached
+        if ($this->terms()->where('terms.id', $term->id)->exists()) {
+            return;
+        }
+
+        $this->terms()->attach($term->id, [
+            'taxonomy_id' => $term->taxonomy_id,
+            'sort_order' => $sortOrder,
+            'meta' => empty($meta) ? null : json_encode($meta),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Increment term usage
+        $term->incrementUsage();
+    }
+
+    /**
+     * Detach a term from this model.
+     */
+    protected function detachTerm(int $termId): void
+    {
+        $this->terms()->detach($termId);
+
+        // Decrement term usage
+        $term = Term::find($termId);
+        if ($term && $term->usage_count > 0) {
+            $term->decrement('usage_count');
+        }
+    }
+}

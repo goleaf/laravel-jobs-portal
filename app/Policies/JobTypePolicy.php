@@ -101,6 +101,7 @@ class JobTypePolicy
             if ($jobType->is_default) {
                 return Response::deny('Default job types cannot be deleted.');
             }
+
             return Response::allow();
         }
 
@@ -365,27 +366,6 @@ class JobTypePolicy
     }
 
     /**
-     * Check if user can manage job types in general.
-     */
-    private function canManageJobTypes(User $user): bool
-    {
-        return $user->hasAnyRole([
-            'admin',
-            'super_admin',
-            'hr_manager',
-            'seo_manager'
-        ]);
-    }
-
-    /**
-     * Check if user is an admin-level user.
-     */
-    private function isAdmin(User $user): bool
-    {
-        return $user->hasAnyRole(['admin', 'super_admin']);
-    }
-
-    /**
      * Check if user can perform bulk operations on specific job types.
      */
     public function bulkUpdateSpecific(User $user, array $jobTypeIds): Response
@@ -398,7 +378,8 @@ class JobTypePolicy
             // Check if any of the job types are default types
             $hasDefaultTypes = JobType::whereIn('id', $jobTypeIds)
                 ->where('is_default', true)
-                ->exists();
+                ->exists()
+            ;
 
             if ($hasDefaultTypes) {
                 return Response::deny('You cannot perform bulk operations on default job types.');
@@ -427,4 +408,25 @@ class JobTypePolicy
     {
         return $user->hasRole(['admin', 'super_admin']);
     }
-} 
+
+    /**
+     * Check if user can manage job types in general.
+     */
+    private function canManageJobTypes(User $user): bool
+    {
+        return $user->hasAnyRole([
+            'admin',
+            'super_admin',
+            'hr_manager',
+            'seo_manager',
+        ]);
+    }
+
+    /**
+     * Check if user is an admin-level user.
+     */
+    private function isAdmin(User $user): bool
+    {
+        return $user->hasAnyRole(['admin', 'super_admin']);
+    }
+}

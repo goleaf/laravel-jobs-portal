@@ -2,14 +2,17 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\City;
+use App\Models\State;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
 /**
  * Enhanced Enhanced Form Request for Update Company
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Following proven MasterData pattern with update-specific rules
+ * Following proven MasterData pattern with update-specific rules.
  */
 class UpdateCompanyEnhancedRequest extends FormRequest
 {
@@ -26,15 +29,15 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         $user = auth()->user();
         $company = $this->route('company');
 
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $company && $company->user_id === $user->id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $company && $company->user_id === $user->id);
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Enhanced Pattern: Update-specific validation with security
+     * Enhanced Pattern: Update-specific validation with security.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -44,52 +47,52 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         return [
             // Company Basic Information (unique except current)
             'name' => [
-                'required', 
-                'string', 
-                'max:255', 
-                Rule::unique('companies', 'name')->ignore($companyId)
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('companies', 'name')->ignore($companyId),
             ],
             'email' => [
-                'required', 
-                'email', 
-                'max:255', 
-                Rule::unique('users', 'email')->ignore($userId)
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($userId),
             ],
             'ceo' => ['nullable', 'string', 'max:255'],
             'industry_id' => ['required', 'integer', 'exists:industries,id'],
             'ownership_type_id' => ['required', 'integer', 'exists:ownership_types,id'],
             'company_size_id' => ['required', 'integer', 'exists:company_sizes,id'],
-            
+
             // Contact Information
             'phone' => ['nullable', 'string', 'max:20'],
             'fax' => ['nullable', 'string', 'max:20'],
             'website' => ['nullable', 'url', 'max:255'],
-            
+
             // Location Information
             'country_id' => ['required', 'integer', 'exists:countries,id'],
             'state_id' => ['nullable', 'integer', 'exists:states,id'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'location' => ['nullable', 'string', 'max:255'],
             'location2' => ['nullable', 'string', 'max:255'],
-            
+
             // Company Details
             'details' => ['nullable', 'string', 'max:65000'],
             'no_of_offices' => ['nullable', 'integer', 'min:1', 'max:10000'],
-            'established_in' => ['nullable', 'integer', 'min:1800', 'max:' . date('Y')],
-            
+            'established_in' => ['nullable', 'integer', 'min:1800', 'max:'.date('Y')],
+
             // Social Media
             'facebook_url' => ['nullable', 'url', 'max:255'],
             'twitter_url' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'google_plus_url' => ['nullable', 'url', 'max:255'],
             'pinterest_url' => ['nullable', 'url', 'max:255'],
-            
+
             // User Information (optional for updates)
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8'],
-            
+
             // Status and Settings (Admin only for some fields)
             'is_active' => ['boolean'],
             'is_featured' => [
@@ -100,15 +103,15 @@ class UpdateCompanyEnhancedRequest extends FormRequest
                     }
                 },
             ],
-            
+
             // File Uploads
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'], // 5MB max
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'], // 5MB max
-            
+
             // Featured settings (Admin only)
             'featured_until' => [
-                'nullable', 
-                'date', 
+                'nullable',
+                'date',
                 'after:today',
                 function ($attribute, $value, $fail) {
                     if ($value && !auth()->user()->hasRole('Admin')) {
@@ -121,7 +124,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Enhanced Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -166,7 +169,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Enhanced Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -202,8 +205,33 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     * Enhanced Pattern: Enhanced validation with update logic.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($this->hasUnauthorizedChanges()) {
+                $validator->errors()->add('permission', __('validation.unauthorized_update'));
+            }
+
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('details', __('validation.suspicious_content'));
+            }
+
+            if ($this->hasInvalidSocialMediaUrls()) {
+                $validator->errors()->add('social_media', __('validation.invalid_social_media'));
+            }
+
+            if ($this->hasInvalidLocationChanges()) {
+                $validator->errors()->add('location', __('validation.invalid_location_change'));
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization for updates
+     * Enhanced Pattern: Data normalization for updates.
      */
     protected function prepareForValidation(): void
     {
@@ -232,149 +260,13 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     * Enhanced Pattern: Enhanced validation with update logic
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->hasUnauthorizedChanges()) {
-                $validator->errors()->add('permission', __('validation.unauthorized_update'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('details', __('validation.suspicious_content'));
-            }
-            
-            if ($this->hasInvalidSocialMediaUrls()) {
-                $validator->errors()->add('social_media', __('validation.invalid_social_media'));
-            }
-
-            if ($this->hasInvalidLocationChanges()) {
-                $validator->errors()->add('location', __('validation.invalid_location_change'));
-            }
-        });
-    }
-
-    /**
-     * Enhanced Pattern: Check for unauthorized changes
-     */
-    private function hasUnauthorizedChanges(): bool
-    {
-        $user = auth()->user();
-        $company = $this->route('company');
-
-        if (!$user || !$company) return true;
-
-        // Only admins can change featured status
-        if ($this->has('is_featured') && !$user->hasRole('Admin')) {
-            return true;
-        }
-
-        // Employers can only edit their own companies
-        if ($user->hasRole('Employer') && $company->user_id !== $user->id) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        if (!$this->details) return false;
-        
-        $suspiciousPatterns = [
-            'spam', 'scam', 'free money', 'click here',
-            'guaranteed income', 'work from home guaranteed',
-            'virus', 'malware', 'phishing'
-        ];
-        
-        $content = strtolower($this->details);
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Social media URL validation
-     */
-    private function hasInvalidSocialMediaUrls(): bool
-    {
-        $socialUrls = [
-            'facebook_url' => 'facebook.com',
-            'twitter_url' => 'twitter.com',
-            'linkedin_url' => 'linkedin.com',
-        ];
-        
-        foreach ($socialUrls as $field => $expectedDomain) {
-            $url = $this->$field;
-            if ($url && !empty($url) && strpos($url, $expectedDomain) === false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Location validation for updates
-     */
-    private function hasInvalidLocationChanges(): bool
-    {
-        // Validate state belongs to country
-        if ($this->country_id && $this->state_id) {
-            $stateExists = \App\Models\State::where('id', $this->state_id)
-                ->where('country_id', $this->country_id)
-                ->exists();
-            
-            if (!$stateExists) return true;
-        }
-
-        // Validate city belongs to state
-        if ($this->state_id && $this->city_id) {
-            $cityExists = \App\Models\City::where('id', $this->city_id)
-                ->where('state_id', $this->state_id)
-                ->exists();
-            
-            if (!$cityExists) return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: URL normalization helper
-     */
-    private function normalizeUrl(?string $url): ?string
-    {
-        if (empty($url)) return null;
-        
-        $url = trim($url);
-        
-        // Add https:// if no protocol specified
-        if (!preg_match('/^https?:\/\//', $url)) {
-            $url = 'https://' . $url;
-        }
-        
-        return $url;
-    }
-
-    /**
      * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with audit trail
+     * Enhanced Pattern: Enhanced error handling with audit trail.
      */
     protected function failedValidation(Validator $validator): void
     {
         $company = $this->route('company');
-        
+
         logger()->warning('Enhanced validation failed for UpdateCompanyEnhancedRequest', [
             'errors' => $validator->errors()->toArray(),
             'controller' => 'Company',
@@ -392,4 +284,127 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
         parent::failedValidation($validator);
     }
-} 
+
+    /**
+     * Enhanced Pattern: Check for unauthorized changes.
+     */
+    private function hasUnauthorizedChanges(): bool
+    {
+        $user = auth()->user();
+        $company = $this->route('company');
+
+        if (!$user || !$company) {
+            return true;
+        }
+
+        // Only admins can change featured status
+        if ($this->has('is_featured') && !$user->hasRole('Admin')) {
+            return true;
+        }
+
+        // Employers can only edit their own companies
+        if ($user->hasRole('Employer') && $company->user_id !== $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Content security validation.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        if (!$this->details) {
+            return false;
+        }
+
+        $suspiciousPatterns = [
+            'spam', 'scam', 'free money', 'click here',
+            'guaranteed income', 'work from home guaranteed',
+            'virus', 'malware', 'phishing',
+        ];
+
+        $content = strtolower($this->details);
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Social media URL validation.
+     */
+    private function hasInvalidSocialMediaUrls(): bool
+    {
+        $socialUrls = [
+            'facebook_url' => 'facebook.com',
+            'twitter_url' => 'twitter.com',
+            'linkedin_url' => 'linkedin.com',
+        ];
+
+        foreach ($socialUrls as $field => $expectedDomain) {
+            $url = $this->{$field};
+            if ($url && !empty($url) && false === strpos($url, $expectedDomain)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Location validation for updates.
+     */
+    private function hasInvalidLocationChanges(): bool
+    {
+        // Validate state belongs to country
+        if ($this->country_id && $this->state_id) {
+            $stateExists = State::where('id', $this->state_id)
+                ->where('country_id', $this->country_id)
+                ->exists()
+            ;
+
+            if (!$stateExists) {
+                return true;
+            }
+        }
+
+        // Validate city belongs to state
+        if ($this->state_id && $this->city_id) {
+            $cityExists = City::where('id', $this->city_id)
+                ->where('state_id', $this->state_id)
+                ->exists()
+            ;
+
+            if (!$cityExists) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: URL normalization helper.
+     */
+    private function normalizeUrl(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        $url = trim($url);
+
+        // Add https:// if no protocol specified
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://'.$url;
+        }
+
+        return $url;
+    }
+}

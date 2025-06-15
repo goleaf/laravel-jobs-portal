@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -12,12 +11,14 @@ use Illuminate\Support\Str;
 class UniversalBaseController extends AppBaseController
 {
     /**
-     * Default cache TTL in seconds (1 hour)
+     * Default cache TTL in seconds (1 hour).
      */
     protected int $cacheTTL = 3600;
 
     /**
-     * Universal response wrapper with metadata
+     * Universal response wrapper with metadata.
+     *
+     * @param mixed $data
      */
     protected function universalResponse($data, string $message = 'Success', array $meta = []): JsonResponse
     {
@@ -36,7 +37,7 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal error response with consistent structure
+     * Universal error response with consistent structure.
      */
     protected function universalError(string $message, array $errors = [], int $code = 400, array $meta = []): JsonResponse
     {
@@ -55,19 +56,21 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal cache key generation
+     * Universal cache key generation.
      */
     protected function universalCacheKey(string $type, ...$params): string
     {
         $userId = auth()->id() ?? 'guest';
         $locale = app()->getLocale();
         $paramString = implode('_', array_filter($params));
-        
+
         return "universal_{$type}_{$locale}_{$userId}_{$paramString}";
     }
 
     /**
-     * Universal model query with common filters
+     * Universal model query with common filters.
+     *
+     * @param mixed $model
      */
     protected function universalQuery($model, Request $request)
     {
@@ -100,7 +103,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal search functionality
+     * Universal search functionality.
+     *
+     * @param mixed $query
      */
     protected function universalSearch($query, string $search, array $fields = ['name', 'title', 'description'])
     {
@@ -112,7 +117,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal sorting
+     * Universal sorting.
+     *
+     * @param mixed $query
      */
     protected function universalSort($query, Request $request, string $defaultSort = 'created_at')
     {
@@ -128,7 +135,10 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal pagination with metadata
+     * Universal pagination with metadata.
+     *
+     * @param mixed      $query
+     * @param null|mixed $transformer
      */
     protected function universalPaginate($query, Request $request, $transformer = null)
     {
@@ -157,7 +167,7 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Get applied filters for metadata
+     * Get applied filters for metadata.
      */
     protected function getAppliedFilters(Request $request): array
     {
@@ -199,7 +209,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal model operations with logging
+     * Universal model operations with logging.
+     *
+     * @param mixed $model
      */
     protected function universalCreate($model, array $data, string $action = 'create'): JsonResponse
     {
@@ -213,7 +225,7 @@ class UniversalBaseController extends AppBaseController
                 'data' => $data,
             ]);
 
-            return $this->universalResponse($instance, ucfirst($action) . ' successful');
+            return $this->universalResponse($instance, ucfirst($action).' successful');
         } catch (\Exception $e) {
             Log::error("Universal {$action} failed", [
                 'model' => is_string($model) ? $model : get_class($model),
@@ -226,7 +238,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal model update with logging
+     * Universal model update with logging.
+     *
+     * @param mixed $instance
      */
     protected function universalUpdate($instance, array $data, string $action = 'update'): JsonResponse
     {
@@ -239,7 +253,7 @@ class UniversalBaseController extends AppBaseController
                 'data' => $data,
             ]);
 
-            return $this->universalResponse($instance->fresh(), ucfirst($action) . ' successful');
+            return $this->universalResponse($instance->fresh(), ucfirst($action).' successful');
         } catch (\Exception $e) {
             Log::error("Universal {$action} failed", [
                 'model' => get_class($instance),
@@ -253,7 +267,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal model deletion with logging
+     * Universal model deletion with logging.
+     *
+     * @param mixed $instance
      */
     protected function universalDelete($instance, string $action = 'delete'): JsonResponse
     {
@@ -268,7 +284,7 @@ class UniversalBaseController extends AppBaseController
                 'id' => $id,
             ]);
 
-            return $this->universalResponse(null, ucfirst($action) . ' successful');
+            return $this->universalResponse(null, ucfirst($action).' successful');
         } catch (\Exception $e) {
             Log::error("Universal {$action} failed", [
                 'model' => get_class($instance),
@@ -281,7 +297,7 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal bulk operations
+     * Universal bulk operations.
      */
     protected function universalBulkOperation(array $ids, callable $operation, string $action = 'bulk operation'): JsonResponse
     {
@@ -296,10 +312,10 @@ class UniversalBaseController extends AppBaseController
         foreach ($ids as $id) {
             try {
                 $operation($id);
-                $successful++;
+                ++$successful;
             } catch (\Exception $e) {
-                $failed++;
-                $errors[] = "ID {$id}: " . $e->getMessage();
+                ++$failed;
+                $errors[] = "ID {$id}: ".$e->getMessage();
             }
         }
 
@@ -317,9 +333,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Universal cache management
+     * Universal cache management.
      */
-    protected function universalCache(string $key, callable $callback, int $ttl = null)
+    protected function universalCache(string $key, callable $callback, ?int $ttl = null)
     {
         $ttl = $ttl ?? $this->cacheTTL;
         $cacheKey = $this->universalCacheKey($key);
@@ -328,9 +344,9 @@ class UniversalBaseController extends AppBaseController
     }
 
     /**
-     * Clear universal cache by pattern
+     * Clear universal cache by pattern.
      */
-    protected function clearUniversalCache(string $pattern = null): void
+    protected function clearUniversalCache(?string $pattern = null): void
     {
         if ($pattern) {
             $keys = Cache::store()->keys("universal_{$pattern}*");
@@ -341,4 +357,4 @@ class UniversalBaseController extends AppBaseController
             Cache::store()->flush();
         }
     }
-} 
+}

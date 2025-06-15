@@ -35,7 +35,7 @@ class TodoFactory extends Factory
     /**
      * Indicate that the todo is completed.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return Factory
      */
     public function completed()
     {
@@ -49,7 +49,7 @@ class TodoFactory extends Factory
     /**
      * Indicate that the todo is not completed.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return Factory
      */
     public function incomplete()
     {
@@ -63,7 +63,7 @@ class TodoFactory extends Factory
     /**
      * Set the priority to high.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return Factory
      */
     public function highPriority()
     {

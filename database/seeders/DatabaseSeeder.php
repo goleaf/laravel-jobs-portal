@@ -14,15 +14,15 @@ class DatabaseSeeder extends Seeder
     {
         // Auto-detect database type and use appropriate seeder
         $dbConnection = Config::get('database.default', 'mysql');
-        
-        if ($dbConnection === 'sqlite') {
+
+        if ('sqlite' === $dbConnection) {
             $this->command->info('🗃️ SQLite database detected - using optimized seeder');
             $this->call(SQLiteOptimizedSeeder::class);
         } else {
             $this->command->info('🗄️ MySQL/other database detected - using comprehensive seeder');
             $this->call(ComprehensiveAllTablesSeeder::class);
         }
-        
+
         // Original individual seeders (commented out - uncomment as needed)
         /*
         $this->call(CreateDefaultCurrencySeeder::class);

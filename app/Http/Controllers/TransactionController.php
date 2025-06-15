@@ -2,26 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
+use App\Http\Requests\Transaction\GetTransactionInvoiceRequest;
+use App\Http\Requests\Transaction\IndexTransactionRequest;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Stripe\StripeClient;
-use App\Http\Requests\Transaction\IndexTransactionRequest;
-use App\Http\Requests\Transaction\GetTransactionInvoiceRequest;
 
 /**
- * Class TransactionController
+ * Class TransactionController.
  */
-
 class TransactionController extends AppBaseController
 {
     /**
-     * @param  IndexTransactionRequest  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(IndexTransactionRequest $request): View
     {
@@ -35,14 +31,14 @@ class TransactionController extends AppBaseController
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getTransactionInvoice(string $invoiceId, GetTransactionInvoiceRequest $request)
     {
         try {
             setStripeApiKey();
             $envSetting = getEnvSetting();
-            if (! empty($envSetting['stripe_secret'])) {
+            if (!empty($envSetting['stripe_secret'])) {
                 $stripe = new StripeClient(
                     $envSetting['stripe_secret']
                 );
@@ -61,7 +57,7 @@ class TransactionController extends AppBaseController
             $receiptUrl = $charge->receipt_url;
 
             return $this->sendResponse($receiptUrl, __('messages.flash.invoice_retrieve'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
         }
     }

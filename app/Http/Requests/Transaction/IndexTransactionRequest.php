@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests\Transaction;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Enhanced Enhanced Form Request for Transaction index
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Auto-generated for Level 4 Complex System Transformation
+ * Auto-generated for Level 4 Complex System Transformation.
  */
 class IndexTransactionRequest extends FormRequest
 {
@@ -22,18 +21,19 @@ class IndexTransactionRequest extends FormRequest
         if (!auth()->check()) {
             return false;
         }
-        
+
         $user = auth()->user();
+
         return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer') ||
-            $user->hasRole('Candidate')
+            $user->hasRole('Admin')
+            || $user->hasRole('Employer')
+            || $user->hasRole('Candidate')
         );
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Enhanced Pattern: Comprehensive validation with security
+     * Enhanced Pattern: Comprehensive validation with security.
      */
     public function rules(): array
     {
@@ -43,7 +43,7 @@ class IndexTransactionRequest extends FormRequest
             'email' => ['sometimes', 'email', 'max:255'],
             'description' => ['sometimes', 'string', 'max:1000'],
             'is_active' => ['sometimes', 'boolean'],
-            
+
             // Security validation
             'g-recaptcha-response' => [
                 'nullable',
@@ -58,7 +58,7 @@ class IndexTransactionRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Enhanced Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -73,7 +73,7 @@ class IndexTransactionRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Enhanced Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -86,8 +86,25 @@ class IndexTransactionRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     * Enhanced Pattern: Enhanced validation logic.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($this->hasEnhancedValidationConflicts()) {
+                $validator->errors()->add('name', __('validation.conflict_detected'));
+            }
+
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('name', __('validation.suspicious_content'));
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
+     * Enhanced Pattern: Data normalization.
      */
     protected function prepareForValidation(): void
     {
@@ -99,51 +116,8 @@ class IndexTransactionRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     * Enhanced Pattern: Enhanced validation logic
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->hasEnhancedValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
-            }
-        });
-    }
-
-    /**
-     * Enhanced Pattern: Enhanced business logic validation
-     */
-    private function hasEnhancedValidationConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
      * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -157,5 +131,31 @@ class IndexTransactionRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Enhanced Pattern: Enhanced business logic validation.
+     */
+    private function hasEnhancedValidationConflicts(): bool
+    {
+        // Add specific business logic validation here
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Content security validation.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
+        $content = strtolower(($this->name ?? '').' '.($this->description ?? ''));
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

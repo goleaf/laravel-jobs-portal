@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Job;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateJobRequest extends FormRequest
 {
@@ -18,7 +18,7 @@ class UpdateJobRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -93,6 +93,18 @@ class UpdateJobRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -102,15 +114,5 @@ class UpdateJobRequest extends FormRequest
         $this->merge([
             // Add any automatic data transformations
         ]);
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            // Add any custom validation logic here
-        });
     }
 }

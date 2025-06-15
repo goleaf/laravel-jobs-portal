@@ -3,11 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\BrandingSliders;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class BrandingSliderRepository
+ * Class BrandingSliderRepository.
  */
 class BrandingSliderRepository extends BaseRepository
 {
@@ -24,8 +23,8 @@ class BrandingSliderRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return BrandingSliders::class;
@@ -37,7 +36,7 @@ class BrandingSliderRepository extends BaseRepository
             /** @var BrandingSliders $brandingSlider */
             $brandingSlider = $this->create($input);
 
-            if (isset($input['branding_slider']) && ! empty($input['branding_slider'])) {
+            if (isset($input['branding_slider']) && !empty($input['branding_slider'])) {
                 $brandingSlider->addMedia($input['branding_slider'])->toMediaCollection(
                     BrandingSliders::PATH,
                     config('app.media_disc')
@@ -45,7 +44,7 @@ class BrandingSliderRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -56,7 +55,7 @@ class BrandingSliderRepository extends BaseRepository
             /** @var BrandingSliders $brandingSlider */
             $brandingSlider = $this->update($input, $brandingSliderId);
 
-            if (isset($input['branding_slider']) && ! empty($input['branding_slider'])) {
+            if (isset($input['branding_slider']) && !empty($input['branding_slider'])) {
                 $brandingSlider->clearMediaCollection(BrandingSliders::PATH);
                 $brandingSlider->addMedia($input['branding_slider'])->toMediaCollection(
                     BrandingSliders::PATH,
@@ -65,7 +64,7 @@ class BrandingSliderRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }

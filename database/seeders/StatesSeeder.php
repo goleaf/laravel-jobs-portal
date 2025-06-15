@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -55,10 +54,10 @@ class StatesSeeder extends Seeder
                     ['id' => $state['id']],
                     array_merge($state, [
                         'created_at' => now(),
-                        'updated_at' => now()
+                        'updated_at' => now(),
                     ])
                 );
             }
         });
     }
-} 
+}

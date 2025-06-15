@@ -3,8 +3,8 @@
 namespace App\Http\Requests\CompanySize;
 
 use App\Models\CompanySize;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CreateCompanySizeRequest extends FormRequest
 {
@@ -19,7 +19,7 @@ class CreateCompanySizeRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -29,7 +29,7 @@ class CreateCompanySizeRequest extends FormRequest
                 'string',
                 'max:150',
                 'unique:company_sizes,size',
-                'regex:/^\d+(-\d+)?(\+)?( employees?)?$/i'
+                'regex:/^\d+(-\d+)?(\+)?( employees?)?$/i',
             ],
             'is_default' => 'sometimes|boolean',
             'is_active' => 'sometimes|boolean',
@@ -91,4 +91,4 @@ class CreateCompanySizeRequest extends FormRequest
             'ip' => $this->ip(),
         ]);
     }
-} 
+}

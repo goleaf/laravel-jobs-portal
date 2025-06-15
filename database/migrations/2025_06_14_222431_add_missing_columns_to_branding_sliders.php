@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -45,12 +44,12 @@ return new class extends Migration
         Schema::table('branding_sliders', function (Blueprint $table) {
             $table->dropColumn([
                 'description',
-                'link_url', 
+                'link_url',
                 'button_text',
                 'is_featured',
                 'start_date',
                 'end_date',
-                'meta'
+                'meta',
             ]);
         });
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LogoutRequest extends FormRequest
@@ -14,7 +14,7 @@ class LogoutRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated via Sanctum token to logout
-        return $this->user() !== null && $this->user()->currentAccessToken() !== null;
+        return null !== $this->user() && null !== $this->user()->currentAccessToken();
     }
 
     /**
@@ -46,6 +46,19 @@ class LogoutRequest extends FormRequest
         return [
             // No attributes needed for this request
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Verify that the user has a current access token
+            if ($this->user() && !$this->user()->currentAccessToken()) {
+                $validator->errors()->add('token', __('auth.no_active_token'));
+            }
+        });
     }
 
     /**
@@ -83,17 +96,4 @@ class LogoutRequest extends FormRequest
     {
         // No data preparation needed for logout request
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Verify that the user has a current access token
-            if ($this->user() && !$this->user()->currentAccessToken()) {
-                $validator->errors()->add('token', __('auth.no_active_token'));
-            }
-        });
-    }
-} 
+}

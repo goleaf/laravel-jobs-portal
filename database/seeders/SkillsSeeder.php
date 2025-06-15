@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +13,7 @@ class SkillsSeeder extends Seeder
         Schema::withoutForeignKeyConstraints(function () {
             // Clear existing skills
             DB::table('skills')->truncate();
-            
+
             // Enhanced skills data from infy-jobs.sql with additional modern skills
             $skills = [
                 ['id' => 1, 'name' => 'Computer Skills', 'description' => 'Computer operating and software skills', 'is_default' => true],
@@ -25,7 +24,7 @@ class SkillsSeeder extends Seeder
                 ['id' => 6, 'name' => 'Management Skills', 'description' => 'Project and people management', 'is_default' => true],
                 ['id' => 7, 'name' => 'Problem-solving Skills', 'description' => 'Analytical and critical thinking', 'is_default' => true],
                 ['id' => 8, 'name' => 'Time Management Skills', 'description' => 'Organizing and prioritizing tasks', 'is_default' => true],
-                
+
                 // Additional modern skills
                 ['id' => 9, 'name' => 'Digital Marketing', 'description' => 'Online marketing and social media expertise', 'is_default' => true],
                 ['id' => 10, 'name' => 'Data Analysis', 'description' => 'Data interpretation and statistical analysis', 'is_default' => true],
@@ -41,10 +40,10 @@ class SkillsSeeder extends Seeder
                     ['id' => $skill['id']],
                     array_merge($skill, [
                         'created_at' => now(),
-                        'updated_at' => now()
+                        'updated_at' => now(),
                     ])
                 );
             }
         });
     }
-} 
+}

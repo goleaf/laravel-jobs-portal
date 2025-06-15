@@ -2,18 +2,17 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Redis Session Management Middleware
- * Enhanced session handling with Redis backend
+ * Enhanced session handling with Redis backend.
  */
 class RedisSessionManager
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response
     {
         // Ensure Redis connection is available
         try {

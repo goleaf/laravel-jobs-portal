@@ -2,34 +2,35 @@
 
 namespace App\Http\Requests\Api\Universal;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 
 /**
  * Universal API Request for updating Skill
- * Implements Laravel 12 API best practices with Universal MCP patterns
+ * Implements Laravel 12 API best practices with Universal MCP patterns.
  */
 class UpdateSkillApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Universal Pattern: API authorization with abilities and resource ownership
+     * Universal Pattern: API authorization with abilities and resource ownership.
      */
     public function authorize(): bool
     {
-        $canUpdate = $this->user()?->tokenCan(strtolower('Skill') . ':update') ?? false;
+        $canUpdate = $this->user()?->tokenCan(strtolower('Skill').':update') ?? false;
         $resource = $this->route(strtolower('Skill'));
-        
+
         return $canUpdate && ($resource && $this->user()?->can('update', $resource));
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: API update validation with uniqueness checks
+     * Universal Pattern: API update validation with uniqueness checks.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -49,7 +50,7 @@ class UpdateSkillApiRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Universal Pattern: API error messages
+     * Universal Pattern: API error messages.
      */
     public function messages(): array
     {
@@ -65,7 +66,7 @@ class UpdateSkillApiRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: API field naming
+     * Universal Pattern: API field naming.
      */
     public function attributes(): array
     {
@@ -80,35 +81,8 @@ class UpdateSkillApiRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Universal Pattern: API data normalization for updates
-     */
-    protected function prepareForValidation(): void
-    {
-        $data = [];
-        
-        if ($this->has('name')) {
-            $data['name'] = trim($this->name);
-        }
-        
-        if ($this->has('email')) {
-            $data['email'] = $this->email ? strtolower(trim($this->email)) : null;
-        }
-        
-        if ($this->has('status')) {
-            $data['status'] = strtolower($this->status);
-        }
-        
-        if ($this->has('tags')) {
-            $data['tags'] = $this->tags ? array_map('trim', (array) $this->tags) : [];
-        }
-        
-        $this->merge($data);
-    }
-
-    /**
      * Configure the validator instance.
-     * Universal Pattern: API update validation enhancements
+     * Universal Pattern: API update validation enhancements.
      */
     public function withValidator(Validator $validator): void
     {
@@ -121,17 +95,35 @@ class UpdateSkillApiRequest extends FormRequest
     }
 
     /**
-     * Universal Pattern: Check for protected field modifications
+     * Prepare the data for validation.
+     * Universal Pattern: API data normalization for updates.
      */
-    private function hasProtectedFieldChanges(): bool
+    protected function prepareForValidation(): void
     {
-        // Add logic to check for protected fields
-        return false;
+        $data = [];
+
+        if ($this->has('name')) {
+            $data['name'] = trim($this->name);
+        }
+
+        if ($this->has('email')) {
+            $data['email'] = $this->email ? strtolower(trim($this->email)) : null;
+        }
+
+        if ($this->has('status')) {
+            $data['status'] = strtolower($this->status);
+        }
+
+        if ($this->has('tags')) {
+            $data['tags'] = $this->tags ? array_map('trim', (array) $this->tags) : [];
+        }
+
+        $this->merge($data);
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: API error response with enhanced details
+     * Universal Pattern: API error response with enhanced details.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -147,5 +139,14 @@ class UpdateSkillApiRequest extends FormRequest
                 ],
             ], 422)
         );
+    }
+
+    /**
+     * Universal Pattern: Check for protected field modifications.
+     */
+    private function hasProtectedFieldChanges(): bool
+    {
+        // Add logic to check for protected fields
+        return false;
     }
 }

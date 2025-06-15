@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests\Transaction;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\NoMaliciousContent;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 /**
- * Request validation for TransactionController::store
- * 
+ * Request validation for TransactionController::store.
+ *
  * @enhanced by RequestValidationImprover
  */
 class StoreTransactionRequest extends FormRequest
@@ -23,19 +25,19 @@ class StoreTransactionRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         return [
-    "user_id" => "required|exists:users,id",
-    "subscription_plan_id" => "required|exists:subscription_plans,id",
-    "transaction_id" => "required|string|unique:transactions,transaction_id",
-    "amount" => "required|numeric|min:0",
-    "payment_type" => "required|in:stripe,paypal,razorpay,paystack,manual",
-    "status" => "required|in:pending,approved,denied,cancelled",
-    "meta" => "nullable|json"
-];
+            'user_id' => 'required|exists:users,id',
+            'subscription_plan_id' => 'required|exists:subscription_plans,id',
+            'transaction_id' => 'required|string|unique:transactions,transaction_id',
+            'amount' => 'required|numeric|min:0',
+            'payment_type' => 'required|in:stripe,paypal,razorpay,paystack,manual',
+            'status' => 'required|in:pending,approved,denied,cancelled',
+            'meta' => 'nullable|json',
+        ];
     }
 
     /**
@@ -46,15 +48,15 @@ class StoreTransactionRequest extends FormRequest
     public function messages(): array
     {
         return [
-    "user_id.required" => "User is required",
-    "subscription_plan_id.required" => "Subscription plan is required",
-    "transaction_id.required" => "Transaction ID is required",
-    "transaction_id.unique" => "Transaction ID already exists",
-    "amount.required" => "Amount is required",
-    "amount.numeric" => "Amount must be a number",
-    "payment_type.required" => "Payment type is required",
-    "status.required" => "Status is required"
-];
+            'user_id.required' => 'User is required',
+            'subscription_plan_id.required' => 'Subscription plan is required',
+            'transaction_id.required' => 'Transaction ID is required',
+            'transaction_id.unique' => 'Transaction ID already exists',
+            'amount.required' => 'Amount is required',
+            'amount.numeric' => 'Amount must be a number',
+            'payment_type.required' => 'Payment type is required',
+            'status.required' => 'Status is required',
+        ];
     }
 
     /**
@@ -73,34 +75,14 @@ class StoreTransactionRequest extends FormRequest
             'job_description' => 'job description',
             'job_expiry_date' => 'job expiry date',
             'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary'
+            'salary_to' => 'maximum salary',
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Sanitize input data
-        if ($this->has('job_title')) {
-            $this->merge([
-                'job_title' => strip_tags($this->job_title)
-            ]);
-        }
-        
-        if ($this->has('job_description')) {
-            $this->merge([
-                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
-            ]);
-        }
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
@@ -111,7 +93,7 @@ class StoreTransactionRequest extends FormRequest
                     $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
                 }
             }
-            
+
             // Check for malicious content in text fields
             foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
@@ -122,5 +104,24 @@ class StoreTransactionRequest extends FormRequest
                 }
             }
         });
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('job_title')) {
+            $this->merge([
+                'job_title' => strip_tags($this->job_title),
+            ]);
+        }
+
+        if ($this->has('job_description')) {
+            $this->merge([
+                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>'),
+            ]);
+        }
     }
 }

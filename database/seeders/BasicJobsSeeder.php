@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +14,10 @@ class BasicJobsSeeder extends Seeder
             // Create basic companies for job dependencies
             $companies = [
                 [
-                    'id' => 1, 
-                    'user_id' => 1, 
-                    'industry_id' => 1, 
-                    'ownership_type_id' => 1, 
+                    'id' => 1,
+                    'user_id' => 1,
+                    'industry_id' => 1,
+                    'ownership_type_id' => 1,
                     'company_size_id' => 1,
                     'established_in' => 2020,
                     'details' => 'Technology company focused on software development',
@@ -30,10 +29,10 @@ class BasicJobsSeeder extends Seeder
                     'updated_at' => now(),
                 ],
                 [
-                    'id' => 2, 
-                    'user_id' => 2, 
-                    'industry_id' => 1, 
-                    'ownership_type_id' => 1, 
+                    'id' => 2,
+                    'user_id' => 2,
+                    'industry_id' => 1,
+                    'ownership_type_id' => 1,
                     'company_size_id' => 2,
                     'established_in' => 2018,
                     'details' => 'Innovation-focused technology solutions',
@@ -45,10 +44,10 @@ class BasicJobsSeeder extends Seeder
                     'updated_at' => now(),
                 ],
                 [
-                    'id' => 3, 
-                    'user_id' => 3, 
-                    'industry_id' => 1, 
-                    'ownership_type_id' => 1, 
+                    'id' => 3,
+                    'user_id' => 3,
+                    'industry_id' => 1,
+                    'ownership_type_id' => 1,
                     'company_size_id' => 1,
                     'established_in' => 2019,
                     'details' => 'Future-oriented systems and solutions',
@@ -164,4 +163,4 @@ class BasicJobsSeeder extends Seeder
             }
         });
     }
-} 
+}

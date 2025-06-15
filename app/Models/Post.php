@@ -2,55 +2,58 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\Models\Media;
 
 /**
- * Post Model - Enhanced with Enhanced patterns
+ * Post Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $title
- * @property string $description
- * @property string|null $content
- * @property string|null $excerpt
- * @property string|null $slug
- * @property int $created_by
- * @property bool $is_active
- * @property bool $is_featured
- * @property bool $is_published
- * @property bool $is_default
- * @property \Illuminate\Support\Carbon|null $published_at
- * @property int|null $views_count
- * @property int|null $likes_count
- * @property int|null $comments_count
- * @property array|null $meta_data
- * @property string|null $meta_title
- * @property string|null $meta_description
- * @property string|null $meta_keywords
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostCategory[] $postAssignCategories
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostComment[] $comments
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read string $blog_image_url
- * @property-read string $display_title
- * @property-read string $reading_time
- * @property-read string $status_label
- * @property-read string $formatted_published_date
+ * @property int                       $id
+ * @property string                    $title
+ * @property string                    $description
+ * @property null|string               $content
+ * @property null|string               $excerpt
+ * @property null|string               $slug
+ * @property int                       $created_by
+ * @property bool                      $is_active
+ * @property bool                      $is_featured
+ * @property bool                      $is_published
+ * @property bool                      $is_default
+ * @property null|Carbon               $published_at
+ * @property null|int                  $views_count
+ * @property null|int                  $likes_count
+ * @property null|int                  $comments_count
+ * @property null|array                $meta_data
+ * @property null|string               $meta_title
+ * @property null|string               $meta_description
+ * @property null|string               $meta_keywords
+ * @property null|Carbon               $created_at
+ * @property null|Carbon               $updated_at
+ * @property null|Carbon               $deleted_at
+ * @property User                      $user
+ * @property Collection|PostCategory[] $postAssignCategories
+ * @property Collection|PostComment[]  $comments
+ * @property Collection|Media[]        $media
+ * @property string                    $blog_image_url
+ * @property string                    $display_title
+ * @property string                    $reading_time
+ * @property string                    $status_label
+ * @property string                    $formatted_published_date
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder published()
@@ -84,16 +87,39 @@ class Post extends Model implements HasMedia
     use LogsActivity;
 
     /**
+     * Media collection path constant.
+     */
+    public const PATH = 'posts';
+
+    /**
+     * Validation rules for creating posts.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'title' => 'required|string|max:255|unique:posts,title',
+        'description' => 'required|string',
+        'content' => 'nullable|string',
+        'excerpt' => 'nullable|string|max:500',
+        'slug' => 'nullable|string|max:255|unique:posts,slug',
+        'created_by' => 'required|integer|exists:users,id',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+        'is_default' => 'boolean',
+        'published_at' => 'nullable|date',
+        'meta_title' => 'nullable|string|max:255',
+        'meta_description' => 'nullable|string|max:500',
+        'meta_keywords' => 'nullable|string|max:255',
+        'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+    ];
+
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'posts';
-
-    /**
-     * Media collection path constant.
-     */
-    public const PATH = 'posts';
 
     /**
      * The attributes that are mass assignable.
@@ -138,29 +164,6 @@ class Post extends Model implements HasMedia
     protected $appends = ['blog_image_url'];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean',
-            'is_default' => 'boolean',
-            'published_at' => 'datetime',
-            'views_count' => 'integer',
-            'likes_count' => 'integer',
-            'comments_count' => 'integer',
-            'meta_data' => 'array',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -179,46 +182,23 @@ class Post extends Model implements HasMedia
                 'meta_description',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating posts.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'title' => 'required|string|max:255|unique:posts,title',
-        'description' => 'required|string',
-        'content' => 'nullable|string',
-        'excerpt' => 'nullable|string|max:500',
-        'slug' => 'nullable|string|max:255|unique:posts,slug',
-        'created_by' => 'required|integer|exists:users,id',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_published' => 'boolean',
-        'is_default' => 'boolean',
-        'published_at' => 'nullable|date',
-        'meta_title' => 'nullable|string|max:255',
-        'meta_description' => 'nullable|string|max:500',
-        'meta_keywords' => 'nullable|string|max:255',
-        'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
-    ];
 
     /**
      * Update validation rules for posts.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'title' => 'required|string|max:255|unique:posts,title,' . $id,
+            'title' => 'required|string|max:255|unique:posts,title,'.$id,
             'description' => 'required|string',
             'content' => 'nullable|string',
             'excerpt' => 'nullable|string|max:500',
-            'slug' => 'nullable|string|max:255|unique:posts,slug,' . $id,
+            'slug' => 'nullable|string|max:255|unique:posts,slug,'.$id,
             'created_by' => 'required|integer|exists:users,id',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -266,6 +246,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for active posts.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -274,6 +256,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for inactive posts.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -282,24 +266,32 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for published posts.
+     *
+     * @param mixed $query
      */
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-                    ->where('published_at', '<=', now());
+            ->where('published_at', '<=', now())
+        ;
     }
 
     /**
      * Scope for unpublished posts.
+     *
+     * @param mixed $query
      */
     public function scopeUnpublished($query)
     {
         return $query->where('is_published', false)
-                    ->orWhere('published_at', '>', now());
+            ->orWhere('published_at', '>', now())
+        ;
     }
 
     /**
      * Scope for featured posts.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -308,6 +300,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for non-featured posts.
+     *
+     * @param mixed $query
      */
     public function scopeNotFeatured($query)
     {
@@ -316,19 +310,24 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for searching posts.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('title', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhere('content', 'like', '%' . $term . '%')
-              ->orWhere('excerpt', 'like', '%' . $term . '%');
+            $q->where('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhere('content', 'like', '%'.$term.'%')
+                ->orWhere('excerpt', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope for recent posts.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -337,6 +336,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for old posts.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -345,6 +346,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, int $categoryId)
     {
@@ -355,6 +358,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts by author.
+     *
+     * @param mixed $query
      */
     public function scopeByAuthor($query, int $authorId)
     {
@@ -363,6 +368,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts with featured images.
+     *
+     * @param mixed $query
      */
     public function scopeWithFeaturedImages($query)
     {
@@ -371,6 +378,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts without featured images.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutFeaturedImages($query)
     {
@@ -379,6 +388,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts with comments.
+     *
+     * @param mixed $query
      */
     public function scopeWithComments($query)
     {
@@ -387,6 +398,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for posts without comments.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutComments($query)
     {
@@ -395,6 +408,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for popular posts (most viewed).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -403,15 +418,20 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for trending posts (recent with high engagement).
+     *
+     * @param mixed $query
      */
     public function scopeTrending($query, int $days = 7)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByRaw('(views_count + likes_count + comments_count) DESC');
+            ->orderByRaw('(views_count + likes_count + comments_count) DESC')
+        ;
     }
 
     /**
      * Scope for latest posts.
+     *
+     * @param mixed $query
      */
     public function scopeLatest($query, int $limit = 10)
     {
@@ -420,6 +440,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for alphabetical ordering.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -428,6 +450,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for most viewed posts.
+     *
+     * @param mixed $query
      */
     public function scopeMostViewed($query, int $limit = 10)
     {
@@ -436,6 +460,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for most liked posts.
+     *
+     * @param mixed $query
      */
     public function scopeMostLiked($query, int $limit = 10)
     {
@@ -444,6 +470,8 @@ class Post extends Model implements HasMedia
 
     /**
      * Scope for most commented posts.
+     *
+     * @param mixed $query
      */
     public function scopeMostCommented($query, int $limit = 10)
     {
@@ -482,8 +510,8 @@ class Post extends Model implements HasMedia
     {
         $wordCount = str_word_count(strip_tags($this->content ?? $this->description));
         $minutes = ceil($wordCount / 200); // Average reading speed
-        
-        return $minutes . ' min read';
+
+        return $minutes.' min read';
     }
 
     /**
@@ -494,15 +522,15 @@ class Post extends Model implements HasMedia
         if (!$this->is_active) {
             return 'Inactive';
         }
-        
+
         if (!$this->is_published) {
             return 'Draft';
         }
-        
+
         if ($this->published_at && $this->published_at->isFuture()) {
             return 'Scheduled';
         }
-        
+
         return 'Published';
     }
 
@@ -514,7 +542,7 @@ class Post extends Model implements HasMedia
         if (!$this->published_at) {
             return 'Not published';
         }
-        
+
         return $this->published_at->format('M d, Y');
     }
 
@@ -527,10 +555,10 @@ class Post extends Model implements HasMedia
      */
     public function isPublished(): bool
     {
-        return $this->is_active && 
-               $this->is_published && 
-               $this->published_at && 
-               $this->published_at->isPast();
+        return $this->is_active
+               && $this->is_published
+               && $this->published_at
+               && $this->published_at->isPast();
     }
 
     /**
@@ -538,9 +566,9 @@ class Post extends Model implements HasMedia
      */
     public function isScheduled(): bool
     {
-        return $this->is_published && 
-               $this->published_at && 
-               $this->published_at->isFuture();
+        return $this->is_published
+               && $this->published_at
+               && $this->published_at->isFuture();
     }
 
     /**
@@ -580,8 +608,8 @@ class Post extends Model implements HasMedia
         $counter = 1;
 
         while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
+            $slug = $originalSlug.'-'.$counter;
+            ++$counter;
         }
 
         return $slug;
@@ -594,7 +622,7 @@ class Post extends Model implements HasMedia
     /**
      * Get cached published posts.
      */
-    public static function getCachedPublished(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPublished(int $limit = 10): Collection
     {
         return Cache::remember("posts_published_{$limit}", 1800, function () use ($limit) {
             return static::published()->active()->latest($limit)->get();
@@ -604,7 +632,7 @@ class Post extends Model implements HasMedia
     /**
      * Get cached featured posts.
      */
-    public static function getCachedFeatured(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(int $limit = 5): Collection
     {
         return Cache::remember("posts_featured_{$limit}", 1800, function () use ($limit) {
             return static::featured()->published()->active()->latest($limit)->get();
@@ -614,7 +642,7 @@ class Post extends Model implements HasMedia
     /**
      * Get cached popular posts.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("posts_popular_{$limit}", 3600, function () use ($limit) {
             return static::popular($limit)->published()->active()->get();
@@ -624,7 +652,7 @@ class Post extends Model implements HasMedia
     /**
      * Get cached posts by category.
      */
-    public static function getCachedByCategory(int $categoryId, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCategory(int $categoryId, int $limit = 10): Collection
     {
         return Cache::remember("posts_category_{$categoryId}_{$limit}", 1800, function () use ($categoryId, $limit) {
             return static::byCategory($categoryId)->published()->active()->latest($limit)->get();
@@ -639,28 +667,37 @@ class Post extends Model implements HasMedia
         Cache::forget('posts_published_10');
         Cache::forget('posts_featured_5');
         Cache::forget('posts_popular_10');
-        
+
         // Clear category-specific caches
         $this->postAssignCategories->each(function ($category) {
             Cache::forget("posts_category_{$category->id}_10");
         });
-        
+
         // Clear pattern-based caches
         $this->clearCachePattern('posts_*');
     }
 
     /**
-     * Clear cache by pattern.
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    private function clearCachePattern(string $pattern): void
+    protected function casts(): array
     {
-        if (method_exists(Cache::getStore(), 'flush')) {
-            // For stores that support pattern clearing
-            $keys = Cache::getStore()->getRedis()->keys($pattern);
-            if (!empty($keys)) {
-                Cache::getStore()->getRedis()->del($keys);
-            }
-        }
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'is_default' => 'boolean',
+            'published_at' => 'datetime',
+            'views_count' => 'integer',
+            'likes_count' => 'integer',
+            'comments_count' => 'integer',
+            'meta_data' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================
@@ -693,5 +730,19 @@ class Post extends Model implements HasMedia
         static::deleted(function ($post) {
             $post->clearCaches();
         });
+    }
+
+    /**
+     * Clear cache by pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        if (method_exists(Cache::getStore(), 'flush')) {
+            // For stores that support pattern clearing
+            $keys = Cache::getStore()->getRedis()->keys($pattern);
+            if (!empty($keys)) {
+                Cache::getStore()->getRedis()->del($keys);
+            }
+        }
     }
 }

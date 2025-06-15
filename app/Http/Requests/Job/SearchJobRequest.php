@@ -6,8 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Class SearchJobRequest
- * 
+ * Class SearchJobRequest.
+ *
  * Comprehensive request validation for job search and filtering with multilanguage support
  */
 class SearchJobRequest extends FormRequest
@@ -30,167 +30,167 @@ class SearchJobRequest extends FormRequest
                 'nullable',
                 'string',
                 'min:2',
-                'max:200'
+                'max:200',
             ],
             'job_category_id' => [
                 'nullable',
                 'integer',
-                'exists:job_categories,id'
+                'exists:job_categories,id',
             ],
             'job_type_id' => [
                 'nullable',
                 'integer',
-                'exists:job_types,id'
+                'exists:job_types,id',
             ],
             'career_level_id' => [
                 'nullable',
                 'integer',
-                'exists:career_levels,id'
+                'exists:career_levels,id',
             ],
             'functional_area_id' => [
                 'nullable',
                 'integer',
-                'exists:functional_areas,id'
+                'exists:functional_areas,id',
             ],
             'industry_id' => [
                 'nullable',
                 'integer',
-                'exists:industries,id'
+                'exists:industries,id',
             ],
             'company_id' => [
                 'nullable',
                 'integer',
-                'exists:companies,id'
+                'exists:companies,id',
             ],
             'country_id' => [
                 'nullable',
                 'integer',
-                'exists:countries,id'
+                'exists:countries,id',
             ],
             'state_id' => [
                 'nullable',
                 'integer',
-                'exists:states,id'
+                'exists:states,id',
             ],
             'city_id' => [
                 'nullable',
                 'integer',
-                'exists:cities,id'
+                'exists:cities,id',
             ],
             'salary_from' => [
                 'nullable',
                 'numeric',
                 'min:0',
-                'max:9999999.99'
+                'max:9999999.99',
             ],
             'salary_to' => [
                 'nullable',
                 'numeric',
                 'min:0',
                 'max:9999999.99',
-                'gte:salary_from'
+                'gte:salary_from',
             ],
             'salary_currency_id' => [
                 'nullable',
                 'integer',
-                'exists:salary_currencies,id'
+                'exists:salary_currencies,id',
             ],
             'experience_from' => [
                 'nullable',
                 'integer',
                 'min:0',
-                'max:50'
+                'max:50',
             ],
             'experience_to' => [
                 'nullable',
                 'integer',
                 'min:0',
                 'max:50',
-                'gte:experience_from'
+                'gte:experience_from',
             ],
             'job_shift_id' => [
                 'nullable',
                 'integer',
-                'exists:job_shifts,id'
+                'exists:job_shifts,id',
             ],
             'degree_level_id' => [
                 'nullable',
                 'integer',
-                'exists:required_degree_levels,id'
+                'exists:required_degree_levels,id',
             ],
             'is_freelance' => [
                 'nullable',
-                'boolean'
+                'boolean',
             ],
             'is_featured' => [
                 'nullable',
-                'boolean'
+                'boolean',
             ],
             'posted_within' => [
                 'nullable',
                 'integer',
                 'min:1',
-                'max:365'
+                'max:365',
             ],
             'sort_by' => [
                 'nullable',
                 'string',
                 Rule::in([
                     'created_at',
-                    'job_title', 
+                    'job_title',
                     'salary_from',
                     'experience',
                     'job_expiry_date',
                     'company_name',
-                    'relevance'
-                ])
+                    'relevance',
+                ]),
             ],
             'sort_direction' => [
                 'nullable',
                 'string',
-                Rule::in(['asc', 'desc'])
+                Rule::in(['asc', 'desc']),
             ],
             'per_page' => [
                 'nullable',
                 'integer',
                 'min:5',
-                'max:100'
+                'max:100',
             ],
             'page' => [
                 'nullable',
                 'integer',
-                'min:1'
+                'min:1',
             ],
             'skills' => [
                 'nullable',
                 'array',
-                'max:20'
+                'max:20',
             ],
             'skills.*' => [
                 'integer',
-                'exists:skills,id'
+                'exists:skills,id',
             ],
             'tags' => [
                 'nullable',
                 'array',
-                'max:10'
+                'max:10',
             ],
             'tags.*' => [
                 'integer',
-                'exists:tags,id'
+                'exists:tags,id',
             ],
             'hide_expired' => [
                 'nullable',
-                'boolean'
+                'boolean',
             ],
             'remote_only' => [
                 'nullable',
-                'boolean'
+                'boolean',
             ],
             'with_salary' => [
                 'nullable',
-                'boolean'
-            ]
+                'boolean',
+            ],
         ];
     }
 
@@ -203,74 +203,74 @@ class SearchJobRequest extends FormRequest
             'keyword.string' => __('validation.search.keyword_string'),
             'keyword.min' => __('validation.search.keyword_min'),
             'keyword.max' => __('validation.search.keyword_max'),
-            
+
             'job_category_id.integer' => __('validation.search.category_integer'),
             'job_category_id.exists' => __('validation.search.category_exists'),
-            
+
             'job_type_id.integer' => __('validation.search.type_integer'),
             'job_type_id.exists' => __('validation.search.type_exists'),
-            
+
             'career_level_id.integer' => __('validation.search.career_level_integer'),
             'career_level_id.exists' => __('validation.search.career_level_exists'),
-            
+
             'functional_area_id.integer' => __('validation.search.functional_area_integer'),
             'functional_area_id.exists' => __('validation.search.functional_area_exists'),
-            
+
             'industry_id.integer' => __('validation.search.industry_integer'),
             'industry_id.exists' => __('validation.search.industry_exists'),
-            
+
             'company_id.integer' => __('validation.search.company_integer'),
             'company_id.exists' => __('validation.search.company_exists'),
-            
+
             'country_id.integer' => __('validation.search.country_integer'),
             'country_id.exists' => __('validation.search.country_exists'),
-            
+
             'state_id.integer' => __('validation.search.state_integer'),
             'state_id.exists' => __('validation.search.state_exists'),
-            
+
             'city_id.integer' => __('validation.search.city_integer'),
             'city_id.exists' => __('validation.search.city_exists'),
-            
+
             'salary_from.numeric' => __('validation.search.salary_from_numeric'),
             'salary_from.min' => __('validation.search.salary_from_min'),
             'salary_from.max' => __('validation.search.salary_from_max'),
-            
+
             'salary_to.numeric' => __('validation.search.salary_to_numeric'),
             'salary_to.min' => __('validation.search.salary_to_min'),
             'salary_to.max' => __('validation.search.salary_to_max'),
             'salary_to.gte' => __('validation.search.salary_to_gte'),
-            
+
             'experience_from.integer' => __('validation.search.experience_from_integer'),
             'experience_from.min' => __('validation.search.experience_from_min'),
             'experience_from.max' => __('validation.search.experience_from_max'),
-            
+
             'experience_to.integer' => __('validation.search.experience_to_integer'),
             'experience_to.min' => __('validation.search.experience_to_min'),
             'experience_to.max' => __('validation.search.experience_to_max'),
             'experience_to.gte' => __('validation.search.experience_to_gte'),
-            
+
             'sort_by.string' => __('validation.search.sort_by_string'),
             'sort_by.in' => __('validation.search.sort_by_in'),
-            
+
             'sort_direction.string' => __('validation.search.sort_direction_string'),
             'sort_direction.in' => __('validation.search.sort_direction_in'),
-            
+
             'per_page.integer' => __('validation.search.per_page_integer'),
             'per_page.min' => __('validation.search.per_page_min'),
             'per_page.max' => __('validation.search.per_page_max'),
-            
+
             'page.integer' => __('validation.search.page_integer'),
             'page.min' => __('validation.search.page_min'),
-            
+
             'posted_within.integer' => __('validation.search.posted_within_integer'),
             'posted_within.min' => __('validation.search.posted_within_min'),
             'posted_within.max' => __('validation.search.posted_within_max'),
-            
+
             'skills.array' => __('validation.search.skills_array'),
             'skills.max' => __('validation.search.skills_max'),
             'skills.*.integer' => __('validation.search.skill_integer'),
             'skills.*.exists' => __('validation.search.skill_exists'),
-            
+
             'tags.array' => __('validation.search.tags_array'),
             'tags.max' => __('validation.search.tags_max'),
             'tags.*.integer' => __('validation.search.tag_integer'),
@@ -312,25 +312,9 @@ class SearchJobRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'is_freelance' => $this->boolean('is_freelance'),
-            'is_featured' => $this->boolean('is_featured'),
-            'hide_expired' => $this->boolean('hide_expired', true), // Default to true
-            'remote_only' => $this->boolean('remote_only'),
-            'with_salary' => $this->boolean('with_salary'),
-            'per_page' => $this->filled('per_page') ? $this->integer('per_page') : 20,
-            'page' => $this->filled('page') ? $this->integer('page') : 1,
-            'sort_by' => $this->filled('sort_by') ? $this->string('sort_by') : 'created_at',
-            'sort_direction' => $this->filled('sort_direction') ? $this->string('sort_direction') : 'desc',
-        ]);
-    }
-
-    /**
      * Configure the validator instance.
+     *
+     * @param mixed $validator
      */
     public function withValidator($validator): void
     {
@@ -415,4 +399,22 @@ class SearchJobRequest extends FormRequest
             'sort_direction' => $this->string('sort_direction', 'desc'),
         ];
     }
-} 
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_freelance' => $this->boolean('is_freelance'),
+            'is_featured' => $this->boolean('is_featured'),
+            'hide_expired' => $this->boolean('hide_expired', true), // Default to true
+            'remote_only' => $this->boolean('remote_only'),
+            'with_salary' => $this->boolean('with_salary'),
+            'per_page' => $this->filled('per_page') ? $this->integer('per_page') : 20,
+            'page' => $this->filled('page') ? $this->integer('page') : 1,
+            'sort_by' => $this->filled('sort_by') ? $this->string('sort_by') : 'created_at',
+            'sort_direction' => $this->filled('sort_direction') ? $this->string('sort_direction') : 'desc',
+        ]);
+    }
+}

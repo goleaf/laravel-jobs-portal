@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ImageService
 {
     /**
-     * Convert image to WebP format
+     * Convert image to WebP format.
      */
     public function convertToWebP(string $imagePath, int $quality = 85): ?string
     {
@@ -16,7 +16,7 @@ class ImageService
             $fullPath = Storage::path($imagePath);
             $webpPath = str_replace(pathinfo($imagePath, PATHINFO_EXTENSION), 'webp', $imagePath);
             $webpFullPath = Storage::path($webpPath);
-            
+
             if (file_exists($webpFullPath)) {
                 return $webpPath;
             }
@@ -24,18 +24,20 @@ class ImageService
             $image = $this->createImageFromFile($fullPath);
             if ($image && imagewebp($image, $webpFullPath, $quality)) {
                 imagedestroy($image);
+
                 return $webpPath;
             }
-            
+
             return null;
         } catch (\Exception $e) {
-            Log::error("WebP conversion failed", ['error' => $e->getMessage()]);
+            Log::error('WebP conversion failed', ['error' => $e->getMessage()]);
+
             return null;
         }
     }
 
     /**
-     * Generate responsive images
+     * Generate responsive images.
      */
     public function generateResponsive(string $imagePath): array
     {
@@ -48,7 +50,7 @@ class ImageService
                 $responsive[$name] = [
                     'path' => $responsivePath,
                     'width' => $width,
-                    'url' => Storage::url($responsivePath)
+                    'url' => Storage::url($responsivePath),
                 ];
             }
         }
@@ -57,13 +59,15 @@ class ImageService
     }
 
     /**
-     * Generate blur placeholder
+     * Generate blur placeholder.
      */
     public function generatePlaceholder(string $imagePath): ?string
     {
         try {
             $image = $this->createImageFromFile(Storage::path($imagePath));
-            if (!$image) return null;
+            if (!$image) {
+                return null;
+            }
 
             $placeholder = imagecreatetruecolor(20, 20);
             imagecopyresampled($placeholder, $image, 0, 0, 0, 0, 20, 20, imagesx($image), imagesy($image));
@@ -77,7 +81,7 @@ class ImageService
             imagedestroy($image);
             imagedestroy($placeholder);
 
-            return 'data:image/jpeg;base64,' . base64_encode($data);
+            return 'data:image/jpeg;base64,'.base64_encode($data);
         } catch (\Exception $e) {
             return null;
         }
@@ -86,13 +90,19 @@ class ImageService
     private function createImageFromFile(string $path)
     {
         $info = getimagesize($path);
-        if (!$info) return null;
+        if (!$info) {
+            return null;
+        }
 
         switch ($info['mime']) {
             case 'image/jpeg': return imagecreatefromjpeg($path);
+
             case 'image/png': return imagecreatefrompng($path);
+
             case 'image/gif': return imagecreatefromgif($path);
+
             case 'image/webp': return imagecreatefromwebp($path);
+
             default: return null;
         }
     }
@@ -101,14 +111,16 @@ class ImageService
     {
         try {
             $pathInfo = pathinfo($imagePath);
-            $resizedPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . "_{$width}w." . $pathInfo['extension'];
-            
+            $resizedPath = $pathInfo['dirname'].'/'.$pathInfo['filename']."_{$width}w.".$pathInfo['extension'];
+
             if (Storage::exists($resizedPath)) {
                 return $resizedPath;
             }
 
             $source = $this->createImageFromFile(Storage::path($imagePath));
-            if (!$source) return null;
+            if (!$source) {
+                return null;
+            }
 
             $originalWidth = imagesx($source);
             $originalHeight = imagesy($source);
@@ -128,4 +140,4 @@ class ImageService
             return null;
         }
     }
-} 
+}

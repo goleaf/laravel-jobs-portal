@@ -2,16 +2,31 @@
 
 namespace Tests\Feature;
 
+use App\Models\CareerLevel;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
+use App\Models\FunctionalArea;
 use App\Models\Job;
 use App\Models\JobCategory;
 use App\Models\JobShift;
 use App\Models\JobType;
+use App\Models\RequiredDegreeLevel;
+use App\Models\SalaryCurrency;
+use App\Models\SalaryPeriod;
+use App\Models\Skill;
+use App\Models\State;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobTest extends TestCase
 {
     use RefreshDatabase;
@@ -33,7 +48,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_can_be_created()
+    public function jobCanBeCreated()
     {
         $company = Company::factory()->create();
         $jobType = JobType::factory()->create();
@@ -70,7 +85,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_can_be_updated()
+    public function jobCanBeUpdated()
     {
         $job = Job::factory()->create();
 
@@ -89,7 +104,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_can_be_filtered_by_status()
+    public function jobCanBeFilteredByStatus()
     {
         Job::factory()->count(3)->create(['status' => Job::STATUS_OPEN]);
         Job::factory()->count(2)->create(['status' => Job::STATUS_CLOSED]);
@@ -102,7 +117,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_belongs_to_company()
+    public function jobBelongsToCompany()
     {
         $company = Company::factory()->create();
         $job = Job::factory()->create(['company_id' => $company->id]);
@@ -112,7 +127,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_belongs_to_job_type()
+    public function jobBelongsToJobType()
     {
         $jobType = JobType::factory()->create();
         $job = Job::factory()->create(['job_type_id' => $jobType->id]);
@@ -122,7 +137,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_belongs_to_job_category()
+    public function jobBelongsToJobCategory()
     {
         $jobCategory = JobCategory::factory()->create();
         $job = Job::factory()->create(['job_category_id' => $jobCategory->id]);
@@ -132,7 +147,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function job_can_be_featured()
+    public function jobCanBeFeatured()
     {
         Job::factory()->count(3)->create(['is_featured' => true]);
         Job::factory()->count(2)->create(['is_featured' => false]);
@@ -145,7 +160,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function jobs_can_be_filtered_by_expiry_date()
+    public function jobsCanBeFilteredByExpiryDate()
     {
         Job::factory()->count(2)->create(['job_expiry_date' => now()->subDay()]);
         Job::factory()->count(3)->create(['job_expiry_date' => now()->addDays(10)]);
@@ -158,7 +173,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function guests_cannot_access_employer_jobs_section()
+    public function guestsCannotAccessEmployerJobsSection()
     {
         // Assuming routes are prefixed with /employer
         $this->get('/employer/jobs')->assertRedirect('/login');
@@ -168,7 +183,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function non_employer_users_cannot_access_employer_jobs_section()
+    public function nonEmployerUsersCannotAccessEmployerJobsSection()
     {
         $candidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
         $adminUser = User::factory()->create(['user_type' => User::ADMIN]);
@@ -182,7 +197,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_view_their_jobs_list()
+    public function employerCanViewTheirJobsList()
     {
         Job::factory()->count(3)->create(['company_id' => $this->company->id]);
         // Create a job for another company to ensure filtering
@@ -196,7 +211,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_view_create_job_form()
+    public function employerCanViewCreateJobForm()
     {
         $response = $this->actingAs($this->employerUser)->get('/employer/jobs/create');
 
@@ -205,7 +220,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_create_a_new_job()
+    public function employerCanCreateANewJob()
     {
         $jobData = $this->getJobData();
 
@@ -220,8 +235,8 @@ class JobTest extends TestCase
         ]);
     }
 
-     /** @test */
-    public function employer_can_create_a_draft_job()
+    /** @test */
+    public function employerCanCreateADraftJob()
     {
         $jobData = $this->getJobData();
         $jobData['saveAsDraft'] = 'true'; // Add flag to trigger draft save
@@ -238,7 +253,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function create_job_requires_necessary_fields()
+    public function createJobRequiresNecessaryFields()
     {
         $response = $this->actingAs($this->employerUser)->post('/employer/jobs', []);
 
@@ -247,7 +262,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_view_their_job_details()
+    public function employerCanViewTheirJobDetails()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id]);
 
@@ -259,7 +274,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_cannot_view_other_employers_job_details()
+    public function employerCannotViewOtherEmployersJobDetails()
     {
         $otherJob = Job::factory()->create(); // Belongs to a different company
 
@@ -269,7 +284,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_view_edit_job_form()
+    public function employerCanViewEditJobForm()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id, 'status' => Job::STATUS_OPEN]);
 
@@ -281,7 +296,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_cannot_edit_other_employers_job()
+    public function employerCannotEditOtherEmployersJob()
     {
         $otherJob = Job::factory()->create(['status' => Job::STATUS_OPEN]);
 
@@ -290,7 +305,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_update_their_job()
+    public function employerCanUpdateTheirJob()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id, 'status' => Job::STATUS_DRAFT]);
         $updateData = $this->getJobData();
@@ -309,7 +324,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_delete_their_job()
+    public function employerCanDeleteTheirJob()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id]);
 
@@ -322,7 +337,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function employer_cannot_delete_other_employers_job()
+    public function employerCannotDeleteOtherEmployersJob()
     {
         $otherJob = Job::factory()->create();
 
@@ -333,49 +348,8 @@ class JobTest extends TestCase
         $this->assertDatabaseHas('jobs', ['id' => $otherJob->id]);
     }
 
-    /**
-     * Helper function to get valid job data for tests.
-     */
-    protected function getJobData(): array
-    {
-        // Ensure related models exist
-        $jobType = JobType::factory()->create();
-        $jobCategory = JobCategory::factory()->create();
-        $jobShift = JobShift::factory()->create();
-        // Assume Country/State/City with ID 1 exist or create them
-        if (!\App\Models\Country::find(1)) { \App\Models\Country::factory()->create(['id' => 1]); }
-        if (!\App\Models\State::find(1)) { \App\Models\State::factory()->create(['id' => 1, 'country_id' => 1]); }
-        if (!\App\Models\City::find(1)) { \App\Models\City::factory()->create(['id' => 1, 'state_id' => 1]); }
-
-        return [
-            'job_title' => $this->faker->jobTitle,
-            'job_type_id' => $jobType->id,
-            'job_category_id' => $jobCategory->id,
-            'job_shift_id' => $jobShift->id, // Added job shift
-            'currency_id' => \App\Models\SalaryCurrency::factory()->create()->id,
-            'salary_period_id' => \App\Models\SalaryPeriod::factory()->create()->id,
-            'functional_area_id' => \App\Models\FunctionalArea::factory()->create()->id,
-            'career_level_id' => \App\Models\CareerLevel::factory()->create()->id,
-            'degree_level_id' => \App\Models\RequiredDegreeLevel::factory()->create()->id,
-            'position' => $this->faker->randomNumber(1),
-            'description' => $this->faker->paragraph,
-            'salary_from' => $this->faker->randomNumber(5),
-            'salary_to' => $this->faker->randomNumber(5) + 10000,
-            'country_id' => 1,
-            'state_id' => 1,
-            'city_id' => 1,
-            'job_expiry_date' => now()->addDays(30)->toDateString(),
-            'no_preference' => 0, // Example default
-            'hide_salary' => false,
-            'is_freelance' => false,
-            // Add any other required fields from CreateJobRequest/UpdateJobRequest
-             'skills' => implode(',', \App\Models\Skill::factory()->count(3)->create()->pluck('name')->toArray()), // Example skills
-             'tag_ids' => \App\Models\Tag::factory()->count(2)->create()->pluck('id')->toArray(), // Example tags
-        ];
-    }
-
     /** @test */
-    public function it_can_create_a_job()
+    public function itCanCreateAJob()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -389,7 +363,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_job()
+    public function itCanUpdateAJob()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -410,7 +384,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_a_job()
+    public function itCanDeleteAJob()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -422,7 +396,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_a_company()
+    public function itBelongsToACompany()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -432,7 +406,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_filter_by_status()
+    public function itCanFilterByStatus()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -445,7 +419,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_filter_by_category()
+    public function itCanFilterByCategory()
     {
         $user = User::factory()->create(['user_type' => 'employer']);
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -456,5 +430,52 @@ class JobTest extends TestCase
         $filteredJobs = Job::byCategory($categoryId)->get();
         $this->assertCount(1, $filteredJobs);
         $this->assertEquals($job->id, $filteredJobs->first()->id);
+    }
+
+    /**
+     * Helper function to get valid job data for tests.
+     */
+    protected function getJobData(): array
+    {
+        // Ensure related models exist
+        $jobType = JobType::factory()->create();
+        $jobCategory = JobCategory::factory()->create();
+        $jobShift = JobShift::factory()->create();
+        // Assume Country/State/City with ID 1 exist or create them
+        if (!Country::find(1)) {
+            Country::factory()->create(['id' => 1]);
+        }
+        if (!State::find(1)) {
+            State::factory()->create(['id' => 1, 'country_id' => 1]);
+        }
+        if (!City::find(1)) {
+            City::factory()->create(['id' => 1, 'state_id' => 1]);
+        }
+
+        return [
+            'job_title' => $this->faker->jobTitle,
+            'job_type_id' => $jobType->id,
+            'job_category_id' => $jobCategory->id,
+            'job_shift_id' => $jobShift->id, // Added job shift
+            'currency_id' => SalaryCurrency::factory()->create()->id,
+            'salary_period_id' => SalaryPeriod::factory()->create()->id,
+            'functional_area_id' => FunctionalArea::factory()->create()->id,
+            'career_level_id' => CareerLevel::factory()->create()->id,
+            'degree_level_id' => RequiredDegreeLevel::factory()->create()->id,
+            'position' => $this->faker->randomNumber(1),
+            'description' => $this->faker->paragraph,
+            'salary_from' => $this->faker->randomNumber(5),
+            'salary_to' => $this->faker->randomNumber(5) + 10000,
+            'country_id' => 1,
+            'state_id' => 1,
+            'city_id' => 1,
+            'job_expiry_date' => now()->addDays(30)->toDateString(),
+            'no_preference' => 0, // Example default
+            'hide_salary' => false,
+            'is_freelance' => false,
+            // Add any other required fields from CreateJobRequest/UpdateJobRequest
+            'skills' => implode(',', Skill::factory()->count(3)->create()->pluck('name')->toArray()), // Example skills
+            'tag_ids' => Tag::factory()->count(2)->create()->pluck('id')->toArray(), // Example tags
+        ];
     }
 }

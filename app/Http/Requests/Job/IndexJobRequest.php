@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Job;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +20,7 @@ class IndexJobRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -65,6 +66,17 @@ class IndexJobRequest extends FormRequest
     }
 
     /**
+     * Get the validated data with additional computed fields.
+     */
+    public function getValidatedWithDefaults(): array
+    {
+        return array_merge($this->validated(), [
+            'user_id' => Auth::id(),
+            'company_id' => Auth::user()->company?->id,
+        ]);
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -77,15 +89,4 @@ class IndexJobRequest extends FormRequest
             'page' => $this->page ?? 1,
         ]);
     }
-
-    /**
-     * Get the validated data with additional computed fields.
-     */
-    public function getValidatedWithDefaults(): array
-    {
-        return array_merge($this->validated(), [
-            'user_id' => Auth::id(),
-            'company_id' => Auth::user()->company?->id,
-        ]);
-    }
-} 
+}

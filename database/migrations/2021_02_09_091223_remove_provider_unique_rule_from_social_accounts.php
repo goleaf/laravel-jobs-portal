@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,14 +17,14 @@ return new class extends Migration
 
         Schema::table('social_accounts', function (Blueprint $table) {
             // Skip for SQLite in testing as it doesn't support advanced schema introspection
-            if (config('database.default') === 'sqlite') {
+            if ('sqlite' === config('database.default')) {
                 return;
             }
 
             try {
                 // Try to drop the unique constraint if it exists
                 $table->dropUnique(['provider']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // If the constraint doesn't exist, continue silently
             }
         });

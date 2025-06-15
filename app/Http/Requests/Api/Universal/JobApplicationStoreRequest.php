@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class JobApplicationStoreRequest extends FormRequest
@@ -58,13 +60,41 @@ class JobApplicationStoreRequest extends FormRequest
         ];
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Check if user already applied for this job
+            if ($this->has(['job_id', 'candidate_id'])) {
+                $existingApplication = JobApplication::where('job_id', $this->job_id)
+                    ->where('candidate_id', $this->candidate_id)
+                    ->exists()
+                ;
+
+                if ($existingApplication) {
+                    $validator->errors()->add('job_id', 'You have already applied for this job.');
+                }
+            }
+
+            // Validate job is still accepting applications
+            if ($this->has('job_id')) {
+                $job = Job::find($this->job_id);
+                if ($job && $job->deadline && $job->deadline->isPast()) {
+                    $validator->errors()->add('job_id', 'This job is no longer accepting applications.');
+                }
+                if ($job && 'published' !== $job->status) {
+                    $validator->errors()->add('job_id', 'This job is not currently available for applications.');
+                }
+            }
+        });
+    }
+
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
             response()->json([
                 'success' => false,
                 'message' => 'Job application validation failed',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -74,7 +104,7 @@ class JobApplicationStoreRequest extends FormRequest
         // Clean phone number
         if ($this->has('phone')) {
             $this->merge([
-                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone)
+                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone),
             ]);
         }
 
@@ -82,36 +112,9 @@ class JobApplicationStoreRequest extends FormRequest
         foreach (['is_willing_to_relocate'] as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
                 ]);
             }
         }
     }
-
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Check if user already applied for this job
-            if ($this->has(['job_id', 'candidate_id'])) {
-                $existingApplication = \App\Models\JobApplication::where('job_id', $this->job_id)
-                    ->where('candidate_id', $this->candidate_id)
-                    ->exists();
-                
-                if ($existingApplication) {
-                    $validator->errors()->add('job_id', 'You have already applied for this job.');
-                }
-            }
-
-            // Validate job is still accepting applications
-            if ($this->has('job_id')) {
-                $job = \App\Models\Job::find($this->job_id);
-                if ($job && $job->deadline && $job->deadline->isPast()) {
-                    $validator->errors()->add('job_id', 'This job is no longer accepting applications.');
-                }
-                if ($job && $job->status !== 'published') {
-                    $validator->errors()->add('job_id', 'This job is not currently available for applications.');
-                }
-            }
-        });
-    }
-} 
+}

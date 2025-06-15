@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for State
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\State>
  */
@@ -29,7 +29,7 @@ class StateFactory extends Factory
     {
         return [
             'country_id' => fake()->numberBetween(1, 5), // Use only existing country IDs
-            'name' => fake()->state()
+            'name' => fake()->state(),
         ];
     }
 }

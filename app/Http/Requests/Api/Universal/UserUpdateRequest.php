@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
@@ -12,9 +12,10 @@ class UserUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $user = $this->route('user');
+
         return auth()->check() && (
-            auth()->user()->id === $user->id ||
-            auth()->user()->hasRole('admin')
+            auth()->user()->id === $user->id
+            || auth()->user()->hasRole('admin')
         );
     }
 
@@ -69,13 +70,29 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate social media URLs
+            $socialFields = ['linkedin_url', 'github_url', 'twitter_url'];
+            foreach ($socialFields as $field) {
+                if ($this->has($field) && $this->{$field}) {
+                    $platform = str_replace('_url', '', $field);
+                    if (!str_contains($this->{$field}, $platform.'.com')) {
+                        $validator->errors()->add($field, "Please provide a valid {$platform} URL.");
+                    }
+                }
+            }
+        });
+    }
+
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
             response()->json([
                 'success' => false,
                 'message' => 'User update validation failed',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -85,7 +102,7 @@ class UserUpdateRequest extends FormRequest
         // Clean phone number
         if ($this->has('phone')) {
             $this->merge([
-                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone)
+                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone),
             ]);
         }
 
@@ -113,24 +130,8 @@ class UserUpdateRequest extends FormRequest
         // Convert boolean strings
         if ($this->has('is_active')) {
             $this->merge([
-                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
     }
-
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate social media URLs
-            $socialFields = ['linkedin_url', 'github_url', 'twitter_url'];
-            foreach ($socialFields as $field) {
-                if ($this->has($field) && $this->$field) {
-                    $platform = str_replace('_url', '', $field);
-                    if (!str_contains($this->$field, $platform . '.com')) {
-                        $validator->errors()->add($field, "Please provide a valid {$platform} URL.");
-                    }
-                }
-            }
-        });
-    }
-} 
+}

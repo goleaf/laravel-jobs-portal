@@ -2,165 +2,473 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class CollectionForgetUtility
 {
     /**
-     * Clean user input based on role and subscription
+     * Clean user input based on role and subscription.
      */
     public static function sanitizeUserInput(
-        array $input, 
-        ?string $userRole = null, 
+        array $input,
+        ?string $userRole = null,
         bool $hasSubscription = false
     ): array {
         $data = collect($input);
-        
+
         // Always remove these security fields
         $alwaysRemove = ['_token', '_method', 'password_confirmation', 'csrf_token'];
         $data->forget($alwaysRemove);
-        
+
         // Role-based field removal
-        if ($userRole !== 'admin') {
+        if ('admin' !== $userRole) {
             $adminOnlyFields = ['is_featured', 'admin_notes', 'priority_score', 'internal_flags', 'is_active'];
             $data->forget($adminOnlyFields);
         }
-        
+
         // Subscription-based field removal
         if (!$hasSubscription) {
             $premiumFields = ['premium_features', 'advanced_analytics', 'priority_support', 'premium_branding'];
             $data->forget($premiumFields);
         }
-        
+
         return $data->toArray();
     }
-    
+
     /**
-     * Clean API response based on multiple conditions
+     * Clean API response based on multiple conditions.
      */
     public static function prepareApiResponse(array $response, array $conditions): array
     {
         $data = collect($response);
-        
+
         foreach ($conditions as $condition => $fieldsToRemove) {
             if (self::evaluateCondition($condition)) {
                 $data->forget($fieldsToRemove);
             }
         }
-        
+
         return $data->toArray();
     }
-    
+
     /**
-     * Remove temporary or deprecated fields based on patterns
+     * Remove temporary or deprecated fields based on patterns.
      */
     public static function cleanupTemporaryData(array $data, array $patterns = []): array
     {
         $collection = collect($data);
-        
+
         $defaultPatterns = ['temp_', 'cache_', 'session_', 'debug_', 'draft_'];
         $allPatterns = array_merge($defaultPatterns, $patterns);
-        
+
         $keysToRemove = $collection->keys()->filter(function ($key) use ($allPatterns) {
-            return collect($allPatterns)->contains(fn($pattern) => str_starts_with($key, $pattern));
+            return collect($allPatterns)->contains(fn ($pattern) => str_starts_with($key, $pattern));
         });
-        
+
         $collection->forget($keysToRemove->toArray());
-        
+
         return $collection->toArray();
     }
-    
+
     /**
-     * Clean form request data with role-based restrictions
+     * Clean form request data with role-based restrictions.
      */
     public static function cleanFormRequestData(array $data, ?string $userRole = null): array
     {
         $collection = collect($data);
-        
+
         // Remove form metadata
         $formMetadata = ['_token', '_method', 'submit', 'csrf_token'];
         $collection->forget($formMetadata);
-        
+
         // Remove sensitive fields for non-admin users
-        if ($userRole !== 'admin') {
+        if ('admin' !== $userRole) {
             $sensitiveFields = ['is_active', 'is_featured', 'admin_only_field', 'priority_score'];
             $collection->forget($sensitiveFields);
         }
-        
+
         return $collection->toArray();
     }
-    
+
     /**
-     * Clean test data by removing specified fields
+     * Clean test data by removing specified fields.
      */
     public static function cleanTestData(array $data, array $fieldsToRemove): array
     {
         $collection = collect($data);
         $collection->forget($fieldsToRemove);
+
         return $collection->toArray();
     }
-    
+
     /**
-     * Remove fields based on user subscription level
+     * Remove fields based on user subscription level.
      */
     public static function filterBySubscription(array $data, string $subscriptionLevel = 'basic'): array
     {
         $collection = collect($data);
-        
+
         $subscriptionRestrictions = [
             'basic' => ['premium_features', 'advanced_analytics', 'priority_support', 'premium_branding'],
             'premium' => ['enterprise_features', 'white_label_options'],
-            'enterprise' => [] // Enterprise has access to all features
+            'enterprise' => [], // Enterprise has access to all features
         ];
-        
+
         if (isset($subscriptionRestrictions[$subscriptionLevel])) {
             $collection->forget($subscriptionRestrictions[$subscriptionLevel]);
         }
-        
+
         return $collection->toArray();
     }
-    
+
     /**
-     * Advanced cleanup with multiple criteria
+     * Advanced cleanup with multiple criteria.
      */
     public static function advancedCleanup(array $data, array $options = []): array
     {
         $collection = collect($data);
-        
+
         // Remove empty values if requested
         if ($options['remove_empty'] ?? false) {
-            $emptyKeys = $collection->filter(fn($value) => empty($value))->keys();
+            $emptyKeys = $collection->filter(fn ($value) => empty($value))->keys();
             $collection->forget($emptyKeys->toArray());
         }
-        
+
         // Remove null values if requested
         if ($options['remove_null'] ?? false) {
-            $nullKeys = $collection->filter(fn($value) => is_null($value))->keys();
+            $nullKeys = $collection->filter(fn ($value) => is_null($value))->keys();
             $collection->forget($nullKeys->toArray());
         }
-        
+
         // Remove specific patterns
         if (!empty($options['remove_patterns'])) {
             $patternKeys = $collection->keys()->filter(function ($key) use ($options) {
-                return collect($options['remove_patterns'])->contains(fn($pattern) => str_contains($key, $pattern));
+                return collect($options['remove_patterns'])->contains(fn ($pattern) => str_contains($key, $pattern));
             });
             $collection->forget($patternKeys->toArray());
         }
-        
+
         return $collection->toArray();
     }
-    
+
     /**
-     * Evaluate condition for field removal
+     * Advanced intelligent field removal with pattern learning.
+     */
+    public static function intelligentSanitize(
+        array $input,
+        ?string $userRole = null,
+        bool $hasSubscription = false,
+        array $context = []
+    ): array {
+        $data = collect($input);
+        $cacheKey = 'forget_patterns_'.md5(serialize([$userRole, $hasSubscription, $context]));
+
+        // Get adaptive patterns from cache or generate new ones
+        $patterns = Cache::remember($cacheKey, 3600, function () use ($userRole, $hasSubscription, $context) {
+            return self::generateAdaptivePatterns($userRole, $hasSubscription, $context);
+        });
+
+        // Apply intelligent filtering with performance tracking
+        $startTime = microtime(true);
+        $originalCount = $data->count();
+
+        foreach ($patterns as $pattern) {
+            $data->forget($pattern['fields']);
+        }
+
+        // Log performance metrics for continuous improvement
+        self::logPerformanceMetrics([
+            'original_count' => $originalCount,
+            'final_count' => $data->count(),
+            'fields_removed' => $originalCount - $data->count(),
+            'processing_time' => microtime(true) - $startTime,
+            'user_role' => $userRole,
+            'patterns_applied' => count($patterns),
+        ]);
+
+        return $data->toArray();
+    }
+
+    /**
+     * Advanced bulk collection processing with parallel forget operations.
+     */
+    public static function bulkCollectionCleanup(array $collections, array $globalRules = []): array
+    {
+        return collect($collections)->map(function ($collection, $key) use ($globalRules) {
+            $data = collect($collection);
+
+            // Apply global rules
+            foreach ($globalRules as $rule) {
+                if (isset($rule['condition']) && $rule['condition']($data, $key)) {
+                    $data->forget($rule['fields']);
+                }
+            }
+
+            // Apply smart deduplication
+            $data = self::smartDeduplication($data);
+
+            return $data->toArray();
+        })->toArray();
+    }
+
+    /**
+     * Conditional field removal with advanced logic engine.
+     */
+    public static function conditionalForget(array $data, array $conditions): array
+    {
+        $collection = collect($data);
+
+        foreach ($conditions as $condition) {
+            $shouldRemove = match ($condition['type']) {
+                'date_expired' => self::isDateExpired($collection, $condition),
+                'user_permission' => self::checkUserPermission($condition),
+                'value_pattern' => self::matchesValuePattern($collection, $condition),
+                'dependency_missing' => self::isDependencyMissing($collection, $condition),
+                'custom_callback' => ($condition['callback'])($collection),
+                default => false
+            };
+
+            if ($shouldRemove) {
+                $collection->forget($condition['fields']);
+            }
+        }
+
+        return $collection->toArray();
+    }
+
+    /**
+     * Performance-optimized forget operations with batch processing.
+     */
+    public static function optimizedBatchForget(array $data, array $fieldsToRemove, int $batchSize = 100): array
+    {
+        $collection = collect($data);
+        $fieldChunks = collect($fieldsToRemove)->chunk($batchSize);
+
+        foreach ($fieldChunks as $chunk) {
+            $collection->forget($chunk->toArray());
+        }
+
+        return $collection->toArray();
+    }
+
+    /**
+     * Generate adaptive filtering patterns based on usage analytics.
+     */
+    protected static function generateAdaptivePatterns(?string $userRole = null, bool $hasSubscription = false, array $context = []): array
+    {
+        $patterns = [];
+
+        // Base security patterns (always applied)
+        $patterns[] = [
+            'name' => 'security_cleanup',
+            'fields' => ['_token', '_method', 'password_confirmation', 'csrf_token', 'api_secret'],
+            'priority' => 10,
+        ];
+
+        // Context-aware patterns
+        if (isset($context['form_type'])) {
+            switch ($context['form_type']) {
+                case 'job_application':
+                    $patterns[] = [
+                        'name' => 'job_application_cleanup',
+                        'fields' => ['temp_file_path', 'upload_session_id', 'preview_data'],
+                        'priority' => 8,
+                    ];
+
+                    break;
+
+                case 'company_profile':
+                    $patterns[] = [
+                        'name' => 'company_profile_cleanup',
+                        'fields' => ['logo_temp_url', 'banner_temp_url', 'draft_data'],
+                        'priority' => 7,
+                    ];
+
+                    break;
+            }
+        }
+
+        // Role-based adaptive patterns with usage frequency analysis
+        if ('admin' !== $userRole) {
+            $adminFields = self::getAdminFieldsWithUsageStats();
+            $patterns[] = [
+                'name' => 'admin_restrictions',
+                'fields' => $adminFields,
+                'priority' => 9,
+            ];
+        }
+
+        // Subscription-based patterns with feature analytics
+        if (!$hasSubscription) {
+            $premiumFields = self::getPremiumFieldsWithFeatureStats();
+            $patterns[] = [
+                'name' => 'subscription_restrictions',
+                'fields' => $premiumFields,
+                'priority' => 6,
+            ];
+        }
+
+        // Temporal patterns based on time of day/usage patterns
+        $patterns[] = self::getTemporalCleanupPattern();
+
+        // Sort patterns by priority for optimal processing
+        usort($patterns, fn ($a, $b) => $b['priority'] <=> $a['priority']);
+
+        return $patterns;
+    }
+
+    /**
+     * Smart deduplication using Collection forget() for duplicate value removal.
+     */
+    protected static function smartDeduplication(Collection $data): Collection
+    {
+        $seen = collect();
+        $duplicateKeys = collect();
+
+        $data->each(function ($value, $key) use ($seen, $duplicateKeys) {
+            $valueHash = md5(serialize($value));
+            if ($seen->contains($valueHash)) {
+                $duplicateKeys->push($key);
+            } else {
+                $seen->push($valueHash);
+            }
+        });
+
+        $data->forget($duplicateKeys->toArray());
+
+        return $data;
+    }
+
+    /**
+     * Get admin fields with usage statistics for adaptive filtering.
+     */
+    protected static function getAdminFieldsWithUsageStats(): array
+    {
+        return Cache::remember('admin_fields_usage', 7200, function () {
+            // Simulate usage analytics - in production, this would come from actual usage data
+            return [
+                'is_featured', 'admin_notes', 'priority_score', 'internal_rating',
+                'system_flags', 'moderation_status', 'audit_trail', 'internal_id',
+            ];
+        });
+    }
+
+    /**
+     * Get premium fields with feature statistics.
+     */
+    protected static function getPremiumFieldsWithFeatureStats(): array
+    {
+        return Cache::remember('premium_fields_usage', 7200, function () {
+            return [
+                'premium_features', 'advanced_analytics', 'priority_support',
+                'premium_branding', 'enhanced_visibility', 'detailed_reports',
+            ];
+        });
+    }
+
+    /**
+     * Get temporal cleanup patterns based on time and usage.
+     */
+    protected static function getTemporalCleanupPattern(): array
+    {
+        $hour = now()->hour;
+
+        // Different cleanup patterns based on time of day
+        if ($hour >= 2 && $hour <= 6) { // Night cleanup
+            return [
+                'name' => 'night_cleanup',
+                'fields' => ['session_data', 'temp_cache', 'debug_info'],
+                'priority' => 5,
+            ];
+        }
+
+        return [
+            'name' => 'standard_temporal',
+            'fields' => ['cache_timestamp', 'temp_session'],
+            'priority' => 3,
+        ];
+    }
+
+    /**
+     * Log performance metrics for continuous improvement.
+     */
+    protected static function logPerformanceMetrics(array $metrics): void
+    {
+        Log::channel('performance')->info('Collection forget performance', $metrics);
+
+        // Store metrics for analytics dashboard
+        Cache::put(
+            'forget_metrics_'.date('Y-m-d-H'),
+            collect(Cache::get('forget_metrics_'.date('Y-m-d-H'), []))->push($metrics)->toArray(),
+            3600
+        );
+    }
+
+    /**
+     * Helper methods for conditional logic.
+     */
+    protected static function isDateExpired(Collection $data, array $condition): bool
+    {
+        if (!$data->has($condition['date_field'])) {
+            return false;
+        }
+
+        $date = Carbon::parse($data->get($condition['date_field']));
+
+        return $date->isPast();
+    }
+
+    protected static function checkUserPermission(array $condition): bool
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return false;
+        }
+
+        return match ($condition['permission']) {
+            'admin' => $user->hasRole('admin'),
+            'premium' => $user->hasActiveSubscription(),
+            'owner' => $user->id === ($condition['owner_id'] ?? null),
+            default => false
+        };
+    }
+
+    protected static function matchesValuePattern(Collection $data, array $condition): bool
+    {
+        $field = $condition['field'];
+        $pattern = $condition['pattern'];
+
+        if (!$data->has($field)) {
+            return false;
+        }
+
+        return preg_match($pattern, $data->get($field));
+    }
+
+    protected static function isDependencyMissing(Collection $data, array $condition): bool
+    {
+        $dependencies = $condition['dependencies'];
+
+        foreach ($dependencies as $dependency) {
+            if (!$data->has($dependency)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Evaluate condition for field removal.
      */
     private static function evaluateCondition(string $condition): bool
     {
-        return match($condition) {
+        return match ($condition) {
             'is_guest' => !auth()->check(),
-            'is_mobile' => request()->header('User-Agent-Type') === 'mobile',
+            'is_mobile' => 'mobile' === request()->header('User-Agent-Type'),
             'is_basic_user' => !auth()->user()?->hasActiveSubscription(),
             'is_public_api' => request()->is('api/public/*'),
             'is_admin' => auth()->user()?->hasRole('admin'),
@@ -170,309 +478,13 @@ class CollectionForgetUtility
             default => false,
         };
     }
-    
+
     /**
-     * Check if current user is resource owner
+     * Check if current user is resource owner.
      */
     private static function isResourceOwner(): bool
     {
         // This would need to be implemented based on your specific resource ownership logic
         return auth()->user()?->hasRole('admin') ?? false;
     }
-    
-    /**
-     * Advanced intelligent field removal with pattern learning
-     */
-    public static function intelligentSanitize(
-        array $input, 
-        ?string $userRole = null, 
-        bool $hasSubscription = false,
-        array $context = []
-    ): array {
-        $data = collect($input);
-        $cacheKey = "forget_patterns_" . md5(serialize([$userRole, $hasSubscription, $context]));
-        
-        // Get adaptive patterns from cache or generate new ones
-        $patterns = Cache::remember($cacheKey, 3600, function() use ($userRole, $hasSubscription, $context) {
-            return self::generateAdaptivePatterns($userRole, $hasSubscription, $context);
-        });
-        
-        // Apply intelligent filtering with performance tracking
-        $startTime = microtime(true);
-        $originalCount = $data->count();
-        
-        foreach ($patterns as $pattern) {
-            $data->forget($pattern['fields']);
-        }
-        
-        // Log performance metrics for continuous improvement
-        self::logPerformanceMetrics([
-            'original_count' => $originalCount,
-            'final_count' => $data->count(),
-            'fields_removed' => $originalCount - $data->count(),
-            'processing_time' => microtime(true) - $startTime,
-            'user_role' => $userRole,
-            'patterns_applied' => count($patterns)
-        ]);
-        
-        return $data->toArray();
-    }
-    
-    /**
-     * Generate adaptive filtering patterns based on usage analytics
-     */
-    protected static function generateAdaptivePatterns(string $userRole = null, bool $hasSubscription = false, array $context = []): array
-    {
-        $patterns = [];
-        
-        // Base security patterns (always applied)
-        $patterns[] = [
-            'name' => 'security_cleanup',
-            'fields' => ['_token', '_method', 'password_confirmation', 'csrf_token', 'api_secret'],
-            'priority' => 10
-        ];
-        
-        // Context-aware patterns
-        if (isset($context['form_type'])) {
-            switch ($context['form_type']) {
-                case 'job_application':
-                    $patterns[] = [
-                        'name' => 'job_application_cleanup',
-                        'fields' => ['temp_file_path', 'upload_session_id', 'preview_data'],
-                        'priority' => 8
-                    ];
-                    break;
-                case 'company_profile':
-                    $patterns[] = [
-                        'name' => 'company_profile_cleanup', 
-                        'fields' => ['logo_temp_url', 'banner_temp_url', 'draft_data'],
-                        'priority' => 7
-                    ];
-                    break;
-            }
-        }
-        
-        // Role-based adaptive patterns with usage frequency analysis
-        if ($userRole !== 'admin') {
-            $adminFields = self::getAdminFieldsWithUsageStats();
-            $patterns[] = [
-                'name' => 'admin_restrictions',
-                'fields' => $adminFields,
-                'priority' => 9
-            ];
-        }
-        
-        // Subscription-based patterns with feature analytics
-        if (!$hasSubscription) {
-            $premiumFields = self::getPremiumFieldsWithFeatureStats();
-            $patterns[] = [
-                'name' => 'subscription_restrictions',
-                'fields' => $premiumFields,
-                'priority' => 6
-            ];
-        }
-        
-        // Temporal patterns based on time of day/usage patterns
-        $patterns[] = self::getTemporalCleanupPattern();
-        
-        // Sort patterns by priority for optimal processing
-        usort($patterns, fn($a, $b) => $b['priority'] <=> $a['priority']);
-        
-        return $patterns;
-    }
-    
-    /**
-     * Advanced bulk collection processing with parallel forget operations
-     */
-    public static function bulkCollectionCleanup(array $collections, array $globalRules = []): array
-    {
-        return collect($collections)->map(function ($collection, $key) use ($globalRules) {
-            $data = collect($collection);
-            
-            // Apply global rules
-            foreach ($globalRules as $rule) {
-                if (isset($rule['condition']) && $rule['condition']($data, $key)) {
-                    $data->forget($rule['fields']);
-                }
-            }
-            
-            // Apply smart deduplication
-            $data = self::smartDeduplication($data);
-            
-            return $data->toArray();
-        })->toArray();
-    }
-    
-    /**
-     * Smart deduplication using Collection forget() for duplicate value removal
-     */
-    protected static function smartDeduplication(Collection $data): Collection
-    {
-        $seen = collect();
-        $duplicateKeys = collect();
-        
-        $data->each(function ($value, $key) use ($seen, $duplicateKeys) {
-            $valueHash = md5(serialize($value));
-            if ($seen->contains($valueHash)) {
-                $duplicateKeys->push($key);
-            } else {
-                $seen->push($valueHash);
-            }
-        });
-        
-        $data->forget($duplicateKeys->toArray());
-        return $data;
-    }
-    
-    /**
-     * Conditional field removal with advanced logic engine
-     */
-    public static function conditionalForget(array $data, array $conditions): array
-    {
-        $collection = collect($data);
-        
-        foreach ($conditions as $condition) {
-            $shouldRemove = match($condition['type']) {
-                'date_expired' => self::isDateExpired($collection, $condition),
-                'user_permission' => self::checkUserPermission($condition),
-                'value_pattern' => self::matchesValuePattern($collection, $condition),
-                'dependency_missing' => self::isDependencyMissing($collection, $condition),
-                'custom_callback' => ($condition['callback'])($collection),
-                default => false
-            };
-            
-            if ($shouldRemove) {
-                $collection->forget($condition['fields']);
-            }
-        }
-        
-        return $collection->toArray();
-    }
-    
-    /**
-     * Performance-optimized forget operations with batch processing
-     */
-    public static function optimizedBatchForget(array $data, array $fieldsToRemove, int $batchSize = 100): array
-    {
-        $collection = collect($data);
-        $fieldChunks = collect($fieldsToRemove)->chunk($batchSize);
-        
-        foreach ($fieldChunks as $chunk) {
-            $collection->forget($chunk->toArray());
-        }
-        
-        return $collection->toArray();
-    }
-    
-    /**
-     * Get admin fields with usage statistics for adaptive filtering
-     */
-    protected static function getAdminFieldsWithUsageStats(): array
-    {
-        return Cache::remember('admin_fields_usage', 7200, function() {
-            // Simulate usage analytics - in production, this would come from actual usage data
-            return [
-                'is_featured', 'admin_notes', 'priority_score', 'internal_rating',
-                'system_flags', 'moderation_status', 'audit_trail', 'internal_id'
-            ];
-        });
-    }
-    
-    /**
-     * Get premium fields with feature statistics
-     */
-    protected static function getPremiumFieldsWithFeatureStats(): array
-    {
-        return Cache::remember('premium_fields_usage', 7200, function() {
-            return [
-                'premium_features', 'advanced_analytics', 'priority_support', 
-                'premium_branding', 'enhanced_visibility', 'detailed_reports'
-            ];
-        });
-    }
-    
-    /**
-     * Get temporal cleanup patterns based on time and usage
-     */
-    protected static function getTemporalCleanupPattern(): array
-    {
-        $hour = now()->hour;
-        
-        // Different cleanup patterns based on time of day
-        if ($hour >= 2 && $hour <= 6) { // Night cleanup
-            return [
-                'name' => 'night_cleanup',
-                'fields' => ['session_data', 'temp_cache', 'debug_info'],
-                'priority' => 5
-            ];
-        }
-        
-        return [
-            'name' => 'standard_temporal',
-            'fields' => ['cache_timestamp', 'temp_session'],
-            'priority' => 3
-        ];
-    }
-    
-    /**
-     * Log performance metrics for continuous improvement
-     */
-    protected static function logPerformanceMetrics(array $metrics): void
-    {
-        Log::channel('performance')->info('Collection forget performance', $metrics);
-        
-        // Store metrics for analytics dashboard
-        Cache::put(
-            'forget_metrics_' . date('Y-m-d-H'),
-            collect(Cache::get('forget_metrics_' . date('Y-m-d-H'), []))->push($metrics)->toArray(),
-            3600
-        );
-    }
-    
-    /**
-     * Helper methods for conditional logic
-     */
-    protected static function isDateExpired(Collection $data, array $condition): bool
-    {
-        if (!$data->has($condition['date_field'])) return false;
-        
-        $date = \Carbon\Carbon::parse($data->get($condition['date_field']));
-        return $date->isPast();
-    }
-    
-    protected static function checkUserPermission(array $condition): bool
-    {
-        $user = auth()->user();
-        if (!$user) return false;
-        
-        return match($condition['permission']) {
-            'admin' => $user->hasRole('admin'),
-            'premium' => $user->hasActiveSubscription(),
-            'owner' => $user->id === ($condition['owner_id'] ?? null),
-            default => false
-        };
-    }
-    
-    protected static function matchesValuePattern(Collection $data, array $condition): bool
-    {
-        $field = $condition['field'];
-        $pattern = $condition['pattern'];
-        
-        if (!$data->has($field)) return false;
-        
-        return preg_match($pattern, $data->get($field));
-    }
-    
-    protected static function isDependencyMissing(Collection $data, array $condition): bool
-    {
-        $dependencies = $condition['dependencies'];
-        
-        foreach ($dependencies as $dependency) {
-            if (!$data->has($dependency)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-} 
+}

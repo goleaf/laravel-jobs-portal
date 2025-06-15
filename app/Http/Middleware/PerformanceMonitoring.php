@@ -2,17 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Performance monitoring middleware
+ * Performance monitoring middleware.
  */
 class PerformanceMonitoring
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response
     {
         $startTime = microtime(true);
         $startMemory = memory_get_usage(true);
@@ -40,20 +39,20 @@ class PerformanceMonitoring
 
         // Add performance headers in development
         if (app()->environment('local', 'development')) {
-            $response->headers->set('X-Execution-Time', $executionTime . 'ms');
-            $response->headers->set('X-Memory-Usage', $memoryUsage . 'MB');
-            $response->headers->set('X-Peak-Memory', $peakMemory . 'MB');
+            $response->headers->set('X-Execution-Time', $executionTime.'ms');
+            $response->headers->set('X-Memory-Usage', $memoryUsage.'MB');
+            $response->headers->set('X-Peak-Memory', $peakMemory.'MB');
         }
 
         // Store performance metrics (you could use a proper metrics service)
         cache()->put(
-            'performance_metrics_' . date('Y-m-d-H'),
-            cache()->get('performance_metrics_' . date('Y-m-d-H'), []) + [
+            'performance_metrics_'.date('Y-m-d-H'),
+            cache()->get('performance_metrics_'.date('Y-m-d-H'), []) + [
                 time() => [
                     'execution_time' => $executionTime,
                     'memory_usage' => $memoryUsage,
                     'endpoint' => $request->path(),
-                ]
+                ],
             ],
             3600
         );

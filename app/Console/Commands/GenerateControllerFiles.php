@@ -4,8 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use ReflectionClass;
-use ReflectionMethod;
 
 class GenerateControllerFiles extends Command
 {
@@ -23,7 +21,7 @@ class GenerateControllerFiles extends Command
     protected $description = 'Generate request, response, and test files for controller methods';
 
     /**
-     * Generated files counter
+     * Generated files counter.
      */
     protected $stats = [
         'controllers' => 0,
@@ -40,7 +38,7 @@ class GenerateControllerFiles extends Command
     public function handle()
     {
         $this->info('🚀 Generating HTTP Controller Files...');
-        
+
         $controller = $this->option('controller');
         $type = $this->option('type') ?? 'all';
         $dryRun = $this->option('dry-run');
@@ -57,11 +55,13 @@ class GenerateControllerFiles extends Command
         ];
 
         foreach ($directories as $dir) {
-            if (!File::exists(base_path($dir))) continue;
-            
+            if (!File::exists(base_path($dir))) {
+                continue;
+            }
+
             $this->info("📁 Processing: {$dir}");
-            $controllers = File::glob(base_path($dir) . '/*.php');
-            
+            $controllers = File::glob(base_path($dir).'/*.php');
+
             foreach ($controllers as $path) {
                 $this->processController($path, $type, $dryRun);
             }
@@ -71,25 +71,31 @@ class GenerateControllerFiles extends Command
     }
 
     /**
-     * Process a single controller file
+     * Process a single controller file.
+     *
+     * @param mixed $path
+     * @param mixed $type
+     * @param mixed $dryRun
      */
     protected function processController($path, $type, $dryRun)
     {
         $name = basename($path, '.php');
-        
+
         if (in_array($name, ['Controller', 'UniversalBaseController'])) {
             return;
         }
 
         try {
             $namespace = $this->getNamespace($path);
-            $class = $namespace . '\\' . $name;
-            
-            if (!class_exists($class)) return;
+            $class = $namespace.'\\'.$name;
 
-            $reflection = new ReflectionClass($class);
-            $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
-            
+            if (!class_exists($class)) {
+                return;
+            }
+
+            $reflection = new \ReflectionClass($class);
+            $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+
             $publicMethods = [];
             foreach ($methods as $method) {
                 if ($method->getDeclaringClass()->getName() === $class) {
@@ -97,19 +103,20 @@ class GenerateControllerFiles extends Command
                 }
             }
 
-            if (empty($publicMethods)) return;
+            if (empty($publicMethods)) {
+                return;
+            }
 
-            $this->line("  🔍 {$name}: " . implode(', ', $publicMethods));
-            
+            $this->line("  🔍 {$name}: ".implode(', ', $publicMethods));
+
             foreach ($publicMethods as $methodName) {
                 $this->generateFiles($path, $name, $methodName, $type, $dryRun);
             }
 
-            $this->stats['controllers']++;
+            ++$this->stats['controllers'];
             $this->stats['methods'] += count($publicMethods);
-
         } catch (\Exception $e) {
-            $this->error("❌ Error: {$name} - " . $e->getMessage());
+            $this->error("❌ Error: {$name} - ".$e->getMessage());
         }
     }
 
@@ -119,30 +126,36 @@ class GenerateControllerFiles extends Command
         $relative = str_replace(base_path('app/Http/Controllers'), '', $dir);
         $namespace = str_replace('/', '\\', $relative);
 
-        if ($type === 'all' || $type === 'request') {
+        if ('all' === $type || 'request' === $type) {
             $this->generateRequest($namespace, $controllerName, $methodName, $dryRun);
         }
 
-        if ($type === 'all' || $type === 'response') {
+        if ('all' === $type || 'response' === $type) {
             $this->generateResponse($namespace, $controllerName, $methodName, $dryRun);
         }
 
-        if ($type === 'all' || $type === 'test') {
+        if ('all' === $type || 'test' === $type) {
             $this->generateTest($namespace, $controllerName, $dryRun);
         }
     }
 
     /**
-     * Generate request file
+     * Generate request file.
+     *
+     * @param mixed $namespace
+     * @param mixed $controller
+     * @param mixed $method
+     * @param mixed $dryRun
      */
     protected function generateRequest($namespace, $controller, $method, $dryRun)
     {
-        $name = ucfirst($method) . 'Request';
-        $ns = 'App\\Http\\Requests' . $namespace;
-        $path = base_path('app/Http/Requests' . $namespace . '/' . $name . '.php');
+        $name = ucfirst($method).'Request';
+        $ns = 'App\Http\Requests'.$namespace;
+        $path = base_path('app/Http/Requests'.$namespace.'/'.$name.'.php');
 
         if (File::exists($path)) {
-            $this->stats['skipped']++;
+            ++$this->stats['skipped'];
+
             return;
         }
 
@@ -154,20 +167,26 @@ class GenerateControllerFiles extends Command
         }
 
         $this->line("      ✅ Request: {$name}");
-        $this->stats['requests']++;
+        ++$this->stats['requests'];
     }
 
     /**
-     * Generate response file
+     * Generate response file.
+     *
+     * @param mixed $namespace
+     * @param mixed $controller
+     * @param mixed $method
+     * @param mixed $dryRun
      */
     protected function generateResponse($namespace, $controller, $method, $dryRun)
     {
-        $name = ucfirst($method) . 'Resource';
-        $ns = 'App\\Http\\Resources' . $namespace;
-        $path = base_path('app/Http/Resources' . $namespace . '/' . $name . '.php');
+        $name = ucfirst($method).'Resource';
+        $ns = 'App\Http\Resources'.$namespace;
+        $path = base_path('app/Http/Resources'.$namespace.'/'.$name.'.php');
 
         if (File::exists($path)) {
-            $this->stats['skipped']++;
+            ++$this->stats['skipped'];
+
             return;
         }
 
@@ -179,17 +198,21 @@ class GenerateControllerFiles extends Command
         }
 
         $this->line("      ✅ Response: {$name}");
-        $this->stats['responses']++;
+        ++$this->stats['responses'];
     }
 
     /**
-     * Generate test file (one per controller)
+     * Generate test file (one per controller).
+     *
+     * @param mixed $namespace
+     * @param mixed $controller
+     * @param mixed $dryRun
      */
     protected function generateTest($namespace, $controller, $dryRun)
     {
-        $name = $controller . 'Test';
-        $ns = 'Tests\\Feature' . $namespace;
-        $path = base_path('tests/Feature' . $namespace . '/' . $name . '.php');
+        $name = $controller.'Test';
+        $ns = 'Tests\Feature'.$namespace;
+        $path = base_path('tests/Feature'.$namespace.'/'.$name.'.php');
 
         if (File::exists($path)) {
             return;
@@ -203,11 +226,15 @@ class GenerateControllerFiles extends Command
         }
 
         $this->line("      ✅ Test: {$name}");
-        $this->stats['tests']++;
+        ++$this->stats['tests'];
     }
 
     /**
-     * Get request file template
+     * Get request file template.
+     *
+     * @param mixed $namespace
+     * @param mixed $className
+     * @param mixed $method
      */
     protected function requestTemplate($namespace, $className, $method)
     {
@@ -215,7 +242,7 @@ class GenerateControllerFiles extends Command
 
 namespace {$namespace};
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\\Foundation\\Http\\FormRequest;
 
 class {$className} extends FormRequest
 {
@@ -242,7 +269,11 @@ class {$className} extends FormRequest
     }
 
     /**
-     * Get response file template
+     * Get response file template.
+     *
+     * @param mixed $namespace
+     * @param mixed $className
+     * @param mixed $method
      */
     protected function responseTemplate($namespace, $className, $method)
     {
@@ -250,7 +281,7 @@ class {$className} extends FormRequest
 
 namespace {$namespace};
 
-use Illuminate\Http\Resources\\Json\\JsonResource;
+use Illuminate\\Http\\Resources\\Json\\JsonResource;
 
 class {$className} extends JsonResource
 {
@@ -276,7 +307,11 @@ class {$className} extends JsonResource
     }
 
     /**
-     * Get test file template
+     * Get test file template.
+     *
+     * @param mixed $namespace
+     * @param mixed $className
+     * @param mixed $controller
      */
     protected function testTemplate($namespace, $className, $controller)
     {
@@ -301,29 +336,31 @@ class {$className} extends TestCase
     }
 
     /**
-     * Get controller namespace
+     * Get controller namespace.
+     *
+     * @param mixed $path
      */
     protected function getNamespace($path)
     {
         $content = File::get($path);
-        
+
         if (preg_match('/namespace\s+([^;]+);/', $content, $matches)) {
             return $matches[1];
         }
-        
-        return 'App\\Http\\Controllers';
+
+        return 'App\Http\Controllers';
     }
 
     /**
-     * Display generation statistics
+     * Display generation statistics.
      */
     protected function displayStats()
     {
         $this->newLine();
         $this->info('📊 Generation Complete!');
-        
+
         $total = $this->stats['requests'] + $this->stats['responses'] + $this->stats['tests'];
-        
+
         $this->table(['Metric', 'Count'], [
             ['Controllers', $this->stats['controllers']],
             ['Methods', $this->stats['methods']],
@@ -338,4 +375,4 @@ class {$className} extends TestCase
             $this->info("🎉 Generated {$total} files!");
         }
     }
-} 
+}

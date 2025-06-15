@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\Candidate;
-use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -21,16 +20,17 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * Display a listing of candidates for admin
+     * Display a listing of candidates for admin.
      */
     public function index(): View
     {
         $candidates = Candidate::with('user')->paginate(15);
+
         return view('admin.candidates.index', compact('candidates'));
     }
 
     /**
-     * Show the form for creating a new candidate
+     * Show the form for creating a new candidate.
      */
     public function create(): View
     {
@@ -38,7 +38,7 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * Store a newly created candidate
+     * Store a newly created candidate.
      */
     public function store(CreateCandidateRequest $request)
     {
@@ -47,25 +47,33 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * Display the specified candidate
+     * Display the specified candidate.
+     *
+     * @param mixed $id
      */
     public function show($id): View
     {
         $candidate = Candidate::with('user')->findOrFail($id);
+
         return view('admin.candidates.show', compact('candidate'));
     }
 
     /**
-     * Show the form for editing the specified candidate
+     * Show the form for editing the specified candidate.
+     *
+     * @param mixed $id
      */
     public function edit($id): View
     {
         $candidate = Candidate::with('user')->findOrFail($id);
+
         return view('admin.candidates.edit', compact('candidate'));
     }
 
     /**
-     * Update the specified candidate
+     * Update the specified candidate.
+     *
+     * @param mixed $id
      */
     public function update(UpdateCandidateRequest $request, $id)
     {
@@ -74,16 +82,21 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * Remove the specified candidate
+     * Remove the specified candidate.
+     *
+     * @param mixed $id
      */
     public function destroy($id)
     {
         $candidate = Candidate::findOrFail($id);
         $candidate->delete();
+
         return redirect()->route('admin.candidates.index')->with('success', 'Candidate deleted successfully');
     }
 
     /**
+     * @param mixed $uniqueId
+     *
      * @return Application|Factory|View
      */
     public function getCandidateDetails($uniqueId): View

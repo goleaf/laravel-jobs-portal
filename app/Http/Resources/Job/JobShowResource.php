@@ -23,7 +23,7 @@ class JobShowResource extends JsonResource
             'benefits' => $this->benefits,
             'status' => $this->status,
             'status_label' => $this->getStatusLabel(),
-            
+
             // Job details
             'details' => [
                 'job_type' => [
@@ -48,7 +48,7 @@ class JobShowResource extends JsonResource
                     'description' => $this->experience_description,
                 ],
             ],
-            
+
             // Location information
             'location' => [
                 'country' => [
@@ -68,7 +68,7 @@ class JobShowResource extends JsonResource
                 'is_remote' => $this->is_remote,
                 'is_freelance' => $this->is_freelance,
             ],
-            
+
             // Salary information
             'salary' => [
                 'from' => $this->hide_salary ? null : $this->salary_from,
@@ -78,7 +78,7 @@ class JobShowResource extends JsonResource
                 'is_disclosed' => !$this->hide_salary,
                 'formatted' => $this->getFormattedSalaryRange(),
             ],
-            
+
             // Company information
             'company' => [
                 'id' => $this->company?->id,
@@ -91,7 +91,7 @@ class JobShowResource extends JsonResource
                 'established_in' => $this->company?->established_in,
                 'no_of_employees' => $this->company?->no_of_employees,
             ],
-            
+
             // Skills and tags
             'skills' => $this->whenLoaded('jobsSkill', function () {
                 return $this->jobsSkill->map(function ($skill) {
@@ -105,7 +105,7 @@ class JobShowResource extends JsonResource
             'tags' => $this->whenLoaded('jobsTag', function () {
                 return $this->jobsTag->pluck('name');
             }),
-            
+
             // Dates and timing
             'dates' => [
                 'created' => $this->created_at?->format('Y-m-d H:i:s'),
@@ -116,7 +116,7 @@ class JobShowResource extends JsonResource
                 'is_expired' => $this->expires_at ? $this->expires_at->isPast() : false,
                 'is_urgent' => $this->is_urgent,
             ],
-            
+
             // Statistics (only for authorized users)
             'statistics' => $this->when($this->canViewStatistics($request->user()), [
                 'applications_count' => $this->job_applications_count ?? 0,
@@ -125,7 +125,7 @@ class JobShowResource extends JsonResource
                 'hired_count' => $this->hired_applications_count ?? 0,
                 'average_application_score' => $this->average_application_score ?? 0,
             ]),
-            
+
             // Flags and settings
             'flags' => [
                 'is_featured' => $this->is_featured,
@@ -137,7 +137,7 @@ class JobShowResource extends JsonResource
                 'require_cover_letter' => $this->require_cover_letter,
                 'allow_remote_work' => $this->allow_remote_work,
             ],
-            
+
             // User permissions and actions
             'permissions' => [
                 'can_edit' => $this->canUserEdit($request->user()),
@@ -148,7 +148,7 @@ class JobShowResource extends JsonResource
                 'can_close' => $this->canUserClose($request->user()),
                 'can_view_applications' => $this->canViewApplications($request->user()),
             ],
-            
+
             // URLs and navigation
             'urls' => [
                 'public' => route('front.job.details', $this->slug),
@@ -156,12 +156,12 @@ class JobShowResource extends JsonResource
                 'edit' => $this->when($this->canUserEdit($request->user()), route('jobs.edit', $this->id)),
                 'applications' => $this->when($this->canViewApplications($request->user()), route('job.applications', $this->id)),
                 'share' => [
-                    'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode(route('front.job.details', $this->slug)),
-                    'twitter' => 'https://twitter.com/intent/tweet?url=' . urlencode(route('front.job.details', $this->slug)) . '&text=' . urlencode($this->title),
-                    'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . urlencode(route('front.job.details', $this->slug)),
+                    'facebook' => 'https://www.facebook.com/sharer/sharer.php?u='.urlencode(route('front.job.details', $this->slug)),
+                    'twitter' => 'https://twitter.com/intent/tweet?url='.urlencode(route('front.job.details', $this->slug)).'&text='.urlencode($this->title),
+                    'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url='.urlencode(route('front.job.details', $this->slug)),
                 ],
             ],
-            
+
             // Related jobs (only show limited data)
             'related_jobs' => $this->when($request->has('include_related'), function () {
                 return $this->getRelatedJobs()->map(function ($job) {
@@ -170,20 +170,20 @@ class JobShowResource extends JsonResource
                         'title' => $job->title,
                         'slug' => $job->slug,
                         'company_name' => $job->company?->name,
-                        'location' => $job->city?->name . ', ' . $job->country?->name,
+                        'location' => $job->city?->name.', '.$job->country?->name,
                         'url' => route('front.job.details', $job->slug),
                     ];
                 });
             }),
-            
+
             // SEO and meta information
             'seo' => [
-                'title' => $this->title . ' - ' . $this->company?->name,
+                'title' => $this->title.' - '.$this->company?->name,
                 'description' => substr(strip_tags($this->description), 0, 160),
                 'keywords' => $this->jobsSkill?->pluck('name')->implode(', '),
                 'og_image' => $this->company?->logo_url,
             ],
-            
+
             // Metadata
             'meta' => [
                 'resource_type' => 'job_detail',
@@ -203,18 +203,20 @@ class JobShowResource extends JsonResource
         if ($this->hide_salary || (!$this->salary_from && !$this->salary_to)) {
             return null;
         }
-        
+
         $currency = $this->salaryCurrency?->currency_code ?? 'USD';
         $period = $this->salaryPeriod?->period ?? 'month';
-        
+
         if ($this->salary_from && $this->salary_to) {
-            return number_format($this->salary_from) . ' - ' . number_format($this->salary_to) . ' ' . $currency . '/' . $period;
-        } elseif ($this->salary_from) {
-            return 'From ' . number_format($this->salary_from) . ' ' . $currency . '/' . $period;
-        } elseif ($this->salary_to) {
-            return 'Up to ' . number_format($this->salary_to) . ' ' . $currency . '/' . $period;
+            return number_format($this->salary_from).' - '.number_format($this->salary_to).' '.$currency.'/'.$period;
         }
-        
+        if ($this->salary_from) {
+            return 'From '.number_format($this->salary_from).' '.$currency.'/'.$period;
+        }
+        if ($this->salary_to) {
+            return 'Up to '.number_format($this->salary_to).' '.$currency.'/'.$period;
+        }
+
         return null;
     }
 
@@ -223,7 +225,7 @@ class JobShowResource extends JsonResource
      */
     private function getStatusLabel(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'open' => __('jobs.status.open'),
             'closed' => __('jobs.status.closed'),
             'drafted' => __('jobs.status.drafted'),
@@ -234,17 +236,23 @@ class JobShowResource extends JsonResource
 
     /**
      * Check if user can view sensitive data.
+     *
+     * @param mixed $user
      */
     private function canViewSensitiveData($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
     }
 
     /**
      * Check if user can view statistics.
+     *
+     * @param mixed $user
      */
     private function canViewStatistics($user): bool
     {
@@ -253,62 +261,84 @@ class JobShowResource extends JsonResource
 
     /**
      * Check if user can edit this job.
+     *
+     * @param mixed $user
      */
     private function canUserEdit($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
     }
 
     /**
      * Check if user can delete this job.
+     *
+     * @param mixed $user
      */
     private function canUserDelete($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id && $this->job_applications_count === 0);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && 0 === $this->job_applications_count);
     }
 
     /**
      * Check if user can apply to this job.
+     *
+     * @param mixed $user
      */
     private function canUserApply($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Candidate') && 
-               $this->status === 'open' && 
-               !$this->is_suspended &&
-               ($this->expires_at === null || $this->expires_at->isFuture());
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Candidate')
+               && 'open' === $this->status
+               && !$this->is_suspended
+               && (null === $this->expires_at || $this->expires_at->isFuture());
     }
 
     /**
      * Check if user can feature this job.
+     *
+     * @param mixed $user
      */
     private function canUserFeature($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
     }
 
     /**
      * Check if user can suspend this job.
+     *
+     * @param mixed $user
      */
     private function canUserSuspend($user): bool
     {
-        if (!$user) return false;
-        
+        if (!$user) {
+            return false;
+        }
+
         return $user->hasRole('Admin');
     }
 
     /**
      * Check if user can close this job.
+     *
+     * @param mixed $user
      */
     private function canUserClose($user): bool
     {
@@ -317,6 +347,8 @@ class JobShowResource extends JsonResource
 
     /**
      * Check if user can view applications.
+     *
+     * @param mixed $user
      */
     private function canViewApplications($user): bool
     {

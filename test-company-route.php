@@ -1,10 +1,12 @@
 <?php
 
+use Illuminate\Contracts\Http\Kernel;
+
 require_once 'vendor/autoload.php';
 
 $app = require_once 'bootstrap/app.php';
 
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+$kernel = $app->make(Kernel::class);
 
 // Test route registration
 $router = $app['router'];
@@ -19,12 +21,12 @@ foreach ($routes as $route) {
             'name' => $route->getName(),
             'uri' => $route->uri(),
             'methods' => implode('|', $route->methods()),
-            'action' => $route->getActionName()
+            'action' => $route->getActionName(),
         ];
     }
 }
 
-echo "Found " . count($companyRoutes) . " company routes:\n";
+echo 'Found '.count($companyRoutes)." company routes:\n";
 foreach ($companyRoutes as $route) {
     echo "- {$route['name']}: {$route['methods']} {$route['uri']} -> {$route['action']}\n";
 }
@@ -32,13 +34,13 @@ foreach ($companyRoutes as $route) {
 // Test if CompanyController exists
 if (class_exists('\App\Http\Controllers\CompanyController')) {
     echo "\n✅ CompanyController class exists\n";
-    
+
     if (method_exists('\App\Http\Controllers\CompanyController', 'show')) {
         echo "✅ CompanyController::show method exists\n";
     } else {
         echo "❌ CompanyController::show method missing\n";
     }
-    
+
     if (method_exists('\App\Http\Controllers\CompanyController', 'edit')) {
         echo "✅ CompanyController::edit method exists\n";
     } else {
@@ -55,4 +57,4 @@ if (file_exists(base_path('bootstrap/cache/routes-v7.php'))) {
     echo "\n✅ Routes are not cached\n";
 }
 
-echo "\nTest complete!\n"; 
+echo "\nTest complete!\n";

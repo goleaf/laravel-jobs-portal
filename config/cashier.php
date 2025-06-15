@@ -1,7 +1,8 @@
 <?php
 
-return [
+use App\Models\User;
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Stripe Keys
@@ -57,7 +58,7 @@ return [
     |
     */
 
-    'model' => env('CASHIER_MODEL', \App\Models\User::class),
+    'model' => env('CASHIER_MODEL', User::class),
 
     /*
     |--------------------------------------------------------------------------
@@ -125,5 +126,4 @@ return [
     */
 
     'logger' => env('CASHIER_LOGGER'),
-
 ];

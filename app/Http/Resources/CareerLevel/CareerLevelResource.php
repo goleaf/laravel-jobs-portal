@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\CareerLevel;
 
+use App\Models\CareerLevel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,43 +22,43 @@ class CareerLevelResource extends JsonResource
             'display_name' => $this->getDisplayName(),
             'is_default' => $this->is_default,
             'is_active' => $this->is_active,
-            
+
             // Counts
             'jobs_count' => $this->whenCounted('jobs'),
             'candidates_count' => $this->whenCounted('candidates'),
             'active_jobs_count' => $this->whenCounted('activeJobs'),
-            
+
             // Timestamps
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
             'formatted_created_at' => $this->created_at?->format(__('formats.date_time')),
             'formatted_updated_at' => $this->updated_at?->format(__('formats.date_time')),
-            
+
             // Status labels
             'status_label' => $this->is_active ? __('common.active') : __('common.inactive'),
             'type_label' => $this->is_default ? __('common.default') : __('common.custom'),
             'level_category' => $this->getLevelCategory(),
-            
+
             // Relationships
             'jobs' => $this->whenLoaded('jobs'),
             'candidates' => $this->whenLoaded('candidates'),
-            
+
             // Computed attributes
             'experience_range' => $this->getExperienceRange(),
             'seniority_level' => $this->getSeniorityLevel(),
             'career_progression' => $this->getCareerProgression(),
-            
+
             // Permissions
             'can_update' => $request->user()?->can('update', $this->resource),
             'can_delete' => $request->user()?->can('delete', $this->resource),
-            
+
             // Links
             'links' => [
                 'self' => route('api.career-levels.show', $this->id),
                 'jobs' => route('api.jobs.index', ['career_level_id' => $this->id]),
                 'candidates' => route('api.candidates.index', ['career_level_id' => $this->id]),
             ],
-            
+
             // Statistics (when requested)
             'statistics' => $this->when($request->has('include_statistics'), function () {
                 return [
@@ -67,6 +68,21 @@ class CareerLevelResource extends JsonResource
                     'industry_distribution' => $this->getIndustryDistribution(),
                 ];
             }),
+        ];
+    }
+
+    /**
+     * Get additional data when collection.
+     */
+    public function with(Request $request): array
+    {
+        return [
+            'meta' => [
+                'total_career_levels' => $this->collection?->count(),
+                'active_career_levels' => $this->collection?->where('is_active', true)->count(),
+                'default_career_levels' => $this->collection?->where('is_default', true)->count(),
+                'level_categories' => $this->collection?->groupBy(fn ($item) => $item->getLevelCategory())->map->count(),
+            ],
         ];
     }
 
@@ -84,19 +100,19 @@ class CareerLevelResource extends JsonResource
     private function getLevelCategory(): string
     {
         $level = strtolower($this->level_name);
-        
+
         if (preg_match('/(entry|junior|trainee|intern|beginner)/', $level)) {
             return __('career_levels.categories.entry');
         }
-        
+
         if (preg_match('/(senior|lead|principal|architect)/', $level)) {
             return __('career_levels.categories.senior');
         }
-        
+
         if (preg_match('/(manager|director|executive|ceo|cto|cfo)/', $level)) {
             return __('career_levels.categories.executive');
         }
-        
+
         return __('career_levels.categories.mid');
     }
 
@@ -106,8 +122,8 @@ class CareerLevelResource extends JsonResource
     private function getExperienceRange(): string
     {
         $category = $this->getLevelCategory();
-        
-        return match($category) {
+
+        return match ($category) {
             __('career_levels.categories.entry') => __('career_levels.experience.entry'),
             __('career_levels.categories.mid') => __('career_levels.experience.mid'),
             __('career_levels.categories.senior') => __('career_levels.experience.senior'),
@@ -122,8 +138,8 @@ class CareerLevelResource extends JsonResource
     private function getSeniorityLevel(): int
     {
         $category = $this->getLevelCategory();
-        
-        return match($category) {
+
+        return match ($category) {
             __('career_levels.categories.entry') => 1,
             __('career_levels.categories.mid') => 2,
             __('career_levels.categories.senior') => 3,
@@ -164,7 +180,8 @@ class CareerLevelResource extends JsonResource
                 ->whereNotNull('salary_from')
                 ->whereNotNull('salary_to')
                 ->selectRaw('AVG((salary_from + salary_to) / 2) as avg_salary')
-                ->value('avg_salary');
+                ->value('avg_salary')
+            ;
         });
     }
 
@@ -191,7 +208,8 @@ class CareerLevelResource extends JsonResource
                 ->groupBy('industries.name')
                 ->selectRaw('industries.name, COUNT(*) as job_count')
                 ->pluck('job_count', 'name')
-                ->toArray();
+                ->toArray()
+            ;
         });
     }
 
@@ -201,12 +219,13 @@ class CareerLevelResource extends JsonResource
     private function getNextLevelSuggestions(): array
     {
         $currentLevel = $this->getSeniorityLevel();
-        
-        return \App\Models\CareerLevel::active()
+
+        return CareerLevel::active()
             ->where('id', '!=', $this->id)
             ->get()
             ->filter(function ($level) use ($currentLevel) {
                 $levelResource = new self($level);
+
                 return $levelResource->getSeniorityLevel() === $currentLevel + 1;
             })
             ->map(function ($level) {
@@ -217,7 +236,8 @@ class CareerLevelResource extends JsonResource
                 ];
             })
             ->values()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
@@ -228,19 +248,4 @@ class CareerLevelResource extends JsonResource
         // This would be implemented based on skill analysis
         return [];
     }
-
-    /**
-     * Get additional data when collection.
-     */
-    public function with(Request $request): array
-    {
-        return [
-            'meta' => [
-                'total_career_levels' => $this->collection?->count(),
-                'active_career_levels' => $this->collection?->where('is_active', true)->count(),
-                'default_career_levels' => $this->collection?->where('is_default', true)->count(),
-                'level_categories' => $this->collection?->groupBy(fn($item) => $item->getLevelCategory())->map->count(),
-            ],
-        ];
-    }
-} 
+}

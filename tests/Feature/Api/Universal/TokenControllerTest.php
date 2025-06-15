@@ -2,26 +2,31 @@
 
 namespace Tests\Feature\Api\Universal;
 
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 /**
  * Universal API Test for TokenController
- * Implements Laravel 12 API testing best practices with Universal MCP patterns
+ * Implements Laravel 12 API testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class TokenControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Universal Pattern: Create authenticated API user with tokens
         $this->user = User::factory()->create();
         Sanctum::actingAs($this->user, [
@@ -33,9 +38,9 @@ class TokenControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API index endpoint
+     * Universal Pattern: Test API index endpoint.
      */
-    public function test_index_returns_paginated_results(): void
+    public function testIndexReturnsPaginatedResults(): void
     {
         Token::factory()->count(3)->create();
 
@@ -46,20 +51,21 @@ class TokenControllerTest extends TestCase
                 'success',
                 'data' => [
                     'data' => [
-                        '*' => ['id', 'name', 'created_at', 'updated_at']
+                        '*' => ['id', 'name', 'created_at', 'updated_at'],
                     ],
                     'current_page',
                     'per_page',
-                    'total'
+                    'total',
                 ],
-                'meta'
-            ]);
+                'meta',
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API store endpoint
+     * Universal Pattern: Test API store endpoint.
      */
-    public function test_store_creates_new_resource(): void
+    public function testStoreCreatesNewResource(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -80,8 +86,9 @@ class TokenControllerTest extends TestCase
                 'success',
                 'message',
                 'data' => ['id', 'name', 'email'],
-                'meta'
-            ]);
+                'meta',
+            ])
+        ;
 
         $this->assertDatabaseHas('tokens', [
             'name' => $data['name'],
@@ -90,9 +97,9 @@ class TokenControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API validation
+     * Universal Pattern: Test API validation.
      */
-    public function test_store_validates_required_fields(): void
+    public function testStoreValidatesRequiredFields(): void
     {
         $response = $this->postJson('/api/v1/tokens', []);
 
@@ -101,13 +108,14 @@ class TokenControllerTest extends TestCase
                 'success' => false,
                 'message' => 'Validation failed',
             ])
-            ->assertJsonValidationErrors(['name']);
+            ->assertJsonValidationErrors(['name'])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API show endpoint
+     * Universal Pattern: Test API show endpoint.
      */
-    public function test_show_returns_single_resource(): void
+    public function testShowReturnsSingleResource(): void
     {
         $token = Token::factory()->create();
 
@@ -119,14 +127,15 @@ class TokenControllerTest extends TestCase
                 'data' => [
                     'id' => $token->id,
                     'name' => $token->name,
-                ]
-            ]);
+                ],
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API update endpoint
+     * Universal Pattern: Test API update endpoint.
      */
-    public function test_update_modifies_existing_resource(): void
+    public function testUpdateModifiesExistingResource(): void
     {
         $token = Token::factory()->create();
         $updateData = [
@@ -140,7 +149,8 @@ class TokenControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Token updated successfully',
-            ]);
+            ])
+        ;
 
         $this->assertDatabaseHas('tokens', [
             'id' => $token->id,
@@ -149,9 +159,9 @@ class TokenControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API delete endpoint
+     * Universal Pattern: Test API delete endpoint.
      */
-    public function test_destroy_deletes_resource(): void
+    public function testDestroyDeletesResource(): void
     {
         $token = Token::factory()->create();
 
@@ -161,15 +171,16 @@ class TokenControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Token deleted successfully',
-            ]);
+            ])
+        ;
 
         $this->assertSoftDeleted($token);
     }
 
     /**
-     * Universal Pattern: Test unauthorized access
+     * Universal Pattern: Test unauthorized access.
      */
-    public function test_unauthorized_access_returns_401(): void
+    public function testUnauthorizedAccessReturns401(): void
     {
         Sanctum::actingAs($this->user, []); // No abilities
 
@@ -182,12 +193,12 @@ class TokenControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test rate limiting
+     * Universal Pattern: Test rate limiting.
      */
-    public function test_rate_limiting_prevents_excessive_requests(): void
+    public function testRateLimitingPreventsExcessiveRequests(): void
     {
         // Make requests up to the limit
-        for ($i = 0; $i < 60; $i++) {
+        for ($i = 0; $i < 60; ++$i) {
             $this->getJson('/api/v1/tokens');
         }
 
@@ -197,9 +208,9 @@ class TokenControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test search functionality
+     * Universal Pattern: Test search functionality.
      */
-    public function test_index_can_search_resources(): void
+    public function testIndexCanSearchResources(): void
     {
         Token::factory()->create(['name' => 'Searchable Item']);
         Token::factory()->create(['name' => 'Other Item']);
@@ -207,13 +218,14 @@ class TokenControllerTest extends TestCase
         $response = $this->getJson('/api/v1/tokens?search=Searchable');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.data');
+            ->assertJsonCount(1, 'data.data')
+        ;
     }
 
     /**
-     * Universal Pattern: Test resource not found
+     * Universal Pattern: Test resource not found.
      */
-    public function test_show_returns_404_for_nonexistent_resource(): void
+    public function testShowReturns404ForNonexistentResource(): void
     {
         $response = $this->getJson('/api/v1/tokens/999999');
 
@@ -221,13 +233,14 @@ class TokenControllerTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'Token not found',
-            ]);
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test invalid JSON
+     * Universal Pattern: Test invalid JSON.
      */
-    public function test_store_handles_invalid_json(): void
+    public function testStoreHandlesInvalidJson(): void
     {
         $response = $this->json('POST', '/api/v1/tokens', 'invalid-json', [
             'Content-Type' => 'application/json',
@@ -237,12 +250,12 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_login_with_valid_credentials()
+    public function itCanLoginWithValidCredentials()
     {
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
             'password' => 'password123',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(200)
@@ -253,19 +266,20 @@ class TokenControllerTest extends TestCase
                     'user' => [
                         'id',
                         'name',
-                        'email'
+                        'email',
                     ],
                     'token' => [
                         'access_token',
                         'token_type',
-                        'abilities'
-                    ]
+                        'abilities',
+                    ],
                 ],
-                'meta'
+                'meta',
             ])
             ->assertJson([
-                'success' => true
-            ]);
+                'success' => true,
+            ])
+        ;
 
         $this->assertDatabaseHas('personal_access_tokens', [
             'name' => 'Test Device',
@@ -275,56 +289,60 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_cannot_login_with_invalid_credentials()
+    public function itCannotLoginWithInvalidCredentials()
     {
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(401)
             ->assertJson([
                 'success' => false,
-                'message' => 'Invalid credentials'
-            ]);
+                'message' => 'Invalid credentials',
+            ])
+        ;
     }
 
     /** @test */
-    public function it_validates_login_request_data()
+    public function itValidatesLoginRequestData()
     {
         // Test missing email
         $response = $this->postJson('/api/auth/login', [
             'password' => 'password123',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email'])
+        ;
 
         // Test invalid email format
         $response = $this->postJson('/api/auth/login', [
             'email' => 'invalid-email',
             'password' => 'password123',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email'])
+        ;
 
         // Test short password
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
             'password' => '123',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['password']);
+            ->assertJsonValidationErrors(['password'])
+        ;
     }
 
     /** @test */
-    public function it_can_get_authenticated_user_details()
+    public function itCanGetAuthenticatedUserDetails()
     {
         Sanctum::actingAs($this->user);
 
@@ -339,26 +357,27 @@ class TokenControllerTest extends TestCase
                         'id',
                         'name',
                         'email',
-                        'created_at'
+                        'created_at',
                     ],
                     'authentication' => [
-                        'token_abilities'
-                    ]
-                ]
+                        'token_abilities',
+                    ],
+                ],
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
                     'user' => [
                         'id' => $this->user->id,
-                        'email' => $this->user->email
-                    ]
-                ]
-            ]);
+                        'email' => $this->user->email,
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_cannot_get_user_details_without_authentication()
+    public function itCannotGetUserDetailsWithoutAuthentication()
     {
         $response = $this->getJson('/api/auth/user');
 
@@ -366,28 +385,30 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_logout_authenticated_user()
+    public function itCanLogoutAuthenticatedUser()
     {
         $token = $this->user->createToken('Test Token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->postJson('/api/auth/logout');
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->postJson('/api/auth/logout')
+        ;
 
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Logged out successfully'
-            ]);
+                'message' => 'Logged out successfully',
+            ])
+        ;
 
         // Verify token was deleted
         $this->assertDatabaseMissing('personal_access_tokens', [
             'tokenable_id' => $this->user->id,
-            'name' => 'Test Token'
+            'name' => 'Test Token',
         ]);
     }
 
     /** @test */
-    public function it_cannot_logout_without_authentication()
+    public function itCannotLogoutWithoutAuthentication()
     {
         $response = $this->postJson('/api/auth/logout');
 
@@ -395,7 +416,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_logout_all_tokens()
+    public function itCanLogoutAllTokens()
     {
         // Create multiple tokens
         $token1 = $this->user->createToken('Token 1');
@@ -411,24 +432,25 @@ class TokenControllerTest extends TestCase
                 'success',
                 'message',
                 'data' => [
-                    'revoked_tokens'
-                ]
+                    'revoked_tokens',
+                ],
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
-                    'revoked_tokens' => 3
-                ]
-            ]);
+                    'revoked_tokens' => 3,
+                ],
+            ])
+        ;
 
         // Verify all tokens were deleted
         $this->assertDatabaseMissing('personal_access_tokens', [
-            'tokenable_id' => $this->user->id
+            'tokenable_id' => $this->user->id,
         ]);
     }
 
     /** @test */
-    public function it_can_list_user_tokens()
+    public function itCanListUserTokens()
     {
         // Create multiple tokens
         $token1 = $this->user->createToken('Token 1');
@@ -448,26 +470,27 @@ class TokenControllerTest extends TestCase
                             'id',
                             'name',
                             'abilities',
-                            'created_at'
-                        ]
+                            'created_at',
+                        ],
                     ],
                     'summary' => [
-                        'total_tokens'
-                    ]
-                ]
+                        'total_tokens',
+                    ],
+                ],
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
                     'summary' => [
-                        'total_tokens' => 2
-                    ]
-                ]
-            ]);
+                        'total_tokens' => 2,
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_can_filter_tokens_with_query_parameters()
+    public function itCanFilterTokensWithQueryParameters()
     {
         $token1 = $this->user->createToken('Token 1');
         $token2 = $this->user->createToken('Token 2');
@@ -480,21 +503,22 @@ class TokenControllerTest extends TestCase
             ->assertJsonStructure([
                 'meta' => [
                     'pagination' => [
-                        'limit'
-                    ]
-                ]
+                        'limit',
+                    ],
+                ],
             ])
             ->assertJson([
                 'meta' => [
                     'pagination' => [
-                        'limit' => 1
-                    ]
-                ]
-            ]);
+                        'limit' => 1,
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_validates_tokens_request_parameters()
+    public function itValidatesTokensRequestParameters()
     {
         Sanctum::actingAs($this->user);
 
@@ -502,17 +526,19 @@ class TokenControllerTest extends TestCase
         $response = $this->getJson('/api/auth/tokens?sort_by=invalid_field');
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['sort_by']);
+            ->assertJsonValidationErrors(['sort_by'])
+        ;
 
         // Test invalid limit
         $response = $this->getJson('/api/auth/tokens?limit=101');
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['limit']);
+            ->assertJsonValidationErrors(['limit'])
+        ;
     }
 
     /** @test */
-    public function it_cannot_access_tokens_without_authentication()
+    public function itCannotAccessTokensWithoutAuthentication()
     {
         $response = $this->getJson('/api/auth/tokens');
 
@@ -520,14 +546,14 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_rate_limiting_on_login()
+    public function itHandlesRateLimitingOnLogin()
     {
         // Make multiple failed login attempts
-        for ($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 6; ++$i) {
             $this->postJson('/api/auth/login', [
                 'email' => 'test@example.com',
                 'password' => 'wrongpassword',
-                'device_name' => 'Test Device'
+                'device_name' => 'Test Device',
             ]);
         }
 
@@ -535,18 +561,18 @@ class TokenControllerTest extends TestCase
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
-            'device_name' => 'Test Device'
+            'device_name' => 'Test Device',
         ]);
 
         $response->assertStatus(429); // Too Many Requests
     }
 
     /** @test */
-    public function it_sets_default_device_name_when_not_provided()
+    public function itSetsDefaultDeviceNameWhenNotProvided()
     {
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
-            'password' => 'password123'
+            'password' => 'password123',
         ]);
 
         $response->assertStatus(200);

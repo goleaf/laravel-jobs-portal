@@ -3,9 +3,7 @@
 namespace App\Events;
 
 use App\Models\JobApplication;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -13,7 +11,9 @@ use Illuminate\Queue\SerializesModels;
 
 class JobApplicationStatusChanged implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $jobApplication;
     public $oldStatus;
@@ -37,8 +37,8 @@ class JobApplicationStatusChanged implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('job-application.' . $this->jobApplication->candidate_id),
-            new PrivateChannel('job-applications.' . $this->jobApplication->job->company_id),
+            new PrivateChannel('job-application.'.$this->jobApplication->candidate_id),
+            new PrivateChannel('job-applications.'.$this->jobApplication->job->company_id),
         ];
     }
 
@@ -59,7 +59,7 @@ class JobApplicationStatusChanged implements ShouldBroadcast
             'application_id' => $this->jobApplication->id,
             'job_title' => $this->jobApplication->job->title,
             'company_name' => $this->jobApplication->job->company->name,
-            'candidate_name' => $this->jobApplication->candidate->first_name . ' ' . $this->jobApplication->candidate->last_name,
+            'candidate_name' => $this->jobApplication->candidate->first_name.' '.$this->jobApplication->candidate->last_name,
             'old_status' => $this->oldStatus,
             'new_status' => $this->newStatus,
             'message' => $this->message,
@@ -69,7 +69,7 @@ class JobApplicationStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Generate human-readable status message
+     * Generate human-readable status message.
      */
     private function generateStatusMessage(string $oldStatus, string $newStatus): string
     {
@@ -88,7 +88,7 @@ class JobApplicationStatusChanged implements ShouldBroadcast
     }
 
     /**
-     * Get notification type for UI styling
+     * Get notification type for UI styling.
      */
     private function getNotificationType(string $status): string
     {

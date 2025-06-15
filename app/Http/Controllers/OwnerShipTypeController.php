@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\OwnerShipType;
 use App\Repositories\OwnerShipTypeRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class OwnerShipTypeController extends AppBaseController
 {
     /** @var OwnerShipTypeRepository */
@@ -23,10 +22,9 @@ class OwnerShipTypeController extends AppBaseController
     /**
      * Display a listing of the OwnerShipType.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -74,8 +72,7 @@ class OwnerShipTypeController extends AppBaseController
     /**
      * Remove the specified OwnerShipType from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(OwnerShipType $ownerShipType): JsonResponse
     {

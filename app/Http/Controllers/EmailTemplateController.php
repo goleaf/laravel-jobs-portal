@@ -4,19 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailTemplate;
 use App\Repositories\EmailTemplateRepository;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
 /**
- * Class EmailTemplateController
+ * Class EmailTemplateController.
  */
-
 class EmailTemplateController extends Controller
 {
     /**
@@ -33,10 +30,9 @@ class EmailTemplateController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     * @return Factory|View|Application
+     * @return Application|Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -52,7 +48,7 @@ class EmailTemplateController extends Controller
     }
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function update(UpdateEMailTemplateUpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
     {

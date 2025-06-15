@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for SalaryPeriod
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SalaryPeriod>
  */
@@ -33,15 +33,15 @@ class SalaryPeriodFactory extends Factory
             ['period' => 'Weekly', 'description' => 'Payment calculated per week worked'],
             ['period' => 'Monthly', 'description' => 'Payment calculated per month worked'],
             ['period' => 'Yearly', 'description' => 'Payment calculated per year worked'],
-            ['period' => 'Project-based', 'description' => 'Payment calculated per project completion']
+            ['period' => 'Project-based', 'description' => 'Payment calculated per project completion'],
         ];
-        
+
         $period = $this->faker->unique()->randomElement($periods);
-        
+
         return [
             'period' => $period['period'],
             'description' => $period['description'],
-            'is_default' => $this->faker->boolean(10) // 10% chance of being default
+            'is_default' => $this->faker->boolean(10), // 10% chance of being default
         ];
     }
 }

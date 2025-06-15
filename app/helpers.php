@@ -1,58 +1,63 @@
 <?php
 
+use App\Helpers\LanguageHelper;
+use App\Models\Company;
+use App\Models\Country;
+use Illuminate\Support\Str;
+
 if (!function_exists('trans_json')) {
     /**
-     * Get translation from JSON files
+     * Get translation from JSON files.
      */
-    function trans_json(string $key, array $replace = [], string $locale = null): string
+    function trans_json(string $key, array $replace = [], ?string $locale = null): string
     {
-        return App\Helpers\LanguageHelper::get($key, $locale, $replace);
+        return LanguageHelper::get($key, $locale, $replace);
     }
 }
 
 if (!function_exists('is_rtl')) {
     /**
-     * Check if current locale is RTL
+     * Check if current locale is RTL.
      */
-    function is_rtl(string $locale = null): bool
+    function is_rtl(?string $locale = null): bool
     {
-        return App\Helpers\LanguageHelper::isRtl($locale);
+        return LanguageHelper::isRtl($locale);
     }
 }
 
 if (!function_exists('lang_direction')) {
     /**
-     * Get language direction
+     * Get language direction.
      */
-    function lang_direction(string $locale = null): string
+    function lang_direction(?string $locale = null): string
     {
-        return App\Helpers\LanguageHelper::getDirection($locale);
+        return LanguageHelper::getDirection($locale);
     }
 }
 
 if (!function_exists('getCountries')) {
     /**
-     * Get list of countries
+     * Get list of countries.
+     *
      * @return array
      */
     function getCountries()
     {
         try {
-            $countries = \App\Models\Country::orderBy('name')->pluck('name')->toArray();
-            return $countries;
-        } catch (\Exception $e) {
+            return Country::orderBy('name')->pluck('name')->toArray();
+        } catch (Exception $e) {
             // Return empty array if countries table doesn't exist or error occurs
             return [];
         }
     }
 }
 
-if (!function_exists("getCountries")) {
-    function getCountries() {
+if (!function_exists('getCountries')) {
+    function getCountries()
+    {
         try {
-            $countries = \App\Models\Country::orderBy("name")->pluck("name")->toArray();
-            return $countries;
-        } catch (\Exception $e) {
+            return Country::orderBy('name')->pluck('name')->toArray();
+        } catch (Exception $e) {
             return [];
         }
     }
@@ -60,21 +65,22 @@ if (!function_exists("getCountries")) {
 
 if (!function_exists('getUniqueCompanyId')) {
     /**
-     * Generate a unique company ID
-     * @return string
+     * Generate a unique company ID.
      */
     function getUniqueCompanyId(): string
     {
-        $companyUniqueId = \Illuminate\Support\Str::random(12);
+        $companyUniqueId = Str::random(12);
         while (true) {
-            $isExist = \App\Models\Company::where('unique_id', $companyUniqueId)->exists();
+            $isExist = Company::where('unique_id', $companyUniqueId)->exists();
             if ($isExist) {
-                $companyUniqueId = \Illuminate\Support\Str::random(12);
+                $companyUniqueId = Str::random(12);
+
                 continue;
             }
+
             break;
         }
-        
+
         return $companyUniqueId;
     }
 }

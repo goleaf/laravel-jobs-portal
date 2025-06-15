@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\MasterData;
 use App\Http\Resources\MasterDataResource;
+use App\Models\MasterData;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for MasterData
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class MasterDataApiController extends Controller
 {
@@ -21,20 +21,20 @@ class MasterDataApiController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = MasterData::query();
-        
+
         // Apply filters
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
-        
+
         if ($request->has('status')) {
             $query->where('is_active', $request->boolean('status'));
         }
-        
+
         // Pagination
         $perPage = min($request->integer('per_page', 15), 100);
         $data = $query->paginate($perPage);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'MasterData list retrieved successfully',
@@ -44,7 +44,7 @@ class MasterDataApiController extends Controller
                 'last_page' => $data->lastPage(),
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
-            ]
+            ],
         ]);
     }
 
@@ -56,45 +56,49 @@ class MasterDataApiController extends Controller
         try {
             $data = $request->validated();
             $item = MasterData::create($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'MasterData created successfully',
-                'data' => new MasterDataResource($item)
+                'data' => new MasterDataResource($item),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create masterdata',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $item = MasterData::findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'MasterData retrieved successfully',
-                'data' => new MasterDataResource($item)
+                'data' => new MasterDataResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'MasterData not found',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateMasterDataRequest $request, $id): JsonResponse
     {
@@ -102,39 +106,41 @@ class MasterDataApiController extends Controller
             $item = MasterData::findOrFail($id);
             $data = $request->validated();
             $item->update($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'MasterData updated successfully',
-                'data' => new MasterDataResource($item)
+                'data' => new MasterDataResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update masterdata',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $item = MasterData::findOrFail($id);
             $item->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'MasterData deleted successfully'
+                'message' => 'MasterData deleted successfully',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete masterdata',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

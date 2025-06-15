@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\BrandingSliders;
 use App\Repositories\BrandingSliderRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class BrandingSliderController extends AppBaseController
 {
     /** @var BrandingSliderRepository */
@@ -22,10 +21,9 @@ class BrandingSliderController extends AppBaseController
     /**
      * Display a listing of the BrandingSlider.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -71,8 +69,7 @@ class BrandingSliderController extends AppBaseController
     /**
      * Remove the specified BrandingSlider from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(BrandingSliders $brandingSlider): JsonResponse
     {
@@ -87,7 +84,7 @@ class BrandingSliderController extends AppBaseController
     public function changeIsActive(BrandingSliders $brandingSlider)
     {
         $isActive = $brandingSlider->is_active;
-        $brandingSlider->update(['is_active' => ! $isActive]);
+        $brandingSlider->update(['is_active' => !$isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }

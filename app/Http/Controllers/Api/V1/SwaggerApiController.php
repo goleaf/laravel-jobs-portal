@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\Swagger;
 use App\Http\Resources\SwaggerResource;
+use App\Models\Swagger;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for Swagger
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class SwaggerApiController extends Controller
 {
@@ -21,20 +21,20 @@ class SwaggerApiController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Swagger::query();
-        
+
         // Apply filters
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
-        
+
         if ($request->has('status')) {
             $query->where('is_active', $request->boolean('status'));
         }
-        
+
         // Pagination
         $perPage = min($request->integer('per_page', 15), 100);
         $data = $query->paginate($perPage);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Swagger list retrieved successfully',
@@ -44,7 +44,7 @@ class SwaggerApiController extends Controller
                 'last_page' => $data->lastPage(),
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
-            ]
+            ],
         ]);
     }
 
@@ -56,45 +56,49 @@ class SwaggerApiController extends Controller
         try {
             $data = $request->validated();
             $item = Swagger::create($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Swagger created successfully',
-                'data' => new SwaggerResource($item)
+                'data' => new SwaggerResource($item),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create swagger',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $item = Swagger::findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Swagger retrieved successfully',
-                'data' => new SwaggerResource($item)
+                'data' => new SwaggerResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Swagger not found',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateSwaggerRequest $request, $id): JsonResponse
     {
@@ -102,39 +106,41 @@ class SwaggerApiController extends Controller
             $item = Swagger::findOrFail($id);
             $data = $request->validated();
             $item->update($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Swagger updated successfully',
-                'data' => new SwaggerResource($item)
+                'data' => new SwaggerResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update swagger',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $item = Swagger::findOrFail($id);
             $item->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Swagger deleted successfully'
+                'message' => 'Swagger deleted successfully',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete swagger',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

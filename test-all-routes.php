@@ -1,21 +1,22 @@
 <?php
 
 /**
- * Route Testing Script
- * 
+ * Route Testing Script.
+ *
  * This script tests all routes in the application to ensure they are accessible
  * and return appropriate responses. Part of TODO.md Priority 4: Error Detection.
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 // Bootstrap Laravel Application
-$app = require_once __DIR__ . '/bootstrap/app.php';
-$app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+$app = require_once __DIR__.'/bootstrap/app.php';
+$app->make(Kernel::class)->bootstrap();
 
 class RouteTestResult
 {
@@ -50,7 +51,7 @@ class RouteTestRunner
         '*.websocket',
         'broadcasting.*',
     ];
-    
+
     private array $testableRoutes = [];
     private int $totalRoutes = 0;
     private int $passedRoutes = 0;
@@ -64,7 +65,7 @@ class RouteTestRunner
     }
 
     /**
-     * Run all route tests
+     * Run all route tests.
      */
     public function runAllTests(): void
     {
@@ -74,15 +75,15 @@ class RouteTestRunner
     }
 
     /**
-     * Gather all application routes
+     * Gather all application routes.
      */
     private function gatherRoutes(): void
     {
         echo "📋 Gathering application routes...\n";
-        
+
         $routes = Route::getRoutes();
         $this->totalRoutes = count($routes);
-        
+
         foreach ($routes as $route) {
             $routeName = $route->getName() ?? 'unnamed';
             $routeUri = $route->uri();
@@ -92,59 +93,62 @@ class RouteTestRunner
 
             // Skip excluded routes
             if ($this->shouldExcludeRoute($routeName, $routeUri)) {
-                $this->skippedRoutes++;
+                ++$this->skippedRoutes;
+
                 continue;
             }
 
             foreach ($routeMethods as $method) {
-                if ($method === 'HEAD') continue; // Skip HEAD requests
-                
+                if ('HEAD' === $method) {
+                    continue;
+                } // Skip HEAD requests
+
                 $result = new RouteTestResult($method, $routeUri, $routeName, $routeAction);
                 $result->middleware = $routeMiddleware;
-                
+
                 $this->testableRoutes[] = $result;
             }
         }
 
         echo "✅ Found {$this->totalRoutes} total routes\n";
-        echo "📝 Testing " . count($this->testableRoutes) . " route endpoints\n";
+        echo '📝 Testing '.count($this->testableRoutes)." route endpoints\n";
         echo "⏭️  Skipped {$this->skippedRoutes} excluded routes\n\n";
     }
 
     /**
-     * Test all gathered routes
+     * Test all gathered routes.
      */
     private function testRoutes(): void
     {
         echo "🔄 Starting route tests...\n";
-        
+
         $progressCount = 0;
         $totalTests = count($this->testableRoutes);
-        
+
         foreach ($this->testableRoutes as $routeTest) {
-            $progressCount++;
+            ++$progressCount;
             $this->testSingleRoute($routeTest);
-            
+
             // Show progress
             $percent = round(($progressCount / $totalTests) * 100, 1);
-            echo "\r🔄 Progress: {$progressCount}/{$totalTests} ({$percent}%) - " . 
-                 "Pass: {$this->passedRoutes}, Fail: {$this->failedRoutes}";
+            echo "\r🔄 Progress: {$progressCount}/{$totalTests} ({$percent}%) - "
+                 ."Pass: {$this->passedRoutes}, Fail: {$this->failedRoutes}";
         }
-        
+
         echo "\n\n✅ Route testing completed!\n\n";
     }
 
     /**
-     * Test a single route
+     * Test a single route.
      */
     private function testSingleRoute(RouteTestResult $routeTest): void
     {
         $startTime = microtime(true);
-        
+
         try {
             // Create test request
             $request = $this->createTestRequest($routeTest);
-            
+
             // Handle different route types
             if ($this->requiresAuthentication($routeTest)) {
                 $routeTest->status = 'AUTH_REQUIRED';
@@ -158,30 +162,29 @@ class RouteTestRunner
                 $routeTest->responseCode = $response['status'];
                 $routeTest->status = $this->determineStatus($response['status'], $routeTest);
             }
-            
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $routeTest->status = 'ERROR';
             $routeTest->error = $e->getMessage();
-            $this->failedRoutes++;
+            ++$this->failedRoutes;
         }
-        
+
         $routeTest->responseTime = microtime(true) - $startTime;
         $this->results[] = $routeTest;
-        
-        if ($routeTest->status === 'PASS') {
-            $this->passedRoutes++;
-        } elseif ($routeTest->status === 'ERROR' || $routeTest->status === 'FAIL') {
-            $this->failedRoutes++;
+
+        if ('PASS' === $routeTest->status) {
+            ++$this->passedRoutes;
+        } elseif ('ERROR' === $routeTest->status || 'FAIL' === $routeTest->status) {
+            ++$this->failedRoutes;
         }
     }
 
     /**
-     * Create a test request for the route
+     * Create a test request for the route.
      */
     private function createTestRequest(RouteTestResult $routeTest): Request
     {
         $uri = $this->resolveTestUri($routeTest->uri);
-        
+
         return Request::create($uri, $routeTest->method, [], [], [], [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'HTTP_USER_AGENT' => 'RouteTestRunner/1.0',
@@ -189,30 +192,32 @@ class RouteTestRunner
     }
 
     /**
-     * Make the actual request
+     * Make the actual request.
      */
     private function makeRequest(Request $request, RouteTestResult $routeTest): array
     {
         try {
             $response = app()->handle($request);
+
             return [
                 'status' => $response->getStatusCode(),
                 'content' => $response->getContent(),
                 'headers' => $response->headers->all(),
             ];
-        } catch (\Exception $e) {
-            if (strpos($e->getMessage(), 'Route') !== false) {
+        } catch (Exception $e) {
+            if (false !== strpos($e->getMessage(), 'Route')) {
                 return ['status' => 404, 'content' => '', 'headers' => []];
             }
-            if (strpos($e->getMessage(), 'Unauthenticated') !== false) {
+            if (false !== strpos($e->getMessage(), 'Unauthenticated')) {
                 return ['status' => 401, 'content' => '', 'headers' => []];
             }
+
             throw $e;
         }
     }
 
     /**
-     * Resolve test URI with sample parameters
+     * Resolve test URI with sample parameters.
      */
     private function resolveTestUri(string $uri): string
     {
@@ -241,31 +246,31 @@ class RouteTestRunner
             $uri = str_replace($param, $value, $uri);
         }
 
-        return '/' . ltrim($uri, '/');
+        return '/'.ltrim($uri, '/');
     }
 
     /**
-     * Check if route requires authentication
+     * Check if route requires authentication.
      */
     private function requiresAuthentication(RouteTestResult $routeTest): bool
     {
-        return in_array('auth', $routeTest->middleware) ||
-               strpos($routeTest->uri, 'admin') !== false ||
-               strpos($routeTest->uri, 'dashboard') !== false ||
-               strpos($routeTest->uri, 'candidate') !== false ||
-               strpos($routeTest->uri, 'employer') !== false;
+        return in_array('auth', $routeTest->middleware)
+               || false !== strpos($routeTest->uri, 'admin')
+               || false !== strpos($routeTest->uri, 'dashboard')
+               || false !== strpos($routeTest->uri, 'candidate')
+               || false !== strpos($routeTest->uri, 'employer');
     }
 
     /**
-     * Check if route has parameters
+     * Check if route has parameters.
      */
     private function hasParameters(string $uri): bool
     {
-        return strpos($uri, '{') !== false;
+        return false !== strpos($uri, '{');
     }
 
     /**
-     * Determine route test status
+     * Determine route test status.
      */
     private function determineStatus(int $statusCode, RouteTestResult $routeTest): string
     {
@@ -273,37 +278,37 @@ class RouteTestRunner
         if (in_array($statusCode, [200, 201, 202])) {
             return 'PASS';
         }
-        
+
         // Acceptable redirects
         if (in_array($statusCode, [301, 302, 303, 307, 308])) {
             return 'REDIRECT';
         }
-        
+
         // Authentication required (expected for protected routes)
-        if ($statusCode === 401 || $statusCode === 403) {
+        if (401 === $statusCode || 403 === $statusCode) {
             return 'AUTH_REQUIRED';
         }
-        
+
         // Not found (might be expected for routes with parameters)
-        if ($statusCode === 404) {
+        if (404 === $statusCode) {
             return $this->hasParameters($routeTest->uri) ? 'PARAMETERS_REQUIRED' : 'FAIL';
         }
-        
+
         // Method not allowed
-        if ($statusCode === 405) {
+        if (405 === $statusCode) {
             return 'METHOD_NOT_ALLOWED';
         }
-        
+
         // Server errors
         if ($statusCode >= 500) {
             return 'ERROR';
         }
-        
+
         return 'FAIL';
     }
 
     /**
-     * Check if route should be excluded
+     * Check if route should be excluded.
      */
     private function shouldExcludeRoute(string $routeName, string $uri): bool
     {
@@ -312,11 +317,12 @@ class RouteTestRunner
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Generate comprehensive test report
+     * Generate comprehensive test report.
      */
     private function generateReport(): void
     {
@@ -344,14 +350,18 @@ class RouteTestRunner
         foreach ($groupedResults as $status => $results) {
             $count = count($results);
             $icon = $this->getStatusIcon($status);
-            
+
             echo "{$icon} {$status}: {$count} routes\n";
-            
-            if ($status === 'ERROR' || $status === 'FAIL') {
+
+            if ('ERROR' === $status || 'FAIL' === $status) {
                 foreach ($results as $result) {
                     echo "  ❌ {$result->method} {$result->uri}";
-                    if ($result->name) echo " (name: {$result->name})";
-                    if ($result->error) echo " - Error: {$result->error}";
+                    if ($result->name) {
+                        echo " (name: {$result->name})";
+                    }
+                    if ($result->error) {
+                        echo " - Error: {$result->error}";
+                    }
                     echo " [HTTP {$result->responseCode}]\n";
                 }
                 echo "\n";
@@ -364,7 +374,7 @@ class RouteTestRunner
             $totalTime = array_sum(array_column($this->results, 'responseTime'));
             $avgResponseTime = round($totalTime / count($this->results), 4);
         }
-        
+
         echo "⚡ PERFORMANCE:\n";
         echo "Average Response Time: {$avgResponseTime}s\n\n";
 
@@ -392,11 +402,11 @@ class RouteTestRunner
     }
 
     /**
-     * Get status icon
+     * Get status icon.
      */
     private function getStatusIcon(string $status): string
     {
-        return match($status) {
+        return match ($status) {
             'PASS' => '✅',
             'FAIL', 'ERROR' => '❌',
             'REDIRECT' => '🔄',
@@ -408,12 +418,12 @@ class RouteTestRunner
     }
 
     /**
-     * Check critical routes
+     * Check critical routes.
      */
     private function checkCriticalRoutes(): void
     {
         $criticalRoutes = [
-            'front.home', 'login', 'register', 'jobs.index', 'companies.index'
+            'front.home', 'login', 'register', 'jobs.index', 'companies.index',
         ];
 
         echo "🔍 CRITICAL ROUTES CHECK:\n";
@@ -424,6 +434,7 @@ class RouteTestRunner
                     $icon = $this->getStatusIcon($result->status);
                     echo "  {$icon} {$routeName}: {$result->status}\n";
                     $found = true;
+
                     break;
                 }
             }
@@ -435,7 +446,7 @@ class RouteTestRunner
     }
 
     /**
-     * Generate JSON report
+     * Generate JSON report.
      */
     private function generateJsonReport(): void
     {
@@ -451,7 +462,7 @@ class RouteTestRunner
             'timestamp' => date('Y-m-d H:i:s'),
         ];
 
-        file_put_contents(__DIR__ . '/route-test-report.json', json_encode($report, JSON_PRETTY_PRINT));
+        file_put_contents(__DIR__.'/route-test-report.json', json_encode($report, JSON_PRETTY_PRINT));
         echo "💾 JSON report saved to: route-test-report.json\n\n";
     }
 }
@@ -460,12 +471,12 @@ class RouteTestRunner
 try {
     $runner = new RouteTestRunner();
     $runner->runAllTests();
-    
+
     echo "🎉 ROUTE TESTING COMPLETED SUCCESSFULLY!\n";
     echo "=========================================\n";
     echo "Check the detailed report above and route-test-report.json for full results.\n\n";
-    
 } catch (Exception $e) {
-    echo "💥 ROUTE TESTING FAILED: " . $e->getMessage() . "\n";
+    echo '💥 ROUTE TESTING FAILED: '.$e->getMessage()."\n";
+
     exit(1);
-} 
+}

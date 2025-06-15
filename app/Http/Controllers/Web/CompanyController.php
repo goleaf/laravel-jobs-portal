@@ -8,8 +8,9 @@ use App\Repositories\CompanyRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
+
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */
@@ -23,7 +24,7 @@ class CompanyController extends AppBaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -31,6 +32,8 @@ class CompanyController extends AppBaseController
     }
 
     /**
+     * @param mixed $uniqueId
+     *
      * @return Application|Factory|View
      */
     public function getCompaniesDetails($uniqueId): View

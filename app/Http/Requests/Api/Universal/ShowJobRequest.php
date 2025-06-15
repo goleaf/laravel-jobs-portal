@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ShowJobRequest extends FormRequest
@@ -56,6 +56,43 @@ class ShowJobRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate include relationships if provided
+            if ($this->has('include') && is_array($this->include)) {
+                $allowedIncludes = [
+                    'company', 'category', 'type', 'shift', 'level', 'skills',
+                    'applications', 'location', 'salary_currency', 'benefits',
+                ];
+                foreach ($this->include as $include) {
+                    if (!in_array($include, $allowedIncludes)) {
+                        $validator->errors()->add('include', __('validation.in', ['attribute' => __('validation.attributes.include')]));
+                    }
+                }
+            }
+
+            // Validate field selection if provided
+            if ($this->has('fields') && is_array($this->fields)) {
+                $allowedFields = [
+                    'id', 'title', 'description', 'requirements', 'benefits',
+                    'salary_min', 'salary_max', 'currency', 'location', 'type',
+                    'level', 'experience_required', 'education_required',
+                    'skills_required', 'status', 'featured', 'remote_ok',
+                    'posted_at', 'expires_at', 'created_at', 'updated_at',
+                ];
+                foreach ($this->fields as $field) {
+                    if (!in_array($field, $allowedFields)) {
+                        $validator->errors()->add('fields', __('validation.in', ['attribute' => __('validation.attributes.fields')]));
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Handle a failed validation attempt for API requests.
      */
     protected function failedValidation(Validator $validator)
@@ -95,41 +132,4 @@ class ShowJobRequest extends FormRequest
             ]);
         }
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate include relationships if provided
-            if ($this->has('include') && is_array($this->include)) {
-                $allowedIncludes = [
-                    'company', 'category', 'type', 'shift', 'level', 'skills', 
-                    'applications', 'location', 'salary_currency', 'benefits'
-                ];
-                foreach ($this->include as $include) {
-                    if (!in_array($include, $allowedIncludes)) {
-                        $validator->errors()->add('include', __('validation.in', ['attribute' => __('validation.attributes.include')]));
-                    }
-                }
-            }
-
-            // Validate field selection if provided
-            if ($this->has('fields') && is_array($this->fields)) {
-                $allowedFields = [
-                    'id', 'title', 'description', 'requirements', 'benefits', 
-                    'salary_min', 'salary_max', 'currency', 'location', 'type', 
-                    'level', 'experience_required', 'education_required', 
-                    'skills_required', 'status', 'featured', 'remote_ok', 
-                    'posted_at', 'expires_at', 'created_at', 'updated_at'
-                ];
-                foreach ($this->fields as $field) {
-                    if (!in_array($field, $allowedFields)) {
-                        $validator->errors()->add('fields', __('validation.in', ['attribute' => __('validation.attributes.fields')]));
-                    }
-                }
-            }
-        });
-    }
-} 
+}

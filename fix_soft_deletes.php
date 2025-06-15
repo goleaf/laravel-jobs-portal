@@ -3,7 +3,6 @@
 require_once 'vendor/autoload.php';
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 // Initialize Laravel
 $app = require_once 'bootstrap/app.php';
@@ -39,7 +38,7 @@ $modelsToFix = [];
 foreach ($modelsWithSoftDeletes as $model => $table) {
     try {
         $hasDeletedAt = Schema::hasColumn($table, 'deleted_at');
-        
+
         if (!$hasDeletedAt) {
             $modelsToFix[] = $model;
             echo "❌ {$model} (table: {$table}) - NO deleted_at column\n";
@@ -56,4 +55,4 @@ foreach ($modelsToFix as $model) {
     echo "- {$model}\n";
 }
 
-echo "\nTotal models to fix: " . count($modelsToFix) . "\n"; 
+echo "\nTotal models to fix: ".count($modelsToFix)."\n";

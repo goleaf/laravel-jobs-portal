@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers\Job;
 
+use App\Http\Requests\Job\ChangeJobApplicationStatusRequest;
+use App\Http\Requests\Job\ChangeJobStageJobApplicationRequest;
+use App\Http\Requests\Job\DeleteJobApplicationRequest;
+use App\Http\Requests\Job\DownloadMediaJobApplicationRequest;
+use App\Http\Requests\Job\StoreJobApplicationRequest;
+use App\Http\Requests\Job\ViewSlotsScreenJobApplicationRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
@@ -9,15 +15,9 @@ use App\Models\JobStage;
 use App\Models\Notification;
 use App\Models\NotificationSetting;
 use App\Repositories\JobApplicationRepository;
-use App\Http\Requests\Job\StoreJobApplicationRequest;
-use App\Http\Requests\Job\DeleteJobApplicationRequest;
-use App\Http\Requests\Job\ChangeJobApplicationStatusRequest;
-use App\Http\Requests\Job\DownloadMediaJobApplicationRequest;
-use App\Http\Requests\Job\ChangeJobStageJobApplicationRequest;
-use App\Http\Requests\Job\ViewSlotsScreenJobApplicationRequest;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,9 +26,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 /**
- * Class JobApplicationController
+ * Class JobApplicationController.
  */
-
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */
@@ -47,14 +46,14 @@ class JobApplicationController extends AppBaseController
      *
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(int $jobId, StoreJobApplicationRequest $request): View
     {
         $userId = Auth::user()->owner_id;
         $companyId = Job::whereCompanyId($userId)->pluck('id')->toArray();
 
-        if (! in_array($jobId, $companyId)) {
+        if (!in_array($jobId, $companyId)) {
             return view('errors.404');
         }
 
@@ -70,14 +69,13 @@ class JobApplicationController extends AppBaseController
     /**
      * Remove the specified Job Application from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(JobApplication $jobApplication, DeleteJobApplicationRequest $request): JsonResponse
     {
         $jobId = $request->get('jobId');
         $jobCandidateId = JobApplication::whereJobId($jobId)->pluck('id')->toArray();
-        if (! in_array($jobApplication->id, $jobCandidateId)) {
+        if (!in_array($jobApplication->id, $jobCandidateId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -87,6 +85,9 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
+     * @param mixed $id
+     * @param mixed $status
+     *
      * @return mixed
      */
     public function changeJobApplicationStatus($id, $status, ChangeJobApplicationStatusRequest $request)
@@ -95,34 +96,34 @@ class JobApplicationController extends AppBaseController
 
         $jobCandidateId = JobApplication::whereJobId($jobId)->pluck('id')->toArray();
 
-        if (! in_array($id, $jobCandidateId)) {
+        if (!in_array($id, $jobCandidateId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
         $jobApplication = JobApplication::with(['candidate.user', 'job'])->findOrFail($id);
         $candidateUserId = $jobApplication->candidate->user->id;
         $jobTitle = $jobApplication->job->job_title;
-        if (! in_array($jobApplication->status, [JobApplication::REJECTED, JobApplication::COMPLETE])) {
+        if (!in_array($jobApplication->status, [JobApplication::REJECTED, JobApplication::COMPLETE])) {
             $jobApplication->update(['status' => $status]);
 
-            $status == JobApplication::REJECTED ? NotificationSetting::where('key', 'CANDIDATE_REJECTED_FOR_JOB')->first()->value == 1 ?
-                addNotification([
+            JobApplication::REJECTED == $status ? 1 == NotificationSetting::where('key', 'CANDIDATE_REJECTED_FOR_JOB')->first()->value
+                ? addNotification([
                     Notification::CANDIDATE_REJECTED_FOR_JOB,
                     $candidateUserId,
                     Notification::CANDIDATE,
                     'Your application is Rejected for '.$jobTitle,
                 ]) : false : false;
 
-            $status == JobApplication::COMPLETE ? NotificationSetting::where('key', 'CANDIDATE_SELECTED_FOR_JOB')->first()->value == 1 ?
-                addNotification([
+            JobApplication::COMPLETE == $status ? 1 == NotificationSetting::where('key', 'CANDIDATE_SELECTED_FOR_JOB')->first()->value
+                ? addNotification([
                     Notification::CANDIDATE_SELECTED_FOR_JOB,
                     $candidateUserId,
                     Notification::CANDIDATE,
                     'You are selected for '.$jobTitle,
                 ]) : false : false;
 
-            $status == JobApplication::SHORT_LIST ? NotificationSetting::where('key', 'CANDIDATE_SHORTLISTED_FOR_JOB')->first()->value == 1 ?
-                addNotification([
+            JobApplication::SHORT_LIST == $status ? 1 == NotificationSetting::where('key', 'CANDIDATE_SHORTLISTED_FOR_JOB')->first()->value
+                ? addNotification([
                     Notification::CANDIDATE_SHORTLISTED_FOR_JOB,
                     $candidateUserId,
                     Notification::CANDIDATE,
@@ -136,8 +137,7 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
-     * @param  JobApplication  $jobApplication
-     * @return Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
+     * @return Application|Response|ResponseFactory
      */
     public function downloadMedia(DownloadMediaJobApplicationRequest $request)
     {
@@ -150,9 +150,9 @@ class JobApplicationController extends AppBaseController
                 [$file, $headers] = $this->jobApplicationRepository->downloadMedia($jobApplication);
 
                 return response($file, 200, $headers);
-            } else {
-                return view('errors.404');
             }
+
+            return view('errors.404');
         } catch (\Exception $e) {
             return view('errors.404');
         }
@@ -194,12 +194,14 @@ class JobApplicationController extends AppBaseController
             if ($CustomerJobId) {
                 $getUniqueJobStages = JobApplicationSchedule::whereJobApplicationId($applicationId)
                     ->toBase()->get()->unique('stage_id')
-                    ->pluck('stage_id')->toArray();
+                    ->pluck('stage_id')->toArray()
+                ;
 
                 /** @var JobStage $jobStage */
                 $jobStage = JobStage::whereCompanyId(getLoggedInUser()->owner_id)->toBase()
                     ->whereIn('id', $getUniqueJobStages)
-                    ->pluck('name', 'id');
+                    ->pluck('name', 'id')
+                ;
                 $lastStage = JobApplicationSchedule::latest()->first();
 
                 /** @var JobApplicationSchedule $jobApplicationSchedules */
@@ -208,11 +210,12 @@ class JobApplicationController extends AppBaseController
 
                 /** @var JobApplication $jobApplicationStage */
                 $jobApplicationStage = JobApplication::whereId($applicationId)
-                    ->first();
+                    ->first()
+                ;
 
                 $isStageMatch = false;
-                if (! empty($lastRecord)) {
-                    $isStageMatch = ! ($lastRecord->stage_id == $jobApplicationStage->job_stage_id);
+                if (!empty($lastRecord)) {
+                    $isStageMatch = !($lastRecord->stage_id == $jobApplicationStage->job_stage_id);
                 }
 
                 $isSelectedRejectedSlot = 1;
@@ -225,16 +228,17 @@ class JobApplicationController extends AppBaseController
                             'status',
                             [JobApplicationSchedule::STATUS_SELECTED, JobApplicationSchedule::STATUS_REJECTED]
                         )
-                        ->count();
+                        ->count()
+                    ;
                 }
 
                 return view(
                     'employer.job_applications.view_slot_screen',
                     compact('jobStage', 'lastStage', 'isSelectedRejectedSlot', 'isStageMatch', 'applicationId')
                 );
-            } else {
-                return view('errors.404');
             }
+
+            return view('errors.404');
         } catch (\Exception $e) {
             return view('errors.404');
         }
@@ -251,11 +255,13 @@ class JobApplicationController extends AppBaseController
 
             /** @var JobApplicationSchedule $lastJobSchedule */
             $lastJobSchedule = JobApplicationSchedule::whereJobApplicationId($input['job_application_id'])
-                ->latest()->first();
+                ->latest()->first()
+            ;
             $lastJobScheduleExists = JobApplicationSchedule::whereJobApplicationId($input['job_application_id'])
                 ->whereIn('date', $input['date'])
                 ->whereIn('time', $input['time'])
-                ->exists();
+                ->exists()
+            ;
 
             if ($lastJobScheduleExists) {
                 return $this->sendError(__('messages.flash.slot_already_taken'));
@@ -274,7 +280,7 @@ class JobApplicationController extends AppBaseController
                 }
             }
 
-            for ($i = 1; $i <= $input['scheduleSlotCount']; $i++) {
+            for ($i = 1; $i <= $input['scheduleSlotCount']; ++$i) {
                 if (isset($input['time'][$i])) {
                     // validation date/time code
                     if (count($input['time']) > 1) {
@@ -301,7 +307,7 @@ class JobApplicationController extends AppBaseController
             DB::commit();
 
             return $this->sendResponse($isPageReload, __('messages.flash.slot_create'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return $this->sendError($e->getMessage(), 422);
@@ -313,13 +319,15 @@ class JobApplicationController extends AppBaseController
         try {
             DB::beginTransaction();
             $input = $request->all();
+
             /** @var JobApplication $jobApplication */
             $jobApplication = JobApplication::whereId($input['job_application_id'])->first();
 
             $lastJobScheduleExists = JobApplicationSchedule::whereJobApplicationId($input['job_application_id'])
                 ->where('date', $input['date'])
                 ->where('time', $input['time'])
-                ->exists();
+                ->exists()
+            ;
             if ($lastJobScheduleExists) {
                 return $this->sendError(__('messages.flash.slot_already_taken'));
             }
@@ -337,14 +345,14 @@ class JobApplicationController extends AppBaseController
             DB::commit();
 
             return $this->sendSuccess(__('messages.flash.slot_create'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             $this->sendError($e->getMessage(), 422);
         }
     }
 
     /**
-     * @param  JobApplicationSchedule  $slot
+     * @param mixed $jobId
      */
     public function editSlot($jobId, EditSlotJobApplicationRequest $request): JsonResponse
     {
@@ -356,9 +364,9 @@ class JobApplicationController extends AppBaseController
 
             if ($slot) {
                 return $this->sendResponse($slot, 'Slot retrieved successfully');
-            } else {
-                return $this->sendError(__('messages.common.seems_message'));
             }
+
+            return $this->sendError(__('messages.common.seems_message'));
         } catch (\Exception $e) {
             return $this->sendError(__('messages.common.seems_message'));
         }
@@ -371,7 +379,8 @@ class JobApplicationController extends AppBaseController
             $isExist = JobApplicationSchedule::whereJobApplicationId($input['job_application_id'])
                 ->where('date', $input['date'])
                 ->where('time', $input['time'])
-                ->exists();
+                ->exists()
+            ;
             if ($isExist) {
                 return $this->sendError(__('messages.flash.slot_already_taken'));
             }
@@ -386,7 +395,7 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
-     * @param  JobApplicationSchedule  $slot
+     * @param mixed $jobId
      */
     public function slotDestroy($jobId, SlotDestroyJobApplicationRequest $request): JsonResponse
     {
@@ -397,16 +406,15 @@ class JobApplicationController extends AppBaseController
             })->findorFail($slotId);
 
             if ($slot) {
-                if ($slot->status == 1) {
+                if (1 == $slot->status) {
                     return $this->sendError(__('messages.flash.assigned_slot_not_delete'));
-                } else {
-                    $slot->delete();
-
-                    return $this->sendSuccess(__('messages.flash.slot_delete'));
                 }
-            } else {
-                return $this->sendError(__('messages.common.seems_message'));
+                $slot->delete();
+
+                return $this->sendSuccess(__('messages.flash.slot_delete'));
             }
+
+            return $this->sendError(__('messages.common.seems_message'));
         } catch (\Exception $e) {
             return $this->sendError(__('messages.common.seems_message'));
         }
@@ -415,12 +423,13 @@ class JobApplicationController extends AppBaseController
     public function getScheduleHistory(GetScheduleHistoryJobApplicationRequest $request): JsonResponse
     {
         $jobApplicationSchedules = JobApplicationSchedule::with('jobApplication.candidate')
-            ->where('job_application_id', $request->get('jobApplicationId'));
+            ->where('job_application_id', $request->get('jobApplicationId'))
+        ;
 
         $data = [];
         foreach ($jobApplicationSchedules->get() as $jobApplicationSchedule) {
             $data[] = [
-                'notes' => ! empty($jobApplicationSchedule->notes) ? $jobApplicationSchedule->notes : __('messages.job_stage.new_slot_send'),
+                'notes' => !empty($jobApplicationSchedule->notes) ? $jobApplicationSchedule->notes : __('messages.job_stage.new_slot_send'),
                 'company_name' => getLoggedInUser()->full_name,
                 'schedule_date' => Carbon::parse($jobApplicationSchedule->date)->translatedFormat('jS M Y'),
                 'schedule_time' => $jobApplicationSchedule->time,
@@ -456,10 +465,9 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
      * @return Application|Factory|\Illuminate\Contracts\View\View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function showAllSelectedCandidate(): View
     {
@@ -469,7 +477,7 @@ class JobApplicationController extends AppBaseController
     }
 
     /**
-     * @param  $jobId
+     * @param mixed $jobApplicationId
      */
     public function checkStage($jobApplicationId): JsonResponse
     {

@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\MaritalStatus;
 
 /**
- * Class MaritalStatusRepository
+ * Class MaritalStatusRepository.
  *
  * @version June 23, 2020, 5:43 am UTC
  */
@@ -19,7 +19,7 @@ class MaritalStatusRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class MaritalStatusRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return MaritalStatus::class;

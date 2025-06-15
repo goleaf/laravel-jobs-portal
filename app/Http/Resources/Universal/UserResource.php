@@ -7,14 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Universal User Resource
- * Implements MCP best practices for API responses
+ * Implements MCP best practices for API responses.
  */
 class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -26,7 +25,7 @@ class UserResource extends JsonResource
             'role_name' => $this->role_name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            
+
             // Universal Pattern: Conditional relationships (prevents N+1)
             'candidate' => $this->whenLoaded('candidate'),
             'employer' => $this->whenLoaded('employer'),
@@ -42,7 +41,7 @@ class UserResource extends JsonResource
     }
 
     /**
-     * Universal Pattern: Add metadata to the response
+     * Universal Pattern: Add metadata to the response.
      */
     public function with(Request $request): array
     {
@@ -50,7 +49,7 @@ class UserResource extends JsonResource
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'resource_type' => 'user'
+                'resource_type' => 'user',
             ],
         ];
     }

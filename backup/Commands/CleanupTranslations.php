@@ -37,7 +37,7 @@ class CleanupTranslations extends Command
         }
 
         // Determine locales to process
-        if ($localeOption === 'all') {
+        if ('all' === $localeOption) {
             $locales = array_keys(config('app.available_locales', []));
         } else {
             $locales = [$localeOption];
@@ -53,8 +53,9 @@ class CleanupTranslations extends Command
             $this->info("Processing locale: {$locale}");
 
             $localePath = resource_path("lang/{$locale}");
-            if (! File::exists($localePath)) {
+            if (!File::exists($localePath)) {
                 $this->error("Locale directory not found: {$localePath}");
+
                 continue;
             }
 
@@ -64,7 +65,7 @@ class CleanupTranslations extends Command
                 $filename = $file->getFilename();
                 $fileBaseName = $file->getBasename('.php');
 
-                if ($file->getExtension() !== 'php') {
+                if ('php' !== $file->getExtension()) {
                     continue;
                 }
 
@@ -80,9 +81,9 @@ class CleanupTranslations extends Command
                 foreach ($flatTranslations as $key => $value) {
                     $fullKey = "{$fileBaseName}.{$key}";
 
-                    if (! in_array($fullKey, $usedKeys)) {
+                    if (!in_array($fullKey, $usedKeys)) {
                         $unusedKeys[$key] = $value;
-                        $keysRemoved++;
+                        ++$keysRemoved;
                     }
                 }
 
@@ -102,7 +103,7 @@ class CleanupTranslations extends Command
                     }
 
                     // Remove unused keys if not in dry-run mode
-                    if (! $isDryRun) {
+                    if (!$isDryRun) {
                         $updatedTranslations = $translations;
 
                         foreach ($unusedKeys as $key => $value) {
@@ -127,7 +128,7 @@ class CleanupTranslations extends Command
     }
 
     /**
-     * Scan for used translation keys in the application
+     * Scan for used translation keys in the application.
      */
     private function scanForUsedKeys(string $path): array
     {
@@ -163,22 +164,22 @@ class CleanupTranslations extends Command
         // Patterns to find translation calls
         $patterns = [
             // __('key') or trans('key')
-            "/(?:__|trans|@lang)\(\s*['\"]([^'\"]+)['\"]\s*(?:,|\))/",
+            "/(?:__|trans|@lang)\\(\\s*['\"]([^'\"]+)['\"]\\s*(?:,|\\))/",
 
             // trans_choice('key', $count)
-            "/trans_choice\(\s*['\"]([^'\"]+)['\"]\s*,/",
+            "/trans_choice\\(\\s*['\"]([^'\"]+)['\"]\\s*,/",
 
             // @lang('key')
-            "/@lang\(\s*['\"]([^'\"]+)['\"]\s*(?:,|\))/",
+            "/@lang\\(\\s*['\"]([^'\"]+)['\"]\\s*(?:,|\\))/",
 
             // {{ __('key') }}
-            "/\{\{\s*(?:__|trans|@lang)\(\s*['\"]([^'\"]+)['\"]\s*(?:,|\))/",
+            "/\\{\\{\\s*(?:__|trans|@lang)\\(\\s*['\"]([^'\"]+)['\"]\\s*(?:,|\\))/",
 
             // Lang::get('key')
-            "/Lang::get\(\s*['\"]([^'\"]+)['\"]\s*(?:,|\))/",
+            "/Lang::get\\(\\s*['\"]([^'\"]+)['\"]\\s*(?:,|\\))/",
 
             // trans()->get('key')
-            "/trans\(\)->get\(\s*['\"]([^'\"]+)['\"]\s*(?:,|\))/",
+            "/trans\\(\\)->get\\(\\s*['\"]([^'\"]+)['\"]\\s*(?:,|\\))/",
         ];
 
         foreach ($files as $file) {
@@ -188,7 +189,7 @@ class CleanupTranslations extends Command
             }
 
             // Only process PHP and Blade files
-            if (! in_array($file->getExtension(), ['php', 'blade.php'])) {
+            if (!in_array($file->getExtension(), ['php', 'blade.php'])) {
                 continue;
             }
 

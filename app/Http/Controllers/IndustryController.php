@@ -6,11 +6,10 @@ use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Industry;
 use App\Repositories\IndustryRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class IndustryController extends AppBaseController
 {
     /** @var IndustryRepository */
@@ -24,10 +23,9 @@ class IndustryController extends AppBaseController
     /**
      * Display a listing of the Industry.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -75,8 +73,7 @@ class IndustryController extends AppBaseController
     /**
      * Remove the specified Industry from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Industry $industry): JsonResponse
     {

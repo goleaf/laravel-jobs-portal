@@ -7,20 +7,20 @@ echo "Testing route registration...\n";
 $routesContent = file_get_contents('routes/web.php');
 
 // Check if our routes are in the file
-if (strpos($routesContent, 'CompanyController') !== false) {
+if (false !== strpos($routesContent, 'CompanyController')) {
     echo "✅ CompanyController routes found in web.php\n";
 } else {
     echo "❌ CompanyController routes NOT found in web.php\n";
 }
 
 // Check specific route patterns
-if (strpos($routesContent, '/company/{company}') !== false) {
+if (false !== strpos($routesContent, '/company/{company}')) {
     echo "✅ Company show route pattern found\n";
 } else {
     echo "❌ Company show route pattern NOT found\n";
 }
 
-if (strpos($routesContent, 'company.show') !== false) {
+if (false !== strpos($routesContent, 'company.show')) {
     echo "✅ Company show route name found\n";
 } else {
     echo "❌ Company show route name NOT found\n";
@@ -33,7 +33,7 @@ $url = '/company/1';
 
 // Simple pattern matching test
 $regexPattern = str_replace('{company}', '([^/]+)', $pattern);
-$regexPattern = '#^' . $regexPattern . '$#';
+$regexPattern = '#^'.$regexPattern.'$#';
 
 if (preg_match($regexPattern, $url)) {
     echo "✅ URL '/company/1' should match pattern '/company/{company}'\n";
@@ -47,4 +47,4 @@ $lastLines = array_slice($lines, -20);
 foreach ($lastLines as $i => $line) {
     $lineNum = count($lines) - 20 + $i + 1;
     echo sprintf("%3d: %s\n", $lineNum, $line);
-} 
+}

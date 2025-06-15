@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use Carbon\Carbon;
+
 if (!function_exists('getLoggedInUserId')) {
     function getLoggedInUserId(): ?int
     {
@@ -8,9 +11,9 @@ if (!function_exists('getLoggedInUserId')) {
 }
 
 if (!function_exists('settings')) {
-    function settings(string $key = null, $default = null)
+    function settings(?string $key = null, $default = null)
     {
-        if ($key === null) {
+        if (null === $key) {
             return collect([
                 'app_name' => config('app.name', 'Job Portal'),
                 'app_logo' => '/images/logo.png',
@@ -19,7 +22,7 @@ if (!function_exists('settings')) {
                 'time_format' => 'H:i:s',
             ]);
         }
-        
+
         $settings = [
             'app_name' => config('app.name', 'Job Portal'),
             'app_logo' => '/images/logo.png',
@@ -27,7 +30,7 @@ if (!function_exists('settings')) {
             'date_format' => 'Y-m-d',
             'time_format' => 'H:i:s',
         ];
-        
+
         return $settings[$key] ?? $default;
     }
 }
@@ -63,11 +66,11 @@ if (!function_exists('googleJobSchema')) {
 if (!function_exists('formatCurrency')) {
     function formatCurrency($amount, string $currency = 'USD'): string
     {
-        if ($amount === null || $amount === '') {
+        if (null === $amount || '' === $amount) {
             return '$0.00';
         }
-        
-        return '$' . number_format((float) $amount, 2);
+
+        return '$'.number_format((float) $amount, 2);
     }
 }
 
@@ -75,13 +78,13 @@ if (!function_exists('timeAgo')) {
     function timeAgo($datetime): string
     {
         if (is_string($datetime)) {
-            $datetime = \Carbon\Carbon::parse($datetime);
+            $datetime = Carbon::parse($datetime);
         }
-        
-        if (!$datetime instanceof \Carbon\Carbon) {
-            $datetime = \Carbon\Carbon::parse($datetime);
+
+        if (!$datetime instanceof Carbon) {
+            $datetime = Carbon::parse($datetime);
         }
-        
+
         return $datetime->diffForHumans();
     }
 }
@@ -92,8 +95,8 @@ if (!function_exists('truncateText')) {
         if (strlen($text) <= $length) {
             return $text;
         }
-        
-        return substr($text, 0, $length) . '...';
+
+        return substr($text, 0, $length).'...';
     }
 }
 
@@ -104,9 +107,10 @@ if (!function_exists('getSuperAdmin')) {
         if (app()->environment('testing')) {
             return 1;
         }
-        
+
         // In production, try to find the first admin user
-        $admin = \App\Models\User::where('role', 'admin')->first();
+        $admin = User::where('role', 'admin')->first();
+
         return $admin ? $admin->id : 1;
     }
 }

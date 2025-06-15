@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * App Base Controller
- * 
+ * App Base Controller.
+ *
  * Extended base controller for the Job Portal application with API response methods,
  * caching capabilities, and Enhanced enterprise patterns.
- * 
+ *
  * Features:
  * - Standardized JSON API responses
  * - Advanced caching strategies
@@ -27,17 +27,19 @@ use Illuminate\Support\Facades\Log;
 class AppBaseController extends Controller
 {
     /**
-     * Default cache TTL in seconds (1 hour)
+     * Default cache TTL in seconds (1 hour).
      */
     protected int $cacheTTL = 3600;
 
     /**
-     * Enable/disable query logging for performance monitoring
+     * Enable/disable query logging for performance monitoring.
      */
     protected bool $logQueries = false;
 
     /**
-     * Success response with data
+     * Success response with data.
+     *
+     * @param mixed $result
      */
     public function sendResponse($result, string $message = 'Success', int $code = 200): JsonResponse
     {
@@ -48,15 +50,17 @@ class AppBaseController extends Controller
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'request_id' => request()->header('X-Request-ID', uniqid())
-            ]
+                'request_id' => request()->header('X-Request-ID', uniqid()),
+            ],
         ];
 
         return response()->json($response, $code);
     }
 
     /**
-     * Error response
+     * Error response.
+     *
+     * @param mixed $errorMessages
      */
     public function sendError(string $error, $errorMessages = [], int $code = 404): JsonResponse
     {
@@ -67,8 +71,8 @@ class AppBaseController extends Controller
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'request_id' => request()->header('X-Request-ID', uniqid())
-            ]
+                'request_id' => request()->header('X-Request-ID', uniqid()),
+            ],
         ];
 
         // Log error for monitoring
@@ -79,14 +83,14 @@ class AppBaseController extends Controller
             'url' => request()->url(),
             'method' => request()->method(),
             'user_id' => auth()->id(),
-            'ip' => request()->ip()
+            'ip' => request()->ip(),
         ]);
 
         return response()->json($response, $code);
     }
 
     /**
-     * Success response without data
+     * Success response without data.
      */
     public function sendSuccess(string $message = 'Operation completed successfully', int $code = 200): JsonResponse
     {
@@ -94,7 +98,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Paginated response with meta information
+     * Paginated response with meta information.
      */
     protected function sendPaginatedResponse(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully'): JsonResponse
     {
@@ -109,25 +113,28 @@ class AppBaseController extends Controller
                 'total' => $paginator->total(),
                 'from' => $paginator->firstItem(),
                 'to' => $paginator->lastItem(),
-                'has_more_pages' => $paginator->hasMorePages()
+                'has_more_pages' => $paginator->hasMorePages(),
             ],
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'request_id' => request()->header('X-Request-ID', uniqid())
-            ]
+                'request_id' => request()->header('X-Request-ID', uniqid()),
+            ],
         ];
 
         return response()->json($response, 200);
     }
 
     /**
-     * Handle API pagination with filters and search
+     * Handle API pagination with filters and search.
+     *
+     * @param mixed      $query
+     * @param null|mixed $resource
      */
     protected function sendPaginated($query, Request $request, $resource = null)
     {
         $params = $this->getPaginationParams($request);
-        
+
         // Apply search if provided
         if ($request->filled('search')) {
             $query = $this->applySearch($query, $request->get('search'));
@@ -148,20 +155,25 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Apply search to query
+     * Apply search to query.
+     *
+     * @param mixed $query
      */
     protected function applySearch($query, string $search)
     {
         // This can be overridden in child controllers for specific search logic
         return $query->where(function ($q) use ($search) {
             $q->where('name', 'LIKE', "%{$search}%")
-              ->orWhere('title', 'LIKE', "%{$search}%")
-              ->orWhere('description', 'LIKE', "%{$search}%");
+                ->orWhere('title', 'LIKE', "%{$search}%")
+                ->orWhere('description', 'LIKE', "%{$search}%")
+            ;
         });
     }
 
     /**
-     * Apply standard filters for job portal entities
+     * Apply standard filters for job portal entities.
+     *
+     * @param mixed $query
      */
     protected function applyJobPortalFilters($query, Request $request)
     {
@@ -178,7 +190,7 @@ class AppBaseController extends Controller
         }
 
         if ($request->filled('location')) {
-            $query->where('location', 'like', '%' . $request->get('location') . '%');
+            $query->where('location', 'like', '%'.$request->get('location').'%');
         }
 
         if ($request->filled('salary_min')) {
@@ -191,7 +203,8 @@ class AppBaseController extends Controller
 
         if ($request->filled('experience_level')) {
             $query->where('experience_from', '<=', $request->get('experience_level'))
-                  ->where('experience_to', '>=', $request->get('experience_level'));
+                ->where('experience_to', '>=', $request->get('experience_level'))
+            ;
         }
 
         if ($request->filled('job_type')) {
@@ -210,7 +223,9 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Validation error response
+     * Validation error response.
+     *
+     * @param mixed $validator
      */
     protected function sendValidationError($validator): JsonResponse
     {
@@ -218,7 +233,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Unauthorized response
+     * Unauthorized response.
      */
     protected function sendUnauthorized(string $message = 'Unauthorized access'): JsonResponse
     {
@@ -226,7 +241,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Forbidden response
+     * Forbidden response.
      */
     protected function sendForbidden(string $message = 'Access forbidden'): JsonResponse
     {
@@ -234,7 +249,9 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Server error response
+     * Server error response.
+     *
+     * @param null|mixed $debug
      */
     protected function sendServerError(string $message = 'Internal server error', $debug = null): JsonResponse
     {
@@ -247,7 +264,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Get authenticated user
+     * Get authenticated user.
      */
     protected function getAuthenticatedUser()
     {
@@ -255,12 +272,12 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Check if user has permission
+     * Check if user has permission.
      */
     protected function checkPermission(string $permission): bool
     {
         $user = $this->getAuthenticatedUser();
-        
+
         if (!$user) {
             return false;
         }
@@ -270,7 +287,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Authorize action or fail
+     * Authorize action or fail.
      */
     protected function authorizeOrFail(string $permission, string $message = 'Unauthorized action')
     {
@@ -280,16 +297,18 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Cache response data with key
+     * Cache response data with key.
+     *
+     * @param mixed $data
      */
-    protected function cacheResponse(string $key, $data, int $ttl = null): void
+    protected function cacheResponse(string $key, $data, ?int $ttl = null): void
     {
         $ttl = $ttl ?? $this->cacheTTL;
         Cache::put($key, $data, $ttl);
     }
 
     /**
-     * Get cached response data
+     * Get cached response data.
      */
     protected function getCachedResponse(string $key)
     {
@@ -297,54 +316,54 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Get resource with caching
+     * Get resource with caching.
      */
-    protected function getCachedResource(string $cacheKey, callable $callback, int $ttl = null)
+    protected function getCachedResource(string $cacheKey, callable $callback, ?int $ttl = null)
     {
         return Cache::remember($cacheKey, $ttl ?? $this->cacheTTL, $callback);
     }
 
     /**
-     * Build cache key with prefix
+     * Build cache key with prefix.
      */
     protected function buildCacheKey(string $base, ...$params): string
     {
-        $key = config('app.name', 'jobportal') . ':' . $base;
-        
+        $key = config('app.name', 'jobportal').':'.$base;
+
         foreach ($params as $param) {
-            $key .= ':' . (is_array($param) ? md5(serialize($param)) : $param);
+            $key .= ':'.(is_array($param) ? md5(serialize($param)) : $param);
         }
-        
+
         return $key;
     }
 
     /**
-     * Cache key generator for consistent naming
+     * Cache key generator for consistent naming.
      */
     protected function getCacheKey(string $prefix, ...$params): string
     {
         $userId = Auth::id() ?? 'guest';
         $paramString = implode('_', array_filter($params));
-        
+
         return "app_{$prefix}_{$userId}_{$paramString}";
     }
 
     /**
-     * Execute query with performance monitoring
+     * Execute query with performance monitoring.
      */
     protected function executeWithMonitoring(callable $callback, string $operation = 'database_query')
     {
         $startTime = microtime(true);
-        
+
         if ($this->logQueries) {
             DB::enableQueryLog();
         }
 
         try {
             $result = $callback();
-            
+
             $executionTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
-            
+
             // Log performance metrics
             Log::info('Performance Metric', [
                 'operation' => $operation,
@@ -352,20 +371,19 @@ class AppBaseController extends Controller
                 'memory_usage_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
                 'queries_count' => $this->logQueries ? count(DB::getQueryLog()) : null,
                 'controller' => static::class,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return $result;
-            
         } catch (\Exception $e) {
             Log::error('Operation Failed', [
                 'operation' => $operation,
                 'error' => $e->getMessage(),
                 'execution_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
                 'controller' => static::class,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             throw $e;
         } finally {
             if ($this->logQueries) {
@@ -375,7 +393,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Handle resource creation with logging
+     * Handle resource creation with logging.
      */
     protected function handleResourceCreation(Model $model, array $data, string $resourceName = 'Resource'): JsonResponse
     {
@@ -383,9 +401,9 @@ class AppBaseController extends Controller
             DB::beginTransaction();
 
             $resource = $model->create($data);
-            
+
             $this->logAction('create', $resource, $data);
-            
+
             DB::commit();
 
             return $this->sendResponse(
@@ -393,14 +411,13 @@ class AppBaseController extends Controller
                 "{$resourceName} created successfully",
                 201
             );
-
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error("Failed to create {$resourceName}", [
                 'error' => $e->getMessage(),
                 'data' => $data,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return $this->sendServerError("Failed to create {$resourceName}");
@@ -408,7 +425,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Handle resource update with logging
+     * Handle resource update with logging.
      */
     protected function handleResourceUpdate(Model $resource, array $data, string $resourceName = 'Resource'): JsonResponse
     {
@@ -417,27 +434,26 @@ class AppBaseController extends Controller
 
             $originalData = $resource->toArray();
             $resource->update($data);
-            
+
             $this->logAction('update', $resource, [
                 'original' => $originalData,
-                'updated' => $data
+                'updated' => $data,
             ]);
-            
+
             DB::commit();
 
             return $this->sendResponse(
                 $resource->fresh(),
                 "{$resourceName} updated successfully"
             );
-
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error("Failed to update {$resourceName}", [
                 'error' => $e->getMessage(),
                 'resource_id' => $resource->id,
                 'data' => $data,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return $this->sendServerError("Failed to update {$resourceName}");
@@ -445,7 +461,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Handle resource deletion with logging
+     * Handle resource deletion with logging.
      */
     protected function handleResourceDeletion(Model $resource, string $resourceName = 'Resource'): JsonResponse
     {
@@ -454,20 +470,19 @@ class AppBaseController extends Controller
 
             $resourceData = $resource->toArray();
             $resource->delete();
-            
+
             $this->logAction('delete', $resource, $resourceData);
-            
+
             DB::commit();
 
             return $this->sendSuccess("{$resourceName} deleted successfully");
-
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error("Failed to delete {$resourceName}", [
                 'error' => $e->getMessage(),
                 'resource_id' => $resource->id,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return $this->sendServerError("Failed to delete {$resourceName}");
@@ -475,7 +490,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Handle file upload with validation
+     * Handle file upload with validation.
      */
     protected function handleFileUpload(Request $request, string $field, string $path = 'uploads'): ?string
     {
@@ -484,14 +499,14 @@ class AppBaseController extends Controller
         }
 
         $file = $request->file($field);
-        
+
         if (!$file->isValid()) {
             throw new \Exception("Invalid file upload for field: {$field}");
         }
 
         // Store file and return path
         $filePath = $file->store($path, 'public');
-        
+
         $this->logAction('file_upload', null, [
             'field' => $field,
             'original_name' => $file->getClientOriginalName(),
@@ -504,11 +519,12 @@ class AppBaseController extends Controller
     }
 
     /**
-     * Check if request is API request
+     * Check if request is API request.
      */
-    protected function isApiRequest(Request $request = null): bool
+    protected function isApiRequest(?Request $request = null): bool
     {
         $request = $request ?? request();
+
         return $request->is('api/*') || $request->wantsJson();
     }
-} 
+}

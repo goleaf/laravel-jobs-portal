@@ -6,7 +6,7 @@ use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 /**
- * Class PrivacyPolicySeeder
+ * Class PrivacyPolicySeeder.
  */
 class PrivacyPolicySeeder extends Seeder
 {

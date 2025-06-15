@@ -3,15 +3,19 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\Web\UpdateCategoriesRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
 
 /**
- * Universal Enhanced Validation Tests for UpdateCategoriesRequest
- * 
+ * Universal Enhanced Validation Tests for UpdateCategoriesRequest.
+ *
  * @group validation
  * @group requests
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class UpdateCategoriesRequestTest extends TestCase
 {
@@ -20,34 +24,34 @@ class UpdateCategoriesRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create authenticated user for testing
         $this->user = User::factory()->create();
     }
 
     /** @test */
-    public function test_authorization_returns_true()
+    public function testAuthorizationReturnsTrue()
     {
         $request = new UpdateCategoriesRequest();
-        
+
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
     }
 
     /** @test */
-    public function test_validation_messages_are_defined()
+    public function testValidationMessagesAreDefined()
     {
         $request = new UpdateCategoriesRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
@@ -57,10 +61,10 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_validation_attributes_are_defined()
+    public function testValidationAttributesAreDefined()
     {
         $request = new UpdateCategoriesRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
@@ -70,165 +74,163 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_Categories_validation()
+    public function testCategoriesValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('Categories', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['Categories'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_id_validation()
+    public function testIdValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_name_validation()
+    public function testNameValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('name', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['name'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_required_validation()
+    public function testRequiredValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('required', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['required'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_string_validation()
+    public function testStringValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('string', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['string'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_Categoriess_validation()
+    public function testCategoriessValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('Categoriess', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['Categoriess'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_email_validation()
+    public function testEmailValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('email', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['email'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_nullable_validation()
+    public function testNullableValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('nullable', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['nullable'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_users_validation()
+    public function testUsersValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('users', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['users'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_description_validation()
+    public function testDescriptionValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('description', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['description'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_status_validation()
+    public function testStatusValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('status', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['status'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_boolean_validation()
+    public function testBooleanValidation()
     {
         $request = new UpdateCategoriesRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('boolean', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['boolean'];
         $this->assertNotEmpty($fieldRules);
     }
 
-
-
     /** @test */
-    public function test_valid_data_passes_validation()
+    public function testValidDataPassesValidation()
     {
         $validData = [
             'Categories' => 'Test Value',
@@ -244,37 +246,37 @@ class UpdateCategoriesRequestTest extends TestCase
             'status' => true,
             'boolean' => 'Test Value',
         ];
-        
+
         $request = new UpdateCategoriesRequest();
         $validator = validator($validData, $request->rules());
-        
+
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function test_request_handles_empty_data_correctly()
+    public function testRequestHandlesEmptyDataCorrectly()
     {
         $emptyData = [];
-        
+
         $request = new UpdateCategoriesRequest();
         $validator = validator($emptyData, $request->rules());
-        
+
         // Should handle empty data according to rules
         $this->assertIsArray($validator->errors()->toArray());
     }
 
     /** @test */
-    public function test_security_validation_prevents_xss()
+    public function testSecurityValidationPreventsXss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
             'description' => 'javascript:alert("xss")',
-            'content' => '<img src=x onerror=alert("xss")>'
+            'content' => '<img src=x onerror=alert("xss")>',
         ];
-        
+
         $request = new UpdateCategoriesRequest();
         $validator = validator($maliciousData, $request->rules());
-        
+
         // XSS data should either fail validation or be properly sanitized
         if ($validator->passes()) {
             foreach ($maliciousData as $field => $value) {
@@ -287,17 +289,17 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_sql_injection_prevention()
+    public function testSqlInjectionPrevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
             'search' => "1' OR '1'='1",
-            'filter' => "UNION SELECT * FROM passwords"
+            'filter' => 'UNION SELECT * FROM passwords',
         ];
-        
+
         $request = new UpdateCategoriesRequest();
         $validator = validator($sqlInjectionData, $request->rules());
-        
+
         // SQL injection patterns should be handled safely
         $this->assertIsArray($validator->errors()->toArray());
     }

@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\Job;
 use App\Models\Company;
+use App\Models\Job;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class JobService
 {
@@ -18,11 +18,12 @@ class JobService
      */
     public function getActiveJobs(int $perPage = 15): LengthAwarePaginator
     {
-        return Cache::tags(['jobs'])->remember('jobs.active.page.' . request('page', 1), 3600, function () use ($perPage) {
+        return Cache::tags(['jobs'])->remember('jobs.active.page.'.request('page', 1), 3600, function () use ($perPage) {
             return Job::with(['company', 'jobCategory', 'jobType', 'currency', 'salaryPeriod'])
-                     ->active()
-                     ->latest()
-                     ->paginate($perPage);
+                ->active()
+                ->latest()
+                ->paginate($perPage)
+            ;
         });
     }
 
@@ -33,10 +34,11 @@ class JobService
     {
         return Cache::tags(['jobs', 'featured'])->remember('jobs.featured', 3600, function () use ($limit) {
             return Job::with(['company', 'jobCategory', 'jobType'])
-                     ->featured()
-                     ->latest()
-                     ->limit($limit)
-                     ->get();
+                ->featured()
+                ->latest()
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
 
@@ -46,13 +48,15 @@ class JobService
     public function searchJobs(array $filters, int $perPage = 15): LengthAwarePaginator
     {
         $query = Job::with(['company', 'jobCategory', 'jobType', 'currency'])
-                   ->active();
+            ->active()
+        ;
 
         // Apply filters
         if (!empty($filters['keyword'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('job_title', 'like', '%' . $filters['keyword'] . '%')
-                  ->orWhere('description', 'like', '%' . $filters['keyword'] . '%');
+                $q->where('job_title', 'like', '%'.$filters['keyword'].'%')
+                    ->orWhere('description', 'like', '%'.$filters['keyword'].'%')
+                ;
             });
         }
 
@@ -110,7 +114,7 @@ class JobService
             Log::info('Job created successfully', [
                 'job_id' => $job->id,
                 'job_title' => $job->job_title,
-                'company_id' => $job->company_id
+                'company_id' => $job->company_id,
             ]);
 
             return $job;
@@ -136,11 +140,11 @@ class JobService
             }
 
             // Clear cache
-            Cache::tags(['jobs', 'job-' . $job->id])->flush();
+            Cache::tags(['jobs', 'job-'.$job->id])->flush();
 
             Log::info('Job updated successfully', [
                 'job_id' => $job->id,
-                'changes' => $job->getChanges()
+                'changes' => $job->getChanges(),
             ]);
 
             return $job->fresh();
@@ -157,11 +161,11 @@ class JobService
 
             if ($deleted) {
                 // Clear cache
-                Cache::tags(['jobs', 'job-' . $job->id])->flush();
+                Cache::tags(['jobs', 'job-'.$job->id])->flush();
 
                 Log::info('Job deleted successfully', [
                     'job_id' => $job->id,
-                    'job_title' => $job->job_title
+                    'job_title' => $job->job_title,
                 ]);
             }
 
@@ -175,9 +179,10 @@ class JobService
     public function getJobsByCompany(Company $company, int $perPage = 15): LengthAwarePaginator
     {
         return Job::with(['jobCategory', 'jobType', 'appliedJobs'])
-                  ->byCompany($company->id)
-                  ->latest()
-                  ->paginate($perPage);
+            ->byCompany($company->id)
+            ->latest()
+            ->paginate($perPage)
+        ;
     }
 
     /**
@@ -205,10 +210,11 @@ class JobService
     {
         return Cache::tags(['jobs'])->remember('jobs.popular', 3600, function () use ($limit) {
             return Job::with(['company', 'jobCategory'])
-                     ->popular()
-                     ->active()
-                     ->limit($limit)
-                     ->get();
+                ->popular()
+                ->active()
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
 
@@ -219,11 +225,12 @@ class JobService
     {
         return Cache::tags(['jobs'])->remember('jobs.recent', 1800, function () use ($limit) {
             return Job::with(['company', 'jobCategory', 'jobType'])
-                     ->recent()
-                     ->active()
-                     ->latest()
-                     ->limit($limit)
-                     ->get();
+                ->recent()
+                ->active()
+                ->latest()
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
 
@@ -233,15 +240,17 @@ class JobService
     public function getSimilarJobs(Job $job, int $limit = 5): Collection
     {
         return Job::with(['company', 'jobCategory'])
-                  ->where('id', '!=', $job->id)
-                  ->where(function ($query) use ($job) {
-                      $query->where('job_category_id', $job->job_category_id)
-                            ->orWhere('job_type_id', $job->job_type_id)
-                            ->orWhere('company_id', $job->company_id);
-                  })
-                  ->active()
-                  ->limit($limit)
-                  ->get();
+            ->where('id', '!=', $job->id)
+            ->where(function ($query) use ($job) {
+                $query->where('job_category_id', $job->job_category_id)
+                    ->orWhere('job_type_id', $job->job_type_id)
+                    ->orWhere('company_id', $job->company_id)
+                ;
+            })
+            ->active()
+            ->limit($limit)
+            ->get()
+        ;
     }
 
     /**
@@ -256,14 +265,14 @@ class JobService
                 'is_active' => true,
             ]);
 
-            Cache::tags(['jobs', 'featured', 'job-' . $job->id])->flush();
+            Cache::tags(['jobs', 'featured', 'job-'.$job->id])->flush();
 
             Log::info('Job marked as featured', [
                 'job_id' => $job->id,
-                'expiry_date' => $expiryDate->toDateString()
+                'expiry_date' => $expiryDate->toDateString(),
             ]);
 
-            return $featuredRecord !== null;
+            return null !== $featuredRecord;
         });
     }
 
@@ -273,8 +282,9 @@ class JobService
     public function expireOldJobs(): int
     {
         $expiredCount = Job::where('job_expiry_date', '<', now())
-                          ->where('status', '!=', Job::STATUS_CLOSED)
-                          ->update(['status' => Job::STATUS_CLOSED]);
+            ->where('status', '!=', Job::STATUS_CLOSED)
+            ->update(['status' => Job::STATUS_CLOSED])
+        ;
 
         if ($expiredCount > 0) {
             Cache::tags(['jobs'])->flush();
@@ -290,9 +300,9 @@ class JobService
     public function getJobsExpiringSoon(int $days = 7): Collection
     {
         return Job::with(['company'])
-                  ->where('job_expiry_date', '<=', now()->addDays($days))
-                  ->where('job_expiry_date', '>', now())
-                  ->active()
-                  ->get();
+            ->where('job_expiry_date', '<=', now()->addDays($days))
+            ->where('job_expiry_date', '>', now())
+            ->active()
+            ->get();
     }
-} 
+}

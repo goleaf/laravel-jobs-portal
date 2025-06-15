@@ -6,15 +6,13 @@ use App\Models\Setting;
 use App\Repositories\PrivacyPolicyRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
 /**
- * Class PrivacyPolicyController
+ * Class PrivacyPolicyController.
  */
-
 class PrivacyPolicyController extends AppBaseController
 {
     /** @var PrivacyPolicyRepository */

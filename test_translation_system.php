@@ -1,21 +1,16 @@
 <?php
 
 /**
- * Translation System Test Script
- * 
+ * Translation System Test Script.
+ *
  * This script validates the complete translation system implementation
  * to ensure all components are working correctly before deployment.
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Cache;
+require_once __DIR__.'/vendor/autoload.php';
 
 /**
- * Translation System Tester
+ * Translation System Tester.
  */
 class TranslationSystemTester
 {
@@ -44,23 +39,23 @@ class TranslationSystemTester
 
     private function test(string $name, callable $test): void
     {
-        $this->totalTests++;
+        ++$this->totalTests;
         echo "Testing: {$name}... ";
 
         try {
             $result = $test();
             if ($result) {
                 echo "✅ PASS\n";
-                $this->passedTests++;
+                ++$this->passedTests;
                 $this->results[$name] = ['status' => 'PASS', 'message' => 'Success'];
             } else {
                 echo "❌ FAIL\n";
-                $this->failedTests++;
+                ++$this->failedTests;
                 $this->results[$name] = ['status' => 'FAIL', 'message' => 'Test returned false'];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo "❌ ERROR: {$e->getMessage()}\n";
-            $this->failedTests++;
+            ++$this->failedTests;
             $this->results[$name] = ['status' => 'ERROR', 'message' => $e->getMessage()];
         }
     }
@@ -68,25 +63,28 @@ class TranslationSystemTester
     private function testConfigurationSetup(): void
     {
         echo "📋 Testing Configuration Setup\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('App configuration has available_locales', function () {
             $locales = config('app.available_locales', []);
+
             return !empty($locales) && count($locales) >= 9;
         });
 
         $this->test('Translation configuration exists', function () {
-            return file_exists(__DIR__ . '/config/translation.php');
+            return file_exists(__DIR__.'/config/translation.php');
         });
 
         $this->test('Default locale is set', function () {
             $locale = config('app.locale');
-            return !empty($locale) && strlen($locale) === 2;
+
+            return !empty($locale) && 2 === strlen($locale);
         });
 
         $this->test('Fallback locale is configured', function () {
             $fallback = config('app.fallback_locale');
-            return !empty($fallback) && strlen($fallback) === 2;
+
+            return !empty($fallback) && 2 === strlen($fallback);
         });
 
         echo "\n";
@@ -95,20 +93,22 @@ class TranslationSystemTester
     private function testLocaleAvailability(): void
     {
         echo "🌐 Testing Locale Availability\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $expectedLocales = ['en', 'ar', 'de', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'];
 
         foreach ($expectedLocales as $locale) {
             $this->test("Locale '{$locale}' is configured", function () use ($locale) {
                 $availableLocales = config('app.available_locales', []);
+
                 return isset($availableLocales[$locale]);
             });
         }
 
         $this->test('RTL configuration for Arabic', function () {
             $arConfig = config('app.available_locales.ar', []);
-            return isset($arConfig['rtl']) && $arConfig['rtl'] === true;
+
+            return isset($arConfig['rtl']) && true === $arConfig['rtl'];
         });
 
         echo "\n";
@@ -117,25 +117,25 @@ class TranslationSystemTester
     private function testTranslationFiles(): void
     {
         echo "📁 Testing Translation Files\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $locales = ['en', 'ar', 'de', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'];
 
         foreach ($locales as $locale) {
             $this->test("Translation directory for '{$locale}' exists", function () use ($locale) {
-                return is_dir(__DIR__ . "/lang/{$locale}");
+                return is_dir(__DIR__."/lang/{$locale}");
             });
 
             $this->test("JSON translation file for '{$locale}' exists", function () use ($locale) {
-                return file_exists(__DIR__ . "/lang/{$locale}.json");
+                return file_exists(__DIR__."/lang/{$locale}.json");
             });
 
             $this->test("Locale translation file for '{$locale}' exists", function () use ($locale) {
-                return file_exists(__DIR__ . "/lang/{$locale}/locale.php");
+                return file_exists(__DIR__."/lang/{$locale}/locale.php");
             });
 
             $this->test("Messages translation file for '{$locale}' exists", function () use ($locale) {
-                return file_exists(__DIR__ . "/lang/{$locale}/messages.php");
+                return file_exists(__DIR__."/lang/{$locale}/messages.php");
             });
         }
 
@@ -145,7 +145,7 @@ class TranslationSystemTester
     private function testHelperFunctions(): void
     {
         echo "🔧 Testing Helper Functions\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('trans_json function exists', function () {
             return function_exists('trans_json');
@@ -173,7 +173,7 @@ class TranslationSystemTester
     private function testRTLSupport(): void
     {
         echo "↩️ Testing RTL Support\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('Arabic is detected as RTL', function () {
             return in_array('ar', config('translation.rtl_languages', []));
@@ -185,8 +185,9 @@ class TranslationSystemTester
 
         $this->test('RTL detection works correctly', function () {
             if (function_exists('is_rtl')) {
-                return is_rtl('ar') === true && is_rtl('en') === false;
+                return true === is_rtl('ar') && false === is_rtl('en');
             }
+
             return false;
         });
 
@@ -196,24 +197,26 @@ class TranslationSystemTester
     private function testCacheConfiguration(): void
     {
         echo "⚡ Testing Cache Configuration\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('Cache configuration exists', function () {
             $cacheConfig = config('translation.cache', []);
+
             return !empty($cacheConfig);
         });
 
         $this->test('Cache is enabled', function () {
-            return config('translation.cache.enabled', false) === true;
+            return true === config('translation.cache.enabled', false);
         });
 
         $this->test('Cache TTL is set', function () {
             $ttl = config('translation.cache.ttl', 0);
+
             return $ttl > 0;
         });
 
         $this->test('Redis cache store is configured', function () {
-            return config('cache.stores.redis') !== null;
+            return null !== config('cache.stores.redis');
         });
 
         echo "\n";
@@ -222,22 +225,22 @@ class TranslationSystemTester
     private function testAPIEndpoints(): void
     {
         echo "🔗 Testing API Structure\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('LocaleController exists', function () {
-            return file_exists(__DIR__ . '/app/Http/Controllers/LocaleController.php');
+            return file_exists(__DIR__.'/app/Http/Controllers/LocaleController.php');
         });
 
         $this->test('TranslationManagerController exists', function () {
-            return file_exists(__DIR__ . '/app/Http/Controllers/TranslationManagerController.php');
+            return file_exists(__DIR__.'/app/Http/Controllers/TranslationManagerController.php');
         });
 
         $this->test('Routes are defined', function () {
-            return file_exists(__DIR__ . '/routes/web.php');
+            return file_exists(__DIR__.'/routes/web.php');
         });
 
         $this->test('API routes are defined', function () {
-            return file_exists(__DIR__ . '/routes/api.php');
+            return file_exists(__DIR__.'/routes/api.php');
         });
 
         echo "\n";
@@ -246,15 +249,16 @@ class TranslationSystemTester
     private function testCLICommands(): void
     {
         echo "⌨️ Testing CLI Commands\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('TranslationCommand exists', function () {
-            return file_exists(__DIR__ . '/app/Console/Commands/TranslationCommand.php');
+            return file_exists(__DIR__.'/app/Console/Commands/TranslationCommand.php');
         });
 
         $this->test('Command signature is properly defined', function () {
-            $content = file_get_contents(__DIR__ . '/app/Console/Commands/TranslationCommand.php');
-            return strpos($content, 'translation:manage') !== false;
+            $content = file_get_contents(__DIR__.'/app/Console/Commands/TranslationCommand.php');
+
+            return false !== strpos($content, 'translation:manage');
         });
 
         echo "\n";
@@ -263,21 +267,23 @@ class TranslationSystemTester
     private function testFrontendIntegration(): void
     {
         echo "🌐 Testing Frontend Integration\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('Frontend translation.js exists', function () {
-            return file_exists(__DIR__ . '/resources/js/translation.js');
+            return file_exists(__DIR__.'/resources/js/translation.js');
         });
 
         $this->test('Language switcher component exists', function () {
-            return file_exists(__DIR__ . '/resources/views/components/ui/language-switcher.blade.php');
+            return file_exists(__DIR__.'/resources/views/components/ui/language-switcher.blade.php');
         });
 
         $this->test('Translation JavaScript contains TranslationManager', function () {
-            if (file_exists(__DIR__ . '/resources/js/translation.js')) {
-                $content = file_get_contents(__DIR__ . '/resources/js/translation.js');
-                return strpos($content, 'class TranslationManager') !== false;
+            if (file_exists(__DIR__.'/resources/js/translation.js')) {
+                $content = file_get_contents(__DIR__.'/resources/js/translation.js');
+
+                return false !== strpos($content, 'class TranslationManager');
             }
+
             return false;
         });
 
@@ -287,19 +293,20 @@ class TranslationSystemTester
     private function testPerformance(): void
     {
         echo "🚀 Testing Performance Configuration\n";
-        echo "=" . str_repeat("=", 50) . "\n";
+        echo '='.str_repeat('=', 50)."\n";
 
         $this->test('Lazy loading is enabled', function () {
-            return config('translation.loading.lazy', false) === true;
+            return true === config('translation.loading.lazy', false);
         });
 
         $this->test('Critical namespaces are defined for preloading', function () {
             $namespaces = config('translation.loading.preload_namespaces', []);
+
             return !empty($namespaces) && in_array('common', $namespaces);
         });
 
         $this->test('Performance settings are optimized', function () {
-            return config('translation.performance.prefetch_translations', false) === true;
+            return true === config('translation.performance.prefetch_translations', false);
         });
 
         echo "\n";
@@ -307,30 +314,30 @@ class TranslationSystemTester
 
     private function displayResults(): void
     {
-        echo "=" . str_repeat("=", 60) . "\n";
+        echo '='.str_repeat('=', 60)."\n";
         echo "🎯 TRANSLATION SYSTEM TEST RESULTS\n";
-        echo "=" . str_repeat("=", 60) . "\n\n";
+        echo '='.str_repeat('=', 60)."\n\n";
 
         echo "📊 SUMMARY:\n";
         echo "   Total Tests: {$this->totalTests}\n";
         echo "   ✅ Passed: {$this->passedTests}\n";
         echo "   ❌ Failed: {$this->failedTests}\n";
-        echo "   📈 Success Rate: " . round(($this->passedTests / $this->totalTests) * 100, 2) . "%\n\n";
+        echo '   📈 Success Rate: '.round(($this->passedTests / $this->totalTests) * 100, 2)."%\n\n";
 
         if ($this->failedTests > 0) {
             echo "❌ FAILED TESTS:\n";
-            echo "-" . str_repeat("-", 50) . "\n";
+            echo '-'.str_repeat('-', 50)."\n";
             foreach ($this->results as $test => $result) {
-                if ($result['status'] !== 'PASS') {
+                if ('PASS' !== $result['status']) {
                     echo "   • {$test}: {$result['message']}\n";
                 }
             }
             echo "\n";
         }
 
-        if ($this->failedTests === 0) {
+        if (0 === $this->failedTests) {
             echo "🎉 ALL TESTS PASSED! Your translation system is ready for deployment.\n\n";
-            
+
             echo "✅ DEPLOYMENT CHECKLIST:\n";
             echo "   □ Set REDIS_HOST and REDIS_PORT in .env\n";
             echo "   □ Configure TRANSLATION_CACHE_ENABLED=true\n";
@@ -340,7 +347,7 @@ class TranslationSystemTester
             echo "   □ Test language switching in browser\n";
             echo "   □ Verify RTL layout for Arabic\n";
             echo "   □ Monitor translation cache performance\n\n";
-            
+
             echo "🚀 Your job portal is now fully internationalized!\n";
         } else {
             echo "⚠️ Some tests failed. Please fix the issues before deployment.\n\n";
@@ -352,7 +359,7 @@ class TranslationSystemTester
 }
 
 // Check if running from command line
-if (php_sapi_name() === 'cli') {
+if ('cli' === php_sapi_name()) {
     $tester = new TranslationSystemTester();
     $tester->runAllTests();
 } else {

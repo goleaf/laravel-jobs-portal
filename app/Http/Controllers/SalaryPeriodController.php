@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use App\Models\SalaryPeriod;
 use App\Repositories\SalaryPeriodRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class SalaryPeriodController extends AppBaseController
 {
     /** @var SalaryPeriodRepository */
@@ -23,10 +22,9 @@ class SalaryPeriodController extends AppBaseController
     /**
      * Display a listing of the SalaryPeriod.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -74,8 +72,7 @@ class SalaryPeriodController extends AppBaseController
     /**
      * Remove the specified SalaryPeriod from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(SalaryPeriod $salaryPeriod): JsonResponse
     {

@@ -17,7 +17,7 @@ class JobStageFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word . " Stage",
+            'name' => $this->faker->word.' Stage',
             'description' => $this->faker->sentence,
             'is_active' => $this->faker->boolean(80),
         ];

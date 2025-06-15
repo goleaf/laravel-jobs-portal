@@ -17,7 +17,7 @@ class ShowCandidateResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            
+
             // Personal Information
             'personal' => [
                 'first_name' => $this->first_name,
@@ -187,8 +187,8 @@ class ShowCandidateResource extends JsonResource
 
             // Applications (when included and authorized)
             'applications' => $this->when(
-                $request->include && str_contains($request->include, 'applications') && 
-                (auth()->check() && (auth()->id() === $this->user_id || auth()->user()->hasRole(['admin', 'employer']))),
+                $request->include && str_contains($request->include, 'applications')
+                && (auth()->check() && (auth()->id() === $this->user_id || auth()->user()->hasRole(['admin', 'employer']))),
                 function () {
                     return $this->jobApplications->map(function ($application) {
                         return [
@@ -253,6 +253,8 @@ class ShowCandidateResource extends JsonResource
 
     /**
      * Customize the outgoing response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -261,7 +263,7 @@ class ShowCandidateResource extends JsonResource
     }
 
     /**
-     * Calculate profile completion percentage
+     * Calculate profile completion percentage.
      */
     private function getProfileCompletionPercentage(): int
     {
@@ -269,49 +271,90 @@ class ShowCandidateResource extends JsonResource
         $completedFields = 0;
 
         // Basic information
-        if ($this->first_name) $completedFields++;
-        if ($this->last_name) $completedFields++;
-        if ($this->phone) $completedFields++;
-        if ($this->summary) $completedFields++;
-        if ($this->address) $completedFields++;
+        if ($this->first_name) {
+            ++$completedFields;
+        }
+        if ($this->last_name) {
+            ++$completedFields;
+        }
+        if ($this->phone) {
+            ++$completedFields;
+        }
+        if ($this->summary) {
+            ++$completedFields;
+        }
+        if ($this->address) {
+            ++$completedFields;
+        }
 
         // Professional information
-        if ($this->expected_salary) $completedFields++;
-        if ($this->career_level_id) $completedFields++;
-        if ($this->industry_id) $completedFields++;
-        if ($this->functional_area_id) $completedFields++;
-        if ($this->experience) $completedFields++;
+        if ($this->expected_salary) {
+            ++$completedFields;
+        }
+        if ($this->career_level_id) {
+            ++$completedFields;
+        }
+        if ($this->industry_id) {
+            ++$completedFields;
+        }
+        if ($this->functional_area_id) {
+            ++$completedFields;
+        }
+        if ($this->experience) {
+            ++$completedFields;
+        }
 
         // Location
-        if ($this->country_id) $completedFields++;
-        if ($this->state_id) $completedFields++;
-        if ($this->city_id) $completedFields++;
+        if ($this->country_id) {
+            ++$completedFields;
+        }
+        if ($this->state_id) {
+            ++$completedFields;
+        }
+        if ($this->city_id) {
+            ++$completedFields;
+        }
 
         // Profile enhancements
-        if ($this->user && $this->user->avatar) $completedFields++;
-        if ($this->website) $completedFields++;
-        if ($this->linkedin_url) $completedFields++;
+        if ($this->user && $this->user->avatar) {
+            ++$completedFields;
+        }
+        if ($this->website) {
+            ++$completedFields;
+        }
+        if ($this->linkedin_url) {
+            ++$completedFields;
+        }
 
         // Related data
-        if ($this->candidateSkills->count() > 0) $completedFields++;
-        if ($this->candidateEducations->count() > 0) $completedFields++;
-        if ($this->candidateExperiences->count() > 0) $completedFields++;
-        if ($this->resumes->count() > 0) $completedFields++;
+        if ($this->candidateSkills->count() > 0) {
+            ++$completedFields;
+        }
+        if ($this->candidateEducations->count() > 0) {
+            ++$completedFields;
+        }
+        if ($this->candidateExperiences->count() > 0) {
+            ++$completedFields;
+        }
+        if ($this->resumes->count() > 0) {
+            ++$completedFields;
+        }
 
         return round(($completedFields / $totalFields) * 100);
     }
 
     /**
-     * Calculate response rate for applications
+     * Calculate response rate for applications.
      */
     private function calculateResponseRate(): float
     {
         $totalApplications = $this->jobApplications->count();
-        if ($totalApplications === 0) {
+        if (0 === $totalApplications) {
             return 0.0;
         }
 
         $responsedApplications = $this->jobApplications->whereNotIn('status', ['pending'])->count();
+
         return round(($responsedApplications / $totalApplications) * 100, 2);
     }
-} 
+}

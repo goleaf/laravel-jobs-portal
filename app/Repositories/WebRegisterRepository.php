@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Notification;
@@ -10,16 +9,14 @@ use App\Models\NotificationSetting;
 use App\Models\Setting;
 use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Throwable;
 
 /**
- * Class WebRegisterRepository
+ * Class WebRegisterRepository.
  *
  * @version July 7, 2020, 5:07 am UTC
  */
@@ -34,7 +31,7 @@ class WebRegisterRepository
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function store(array $input): bool
     {
@@ -43,21 +40,22 @@ class WebRegisterRepository
 
             $userInput = Arr::except($input, ['type']);
             $userInput['password'] = Hash::make($input['password']);
+
             /** @var User $user */
             $user = User::create($userInput);
-            $userRole = Role::where('name', ($input['type'] == 1) ? 'Candidate' : 'Employer')->first();
+            $userRole = Role::where('name', (1 == $input['type']) ? 'Candidate' : 'Employer')->first();
             $user->assignRole($userRole);
             $adminId = User::role('Admin')->first()->id;
-            if ($input['type'] == 1) {
+            if (1 == $input['type']) {
                 /** @var CandidateRepository $candidateRepo */
-                $candidateRepo = App::make(CandidateRepository::class);
+                $candidateRepo = \App::make(CandidateRepository::class);
                 $candidate = Candidate::create([
                     'user_id' => $user->id,
                     'unique_id' => $candidateRepo->getUniqueCandidateId(),
                 ]);
                 $user->update(['owner_id' => $candidate->id, 'owner_type' => Candidate::class]);
-                NotificationSetting::where('key', 'NEW_CANDIDATE_REGISTERED')->first()->value == 1 ?
-                    addNotification([
+                1 == NotificationSetting::where('key', 'NEW_CANDIDATE_REGISTERED')->first()->value
+                    ? addNotification([
                         Notification::NEW_CANDIDATE_REGISTERED,
                         $adminId,
                         Notification::ADMIN,
@@ -69,8 +67,8 @@ class WebRegisterRepository
                     'unique_id' => getUniqueCompanyId(),
                 ]);
                 $user->update(['owner_id' => $employer->id, 'owner_type' => Company::class]);
-                NotificationSetting::where('key', 'NEW_EMPLOYER_REGISTERED')->first()->value == 1 ?
-                    addNotification([
+                1 == NotificationSetting::where('key', 'NEW_EMPLOYER_REGISTERED')->first()->value
+                    ? addNotification([
                         Notification::NEW_EMPLOYER_REGISTERED,
                         $adminId,
                         Notification::ADMIN,
@@ -87,7 +85,7 @@ class WebRegisterRepository
             DB::commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             throw new UnprocessableEntityHttpException($e->getMessage());

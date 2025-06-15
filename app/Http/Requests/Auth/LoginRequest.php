@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\NoMaliciousContent;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 /**
- * Request validation for AuthController::login
- * 
+ * Request validation for AuthController::login.
+ *
  * @enhanced by RequestValidationImprover
  */
 class LoginRequest extends FormRequest
@@ -23,15 +25,15 @@ class LoginRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         return [
-    "email" => "required|email",
-    "password" => "required|string",
-    "remember" => "boolean"
-];
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'remember' => 'boolean',
+        ];
     }
 
     /**
@@ -42,10 +44,10 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-    "email.required" => "Email is required",
-    "email.email" => "Please enter a valid email address",
-    "password.required" => "Password is required"
-];
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'password.required' => 'Password is required',
+        ];
     }
 
     /**
@@ -64,34 +66,14 @@ class LoginRequest extends FormRequest
             'job_description' => 'job description',
             'job_expiry_date' => 'job expiry date',
             'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary'
+            'salary_to' => 'maximum salary',
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Sanitize input data
-        if ($this->has('job_title')) {
-            $this->merge([
-                'job_title' => strip_tags($this->job_title)
-            ]);
-        }
-        
-        if ($this->has('job_description')) {
-            $this->merge([
-                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
-            ]);
-        }
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
@@ -102,7 +84,7 @@ class LoginRequest extends FormRequest
                     $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
                 }
             }
-            
+
             // Check for malicious content in text fields
             foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
@@ -113,5 +95,24 @@ class LoginRequest extends FormRequest
                 }
             }
         });
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('job_title')) {
+            $this->merge([
+                'job_title' => strip_tags($this->job_title),
+            ]);
+        }
+
+        if ($this->has('job_description')) {
+            $this->merge([
+                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>'),
+            ]);
+        }
     }
 }

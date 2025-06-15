@@ -2,17 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class CacheResponse
 {
-    public function handle(Request $request, Closure $next, $ttl = 3600)
+    public function handle(Request $request, \Closure $next, $ttl = 3600)
     {
         if ($request->isMethod('GET')) {
-            $cacheKey = 'response:' . md5($request->fullUrl());
-            
+            $cacheKey = 'response:'.md5($request->fullUrl());
+
             $response = Cache::remember($cacheKey, $ttl, function () use ($request, $next) {
                 return $next($request);
             });

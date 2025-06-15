@@ -14,7 +14,7 @@ class FormServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton('form', function ($app) {
-            return new FormHelper;
+            return new FormHelper();
         });
     }
 
@@ -25,7 +25,7 @@ class FormServiceProvider extends ServiceProvider
     {
         // Register the "Form" directive for Blade templates
         Blade::directive('formOpen', function ($expression) {
-            return "<?php echo app('form')->open($expression); ?>";
+            return "<?php echo app('form')->open({$expression}); ?>";
         });
 
         Blade::directive('formClose', function () {
@@ -33,47 +33,47 @@ class FormServiceProvider extends ServiceProvider
         });
 
         Blade::directive('formText', function ($expression) {
-            return "<?php echo app('form')->text($expression); ?>";
+            return "<?php echo app('form')->text({$expression}); ?>";
         });
 
         Blade::directive('formPassword', function ($expression) {
-            return "<?php echo app('form')->password($expression); ?>";
+            return "<?php echo app('form')->password({$expression}); ?>";
         });
 
         Blade::directive('formEmail', function ($expression) {
-            return "<?php echo app('form')->email($expression); ?>";
+            return "<?php echo app('form')->email({$expression}); ?>";
         });
 
         Blade::directive('formFile', function ($expression) {
-            return "<?php echo app('form')->file($expression); ?>";
+            return "<?php echo app('form')->file({$expression}); ?>";
         });
 
         Blade::directive('formTextarea', function ($expression) {
-            return "<?php echo app('form')->textarea($expression); ?>";
+            return "<?php echo app('form')->textarea({$expression}); ?>";
         });
 
         Blade::directive('formSelect', function ($expression) {
-            return "<?php echo app('form')->select($expression); ?>";
+            return "<?php echo app('form')->select({$expression}); ?>";
         });
 
         Blade::directive('formCheckbox', function ($expression) {
-            return "<?php echo app('form')->checkbox($expression); ?>";
+            return "<?php echo app('form')->checkbox({$expression}); ?>";
         });
 
         Blade::directive('formRadio', function ($expression) {
-            return "<?php echo app('form')->radio($expression); ?>";
+            return "<?php echo app('form')->radio({$expression}); ?>";
         });
 
         Blade::directive('formSubmit', function ($expression) {
-            return "<?php echo app('form')->submit($expression); ?>";
+            return "<?php echo app('form')->submit({$expression}); ?>";
         });
 
         Blade::directive('formButton', function ($expression) {
-            return "<?php echo app('form')->button($expression); ?>";
+            return "<?php echo app('form')->button({$expression}); ?>";
         });
 
         Blade::directive('formLabel', function ($expression) {
-            return "<?php echo app('form')->label($expression); ?>";
+            return "<?php echo app('form')->label({$expression}); ?>";
         });
     }
 }

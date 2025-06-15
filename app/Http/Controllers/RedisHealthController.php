@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\RedisCacheService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Redis;
-use App\Services\RedisCacheService;
 
 /**
- * Redis health check controller
+ * Redis health check controller.
  */
 class RedisHealthController extends Controller
 {
@@ -34,7 +34,7 @@ class RedisHealthController extends Controller
             'status' => $overall,
             'timestamp' => now()->toISOString(),
             'services' => $status,
-        ], $overall === 'healthy' ? 200 : 503);
+        ], 'healthy' === $overall ? 200 : 503);
     }
 
     private function checkRedisConnection(): array
@@ -42,15 +42,16 @@ class RedisHealthController extends Controller
         try {
             $redis = Redis::connection();
             $response = $redis->ping();
+
             return [
                 'status' => 'healthy',
-                'response_time' => $this->measureResponseTime(fn() => $redis->ping()),
-                'message' => 'Redis connection successful'
+                'response_time' => $this->measureResponseTime(fn () => $redis->ping()),
+                'message' => 'Redis connection successful',
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'unhealthy',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -59,19 +60,19 @@ class RedisHealthController extends Controller
     {
         try {
             $redis = Redis::connection('cache');
-            $testKey = 'health_check_' . time();
+            $testKey = 'health_check_'.time();
             $redis->setex($testKey, 60, 'test');
             $value = $redis->get($testKey);
             $redis->del($testKey);
-            
+
             return [
-                'status' => $value === 'test' ? 'healthy' : 'unhealthy',
-                'message' => 'Cache read/write test completed'
+                'status' => 'test' === $value ? 'healthy' : 'unhealthy',
+                'message' => 'Cache read/write test completed',
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'unhealthy',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -81,14 +82,15 @@ class RedisHealthController extends Controller
         try {
             $redis = Redis::connection('sessions');
             $redis->ping();
+
             return [
                 'status' => 'healthy',
-                'message' => 'Session Redis connection active'
+                'message' => 'Session Redis connection active',
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'unhealthy',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -98,14 +100,15 @@ class RedisHealthController extends Controller
         try {
             $redis = Redis::connection('queues');
             $redis->ping();
+
             return [
                 'status' => 'healthy',
-                'message' => 'Queue Redis connection active'
+                'message' => 'Queue Redis connection active',
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'unhealthy',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -115,16 +118,18 @@ class RedisHealthController extends Controller
         $start = microtime(true);
         $operation();
         $end = microtime(true);
-        return round(($end - $start) * 1000, 2) . 'ms';
+
+        return round(($end - $start) * 1000, 2).'ms';
     }
 
     private function determineOverallHealth(array $status): string
     {
         foreach ($status as $service => $details) {
-            if (is_array($details) && isset($details['status']) && $details['status'] === 'unhealthy') {
+            if (is_array($details) && isset($details['status']) && 'unhealthy' === $details['status']) {
                 return 'degraded';
             }
         }
+
         return 'healthy';
     }
 }

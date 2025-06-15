@@ -6,7 +6,7 @@ use App\Models\CandidateExperience;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateCandidateExperienceRequest
+ * Class CreateCandidateExperienceRequest.
  */
 class CreateCandidateExperienceRequest extends FormRequest
 {

@@ -2,21 +2,26 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
-use App\Models\Job;
+use App\Models\CareerLevel;
+use App\Models\City;
 use App\Models\Company;
-use App\Models\User;
+use App\Models\Country;
+use App\Models\FunctionalArea;
+use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobCategory;
 use App\Models\JobType;
-use App\Models\CareerLevel;
-use App\Models\FunctionalArea;
-use App\Models\JobApplication;
-use App\Models\Country;
 use App\Models\State;
-use App\Models\City;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobTest extends TestCase
 {
     use RefreshDatabase;
@@ -28,7 +33,7 @@ class JobTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test data
         $this->user = User::factory()->create();
         $this->company = Company::factory()->create(['user_id' => $this->user->id]);
@@ -36,7 +41,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes(): void
+    public function itHasCorrectFillableAttributes(): void
     {
         $fillable = [
             'title', 'description', 'benefits', 'skills', 'requirements',
@@ -46,14 +51,14 @@ class JobTest extends TestCase
             'experience_from', 'experience_to', 'degree_level_id',
             'job_shift_id', 'no_of_positions', 'job_expiry_date',
             'hide_salary', 'is_freelance', 'is_suspended', 'is_featured',
-            'company_id', 'created_by'
+            'company_id', 'created_by',
         ];
 
         $this->assertEquals($fillable, $this->job->getFillable());
     }
 
     /** @test */
-    public function it_has_correct_casts(): void
+    public function itHasCorrectCasts(): void
     {
         $expectedCasts = [
             'id' => 'int',
@@ -72,20 +77,23 @@ class JobTest extends TestCase
         ];
 
         foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals($cast, $this->job->getCasts()[$attribute] ?? null, 
-                "Cast for {$attribute} should be {$cast}");
+            $this->assertEquals(
+                $cast,
+                $this->job->getCasts()[$attribute] ?? null,
+                "Cast for {$attribute} should be {$cast}"
+            );
         }
     }
 
     /** @test */
-    public function it_belongs_to_company(): void
+    public function itBelongsToCompany(): void
     {
         $this->assertInstanceOf(Company::class, $this->job->company);
         $this->assertEquals($this->company->id, $this->job->company->id);
     }
 
     /** @test */
-    public function it_belongs_to_job_category(): void
+    public function itBelongsToJobCategory(): void
     {
         $category = JobCategory::factory()->create();
         $job = Job::factory()->create(['job_category_id' => $category->id]);
@@ -95,7 +103,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_job_type(): void
+    public function itBelongsToJobType(): void
     {
         $jobType = JobType::factory()->create();
         $job = Job::factory()->create(['job_type_id' => $jobType->id]);
@@ -105,7 +113,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_career_level(): void
+    public function itBelongsToCareerLevel(): void
     {
         $careerLevel = CareerLevel::factory()->create();
         $job = Job::factory()->create(['career_level_id' => $careerLevel->id]);
@@ -115,7 +123,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_functional_area(): void
+    public function itBelongsToFunctionalArea(): void
     {
         $functionalArea = FunctionalArea::factory()->create();
         $job = Job::factory()->create(['functional_area_id' => $functionalArea->id]);
@@ -125,12 +133,12 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_location_models(): void
+    public function itBelongsToLocationModels(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
         $city = City::factory()->create(['state_id' => $state->id]);
-        
+
         $job = Job::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -140,27 +148,27 @@ class JobTest extends TestCase
         $this->assertInstanceOf(Country::class, $job->country);
         $this->assertInstanceOf(State::class, $job->state);
         $this->assertInstanceOf(City::class, $job->city);
-        
+
         $this->assertEquals($country->id, $job->country->id);
         $this->assertEquals($state->id, $job->state->id);
         $this->assertEquals($city->id, $job->city->id);
     }
 
     /** @test */
-    public function it_has_many_job_applications(): void
+    public function itHasManyJobApplications(): void
     {
         $applications = JobApplication::factory()->count(3)->create(['job_id' => $this->job->id]);
 
         $this->assertInstanceOf(Collection::class, $this->job->jobApplications);
         $this->assertCount(3, $this->job->jobApplications);
-        
+
         foreach ($applications as $application) {
             $this->assertTrue($this->job->jobApplications->contains($application));
         }
     }
 
     /** @test */
-    public function active_scope_returns_only_active_jobs(): void
+    public function activeScopeReturnsOnlyActiveJobs(): void
     {
         Job::factory()->create(['is_suspended' => false]);
         Job::factory()->create(['is_suspended' => true]);
@@ -174,7 +182,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function featured_scope_returns_only_featured_jobs(): void
+    public function featuredScopeReturnsOnlyFeaturedJobs(): void
     {
         Job::factory()->create(['is_featured' => true]);
         Job::factory()->create(['is_featured' => false]);
@@ -187,7 +195,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function by_company_scope_filters_by_company(): void
+    public function byCompanyScopeFiltersByCompany(): void
     {
         $otherCompany = Company::factory()->create();
         Job::factory()->create(['company_id' => $otherCompany->id]);
@@ -199,7 +207,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function by_category_scope_filters_by_category(): void
+    public function byCategoryScopeFiltersByCategory(): void
     {
         $category = JobCategory::factory()->create();
         Job::factory()->create(['job_category_id' => $category->id]);
@@ -212,12 +220,12 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function by_location_scope_filters_by_location(): void
+    public function byLocationScopeFiltersByLocation(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
         $city = City::factory()->create(['state_id' => $state->id]);
-        
+
         Job::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -234,7 +242,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function salary_range_scope_filters_by_salary(): void
+    public function salaryRangeScopeFiltersBySalary(): void
     {
         Job::factory()->create(['salary_from' => 50000, 'salary_to' => 80000]);
         Job::factory()->create(['salary_from' => 30000, 'salary_to' => 45000]);
@@ -247,7 +255,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function experience_range_scope_filters_by_experience(): void
+    public function experienceRangeScopeFiltersByExperience(): void
     {
         Job::factory()->create(['experience_from' => 2, 'experience_to' => 5]);
         Job::factory()->create(['experience_from' => 5, 'experience_to' => 8]);
@@ -260,7 +268,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function search_scope_searches_in_title_and_description(): void
+    public function searchScopeSearchesInTitleAndDescription(): void
     {
         Job::factory()->create(['title' => 'Software Engineer', 'description' => 'PHP Developer']);
         Job::factory()->create(['title' => 'Marketing Manager', 'description' => 'Digital Marketing']);
@@ -272,7 +280,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function recent_scope_returns_jobs_from_last_30_days(): void
+    public function recentScopeReturnsJobsFromLast30Days(): void
     {
         Job::factory()->create(['created_at' => now()->subDays(10)]);
         Job::factory()->create(['created_at' => now()->subDays(40)]);
@@ -285,7 +293,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function expired_scope_returns_expired_jobs(): void
+    public function expiredScopeReturnsExpiredJobs(): void
     {
         Job::factory()->create(['job_expiry_date' => now()->subDays(5)]);
         Job::factory()->create(['job_expiry_date' => now()->addDays(5)]);
@@ -298,7 +306,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_job_is_expired(): void
+    public function itCanCheckIfJobIsExpired(): void
     {
         $expiredJob = Job::factory()->create(['job_expiry_date' => now()->subDay()]);
         $activeJob = Job::factory()->create(['job_expiry_date' => now()->addDay()]);
@@ -308,7 +316,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_formatted_salary_range(): void
+    public function itCanGetFormattedSalaryRange(): void
     {
         $job = Job::factory()->create([
             'salary_from' => 50000,
@@ -321,7 +329,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_hidden_salary_when_salary_is_hidden(): void
+    public function itReturnsHiddenSalaryWhenSalaryIsHidden(): void
     {
         $job = Job::factory()->create(['hide_salary' => true]);
 
@@ -329,7 +337,7 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_applications_count(): void
+    public function itCanGetApplicationsCount(): void
     {
         JobApplication::factory()->count(5)->create(['job_id' => $this->job->id]);
 
@@ -337,12 +345,12 @@ class JobTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_full_location_string(): void
+    public function itCanGetFullLocationString(): void
     {
         $country = Country::factory()->create(['name' => 'United States']);
         $state = State::factory()->create(['name' => 'California', 'country_id' => $country->id]);
         $city = City::factory()->create(['name' => 'San Francisco', 'state_id' => $state->id]);
-        
+
         $job = Job::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -350,7 +358,7 @@ class JobTest extends TestCase
         ]);
 
         $fullLocation = $job->full_location;
-        
+
         $this->assertStringContainsString('San Francisco', $fullLocation);
         $this->assertStringContainsString('California', $fullLocation);
         $this->assertStringContainsString('United States', $fullLocation);

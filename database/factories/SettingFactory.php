@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Setting
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Setting>
  */
@@ -29,7 +29,7 @@ class SettingFactory extends Factory
     {
         return [
             'key' => fake()->word(),
-            'value' => fake()->word()
+            'value' => fake()->word(),
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Language;
 
 /**
- * Class LanguageRepository
+ * Class LanguageRepository.
  *
  * @version July 3, 2020, 9:12 am UTC
  */
@@ -20,7 +20,7 @@ class LanguageRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -28,8 +28,8 @@ class LanguageRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Language::class;

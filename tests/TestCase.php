@@ -2,86 +2,45 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\TestHelpers;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Database\Seeders\UsersSeeder;
-use Database\Seeders\CountriesSeeder;
-use Database\Seeders\StatesSeeder;
+use App\Models\Candidate;
+use App\Models\Company;
+use App\Models\Job;
+use App\Models\User;
 use Database\Seeders\CitiesSeeder;
-use Database\Seeders\BasicJobsSeeder;
-use Database\Seeders\SkillsSeeder;
-use Database\Seeders\CreateDefaultIndustriesSeeder;
+use Database\Seeders\CountriesSeeder;
 use Database\Seeders\CreateDefaultCareerLevelSeeder;
 use Database\Seeders\CreateDefaultDegreeLevelSeeder;
 use Database\Seeders\CreateDefaultFunctionalAreaSeeder;
-use Database\Seeders\CreateDefaultJobTypeSeeder;
+use Database\Seeders\CreateDefaultIndustriesSeeder;
 use Database\Seeders\CreateDefaultJobShiftSeeder;
-use Database\Seeders\CreateDefaultSalaryPeriodSeeder;
-use Database\Seeders\SalaryCurrencySeeder;
-use Database\Seeders\DefaultCompanySizeSeeder;
+use Database\Seeders\CreateDefaultJobTypeSeeder;
 use Database\Seeders\CreateDefaultOwnerShipTypeSeeder;
+use Database\Seeders\CreateDefaultSalaryPeriodSeeder;
+use Database\Seeders\DefaultCompanySizeSeeder;
 use Database\Seeders\JobCategorySeeder;
-use Database\Seeders\CreateDefaultPostCategorySeeder;
+use Database\Seeders\SalaryCurrencySeeder;
+use Database\Seeders\StatesSeeder;
+use Database\Seeders\UsersSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, RefreshDatabase;
+    use CreatesApplication;
+    use RefreshDatabase;
 
     /**
-     * Setup essential data for tests that require foreign key dependencies
-     */
-    protected function seedEssentialData(): void
-    {
-        // Disable foreign key constraints during seeding
-        DB::statement('PRAGMA foreign_keys=OFF');
-        
-        try {
-            // Seed essential data in proper order to avoid foreign key issues
-            $this->seed([
-                // Master data first
-                CreateDefaultIndustriesSeeder::class,
-                CreateDefaultCareerLevelSeeder::class,
-                CreateDefaultDegreeLevelSeeder::class,
-                CreateDefaultFunctionalAreaSeeder::class,
-                JobCategorySeeder::class,
-                CreateDefaultJobTypeSeeder::class,
-                CreateDefaultJobShiftSeeder::class,
-                CreateDefaultSalaryPeriodSeeder::class,
-                SalaryCurrencySeeder::class,
-                DefaultCompanySizeSeeder::class,
-                CreateDefaultOwnerShipTypeSeeder::class,
-                
-                // Geographic data
-                CountriesSeeder::class,
-                StatesSeeder::class,
-                CitiesSeeder::class,
-                
-                // Users and related data
-                UsersSeeder::class,
-            ]);
-            
-            // Create basic test data
-            $this->createBasicTestData();
-            
-        } finally {
-            // Re-enable foreign key constraints
-            DB::statement('PRAGMA foreign_keys=ON');
-        }
-    }
-
-    /**
-     * Setup method that can be called by tests needing foreign key data
+     * Setup method that can be called by tests needing foreign key data.
      */
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Optimize memory usage
         ini_set('memory_limit', '2G');
-        
+
         // Set up testing environment efficiently
         $this->setTestingConfig();
 
@@ -98,34 +57,110 @@ abstract class TestCase extends BaseTestCase
     {
         // Enhanced Pattern: Re-enable foreign key constraints after testing
         $this->restoreDatabaseConstraints();
-        
+
         // Force garbage collection
         if (function_exists('gc_collect_cycles')) {
             gc_collect_cycles();
         }
-        
+
         parent::tearDown();
+    }
+
+    /**
+     * Setup essential data for tests that require foreign key dependencies.
+     */
+    protected function seedEssentialData(): void
+    {
+        // Disable foreign key constraints during seeding
+        DB::statement('PRAGMA foreign_keys=OFF');
+
+        try {
+            // Seed essential data in proper order to avoid foreign key issues
+            $this->seed([
+                // Master data first
+                CreateDefaultIndustriesSeeder::class,
+                CreateDefaultCareerLevelSeeder::class,
+                CreateDefaultDegreeLevelSeeder::class,
+                CreateDefaultFunctionalAreaSeeder::class,
+                JobCategorySeeder::class,
+                CreateDefaultJobTypeSeeder::class,
+                CreateDefaultJobShiftSeeder::class,
+                CreateDefaultSalaryPeriodSeeder::class,
+                SalaryCurrencySeeder::class,
+                DefaultCompanySizeSeeder::class,
+                CreateDefaultOwnerShipTypeSeeder::class,
+
+                // Geographic data
+                CountriesSeeder::class,
+                StatesSeeder::class,
+                CitiesSeeder::class,
+
+                // Users and related data
+                UsersSeeder::class,
+            ]);
+
+            // Create basic test data
+            $this->createBasicTestData();
+        } finally {
+            // Re-enable foreign key constraints
+            DB::statement('PRAGMA foreign_keys=ON');
+        }
+    }
+
+    /**
+     * Helper method to create test user with role.
+     */
+    protected function createTestUser(string $role = 'candidate'): User
+    {
+        $user = User::factory()->create();
+        $user->assignRole($role);
+
+        return $user;
+    }
+
+    /**
+     * Helper method to create test candidate.
+     */
+    protected function createTestCandidate(): Candidate
+    {
+        return Candidate::factory()->create();
+    }
+
+    /**
+     * Helper method to create test company.
+     */
+    protected function createTestCompany(): Company
+    {
+        return Company::factory()->create();
+    }
+
+    /**
+     * Helper method to create test job.
+     */
+    protected function createTestJob(): Job
+    {
+        return Job::factory()->create();
     }
 
     private function setTestingConfig(): void
     {
-        config(["app.env" => "testing"]);
-        config(["cache.default" => "array"]);
-        config(["session.driver" => "array"]);
-        config(["queue.default" => "sync"]);
-        config(["mail.default" => "array"]);
+        config(['app.env' => 'testing']);
+        config(['cache.default' => 'array']);
+        config(['session.driver' => 'array']);
+        config(['queue.default' => 'sync']);
+        config(['mail.default' => 'array']);
     }
 
     private function configureDatabaseForTesting(): void
     {
         try {
-            if (config('database.default') === 'sqlite') {
+            if ('sqlite' === config('database.default')) {
                 // Configure SQLite for testing
                 DB::statement('PRAGMA journal_mode=WAL');
                 DB::statement('PRAGMA synchronous=NORMAL');
                 DB::statement('PRAGMA temp_store=MEMORY');
                 DB::statement('PRAGMA mmap_size=268435456'); // 256MB
-                
+
                 // Temporarily disable foreign key constraints during migrations
                 DB::statement('PRAGMA foreign_keys=OFF');
             }
@@ -137,7 +172,7 @@ abstract class TestCase extends BaseTestCase
     private function restoreDatabaseConstraints(): void
     {
         try {
-            if (config('database.default') === 'sqlite') {
+            if ('sqlite' === config('database.default')) {
                 DB::statement('PRAGMA foreign_keys=ON');
             }
         } catch (\Exception $e) {
@@ -198,7 +233,7 @@ abstract class TestCase extends BaseTestCase
             if (Schema::hasTable('media')) {
                 DB::table('media')->insertOrIgnore([
                     'id' => 1,
-                    'model_type' => 'App\\Models\\Candidate',
+                    'model_type' => 'App\Models\Candidate',
                     'model_id' => 1,
                     'uuid' => '12345678-1234-1234-1234-123456789012',
                     'collection_name' => 'resumes',
@@ -261,47 +296,12 @@ abstract class TestCase extends BaseTestCase
                     ],
                 ]);
             }
-
         } catch (\Exception $e) {
             // Log but don't fail tests if basic data creation fails
             if (app()->environment('testing')) {
                 // Only log in testing environment
-                error_log("TestCase: Failed to create basic test data - " . $e->getMessage());
+                error_log('TestCase: Failed to create basic test data - '.$e->getMessage());
             }
         }
-    }
-
-    /**
-     * Helper method to create test user with role
-     */
-    protected function createTestUser(string $role = 'candidate'): \App\Models\User
-    {
-        $user = \App\Models\User::factory()->create();
-        $user->assignRole($role);
-        return $user;
-    }
-
-    /**
-     * Helper method to create test candidate
-     */
-    protected function createTestCandidate(): \App\Models\Candidate
-    {
-        return \App\Models\Candidate::factory()->create();
-    }
-
-    /**
-     * Helper method to create test company
-     */
-    protected function createTestCompany(): \App\Models\Company
-    {
-        return \App\Models\Company::factory()->create();
-    }
-
-    /**
-     * Helper method to create test job
-     */
-    protected function createTestJob(): \App\Models\Job
-    {
-        return \App\Models\Job::factory()->create();
     }
 }

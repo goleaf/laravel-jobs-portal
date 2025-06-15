@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Transaction
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
  */
@@ -35,7 +35,7 @@ class TransactionFactory extends Factory
             'status' => fake()->randomElement(['pending', 'completed', 'failed', 'cancelled']),
             'is_approved' => fake()->boolean(),
             'approved_id' => fake()->optional()->numberBetween(1, 3),
-            'plan_currency_id' => fake()->numberBetween(1, 3) // Use existing currency IDs
+            'plan_currency_id' => fake()->numberBetween(1, 3), // Use existing currency IDs
         ];
     }
 }

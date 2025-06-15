@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for RequiredDegreeLevel
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RequiredDegreeLevel>
  */
@@ -37,12 +37,12 @@ class RequiredDegreeLevelFactory extends Factory
             'Certificate Program',
             'Diploma',
             'Trade School',
-            'No Formal Education Required'
+            'No Formal Education Required',
         ];
-        
+
         return [
             'name' => $this->faker->unique()->randomElement($degrees),
-            'is_default' => $this->faker->boolean(10) // 10% chance of being default
+            'is_default' => $this->faker->boolean(10), // 10% chance of being default
         ];
     }
 }

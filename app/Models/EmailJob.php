@@ -9,40 +9,40 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * EmailJob Model - Enhanced with Enhanced patterns
+ * EmailJob Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property int $job_id
- * @property string $job_url
- * @property string $friend_name
- * @property string $friend_email
- * @property bool $is_sent
- * @property bool $is_active
- * @property string|null $message
- * @property string|null $status
- * @property Carbon|null $sent_at
- * @property Carbon|null $opened_at
- * @property Carbon|null $clicked_at
- * @property int|null $open_count
- * @property int|null $click_count
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User $user
- * @property-read Job $job
- * @property-read bool $is_recent
- * @property-read bool $is_opened
- * @property-read bool $is_clicked
- * @property-read string $status_label
- * @property-read string $friend_domain
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $job_id
+ * @property string      $job_url
+ * @property string      $friend_name
+ * @property string      $friend_email
+ * @property bool        $is_sent
+ * @property bool        $is_active
+ * @property null|string $message
+ * @property null|string $status
+ * @property null|Carbon $sent_at
+ * @property null|Carbon $opened_at
+ * @property null|Carbon $clicked_at
+ * @property null|int    $open_count
+ * @property null|int    $click_count
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property Job         $job
+ * @property bool        $is_recent
+ * @property bool        $is_opened
+ * @property bool        $is_clicked
+ * @property string      $status_label
+ * @property string      $friend_domain
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder sent()
@@ -69,15 +69,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class EmailJob extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'email_jobs';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_SENT = 'sent';
@@ -88,56 +85,7 @@ class EmailJob extends Model
     public const STATUS_BOUNCED = 'bounced';
 
     /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'user_id',
-        'job_id',
-        'job_url',
-        'friend_name',
-        'friend_email',
-        'is_sent',
-        'is_active',
-        'message',
-        'status',
-        'sent_at',
-        'opened_at',
-        'clicked_at',
-        'open_count',
-        'click_count',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     */
-    protected $hidden = [
-        'deleted_at',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'job_id' => 'integer',
-            'is_sent' => 'boolean',
-            'is_active' => 'boolean',
-            'open_count' => 'integer',
-            'click_count' => 'integer',
-            'sent_at' => 'datetime',
-            'opened_at' => 'datetime',
-            'clicked_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
+     * Validation rules.
      */
     public static array $rules = [
         'user_id' => 'required|integer|exists:users,id',
@@ -157,7 +105,35 @@ class EmailJob extends Model
     ];
 
     /**
-     * Activity log configuration
+     * The table associated with the model.
+     */
+    protected $table = 'email_jobs';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'user_id',
+        'job_id',
+        'job_url',
+        'friend_name',
+        'friend_email',
+        'is_active',
+        'is_sent',
+        'status',
+        'open_count',
+        'click_count'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    /**
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -165,7 +141,8 @@ class EmailJob extends Model
             ->logOnly(['user_id', 'job_id', 'friend_name', 'friend_email', 'is_sent', 'status'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Email job has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Email job has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -221,7 +198,7 @@ class EmailJob extends Model
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->where('is_sent', false);
+        return $query->where('status', 'pending');
     }
 
     /**
@@ -282,7 +259,8 @@ class EmailJob extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -339,9 +317,10 @@ class EmailJob extends Model
     public function scopePopular(Builder $query): Builder
     {
         return $query->select('job_id')
-                    ->selectRaw('COUNT(*) as shares_count')
-                    ->groupBy('job_id')
-                    ->orderByDesc('shares_count');
+            ->selectRaw('COUNT(*) as shares_count')
+            ->groupBy('job_id')
+            ->orderByDesc('shares_count')
+        ;
     }
 
     /**
@@ -351,7 +330,8 @@ class EmailJob extends Model
     {
         return $query->where(function ($q) {
             $q->whereNotNull('opened_at')
-              ->orWhereNotNull('clicked_at');
+                ->orWhereNotNull('clicked_at')
+            ;
         });
     }
 
@@ -364,17 +344,19 @@ class EmailJob extends Model
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
-        return $query->where('friend_name', 'like', '%' . $term . '%')
-                    ->orWhere('friend_email', 'like', '%' . $term . '%')
-                    ->orWhere('message', 'like', '%' . $term . '%')
-                    ->orWhereHas('job', function ($jobQuery) use ($term) {
-                        $jobQuery->where('title', 'like', '%' . $term . '%');
-                    })
-                    ->orWhereHas('user', function ($userQuery) use ($term) {
-                        $userQuery->where('first_name', 'like', '%' . $term . '%')
-                                 ->orWhere('last_name', 'like', '%' . $term . '%')
-                                 ->orWhere('email', 'like', '%' . $term . '%');
-                    });
+        return $query->where('friend_name', 'like', '%'.$term.'%')
+            ->orWhere('friend_email', 'like', '%'.$term.'%')
+            ->orWhere('message', 'like', '%'.$term.'%')
+            ->orWhereHas('job', function ($jobQuery) use ($term) {
+                $jobQuery->where('title', 'like', '%'.$term.'%');
+            })
+            ->orWhereHas('user', function ($userQuery) use ($term) {
+                $userQuery->where('first_name', 'like', '%'.$term.'%')
+                    ->orWhere('last_name', 'like', '%'.$term.'%')
+                    ->orWhere('email', 'like', '%'.$term.'%')
+                ;
+            })
+        ;
     }
 
     /**
@@ -426,7 +408,7 @@ class EmailJob extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_PENDING => 'Pending',
             self::STATUS_SENT => 'Sent',
             self::STATUS_DELIVERED => 'Delivered',
@@ -443,7 +425,7 @@ class EmailJob extends Model
      */
     public function getFriendDomainAttribute(): string
     {
-        return substr(strrchr($this->friend_email, "@"), 1);
+        return substr(strrchr($this->friend_email, '@'), 1);
     }
 
     // =============================================
@@ -545,9 +527,12 @@ class EmailJob extends Model
     {
         return Cache::remember("user.{$userId}.engagement_rate", 3600, function () use ($userId) {
             $total = self::where('user_id', $userId)->sent()->count();
-            if ($total === 0) return 0.0;
-            
+            if (0 === $total) {
+                return 0.0;
+            }
+
             $engaged = self::where('user_id', $userId)->sent()->engaged()->count();
+
             return round(($engaged / $total) * 100, 2);
         });
     }
@@ -576,6 +561,28 @@ class EmailJob extends Model
         Cache::forget("user.{$this->user_id}.email_jobs_count");
         Cache::forget("job.{$this->job_id}.shares_count");
         Cache::forget("user.{$this->user_id}.engagement_rate");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'job_id' => 'integer',
+            'is_sent' => 'boolean',
+            'is_active' => 'boolean',
+            'open_count' => 'integer',
+            'click_count' => 'integer',
+            'sent_at' => 'datetime',
+            'opened_at' => 'datetime',
+            'clicked_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

@@ -3,32 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class CareerLevel
+ * Class CareerLevel.
  *
  * @version June 20, 2020, 5:46 am UTC
  *
- * @property int $id
- * @property string $level_name
- * @property string|null $description
- * @property int $level_order
- * @property bool $is_default
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read int|null $candidates_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
- * @property-read mixed $level_category
+ * @property int                    $id
+ * @property string                 $level_name
+ * @property null|string            $description
+ * @property int                    $level_order
+ * @property bool                   $is_default
+ * @property bool                   $is_active
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property Collection|Job[]       $jobs
+ * @property null|int               $jobs_count
+ * @property Candidate[]|Collection $candidates
+ * @property null|int               $candidates_count
+ * @property mixed                  $usage_count
+ * @property mixed                  $formatted_usage_stats
+ * @property mixed                  $level_category
  *
  * @method static Builder|CareerLevel newModelQuery()
  * @method static Builder|CareerLevel newQuery()
@@ -66,7 +68,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class CareerLevel extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     public $table = 'career_levels';
 
@@ -87,69 +90,25 @@ class CareerLevel extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'level_order' => 'integer',
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'min_experience_years' => 'integer',
-            'max_experience_years' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Scope a query to only include old records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $days
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query, int $days = 365): \Illuminate\Database\Eloquent\Builder
+    public function scopeOld(Builder $query, int $days = 365): Builder
     {
         return $query->where('created_at', '<', now()->subDays($days))
-                    ->orderBy("created_at", "asc");
+            ->orderBy('created_at', 'asc')
+        ;
     }
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when career level is updated
-        static::updated(function ($careerLevel) {
-            cache()->forget("career_level.{$careerLevel->id}");
-            cache()->forget("career_levels.popular");
-            cache()->forget("career_levels.trending");
-            cache()->tags(['career_levels', 'career_level-' . $careerLevel->id])->flush();
-        });
-
-        // Clear cache when career level is deleted
-        static::deleted(function ($careerLevel) {
-            cache()->forget("career_level.{$careerLevel->id}");
-            cache()->forget("career_levels.popular");
-            cache()->forget("career_levels.trending");
-            cache()->tags(['career_levels', 'career_level-' . $careerLevel->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['level_name', 'description', 'level_order', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -279,7 +238,8 @@ class CareerLevel extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('level_name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -288,9 +248,10 @@ class CareerLevel extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount(['jobs', 'candidates'])
-                    ->orderByDesc('jobs_count')
-                    ->orderByDesc('candidates_count')
-                    ->limit($limit);
+            ->orderByDesc('jobs_count')
+            ->orderByDesc('candidates_count')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -315,7 +276,8 @@ class CareerLevel extends Model
     public function scopeRecent(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+        ;
     }
 
     /**
@@ -324,15 +286,16 @@ class CareerLevel extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        },
-                        'candidates' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count')
-                    ->orderByDesc('candidates_count');
+            'jobs' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+            'candidates' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('jobs_count')
+            ->orderByDesc('candidates_count')
+        ;
     }
 
     /**
@@ -349,7 +312,8 @@ class CareerLevel extends Model
     public function scopeEntry(Builder $query): Builder
     {
         return $query->where('level_name', 'LIKE', '%Entry%')
-                    ->orWhere('level_name', 'LIKE', '%Junior%');
+            ->orWhere('level_name', 'LIKE', '%Junior%')
+        ;
     }
 
     /**
@@ -366,7 +330,8 @@ class CareerLevel extends Model
     public function scopeManagement(Builder $query): Builder
     {
         return $query->where('level_name', 'LIKE', '%Manager%')
-                    ->orWhere('level_name', 'LIKE', '%Executive%');
+            ->orWhere('level_name', 'LIKE', '%Executive%')
+        ;
     }
 
     /**
@@ -440,10 +405,11 @@ class CareerLevel extends Model
     {
         return cache()->remember("career_level.{$this->id}.average_salary", 3600, function () {
             return $this->jobs()
-                        ->whereNotNull('min_salary')
-                        ->whereNotNull('max_salary')
-                        ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
-                        ->value('avg_salary') ?? 0.0;
+                ->whereNotNull('min_salary')
+                ->whereNotNull('max_salary')
+                ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
+                ->value('avg_salary') ?? 0.0
+            ;
         });
     }
 
@@ -453,9 +419,10 @@ class CareerLevel extends Model
     public function getNextLevel(): ?CareerLevel
     {
         return static::where('level_order', '>', $this->level_order)
-                    ->active()
-                    ->orderBy('level_order', 'asc')
-                    ->first();
+            ->active()
+            ->orderBy('level_order', 'asc')
+            ->first()
+        ;
     }
 
     /**
@@ -464,20 +431,22 @@ class CareerLevel extends Model
     public function getPreviousLevel(): ?CareerLevel
     {
         return static::where('level_order', '<', $this->level_order)
-                    ->active()
-                    ->orderBy('level_order', 'desc')
-                    ->first();
+            ->active()
+            ->orderBy('level_order', 'desc')
+            ->first()
+        ;
     }
 
     /**
      * Get career progression path.
      */
-    public function getProgressionPath(): \Illuminate\Database\Eloquent\Collection
+    public function getProgressionPath(): Collection
     {
         return cache()->remember("career_level.{$this->id}.progression_path", 3600, function () {
             return static::active()
-                          ->byOrder()
-                          ->get();
+                ->byOrder()
+                ->get()
+            ;
         });
     }
 
@@ -494,6 +463,48 @@ class CareerLevel extends Model
     }
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'level_order' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'min_experience_years' => 'integer',
+            'max_experience_years' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when career level is updated
+        static::updated(function ($careerLevel) {
+            cache()->forget("career_level.{$careerLevel->id}");
+            cache()->forget('career_levels.popular');
+            cache()->forget('career_levels.trending');
+            cache()->tags(['career_levels', 'career_level-'.$careerLevel->id])->flush();
+        });
+
+        // Clear cache when career level is deleted
+        static::deleted(function ($careerLevel) {
+            cache()->forget("career_level.{$careerLevel->id}");
+            cache()->forget('career_levels.popular');
+            cache()->forget('career_levels.trending');
+            cache()->tags(['career_levels', 'career_level-'.$careerLevel->id])->flush();
+        });
+    }
+
+    /**
      * Get experience description.
      */
     private function getExperienceDescription(): string
@@ -501,7 +512,7 @@ class CareerLevel extends Model
         $min = $this->min_experience_years ?? 0;
         $max = $this->max_experience_years ?? 0;
 
-        if ($min === 0 && $max === 0) {
+        if (0 === $min && 0 === $max) {
             return __('career_level.no_experience_required');
         }
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Universal;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
 class LoginRequest extends FormRequest
 {
@@ -25,12 +24,12 @@ class LoginRequest extends FormRequest
                 'required',
                 'string',
                 'email:rfc,dns',
-                'max:255'
+                'max:255',
             ],
             'password' => [
                 'required',
                 'string',
-                'min:8'
+                'min:8',
             ],
             'remember' => 'nullable|boolean',
             'device_name' => 'nullable|string|max:255',
@@ -76,13 +75,13 @@ class LoginRequest extends FormRequest
     {
         if ($this->has('email')) {
             $this->merge([
-                'email' => strtolower(trim($this->email))
+                'email' => strtolower(trim($this->email)),
             ]);
         }
 
         if (!$this->has('device_name') || empty($this->device_name)) {
             $this->merge([
-                'device_name' => $this->userAgent() ?: 'Unknown Device'
+                'device_name' => $this->userAgent() ?: 'Unknown Device',
             ]);
         }
     }

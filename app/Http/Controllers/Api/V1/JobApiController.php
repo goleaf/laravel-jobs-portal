@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\Job;
 use App\Http\Requests\Api\Universal\StoreRequest;
 use App\Http\Requests\Api\Universal\UpdateRequest;
-use App\Http\Requests\Api\Universal\IndexRequest;
+use App\Models\Job;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for Job Management
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class JobApiController extends Controller
 {
@@ -24,37 +23,38 @@ class JobApiController extends Controller
     {
         try {
             $query = Job::with(['company:id,name', 'jobCategory:id,name', 'jobType:id,name']);
-            
+
             // Apply search filter
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhereHas('company', function($company) use ($search) {
-                          $company->where('name', 'like', "%{$search}%");
-                      });
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhereHas('company', function ($company) use ($search) {
+                            $company->where('name', 'like', "%{$search}%");
+                        })
+                    ;
                 });
             }
-            
+
             // Apply status filter
-            if ($request->has('status') && $request->status !== '') {
-                if ($request->status === 'active') {
+            if ($request->has('status') && '' !== $request->status) {
+                if ('active' === $request->status) {
                     $query->where('is_active', true);
-                } elseif ($request->status === 'inactive') {
+                } elseif ('inactive' === $request->status) {
                     $query->where('is_active', false);
                 }
             }
-            
+
             // Apply sorting
             $sortBy = $request->get('sort', 'created_at');
             $order = $request->get('order', 'desc');
             $query->orderBy($sortBy, $order);
-            
+
             // Pagination
             $perPage = min($request->integer('per_page', 15), 100);
             $data = $query->paginate($perPage);
-            
+
             // Transform data
             $jobs = $data->getCollection()->map(function ($job) {
                 return [
@@ -63,15 +63,15 @@ class JobApiController extends Controller
                     'description' => $job->description,
                     'company' => [
                         'id' => $job->company?->id,
-                        'name' => $job->company?->name ?? 'N/A'
+                        'name' => $job->company?->name ?? 'N/A',
                     ],
                     'category' => [
                         'id' => $job->jobCategory?->id,
-                        'name' => $job->jobCategory?->name ?? 'N/A'
+                        'name' => $job->jobCategory?->name ?? 'N/A',
                     ],
                     'type' => [
                         'id' => $job->jobType?->id,
-                        'name' => $job->jobType?->name ?? 'Full-time'
+                        'name' => $job->jobType?->name ?? 'Full-time',
                     ],
                     'location' => $job->location,
                     'salary_from' => $job->salary_from,
@@ -84,7 +84,7 @@ class JobApiController extends Controller
                     'updated_at' => $job->updated_at?->toISOString(),
                 ];
             });
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Jobs retrieved successfully',
@@ -94,13 +94,12 @@ class JobApiController extends Controller
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve jobs',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
@@ -112,7 +111,7 @@ class JobApiController extends Controller
     {
         try {
             $data = $request->validated();
-            
+
             // Create job with validated data
             $job = Job::create([
                 'title' => $data['name'] ?? $data['title'] ?? 'Untitled Job',
@@ -127,10 +126,10 @@ class JobApiController extends Controller
                 'is_active' => $data['is_active'] ?? true,
                 'is_featured' => $data['is_featured'] ?? false,
             ]);
-            
+
             // Load relationships for response
             $job->load(['company:id,name', 'jobCategory:id,name', 'jobType:id,name']);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Job created successfully',
@@ -140,31 +139,33 @@ class JobApiController extends Controller
                     'description' => $job->description,
                     'company' => [
                         'id' => $job->company?->id,
-                        'name' => $job->company?->name ?? 'N/A'
+                        'name' => $job->company?->name ?? 'N/A',
                     ],
                     'is_active' => $job->is_active,
                     'created_at' => $job->created_at?->toISOString(),
-                ]
+                ],
             ], 201);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create job',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $job = Job::with(['company:id,name', 'jobCategory:id,name', 'jobType:id,name'])
-                ->findOrFail($id);
-            
+                ->findOrFail($id)
+            ;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Job retrieved successfully',
@@ -174,15 +175,15 @@ class JobApiController extends Controller
                     'description' => $job->description,
                     'company' => [
                         'id' => $job->company?->id,
-                        'name' => $job->company?->name ?? 'N/A'
+                        'name' => $job->company?->name ?? 'N/A',
                     ],
                     'category' => [
                         'id' => $job->jobCategory?->id,
-                        'name' => $job->jobCategory?->name ?? 'N/A'
+                        'name' => $job->jobCategory?->name ?? 'N/A',
                     ],
                     'type' => [
                         'id' => $job->jobType?->id,
-                        'name' => $job->jobType?->name ?? 'Full-time'
+                        'name' => $job->jobType?->name ?? 'Full-time',
                     ],
                     'location' => $job->location,
                     'salary_from' => $job->salary_from,
@@ -192,27 +193,28 @@ class JobApiController extends Controller
                     'is_featured' => $job->is_featured ?? false,
                     'created_at' => $job->created_at?->toISOString(),
                     'updated_at' => $job->updated_at?->toISOString(),
-                ]
+                ],
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Job not found',
-                'error' => config('app.debug') ? $e->getMessage() : 'Job not found'
+                'error' => config('app.debug') ? $e->getMessage() : 'Job not found',
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
         try {
             $job = Job::findOrFail($id);
             $data = $request->validated();
-            
+
             // Update job with validated data
             $updateData = [];
             if (isset($data['name']) || isset($data['title'])) {
@@ -227,12 +229,12 @@ class JobApiController extends Controller
             if (isset($data['location'])) {
                 $updateData['location'] = $data['location'];
             }
-            
+
             $job->update($updateData);
-            
+
             // Load relationships for response
             $job->load(['company:id,name', 'jobCategory:id,name', 'jobType:id,name']);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Job updated successfully',
@@ -242,39 +244,39 @@ class JobApiController extends Controller
                     'description' => $job->description,
                     'is_active' => $job->is_active,
                     'updated_at' => $job->updated_at?->toISOString(),
-                ]
+                ],
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update job',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $job = Job::findOrFail($id);
             $jobTitle = $job->title;
-            
+
             $job->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => "Job '{$jobTitle}' deleted successfully"
+                'message' => "Job '{$jobTitle}' deleted successfully",
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete job',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }

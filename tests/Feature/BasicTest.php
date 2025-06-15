@@ -7,41 +7,46 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class BasicTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
 
     /** @test */
-    public function public_can_view_homepage()
+    public function publicCanViewHomepage()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function public_can_view_login_page()
+    public function publicCanViewLoginPage()
     {
         $response = $this->get('/login');
-        
+
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function user_can_login_with_valid_credentials()
+    public function userCanLoginWithValidCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
-        
+
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'password',
         ]);
-        
+
         $response->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($user);
     }
-} 
+}

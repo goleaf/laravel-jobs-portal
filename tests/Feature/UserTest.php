@@ -7,6 +7,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class UserTest extends TestCase
 {
     use RefreshDatabase;
@@ -22,7 +27,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_can_be_created()
+    public function userCanBeCreated()
     {
         $userData = [
             'name' => $this->faker->name,
@@ -42,7 +47,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_can_be_updated()
+    public function userCanBeUpdated()
     {
         $user = User::factory()->create();
 
@@ -59,7 +64,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function inactive_users_can_be_filtered()
+    public function inactiveUsersCanBeFiltered()
     {
         User::factory()->count(3)->create(['is_active' => true]);
         User::factory()->count(2)->create(['is_active' => false]);
@@ -72,7 +77,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_can_have_candidate_profile()
+    public function userCanHaveCandidateProfile()
     {
         $user = User::factory()->create();
 
@@ -90,7 +95,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_can_have_company_profile()
+    public function userCanHaveCompanyProfile()
     {
         $user = User::factory()->create();
 
@@ -109,7 +114,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function guests_cannot_access_admin_users_section()
+    public function guestsCannotAccessAdminUsersSection()
     {
         $this->get('/admin/users')->assertRedirect('/login');
         $this->get('/admin/users/create')->assertRedirect('/login');
@@ -117,7 +122,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function non_admin_users_cannot_access_admin_users_section()
+    public function nonAdminUsersCannotAccessAdminUsersSection()
     {
         $user = User::factory()->create(['user_type' => User::CANDIDATE]); // Or EMPLOYER
         $this->actingAs($user)->get('/admin/users')->assertStatus(403); // Or appropriate redirect/error
@@ -126,7 +131,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_admin_users_list()
+    public function adminCanViewAdminUsersList()
     {
         $response = $this->actingAs($this->adminUser)->get('/admin/users');
         $response->assertStatus(200);
@@ -134,7 +139,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_create_admin_user_form()
+    public function adminCanViewCreateAdminUserForm()
     {
         $response = $this->actingAs($this->adminUser)->get('/admin/users/create');
         $response->assertStatus(200);
@@ -142,7 +147,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_a_new_admin_user()
+    public function adminCanCreateANewAdminUser()
     {
         $newAdminData = [
             'name' => $this->faker->name,
@@ -165,7 +170,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_edit_admin_user_form()
+    public function adminCanViewEditAdminUserForm()
     {
         $adminToEdit = User::factory()->create(['user_type' => User::ADMIN]);
 
@@ -176,7 +181,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_update_an_admin_user()
+    public function adminCanUpdateAnAdminUser()
     {
         $adminToUpdate = User::factory()->create(['user_type' => User::ADMIN]);
         $updatedData = [
@@ -184,7 +189,7 @@ class UserTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
             'is_active' => false,
-             'user_type' => User::ADMIN, // Required by UpdateAdminRequest
+            'user_type' => User::ADMIN, // Required by UpdateAdminRequest
         ];
 
         $response = $this->actingAs($this->adminUser)->put("/admin/users/{$adminToUpdate->id}", $updatedData);
@@ -200,7 +205,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_delete_an_admin_user()
+    public function adminCanDeleteAnAdminUser()
     {
         $adminToDelete = User::factory()->create(['user_type' => User::ADMIN]);
 
@@ -218,8 +223,8 @@ class UserTest extends TestCase
         // $this->assertDatabaseMissing('users', ['id' => $adminToDelete->id]);
     }
 
-     /** @test */
-    public function admin_cannot_delete_self()
+    /** @test */
+    public function adminCannotDeleteSelf()
     {
         $response = $this->actingAs($this->adminUser)->delete("/admin/users/{$this->adminUser->id}");
 

@@ -1,25 +1,25 @@
 <?php
 
 /**
- * Comprehensive Database Seeder Runner
- * 
+ * Comprehensive Database Seeder Runner.
+ *
  * This script runs the comprehensive seeder for all tables in the Laravel job portal application.
- * 
+ *
  * Usage:
  * php seed_all_tables.php
- * 
+ *
  * Or if you prefer to use artisan directly:
  * php artisan db:seed --class=ComprehensiveAllTablesSeeder
  */
-
 echo "🚀 Starting Comprehensive Database Seeding...\n";
-echo "=" . str_repeat("=", 50) . "\n";
+echo '='.str_repeat('=', 50)."\n";
 echo "\n";
 
 // Check if we're in the correct directory
 if (!file_exists('artisan')) {
     echo "❌ Error: This script must be run from the Laravel project root directory.\n";
     echo "Please navigate to your Laravel project directory and run: php seed_all_tables.php\n";
+
     exit(1);
 }
 
@@ -30,17 +30,17 @@ $command = 'php artisan db:seed --class=ComprehensiveAllTablesSeeder';
 $output = [];
 $returnCode = 0;
 
-exec($command . ' 2>&1', $output, $returnCode);
+exec($command.' 2>&1', $output, $returnCode);
 
 // Display the output
 foreach ($output as $line) {
-    echo $line . "\n";
+    echo $line."\n";
 }
 
-if ($returnCode === 0) {
+if (0 === $returnCode) {
     echo "\n";
     echo "✅ SEEDING COMPLETED SUCCESSFULLY!\n";
-    echo "=" . str_repeat("=", 50) . "\n";
+    echo '='.str_repeat('=', 50)."\n";
     echo "\n";
     echo "🎉 All tables have been seeded with comprehensive data!\n";
     echo "\n";
@@ -63,7 +63,7 @@ if ($returnCode === 0) {
 } else {
     echo "\n";
     echo "❌ SEEDING FAILED!\n";
-    echo "=" . str_repeat("=", 50) . "\n";
+    echo '='.str_repeat('=', 50)."\n";
     echo "\n";
     echo "Please check the error messages above and try again.\n";
     echo "You may need to:\n";
@@ -71,7 +71,6 @@ if ($returnCode === 0) {
     echo "• Run migrations first: php artisan migrate\n";
     echo "• Check for missing dependencies\n";
     echo "\n";
+
     exit(1);
 }
-
-?>

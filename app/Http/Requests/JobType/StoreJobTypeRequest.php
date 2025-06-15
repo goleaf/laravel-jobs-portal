@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\JobType;
 
+use App\Models\JobType;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class StoreJobTypeRequest extends FormRequest
 {
@@ -12,13 +14,13 @@ class StoreJobTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\JobType::class);
+        return $this->user()->can('create', JobType::class);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -149,7 +151,7 @@ class StoreJobTypeRequest extends FormRequest
         // Auto-generate slug if not provided
         if (!$this->has('slug') && $this->has('name')) {
             $this->merge([
-                'slug' => \Illuminate\Support\Str::slug($this->name),
+                'slug' => Str::slug($this->name),
             ]);
         }
 
@@ -189,4 +191,4 @@ class StoreJobTypeRequest extends FormRequest
             ]);
         }
     }
-} 
+}

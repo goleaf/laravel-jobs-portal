@@ -10,11 +10,9 @@ use App\Models\NotificationSetting;
 use App\Models\SalaryCurrency;
 use App\Models\Transaction;
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
@@ -23,9 +21,8 @@ use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class FeaturedCompanySubscriptionController
+ * Class FeaturedCompanySubscriptionController.
  */
-
 class FeaturedCompanySubscriptionController extends AppBaseController
 {
     /**
@@ -73,7 +70,7 @@ class FeaturedCompanySubscriptionController extends AppBaseController
     /**
      * @return RedirectResponse|RedirectorStripe::setApiKey(<API-KEY>)
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function paymentSuccess(PaymentSuccessFeaturedCompanySubscriptionRequest $request): RedirectResponse
     {
@@ -84,7 +81,7 @@ class FeaturedCompanySubscriptionController extends AppBaseController
         }
         setStripeApiKey();
 
-        $sessionData = \Stripe\Checkout\Session::retrieve($sessionId);
+        $sessionData = Session::retrieve($sessionId);
         $currency = SalaryCurrency::where('currency_code', $sessionData->currency)->select('id')->first();
         $stripeID = $sessionData->id;
         $companyId = $sessionData->client_reference_id;
@@ -105,11 +102,11 @@ class FeaturedCompanySubscriptionController extends AppBaseController
             'meta' => $sessionData->toJSON(),
         ];
         FeaturedRecord::create($featuredRecord);
-        NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
+        1 == NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
             'type',
             'employer'
-        )->first()->value == 1 ?
-            addNotification([
+        )->first()->value
+            ? addNotification([
                 Notification::MARK_COMPANY_FEATURED,
                 $adminId,
                 Notification::ADMIN,

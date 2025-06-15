@@ -27,6 +27,7 @@ class DefaultRoleSeeder extends Seeder
         foreach ($roles as $role) {
             Role::create($role);
         }
+
         /** @var Role $adminRole */
         $adminRole = Role::whereName('Admin')->first();
 

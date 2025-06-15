@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests\Financial;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Enhanced Enhanced Form Request for StoreSalaryCurrencyRequest
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Following proven MasterData pattern
+ * Following proven MasterData pattern.
  */
 class StoreSalaryCurrencyRequest extends FormRequest
 {
@@ -18,11 +17,12 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if (!auth()->check()) {
             return false;
         }
-        
+
         $user = auth()->user();
+
         return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
+            $user->hasRole('Admin')
+            || $user->hasRole('Employer')
         );
     }
 
@@ -60,35 +60,6 @@ class StoreSalaryCurrencyRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation(): void
-    {
-        $data = [];
-        
-        if (isset($this->name)) {
-            $data['name'] = trim($this->name);
-        }
-        
-        if (isset($this->currency_name)) {
-            $data['currency_name'] = trim($this->currency_name);
-        }
-        
-        if (isset($this->level_name)) {
-            $data['level_name'] = trim($this->level_name);
-        }
-        
-        if (isset($this->shift)) {
-            $data['shift'] = trim($this->shift);
-        }
-        
-        if (isset($this->size)) {
-            $data['size'] = trim($this->size);
-        }
-        
-        $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
-        
-        $this->merge($data);
-    }
-
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
@@ -96,6 +67,35 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 $validator->errors()->add('name', __('validation.salarycurrency_business_conflict'));
             }
         });
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $data = [];
+
+        if (isset($this->name)) {
+            $data['name'] = trim($this->name);
+        }
+
+        if (isset($this->currency_name)) {
+            $data['currency_name'] = trim($this->currency_name);
+        }
+
+        if (isset($this->level_name)) {
+            $data['level_name'] = trim($this->level_name);
+        }
+
+        if (isset($this->shift)) {
+            $data['shift'] = trim($this->shift);
+        }
+
+        if (isset($this->size)) {
+            $data['size'] = trim($this->size);
+        }
+
+        $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
+
+        $this->merge($data);
     }
 
     private function hasBusinessLogicConflicts(): bool

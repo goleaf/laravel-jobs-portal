@@ -22,7 +22,7 @@ class JobShowResource extends JsonResource
                 'name' => $this->company?->name,
                 'slug' => $this->company?->slug,
                 'logo' => $this->company?->getLogoUrl(),
-                'location' => $this->company?->city?->name . ', ' . $this->company?->country?->name,
+                'location' => $this->company?->city?->name.', '.$this->company?->country?->name,
                 'industry' => $this->company?->industry?->name,
                 'size' => $this->company?->companySize?->name,
                 'is_verified' => $this->company?->is_verified,
@@ -69,8 +69,8 @@ class JobShowResource extends JsonResource
                 'experience_years_max' => $this->experience_years_max,
                 'experience_range' => $this->getExperienceRange(),
             ],
-            'skills' => $this->when($this->relationLoaded('skills'), function() {
-                return $this->skills->map(function($skill) {
+            'skills' => $this->when($this->relationLoaded('skills'), function () {
+                return $this->skills->map(function ($skill) {
                     return [
                         'id' => $skill->id,
                         'name' => $skill->name,
@@ -90,11 +90,11 @@ class JobShowResource extends JsonResource
                 'status' => $this->status,
                 'is_featured' => $this->is_featured,
                 'is_freelance' => $this->is_freelance,
-                'is_active' => $this->status === 'published',
+                'is_active' => 'published' === $this->status,
                 'views_count' => $this->views_count ?? 0,
             ],
-            'similar_jobs' => $this->when($this->relationLoaded('similarJobs'), function() {
-                return $this->similarJobs->take(5)->map(function($job) {
+            'similar_jobs' => $this->when($this->relationLoaded('similarJobs'), function () {
+                return $this->similarJobs->take(5)->map(function ($job) {
                     return [
                         'id' => $job->id,
                         'title' => $job->title,
@@ -138,17 +138,17 @@ class JobShowResource extends JsonResource
         }
 
         $symbol = $this->salaryCurrency?->symbol ?? '$';
-        
+
         if ($this->salary_from && $this->salary_to) {
-            return $symbol . number_format($this->salary_from) . ' - ' . $symbol . number_format($this->salary_to);
+            return $symbol.number_format($this->salary_from).' - '.$symbol.number_format($this->salary_to);
         }
-        
+
         if ($this->salary_from) {
-            return 'From ' . $symbol . number_format($this->salary_from);
+            return 'From '.$symbol.number_format($this->salary_from);
         }
-        
+
         if ($this->salary_to) {
-            return 'Up to ' . $symbol . number_format($this->salary_to);
+            return 'Up to '.$symbol.number_format($this->salary_to);
         }
 
         return null;
@@ -176,33 +176,45 @@ class JobShowResource extends JsonResource
         }
 
         if ($this->experience_years_min && $this->experience_years_max) {
-            return $this->experience_years_min . '-' . $this->experience_years_max . ' years';
+            return $this->experience_years_min.'-'.$this->experience_years_max.' years';
         }
 
         if ($this->experience_years_min) {
-            return $this->experience_years_min . '+ years';
+            return $this->experience_years_min.'+ years';
         }
 
-        return 'Up to ' . $this->experience_years_max . ' years';
+        return 'Up to '.$this->experience_years_max.' years';
     }
 
     private function canUserApply($user): bool
     {
-        if (!$user) return false;
-        if ($this->status !== 'published') return false;
-        if ($this->deadline && $this->deadline->isPast()) return false;
-        
+        if (!$user) {
+            return false;
+        }
+        if ('published' !== $this->status) {
+            return false;
+        }
+        if ($this->deadline && $this->deadline->isPast()) {
+            return false;
+        }
+
         return !$this->applications()->where('candidate_id', $user->candidate?->id)->exists();
     }
 
     private function getIncludedRelations(): array
     {
         $included = [];
-        
-        if ($this->relationLoaded('skills')) $included[] = 'skills';
-        if ($this->relationLoaded('similarJobs')) $included[] = 'similar_jobs';
-        if ($this->relationLoaded('applications')) $included[] = 'applications';
+
+        if ($this->relationLoaded('skills')) {
+            $included[] = 'skills';
+        }
+        if ($this->relationLoaded('similarJobs')) {
+            $included[] = 'similar_jobs';
+        }
+        if ($this->relationLoaded('applications')) {
+            $included[] = 'applications';
+        }
 
         return $included;
     }
-} 
+}

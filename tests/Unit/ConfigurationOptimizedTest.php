@@ -4,22 +4,27 @@ namespace Tests\Unit;
 
 use Tests\UnitTestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class ConfigurationOptimizedTest extends UnitTestCase
 {
     /** @test */
-    public function it_has_basic_environment_variables()
+    public function itHasBasicEnvironmentVariables()
     {
         // Test that basic environment variables or server variables are accessible
         $envExists = !empty($_ENV) || !empty($_SERVER);
         $this->assertTrue($envExists, 'Either $_ENV or $_SERVER should have values');
-        
+
         // Test basic PHP configuration
         $this->assertIsString(php_sapi_name());
         $this->assertIsString(phpversion());
     }
 
     /** @test */
-    public function it_has_memory_configuration()
+    public function itHasMemoryConfiguration()
     {
         $memoryLimit = ini_get('memory_limit');
         $this->assertNotEmpty($memoryLimit);
@@ -27,7 +32,7 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function it_has_timezone_configuration()
+    public function itHasTimezoneConfiguration()
     {
         $timezone = date_default_timezone_get();
         $this->assertNotEmpty($timezone);
@@ -35,14 +40,14 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function it_has_error_reporting_configuration()
+    public function itHasErrorReportingConfiguration()
     {
         $errorReporting = error_reporting();
         $this->assertIsInt($errorReporting);
     }
 
     /** @test */
-    public function it_has_basic_php_extensions()
+    public function itHasBasicPhpExtensions()
     {
         // Test common PHP extensions that Laravel requires
         $this->assertTrue(extension_loaded('json'));
@@ -51,17 +56,17 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function it_can_handle_basic_filesystem_operations()
+    public function itCanHandleBasicFilesystemOperations()
     {
         // Test basic file operations without Laravel
         $tempFile = tempnam(sys_get_temp_dir(), 'test_');
         $this->assertNotFalse($tempFile);
-        
+
         file_put_contents($tempFile, 'test content');
         $content = file_get_contents($tempFile);
         $this->assertEquals('test content', $content);
-        
+
         unlink($tempFile);
         $this->assertFileDoesNotExist($tempFile);
     }
-} 
+}

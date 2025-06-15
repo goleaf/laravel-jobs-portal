@@ -2,35 +2,40 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
 use App\Models\User;
-use Tests\Helpers\TestHelpers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Helpers\TestHelpers;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class UserModelOptimizedTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_be_created(): void
+    public function testUserCanBeCreated(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
-            "name" => "John Doe",
-            "email" => "john@example.com"
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals("John Doe", $user->name);
-        $this->assertEquals("john@example.com", $user->email);
+        $this->assertEquals('John Doe', $user->name);
+        $this->assertEquals('john@example.com', $user->email);
     }
 
-    public function test_user_has_correct_fillable_attributes(): void
+    public function testUserHasCorrectFillableAttributes(): void
     {
         $user = new User();
         $fillable = $user->getFillable();
 
         $expectedFillable = [
-            "first_name", "last_name", "name", "email", "password", 
-            "phone", "dob", "gender", "region_code"
+            'first_name', 'last_name', 'name', 'email', 'password',
+            'phone', 'dob', 'gender', 'region_code',
         ];
 
         foreach ($expectedFillable as $attribute) {
@@ -38,31 +43,31 @@ class UserModelOptimizedTest extends TestCase
         }
     }
 
-    public function test_user_has_correct_hidden_attributes(): void
+    public function testUserHasCorrectHiddenAttributes(): void
     {
         $user = new User();
         $hidden = $user->getHidden();
 
-        $this->assertContains("password", $hidden);
-        $this->assertContains("remember_token", $hidden);
+        $this->assertContains('password', $hidden);
+        $this->assertContains('remember_token', $hidden);
     }
 
-    public function test_password_is_hashed(): void
+    public function testPasswordIsHashed(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
-            "password" => "plaintext"
+            'password' => 'plaintext',
         ]);
 
-        $this->assertNotEquals("plaintext", $user->password);
-        $this->assertTrue(\Hash::check("plaintext", $user->password));
+        $this->assertNotEquals('plaintext', $user->password);
+        $this->assertTrue(\Hash::check('plaintext', $user->password));
     }
 
-    public function test_user_relationships(): void
+    public function testUserRelationships(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail();
-        
+
         // Test that relationships exist (methods are callable)
-        $this->assertTrue(method_exists($user, "jobs"));
-        $this->assertTrue(method_exists($user, "company"));
+        $this->assertTrue(method_exists($user, 'jobs'));
+        $this->assertTrue(method_exists($user, 'company'));
     }
 }

@@ -12,12 +12,17 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobSearchTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
     /** @test */
-    public function visitor_can_search_for_jobs_on_homepage()
+    public function visitorCanSearchForJobsOnHomepage()
     {
         $category = JobCategory::factory()->create(['name' => 'Web Development']);
         $jobType = JobType::factory()->create(['name' => 'Full Time']);
@@ -53,12 +58,13 @@ class JobSearchTest extends DuskTestCase
                 ->press('Search')
                 ->assertSee('Senior PHP Developer')
                 ->assertSee('Junior PHP Developer')
-                ->assertDontSee('Java Developer');
+                ->assertDontSee('Java Developer')
+            ;
         });
     }
 
     /** @test */
-    public function visitor_can_view_job_details()
+    public function visitorCanViewJobDetails()
     {
         $job = Job::factory()->create([
             'job_title' => 'Software Engineer',
@@ -71,12 +77,13 @@ class JobSearchTest extends DuskTestCase
             $browser->visit('/jobs/'.$job->id)
                 ->assertSee('Software Engineer')
                 ->assertSee('We are looking for an experienced software engineer')
-                ->assertSee('Apply Now');
+                ->assertSee('Apply Now')
+            ;
         });
     }
 
     /** @test */
-    public function visitor_can_browse_jobs_by_category()
+    public function visitorCanBrowseJobsByCategory()
     {
         $category1 = JobCategory::factory()->create(['name' => 'Web Development']);
         $category2 = JobCategory::factory()->create(['name' => 'Mobile Development']);
@@ -100,12 +107,13 @@ class JobSearchTest extends DuskTestCase
                 ->click('.category-filters a[data-id="Web Development"]')
                 ->waitForText('Web Developer')
                 ->assertSee('Web Developer')
-                ->assertDontSee('Mobile App Developer');
+                ->assertDontSee('Mobile App Developer')
+            ;
         });
     }
 
     /** @test */
-    public function candidate_can_apply_for_job()
+    public function candidateCanApplyForJob()
     {
         $user = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -137,12 +145,13 @@ class JobSearchTest extends DuskTestCase
                 ->attach('resume', __DIR__.'/files/resume.pdf')
                 ->press('Submit Application')
                 ->waitForText('Your application has been submitted successfully')
-                ->assertSee('Your application has been submitted successfully');
+                ->assertSee('Your application has been submitted successfully')
+            ;
         });
     }
 
     /** @test */
-    public function employer_can_post_a_new_job()
+    public function employerCanPostANewJob()
     {
         $user = User::factory()->create([
             'email' => 'employer@example.com',
@@ -175,12 +184,13 @@ class JobSearchTest extends DuskTestCase
                 ->type('salary_to', '70000')
                 ->press('Save')
                 ->waitForText('Job created successfully')
-                ->assertSee('Job created successfully');
+                ->assertSee('Job created successfully')
+            ;
         });
     }
 
     /** @test */
-    public function candidate_can_view_applied_jobs()
+    public function candidateCanViewAppliedJobs()
     {
         $user = User::factory()->create([
             'email' => 'candidate@example.com',

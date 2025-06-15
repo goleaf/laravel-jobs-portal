@@ -4,7 +4,7 @@
  * Created by PhpStorm.
  * User: Fabian
  * Date: 12.05.16
- * Time: 07:24
+ * Time: 07:24.
  */
 
 return [
@@ -35,11 +35,11 @@ return [
     // Activate or deactivate the graphical interface
     'activated' => true,
 
-    /* Default view */
+    // Default view
     // 'template'        => 'dotenv-editor::master',
     // 'overview'        => 'dotenv-editor::overview',
 
-    /* This is my custom view, do not using */
+    // This is my custom view, do not using
     'template' => 'adminlte::page',
     'overview' => 'dotenv-editor::overview-adminlte',
 

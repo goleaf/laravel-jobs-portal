@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CompanyStoreRequest extends FormRequest
@@ -35,7 +35,7 @@ class CompanyStoreRequest extends FormRequest
             'company_size_id' => 'sometimes|integer|exists:company_sizes,id',
             'ownership_type_id' => 'sometimes|integer|exists:ownership_types,id',
             'employee_count' => 'sometimes|integer|min:0|max:1000000',
-            'founded_year' => 'sometimes|integer|min:1800|max:' . date('Y'),
+            'founded_year' => 'sometimes|integer|min:1800|max:'.date('Y'),
             'revenue' => 'sometimes|numeric|min:0',
             'revenue_currency_id' => 'sometimes|integer|exists:salary_currencies,id',
             'address' => 'sometimes|string|max:500',
@@ -141,49 +141,6 @@ class CompanyStoreRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Company creation validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Generate slug from name if not provided
-        if (!$this->slug && $this->name) {
-            $this->merge([
-                'slug' => \Str::slug($this->name)
-            ]);
-        }
-
-        // Clean phone number
-        if ($this->has('phone')) {
-            $this->merge([
-                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone)
-            ]);
-        }
-
-        // Convert boolean strings
-        foreach (['is_featured', 'is_verified', 'is_remote_friendly'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -193,7 +150,7 @@ class CompanyStoreRequest extends FormRequest
             if ($this->has('state_id') && !$this->has('country_id')) {
                 $validator->errors()->add('country_id', 'Country is required when state is specified.');
             }
-            
+
             if ($this->has('city_id') && !$this->has('state_id')) {
                 $validator->errors()->add('state_id', 'State is required when city is specified.');
             }
@@ -206,13 +163,56 @@ class CompanyStoreRequest extends FormRequest
             // Validate social media URLs
             $socialFields = ['social_facebook', 'social_twitter', 'social_linkedin'];
             foreach ($socialFields as $field) {
-                if ($this->has($field) && $this->$field) {
+                if ($this->has($field) && $this->{$field}) {
                     $platform = str_replace('social_', '', $field);
-                    if (!str_contains($this->$field, $platform . '.com')) {
+                    if (!str_contains($this->{$field}, $platform.'.com')) {
                         $validator->errors()->add($field, "Please provide a valid {$platform} URL.");
                     }
                 }
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Company creation validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Generate slug from name if not provided
+        if (!$this->slug && $this->name) {
+            $this->merge([
+                'slug' => \Str::slug($this->name),
+            ]);
+        }
+
+        // Clean phone number
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone),
+            ]);
+        }
+
+        // Convert boolean strings
+        foreach (['is_featured', 'is_verified', 'is_remote_friendly'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+    }
+}

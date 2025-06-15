@@ -7,7 +7,6 @@ use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\EmailTemplate;
 use App\Models\Job;
-use Arr;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class JobNotificationRepository
+ * Class JobNotificationRepository.
  */
 class JobNotificationRepository
 {
@@ -43,11 +42,12 @@ class JobNotificationRepository
 
     public function sendJobNotification($input)
     {
-        $candidateIds = Arr::only($input, 'candidate_id')['candidate_id'];
-        $jobIds = Arr::only($input, 'job_id')['job_id'];
+        $candidateIds = \Arr::only($input, 'candidate_id')['candidate_id'];
+        $jobIds = \Arr::only($input, 'job_id')['job_id'];
 
         $candidates = Candidate::with('user')->whereIn('id', $candidateIds)->get();
         $jobs = Job::whereIn('id', $jobIds)->get();
+
         /** @var EmailTemplate $templateBody */
         $templateBody = EmailTemplate::whereTemplateName('Job Notification')->first();
 

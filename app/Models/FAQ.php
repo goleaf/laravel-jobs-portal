@@ -2,46 +2,48 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * FAQ Model - Enhanced with Enhanced patterns
+ * FAQ Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $title
- * @property string $description
- * @property string|null $category
- * @property int|null $user_id
- * @property bool $is_active
- * @property bool $is_featured
- * @property bool $is_published
- * @property int|null $view_count
- * @property int|null $helpful_count
- * @property int|null $not_helpful_count
- * @property int $sort_order
- * @property array|null $tags
- * @property array|null $meta
- * @property \Illuminate\Support\Carbon|null $published_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \App\Models\User|null $author
- * @property-read string $category_label
- * @property-read string $status_label
- * @property-read float $helpfulness_ratio
- * @property-read bool $is_helpful
- * @property-read bool $is_popular
- * @property-read string $display_text
- * @property-read string $excerpt
+ * @property int         $id
+ * @property string      $title
+ * @property string      $description
+ * @property null|string $category
+ * @property null|int    $user_id
+ * @property bool        $is_active
+ * @property bool        $is_featured
+ * @property bool        $is_published
+ * @property null|int    $view_count
+ * @property null|int    $helpful_count
+ * @property null|int    $not_helpful_count
+ * @property int         $sort_order
+ * @property null|array  $tags
+ * @property null|array  $meta
+ * @property null|Carbon $published_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property null|User   $author
+ * @property string      $category_label
+ * @property string      $status_label
+ * @property float       $helpfulness_ratio
+ * @property bool        $is_helpful
+ * @property bool        $is_popular
+ * @property string      $display_text
+ * @property string      $excerpt
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -76,14 +78,7 @@ class FAQ extends Model
     use LogsActivity;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'faqs';
-
-    /**
-     * Category constants
+     * Category constants.
      */
     public const CATEGORY_GENERAL = 'general';
     public const CATEGORY_TECHNICAL = 'technical';
@@ -93,6 +88,36 @@ class FAQ extends Model
     public const CATEGORY_JOBS = 'jobs';
     public const CATEGORY_COMPANY = 'company';
     public const CATEGORY_SUPPORT = 'support';
+
+    /**
+     * Validation rules for creating FAQs.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'title' => 'required|string|max:255',
+        'description' => 'required|string|max:5000',
+        'category' => 'nullable|string|max:100',
+        'user_id' => 'nullable|integer|exists:users,id',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
+        'view_count' => 'nullable|integer|min:0',
+        'helpful_count' => 'nullable|integer|min:0',
+        'not_helpful_count' => 'nullable|integer|min:0',
+        'sort_order' => 'nullable|integer|min:0',
+        'tags' => 'nullable|array',
+        'tags.*' => 'string|max:50',
+        'meta' => 'nullable|array',
+        'published_at' => 'nullable|date',
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'faqs';
 
     /**
      * The attributes that are mass assignable.
@@ -137,32 +162,6 @@ class FAQ extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean',
-            'view_count' => 'integer',
-            'helpful_count' => 'integer',
-            'not_helpful_count' => 'integer',
-            'sort_order' => 'integer',
-            'tags' => 'array',
-            'meta' => 'array',
-            'published_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -170,36 +169,13 @@ class FAQ extends Model
         return LogOptions::defaults()
             ->logOnly(['title', 'description', 'category', 'is_active', 'is_featured', 'is_published'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating FAQs.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'title' => 'required|string|max:255',
-        'description' => 'required|string|max:5000',
-        'category' => 'nullable|string|max:100',
-        'user_id' => 'nullable|integer|exists:users,id',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_published' => 'boolean',
-        'view_count' => 'nullable|integer|min:0',
-        'helpful_count' => 'nullable|integer|min:0',
-        'not_helpful_count' => 'nullable|integer|min:0',
-        'sort_order' => 'nullable|integer|min:0',
-        'tags' => 'nullable|array',
-        'tags.*' => 'string|max:50',
-        'meta' => 'nullable|array',
-        'published_at' => 'nullable|date',
-    ];
 
     /**
      * Update validation rules for FAQs.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
@@ -241,6 +217,8 @@ class FAQ extends Model
 
     /**
      * Scope to only include active FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -249,6 +227,8 @@ class FAQ extends Model
 
     /**
      * Scope to only include inactive FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -257,6 +237,8 @@ class FAQ extends Model
 
     /**
      * Scope to only include featured FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -265,6 +247,8 @@ class FAQ extends Model
 
     /**
      * Scope to only include non-featured FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -273,25 +257,31 @@ class FAQ extends Model
 
     /**
      * Scope to only include published FAQs.
+     *
+     * @param mixed $query
      */
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-                    ->where('is_active', true)
-                    ->whereNotNull('published_at')
-                    ->where('published_at', '<=', now());
+            ->where('is_active', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+        ;
     }
 
     /**
      * Scope to only include unpublished FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeUnpublished($query)
     {
         return $query->where(function ($q) {
             $q->where('is_published', false)
-              ->orWhere('is_active', false)
-              ->orWhereNull('published_at')
-              ->orWhere('published_at', '>', now());
+                ->orWhere('is_active', false)
+                ->orWhereNull('published_at')
+                ->orWhere('published_at', '>', now())
+            ;
         });
     }
 
@@ -301,6 +291,8 @@ class FAQ extends Model
 
     /**
      * Scope to get FAQs by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -309,6 +301,8 @@ class FAQ extends Model
 
     /**
      * Scope to get FAQs by author.
+     *
+     * @param mixed $query
      */
     public function scopeByAuthor($query, int $userId)
     {
@@ -317,6 +311,8 @@ class FAQ extends Model
 
     /**
      * Scope to get general FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeGeneral($query)
     {
@@ -325,6 +321,8 @@ class FAQ extends Model
 
     /**
      * Scope to get technical FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeTechnical($query)
     {
@@ -333,6 +331,8 @@ class FAQ extends Model
 
     /**
      * Scope to get billing FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeBilling($query)
     {
@@ -341,6 +341,8 @@ class FAQ extends Model
 
     /**
      * Scope to get account FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeAccount($query)
     {
@@ -349,6 +351,8 @@ class FAQ extends Model
 
     /**
      * Scope to get security FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeSecurity($query)
     {
@@ -357,6 +361,8 @@ class FAQ extends Model
 
     /**
      * Scope to get job-related FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeJobs($query)
     {
@@ -365,6 +371,8 @@ class FAQ extends Model
 
     /**
      * Scope to get company-related FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeCompany($query)
     {
@@ -373,6 +381,8 @@ class FAQ extends Model
 
     /**
      * Scope to get support FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeSupport($query)
     {
@@ -385,18 +395,23 @@ class FAQ extends Model
 
     /**
      * Scope to search FAQs by title, description, or tags.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('title', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhereJsonContains('tags', $term);
+            $q->where('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhereJsonContains('tags', $term)
+            ;
         });
     }
 
     /**
      * Scope to get FAQs by tag.
+     *
+     * @param mixed $query
      */
     public function scopeByTag($query, string $tag)
     {
@@ -405,6 +420,8 @@ class FAQ extends Model
 
     /**
      * Scope to get FAQs created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -413,6 +430,8 @@ class FAQ extends Model
 
     /**
      * Scope to get old FAQs created before specified days.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -425,26 +444,34 @@ class FAQ extends Model
 
     /**
      * Scope to get popular FAQs (by view count and helpfulness).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query)
     {
         return $query->where('view_count', '>', 100)
-                    ->whereRaw('helpful_count > not_helpful_count')
-                    ->orderByRaw('view_count + helpful_count DESC');
+            ->whereRaw('helpful_count > not_helpful_count')
+            ->orderByRaw('view_count + helpful_count DESC')
+        ;
     }
 
     /**
      * Scope to get helpful FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeHelpful($query)
     {
         return $query->where('helpful_count', '>', 0)
-                    ->whereRaw('helpful_count >= not_helpful_count')
-                    ->orderBy('helpful_count', 'desc');
+            ->whereRaw('helpful_count >= not_helpful_count')
+            ->orderBy('helpful_count', 'desc')
+        ;
     }
 
     /**
      * Scope to get most viewed FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeMostViewed($query, int $limit = 10)
     {
@@ -453,12 +480,15 @@ class FAQ extends Model
 
     /**
      * Scope to get trending FAQs (recent and popular).
+     *
+     * @param mixed $query
      */
     public function scopeTrending($query, int $days = 7)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->where('view_count', '>', 10)
-                    ->orderByRaw('view_count + helpful_count DESC');
+            ->where('view_count', '>', 10)
+            ->orderByRaw('view_count + helpful_count DESC')
+        ;
     }
 
     // =============================================
@@ -467,6 +497,8 @@ class FAQ extends Model
 
     /**
      * Scope to order FAQs alphabetically by title.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -475,15 +507,20 @@ class FAQ extends Model
 
     /**
      * Scope to order FAQs by sort order and title.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('title', 'asc');
+            ->orderBy('title', 'asc')
+        ;
     }
 
     /**
      * Scope to get latest FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeLatest($query)
     {
@@ -492,6 +529,8 @@ class FAQ extends Model
 
     /**
      * Scope to get oldest FAQs.
+     *
+     * @param mixed $query
      */
     public function scopeOldest($query)
     {
@@ -500,6 +539,8 @@ class FAQ extends Model
 
     /**
      * Scope to order by helpfulness.
+     *
+     * @param mixed $query
      */
     public function scopeByHelpfulness($query)
     {
@@ -513,7 +554,7 @@ class FAQ extends Model
     /**
      * Get cached published FAQs.
      */
-    public static function getCachedPublished(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPublished(): Collection
     {
         return Cache::remember('faqs.published', now()->addHours(2), function () {
             return static::published()->ordered()->get();
@@ -523,7 +564,7 @@ class FAQ extends Model
     /**
      * Get cached FAQs by category.
      */
-    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCategory(string $category): Collection
     {
         return Cache::remember("faqs.category.{$category}", now()->addHours(2), function () use ($category) {
             return static::published()->byCategory($category)->ordered()->get();
@@ -533,7 +574,7 @@ class FAQ extends Model
     /**
      * Get cached featured FAQs.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('faqs.featured', now()->addHours(1), function () {
             return static::featured()->published()->ordered()->get();
@@ -543,7 +584,7 @@ class FAQ extends Model
     /**
      * Get cached popular FAQs.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("faqs.popular.{$limit}", now()->addMinutes(30), function () use ($limit) {
             return static::popular()->published()->limit($limit)->get();
@@ -559,7 +600,7 @@ class FAQ extends Model
      */
     public function getCategoryLabelAttribute(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             self::CATEGORY_GENERAL => 'General',
             self::CATEGORY_TECHNICAL => 'Technical',
             self::CATEGORY_BILLING => 'Billing',
@@ -586,6 +627,7 @@ class FAQ extends Model
         if ($this->is_featured) {
             return 'Featured';
         }
+
         return 'Published';
     }
 
@@ -595,6 +637,7 @@ class FAQ extends Model
     public function getHelpfulnessRatioAttribute(): float
     {
         $total = $this->helpful_count + $this->not_helpful_count;
+
         return $total > 0 ? round(($this->helpful_count / $total) * 100, 2) : 0;
     }
 
@@ -655,10 +698,10 @@ class FAQ extends Model
      */
     public function isPublished(): bool
     {
-        return $this->is_published && 
-               $this->is_active && 
-               $this->published_at && 
-               $this->published_at->isPast();
+        return $this->is_published
+               && $this->is_active
+               && $this->published_at
+               && $this->published_at->isPast();
     }
 
     /**
@@ -710,7 +753,7 @@ class FAQ extends Model
      */
     public function getCategoryColor(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             self::CATEGORY_GENERAL => '#6c757d',
             self::CATEGORY_TECHNICAL => '#dc3545',
             self::CATEGORY_BILLING => '#28a745',
@@ -739,8 +782,10 @@ class FAQ extends Model
         $tags = $this->tags ?? [];
         if (!in_array($tag, $tags)) {
             $tags[] = $tag;
+
             return $this->update(['tags' => $tags]);
         }
+
         return true;
     }
 
@@ -750,7 +795,8 @@ class FAQ extends Model
     public function removeTag(string $tag): bool
     {
         $tags = $this->tags ?? [];
-        $tags = array_values(array_filter($tags, fn($t) => $t !== $tag));
+        $tags = array_values(array_filter($tags, fn ($t) => $t !== $tag));
+
         return $this->update(['tags' => $tags]);
     }
 
@@ -777,6 +823,32 @@ class FAQ extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'view_count' => 'integer',
+            'helpful_count' => 'integer',
+            'not_helpful_count' => 'integer',
+            'sort_order' => 'integer',
+            'tags' => 'array',
+            'meta' => 'array',
+            'published_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

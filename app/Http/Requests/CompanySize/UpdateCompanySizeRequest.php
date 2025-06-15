@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\CompanySize;
 
-use App\Models\CompanySize;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,19 +19,19 @@ class UpdateCompanySizeRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         $companySizeId = $this->route('companySize')->id ?? $this->route('id');
-        
+
         return [
             'size' => [
                 'required',
                 'string',
                 'max:150',
                 Rule::unique('company_sizes', 'size')->ignore($companySizeId),
-                'regex:/^\d+(-\d+)?(\+)?( employees?)?$/i'
+                'regex:/^\d+(-\d+)?(\+)?( employees?)?$/i',
             ],
             'is_default' => 'sometimes|boolean',
             'is_active' => 'sometimes|boolean',
@@ -94,4 +94,4 @@ class UpdateCompanySizeRequest extends FormRequest
             'ip' => $this->ip(),
         ]);
     }
-} 
+}

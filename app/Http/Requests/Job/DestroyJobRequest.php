@@ -9,13 +9,11 @@ class DestroyJobRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
-        return Auth::check() && (Auth::user()->hasRole('admin') || 
-               (Auth::user()->company && $this->job->company_id === Auth::user()->company->id));
+        return Auth::check() && (Auth::user()->hasRole('admin')
+               || (Auth::user()->company && $this->job->company_id === Auth::user()->company->id));
     }
 
     /**

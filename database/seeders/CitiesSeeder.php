@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +13,7 @@ class CitiesSeeder extends Seeder
         Schema::withoutForeignKeyConstraints(function () {
             // Clear existing cities
             DB::table('cities')->truncate();
-            
+
             // Cities data from infy-jobs.sql - mapped to our existing states
             $cities = [
                 // Andaman and Nicobar Islands (state_id = 1)
@@ -22,43 +21,43 @@ class CitiesSeeder extends Seeder
                 ['id' => 2, 'state_id' => 1, 'name' => 'Garacharma'],
                 ['id' => 3, 'state_id' => 1, 'name' => 'Bombuflat'],
                 ['id' => 4, 'state_id' => 1, 'name' => 'Rangat'],
-                
+
                 // California (state_id = 1 remapped for our US states)
                 ['id' => 5, 'state_id' => 1, 'name' => 'Los Angeles'],
                 ['id' => 6, 'state_id' => 1, 'name' => 'San Francisco'],
                 ['id' => 7, 'state_id' => 1, 'name' => 'San Diego'],
                 ['id' => 8, 'state_id' => 1, 'name' => 'Sacramento'],
-                
+
                 // Texas (state_id = 2)
                 ['id' => 9, 'state_id' => 2, 'name' => 'Houston'],
                 ['id' => 10, 'state_id' => 2, 'name' => 'Dallas'],
                 ['id' => 11, 'state_id' => 2, 'name' => 'Austin'],
                 ['id' => 12, 'state_id' => 2, 'name' => 'San Antonio'],
-                
+
                 // New York (state_id = 3)
                 ['id' => 13, 'state_id' => 3, 'name' => 'New York City'],
                 ['id' => 14, 'state_id' => 3, 'name' => 'Buffalo'],
                 ['id' => 15, 'state_id' => 3, 'name' => 'Rochester'],
                 ['id' => 16, 'state_id' => 3, 'name' => 'Syracuse'],
-                
+
                 // Florida (state_id = 4)
                 ['id' => 17, 'state_id' => 4, 'name' => 'Miami'],
                 ['id' => 18, 'state_id' => 4, 'name' => 'Orlando'],
                 ['id' => 19, 'state_id' => 4, 'name' => 'Tampa'],
                 ['id' => 20, 'state_id' => 4, 'name' => 'Jacksonville'],
-                
+
                 // Illinois (state_id = 5)
                 ['id' => 21, 'state_id' => 5, 'name' => 'Chicago'],
                 ['id' => 22, 'state_id' => 5, 'name' => 'Springfield'],
                 ['id' => 23, 'state_id' => 5, 'name' => 'Rockford'],
                 ['id' => 24, 'state_id' => 5, 'name' => 'Peoria'],
-                
+
                 // Washington (state_id = 6)
                 ['id' => 25, 'state_id' => 6, 'name' => 'Seattle'],
                 ['id' => 26, 'state_id' => 6, 'name' => 'Spokane'],
                 ['id' => 27, 'state_id' => 6, 'name' => 'Tacoma'],
                 ['id' => 28, 'state_id' => 6, 'name' => 'Vancouver'],
-                
+
                 // Add cities for all our state IDs to prevent foreign key errors
                 ['id' => 29, 'state_id' => 50, 'name' => 'Honolulu'],
                 ['id' => 30, 'state_id' => 51, 'name' => 'Anchorage'],
@@ -89,10 +88,10 @@ class CitiesSeeder extends Seeder
                     ['id' => $city['id']],
                     array_merge($city, [
                         'created_at' => now(),
-                        'updated_at' => now()
+                        'updated_at' => now(),
                     ])
                 );
             }
         });
     }
-} 
+}

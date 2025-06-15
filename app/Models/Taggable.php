@@ -6,22 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Taggable Model - Enhanced with Enhanced patterns
+ * Taggable Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $tag_id
- * @property string $taggable_type
- * @property int $taggable_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int         $id
+ * @property int         $tag_id
+ * @property string      $taggable_type
+ * @property int         $taggable_id
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder forTag(int $tagId)
  * @method static \Illuminate\Database\Eloquent\Builder forModel(string $type)
  * @method static \Illuminate\Database\Eloquent\Builder forEntity(string $type, int $id)
@@ -37,7 +39,15 @@ use Spatie\Activitylog\LogOptions;
  */
 class Taggable extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
+
+    public static $rules = [
+        'tag_id' => 'required|integer|exists:tags,id',
+        'taggable_type' => 'required|string|max:255',
+        'taggable_id' => 'required|integer|min:1',
+    ];
 
     protected $table = 'taggables';
 
@@ -47,30 +57,13 @@ class Taggable extends Model
         'taggable_id',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'tag_id' => 'integer',
-            'taggable_id' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    public static $rules = [
-        'tag_id' => 'required|integer|exists:tags,id',
-        'taggable_type' => 'required|string|max:255',
-        'taggable_id' => 'required|integer|min:1',
-    ];
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['tag_id', 'taggable_type', 'taggable_id'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     public function tag()
@@ -96,7 +89,8 @@ class Taggable extends Model
     public function scopeForEntity($query, string $type, int $id)
     {
         return $query->where('taggable_type', $type)
-                    ->where('taggable_id', $id);
+            ->where('taggable_id', $id)
+        ;
     }
 
     public function scopeRecent($query, int $days = 30)
@@ -107,19 +101,20 @@ class Taggable extends Model
     public function scopePopular($query, int $limit = 10)
     {
         return $query->selectRaw('tag_id, taggable_type, COUNT(*) as usage_count')
-                    ->groupBy('tag_id', 'taggable_type')
-                    ->orderBy('usage_count', 'desc')
-                    ->limit($limit);
+            ->groupBy('tag_id', 'taggable_type')
+            ->orderBy('usage_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     public function scopeForJobs($query)
     {
-        return $query->where('taggable_type', 'App\\Models\\Job');
+        return $query->where('taggable_type', 'App\Models\Job');
     }
 
     public function scopeForCandidates($query)
     {
-        return $query->where('taggable_type', 'App\\Models\\Candidate');
+        return $query->where('taggable_type', 'App\Models\Candidate');
     }
 
     public function scopeWithTags($query)
@@ -135,19 +130,20 @@ class Taggable extends Model
     public function scopeTrending($query, int $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->selectRaw('tag_id, COUNT(*) as trend_count')
-                    ->groupBy('tag_id')
-                    ->having('trend_count', '>=', 3)
-                    ->orderBy('trend_count', 'desc');
+            ->selectRaw('tag_id, COUNT(*) as trend_count')
+            ->groupBy('tag_id')
+            ->having('trend_count', '>=', 3)
+            ->orderBy('trend_count', 'desc')
+        ;
     }
 
     public function getTaggableTypeDisplayAttribute(): string
     {
         $typeMap = [
-            'App\\Models\\Job' => 'Job',
-            'App\\Models\\Candidate' => 'Candidate',
-            'App\\Models\\Company' => 'Company',
-            'App\\Models\\Post' => 'Post',
+            'App\Models\Job' => 'Job',
+            'App\Models\Candidate' => 'Candidate',
+            'App\Models\Company' => 'Company',
+            'App\Models\Post' => 'Post',
         ];
 
         return $typeMap[$this->taggable_type] ?? class_basename($this->taggable_type);
@@ -155,7 +151,7 @@ class Taggable extends Model
 
     public function getDisplayNameAttribute(): string
     {
-        return $this->tag?->name . ' → ' . $this->taggable_type_display;
+        return $this->tag?->name.' → '.$this->taggable_type_display;
     }
 
     public function getIsRecentAttribute(): bool
@@ -167,6 +163,18 @@ class Taggable extends Model
     {
         Cache::forget('taggables.popular');
         Cache::forget('taggables.trending');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'tag_id' => 'integer',
+            'taggable_id' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     protected static function boot()

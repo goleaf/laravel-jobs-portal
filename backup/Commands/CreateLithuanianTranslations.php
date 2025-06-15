@@ -22,7 +22,7 @@ class CreateLithuanianTranslations extends Command
     protected $description = 'Create Lithuanian translations from English translations';
 
     /**
-     * Lithuanian translations for common terms
+     * Lithuanian translations for common terms.
      */
     protected array $commonTranslations = [
         // Common words
@@ -92,7 +92,7 @@ class CreateLithuanianTranslations extends Command
 
         // Load English translations
         $englishTranslationsPath = resource_path('lang/en.php');
-        if (! File::exists($englishTranslationsPath)) {
+        if (!File::exists($englishTranslationsPath)) {
             $this->error('English translations file not found. Run translations:consolidate first.');
 
             return Command::FAILURE;
@@ -112,7 +112,7 @@ class CreateLithuanianTranslations extends Command
         }
 
         // Add auth translations
-        if (! isset($lithuanianTranslations['auth'])) {
+        if (!isset($lithuanianTranslations['auth'])) {
             $lithuanianTranslations['auth'] = [
                 'failed' => 'Šie kredencialai neatitinka mūsų įrašų.',
                 'password' => 'Pateiktas slaptažodis yra neteisingas.',
@@ -121,7 +121,7 @@ class CreateLithuanianTranslations extends Command
         }
 
         // Add pagination translations
-        if (! isset($lithuanianTranslations['pagination'])) {
+        if (!isset($lithuanianTranslations['pagination'])) {
             $lithuanianTranslations['pagination'] = [
                 'previous' => '&laquo; Ankstesnis',
                 'next' => 'Sekantis &raquo;',
@@ -134,7 +134,7 @@ class CreateLithuanianTranslations extends Command
         }
 
         // Add passwords translations
-        if (! isset($lithuanianTranslations['passwords'])) {
+        if (!isset($lithuanianTranslations['passwords'])) {
             $lithuanianTranslations['passwords'] = [
                 'reset' => 'Jūsų slaptažodis pakeistas!',
                 'sent' => 'Slaptažodžio atkūrimo nuoroda išsiųsta!',
@@ -146,7 +146,7 @@ class CreateLithuanianTranslations extends Command
 
         // Process all English translations and create Lithuanian versions
         foreach ($englishTranslations as $section => $translations) {
-            if (! isset($lithuanianTranslations[$section])) {
+            if (!isset($lithuanianTranslations[$section])) {
                 $lithuanianTranslations[$section] = [];
             }
 
@@ -163,7 +163,7 @@ class CreateLithuanianTranslations extends Command
     }
 
     /**
-     * Translate a section of translations
+     * Translate a section of translations.
      */
     private function translateSection(string $section, array $englishTranslations, array $existingLithuanianTranslations = []): array
     {
@@ -188,7 +188,7 @@ class CreateLithuanianTranslations extends Command
     }
 
     /**
-     * Translate a string to Lithuanian
+     * Translate a string to Lithuanian.
      */
     private function translateString(string $englishString, string $translationKey): string
     {

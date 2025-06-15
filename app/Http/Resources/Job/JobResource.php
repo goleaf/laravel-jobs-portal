@@ -58,7 +58,7 @@ class JobResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('jobsTag')),
             'applications_count' => $this->when(
                 $this->relationLoaded('appliedJobs'),
-                fn() => $this->applied_jobs_count ?? $this->appliedJobs->count()
+                fn () => $this->applied_jobs_count ?? $this->appliedJobs->count()
             ),
             'featured_details' => new FeaturedRecordResource($this->whenLoaded('activeFeatured')),
             'created_at' => $this->created_at?->toISOString(),
@@ -87,4 +87,4 @@ class JobResource extends JsonResource
             ],
         ];
     }
-} 
+}

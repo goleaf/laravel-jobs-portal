@@ -20,11 +20,11 @@ class UpdateAdminRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->route('admin') ? $this->route('admin')->id : $this->route('id');
-        
+
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$userId],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8'],
             'is_active' => ['boolean'],
@@ -65,6 +65,18 @@ class UpdateAdminRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -72,15 +84,5 @@ class UpdateAdminRequest extends FormRequest
         $this->merge([
             'is_active' => $this->boolean('is_active', true),
         ]);
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            // Add any custom validation logic here
-        });
     }
 }

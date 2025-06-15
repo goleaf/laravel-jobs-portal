@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CandidateStoreRequest extends FormRequest
@@ -128,40 +128,6 @@ class CandidateStoreRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Candidate validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean and format data
-        if ($this->has('phone')) {
-            $this->merge([
-                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone)
-            ]);
-        }
-
-        // Convert boolean strings
-        if ($this->has('is_immediate_available')) {
-            $this->merge([
-                'is_immediate_available' => filter_var($this->is_immediate_available, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-            ]);
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -180,10 +146,44 @@ class CandidateStoreRequest extends FormRequest
             if ($this->has('state_id') && !$this->has('country_id')) {
                 $validator->errors()->add('country_id', 'Country is required when state is specified.');
             }
-            
+
             if ($this->has('city_id') && !$this->has('state_id')) {
                 $validator->errors()->add('state_id', 'State is required when city is specified.');
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Candidate validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Clean and format data
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone),
+            ]);
+        }
+
+        // Convert boolean strings
+        if ($this->has('is_immediate_available')) {
+            $this->merge([
+                'is_immediate_available' => filter_var($this->is_immediate_available, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            ]);
+        }
+    }
+}

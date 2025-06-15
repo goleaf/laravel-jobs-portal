@@ -2,19 +2,19 @@
 
 namespace App\Http\Requests\MasterData;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Universal Form Request for storing CompanySize
- * Implements Laravel 12 best practices with Universal MCP patterns
+ * Implements Laravel 12 best practices with Universal MCP patterns.
  */
 class StoreCompanySizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Universal Pattern: Authorization check
+     * Universal Pattern: Authorization check.
      */
     public function authorize(): bool
     {
@@ -23,9 +23,9 @@ class StoreCompanySizeRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: Comprehensive validation rules
+     * Universal Pattern: Comprehensive validation rules.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -39,7 +39,7 @@ class StoreCompanySizeRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Universal Pattern: Multilingual error messages
+     * Universal Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -54,7 +54,7 @@ class StoreCompanySizeRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: User-friendly field names
+     * Universal Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -67,22 +67,8 @@ class StoreCompanySizeRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Universal Pattern: Data normalization
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'name' => trim($this->name ?? ''),
-            'description' => trim($this->description ?? '') ?: null,
-            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
-            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
-        ]);
-    }
-
-    /**
      * Configure the validator instance.
-     * Universal Pattern: Enhanced validation logic
+     * Universal Pattern: Enhanced validation logic.
      */
     public function withValidator(Validator $validator): void
     {
@@ -95,17 +81,22 @@ class StoreCompanySizeRequest extends FormRequest
     }
 
     /**
-     * Universal Pattern: Custom business logic check
+     * Prepare the data for validation.
+     * Universal Pattern: Data normalization.
      */
-    private function hasConflictingData(): bool
+    protected function prepareForValidation(): void
     {
-        // Add specific business logic here
-        return false;
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'description' => trim($this->description ?? '') ?: null,
+            'status' => filter_var($this->status, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
+        ]);
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: Enhanced error handling
+     * Universal Pattern: Enhanced error handling.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -117,5 +108,14 @@ class StoreCompanySizeRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Universal Pattern: Custom business logic check.
+     */
+    private function hasConflictingData(): bool
+    {
+        // Add specific business logic here
+        return false;
     }
 }

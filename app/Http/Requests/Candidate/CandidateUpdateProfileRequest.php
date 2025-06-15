@@ -16,18 +16,6 @@ class CandidateUpdateProfileRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $currentSalary = removeCommaFromNumbers($this->request->get('current_salary'));
-        $expectedSalary = removeCommaFromNumbers($this->request->get('expected_salary'));
-
-        $this->request->set('current_salary', $currentSalary);
-        $this->request->set('expected_salary', $expectedSalary);
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
@@ -51,7 +39,18 @@ class CandidateUpdateProfileRequest extends FormRequest
             'password_confirmation' => 'nullable|min:6',
             'candidateLanguage' => 'required',
             'image' => 'nullable|mimes:jpeg,jpg,png',
-
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $currentSalary = removeCommaFromNumbers($this->request->get('current_salary'));
+        $expectedSalary = removeCommaFromNumbers($this->request->get('expected_salary'));
+
+        $this->request->set('current_salary', $currentSalary);
+        $this->request->set('expected_salary', $expectedSalary);
     }
 }

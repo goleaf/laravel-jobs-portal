@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rules\Password;
 
 class LoginRequest extends FormRequest
 {
@@ -68,6 +67,20 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Additional security validations
+            if ($this->filled('email') && $this->filled('password')) {
+                // Rate limiting is handled by middleware
+                // Additional custom validation can be added here
+            }
+        });
+    }
+
+    /**
      * Handle a failed validation attempt for API requests.
      */
     protected function failedValidation(Validator $validator)
@@ -107,18 +120,4 @@ class LoginRequest extends FormRequest
             ]);
         }
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Additional security validations
-            if ($this->filled('email') && $this->filled('password')) {
-                // Rate limiting is handled by middleware
-                // Additional custom validation can be added here
-            }
-        });
-    }
-} 
+}

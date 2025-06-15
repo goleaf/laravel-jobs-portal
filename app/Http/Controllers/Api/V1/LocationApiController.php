@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\Location;
 use App\Http\Resources\LocationResource;
+use App\Models\Location;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for Location
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class LocationApiController extends Controller
 {
@@ -21,20 +21,20 @@ class LocationApiController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Location::query();
-        
+
         // Apply filters
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
-        
+
         if ($request->has('status')) {
             $query->where('is_active', $request->boolean('status'));
         }
-        
+
         // Pagination
         $perPage = min($request->integer('per_page', 15), 100);
         $data = $query->paginate($perPage);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Location list retrieved successfully',
@@ -44,7 +44,7 @@ class LocationApiController extends Controller
                 'last_page' => $data->lastPage(),
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
-            ]
+            ],
         ]);
     }
 
@@ -56,45 +56,49 @@ class LocationApiController extends Controller
         try {
             $data = $request->validated();
             $item = Location::create($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Location created successfully',
-                'data' => new LocationResource($item)
+                'data' => new LocationResource($item),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create location',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $item = Location::findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Location retrieved successfully',
-                'data' => new LocationResource($item)
+                'data' => new LocationResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Location not found',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateLocationRequest $request, $id): JsonResponse
     {
@@ -102,39 +106,41 @@ class LocationApiController extends Controller
             $item = Location::findOrFail($id);
             $data = $request->validated();
             $item->update($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Location updated successfully',
-                'data' => new LocationResource($item)
+                'data' => new LocationResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update location',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $item = Location::findOrFail($id);
             $item->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Location deleted successfully'
+                'message' => 'Location deleted successfully',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete location',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

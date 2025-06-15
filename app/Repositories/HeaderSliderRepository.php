@@ -3,11 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\HeaderSlider;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class HeaderSliderRepository
+ * Class HeaderSliderRepository.
  */
 class HeaderSliderRepository extends BaseRepository
 {
@@ -24,8 +23,8 @@ class HeaderSliderRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return HeaderSlider::class;
@@ -37,7 +36,7 @@ class HeaderSliderRepository extends BaseRepository
             /** @var HeaderSlider $headerSlider */
             $headerSlider = $this->create($input);
 
-            if (isset($input['header_slider']) && ! empty($input['header_slider'])) {
+            if (isset($input['header_slider']) && !empty($input['header_slider'])) {
                 $headerSlider->addMedia($input['header_slider'])->toMediaCollection(
                     HeaderSlider::PATH,
                     config('app.media_disc')
@@ -45,7 +44,7 @@ class HeaderSliderRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -56,7 +55,7 @@ class HeaderSliderRepository extends BaseRepository
             /** @var HeaderSlider $headerSlider */
             $headerSlider = $this->update($input, $headerSliderId);
 
-            if (isset($input['image_slider']) && ! empty($input['image_slider'])) {
+            if (isset($input['image_slider']) && !empty($input['image_slider'])) {
                 $headerSlider->clearMediaCollection(HeaderSlider::PATH);
                 $headerSlider->addMedia($input['image_slider'])->toMediaCollection(
                     HeaderSlider::PATH,
@@ -65,7 +64,7 @@ class HeaderSliderRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }

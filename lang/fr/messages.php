@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files - French Language
@@ -1591,5 +1590,4 @@ return [
         'resume_field_required' => 'Le champ CV est obligatoire.',
         'verify_google_recaptcha' => 'Vous devriez vérifier Google Recaptcha.',
     ],
-
 ];

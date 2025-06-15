@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class WorkingDatabaseSeeder extends Seeder
 {
@@ -13,12 +13,12 @@ class WorkingDatabaseSeeder extends Seeder
     public function run()
     {
         $this->command->info('🚀 Starting working database seeding...');
-        
+
         // Use Enhanced pattern: Disable foreign key constraints during seeding
         Schema::withoutForeignKeyConstraints(function () {
             $this->seedInOrder();
         });
-        
+
         $this->command->info('✅ Working database seeding completed successfully!');
     }
 
@@ -26,7 +26,7 @@ class WorkingDatabaseSeeder extends Seeder
     {
         // Phase 1: Create essential system data
         $this->command->info('🔧 Phase 1: Essential system data');
-        
+
         // Use existing seeders that are available
         $availableSeeders = [
             // Core system configuration
@@ -35,12 +35,12 @@ class WorkingDatabaseSeeder extends Seeder
             CreateFrontSettingSeeder::class,
             SettingsTableSeeder::class,
             EmailTemplateSeeder::class,
-            
+
             // Geographic data (for foreign key dependencies)
             CountriesSeeder::class,
             StatesSeeder::class,
             CitiesSeeder::class,
-            
+
             // Job portal master data
             SkillsSeeder::class,
             CreateDefaultIndustriesSeeder::class,
@@ -58,15 +58,15 @@ class WorkingDatabaseSeeder extends Seeder
             SkillTableSeeder::class,
             CreateDefaultTagSeeder::class,
             JobCategorySeeder::class,
-            
+
             // User management
             DefaultRoleSeeder::class,
             UsersSeeder::class, // Our fixed seeder with admin user
-            
+
             // Content
             CreateDefaultPostCategorySeeder::class,
             CreateDefaultPostSeeder::class, // Should work now with user ID 1
-            
+
             // Additional setup
             CreateNotificationSettingSeeder::class,
             DefaultTrialPlanSeeder::class,
@@ -76,9 +76,9 @@ class WorkingDatabaseSeeder extends Seeder
             try {
                 $this->call($seeder);
             } catch (\Exception $e) {
-                $this->command->error("Failed to run {$seeder}: " . $e->getMessage());
-                $this->command->info("Continuing with next seeder...");
+                $this->command->error("Failed to run {$seeder}: ".$e->getMessage());
+                $this->command->info('Continuing with next seeder...');
             }
         }
     }
-} 
+}

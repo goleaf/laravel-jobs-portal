@@ -8,37 +8,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * ReportedToCompany Model - Enhanced with Enhanced patterns
+ * ReportedToCompany Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property int $company_id
- * @property string $note
- * @property string $reason
- * @property string $status
- * @property bool $is_active
- * @property bool $is_resolved
- * @property string|null $admin_notes
- * @property Carbon|null $resolved_at
- * @property int|null $resolved_by
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User $user
- * @property-read Company $company
- * @property-read User|null $resolver
- * @property-read bool $is_recent
- * @property-read bool $is_pending
- * @property-read string $status_label
- * @property-read string $reason_label
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $company_id
+ * @property string      $note
+ * @property string      $reason
+ * @property string      $status
+ * @property bool        $is_active
+ * @property bool        $is_resolved
+ * @property null|string $admin_notes
+ * @property null|Carbon $resolved_at
+ * @property null|int    $resolved_by
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property Company     $company
+ * @property null|User   $resolver
+ * @property bool        $is_recent
+ * @property bool        $is_pending
+ * @property string      $status_label
+ * @property string      $reason_label
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder resolved()
@@ -62,15 +63,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class ReportedToCompany extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'reported_to_companies';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_UNDER_REVIEW = 'under_review';
@@ -79,7 +77,7 @@ class ReportedToCompany extends Model
     public const STATUS_ESCALATED = 'escalated';
 
     /**
-     * Reason constants
+     * Reason constants.
      */
     public const REASON_FAKE_COMPANY = 'fake_company';
     public const REASON_INAPPROPRIATE_CONTENT = 'inappropriate_content';
@@ -88,6 +86,42 @@ class ReportedToCompany extends Model
     public const REASON_HARASSMENT = 'harassment';
     public const REASON_COPYRIGHT = 'copyright';
     public const REASON_OTHER = 'other';
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'user_id' => 'required|integer|exists:users,id',
+        'company_id' => 'required|integer|exists:companies,id',
+        'note' => 'required|string|max:1000',
+        'reason' => 'required|string|in:fake_company,inappropriate_content,spam,misleading_info,harassment,copyright,other',
+        'status' => 'nullable|string|in:pending,under_review,resolved,dismissed,escalated',
+        'is_active' => 'boolean',
+        'is_resolved' => 'boolean',
+        'admin_notes' => 'nullable|string|max:1000',
+        'resolved_by' => 'nullable|integer|exists:users,id',
+    ];
+
+    /**
+     * Custom validation messages.
+     */
+    public static array $messages = [
+        'user_id.required' => 'User is required',
+        'user_id.exists' => 'Selected user does not exist',
+        'company_id.required' => 'Company is required',
+        'company_id.exists' => 'Selected company does not exist',
+        'note.required' => 'Report note is required',
+        'note.max' => 'Report note cannot exceed 1000 characters',
+        'reason.required' => 'Report reason is required',
+        'reason.in' => 'Invalid report reason selected',
+        'admin_notes.max' => 'Admin notes cannot exceed 1000 characters',
+        'resolved_by.exists' => 'Selected resolver does not exist',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'reported_to_companies';
 
     /**
      * The attributes that are mass assignable.
@@ -113,57 +147,7 @@ class ReportedToCompany extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'company_id' => 'integer',
-            'resolved_by' => 'integer',
-            'is_active' => 'boolean',
-            'is_resolved' => 'boolean',
-            'resolved_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'user_id' => 'required|integer|exists:users,id',
-        'company_id' => 'required|integer|exists:companies,id',
-        'note' => 'required|string|max:1000',
-        'reason' => 'required|string|in:fake_company,inappropriate_content,spam,misleading_info,harassment,copyright,other',
-        'status' => 'nullable|string|in:pending,under_review,resolved,dismissed,escalated',
-        'is_active' => 'boolean',
-        'is_resolved' => 'boolean',
-        'admin_notes' => 'nullable|string|max:1000',
-        'resolved_by' => 'nullable|integer|exists:users,id',
-    ];
-
-    /**
-     * Custom validation messages
-     */
-    public static array $messages = [
-        'user_id.required' => 'User is required',
-        'user_id.exists' => 'Selected user does not exist',
-        'company_id.required' => 'Company is required',
-        'company_id.exists' => 'Selected company does not exist',
-        'note.required' => 'Report note is required',
-        'note.max' => 'Report note cannot exceed 1000 characters',
-        'reason.required' => 'Report reason is required',
-        'reason.in' => 'Invalid report reason selected',
-        'admin_notes.max' => 'Admin notes cannot exceed 1000 characters',
-        'resolved_by.exists' => 'Selected resolver does not exist',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -171,7 +155,8 @@ class ReportedToCompany extends Model
             ->logOnly(['user_id', 'company_id', 'reason', 'status', 'is_resolved'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Company report has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Company report has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -280,7 +265,8 @@ class ReportedToCompany extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -329,10 +315,11 @@ class ReportedToCompany extends Model
     public function scopePriority(Builder $query): Builder
     {
         return $query->select('company_id')
-                    ->selectRaw('COUNT(*) as reports_count')
-                    ->groupBy('company_id')
-                    ->having('reports_count', '>', 1)
-                    ->orderByDesc('reports_count');
+            ->selectRaw('COUNT(*) as reports_count')
+            ->groupBy('company_id')
+            ->having('reports_count', '>', 1)
+            ->orderByDesc('reports_count')
+        ;
     }
 
     // =============================================
@@ -344,17 +331,20 @@ class ReportedToCompany extends Model
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
-        return $query->where('note', 'like', '%' . $term . '%')
-                    ->orWhere('admin_notes', 'like', '%' . $term . '%')
-                    ->orWhereHas('company', function ($companyQuery) use ($term) {
-                        $companyQuery->where('name', 'like', '%' . $term . '%')
-                                   ->orWhere('slug', 'like', '%' . $term . '%');
-                    })
-                    ->orWhereHas('user', function ($userQuery) use ($term) {
-                        $userQuery->where('first_name', 'like', '%' . $term . '%')
-                                 ->orWhere('last_name', 'like', '%' . $term . '%')
-                                 ->orWhere('email', 'like', '%' . $term . '%');
-                    });
+        return $query->where('note', 'like', '%'.$term.'%')
+            ->orWhere('admin_notes', 'like', '%'.$term.'%')
+            ->orWhereHas('company', function ($companyQuery) use ($term) {
+                $companyQuery->where('name', 'like', '%'.$term.'%')
+                    ->orWhere('slug', 'like', '%'.$term.'%')
+                ;
+            })
+            ->orWhereHas('user', function ($userQuery) use ($term) {
+                $userQuery->where('first_name', 'like', '%'.$term.'%')
+                    ->orWhere('last_name', 'like', '%'.$term.'%')
+                    ->orWhere('email', 'like', '%'.$term.'%')
+                ;
+            })
+        ;
     }
 
     /**
@@ -406,7 +396,7 @@ class ReportedToCompany extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_PENDING => 'Pending',
             self::STATUS_UNDER_REVIEW => 'Under Review',
             self::STATUS_RESOLVED => 'Resolved',
@@ -421,7 +411,7 @@ class ReportedToCompany extends Model
      */
     public function getReasonLabelAttribute(): string
     {
-        return match($this->reason) {
+        return match ($this->reason) {
             self::REASON_FAKE_COMPANY => 'Fake Company',
             self::REASON_INAPPROPRIATE_CONTENT => 'Inappropriate Content',
             self::REASON_SPAM => 'Spam',
@@ -464,7 +454,7 @@ class ReportedToCompany extends Model
     /**
      * Mark report as resolved.
      */
-    public function markAsResolved(int $resolvedBy, string $adminNotes = null): bool
+    public function markAsResolved(int $resolvedBy, ?string $adminNotes = null): bool
     {
         return $this->update([
             'is_resolved' => true,
@@ -478,7 +468,7 @@ class ReportedToCompany extends Model
     /**
      * Mark report as dismissed.
      */
-    public function markAsDismissed(int $resolvedBy, string $adminNotes = null): bool
+    public function markAsDismissed(int $resolvedBy, ?string $adminNotes = null): bool
     {
         return $this->update([
             'is_resolved' => true,
@@ -492,7 +482,7 @@ class ReportedToCompany extends Model
     /**
      * Escalate report.
      */
-    public function escalate(string $adminNotes = null): bool
+    public function escalate(?string $adminNotes = null): bool
     {
         return $this->update([
             'status' => self::STATUS_ESCALATED,
@@ -533,17 +523,18 @@ class ReportedToCompany extends Model
     /**
      * Get most reported companies.
      */
-    public static function getMostReported(int $limit = 10): \Illuminate\Support\Collection
+    public static function getMostReported(int $limit = 10): Collection
     {
         return Cache::remember("companies.most_reported.{$limit}", 3600, function () use ($limit) {
             return self::select('company_id')
-                      ->selectRaw('COUNT(*) as reports_count')
-                      ->active()
-                      ->groupBy('company_id')
-                      ->orderByDesc('reports_count')
-                      ->limit($limit)
-                      ->with('company')
-                      ->get();
+                ->selectRaw('COUNT(*) as reports_count')
+                ->active()
+                ->groupBy('company_id')
+                ->orderByDesc('reports_count')
+                ->limit($limit)
+                ->with('company')
+                ->get()
+            ;
         });
     }
 
@@ -554,9 +545,10 @@ class ReportedToCompany extends Model
     {
         return Cache::remember("user.{$userId}.company.{$companyId}.reported", 3600, function () use ($userId, $companyId) {
             return self::where('user_id', $userId)
-                      ->where('company_id', $companyId)
-                      ->active()
-                      ->exists();
+                ->where('company_id', $companyId)
+                ->active()
+                ->exists()
+            ;
         });
     }
 
@@ -583,6 +575,25 @@ class ReportedToCompany extends Model
         Cache::forget("company.{$this->company_id}.reports_count");
         Cache::forget("user.{$this->user_id}.reports_count");
         Cache::forget("user.{$this->user_id}.company.{$this->company_id}.reported");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'company_id' => 'integer',
+            'resolved_by' => 'integer',
+            'is_active' => 'boolean',
+            'is_resolved' => 'boolean',
+            'resolved_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================
@@ -622,4 +633,4 @@ class ReportedToCompany extends Model
             $model->clearCaches();
         });
     }
-} 
+}

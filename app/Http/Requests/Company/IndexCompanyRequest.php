@@ -2,15 +2,16 @@
 
 namespace App\Http\Requests\Company;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
 /**
  * Enhanced Enhanced Form Request for Company index
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Auto-generated for Level 4 Complex System Transformation
+ * Auto-generated for Level 4 Complex System Transformation.
  */
 class IndexCompanyRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class IndexCompanyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -44,7 +45,7 @@ class IndexCompanyRequest extends FormRequest
                 'min:1',
                 'max:100',
             ],
-            
+
             // Search and filtering
             'search' => [
                 'sometimes',
@@ -65,7 +66,7 @@ class IndexCompanyRequest extends FormRequest
                 'sometimes',
                 'boolean',
             ],
-            
+
             // Location filters
             'country_id' => [
                 'sometimes',
@@ -82,7 +83,7 @@ class IndexCompanyRequest extends FormRequest
                 'integer',
                 'exists:cities,id',
             ],
-            
+
             // Industry and size filters
             'industry_id' => [
                 'sometimes',
@@ -99,7 +100,7 @@ class IndexCompanyRequest extends FormRequest
                 'integer',
                 'exists:ownership_types,id',
             ],
-            
+
             // Date range filters
             'created_from' => [
                 'sometimes',
@@ -116,16 +117,16 @@ class IndexCompanyRequest extends FormRequest
                 'sometimes',
                 'integer',
                 'min:1800',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
             ],
             'established_to' => [
                 'sometimes',
                 'integer',
                 'min:1800',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
                 'gte:established_from',
             ],
-            
+
             // Employee count range
             'employees_min' => [
                 'sometimes',
@@ -140,14 +141,14 @@ class IndexCompanyRequest extends FormRequest
                 'max:1000000',
                 'gte:employees_min',
             ],
-            
+
             // Sorting
             'sort_by' => [
                 'sometimes',
                 'string',
                 Rule::in([
                     'name', 'created_at', 'updated_at', 'established_in',
-                    'no_of_employees', 'jobs_count', 'applications_count'
+                    'no_of_employees', 'jobs_count', 'applications_count',
                 ]),
             ],
             'sort_order' => [
@@ -155,7 +156,7 @@ class IndexCompanyRequest extends FormRequest
                 'string',
                 Rule::in(['asc', 'desc']),
             ],
-            
+
             // Include relationships
             'include' => [
                 'sometimes',
@@ -165,10 +166,10 @@ class IndexCompanyRequest extends FormRequest
                 'string',
                 Rule::in([
                     'user', 'country', 'state', 'city', 'industry',
-                    'ownershipType', 'companySize', 'jobs', 'activeJobs'
+                    'ownershipType', 'companySize', 'jobs', 'activeJobs',
                 ]),
             ],
-            
+
             // Response format
             'format' => [
                 'sometimes',
@@ -263,6 +264,79 @@ class IndexCompanyRequest extends FormRequest
     }
 
     /**
+     * Get the processed filter data.
+     */
+    public function getFilters(): array
+    {
+        return $this->only([
+            'search', 'status', 'is_featured', 'is_verified',
+            'country_id', 'state_id', 'city_id',
+            'industry_id', 'company_size_id', 'ownership_type_id',
+            'created_from', 'created_to',
+            'established_from', 'established_to',
+            'employees_min', 'employees_max',
+        ]);
+    }
+
+    /**
+     * Get the pagination parameters.
+     */
+    public function getPagination(): array
+    {
+        return $this->only(['page', 'per_page']);
+    }
+
+    /**
+     * Get the sorting parameters.
+     */
+    public function getSorting(): array
+    {
+        return $this->only(['sort_by', 'sort_order']);
+    }
+
+    /**
+     * Get the relationships to include.
+     */
+    public function getIncludes(): array
+    {
+        return $this->input('include', []);
+    }
+
+    /**
+     * Check if user can access advanced filters.
+     */
+    public function canUseAdvancedFilters(): bool
+    {
+        return Auth::user()->hasAnyRole(['Admin', 'Super Admin']);
+    }
+
+    /**
+     * Check if user can export data.
+     */
+    public function canExport(): bool
+    {
+        return Auth::user()->hasPermission('companies.export')
+               || Auth::user()->hasAnyRole(['Admin', 'Super Admin']);
+    }
+
+    /**
+     * Configure the validator instance.
+     * Enhanced Pattern: Enhanced validation logic.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($this->hasEnhancedValidationConflicts()) {
+                $validator->errors()->add('name', __('validation.conflict_detected'));
+            }
+
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('name', __('validation.suspicious_content'));
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -293,119 +367,8 @@ class IndexCompanyRequest extends FormRequest
     }
 
     /**
-     * Get the processed filter data.
-     *
-     * @return array
-     */
-    public function getFilters(): array
-    {
-        return $this->only([
-            'search', 'status', 'is_featured', 'is_verified',
-            'country_id', 'state_id', 'city_id',
-            'industry_id', 'company_size_id', 'ownership_type_id',
-            'created_from', 'created_to',
-            'established_from', 'established_to',
-            'employees_min', 'employees_max'
-        ]);
-    }
-
-    /**
-     * Get the pagination parameters.
-     *
-     * @return array
-     */
-    public function getPagination(): array
-    {
-        return $this->only(['page', 'per_page']);
-    }
-
-    /**
-     * Get the sorting parameters.
-     *
-     * @return array
-     */
-    public function getSorting(): array
-    {
-        return $this->only(['sort_by', 'sort_order']);
-    }
-
-    /**
-     * Get the relationships to include.
-     *
-     * @return array
-     */
-    public function getIncludes(): array
-    {
-        return $this->input('include', []);
-    }
-
-    /**
-     * Check if user can access advanced filters.
-     *
-     * @return bool
-     */
-    public function canUseAdvancedFilters(): bool
-    {
-        return Auth::user()->hasAnyRole(['Admin', 'Super Admin']);
-    }
-
-    /**
-     * Check if user can export data.
-     *
-     * @return bool
-     */
-    public function canExport(): bool
-    {
-        return Auth::user()->hasPermission('companies.export') || 
-               Auth::user()->hasAnyRole(['Admin', 'Super Admin']);
-    }
-
-    /**
-     * Configure the validator instance.
-     * Enhanced Pattern: Enhanced validation logic
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->hasEnhancedValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
-            }
-        });
-    }
-
-    /**
-     * Enhanced Pattern: Enhanced business logic validation
-     */
-    private function hasEnhancedValidationConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->search ?? '') . ' ' . ($this->search ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
      * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -419,5 +382,31 @@ class IndexCompanyRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
+    }
+
+    /**
+     * Enhanced Pattern: Enhanced business logic validation.
+     */
+    private function hasEnhancedValidationConflicts(): bool
+    {
+        // Add specific business logic validation here
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Content security validation.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
+        $content = strtolower(($this->search ?? '').' '.($this->search ?? ''));
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

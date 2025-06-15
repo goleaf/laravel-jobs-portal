@@ -2,48 +2,50 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Todo Model - Enhanced with Enhanced patterns
+ * Todo Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property string $title
- * @property string|null $description
- * @property string|null $category
- * @property string $priority
- * @property bool $is_completed
- * @property bool $is_active
- * @property bool $is_recurring
- * @property \Illuminate\Support\Carbon|null $due_date
- * @property \Illuminate\Support\Carbon|null $completed_at
- * @property int|null $estimated_minutes
- * @property int|null $actual_minutes
- * @property array|null $tags
- * @property int|null $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \App\Models\User $user
- * @property-read string $status
- * @property-read string $priority_label
- * @property-read string $category_label
- * @property-read bool $is_overdue
- * @property-read bool $is_due_today
- * @property-read bool $is_due_soon
- * @property-read int $days_until_due
- * @property-read int $days_overdue
- * @property-read string $completion_status
+ * @property int         $id
+ * @property int         $user_id
+ * @property string      $title
+ * @property null|string $description
+ * @property null|string $category
+ * @property string      $priority
+ * @property bool        $is_completed
+ * @property bool        $is_active
+ * @property bool        $is_recurring
+ * @property null|Carbon $due_date
+ * @property null|Carbon $completed_at
+ * @property null|int    $estimated_minutes
+ * @property null|int    $actual_minutes
+ * @property null|array  $tags
+ * @property null|int    $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property string      $status
+ * @property string      $priority_label
+ * @property string      $category_label
+ * @property bool        $is_overdue
+ * @property bool        $is_due_today
+ * @property bool        $is_due_soon
+ * @property int         $days_until_due
+ * @property int         $days_overdue
+ * @property string      $completion_status
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder completed()
@@ -77,14 +79,7 @@ class Todo extends Model
     use LogsActivity;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'todos';
-
-    /**
-     * Priority constants
+     * Priority constants.
      */
     public const PRIORITY_LOW = 'low';
     public const PRIORITY_MEDIUM = 'medium';
@@ -92,7 +87,7 @@ class Todo extends Model
     public const PRIORITY_URGENT = 'urgent';
 
     /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_IN_PROGRESS = 'in_progress';
@@ -100,7 +95,7 @@ class Todo extends Model
     public const STATUS_CANCELLED = 'cancelled';
 
     /**
-     * Category constants
+     * Category constants.
      */
     public const CATEGORY_PERSONAL = 'personal';
     public const CATEGORY_WORK = 'work';
@@ -108,6 +103,36 @@ class Todo extends Model
     public const CATEGORY_MEETING = 'meeting';
     public const CATEGORY_REMINDER = 'reminder';
     public const CATEGORY_ADMIN = 'admin';
+
+    /**
+     * Validation rules for creating todos.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'user_id' => 'required|integer|exists:users,id',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'category' => 'nullable|string|max:50',
+        'priority' => 'required|string|in:low,medium,high,urgent',
+        'is_completed' => 'boolean',
+        'is_active' => 'boolean',
+        'is_recurring' => 'boolean',
+        'due_date' => 'nullable|date|after:now',
+        'completed_at' => 'nullable|date',
+        'estimated_minutes' => 'nullable|integer|min:1|max:1440',
+        'actual_minutes' => 'nullable|integer|min:1|max:1440',
+        'tags' => 'nullable|array',
+        'tags.*' => 'string|max:50',
+        'sort_order' => 'nullable|integer|min:0',
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'todos';
 
     /**
      * The attributes that are mass assignable.
@@ -141,31 +166,6 @@ class Todo extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'is_completed' => 'boolean',
-            'is_active' => 'boolean',
-            'is_recurring' => 'boolean',
-            'due_date' => 'datetime',
-            'completed_at' => 'datetime',
-            'estimated_minutes' => 'integer',
-            'actual_minutes' => 'integer',
-            'tags' => 'array',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -173,36 +173,13 @@ class Todo extends Model
         return LogOptions::defaults()
             ->logOnly(['title', 'description', 'priority', 'is_completed', 'due_date'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating todos.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'user_id' => 'required|integer|exists:users,id',
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string|max:1000',
-        'category' => 'nullable|string|max:50',
-        'priority' => 'required|string|in:low,medium,high,urgent',
-        'is_completed' => 'boolean',
-        'is_active' => 'boolean',
-        'is_recurring' => 'boolean',
-        'due_date' => 'nullable|date|after:now',
-        'completed_at' => 'nullable|date',
-        'estimated_minutes' => 'nullable|integer|min:1|max:1440',
-        'actual_minutes' => 'nullable|integer|min:1|max:1440',
-        'tags' => 'nullable|array',
-        'tags.*' => 'string|max:50',
-        'sort_order' => 'nullable|integer|min:0',
-    ];
 
     /**
      * Update validation rules for todos.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
@@ -244,6 +221,8 @@ class Todo extends Model
 
     /**
      * Scope to only include active todos.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -252,6 +231,8 @@ class Todo extends Model
 
     /**
      * Scope to only include inactive todos.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -260,6 +241,8 @@ class Todo extends Model
 
     /**
      * Scope to only include completed todos.
+     *
+     * @param mixed $query
      */
     public function scopeCompleted($query)
     {
@@ -268,6 +251,8 @@ class Todo extends Model
 
     /**
      * Scope to only include incomplete todos.
+     *
+     * @param mixed $query
      */
     public function scopeIncomplete($query)
     {
@@ -276,6 +261,8 @@ class Todo extends Model
 
     /**
      * Scope to only include pending todos (active and incomplete).
+     *
+     * @param mixed $query
      */
     public function scopePending($query)
     {
@@ -284,6 +271,8 @@ class Todo extends Model
 
     /**
      * Scope to only include recurring todos.
+     *
+     * @param mixed $query
      */
     public function scopeRecurring($query)
     {
@@ -292,6 +281,8 @@ class Todo extends Model
 
     /**
      * Scope to only include non-recurring todos.
+     *
+     * @param mixed $query
      */
     public function scopeNonRecurring($query)
     {
@@ -304,53 +295,68 @@ class Todo extends Model
 
     /**
      * Scope to only include overdue todos.
+     *
+     * @param mixed $query
      */
     public function scopeOverdue($query)
     {
         return $query->where('due_date', '<', now())
-                    ->where('is_completed', false)
-                    ->where('is_active', true);
+            ->where('is_completed', false)
+            ->where('is_active', true)
+        ;
     }
 
     /**
      * Scope to only include todos due today.
+     *
+     * @param mixed $query
      */
     public function scopeDueToday($query)
     {
         return $query->whereDate('due_date', today())
-                    ->where('is_completed', false)
-                    ->where('is_active', true);
+            ->where('is_completed', false)
+            ->where('is_active', true)
+        ;
     }
 
     /**
      * Scope to only include todos due soon.
+     *
+     * @param mixed $query
      */
     public function scopeDueSoon($query, int $days = 7)
     {
         return $query->where('due_date', '<=', now()->addDays($days))
-                    ->where('due_date', '>=', now())
-                    ->where('is_completed', false)
-                    ->where('is_active', true);
+            ->where('due_date', '>=', now())
+            ->where('is_completed', false)
+            ->where('is_active', true)
+        ;
     }
 
     /**
      * Scope to only include todos due this week.
+     *
+     * @param mixed $query
      */
     public function scopeDueThisWeek($query)
     {
         return $query->whereBetween('due_date', [now()->startOfWeek(), now()->endOfWeek()])
-                    ->where('is_completed', false)
-                    ->where('is_active', true);
+            ->where('is_completed', false)
+            ->where('is_active', true)
+        ;
     }
 
     /**
      * Scope to only include todos due this month.
+     *
+     * @param mixed $query
      */
     public function scopeDueThisMonth($query)
     {
         return $query->whereBetween('due_date', [now()->startOfMonth(), now()->endOfMonth()])
-                    ->where('is_completed', false)
-                    ->where('is_active', true);
+            ->where('is_completed', false)
+            ->where('is_active', true)
+        ;
     }
 
     // =============================================
@@ -359,6 +365,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos by priority.
+     *
+     * @param mixed $query
      */
     public function scopeByPriority($query, string $priority)
     {
@@ -367,6 +375,8 @@ class Todo extends Model
 
     /**
      * Scope to only include high priority todos.
+     *
+     * @param mixed $query
      */
     public function scopeHighPriority($query)
     {
@@ -375,6 +385,8 @@ class Todo extends Model
 
     /**
      * Scope to only include medium priority todos.
+     *
+     * @param mixed $query
      */
     public function scopeMediumPriority($query)
     {
@@ -383,6 +395,8 @@ class Todo extends Model
 
     /**
      * Scope to only include low priority todos.
+     *
+     * @param mixed $query
      */
     public function scopeLowPriority($query)
     {
@@ -391,6 +405,8 @@ class Todo extends Model
 
     /**
      * Scope to only include urgent priority todos.
+     *
+     * @param mixed $query
      */
     public function scopeUrgent($query)
     {
@@ -399,6 +415,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -411,6 +429,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos by user.
+     *
+     * @param mixed $query
      */
     public function scopeByUser($query, int $userId)
     {
@@ -419,18 +439,23 @@ class Todo extends Model
 
     /**
      * Scope to search todos by title or description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('title', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhere('category', 'like', '%' . $term . '%');
+            $q->where('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhere('category', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope to get todos created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -443,6 +468,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos with estimated time.
+     *
+     * @param mixed $query
      */
     public function scopeWithEstimatedTime($query)
     {
@@ -451,6 +478,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos without estimated time.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutEstimatedTime($query)
     {
@@ -459,6 +488,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos with actual time tracked.
+     *
+     * @param mixed $query
      */
     public function scopeWithActualTime($query)
     {
@@ -467,6 +498,8 @@ class Todo extends Model
 
     /**
      * Scope to get todos by estimated duration range.
+     *
+     * @param mixed $query
      */
     public function scopeByEstimatedDuration($query, int $minMinutes, int $maxMinutes)
     {
@@ -479,16 +512,21 @@ class Todo extends Model
 
     /**
      * Scope to order todos by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('priority', 'desc')
-                    ->orderBy('due_date', 'asc');
+            ->orderBy('priority', 'desc')
+            ->orderBy('due_date', 'asc')
+        ;
     }
 
     /**
      * Scope to order todos alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -497,6 +535,8 @@ class Todo extends Model
 
     /**
      * Scope to order todos by due date.
+     *
+     * @param mixed $query
      */
     public function scopeByDueDate($query, string $direction = 'asc')
     {
@@ -505,6 +545,8 @@ class Todo extends Model
 
     /**
      * Scope to order todos by priority.
+     *
+     * @param mixed $query
      */
     public function scopeByPriorityOrder($query)
     {
@@ -518,7 +560,7 @@ class Todo extends Model
     /**
      * Get cached todos for a user.
      */
-    public static function getCachedForUser(int $userId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedForUser(int $userId): Collection
     {
         return Cache::remember("todos.user.{$userId}", now()->addMinutes(30), function () use ($userId) {
             return static::byUser($userId)->active()->ordered()->get();
@@ -528,7 +570,7 @@ class Todo extends Model
     /**
      * Get cached pending todos for a user.
      */
-    public static function getCachedPendingForUser(int $userId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPendingForUser(int $userId): Collection
     {
         return Cache::remember("todos.pending.user.{$userId}", now()->addMinutes(15), function () use ($userId) {
             return static::byUser($userId)->pending()->ordered()->get();
@@ -538,7 +580,7 @@ class Todo extends Model
     /**
      * Get cached overdue todos for a user.
      */
-    public static function getCachedOverdueForUser(int $userId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedOverdueForUser(int $userId): Collection
     {
         return Cache::remember("todos.overdue.user.{$userId}", now()->addMinutes(15), function () use ($userId) {
             return static::byUser($userId)->overdue()->ordered()->get();
@@ -563,6 +605,7 @@ class Todo extends Model
         if ($this->is_overdue) {
             return 'overdue';
         }
+
         return self::STATUS_PENDING;
     }
 
@@ -571,7 +614,7 @@ class Todo extends Model
      */
     public function getPriorityLabelAttribute(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             self::PRIORITY_URGENT => 'Urgent',
             self::PRIORITY_HIGH => 'High',
             self::PRIORITY_MEDIUM => 'Medium',
@@ -585,7 +628,7 @@ class Todo extends Model
      */
     public function getCategoryLabelAttribute(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             self::CATEGORY_PERSONAL => 'Personal',
             self::CATEGORY_WORK => 'Work',
             self::CATEGORY_PROJECT => 'Project',
@@ -601,10 +644,10 @@ class Todo extends Model
      */
     public function getIsOverdueAttribute(): bool
     {
-        return $this->due_date && 
-               $this->due_date->isPast() && 
-               !$this->is_completed && 
-               $this->is_active;
+        return $this->due_date
+               && $this->due_date->isPast()
+               && !$this->is_completed
+               && $this->is_active;
     }
 
     /**
@@ -620,10 +663,10 @@ class Todo extends Model
      */
     public function getIsDueSoonAttribute(): bool
     {
-        return $this->due_date && 
-               $this->due_date->isFuture() && 
-               $this->due_date->diffInDays(now()) <= 7 && 
-               !$this->is_completed;
+        return $this->due_date
+               && $this->due_date->isFuture()
+               && $this->due_date->diffInDays(now()) <= 7
+               && !$this->is_completed;
     }
 
     /**
@@ -634,6 +677,7 @@ class Todo extends Model
         if (!$this->due_date || $this->is_completed) {
             return 0;
         }
+
         return $this->due_date->diffInDays(now(), false);
     }
 
@@ -645,6 +689,7 @@ class Todo extends Model
         if (!$this->is_overdue) {
             return 0;
         }
+
         return now()->diffInDays($this->due_date);
     }
 
@@ -665,6 +710,7 @@ class Todo extends Model
         if ($this->is_due_soon) {
             return 'Due Soon';
         }
+
         return 'Pending';
     }
 
@@ -707,7 +753,7 @@ class Todo extends Model
      */
     public function isUrgent(): bool
     {
-        return $this->priority === self::PRIORITY_URGENT;
+        return self::PRIORITY_URGENT === $this->priority;
     }
 
     /**
@@ -731,7 +777,7 @@ class Todo extends Model
      */
     public function getPriorityColor(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             self::PRIORITY_URGENT => '#dc3545',
             self::PRIORITY_HIGH => '#fd7e14',
             self::PRIORITY_MEDIUM => '#ffc107',
@@ -746,6 +792,7 @@ class Todo extends Model
     public function getPriorityBadgeHtml(): string
     {
         $color = $this->getPriorityColor();
+
         return "<span class=\"badge\" style=\"background-color: {$color};\">{$this->priority_label}</span>";
     }
 
@@ -767,6 +814,31 @@ class Todo extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'is_completed' => 'boolean',
+            'is_active' => 'boolean',
+            'is_recurring' => 'boolean',
+            'due_date' => 'datetime',
+            'completed_at' => 'datetime',
+            'estimated_minutes' => 'integer',
+            'actual_minutes' => 'integer',
+            'tags' => 'array',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

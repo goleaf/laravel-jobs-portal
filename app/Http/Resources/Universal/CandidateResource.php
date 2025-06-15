@@ -7,14 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Universal Candidate Resource
- * Implements MCP best practices for API responses
+ * Implements MCP best practices for API responses.
  */
 class CandidateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -27,7 +26,7 @@ class CandidateResource extends JsonResource
             'experience_level' => $this->experience_level,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            
+
             // Universal Pattern: Conditional relationships (prevents N+1)
             'user' => $this->whenLoaded('user'),
             'resumes' => $this->whenLoaded('resumes'),
@@ -44,7 +43,7 @@ class CandidateResource extends JsonResource
     }
 
     /**
-     * Universal Pattern: Add metadata to the response
+     * Universal Pattern: Add metadata to the response.
      */
     public function with(Request $request): array
     {
@@ -52,7 +51,7 @@ class CandidateResource extends JsonResource
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'resource_type' => 'candidate'
+                'resource_type' => 'candidate',
             ],
         ];
     }

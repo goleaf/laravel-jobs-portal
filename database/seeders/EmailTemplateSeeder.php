@@ -6,7 +6,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Database\Seeder;
 
 /**
- * Class EmailTemplateSeeder
+ * Class EmailTemplateSeeder.
  */
 class EmailTemplateSeeder extends Seeder
 {

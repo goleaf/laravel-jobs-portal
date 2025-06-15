@@ -21,12 +21,12 @@ class FunctionalAreaFactory extends Factory
             'Financial Analysis', 'Business Operations', 'Customer Success', 'Product Strategy', 'UX/UI Design',
             'Technical Engineering', 'Quality Control', 'Research & Innovation', 'Legal Affairs', 'Office Administration',
             'Project Coordination', 'Business Development', 'Strategic Consulting', 'Learning & Development', 'Logistics Management',
-            'Production Management', 'Health Services', 'Educational Services', 'Communications', 'Property Management'
+            'Production Management', 'Health Services', 'Educational Services', 'Communications', 'Property Management',
         ];
-        
+
         return [
             'name' => $this->faker->unique()->randomElement($functionalAreas),
             'is_default' => $this->faker->boolean(30), // 30% chance of being default
         ];
     }
-} 
+}

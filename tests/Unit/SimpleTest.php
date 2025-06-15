@@ -4,17 +4,22 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class SimpleTest extends TestCase
 {
     /** @test */
-    public function it_can_run_basic_test()
+    public function itCanRunBasicTest()
     {
         $this->assertTrue(true);
     }
 
     /** @test */
-    public function it_can_perform_basic_math()
+    public function itCanPerformBasicMath()
     {
         $this->assertEquals(4, 2 + 2);
     }
-} 
+}

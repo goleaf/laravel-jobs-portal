@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdatePrivacyPolicyRequest
+ * Class UpdatePrivacyPolicyRequest.
  */
 class UpdatePrivacyPolicyRequest extends FormRequest
 {

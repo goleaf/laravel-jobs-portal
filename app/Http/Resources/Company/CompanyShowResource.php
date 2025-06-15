@@ -4,7 +4,6 @@ namespace App\Http\Resources\Company;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class CompanyShowResource extends JsonResource
 {
@@ -185,10 +184,10 @@ class CompanyShowResource extends JsonResource
 
             // SEO & Meta
             'seo' => [
-                'meta_title' => $this->name . ' - ' . __('company.company_profile'),
-                'meta_description' => $this->description ? 
-                    \Str::limit(strip_tags($this->description), 160) : 
-                    __('company.default_meta_description', ['name' => $this->name]),
+                'meta_title' => $this->name.' - '.__('company.company_profile'),
+                'meta_description' => $this->description
+                    ? \Str::limit(strip_tags($this->description), 160)
+                    : __('company.default_meta_description', ['name' => $this->name]),
                 'canonical_url' => route('company.show', $this->slug),
                 'og_image' => $this->logo ?: asset('images/default-company-logo.png'),
             ],

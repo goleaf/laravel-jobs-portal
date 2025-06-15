@@ -2,57 +2,60 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Arr;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * CustomMedia Model - Enhanced with Enhanced patterns
+ * CustomMedia Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $name
- * @property string $file_name
- * @property string|null $title
- * @property string|null $description
- * @property string $mime_type
- * @property string|null $disk
- * @property string $collection_name
- * @property int $size
- * @property array|null $manipulations
- * @property array|null $custom_properties
- * @property array|null $generated_conversions
- * @property int|null $responsive_images
- * @property int|null $order_column
- * @property string|null $uuid
- * @property string|null $conversions_disk
- * @property bool $is_active
- * @property bool $is_featured
- * @property bool $is_processed
- * @property string|null $alt_text
- * @property string|null $caption
- * @property string|null $copyright
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read string $url
- * @property-read string $full_url
- * @property-read string $path
- * @property-read string $extension
- * @property-read string $human_readable_size
- * @property-read bool $is_image
- * @property-read bool $is_video
- * @property-read bool $is_audio
- * @property-read bool $is_document
- * @property-read array $meta_data
+ * @property int         $id
+ * @property string      $name
+ * @property string      $file_name
+ * @property null|string $title
+ * @property null|string $description
+ * @property string      $mime_type
+ * @property null|string $disk
+ * @property string      $collection_name
+ * @property int         $size
+ * @property null|array  $manipulations
+ * @property null|array  $custom_properties
+ * @property null|array  $generated_conversions
+ * @property null|int    $responsive_images
+ * @property null|int    $order_column
+ * @property null|string $uuid
+ * @property null|string $conversions_disk
+ * @property bool        $is_active
+ * @property bool        $is_featured
+ * @property bool        $is_processed
+ * @property null|string $alt_text
+ * @property null|string $caption
+ * @property null|string $copyright
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property string      $url
+ * @property string      $full_url
+ * @property string      $path
+ * @property string      $extension
+ * @property string      $human_readable_size
+ * @property bool        $is_image
+ * @property bool        $is_video
+ * @property bool        $is_audio
+ * @property bool        $is_document
+ * @property array       $meta_data
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -85,14 +88,7 @@ class CustomMedia extends Media
     use LogsActivity;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'media';
-
-    /**
-     * Media type constants
+     * Media type constants.
      */
     public const TYPE_IMAGE = 'image';
     public const TYPE_VIDEO = 'video';
@@ -102,13 +98,49 @@ class CustomMedia extends Media
     public const TYPE_OTHER = 'other';
 
     /**
-     * Collection constants
+     * Collection constants.
      */
     public const COLLECTION_AVATARS = 'avatars';
     public const COLLECTION_BANNERS = 'banners';
     public const COLLECTION_GALLERY = 'gallery';
     public const COLLECTION_DOCUMENTS = 'documents';
     public const COLLECTION_ATTACHMENTS = 'attachments';
+
+    /**
+     * Validation rules for creating custom media.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:255',
+        'file_name' => 'required|string|max:255',
+        'title' => 'nullable|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'mime_type' => 'required|string|max:255',
+        'disk' => 'nullable|string|max:255',
+        'collection_name' => 'required|string|max:255',
+        'size' => 'required|integer|min:0',
+        'manipulations' => 'nullable|array',
+        'custom_properties' => 'nullable|array',
+        'generated_conversions' => 'nullable|array',
+        'responsive_images' => 'nullable|array',
+        'order_column' => 'nullable|integer|min:0',
+        'uuid' => 'nullable|string|max:36',
+        'conversions_disk' => 'nullable|string|max:255',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_processed' => 'boolean',
+        'alt_text' => 'nullable|string|max:255',
+        'caption' => 'nullable|string|max:500',
+        'copyright' => 'nullable|string|max:255',
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'custommedias';
 
     /**
      * The attributes that are mass assignable.
@@ -164,30 +196,6 @@ class CustomMedia extends Media
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'size' => 'integer',
-            'manipulations' => 'array',
-            'custom_properties' => 'array',
-            'generated_conversions' => 'array',
-            'responsive_images' => 'array',
-            'order_column' => 'integer',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_processed' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -195,42 +203,13 @@ class CustomMedia extends Media
         return LogOptions::defaults()
             ->logOnly(['name', 'file_name', 'title', 'description', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating custom media.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:255',
-        'file_name' => 'required|string|max:255',
-        'title' => 'nullable|string|max:255',
-        'description' => 'nullable|string|max:1000',
-        'mime_type' => 'required|string|max:255',
-        'disk' => 'nullable|string|max:255',
-        'collection_name' => 'required|string|max:255',
-        'size' => 'required|integer|min:0',
-        'manipulations' => 'nullable|array',
-        'custom_properties' => 'nullable|array',
-        'generated_conversions' => 'nullable|array',
-        'responsive_images' => 'nullable|array',
-        'order_column' => 'nullable|integer|min:0',
-        'uuid' => 'nullable|string|max:36',
-        'conversions_disk' => 'nullable|string|max:255',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_processed' => 'boolean',
-        'alt_text' => 'nullable|string|max:255',
-        'caption' => 'nullable|string|max:500',
-        'copyright' => 'nullable|string|max:255',
-    ];
 
     /**
      * Update validation rules for custom media.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
@@ -266,6 +245,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include active media.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -274,6 +255,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include inactive media.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -282,6 +265,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include featured media.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -290,6 +275,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include non-featured media.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -298,6 +285,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include processed media.
+     *
+     * @param mixed $query
      */
     public function scopeProcessed($query)
     {
@@ -306,6 +295,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to only include unprocessed media.
+     *
+     * @param mixed $query
      */
     public function scopeUnprocessed($query)
     {
@@ -318,6 +309,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get media by collection.
+     *
+     * @param mixed $query
      */
     public function scopeByCollection($query, string $collection)
     {
@@ -326,6 +319,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get media by MIME type.
+     *
+     * @param mixed $query
      */
     public function scopeByMimeType($query, string $mimeType)
     {
@@ -334,6 +329,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get only image files.
+     *
+     * @param mixed $query
      */
     public function scopeImages($query)
     {
@@ -342,6 +339,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get only video files.
+     *
+     * @param mixed $query
      */
     public function scopeVideos($query)
     {
@@ -350,6 +349,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get only audio files.
+     *
+     * @param mixed $query
      */
     public function scopeAudio($query)
     {
@@ -358,6 +359,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get only document files.
+     *
+     * @param mixed $query
      */
     public function scopeDocuments($query)
     {
@@ -374,6 +377,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get archive files.
+     *
+     * @param mixed $query
      */
     public function scopeArchives($query)
     {
@@ -391,21 +396,26 @@ class CustomMedia extends Media
 
     /**
      * Scope to search media by name, title, or description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('name', 'like', '%' . $term . '%')
-              ->orWhere('file_name', 'like', '%' . $term . '%')
-              ->orWhere('title', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhere('alt_text', 'like', '%' . $term . '%')
-              ->orWhere('caption', 'like', '%' . $term . '%');
+            $q->where('name', 'like', '%'.$term.'%')
+                ->orWhere('file_name', 'like', '%'.$term.'%')
+                ->orWhere('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhere('alt_text', 'like', '%'.$term.'%')
+                ->orWhere('caption', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope to get media created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -414,6 +424,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get old media created before specified days.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -426,6 +438,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get large files above specified size.
+     *
+     * @param mixed $query
      */
     public function scopeLarge($query, int $bytes = 1048576) // 1MB default
     {
@@ -434,6 +448,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get small files below specified size.
+     *
+     * @param mixed $query
      */
     public function scopeSmall($query, int $bytes = 102400) // 100KB default
     {
@@ -442,6 +458,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get media by storage disk.
+     *
+     * @param mixed $query
      */
     public function scopeByDisk($query, string $disk)
     {
@@ -450,6 +468,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get media with conversions.
+     *
+     * @param mixed $query
      */
     public function scopeWithConversions($query)
     {
@@ -458,6 +478,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to get media without conversions.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutConversions($query)
     {
@@ -470,6 +492,8 @@ class CustomMedia extends Media
 
     /**
      * Scope to order media alphabetically by name.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -479,14 +503,17 @@ class CustomMedia extends Media
     /**
      * Scope to order media by order column and creation date.
      */
-    public function scopeOrdered(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('order_column', 'asc')
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     /**
      * Scope to order media by size (largest first).
+     *
+     * @param mixed $query
      */
     public function scopeBySize($query, string $direction = 'desc')
     {
@@ -500,7 +527,7 @@ class CustomMedia extends Media
     /**
      * Get cached active media.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('custom_media.active', now()->addHours(1), function () {
             return static::active()->ordered()->get();
@@ -510,7 +537,7 @@ class CustomMedia extends Media
     /**
      * Get cached media by collection.
      */
-    public static function getCachedByCollection(string $collection): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCollection(string $collection): Collection
     {
         return Cache::remember("custom_media.collection.{$collection}", now()->addHours(1), function () use ($collection) {
             return static::byCollection($collection)->active()->ordered()->get();
@@ -520,7 +547,7 @@ class CustomMedia extends Media
     /**
      * Get cached featured media.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('custom_media.featured', now()->addMinutes(30), function () {
             return static::featured()->active()->ordered()->get();
@@ -571,7 +598,8 @@ class CustomMedia extends Media
         $bytes = $this->size;
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $power = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
-        return number_format($bytes / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
+
+        return number_format($bytes / pow(1024, $power), 2, '.', ',').' '.$units[$power];
     }
 
     /**
@@ -579,7 +607,7 @@ class CustomMedia extends Media
      */
     public function getIsImageAttribute(): bool
     {
-        return strpos($this->mime_type, 'image/') === 0;
+        return 0 === strpos($this->mime_type, 'image/');
     }
 
     /**
@@ -587,7 +615,7 @@ class CustomMedia extends Media
      */
     public function getIsVideoAttribute(): bool
     {
-        return strpos($this->mime_type, 'video/') === 0;
+        return 0 === strpos($this->mime_type, 'video/');
     }
 
     /**
@@ -595,7 +623,7 @@ class CustomMedia extends Media
      */
     public function getIsAudioAttribute(): bool
     {
-        return strpos($this->mime_type, 'audio/') === 0;
+        return 0 === strpos($this->mime_type, 'audio/');
     }
 
     /**
@@ -612,6 +640,7 @@ class CustomMedia extends Media
             'text/plain',
             'text/csv',
         ];
+
         return in_array($this->mime_type, $documentMimes);
     }
 
@@ -669,22 +698,30 @@ class CustomMedia extends Media
      */
     public function getType(): string
     {
-        if ($this->is_image) return self::TYPE_IMAGE;
-        if ($this->is_video) return self::TYPE_VIDEO;
-        if ($this->is_audio) return self::TYPE_AUDIO;
-        if ($this->is_document) return self::TYPE_DOCUMENT;
-        
+        if ($this->is_image) {
+            return self::TYPE_IMAGE;
+        }
+        if ($this->is_video) {
+            return self::TYPE_VIDEO;
+        }
+        if ($this->is_audio) {
+            return self::TYPE_AUDIO;
+        }
+        if ($this->is_document) {
+            return self::TYPE_DOCUMENT;
+        }
+
         $archiveMimes = [
             'application/zip',
             'application/x-rar-compressed',
             'application/x-tar',
             'application/gzip',
         ];
-        
+
         if (in_array($this->mime_type, $archiveMimes)) {
             return self::TYPE_ARCHIVE;
         }
-        
+
         return self::TYPE_OTHER;
     }
 
@@ -701,7 +738,7 @@ class CustomMedia extends Media
      */
     public function getIcon(): string
     {
-        return match($this->getType()) {
+        return match ($this->getType()) {
             self::TYPE_IMAGE => 'fa-image',
             self::TYPE_VIDEO => 'fa-video',
             self::TYPE_AUDIO => 'fa-music',
@@ -725,6 +762,7 @@ class CustomMedia extends Media
     public function updateMetadata(array $metadata): bool
     {
         $customProperties = array_merge($this->custom_properties ?? [], $metadata);
+
         return $this->update(['custom_properties' => $customProperties]);
     }
 
@@ -746,6 +784,30 @@ class CustomMedia extends Media
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'size' => 'integer',
+            'manipulations' => 'array',
+            'custom_properties' => 'array',
+            'generated_conversions' => 'array',
+            'responsive_images' => 'array',
+            'order_column' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_processed' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================
@@ -771,5 +833,52 @@ class CustomMedia extends Media
         static::restored(function ($model) {
             $model->clearCaches();
         });
+    }
+
+    /**
+     * Validate that all required fields are present using Laravel 12.16 Arr::hasAll()
+     *
+     * @param array $data
+     * @return bool
+     */
+    public static function validateRequiredFields(array $data): bool
+    {
+        $requiredFields = ['name', 'file_name', 'mime_type', 'collection_name', 'size'];
+        
+        return Arr::hasAll($data, $requiredFields);
+    }
+
+    /**
+     * Validate nested media properties using Arr::hasAll() with dot notation
+     *
+     * @param array $data
+     * @return bool
+     */
+    public static function validateNestedProperties(array $data): bool
+    {
+        $nestedChecks = [
+            'custom_properties.alt_text',
+            'custom_properties.caption'
+        ];
+        
+        // Check if data has nested structure and required nested fields
+        return Arr::hasAll($data, ['custom_properties']) && 
+               Arr::hasAll($data, $nestedChecks);
+    }
+
+    /**
+     * Enhanced factory validation using modern Laravel techniques
+     *
+     * @param array $attributes
+     * @return array
+     */
+    public static function validateFactoryData(array $attributes): array
+    {
+        // Use Arr::hasAll() to ensure core fields exist
+        if (!self::validateRequiredFields($attributes)) {
+            throw new \InvalidArgumentException('Missing required fields for CustomMedia creation');
+        }
+
+        return $attributes;
     }
 }

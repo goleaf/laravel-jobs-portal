@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Skill;
 
 use App\Models\Skill;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CreateSkillRequest extends FormRequest
 {
@@ -19,7 +19,7 @@ class CreateSkillRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -89,6 +89,65 @@ class CreateSkillRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Check for similar skill names to prevent duplicates
+            if ($this->input('name')) {
+                $similarSkills = Skill::where('name', 'like', '%'.$this->input('name').'%')
+                    ->where('name', '!=', $this->input('name'))
+                    ->limit(3)
+                    ->pluck('name')
+                    ->toArray()
+                ;
+
+                if (!empty($similarSkills)) {
+                    $validator->errors()->add('name', __('validation.skill.similar_exists', [
+                        'skills' => implode(', ', $similarSkills),
+                    ]));
+                }
+            }
+
+            // Validate skill name doesn't contain inappropriate content
+            if ($this->input('name')) {
+                $inappropriateWords = ['test', 'dummy', 'fake', 'sample'];
+                $name = strtolower($this->input('name'));
+
+                foreach ($inappropriateWords as $word) {
+                    if (str_contains($name, $word)) {
+                        $validator->errors()->add('name', __('validation.skill.inappropriate_content'));
+
+                        break;
+                    }
+                }
+            }
+
+            // Validate icon format if provided
+            if ($this->input('icon')) {
+                $validIconPrefixes = ['fa-', 'fas ', 'far ', 'fab ', 'fal ', 'fad '];
+                $icon = $this->input('icon');
+                $isValidIcon = false;
+
+                foreach ($validIconPrefixes as $prefix) {
+                    if (str_starts_with($icon, $prefix)) {
+                        $isValidIcon = true;
+
+                        break;
+                    }
+                }
+
+                if (!$isValidIcon) {
+                    $validator->errors()->add('icon', __('validation.skill.icon_format_invalid'));
+                }
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -118,7 +177,7 @@ class CreateSkillRequest extends FormRequest
         if ($this->has('color') && $this->input('color')) {
             $color = $this->input('color');
             if (!str_starts_with($color, '#')) {
-                $color = '#' . $color;
+                $color = '#'.$color;
             }
             $this->merge(['color' => strtoupper($color)]);
         }
@@ -137,58 +196,4 @@ class CreateSkillRequest extends FormRequest
             'ip' => $this->ip(),
         ]);
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            // Check for similar skill names to prevent duplicates
-            if ($this->input('name')) {
-                $similarSkills = Skill::where('name', 'like', '%' . $this->input('name') . '%')
-                    ->where('name', '!=', $this->input('name'))
-                    ->limit(3)
-                    ->pluck('name')
-                    ->toArray();
-
-                if (!empty($similarSkills)) {
-                    $validator->errors()->add('name', __('validation.skill.similar_exists', [
-                        'skills' => implode(', ', $similarSkills)
-                    ]));
-                }
-            }
-
-            // Validate skill name doesn't contain inappropriate content
-            if ($this->input('name')) {
-                $inappropriateWords = ['test', 'dummy', 'fake', 'sample'];
-                $name = strtolower($this->input('name'));
-                
-                foreach ($inappropriateWords as $word) {
-                    if (str_contains($name, $word)) {
-                        $validator->errors()->add('name', __('validation.skill.inappropriate_content'));
-                        break;
-                    }
-                }
-            }
-
-            // Validate icon format if provided
-            if ($this->input('icon')) {
-                $validIconPrefixes = ['fa-', 'fas ', 'far ', 'fab ', 'fal ', 'fad '];
-                $icon = $this->input('icon');
-                $isValidIcon = false;
-
-                foreach ($validIconPrefixes as $prefix) {
-                    if (str_starts_with($icon, $prefix)) {
-                        $isValidIcon = true;
-                        break;
-                    }
-                }
-
-                if (!$isValidIcon) {
-                    $validator->errors()->add('icon', __('validation.skill.icon_format_invalid'));
-                }
-            }
-        });
-    }
-} 
+}

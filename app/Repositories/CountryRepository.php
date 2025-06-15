@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Country;
 
 /**
- * Class CountryRepository
+ * Class CountryRepository.
  *
  * @version July 7, 2020, 5:07 am UTC
  */
@@ -21,7 +21,7 @@ class CountryRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -29,8 +29,8 @@ class CountryRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Country::class;

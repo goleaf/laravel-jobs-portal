@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Http\Request;
 
 class RateLimitingService
 {
@@ -37,7 +36,7 @@ class RateLimitingService
     {
         $config = $this->getRateLimitConfig($key);
         $actualLimit = $limit ?? $config['limit'];
-        
+
         return Cache::get($this->buildCacheKey($key), 0) < $actualLimit;
     }
 
@@ -49,22 +48,22 @@ class RateLimitingService
         $config = $this->getRateLimitConfig($key);
         $actualWindow = $window ?? $config['window'];
         $cacheKey = $this->buildCacheKey($key);
-        
+
         $current = Cache::get($cacheKey, 0);
         $new = $current + 1;
-        
+
         Cache::put($cacheKey, $new, $actualWindow);
-        
+
         // Log rate limit hits for monitoring
         if ($new > ($config['limit'] * 0.8)) { // Log when approaching limit
             Log::channel('security')->warning('Rate limit approaching', [
                 'key' => $key,
                 'attempts' => $new,
                 'limit' => $config['limit'],
-                'percentage' => ($new / $config['limit']) * 100
+                'percentage' => ($new / $config['limit']) * 100,
             ]);
         }
-        
+
         return $new;
     }
 
@@ -82,10 +81,10 @@ class RateLimitingService
     public function clear(string $key): void
     {
         Cache::forget($this->buildCacheKey($key));
-        
+
         Log::channel('security')->info('Rate limit cleared', [
             'key' => $key,
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
         ]);
     }
 
@@ -96,25 +95,25 @@ class RateLimitingService
     {
         $now = time();
         $windowStart = $now - $windowSeconds;
-        $cacheKey = $this->buildCacheKey($key) . ':sliding';
-        
+        $cacheKey = $this->buildCacheKey($key).':sliding';
+
         // Get existing timestamps
         $timestamps = Cache::get($cacheKey, []);
-        
+
         // Remove old timestamps outside the window
-        $timestamps = array_filter($timestamps, fn($timestamp) => $timestamp > $windowStart);
-        
+        $timestamps = array_filter($timestamps, fn ($timestamp) => $timestamp > $windowStart);
+
         // Check if limit exceeded
         if (count($timestamps) >= $limit) {
             return false;
         }
-        
+
         // Add current timestamp
         $timestamps[] = $now;
-        
+
         // Store updated timestamps
         Cache::put($cacheKey, $timestamps, $windowSeconds);
-        
+
         return true;
     }
 
@@ -125,47 +124,256 @@ class RateLimitingService
     {
         $user = $request->user();
         $baseKey = $this->buildKeyFromRequest($request, $action);
-        
+
         // Get user's rate limit based on reputation/role
         $multiplier = $this->getRateLimitMultiplier($user, $request);
         $config = $this->getRateLimitConfig($action);
-        
+
         $adaptedLimit = (int) ($config['limit'] * $multiplier);
-        
+
         return $this->isAllowed($baseKey, $adaptedLimit);
     }
 
     /**
+     * Build cache key from request.
+     */
+    public function buildKeyFromRequest(Request $request, string $type = 'general'): string
+    {
+        $user = $request->user();
+
+        // Use multiple identifiers for better accuracy
+        $identifiers = [];
+
+        if ($user) {
+            $identifiers[] = 'user:'.$user->id;
+        } else {
+            $identifiers[] = 'ip:'.$request->ip();
+
+            // Add user agent hash for anonymous users
+            $identifiers[] = 'ua:'.md5($request->userAgent() ?? '');
+        }
+
+        return "rate_limit:{$type}:".implode(':', $identifiers);
+    }
+
+    /**
+     * Get remaining time until rate limit resets.
+     */
+    public function getRemainingTime(string $key): int
+    {
+        $cacheKey = $this->buildCacheKey($key);
+
+        if (!Cache::has($cacheKey)) {
+            return 0;
+        }
+
+        // Get TTL from Redis
+        try {
+            $ttl = Cache::getStore()->getRedis()->ttl(
+                Cache::getStore()->getPrefix().$cacheKey
+            );
+
+            return max(0, $ttl);
+        } catch (\Exception $e) {
+            Log::warning('Failed to get rate limit TTL', [
+                'key' => $key,
+                'error' => $e->getMessage(),
+            ]);
+
+            return 0;
+        }
+    }
+
+    /**
+     * Get detailed statistics for rate limiting.
+     */
+    public function getDetailedStats(): array
+    {
+        $stats = [
+            'status' => 'active',
+            'cache_driver' => config('cache.default'),
+            'configured_limits' => count($this->rateLimits),
+            'limits' => [],
+        ];
+
+        foreach ($this->rateLimits as $key => $config) {
+            $cacheKey = $this->buildCacheKey($key);
+            $currentAttempts = Cache::get($cacheKey, 0);
+            $remainingTime = $this->getRemainingTime($key);
+
+            $stats['limits'][$key] = [
+                'limit' => $config['limit'],
+                'window' => $config['window'],
+                'current_attempts' => $currentAttempts,
+                'remaining' => max(0, $config['limit'] - $currentAttempts),
+                'percentage_used' => $config['limit'] > 0 ? ($currentAttempts / $config['limit']) * 100 : 0,
+                'resets_in' => $remainingTime,
+                'is_exceeded' => $currentAttempts >= $config['limit'],
+            ];
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Get simple statistics.
+     */
+    public function getStats(): array
+    {
+        return [
+            'status' => 'active',
+            'cache_driver' => config('cache.default'),
+            'message' => 'Advanced rate limiting service operational',
+            'configured_limits' => count($this->rateLimits),
+        ];
+    }
+
+    /**
+     * Bulk clear rate limits by pattern.
+     */
+    public function clearByPattern(string $pattern): int
+    {
+        $cleared = 0;
+        $cacheStore = Cache::getStore();
+
+        if (method_exists($cacheStore, 'getRedis')) {
+            $redis = $cacheStore->getRedis();
+            $prefix = $cacheStore->getPrefix();
+            $keys = $redis->keys($prefix.'rate_limit:*'.$pattern.'*');
+
+            foreach ($keys as $key) {
+                $redis->del(str_replace($prefix, '', $key));
+                ++$cleared;
+            }
+        }
+
+        Log::channel('security')->info('Bulk rate limit clear', [
+            'pattern' => $pattern,
+            'cleared_count' => $cleared,
+        ]);
+
+        return $cleared;
+    }
+
+    /**
+     * Set custom rate limit for specific key.
+     */
+    public function setCustomLimit(string $key, int $limit, int $window): void
+    {
+        $this->rateLimits[$key] = [
+            'limit' => $limit,
+            'window' => $window,
+        ];
+
+        Log::channel('security')->info('Custom rate limit set', [
+            'key' => $key,
+            'limit' => $limit,
+            'window' => $window,
+        ]);
+    }
+
+    /**
+     * Check if rate limit is exceeded.
+     */
+    public function isExceeded(string $key): bool
+    {
+        $config = $this->getRateLimitConfig($key);
+        $attempts = $this->getAttempts($key);
+
+        return $attempts >= $config['limit'];
+    }
+
+    /**
+     * Get headers for rate limit response.
+     */
+    public function getHeaders(string $key): array
+    {
+        $config = $this->getRateLimitConfig($key);
+        $attempts = $this->getAttempts($key);
+        $remaining = max(0, $config['limit'] - $attempts);
+        $resetTime = now()->addSeconds($this->getRemainingTime($key))->timestamp;
+
+        return [
+            'X-RateLimit-Limit' => $config['limit'],
+            'X-RateLimit-Remaining' => $remaining,
+            'X-RateLimit-Reset' => $resetTime,
+            'X-RateLimit-Retry-After' => $this->getRemainingTime($key),
+        ];
+    }
+
+    /**
+     * Test rate limiting configuration.
+     */
+    public function testConfiguration(): array
+    {
+        $results = [
+            'status' => 'ok',
+            'tests' => [],
+        ];
+
+        // Test cache connectivity
+        try {
+            Cache::put('rate_limit_test', 'test', 60);
+            $value = Cache::get('rate_limit_test');
+            Cache::forget('rate_limit_test');
+
+            $results['tests']['cache_connectivity'] = 'test' === $value ? 'ok' : 'failed';
+        } catch (\Exception $e) {
+            $results['tests']['cache_connectivity'] = 'failed: '.$e->getMessage();
+            $results['status'] = 'error';
+        }
+
+        // Test rate limit logic
+        try {
+            $testKey = 'test_'.time();
+            $allowed1 = $this->isAllowed($testKey, 2);
+            $this->hit($testKey, 60);
+            $this->hit($testKey, 60);
+            $allowed2 = $this->isAllowed($testKey, 2);
+            $this->clear($testKey);
+
+            $results['tests']['rate_limit_logic'] = ($allowed1 && !$allowed2) ? 'ok' : 'failed';
+        } catch (\Exception $e) {
+            $results['tests']['rate_limit_logic'] = 'failed: '.$e->getMessage();
+            $results['status'] = 'error';
+        }
+
+        return $results;
+    }
+
+    /**
      * Get rate limit multiplier based on user characteristics.
+     *
+     * @param mixed $user
      */
     protected function getRateLimitMultiplier($user, Request $request): float
     {
         $multiplier = 1.0;
-        
+
         if (!$user) {
             return 0.5; // Anonymous users get lower limits
         }
-        
+
         // Verified users get higher limits
         if (method_exists($user, 'hasVerifiedEmail') && $user->hasVerifiedEmail()) {
             $multiplier *= 1.5;
         }
-        
+
         // Admin users get much higher limits
         if (method_exists($user, 'hasRole') && $user->hasRole('admin')) {
             $multiplier *= 5.0;
         }
-        
+
         // Premium/paid users get higher limits
-        if (isset($user->subscription_status) && $user->subscription_status === 'active') {
+        if (isset($user->subscription_status) && 'active' === $user->subscription_status) {
             $multiplier *= 2.0;
         }
-        
+
         // Trusted IPs get higher limits
         if ($this->isTrustedIP($request->ip())) {
             $multiplier *= 2.0;
         }
-        
+
         return $multiplier;
     }
 
@@ -175,29 +383,8 @@ class RateLimitingService
     protected function isTrustedIP(string $ip): bool
     {
         $trustedIPs = config('security.rate_limiting.trusted_ips', []);
-        return in_array($ip, $trustedIPs);
-    }
 
-    /**
-     * Build cache key from request.
-     */
-    public function buildKeyFromRequest(Request $request, string $type = "general"): string
-    {
-        $user = $request->user();
-        
-        // Use multiple identifiers for better accuracy
-        $identifiers = [];
-        
-        if ($user) {
-            $identifiers[] = "user:" . $user->id;
-        } else {
-            $identifiers[] = "ip:" . $request->ip();
-            
-            // Add user agent hash for anonymous users
-            $identifiers[] = "ua:" . md5($request->userAgent() ?? '');
-        }
-        
-        return "rate_limit:{$type}:" . implode(':', $identifiers);
+        return in_array($ip, $trustedIPs);
     }
 
     /**
@@ -215,190 +402,7 @@ class RateLimitingService
     {
         return $this->rateLimits[$key] ?? [
             'limit' => self::DEFAULT_LIMIT,
-            'window' => self::DEFAULT_WINDOW
+            'window' => self::DEFAULT_WINDOW,
         ];
-    }
-
-    /**
-     * Get remaining time until rate limit resets.
-     */
-    public function getRemainingTime(string $key): int
-    {
-        $cacheKey = $this->buildCacheKey($key);
-        
-        if (!Cache::has($cacheKey)) {
-            return 0;
-        }
-        
-        // Get TTL from Redis
-        try {
-            $ttl = Cache::getStore()->getRedis()->ttl(
-                Cache::getStore()->getPrefix() . $cacheKey
-            );
-            return max(0, $ttl);
-        } catch (\Exception $e) {
-            Log::warning('Failed to get rate limit TTL', [
-                'key' => $key,
-                'error' => $e->getMessage()
-            ]);
-            return 0;
-        }
-    }
-
-    /**
-     * Get detailed statistics for rate limiting.
-     */
-    public function getDetailedStats(): array
-    {
-        $stats = [
-            'status' => 'active',
-            'cache_driver' => config('cache.default'),
-            'configured_limits' => count($this->rateLimits),
-            'limits' => []
-        ];
-        
-        foreach ($this->rateLimits as $key => $config) {
-            $cacheKey = $this->buildCacheKey($key);
-            $currentAttempts = Cache::get($cacheKey, 0);
-            $remainingTime = $this->getRemainingTime($key);
-            
-            $stats['limits'][$key] = [
-                'limit' => $config['limit'],
-                'window' => $config['window'],
-                'current_attempts' => $currentAttempts,
-                'remaining' => max(0, $config['limit'] - $currentAttempts),
-                'percentage_used' => $config['limit'] > 0 ? ($currentAttempts / $config['limit']) * 100 : 0,
-                'resets_in' => $remainingTime,
-                'is_exceeded' => $currentAttempts >= $config['limit']
-            ];
-        }
-        
-        return $stats;
-    }
-
-    /**
-     * Get simple statistics.
-     */
-    public function getStats(): array
-    {
-        return [
-            "status" => "active",
-            "cache_driver" => config("cache.default"),
-            "message" => "Advanced rate limiting service operational",
-            "configured_limits" => count($this->rateLimits)
-        ];
-    }
-
-    /**
-     * Bulk clear rate limits by pattern.
-     */
-    public function clearByPattern(string $pattern): int
-    {
-        $cleared = 0;
-        $cacheStore = Cache::getStore();
-        
-        if (method_exists($cacheStore, 'getRedis')) {
-            $redis = $cacheStore->getRedis();
-            $prefix = $cacheStore->getPrefix();
-            $keys = $redis->keys($prefix . 'rate_limit:*' . $pattern . '*');
-            
-            foreach ($keys as $key) {
-                $redis->del(str_replace($prefix, '', $key));
-                $cleared++;
-            }
-        }
-        
-        Log::channel('security')->info('Bulk rate limit clear', [
-            'pattern' => $pattern,
-            'cleared_count' => $cleared
-        ]);
-        
-        return $cleared;
-    }
-
-    /**
-     * Set custom rate limit for specific key.
-     */
-    public function setCustomLimit(string $key, int $limit, int $window): void
-    {
-        $this->rateLimits[$key] = [
-            'limit' => $limit,
-            'window' => $window
-        ];
-        
-        Log::channel('security')->info('Custom rate limit set', [
-            'key' => $key,
-            'limit' => $limit,
-            'window' => $window
-        ]);
-    }
-
-    /**
-     * Check if rate limit is exceeded.
-     */
-    public function isExceeded(string $key): bool
-    {
-        $config = $this->getRateLimitConfig($key);
-        $attempts = $this->getAttempts($key);
-        
-        return $attempts >= $config['limit'];
-    }
-
-    /**
-     * Get headers for rate limit response.
-     */
-    public function getHeaders(string $key): array
-    {
-        $config = $this->getRateLimitConfig($key);
-        $attempts = $this->getAttempts($key);
-        $remaining = max(0, $config['limit'] - $attempts);
-        $resetTime = now()->addSeconds($this->getRemainingTime($key))->timestamp;
-        
-        return [
-            'X-RateLimit-Limit' => $config['limit'],
-            'X-RateLimit-Remaining' => $remaining,
-            'X-RateLimit-Reset' => $resetTime,
-            'X-RateLimit-Retry-After' => $this->getRemainingTime($key),
-        ];
-    }
-
-    /**
-     * Test rate limiting configuration.
-     */
-    public function testConfiguration(): array
-    {
-        $results = [
-            'status' => 'ok',
-            'tests' => []
-        ];
-        
-        // Test cache connectivity
-        try {
-            Cache::put('rate_limit_test', 'test', 60);
-            $value = Cache::get('rate_limit_test');
-            Cache::forget('rate_limit_test');
-            
-            $results['tests']['cache_connectivity'] = $value === 'test' ? 'ok' : 'failed';
-        } catch (\Exception $e) {
-            $results['tests']['cache_connectivity'] = 'failed: ' . $e->getMessage();
-            $results['status'] = 'error';
-        }
-        
-        // Test rate limit logic
-        try {
-            $testKey = 'test_' . time();
-            $allowed1 = $this->isAllowed($testKey, 2);
-            $this->hit($testKey, 60);
-            $this->hit($testKey, 60);
-            $allowed2 = $this->isAllowed($testKey, 2);
-            $this->clear($testKey);
-            
-            $results['tests']['rate_limit_logic'] = ($allowed1 && !$allowed2) ? 'ok' : 'failed';
-        } catch (\Exception $e) {
-            $results['tests']['rate_limit_logic'] = 'failed: ' . $e->getMessage();
-            $results['status'] = 'error';
-        }
-        
-        return $results;
     }
 }

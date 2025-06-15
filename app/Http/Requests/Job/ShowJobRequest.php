@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Models\Job;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Job;
-use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
 /**
  * Enhanced Enhanced Form Request for Job show
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Auto-generated for Level 4 Complex System Transformation
+ * Auto-generated for Level 4 Complex System Transformation.
  */
 class ShowJobRequest extends FormRequest
 {
@@ -21,23 +20,23 @@ class ShowJobRequest extends FormRequest
     public function authorize(): bool
     {
         $job = $this->route('job');
-        
+
         // Admin can view any job
         if (Auth::user()->hasRole('Admin')) {
             return true;
         }
-        
+
         // Employers can view their own jobs
         if (Auth::user()->hasRole('Employer')) {
             return $job->company?->user_id === Auth::id();
         }
-        
+
         return false;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Enhanced Pattern: Comprehensive validation with security
+     * Enhanced Pattern: Comprehensive validation with security.
      */
     public function rules(): array
     {
@@ -45,7 +44,7 @@ class ShowJobRequest extends FormRequest
             'include' => 'sometimes|array',
             'include.*' => 'string|in:company,applications,skills,tags,requirements',
             'with_statistics' => 'sometimes|boolean',
-            
+
             // Security validation
             'g-recaptcha-response' => [
                 'nullable',
@@ -60,7 +59,7 @@ class ShowJobRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Enhanced Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -78,7 +77,7 @@ class ShowJobRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Enhanced Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -93,8 +92,63 @@ class ShowJobRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     * Enhanced Pattern: Enhanced validation logic.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            $job = $this->route('job');
+
+            // Check if job exists and is accessible
+            if (!$job instanceof Job) {
+                $validator->errors()->add('job', __('jobs.errors.not_found'));
+
+                return;
+            }
+
+            // Check if job is deleted (soft deleted)
+            if ($job->trashed()) {
+                $validator->errors()->add('job', __('jobs.errors.deleted'));
+
+                return;
+            }
+
+            // Employers can only view their own jobs unless job is published
+            if (Auth::user()->hasRole('Employer')
+                && $job->company?->user_id !== Auth::id()
+                && 'open' !== $job->status) {
+                $validator->errors()->add('job', __('jobs.errors.not_accessible'));
+            }
+
+            if ($this->hasEnhancedValidationConflicts()) {
+                $validator->errors()->add('name', __('validation.conflict_detected'));
+            }
+
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('name', __('validation.suspicious_content'));
+            }
+        });
+    }
+
+    /**
+     * Get validated data with processed includes.
+     */
+    public function getProcessedData(): array
+    {
+        $validated = $this->validated();
+
+        return [
+            'includes' => $validated['include'] ?? [],
+            'with_statistics' => $validated['with_statistics'] ?? false,
+            'user_role' => Auth::user()->getRoleNames()->first(),
+            'can_view_sensitive' => $this->canViewSensitiveData(),
+        ];
+    }
+
+    /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
+     * Enhanced Pattern: Data normalization.
      */
     protected function prepareForValidation(): void
     {
@@ -106,72 +160,8 @@ class ShowJobRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     * Enhanced Pattern: Enhanced validation logic
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            $job = $this->route('job');
-            
-            // Check if job exists and is accessible
-            if (!$job instanceof Job) {
-                $validator->errors()->add('job', __('jobs.errors.not_found'));
-                return;
-            }
-            
-            // Check if job is deleted (soft deleted)
-            if ($job->trashed()) {
-                $validator->errors()->add('job', __('jobs.errors.deleted'));
-                return;
-            }
-            
-            // Employers can only view their own jobs unless job is published
-            if (Auth::user()->hasRole('Employer') && 
-                $job->company?->user_id !== Auth::id() && 
-                $job->status !== 'open') {
-                $validator->errors()->add('job', __('jobs.errors.not_accessible'));
-            }
-            
-            if ($this->hasEnhancedValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.conflict_detected'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('name', __('validation.suspicious_content'));
-            }
-        });
-    }
-
-    /**
-     * Enhanced Pattern: Enhanced business logic validation
-     */
-    private function hasEnhancedValidationConflicts(): bool
-    {
-        // Add specific business logic validation here
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->description ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
      * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -188,18 +178,29 @@ class ShowJobRequest extends FormRequest
     }
 
     /**
-     * Get validated data with processed includes.
+     * Enhanced Pattern: Enhanced business logic validation.
      */
-    public function getProcessedData(): array
+    private function hasEnhancedValidationConflicts(): bool
     {
-        $validated = $this->validated();
-        
-        return [
-            'includes' => $validated['include'] ?? [],
-            'with_statistics' => $validated['with_statistics'] ?? false,
-            'user_role' => Auth::user()->getRoleNames()->first(),
-            'can_view_sensitive' => $this->canViewSensitiveData(),
-        ];
+        // Add specific business logic validation here
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Content security validation.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit'];
+        $content = strtolower(($this->name ?? '').' '.($this->description ?? ''));
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -208,8 +209,8 @@ class ShowJobRequest extends FormRequest
     private function canViewSensitiveData(): bool
     {
         $job = $this->route('job');
-        
-        return Auth::user()->hasRole('Admin') || 
-               ($job->company?->user_id === Auth::id());
+
+        return Auth::user()->hasRole('Admin')
+               || ($job->company?->user_id === Auth::id());
     }
 }

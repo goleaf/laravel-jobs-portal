@@ -33,7 +33,7 @@ class CreateCompanyRequest extends FormRequest
             'city_id' => ['nullable', 'exists:cities,id'],
             'location' => ['nullable', 'string', 'max:255'],
             'location2' => ['nullable', 'string', 'max:255'],
-            'established_in' => ['nullable', 'integer', 'min:1800', 'max:' . date('Y')],
+            'established_in' => ['nullable', 'integer', 'min:1800', 'max:'.date('Y')],
             'description' => ['nullable', 'string', 'max:65535'],
             'details' => ['nullable', 'string', 'max:65535'],
             'facebook_url' => ['nullable', 'url', 'max:255'],

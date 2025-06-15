@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CandidateIndexRequest extends FormRequest
@@ -84,6 +84,21 @@ class CandidateIndexRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate salary range
+            if ($this->has(['salary_min', 'salary_max'])) {
+                if ($this->salary_min > $this->salary_max) {
+                    $validator->errors()->add('salary_max', 'Maximum salary must be greater than minimum salary.');
+                }
+            }
+        });
+    }
+
+    /**
      * Handle a failed validation attempt.
      */
     protected function failedValidation(Validator $validator): void
@@ -92,7 +107,7 @@ class CandidateIndexRequest extends FormRequest
             response()->json([
                 'success' => false,
                 'message' => 'Invalid search parameters',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -109,19 +124,4 @@ class CandidateIndexRequest extends FormRequest
             'sort_direction' => $this->sort_direction ?? 'desc',
         ]);
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate salary range
-            if ($this->has(['salary_min', 'salary_max'])) {
-                if ($this->salary_min > $this->salary_max) {
-                    $validator->errors()->add('salary_max', 'Maximum salary must be greater than minimum salary.');
-                }
-            }
-        });
-    }
-} 
+}

@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Services\RedisCacheService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
-use App\Services\RedisCacheService;
 
 /**
- * Redis monitoring and statistics command
+ * Redis monitoring and statistics command.
  */
 class RedisMonitor extends Command
 {
@@ -25,9 +25,9 @@ class RedisMonitor extends Command
     public function handle(): int
     {
         $interval = (int) $this->option('interval');
-        
+
         $this->info("🔍 Starting Redis monitoring (interval: {$interval}s)");
-        $this->info("Press Ctrl+C to stop");
+        $this->info('Press Ctrl+C to stop');
         $this->newLine();
 
         while (true) {
@@ -46,8 +46,8 @@ class RedisMonitor extends Command
         $this->line(str_repeat('=', 50));
 
         $stats = $this->cacheService->getRedisStats();
-        
-        if ($stats['status'] === 'connected') {
+
+        if ('connected' === $stats['status']) {
             $this->table(
                 ['Metric', 'Value'],
                 [

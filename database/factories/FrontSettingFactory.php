@@ -33,7 +33,7 @@ class FrontSettingFactory extends Factory
             'job_posting_enabled',
             'resume_upload_enabled',
             'email_verification_enabled',
-            'social_login_enabled'
+            'social_login_enabled',
         ];
 
         return [

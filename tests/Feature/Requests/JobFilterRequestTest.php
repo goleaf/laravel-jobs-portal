@@ -3,15 +3,19 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\Job\JobFilterRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
 
 /**
- * Universal Enhanced Validation Tests for JobFilterRequest
- * 
+ * Universal Enhanced Validation Tests for JobFilterRequest.
+ *
  * @group validation
  * @group requests
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class JobFilterRequestTest extends TestCase
 {
@@ -20,34 +24,34 @@ class JobFilterRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create authenticated user for testing
         $this->user = User::factory()->create();
     }
 
     /** @test */
-    public function test_authorization_returns_true()
+    public function testAuthorizationReturnsTrue()
     {
         $request = new JobFilterRequest();
-        
+
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
     }
 
     /** @test */
-    public function test_validation_messages_are_defined()
+    public function testValidationMessagesAreDefined()
     {
         $request = new JobFilterRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
@@ -57,10 +61,10 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_validation_attributes_are_defined()
+    public function testValidationAttributesAreDefined()
     {
         $request = new JobFilterRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
@@ -70,529 +74,527 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_search_validation()
+    public function testSearchValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('search', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['search'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_nullable_validation()
+    public function testNullableValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('nullable', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['nullable'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_string_validation()
+    public function testStringValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('string', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['string'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_category_id_validation()
+    public function testCategoryIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('category_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['category_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_job_type_id_validation()
+    public function testJobTypeIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('job_type_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['job_type_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_country_id_validation()
+    public function testCountryIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('country_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['country_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_state_id_validation()
+    public function testStateIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('state_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['state_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_city_id_validation()
+    public function testCityIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('city_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['city_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_company_id_validation()
+    public function testCompanyIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('company_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['company_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_functional_area_id_validation()
+    public function testFunctionalAreaIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('functional_area_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['functional_area_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_career_level_id_validation()
+    public function testCareerLevelIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('career_level_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['career_level_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_degree_level_id_validation()
+    public function testDegreeLevelIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('degree_level_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['degree_level_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_job_shift_id_validation()
+    public function testJobShiftIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('job_shift_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['job_shift_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_currency_id_validation()
+    public function testCurrencyIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('currency_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['currency_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_salary_period_id_validation()
+    public function testSalaryPeriodIdValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('salary_period_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['salary_period_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_min_salary_validation()
+    public function testMinSalaryValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('min_salary', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['min_salary'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_numeric_validation()
+    public function testNumericValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('numeric', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['numeric'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_max_salary_validation()
+    public function testMaxSalaryValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('max_salary', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['max_salary'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_min_experience_validation()
+    public function testMinExperienceValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('min_experience', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['min_experience'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_integer_validation()
+    public function testIntegerValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('integer', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['integer'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_max_experience_validation()
+    public function testMaxExperienceValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('max_experience', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['max_experience'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_skills_validation()
+    public function testSkillsValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('skills', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['skills'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_array_validation()
+    public function testArrayValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('array', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['array'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_tags_validation()
+    public function testTagsValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('tags', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['tags'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_posted_within_validation()
+    public function testPostedWithinValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('posted_within', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['posted_within'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_is_featured_validation()
+    public function testIsFeaturedValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('is_featured', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['is_featured'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_boolean_validation()
+    public function testBooleanValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('boolean', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['boolean'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_is_freelance_validation()
+    public function testIsFreelanceValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('is_freelance', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['is_freelance'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_hide_salary_validation()
+    public function testHideSalaryValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('hide_salary', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['hide_salary'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_sort_by_validation()
+    public function testSortByValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('sort_by', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['sort_by'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_relevance_validation()
+    public function testRelevanceValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('relevance', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['relevance'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_date_desc_validation()
+    public function testDateDescValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('date_desc', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['date_desc'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_date_asc_validation()
+    public function testDateAscValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('date_asc', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['date_asc'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_salary_desc_validation()
+    public function testSalaryDescValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('salary_desc', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['salary_desc'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_salary_asc_validation()
+    public function testSalaryAscValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('salary_asc', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['salary_asc'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_company_name_validation()
+    public function testCompanyNameValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('company_name', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['company_name'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_location_validation()
+    public function testLocationValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('location', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['location'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_popularity_validation()
+    public function testPopularityValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('popularity', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['popularity'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_per_page_validation()
+    public function testPerPageValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('per_page', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['per_page'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_page_validation()
+    public function testPageValidation()
     {
         $request = new JobFilterRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('page', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['page'];
         $this->assertNotEmpty($fieldRules);
     }
 
-
-
     /** @test */
-    public function test_valid_data_passes_validation()
+    public function testValidDataPassesValidation()
     {
         $validData = [
             'search' => 'Test Value',
@@ -636,37 +638,37 @@ class JobFilterRequestTest extends TestCase
             'per_page' => 'Test Value',
             'page' => 'Test Value',
         ];
-        
+
         $request = new JobFilterRequest();
         $validator = validator($validData, $request->rules());
-        
+
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function test_request_handles_empty_data_correctly()
+    public function testRequestHandlesEmptyDataCorrectly()
     {
         $emptyData = [];
-        
+
         $request = new JobFilterRequest();
         $validator = validator($emptyData, $request->rules());
-        
+
         // Should handle empty data according to rules
         $this->assertIsArray($validator->errors()->toArray());
     }
 
     /** @test */
-    public function test_security_validation_prevents_xss()
+    public function testSecurityValidationPreventsXss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
             'description' => 'javascript:alert("xss")',
-            'content' => '<img src=x onerror=alert("xss")>'
+            'content' => '<img src=x onerror=alert("xss")>',
         ];
-        
+
         $request = new JobFilterRequest();
         $validator = validator($maliciousData, $request->rules());
-        
+
         // XSS data should either fail validation or be properly sanitized
         if ($validator->passes()) {
             foreach ($maliciousData as $field => $value) {
@@ -679,17 +681,17 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_sql_injection_prevention()
+    public function testSqlInjectionPrevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
             'search' => "1' OR '1'='1",
-            'filter' => "UNION SELECT * FROM passwords"
+            'filter' => 'UNION SELECT * FROM passwords',
         ];
-        
+
         $request = new JobFilterRequest();
         $validator = validator($sqlInjectionData, $request->rules());
-        
+
         // SQL injection patterns should be handled safely
         $this->assertIsArray($validator->errors()->toArray());
     }

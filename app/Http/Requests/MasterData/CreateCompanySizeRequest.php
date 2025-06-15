@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\MasterData;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CreateCompanySizeRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class CreateCompanySizeRequest extends FormRequest
                 'string',
                 'max:255',
                 'unique:company_sizes,size',
-                'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/'
+                'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/',
             ],
         ];
     }
@@ -57,14 +59,14 @@ class CreateCompanySizeRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            throw new HttpResponseException(
                 response()->json([
                     'success' => false,
                     'message' => __('Validation failed'),
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422)
             );
         }

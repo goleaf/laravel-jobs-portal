@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\JobType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class JobTypeSeeder extends Seeder
 {
@@ -229,10 +228,10 @@ class JobTypeSeeder extends Seeder
         foreach ($jobTypes as $jobTypeData) {
             // Check if job type already exists
             $existingJobType = JobType::where('slug', $jobTypeData['slug'])->first();
-            
+
             if (!$existingJobType) {
                 JobType::create($jobTypeData);
-                
+
                 $this->command->info("Created job type: {$jobTypeData['name']}");
             } else {
                 $this->command->info("Job type already exists: {$jobTypeData['name']}");
@@ -241,4 +240,4 @@ class JobTypeSeeder extends Seeder
 
         $this->command->info('Job types seeding completed!');
     }
-} 
+}

@@ -2,6 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Company\ChangeIsActiveCompanyRequest;
+use App\Http\Requests\Company\ChangeIsEmailVerifiedCompanyRequest;
+use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Http\Requests\Company\DeleteReportedCompanyCompanyRequest;
+use App\Http\Requests\Company\DestroyCompanyRequest;
+use App\Http\Requests\Company\EditCompanyRequest;
+use App\Http\Requests\Company\GetCitiesCompanyRequest;
+use App\Http\Requests\Company\GetFollowersCompanyRequest;
+use App\Http\Requests\Company\GetStatesCompanyRequest;
+use App\Http\Requests\Company\IndexCompanyRequest;
+use App\Http\Requests\Company\MarkAsFeaturedCompanyRequest;
+use App\Http\Requests\Company\MarkAsUnFeaturedCompanyRequest;
+use App\Http\Requests\Company\ResendEmailVerificationCompanyRequest;
+use App\Http\Requests\Company\ShowCompanyRequest;
+use App\Http\Requests\Company\ShowReportedCompaniesCompanyRequest;
+use App\Http\Requests\Company\ShowReportedCompanyNoteCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyUpdateCompanyCompanyRequest;
 use App\Models\Company;
 use App\Models\Country;
 use App\Models\FeaturedRecord;
@@ -12,28 +30,8 @@ use App\Models\ReportedToCompany;
 use App\Models\State;
 use App\Models\Transaction;
 use App\Repositories\CompanyRepository;
-use App\Http\Requests\Company\CreateCompanyRequest;
-use App\Http\Requests\Company\UpdateCompanyRequest;
-use App\Http\Requests\Company\GetStatesCompanyRequest;
-use App\Http\Requests\Company\GetCitiesCompanyRequest;
-use App\Http\Requests\Company\UpdateCompanyUpdateCompanyCompanyRequest;
-use App\Http\Requests\Company\ShowReportedCompanyNoteCompanyRequest;
-use App\Http\Requests\Company\DestroyCompanyRequest;
-use App\Http\Requests\Company\IndexCompanyRequest;
-use App\Http\Requests\Company\ShowCompanyRequest;
-use App\Http\Requests\Company\EditCompanyRequest;
-use App\Http\Requests\Company\ChangeIsActiveCompanyRequest;
-use App\Http\Requests\Company\ShowReportedCompaniesCompanyRequest;
-use App\Http\Requests\Company\DeleteReportedCompanyCompanyRequest;
-use App\Http\Requests\Company\GetFollowersCompanyRequest;
-use App\Http\Requests\Company\MarkAsFeaturedCompanyRequest;
-use App\Http\Requests\Company\MarkAsUnFeaturedCompanyRequest;
-use App\Http\Requests\Company\ChangeIsEmailVerifiedCompanyRequest;
-use App\Http\Requests\Company\ResendEmailVerificationCompanyRequest;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,7 +40,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
-use Throwable;
 
 class CompanyController extends AppBaseController
 {
@@ -59,7 +56,7 @@ class CompanyController extends AppBaseController
      *
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(IndexCompanyRequest $request): View
     {
@@ -74,7 +71,7 @@ class CompanyController extends AppBaseController
     public function create(IndexCompanyRequest $request): View
     {
         $data = $this->companyRepository->prepareData();
-        
+
         // Use new scopes for better performance and filtering
         $countries = Country::active()->alphabetical()->pluck('name', 'id');
         $states = State::active()->alphabetical()->pluck('name', 'id');
@@ -85,7 +82,7 @@ class CompanyController extends AppBaseController
     /**
      * Store a newly created Company in storage.
      *
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      *
      * @throws \Throwable
      */
@@ -121,7 +118,7 @@ class CompanyController extends AppBaseController
         $user = $company->user;
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
         $data = $this->companyRepository->prepareData();
-        
+
         // Use new scopes for better performance and filtering
         $countries = Country::active()->alphabetical()->pluck('name', 'id');
         $states = State::active()->alphabetical()->pluck('name', 'id');
@@ -137,9 +134,9 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function update(Company $company, UpdateCompanyRequest $request): RedirectResponse
     {
@@ -156,11 +153,7 @@ class CompanyController extends AppBaseController
     /**
      * Remove the specified Company from storage.
      *
-     * @param  Company  $company
-     * @param  DestroyCompanyRequest  $request
-     * @return JsonResponse
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Company $company, DestroyCompanyRequest $request): JsonResponse
     {
@@ -170,9 +163,9 @@ class CompanyController extends AppBaseController
             $company->user->delete();
 
             return $this->sendSuccess(__('messages.flash.company_delete'));
-        } else {
-            return $this->sendError(__('messages.common.seems_message'));
         }
+
+        return $this->sendError(__('messages.common.seems_message'));
     }
 
     /**
@@ -181,7 +174,7 @@ class CompanyController extends AppBaseController
     public function changeIsActive(Company $company, ChangeIsActiveCompanyRequest $request)
     {
         $isActive = $company->user->is_active;
-        $company->user->update(['is_active' => ! $isActive]);
+        $company->user->update(['is_active' => !$isActive]);
 
         if ($company) {
             if (Auth::user()->hasRole('Admin')) {
@@ -226,7 +219,7 @@ class CompanyController extends AppBaseController
         $user = $company->user;
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
         $data = $this->companyRepository->prepareData();
-        
+
         // Use new scopes for better performance and filtering
         $countries = Country::active()->alphabetical()->pluck('name', 'id');
         $states = State::active()->alphabetical()->pluck('name', 'id');
@@ -251,7 +244,7 @@ class CompanyController extends AppBaseController
     /**
      * Update the specified Company in storage.
      *
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      */
     public function updateCompany(Company $company, UpdateCompanyUpdateCompanyCompanyRequest $request): RedirectResponse
     {
@@ -265,10 +258,11 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Application|Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function showReportedCompanies(ShowReportedCompaniesCompanyRequest $request): View
     {
@@ -278,7 +272,7 @@ class CompanyController extends AppBaseController
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteReportedCompany(ReportedToCompany $reportedToCompany, DeleteReportedCompanyCompanyRequest $request)
     {
@@ -290,10 +284,11 @@ class CompanyController extends AppBaseController
     /**
      * Display a listing of the Job.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getFollowers(GetFollowersCompanyRequest $request): View
     {
@@ -301,7 +296,6 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param  ReportedToCompany  $reportedToCompany
      * @return mixed
      */
     public function showReportedCompanyNote(ShowReportedCompanyNoteCompanyRequest $request)
@@ -313,8 +307,10 @@ class CompanyController extends AppBaseController
     }
 
     /**
+     * @param mixed $companyId
+     *
      * @return mixed
-     **/
+     */
     public function markAsFeatured($companyId, MarkAsFeaturedCompanyRequest $request)
     {
         try {
@@ -343,7 +339,7 @@ class CompanyController extends AppBaseController
                 'end_date' => $endDate,
             ]);
 
-            if (NotificationSetting::where('key', 'NEW_FEATURED_COMPANY_AVAILABLE')->first()->value == 1) {
+            if (1 == NotificationSetting::where('key', 'NEW_FEATURED_COMPANY_AVAILABLE')->first()->value) {
                 $users = getAdminNotificationUserIds();
                 foreach ($users as $userId) {
                     addNotification([
@@ -366,7 +362,7 @@ class CompanyController extends AppBaseController
             DB::commit();
 
             return $this->sendSuccess(__('messages.flash.company_featured'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return $this->sendError($e->getMessage());
@@ -374,8 +370,10 @@ class CompanyController extends AppBaseController
     }
 
     /**
+     * @param mixed $companyId
+     *
      * @return mixed
-     **/
+     */
     public function markAsUnFeatured($companyId, MarkAsUnFeaturedCompanyRequest $request)
     {
         $company = Company::findOrFail($companyId);
@@ -385,7 +383,7 @@ class CompanyController extends AppBaseController
 
         $company->update(['is_featured' => 0]);
         $featuredRecord = FeaturedRecord::where('owner_type', Company::class)->where('owner_id', $company->id)->first();
-        if (! empty($featuredRecord)) {
+        if (!empty($featuredRecord)) {
             $featuredRecord->delete();
         }
 

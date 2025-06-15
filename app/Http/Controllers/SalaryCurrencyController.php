@@ -35,9 +35,6 @@ class SalaryCurrencyController extends AppBaseController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param CreateSalaryCurrencyRequest $request
-     * @return JsonResponse
      */
     public function store(CreateSalaryCurrencyRequest $request): JsonResponse
     {
@@ -49,9 +46,6 @@ class SalaryCurrencyController extends AppBaseController
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param SalaryCurrency $currency
-     * @return JsonResponse
      */
     public function edit(SalaryCurrency $currency): JsonResponse
     {
@@ -61,9 +55,7 @@ class SalaryCurrencyController extends AppBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateSalaryCurrencyRequest $request
      * @param int $currencyId
-     * @return JsonResponse
      */
     public function update(UpdateSalaryCurrencyRequest $request, $currencyId): JsonResponse
     {
@@ -75,9 +67,6 @@ class SalaryCurrencyController extends AppBaseController
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param SalaryCurrency $currency
-     * @return JsonResponse
      */
     public function destroy(SalaryCurrency $currency): JsonResponse
     {
@@ -95,10 +84,10 @@ class SalaryCurrencyController extends AppBaseController
         }
 
         $result = canDelete($model, 'salary_currency_id', $currency->id);
-        if (! $result) {
+        if (!$result) {
             $result = canDelete([Job::class], 'currency_id', $currency->id);
         }
-        if (! $result) {
+        if (!$result) {
             $result = canDelete([Candidate::class], 'salary_currency', $currency->id);
         }
         if ($result) {

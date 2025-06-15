@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreRequest extends FormRequest
@@ -89,58 +89,6 @@ class StoreRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Resource creation validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Generate slug from name or title if not provided
-        if (!$this->slug && ($this->name || $this->title)) {
-            $this->merge([
-                'slug' => \Str::slug($this->name ?: $this->title)
-            ]);
-        }
-
-        // Convert boolean strings
-        foreach (['is_active', 'is_featured', 'is_verified'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-
-        // Clean and format tags
-        if ($this->has('tags') && is_array($this->tags)) {
-            $this->merge([
-                'tags' => array_filter(array_map('trim', $this->tags))
-            ]);
-        }
-
-        // Clean external_id and reference
-        foreach (['external_id', 'reference'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => trim($this->$field)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -173,4 +121,56 @@ class StoreRequest extends FormRequest
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Resource creation validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Generate slug from name or title if not provided
+        if (!$this->slug && ($this->name || $this->title)) {
+            $this->merge([
+                'slug' => \Str::slug($this->name ?: $this->title),
+            ]);
+        }
+
+        // Convert boolean strings
+        foreach (['is_active', 'is_featured', 'is_verified'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+
+        // Clean and format tags
+        if ($this->has('tags') && is_array($this->tags)) {
+            $this->merge([
+                'tags' => array_filter(array_map('trim', $this->tags)),
+            ]);
+        }
+
+        // Clean external_id and reference
+        foreach (['external_id', 'reference'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => trim($this->{$field}),
+                ]);
+            }
+        }
+    }
+}

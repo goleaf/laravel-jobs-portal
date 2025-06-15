@@ -2,30 +2,31 @@
 
 namespace App\Http\Requests\Api\Universal;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 /**
  * Universal API Request for storing JobApplication
- * Implements Laravel 12 API best practices with Universal MCP patterns
+ * Implements Laravel 12 API best practices with Universal MCP patterns.
  */
 class StoreJobApplicationApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Universal Pattern: API authorization with abilities
+     * Universal Pattern: API authorization with abilities.
      */
     public function authorize(): bool
     {
-        return $this->user()?->tokenCan(strtolower('JobApplication') . ':create') ?? false;
+        return $this->user()?->tokenCan(strtolower('JobApplication').':create') ?? false;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: API-specific validation rules
+     * Universal Pattern: API-specific validation rules.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -43,7 +44,7 @@ class StoreJobApplicationApiRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Universal Pattern: API error messages
+     * Universal Pattern: API error messages.
      */
     public function messages(): array
     {
@@ -59,7 +60,7 @@ class StoreJobApplicationApiRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: API field naming
+     * Universal Pattern: API field naming.
      */
     public function attributes(): array
     {
@@ -74,22 +75,8 @@ class StoreJobApplicationApiRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Universal Pattern: API data normalization
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'name' => trim($this->name ?? ''),
-            'email' => $this->email ? strtolower(trim($this->email)) : null,
-            'status' => strtolower($this->status ?? 'pending'),
-            'tags' => $this->tags ? array_map('trim', (array) $this->tags) : [],
-        ]);
-    }
-
-    /**
      * Configure the validator instance.
-     * Universal Pattern: API validation enhancements
+     * Universal Pattern: API validation enhancements.
      */
     public function withValidator(Validator $validator): void
     {
@@ -102,17 +89,22 @@ class StoreJobApplicationApiRequest extends FormRequest
     }
 
     /**
-     * Universal Pattern: Check creation rate limits
+     * Prepare the data for validation.
+     * Universal Pattern: API data normalization.
      */
-    private function exceedsCreationLimit(): bool
+    protected function prepareForValidation(): void
     {
-        // Implement rate limiting logic
-        return false;
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'email' => $this->email ? strtolower(trim($this->email)) : null,
+            'status' => strtolower($this->status ?? 'pending'),
+            'tags' => $this->tags ? array_map('trim', (array) $this->tags) : [],
+        ]);
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: API error response
+     * Universal Pattern: API error response.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -127,5 +119,14 @@ class StoreJobApplicationApiRequest extends FormRequest
                 ],
             ], 422)
         );
+    }
+
+    /**
+     * Universal Pattern: Check creation rate limits.
+     */
+    private function exceedsCreationLimit(): bool
+    {
+        // Implement rate limiting logic
+        return false;
     }
 }

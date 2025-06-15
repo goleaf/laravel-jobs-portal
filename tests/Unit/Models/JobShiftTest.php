@@ -2,15 +2,16 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
-use App\Models\JobShift;
 use App\Models\Job;
+use App\Models\JobShift;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 /**
- * Class JobShiftTest
- * 
+ * Class JobShiftTest.
+ *
  * Comprehensive unit tests for JobShift model including:
  * - Model relationships
  * - All custom scopes
@@ -18,17 +19,22 @@ use Illuminate\Foundation\Testing\WithFaker;
  * - Business logic methods
  * - Caching functionality
  * - Activity logging
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class JobShiftTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     private JobShift $jobShift;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test job shift
         $this->jobShift = JobShift::factory()->create([
             'shift' => 'Day Shift',
@@ -43,66 +49,66 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_created()
+    public function itCanBeCreated()
     {
         $model = JobShift::factory()->create();
-        
+
         $this->assertInstanceOf(JobShift::class, $model);
         $this->assertDatabaseHas('job_shifts', [
-            'id' => $model->id
+            'id' => $model->id,
         ]);
     }
 
     /** @test */
-    public function it_has_fillable_attributes()
+    public function itHasFillableAttributes()
     {
         $model = new JobShift();
         $fillable = $model->getFillable();
-        
+
         $this->assertIsArray($fillable);
         $this->assertNotEmpty($fillable);
     }
 
     /** @test */
-    public function it_has_proper_casts()
+    public function itHasProperCasts()
     {
         $model = new JobShift();
         $casts = $model->getCasts();
-        
+
         $this->assertIsArray($casts);
         // Add specific cast assertions based on model
     }
 
     /** @test */
-    public function it_can_be_updated()
+    public function itCanBeUpdated()
     {
         $model = JobShift::factory()->create();
         $originalData = $model->toArray();
-        
+
         // Update with factory data
         $newData = JobShift::factory()->make()->toArray();
         $model->update($newData);
-        
+
         $this->assertDatabaseHas('job_shifts', [
-            'id' => $model->id
+            'id' => $model->id,
         ]);
     }
 
     /** @test */
-    public function it_can_be_deleted()
+    public function itCanBeDeleted()
     {
         $model = JobShift::factory()->create();
         $modelId = $model->id;
-        
+
         $model->delete();
-        
+
         $this->assertDatabaseMissing('job_shifts', [
-            'id' => $modelId
+            'id' => $modelId,
         ]);
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes(): void
+    public function itHasCorrectFillableAttributes(): void
     {
         $fillable = [
             'shift',
@@ -119,19 +125,19 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_casts_attributes_correctly(): void
+    public function itCastsAttributesCorrectly(): void
     {
         $this->assertIsInt($this->jobShift->id);
         $this->assertIsInt($this->jobShift->duration_hours);
         $this->assertIsBool($this->jobShift->is_default);
         $this->assertIsBool($this->jobShift->is_active);
         $this->assertIsBool($this->jobShift->is_flexible);
-        $this->assertInstanceOf(\Carbon\Carbon::class, $this->jobShift->created_at);
-        $this->assertInstanceOf(\Carbon\Carbon::class, $this->jobShift->updated_at);
+        $this->assertInstanceOf(Carbon::class, $this->jobShift->created_at);
+        $this->assertInstanceOf(Carbon::class, $this->jobShift->updated_at);
     }
 
     /** @test */
-    public function it_has_jobs_relationship(): void
+    public function itHasJobsRelationship(): void
     {
         $job = Job::factory()->create(['job_shift_id' => $this->jobShift->id]);
 
@@ -141,25 +147,25 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_calculates_usage_count_correctly(): void
+    public function itCalculatesUsageCountCorrectly(): void
     {
         // Create jobs associated with this shift
         Job::factory(3)->create(['job_shift_id' => $this->jobShift->id]);
 
         // Refresh model to get updated relationship count
         $this->jobShift->refresh();
-        
+
         $this->assertEquals(3, $this->jobShift->usage_count);
     }
 
     /** @test */
-    public function it_provides_formatted_usage_stats(): void
+    public function itProvidesFormattedUsageStats(): void
     {
         Job::factory(2)->create(['job_shift_id' => $this->jobShift->id]);
         Job::factory()->create([
             'job_shift_id' => $this->jobShift->id,
             'is_active' => true,
-            'is_featured' => true
+            'is_featured' => true,
         ]);
 
         $stats = $this->jobShift->formatted_usage_stats;
@@ -174,32 +180,32 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_determines_shift_category_correctly(): void
+    public function itDeterminesShiftCategoryCorrectly(): void
     {
         // Test day shift
         $dayShift = JobShift::factory()->create([
             'shift' => 'Day Shift',
-            'start_time' => '09:00'
+            'start_time' => '09:00',
         ]);
         $this->assertStringContainsString('day', strtolower($dayShift->shift_category));
 
         // Test night shift
         $nightShift = JobShift::factory()->create([
             'shift' => 'Night Shift',
-            'start_time' => '23:00'
+            'start_time' => '23:00',
         ]);
         $this->assertStringContainsString('night', strtolower($nightShift->shift_category));
 
         // Test evening shift
         $eveningShift = JobShift::factory()->create([
             'shift' => 'Evening Shift',
-            'start_time' => '16:00'
+            'start_time' => '16:00',
         ]);
         $this->assertStringContainsString('evening', strtolower($eveningShift->shift_category));
     }
 
     /** @test */
-    public function it_formats_time_range_correctly(): void
+    public function itFormatsTimeRangeCorrectly(): void
     {
         $this->assertEquals('09:00 - 17:00', $this->jobShift->formatted_time_range);
 
@@ -207,13 +213,13 @@ class JobShiftTest extends TestCase
         $flexibleShift = JobShift::factory()->create([
             'start_time' => null,
             'end_time' => null,
-            'is_flexible' => true
+            'is_flexible' => true,
         ]);
         $this->assertStringContainsString('flexible', strtolower($flexibleShift->formatted_time_range));
     }
 
     /** @test */
-    public function it_detects_night_shift_correctly(): void
+    public function itDetectsNightShiftCorrectly(): void
     {
         // Test name-based detection
         $nightShift1 = JobShift::factory()->create(['shift' => 'Night Shift']);
@@ -222,14 +228,14 @@ class JobShiftTest extends TestCase
         // Test time-based detection
         $nightShift2 = JobShift::factory()->create([
             'shift' => 'Late Shift',
-            'start_time' => '23:00'
+            'start_time' => '23:00',
         ]);
         $this->assertTrue($nightShift2->is_night_shift);
 
         // Test early morning
         $earlyShift = JobShift::factory()->create([
             'shift' => 'Early Shift',
-            'start_time' => '04:00'
+            'start_time' => '04:00',
         ]);
         $this->assertTrue($earlyShift->is_night_shift);
 
@@ -238,7 +244,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function active_scope_returns_only_active_shifts(): void
+    public function activeScopeReturnsOnlyActiveShifts(): void
     {
         JobShift::factory()->create(['is_active' => false]);
         JobShift::factory()->create(['is_active' => true]);
@@ -252,7 +258,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function inactive_scope_returns_only_inactive_shifts(): void
+    public function inactiveScopeReturnsOnlyInactiveShifts(): void
     {
         JobShift::factory()->create(['is_active' => false]);
 
@@ -265,7 +271,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function default_scope_returns_only_default_shifts(): void
+    public function defaultScopeReturnsOnlyDefaultShifts(): void
     {
         JobShift::factory()->create(['is_default' => false]);
 
@@ -278,7 +284,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function flexible_scope_returns_only_flexible_shifts(): void
+    public function flexibleScopeReturnsOnlyFlexibleShifts(): void
     {
         JobShift::factory()->create(['is_flexible' => true]);
 
@@ -291,7 +297,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function with_jobs_scope_returns_shifts_with_jobs(): void
+    public function withJobsScopeReturnsShiftsWithJobs(): void
     {
         $shiftWithJobs = JobShift::factory()->create();
         $shiftWithoutJobs = JobShift::factory()->create();
@@ -305,16 +311,16 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function search_scope_finds_shifts_by_name_and_description(): void
+    public function searchScopeFindsShiftsByNameAndDescription(): void
     {
         JobShift::factory()->create([
             'shift' => 'Morning Shift',
-            'description' => 'Early morning hours'
+            'description' => 'Early morning hours',
         ]);
 
         JobShift::factory()->create([
             'shift' => 'Afternoon Shift',
-            'description' => 'Standard working hours'
+            'description' => 'Standard working hours',
         ]);
 
         $results = JobShift::search('morning')->get();
@@ -327,7 +333,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function popular_scope_returns_shifts_ordered_by_job_count(): void
+    public function popularScopeReturnsShiftsOrderedByJobCount(): void
     {
         $shift1 = JobShift::factory()->create(['shift' => 'Shift 1']);
         $shift2 = JobShift::factory()->create(['shift' => 'Shift 2']);
@@ -346,7 +352,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function alphabetical_scope_orders_shifts_by_name(): void
+    public function alphabeticalScopeOrdersShiftsByName(): void
     {
         JobShift::factory()->create(['shift' => 'Zebra Shift']);
         JobShift::factory()->create(['shift' => 'Alpha Shift']);
@@ -358,14 +364,14 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function recent_scope_returns_shifts_created_within_timeframe(): void
+    public function recentScopeReturnsShiftsCreatedWithinTimeframe(): void
     {
         $oldShift = JobShift::factory()->create([
-            'created_at' => now()->subDays(45)
+            'created_at' => now()->subDays(45),
         ]);
 
         $recentShift = JobShift::factory()->create([
-            'created_at' => now()->subDays(15)
+            'created_at' => now()->subDays(15),
         ]);
 
         $recentShifts = JobShift::recent(30)->get();
@@ -375,16 +381,16 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function day_shift_scope_identifies_day_shifts(): void
+    public function dayShiftScopeIdentifiesDayShifts(): void
     {
         $dayShift = JobShift::factory()->create([
             'shift' => 'Day Shift',
-            'start_time' => '08:00'
+            'start_time' => '08:00',
         ]);
 
         $nightShift = JobShift::factory()->create([
             'shift' => 'Night Shift',
-            'start_time' => '22:00'
+            'start_time' => '22:00',
         ]);
 
         $dayShifts = JobShift::dayShift()->get();
@@ -394,16 +400,16 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function night_shift_scope_identifies_night_shifts(): void
+    public function nightShiftScopeIdentifiesNightShifts(): void
     {
         $nightShift = JobShift::factory()->create([
             'shift' => 'Night Shift',
-            'start_time' => '23:00'
+            'start_time' => '23:00',
         ]);
 
         $earlyShift = JobShift::factory()->create([
             'shift' => 'Early Shift',
-            'start_time' => '03:00'
+            'start_time' => '03:00',
         ]);
 
         $nightShifts = JobShift::nightShift()->get();
@@ -413,16 +419,16 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function evening_shift_scope_identifies_evening_shifts(): void
+    public function eveningShiftScopeIdentifiesEveningShifts(): void
     {
         $eveningShift = JobShift::factory()->create([
             'shift' => 'Evening Shift',
-            'start_time' => '16:00'
+            'start_time' => '16:00',
         ]);
 
         $dayShift = JobShift::factory()->create([
             'shift' => 'Day Shift',
-            'start_time' => '09:00'
+            'start_time' => '09:00',
         ]);
 
         $eveningShifts = JobShift::eveningShift()->get();
@@ -432,7 +438,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function by_duration_scope_filters_by_exact_hours(): void
+    public function byDurationScopeFiltersByExactHours(): void
     {
         JobShift::factory()->create(['duration_hours' => 6]);
         JobShift::factory()->create(['duration_hours' => 10]);
@@ -445,7 +451,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function min_duration_scope_filters_by_minimum_hours(): void
+    public function minDurationScopeFiltersByMinimumHours(): void
     {
         JobShift::factory()->create(['duration_hours' => 6]);
         JobShift::factory()->create(['duration_hours' => 10]);
@@ -455,7 +461,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function max_duration_scope_filters_by_maximum_hours(): void
+    public function maxDurationScopeFiltersByMaximumHours(): void
     {
         JobShift::factory()->create(['duration_hours' => 6]);
         JobShift::factory()->create(['duration_hours' => 10]);
@@ -465,20 +471,20 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_calculates_average_salary_correctly(): void
+    public function itCalculatesAverageSalaryCorrectly(): void
     {
         Job::factory()->create([
             'job_shift_id' => $this->jobShift->id,
             'salary_from' => 50000,
             'salary_to' => 60000,
-            'hide_salary' => false
+            'hide_salary' => false,
         ]);
 
         Job::factory()->create([
             'job_shift_id' => $this->jobShift->id,
             'salary_from' => 70000,
             'salary_to' => 80000,
-            'hide_salary' => false
+            'hide_salary' => false,
         ]);
 
         $averageSalary = $this->jobShift->getAverageSalary();
@@ -486,21 +492,21 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_detects_shift_overlaps_correctly(): void
+    public function itDetectsShiftOverlapsCorrectly(): void
     {
         $morningShift = JobShift::factory()->create([
             'start_time' => '06:00',
-            'end_time' => '14:00'
+            'end_time' => '14:00',
         ]);
 
         $afternoonShift = JobShift::factory()->create([
             'start_time' => '12:00',
-            'end_time' => '20:00'
+            'end_time' => '20:00',
         ]);
 
         $nightShift = JobShift::factory()->create([
             'start_time' => '22:00',
-            'end_time' => '06:00'
+            'end_time' => '06:00',
         ]);
 
         $this->assertTrue($morningShift->overlapsWith($afternoonShift));
@@ -508,21 +514,21 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_calculates_shift_differential_correctly(): void
+    public function itCalculatesShiftDifferentialCorrectly(): void
     {
         $dayShift = JobShift::factory()->create([
             'shift' => 'Day Shift',
-            'start_time' => '09:00'
+            'start_time' => '09:00',
         ]);
 
         $nightShift = JobShift::factory()->create([
             'shift' => 'Night Shift',
-            'start_time' => '23:00'
+            'start_time' => '23:00',
         ]);
 
         $eveningShift = JobShift::factory()->create([
             'shift' => 'Evening Shift',
-            'start_time' => '16:00'
+            'start_time' => '16:00',
         ]);
 
         $this->assertEquals(0.0, $dayShift->getShiftDifferential());
@@ -531,7 +537,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_calculates_hours_per_week_correctly(): void
+    public function itCalculatesHoursPerWeekCorrectly(): void
     {
         $standardShift = JobShift::factory()->create(['duration_hours' => 8]);
         $this->assertEquals(40, $standardShift->getHoursPerWeek());
@@ -541,29 +547,29 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function it_logs_activity_on_updates(): void
+    public function itLogsActivityOnUpdates(): void
     {
         $this->jobShift->update(['shift' => 'Updated Day Shift']);
 
         $this->assertDatabaseHas('activity_log', [
             'subject_type' => JobShift::class,
             'subject_id' => $this->jobShift->id,
-            'description' => 'updated'
+            'description' => 'updated',
         ]);
     }
 
     /** @test */
-    public function it_clears_cache_on_update(): void
+    public function itClearsCacheOnUpdate(): void
     {
         // This would require mocking the cache facade to test properly
         $this->jobShift->update(['shift' => 'Updated Shift']);
-        
+
         // In a real test, you'd verify cache keys were forgotten
         $this->assertTrue(true); // Placeholder assertion
     }
 
     /** @test */
-    public function trending_scope_considers_recent_job_activity(): void
+    public function trendingScopeConsidersRecentJobActivity(): void
     {
         $trendingShift = JobShift::factory()->create(['shift' => 'Trending Shift']);
         $staleShift = JobShift::factory()->create(['shift' => 'Stale Shift']);
@@ -571,13 +577,13 @@ class JobShiftTest extends TestCase
         // Create recent jobs for trending shift
         Job::factory(3)->create([
             'job_shift_id' => $trendingShift->id,
-            'created_at' => now()->subDays(15)
+            'created_at' => now()->subDays(15),
         ]);
 
         // Create old jobs for stale shift
         Job::factory(5)->create([
             'job_shift_id' => $staleShift->id,
-            'created_at' => now()->subDays(45)
+            'created_at' => now()->subDays(45),
         ]);
 
         $trendingShifts = JobShift::trending()->get();
@@ -586,7 +592,7 @@ class JobShiftTest extends TestCase
     }
 
     /** @test */
-    public function validation_rules_are_comprehensive(): void
+    public function validationRulesAreComprehensive(): void
     {
         $rules = JobShift::$rules;
 

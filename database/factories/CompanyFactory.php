@@ -3,13 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Company;
-use App\Models\User;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
 use App\Models\Industry;
-use App\Models\OwnerShipType;
-use App\Models\CompanySize;
+use App\Models\State;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -68,4 +64,4 @@ class CompanyFactory extends Factory
             'is_active' => false,
         ]);
     }
-} 
+}

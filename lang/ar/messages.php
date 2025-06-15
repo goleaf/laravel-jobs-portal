@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files - Arabic Language
@@ -761,7 +760,6 @@ return [
         'please_enter_salary_range_to_greater_than_salary_range_from' => 'الرجاء إدخال نطاق الراتب إلى أكبر من نطاق الراتب من.',
         'remove_favourite_jobs' => 'إزالة الوظيفة المفضلة',
         'expired_job' => 'وظيفة منتهية الصلاحية',
-
     ],
 
     'candidate' => [

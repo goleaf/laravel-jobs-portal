@@ -29,15 +29,15 @@ class CleanupRappasoftReferences extends Command
         $path = $this->option('path');
         $fixTranslations = (bool) $this->option('fix-translations');
 
-        if (! File::isDirectory($path)) {
+        if (!File::isDirectory($path)) {
             $this->error("Path {$path} is not a valid directory.");
 
             return 1;
         }
 
-        $this->info("Searching for Rappasoft references in: $path");
+        $this->info("Searching for Rappasoft references in: {$path}");
 
-        $files = File::glob("$path/**/*.blade.php", GLOB_BRACE);
+        $files = File::glob("{$path}/**/*.blade.php", GLOB_BRACE);
         $this->info('Found '.count($files).' Blade files.');
 
         $count = 0;
@@ -47,12 +47,11 @@ class CleanupRappasoftReferences extends Command
             $originalContent = $content;
 
             // Check if file contains Rappasoft references
-            if (strpos($content, 'rappasoft') !== false ||
-                strpos($content, 'Rappasoft') !== false ||
-                strpos($content, 'wire:sortable') !== false ||
-                strpos($content, 'wire:sorted') !== false) {
-
-                $this->info("Found Rappasoft references in: $file");
+            if (false !== strpos($content, 'rappasoft')
+                || false !== strpos($content, 'Rappasoft')
+                || false !== strpos($content, 'wire:sortable')
+                || false !== strpos($content, 'wire:sorted')) {
+                $this->info("Found Rappasoft references in: {$file}");
 
                 // Replace common Rappasoft classes with Tailwind equivalents
                 $content = preg_replace('/wire:sortable/', 'data-sortable', $content);
@@ -75,7 +74,7 @@ class CleanupRappasoftReferences extends Command
 
                 if ($content !== $originalContent) {
                     File::put($file, $content);
-                    $count++;
+                    ++$count;
                 }
             }
 
@@ -112,14 +111,14 @@ class CleanupRappasoftReferences extends Command
 
                 if ($content !== $originalContent) {
                     File::put($file, $content);
-                    $this->info("Updated translation keys in: $file");
-                    $count++;
+                    $this->info("Updated translation keys in: {$file}");
+                    ++$count;
                 }
             }
         }
 
         if ($count > 0) {
-            $this->info("Cleaned up Rappasoft references and fixed translations in $count files");
+            $this->info("Cleaned up Rappasoft references and fixed translations in {$count} files");
         } else {
             $this->info('No files needed cleaning');
         }

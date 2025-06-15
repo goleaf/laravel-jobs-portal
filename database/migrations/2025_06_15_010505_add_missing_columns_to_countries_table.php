@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -26,10 +25,10 @@ return new class extends Migration
             $table->string('capital', 100)->nullable()->after('area_km2');
             $table->string('timezone', 50)->nullable()->after('capital');
             $table->json('languages')->nullable()->after('timezone');
-            
+
             // Add soft deletes support
             $table->softDeletes()->after('updated_at');
-            
+
             // Add indexes for performance
             $table->index('is_active');
             $table->index('is_featured');
@@ -53,10 +52,10 @@ return new class extends Migration
             $table->dropIndex(['countries_region_index']);
             $table->dropIndex(['countries_continent_index']);
             $table->dropIndex(['countries_is_active_is_featured_index']);
-            
+
             // Drop soft deletes
             $table->dropSoftDeletes();
-            
+
             // Drop added columns
             $table->dropColumn([
                 'iso_code',

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CandidateUpdateRequest extends FormRequest
@@ -15,9 +15,10 @@ class CandidateUpdateRequest extends FormRequest
     {
         // Check if user owns this candidate profile or is admin
         $candidate = $this->route('candidate');
+
         return auth()->check() && (
-            auth()->user()->id === $candidate->user_id ||
-            auth()->user()->hasRole('admin')
+            auth()->user()->id === $candidate->user_id
+            || auth()->user()->hasRole('admin')
         );
     }
 
@@ -138,42 +139,6 @@ class CandidateUpdateRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Candidate update validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean and format data
-        if ($this->has('phone')) {
-            $this->merge([
-                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone)
-            ]);
-        }
-
-        // Convert boolean strings
-        foreach (['is_immediate_available', 'is_active', 'is_featured'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -198,4 +163,40 @@ class CandidateUpdateRequest extends FormRequest
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Candidate update validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Clean and format data
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => preg_replace('/[^0-9+\-\s]/', '', $this->phone),
+            ]);
+        }
+
+        // Convert boolean strings
+        foreach (['is_immediate_available', 'is_active', 'is_featured'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+    }
+}

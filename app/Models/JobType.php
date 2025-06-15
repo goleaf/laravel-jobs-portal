@@ -3,26 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class JobType
+ * Class JobType.
  *
- * @property int $id
- * @property string $name
- * @property string $description
- * @property bool $is_default
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
+ * @property int              $id
+ * @property string           $name
+ * @property string           $description
+ * @property bool             $is_default
+ * @property bool             $is_active
+ * @property null|Carbon      $created_at
+ * @property null|Carbon      $updated_at
+ * @property Collection|Job[] $jobs
+ * @property null|int         $jobs_count
+ * @property mixed            $usage_count
+ * @property mixed            $formatted_usage_stats
  *
  * @method static Builder|JobType newModelQuery()
  * @method static Builder|JobType newQuery()
@@ -59,7 +61,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class JobType extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -95,38 +98,15 @@ class JobType extends Model
     ];
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when job type is updated
-        static::updated(function ($jobType) {
-            cache()->forget("job_type.{$jobType->id}");
-            cache()->forget("job_types.popular");
-            cache()->forget("job_types.trending");
-            cache()->tags(['job_types', 'job_type-' . $jobType->id])->flush();
-        });
-
-        // Clear cache when job type is deleted
-        static::deleted(function ($jobType) {
-            cache()->forget("job_type.{$jobType->id}");
-            cache()->forget("job_types.popular");
-            cache()->forget("job_types.trending");
-            cache()->tags(['job_types', 'job_type-' . $jobType->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -155,7 +135,7 @@ class JobType extends Model
     }
 
     /**
-     * Relationship: Jobs
+     * Relationship: Jobs.
      */
     public function jobs(): HasMany
     {
@@ -218,7 +198,8 @@ class JobType extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -235,8 +216,9 @@ class JobType extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->orderBy('jobs_count', 'desc')
-                    ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -253,11 +235,12 @@ class JobType extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
+            'jobs' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -266,7 +249,8 @@ class JobType extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $count);
+            ->having('jobs_count', '>=', $count)
+        ;
     }
 
     /**
@@ -275,8 +259,9 @@ class JobType extends Model
     public function scopeHighDemand(Builder $query, int $minJobs = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $minJobs)
-                    ->orderByDesc('jobs_count');
+            ->having('jobs_count', '>=', $minJobs)
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -285,8 +270,9 @@ class JobType extends Model
     public function scopeFullTime(Builder $query): Builder
     {
         return $query->where('name', 'like', '%full%time%')
-                    ->orWhere('name', 'like', '%full-time%')
-                    ->orWhere('name', 'like', '%fulltime%');
+            ->orWhere('name', 'like', '%full-time%')
+            ->orWhere('name', 'like', '%fulltime%')
+        ;
     }
 
     /**
@@ -295,8 +281,9 @@ class JobType extends Model
     public function scopePartTime(Builder $query): Builder
     {
         return $query->where('name', 'like', '%part%time%')
-                    ->orWhere('name', 'like', '%part-time%')
-                    ->orWhere('name', 'like', '%parttime%');
+            ->orWhere('name', 'like', '%part-time%')
+            ->orWhere('name', 'like', '%parttime%')
+        ;
     }
 
     /**
@@ -305,7 +292,8 @@ class JobType extends Model
     public function scopeContract(Builder $query): Builder
     {
         return $query->where('name', 'like', '%contract%')
-                    ->orWhere('name', 'like', '%contractor%');
+            ->orWhere('name', 'like', '%contractor%')
+        ;
     }
 
     /**
@@ -314,7 +302,8 @@ class JobType extends Model
     public function scopeTemporary(Builder $query): Builder
     {
         return $query->where('name', 'like', '%temporary%')
-                    ->orWhere('name', 'like', '%temp%');
+            ->orWhere('name', 'like', '%temp%')
+        ;
     }
 
     /**
@@ -323,7 +312,8 @@ class JobType extends Model
     public function scopeInternship(Builder $query): Builder
     {
         return $query->where('name', 'like', '%internship%')
-                    ->orWhere('name', 'like', '%intern%');
+            ->orWhere('name', 'like', '%intern%')
+        ;
     }
 
     /**
@@ -332,7 +322,8 @@ class JobType extends Model
     public function scopeFreelance(Builder $query): Builder
     {
         return $query->where('name', 'like', '%freelance%')
-                    ->orWhere('name', 'like', '%freelancer%');
+            ->orWhere('name', 'like', '%freelancer%')
+        ;
     }
 
     /**
@@ -341,23 +332,9 @@ class JobType extends Model
     public function scopeRemote(Builder $query): Builder
     {
         return $query->where('name', 'like', '%remote%')
-                    ->orWhere('name', 'like', '%work from home%')
-                    ->orWhere('name', 'like', '%wfh%');
-    }
-
-    /**
-     * Get demand level based on usage.
-     */
-    private function getDemandLevel(): string
-    {
-        $jobsCount = $this->jobs()->count();
-        
-        return match (true) {
-            $jobsCount >= 100 => __('job_type.high_demand'),
-            $jobsCount >= 50 => __('job_type.medium_demand'),
-            $jobsCount >= 10 => __('job_type.low_demand'),
-            default => __('job_type.minimal_demand')
-        };
+            ->orWhere('name', 'like', '%work from home%')
+            ->orWhere('name', 'like', '%wfh%')
+        ;
     }
 
     /**
@@ -373,7 +350,7 @@ class JobType extends Model
      */
     public function isFullTime(): bool
     {
-        return stripos($this->name, 'full') !== false && stripos($this->name, 'time') !== false;
+        return false !== stripos($this->name, 'full') && false !== stripos($this->name, 'time');
     }
 
     /**
@@ -381,7 +358,7 @@ class JobType extends Model
      */
     public function isPartTime(): bool
     {
-        return stripos($this->name, 'part') !== false && stripos($this->name, 'time') !== false;
+        return false !== stripos($this->name, 'part') && false !== stripos($this->name, 'time');
     }
 
     /**
@@ -389,23 +366,63 @@ class JobType extends Model
      */
     public function isRemote(): bool
     {
-        return stripos($this->name, 'remote') !== false || 
-               stripos($this->name, 'work from home') !== false ||
-               stripos($this->name, 'wfh') !== false;
+        return false !== stripos($this->name, 'remote')
+               || false !== stripos($this->name, 'work from home')
+               || false !== stripos($this->name, 'wfh');
     }
 
     /**
      * Get related job types.
      */
-    public function getRelatedTypes(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public function getRelatedTypes(int $limit = 5): Collection
     {
         return cache()->remember("job_type.{$this->id}.related", 3600, function () use ($limit) {
             return static::where('id', '!=', $this->id)
-                          ->active()
-                          ->withCount('jobs')
-                          ->orderByDesc('jobs_count')
-                          ->limit($limit)
-                          ->get();
+                ->active()
+                ->withCount('jobs')
+                ->orderByDesc('jobs_count')
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
-} 
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when job type is updated
+        static::updated(function ($jobType) {
+            cache()->forget("job_type.{$jobType->id}");
+            cache()->forget('job_types.popular');
+            cache()->forget('job_types.trending');
+            cache()->tags(['job_types', 'job_type-'.$jobType->id])->flush();
+        });
+
+        // Clear cache when job type is deleted
+        static::deleted(function ($jobType) {
+            cache()->forget("job_type.{$jobType->id}");
+            cache()->forget('job_types.popular');
+            cache()->forget('job_types.trending');
+            cache()->tags(['job_types', 'job_type-'.$jobType->id])->flush();
+        });
+    }
+
+    /**
+     * Get demand level based on usage.
+     */
+    private function getDemandLevel(): string
+    {
+        $jobsCount = $this->jobs()->count();
+
+        return match (true) {
+            $jobsCount >= 100 => __('job_type.high_demand'),
+            $jobsCount >= 50 => __('job_type.medium_demand'),
+            $jobsCount >= 10 => __('job_type.low_demand'),
+            default => __('job_type.minimal_demand')
+        };
+    }
+}

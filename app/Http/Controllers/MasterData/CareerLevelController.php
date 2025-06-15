@@ -8,11 +8,9 @@ use App\Models\Candidate;
 use App\Models\CareerLevel;
 use App\Models\Job;
 use App\Repositories\CareerLevelRepository;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CareerLevelController extends AppBaseController
@@ -28,7 +26,6 @@ class CareerLevelController extends AppBaseController
     /**
      * Display a listing of the CareerLevel.
      *
-     * @param  Request  $request
      * @return Application|Factory|View
      */
     public function index(): View
@@ -38,9 +35,6 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Store a newly created CareerLevel in storage.
-     *
-     * @param CreateCareerLevelRequest $request
-     * @return JsonResponse
      */
     public function store(CreateCareerLevelRequest $request): JsonResponse
     {
@@ -52,9 +46,6 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Show the form for editing the specified CareerLevel.
-     *
-     * @param CareerLevel $careerLevel
-     * @return JsonResponse
      */
     public function edit(CareerLevel $careerLevel): JsonResponse
     {
@@ -63,10 +54,6 @@ class CareerLevelController extends AppBaseController
 
     /**
      * Update the specified CareerLevel in storage.
-     *
-     * @param UpdateCareerLevelRequest $request
-     * @param CareerLevel $careerLevel
-     * @return JsonResponse
      */
     public function update(UpdateCareerLevelRequest $request, CareerLevel $careerLevel): JsonResponse
     {
@@ -79,10 +66,7 @@ class CareerLevelController extends AppBaseController
     /**
      * Remove the specified CareerLevel from storage.
      *
-     * @param CareerLevel $careerLevel
-     * @return JsonResponse
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(CareerLevel $careerLevel): JsonResponse
     {

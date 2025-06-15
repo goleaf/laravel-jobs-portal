@@ -3,21 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Events\JobApplicationStatusChanged;
+use App\Models\Job;
 use App\Models\JobApplication;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+
 class RealTimeController extends Controller
 {
     /**
-     * Get real-time dashboard data
+     * Get real-time dashboard data.
      */
     public function getDashboardData(GetDashboardDataRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -33,7 +34,7 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Update job application status with real-time broadcasting
+     * Update job application status with real-time broadcasting.
      */
     public function updateApplicationStatus(UpdateApplicationStatusRealTimeRequest $request, JobApplication $jobApplication): JsonResponse
     {
@@ -66,7 +67,6 @@ class RealTimeController extends Controller
                 'application' => $jobApplication->fresh(['job', 'candidate']),
                 'broadcast_sent' => true,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to update job application status', [
                 'application_id' => $jobApplication->id,
@@ -78,20 +78,20 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get WebSocket authentication token for private channels
+     * Get WebSocket authentication token for private channels.
      */
     public function getWebSocketAuth(GetWebSocketAuthRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $channels = [];
-        
+
         // Add user-specific channels
-        if ($user->user_type === 'candidate') {
+        if ('candidate' === $user->user_type) {
             $channels[] = "job-application.{$user->id}";
         } else {
             // For employers, add company-specific channels
@@ -108,22 +108,23 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get live activity feed
+     * Get live activity feed.
      */
     public function getActivityFeed(GetActivityFeedRealTimeRequest $request): JsonResponse
     {
         $user = Auth::user();
         $limit = $request->get('limit', 10);
-        
+
         $activities = collect();
 
-        if ($user->user_type === 'candidate') {
+        if ('candidate' === $user->user_type) {
             // Get candidate's application activities
             $applications = JobApplication::where('candidate_id', $user->id)
                 ->with(['job.company'])
                 ->latest()
                 ->limit($limit)
-                ->get();
+                ->get()
+            ;
 
             foreach ($applications as $app) {
                 $activities->push([
@@ -141,10 +142,11 @@ class RealTimeController extends Controller
                 $applications = JobApplication::whereHas('job', function ($query) use ($user) {
                     $query->where('company_id', $user->company->id);
                 })
-                ->with(['job', 'candidate'])
-                ->latest()
-                ->limit($limit)
-                ->get();
+                    ->with(['job', 'candidate'])
+                    ->latest()
+                    ->limit($limit)
+                    ->get()
+                ;
 
                 foreach ($applications as $app) {
                     $activities->push([
@@ -166,7 +168,7 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get real-time statistics
+     * Get real-time statistics.
      */
     public function getRealTimeStats(): JsonResponse
     {
@@ -187,19 +189,19 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Check if user can update application status
+     * Check if user can update application status.
      */
     private function canUpdateStatus(JobApplication $jobApplication, string $newStatus): bool
     {
         $user = Auth::user();
 
         // Candidates can only withdraw their applications
-        if ($user->user_type === 'candidate') {
-            return $user->id === $jobApplication->candidate_id && $newStatus === 'withdrawn';
+        if ('candidate' === $user->user_type) {
+            return $user->id === $jobApplication->candidate_id && 'withdrawn' === $newStatus;
         }
 
         // Employers can update if they own the job
-        if ($user->user_type === 'employer' && $user->company) {
+        if ('employer' === $user->user_type && $user->company) {
             return $user->company->id === $jobApplication->job->company_id;
         }
 
@@ -208,42 +210,47 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get user-specific statistics
+     * Get user-specific statistics.
+     *
+     * @param mixed $user
      */
     private function getUserStats($user): array
     {
         $cacheKey = "user:stats:{$user->id}:{$user->user_type}";
-        
+
         return Cache::remember($cacheKey, 900, function () use ($user) {
-            if ($user->user_type === 'candidate') {
+            if ('candidate' === $user->user_type) {
                 return [
                     'total_applications' => JobApplication::where('candidate_id', $user->id)->count(),
                     'pending_applications' => JobApplication::where('candidate_id', $user->id)->where('status', 'pending')->count(),
                     'interviews_scheduled' => JobApplication::where('candidate_id', $user->id)->where('status', 'interview_scheduled')->count(),
                     'successful_applications' => JobApplication::where('candidate_id', $user->id)->where('status', 'hired')->count(),
                 ];
-            } else {
-                $companyId = $user->company->id ?? null;
-                if (!$companyId) return [];
-
-                return [
-                    'active_jobs' => \App\Models\Job::where('company_id', $companyId)->where('status', 'active')->count(),
-                    'total_applications' => JobApplication::whereHas('job', function ($q) use ($companyId) {
-                        $q->where('company_id', $companyId);
-                    })->count(),
-                    'pending_reviews' => JobApplication::whereHas('job', function ($q) use ($companyId) {
-                        $q->where('company_id', $companyId);
-                    })->where('status', 'pending')->count(),
-                    'scheduled_interviews' => JobApplication::whereHas('job', function ($q) use ($companyId) {
-                        $q->where('company_id', $companyId);
-                    })->where('status', 'interview_scheduled')->count(),
-                ];
             }
+            $companyId = $user->company->id ?? null;
+            if (!$companyId) {
+                return [];
+            }
+
+            return [
+                'active_jobs' => Job::where('company_id', $companyId)->where('status', 'active')->count(),
+                'total_applications' => JobApplication::whereHas('job', function ($q) use ($companyId) {
+                    $q->where('company_id', $companyId);
+                })->count(),
+                'pending_reviews' => JobApplication::whereHas('job', function ($q) use ($companyId) {
+                    $q->where('company_id', $companyId);
+                })->where('status', 'pending')->count(),
+                'scheduled_interviews' => JobApplication::whereHas('job', function ($q) use ($companyId) {
+                    $q->where('company_id', $companyId);
+                })->where('status', 'interview_scheduled')->count(),
+            ];
         });
     }
 
     /**
-     * Get recent activities for user
+     * Get recent activities for user.
+     *
+     * @param mixed $user
      */
     private function getRecentActivities($user): array
     {
@@ -252,12 +259,12 @@ class RealTimeController extends Controller
                 'type' => 'status_update',
                 'message' => 'Recent activity available',
                 'timestamp' => now()->subMinutes(5),
-            ]
+            ],
         ];
     }
 
     /**
-     * Get system health metrics
+     * Get system health metrics.
      */
     private function getSystemHealth(): array
     {
@@ -270,19 +277,19 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get real-time metrics
+     * Get real-time metrics.
      */
     private function getRealTimeMetrics(): array
     {
         return [
             'active_connections' => rand(10, 50),
             'messages_per_minute' => rand(5, 25),
-            'avg_response_time' => rand(50, 200) . 'ms',
+            'avg_response_time' => rand(50, 200).'ms',
         ];
     }
 
     /**
-     * Get status icon for UI
+     * Get status icon for UI.
      */
     private function getStatusIcon(string $status): string
     {
@@ -301,7 +308,7 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get status color for UI
+     * Get status color for UI.
      */
     private function getStatusColor(string $status): string
     {
@@ -320,7 +327,7 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get active users count
+     * Get active users count.
      */
     private function getActiveUsersCount(): int
     {
@@ -330,10 +337,10 @@ class RealTimeController extends Controller
     }
 
     /**
-     * Get system load
+     * Get system load.
      */
     private function getSystemLoad(): string
     {
-        return rand(20, 80) . '%';
+        return rand(20, 80).'%';
     }
-} 
+}

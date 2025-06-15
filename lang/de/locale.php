@@ -22,7 +22,7 @@ return [
     'auto_detect_language' => 'Sprache automatisch vom Browser erkennen',
     'default_language' => 'Standardsprache',
     'fallback_language' => 'Fallback-Sprache',
-    
+
     // Language names in German
     'languages' => [
         'en' => 'Englisch',
@@ -35,25 +35,25 @@ return [
         'tr' => 'Türkisch',
         'zh' => 'Chinesisch',
     ],
-    
+
     // RTL Information
     'rtl_languages' => 'Rechts-nach-Links-Sprachen',
     'ltr_languages' => 'Links-nach-Rechts-Sprachen',
     'text_direction' => 'Textrichtung',
     'left_to_right' => 'Links nach Rechts',
     'right_to_left' => 'Rechts nach Links',
-    
+
     // Browser detection
     'browser_language_detected' => 'Browser-Sprache erkannt: :language',
     'browser_language_not_supported' => 'Ihre Browser-Sprache wird nicht unterstützt, standardmäßig auf :language gesetzt',
-    
+
     // Validation messages
     'validation' => [
         'locale_required' => 'Sprache ist erforderlich',
         'locale_invalid' => 'Die ausgewählte Sprache ist ungültig',
         'locale_unsupported' => 'Die Sprache :locale wird nicht unterstützt',
     ],
-    
+
     // Success/Error messages
     'messages' => [
         'switched_to' => 'Sprache gewechselt zu :language',

@@ -1,1 +1,18 @@
-<?php namespace Tests; use Illuminate\Foundation\Testing\TestCase as LaravelTestCase; abstract class BaseTestCase extends LaravelTestCase { use CreatesApplication; protected function removeTestFields(array $data, array $fields): array { $collection = collect($data); $collection->forget($fields); return $collection->toArray(); } }
+<?php
+
+namespace Tests;
+
+use Illuminate\Foundation\Testing\TestCase as LaravelTestCase;
+
+abstract class BaseTestCase extends LaravelTestCase
+{
+    use CreatesApplication;
+
+    protected function removeTestFields(array $data, array $fields): array
+    {
+        $collection = collect($data);
+        $collection->forget($fields);
+
+        return $collection->toArray();
+    }
+}

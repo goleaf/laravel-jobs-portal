@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
-use App\Models\RequiredDegreeLevel;
-use App\Repositories\RequiredDegreeLevelRepository;
-use Exception;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Log;
-use App\Http\Requests\IndexRequiredDegreeLevelRequest;
 use App\Http\Requests\CreateRequiredDegreeLevelRequest;
-use App\Http\Requests\ShowRequiredDegreeLevelRequest;
-use App\Http\Requests\UpdateRequiredDegreeLevelRequest;
 use App\Http\Requests\DestroyRequiredDegreeLevelRequest;
 use App\Http\Requests\DropdownRequiredDegreeLevelRequest;
+use App\Http\Requests\IndexRequiredDegreeLevelRequest;
+use App\Http\Requests\ShowRequiredDegreeLevelRequest;
+use App\Http\Requests\UpdateRequiredDegreeLevelRequest;
 use App\Http\Resources\RequiredDegreeLevelResource;
+use App\Models\RequiredDegreeLevel;
+use App\Repositories\RequiredDegreeLevelRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RequiredDegreeLevelController extends AppBaseController
 {
@@ -57,10 +52,10 @@ class RequiredDegreeLevelController extends AppBaseController
             // Apply sorting
             $sortBy = $request->input('sort_by', 'name');
             $sortDirection = $request->input('sort_direction', 'asc');
-            
-            if ($sortBy === 'alphabetical') {
+
+            if ('alphabetical' === $sortBy) {
                 $query->alphabetical();
-            } elseif ($sortBy === 'popular') {
+            } elseif ('popular' === $sortBy) {
                 $query->popular();
             } else {
                 $query->orderBy($sortBy, $sortDirection);
@@ -77,16 +72,15 @@ class RequiredDegreeLevelController extends AppBaseController
                     'per_page' => $requiredDegreeLevels->perPage(),
                     'current_page' => $requiredDegreeLevels->currentPage(),
                     'last_page' => $requiredDegreeLevels->lastPage(),
-                ]
+                ],
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level index error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level index error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.index.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }
@@ -102,22 +96,21 @@ class RequiredDegreeLevelController extends AppBaseController
             Log::info('Required Degree Level created', [
                 'id' => $requiredDegreeLevel->id,
                 'name' => $requiredDegreeLevel->name,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => __('required_degree_levels.store.success'),
-                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel)
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel),
             ], 201);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level creation error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level creation error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.store.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }
@@ -133,7 +126,7 @@ class RequiredDegreeLevelController extends AppBaseController
                 $includes = explode(',', $request->input('include'));
                 $allowedIncludes = ['jobs', 'candidates'];
                 $validIncludes = array_intersect($includes, $allowedIncludes);
-                
+
                 if (!empty($validIncludes)) {
                     $requiredDegreeLevel->load($validIncludes);
                 }
@@ -142,16 +135,15 @@ class RequiredDegreeLevelController extends AppBaseController
             return response()->json([
                 'success' => true,
                 'message' => __('required_degree_levels.show.success'),
-                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel)
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel),
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level show error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level show error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.show.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }
@@ -169,22 +161,21 @@ class RequiredDegreeLevelController extends AppBaseController
                 'id' => $requiredDegreeLevel->id,
                 'old_data' => $oldData,
                 'new_data' => $requiredDegreeLevel->fresh()->toArray(),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => __('required_degree_levels.update.success'),
-                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel->fresh())
+                'data' => new RequiredDegreeLevelResource($requiredDegreeLevel->fresh()),
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level update error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level update error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.update.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }
@@ -216,21 +207,20 @@ class RequiredDegreeLevelController extends AppBaseController
 
             Log::info('Required Degree Level deleted', [
                 'deleted_data' => $requiredDegreeLevelData,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => __('required_degree_levels.destroy.success')
+                'message' => __('required_degree_levels.destroy.success'),
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level deletion error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level deletion error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.destroy.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }
@@ -244,7 +234,8 @@ class RequiredDegreeLevelController extends AppBaseController
             $requiredDegreeLevels = RequiredDegreeLevel::active()
                 ->alphabetical()
                 ->select('id', 'name')
-                ->get();
+                ->get()
+            ;
 
             return response()->json([
                 'success' => true,
@@ -253,18 +244,17 @@ class RequiredDegreeLevelController extends AppBaseController
                     return [
                         'value' => $level->id,
                         'label' => $level->name,
-                        'text' => $level->name
+                        'text' => $level->name,
                     ];
-                })
+                }),
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Required Degree Level dropdown error: ' . $e->getMessage());
-            
+            Log::error('Required Degree Level dropdown error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => __('required_degree_levels.dropdown.error'),
-                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong')
+                'error' => config('app.debug') ? $e->getMessage() : __('common.something_went_wrong'),
             ], 500);
         }
     }

@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\CareerLevel;
 
 /**
- * Class CareerLevelRepository
+ * Class CareerLevelRepository.
  *
  * @version July 7, 2020, 5:07 am UTC
  */
@@ -19,7 +19,7 @@ class CareerLevelRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class CareerLevelRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return CareerLevel::class;

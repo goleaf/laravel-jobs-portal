@@ -23,7 +23,7 @@ class ConvertSvgToComponents extends Command
     protected $description = 'Convert SVG elements to icon components';
 
     /**
-     * Array of common SVG icons mapped to their component replacements
+     * Array of common SVG icons mapped to their component replacements.
      *
      * @var array
      */
@@ -49,9 +49,9 @@ class ConvertSvgToComponents extends Command
     {
         $path = $this->option('path');
 
-        $this->info("Searching for SVG elements in path: $path");
+        $this->info("Searching for SVG elements in path: {$path}");
 
-        if (! File::isDirectory($path)) {
+        if (!File::isDirectory($path)) {
             $this->error('The specified path does not exist or is not a directory.');
 
             return 1;
@@ -86,13 +86,13 @@ class ConvertSvgToComponents extends Command
             // Save the file if changes were made
             if ($content !== $originalContent) {
                 File::put($file, $content);
-                $modifiedFiles++;
+                ++$modifiedFiles;
                 $totalReplaced += $replacementCount;
-                $this->line("Modified file: $file (Replaced $replacementCount SVG elements)");
+                $this->line("Modified file: {$file} (Replaced {$replacementCount} SVG elements)");
             }
         }
 
-        $this->info("Conversion complete! Modified $modifiedFiles files and replaced $totalReplaced SVG elements.");
+        $this->info("Conversion complete! Modified {$modifiedFiles} files and replaced {$totalReplaced} SVG elements.");
 
         return 0;
     }
@@ -100,20 +100,22 @@ class ConvertSvgToComponents extends Command
     /**
      * Find all Blade files in the specified directory and its subdirectories.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return array
      */
     protected function findBladeFiles($path)
     {
-        return File::glob("$path/**/*.blade.php", GLOB_BRACE);
+        return File::glob("{$path}/**/*.blade.php", GLOB_BRACE);
     }
 
     /**
      * Replace SVG elements with component calls.
      *
-     * @param  string  $content
-     * @param  string  $svgPattern
-     * @param  string  $componentName
+     * @param string $content
+     * @param string $svgPattern
+     * @param string $componentName
+     *
      * @return string
      */
     protected function replaceSvgWithComponent($content, $svgPattern, $componentName)

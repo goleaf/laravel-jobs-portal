@@ -23,7 +23,7 @@ class ShowJobResource extends JsonResource
                 'requirements' => $this->requirements ?? null,
                 'benefits' => $this->benefits ?? null,
                 'responsibilities' => $this->responsibilities ?? null,
-                
+
                 'employment' => [
                     'type' => $this->job_type ?? null,
                     'level' => $this->career_level ?? null,
@@ -31,7 +31,7 @@ class ShowJobResource extends JsonResource
                     'experience_required' => $this->experience_required ?? null,
                     'education_required' => $this->degree_level ?? null,
                 ],
-                
+
                 'compensation' => [
                     'salary_min' => $this->salary_from ?? null,
                     'salary_max' => $this->salary_to ?? null,
@@ -40,7 +40,7 @@ class ShowJobResource extends JsonResource
                     'hide_salary' => $this->hide_salary ?? false,
                     'negotiable' => $this->is_negotiable ?? false,
                 ],
-                
+
                 'location' => [
                     'country' => $this->country ?? null,
                     'state' => $this->state ?? null,
@@ -50,7 +50,7 @@ class ShowJobResource extends JsonResource
                     'remote_ok' => $this->is_remote ?? false,
                     'hybrid' => $this->is_hybrid ?? false,
                 ],
-                
+
                 'application' => [
                     'deadline' => $this->expiry_date?->toISOString(),
                     'method' => $this->apply_type ?? 'internal',
@@ -58,15 +58,15 @@ class ShowJobResource extends JsonResource
                     'email' => $this->apply_email ?? null,
                     'instructions' => $this->application_instructions ?? null,
                 ],
-                
+
                 'status' => [
                     'current' => $this->status ?? 'draft',
-                    'is_active' => $this->status === 'active',
+                    'is_active' => 'active' === $this->status,
                     'is_featured' => $this->is_featured ?? false,
                     'is_urgent' => $this->is_urgent ?? false,
                     'featured_until' => $this->featured_until?->toISOString(),
                 ],
-                
+
                 'statistics' => [
                     'views' => $this->views_count ?? 0,
                     'applications' => $this->applications_count ?? 0,
@@ -74,13 +74,13 @@ class ShowJobResource extends JsonResource
                     'hired' => $this->hired_count ?? 0,
                     'days_posted' => $this->created_at ? $this->created_at->diffInDays(now()) : 0,
                 ],
-                
+
                 'seo' => [
                     'meta_title' => $this->meta_title ?? null,
                     'meta_description' => $this->meta_description ?? null,
                     'keywords' => $this->keywords ?? null,
                 ],
-                
+
                 'timestamps' => [
                     'posted_at' => $this->created_at?->toISOString(),
                     'updated_at' => $this->updated_at?->toISOString(),
@@ -88,7 +88,7 @@ class ShowJobResource extends JsonResource
                     'last_activity' => $this->last_activity_at?->toISOString(),
                 ],
             ],
-            
+
             // Include relationships if requested
             'company' => $this->whenLoaded('company', function () {
                 return [
@@ -103,7 +103,7 @@ class ShowJobResource extends JsonResource
                     'verified' => $this->company->is_verified ?? false,
                 ];
             }),
-            
+
             'category' => $this->whenLoaded('category', function () {
                 return [
                     'id' => $this->category->id,
@@ -112,7 +112,7 @@ class ShowJobResource extends JsonResource
                     'icon' => $this->category->icon ?? null,
                 ];
             }),
-            
+
             'skills' => $this->whenLoaded('skills', function () {
                 return $this->skills->map(function ($skill) {
                     return [
@@ -123,7 +123,7 @@ class ShowJobResource extends JsonResource
                     ];
                 });
             }),
-            
+
             'applications' => $this->whenLoaded('applications', function () {
                 return $this->applications->map(function ($application) {
                     return [
@@ -135,7 +135,7 @@ class ShowJobResource extends JsonResource
                     ];
                 });
             }),
-            
+
             'similar_jobs' => $this->when($request->input('include_similar'), function () {
                 return $this->getSimilarJobs()->map(function ($job) {
                     return [
@@ -180,12 +180,14 @@ class ShowJobResource extends JsonResource
 
     /**
      * Customize the response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
         $response->setStatusCode(200);
         $response->header('Cache-Control', 'public, max-age=600'); // 10 minutes cache
-        
+
         // Track view if requested
         if ($request->input('track_view', false) && $request->user()) {
             $this->trackJobView($request->user());
@@ -193,11 +195,13 @@ class ShowJobResource extends JsonResource
     }
 
     /**
-     * Check if user can apply to this job
+     * Check if user can apply to this job.
+     *
+     * @param mixed $user
      */
     private function canUserApply($user): bool
     {
-        if (!$user || $this->status !== 'active') {
+        if (!$user || 'active' !== $this->status) {
             return false;
         }
 
@@ -220,7 +224,9 @@ class ShowJobResource extends JsonResource
     }
 
     /**
-     * Check if user can edit this job
+     * Check if user can edit this job.
+     *
+     * @param mixed $user
      */
     private function canUserEdit($user): bool
     {
@@ -228,12 +234,14 @@ class ShowJobResource extends JsonResource
             return false;
         }
 
-        return $user->hasRole('admin') || 
-               ($user->hasRole('employer') && $user->company_id === $this->company_id);
+        return $user->hasRole('admin')
+               || ($user->hasRole('employer') && $user->company_id === $this->company_id);
     }
 
     /**
-     * Check if user can delete this job
+     * Check if user can delete this job.
+     *
+     * @param mixed $user
      */
     private function canUserDelete($user): bool
     {
@@ -241,12 +249,14 @@ class ShowJobResource extends JsonResource
             return false;
         }
 
-        return $user->hasRole('admin') || 
-               ($user->hasRole('employer') && $user->company_id === $this->company_id);
+        return $user->hasRole('admin')
+               || ($user->hasRole('employer') && $user->company_id === $this->company_id);
     }
 
     /**
-     * Check if user can feature this job
+     * Check if user can feature this job.
+     *
+     * @param mixed $user
      */
     private function canUserFeature($user): bool
     {
@@ -254,12 +264,14 @@ class ShowJobResource extends JsonResource
             return false;
         }
 
-        return $user->hasRole('admin') || 
-               ($user->hasRole('employer') && $user->company_id === $this->company_id);
+        return $user->hasRole('admin')
+               || ($user->hasRole('employer') && $user->company_id === $this->company_id);
     }
 
     /**
-     * Track job view
+     * Track job view.
+     *
+     * @param mixed $user
      */
     private function trackJobView($user): void
     {
@@ -268,7 +280,7 @@ class ShowJobResource extends JsonResource
     }
 
     /**
-     * Get similar jobs
+     * Get similar jobs.
      */
     private function getSimilarJobs()
     {
@@ -278,7 +290,9 @@ class ShowJobResource extends JsonResource
     }
 
     /**
-     * Format salary range
+     * Format salary range.
+     *
+     * @param mixed $job
      */
     private function formatSalaryRange($job): ?string
     {
@@ -287,15 +301,15 @@ class ShowJobResource extends JsonResource
         }
 
         $currency = $job->salary_currency ?? 'USD';
-        
+
         if ($job->salary_from && $job->salary_to) {
             return "{$currency} {$job->salary_from} - {$job->salary_to}";
         }
-        
+
         if ($job->salary_from) {
             return "{$currency} {$job->salary_from}+";
         }
-        
+
         return "{$currency} {$job->salary_to}";
     }
-} 
+}

@@ -4,13 +4,18 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class ApplicationTest extends TestCase
 {
     /** @test */
-    public function basic_application_loads()
+    public function basicApplicationLoads()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
     }
-} 
+}

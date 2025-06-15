@@ -3,37 +3,38 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * FrontSetting Model - Enhanced with Enhanced patterns
+ * FrontSetting Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $key
- * @property string $value
- * @property bool $is_active
- * @property bool $is_featured
- * @property string|null $description
- * @property array|null $metadata
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- *
- * @property-read MediaCollection|Media[] $media
- * @property-read int|null $media_count
- * @property-read string $display_value
- * @property-read bool $is_recent
+ * @property int                     $id
+ * @property string                  $key
+ * @property string                  $value
+ * @property bool                    $is_active
+ * @property bool                    $is_featured
+ * @property null|string             $description
+ * @property null|array              $metadata
+ * @property null|Carbon             $created_at
+ * @property null|Carbon             $updated_at
+ * @property Media[]|MediaCollection $media
+ * @property null|int                $media_count
+ * @property string                  $display_value
+ * @property bool                    $is_recent
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder featured()
@@ -51,22 +52,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class FrontSetting extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity;
+    use HasFactory;
+    use InteractsWithMedia;
+    use LogsActivity;
+
+    /**
+     * Featured jobs constant.
+     */
+    public const FEATURED_JOBS_ENABLED = 1;
+
+    /**
+     * Media collection path constant.
+     */
+    public const PATH = 'advertise_image';
 
     /**
      * The table associated with the model.
      */
     public $table = 'front_settings';
-
-    /**
-     * Featured jobs constant
-     */
-    const FEATURED_JOBS_ENABLED = 1;
-
-    /**
-     * Media collection path constant
-     */
-    public const PATH = 'advertise_image';
 
     /**
      * The attributes that are mass assignable.
@@ -77,25 +80,7 @@ class FrontSetting extends Model implements HasMedia
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     */
-    protected $hidden = [
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
+     * Validation rules.
      */
     public static $rules = [
         'key' => 'required|string|max:255|unique:front_settings,key',
@@ -104,15 +89,22 @@ class FrontSetting extends Model implements HasMedia
     ];
 
     /**
-     * Activity log configuration
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+    ];
+
+    /**
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['key', 'value',  'is_featured'])
+            ->logOnly(['key', 'value', 'is_featured'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Front setting has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Front setting has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -124,7 +116,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where( true);
+        return $query->where(true);
     }
 
     /**
@@ -132,7 +124,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeInactive(Builder $query): Builder
     {
-        return $query->where( false);
+        return $query->where(false);
     }
 
     /**
@@ -140,7 +132,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query->where( true);
+        return $query->where(true);
     }
 
     /**
@@ -148,7 +140,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeNotFeatured(Builder $query): Builder
     {
-        return $query->where( false);
+        return $query->where(false);
     }
 
     /**
@@ -194,7 +186,7 @@ class FrontSetting extends Model implements HasMedia
     {
         return $query->whereBetween('created_at', [
             now()->startOfWeek(),
-            now()->endOfWeek()
+            now()->endOfWeek(),
         ]);
     }
 
@@ -204,7 +196,8 @@ class FrontSetting extends Model implements HasMedia
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -218,8 +211,9 @@ class FrontSetting extends Model implements HasMedia
     {
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', "%{$term}%")
-              ->orWhere('value', 'like', "%{$term}%")
-              ->orWhere( 'like', "%{$term}%");
+                ->orWhere('value', 'like', "%{$term}%")
+                ->orWhere('like', "%{$term}%")
+            ;
         });
     }
 
@@ -272,9 +266,10 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopePriority(Builder $query): Builder
     {
-        return $query->orderBy( 'desc')
-                    ->orderBy( 'desc')
-                    ->orderBy('key', 'asc');
+        return $query->orderBy('desc')
+            ->orderBy('desc')
+            ->orderBy('key', 'asc')
+        ;
     }
 
     // =============================================
@@ -335,11 +330,11 @@ class FrontSetting extends Model implements HasMedia
         $setting = static::firstOrCreate(['key' => $key]);
         $setting->value = $value;
         $saved = $setting->save();
-        
+
         if ($saved) {
             Cache::forget("front_setting.{$key}");
         }
-        
+
         return $saved;
     }
 
@@ -350,7 +345,7 @@ class FrontSetting extends Model implements HasMedia
     /**
      * Get cached active settings.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('front_settings.active', 3600, function () {
             return static::active()->get();
@@ -360,7 +355,7 @@ class FrontSetting extends Model implements HasMedia
     /**
      * Get cached featured settings.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('front_settings.featured', 3600, function () {
             return static::featured()->get();
@@ -381,6 +376,18 @@ class FrontSetting extends Model implements HasMedia
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 
     // =============================================

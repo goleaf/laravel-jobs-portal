@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
      * Set the names of files you want to add to generated javascript.
      * Otherwise all the files will be included.
@@ -15,8 +14,6 @@ return [
         'js',
     ],
 
-    /*
-     * The default path to use for the generated javascript.
-     */
+    // The default path to use for the generated javascript.
     'path' => public_path('messages.js'),
 ];

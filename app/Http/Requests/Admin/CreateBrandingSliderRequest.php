@@ -6,7 +6,7 @@ use App\Models\BrandingSliders;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateBrandingSliderRequest
+ * Class CreateBrandingSliderRequest.
  */
 class CreateBrandingSliderRequest extends FormRequest
 {

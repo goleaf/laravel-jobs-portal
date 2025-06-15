@@ -9,7 +9,6 @@ use App\Repositories\SettingRepository;
 use Brotzka\DotenvEditor\Exceptions\DotEnvException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -17,7 +16,7 @@ use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
 /**
- * Class SettingController
+ * Class SettingController.
  */
 class SettingController extends AppBaseController
 {
@@ -42,12 +41,12 @@ class SettingController extends AppBaseController
         // $envData['mail']['MAIL_FROM_ADDRESS'] = str_replace('"', '', $envData['mail']['MAIL_FROM_ADDRESS']);
         $setting = Setting::pluck('value', 'key')->toArray();
         $setting['phone'] = preparePhoneNumber($setting['phone'], $setting['region_code']);
-        $sectionName = ($request->section === null) ? 'general' : $request->section;
+        $sectionName = (null === $request->section) ? 'general' : $request->section;
         $envSetting = EnvSetting::pluck('value', 'key')->toArray();
         $languages = Language::toBase()->pluck('language', 'iso_code');
 
         return view(
-            "settings.$sectionName",
+            "settings.{$sectionName}",
             compact('setting', 'sectionName', 'envSetting', 'languages')
         )->with($envData);
     }
@@ -59,7 +58,7 @@ class SettingController extends AppBaseController
     {
         $this->settingRepository->updateSetting($request->all());
         $language = $request->default_language;
-        if (! empty($language)) {
+        if (!empty($language)) {
             Session::put('languageName', $language);
         }
 
@@ -67,7 +66,7 @@ class SettingController extends AppBaseController
 
         Flash::success(__('messages.flash.setting_update'));
         //         in order to clear the cache for .env values
-        if ($request->get('sectionName') == 'env_setting') {
+        if ('env_setting' == $request->get('sectionName')) {
             Artisan::call('optimize:clear');
             Artisan::call('config:cache');
         }

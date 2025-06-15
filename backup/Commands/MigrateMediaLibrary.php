@@ -50,7 +50,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $user = User::find($media->model_id);
 
-            if (! $user) {
+            if (!$user) {
                 continue;
             }
 
@@ -78,7 +78,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $company = Company::find($media->model_id);
 
-            if (! $company) {
+            if (!$company) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $candidate = Candidate::find($media->model_id);
 
-            if (! $candidate) {
+            if (!$candidate) {
                 continue;
             }
 
@@ -114,7 +114,7 @@ class MigrateMediaLibrary extends Command
 
             if (file_exists($sourcePath)) {
                 // Check the collection name to determine if it's a resume or image
-                if ($media->collection_name === 'resumes') {
+                if ('resumes' === $media->collection_name) {
                     $newPath = 'candidates/resumes/'.$media->file_name;
                     $candidate->update(['resume_path' => $newPath]);
                     $this->info("Migrated resume for candidate #{$candidate->id}");
@@ -140,7 +140,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $category = JobCategory::find($media->model_id);
 
-            if (! $category) {
+            if (!$category) {
                 continue;
             }
 
@@ -168,7 +168,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $post = Post::find($media->model_id);
 
-            if (! $post) {
+            if (!$post) {
                 continue;
             }
 
@@ -196,7 +196,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $testimonial = Testimonial::find($media->model_id);
 
-            if (! $testimonial) {
+            if (!$testimonial) {
                 continue;
             }
 
@@ -224,7 +224,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $setting = FrontSetting::find($media->model_id);
 
-            if (! $setting) {
+            if (!$setting) {
                 continue;
             }
 
@@ -232,7 +232,7 @@ class MigrateMediaLibrary extends Command
 
             if (file_exists($sourcePath)) {
                 // Check the collection name to determine if it's header or footer logo
-                if ($media->collection_name === 'header_logo') {
+                if ('header_logo' === $media->collection_name) {
                     $newPath = 'front_settings/header_logo/'.$media->file_name;
                     $setting->update(['header_logo_path' => $newPath]);
                     $this->info("Migrated header logo for front setting #{$setting->id}");
@@ -258,7 +258,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = HeaderSlider::find($media->model_id);
 
-            if (! $slider) {
+            if (!$slider) {
                 continue;
             }
 
@@ -286,7 +286,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = BrandingSlider::find($media->model_id);
 
-            if (! $slider) {
+            if (!$slider) {
                 continue;
             }
 
@@ -314,7 +314,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $slider = ImageSlider::find($media->model_id);
 
-            if (! $slider) {
+            if (!$slider) {
                 continue;
             }
 
@@ -342,7 +342,7 @@ class MigrateMediaLibrary extends Command
         foreach ($mediaItems as $media) {
             $service = CmsServices::find($media->model_id);
 
-            if (! $service) {
+            if (!$service) {
                 continue;
             }
 

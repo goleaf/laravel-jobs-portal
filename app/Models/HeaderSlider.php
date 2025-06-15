@@ -2,53 +2,53 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\ActivityLog\Traits\LogsActivity;
 use Spatie\ActivityLog\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * HeaderSlider Model - Enhanced with Enhanced patterns
+ * HeaderSlider Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string|null $title
- * @property string|null $sub_title
- * @property string|null $description
- * @property string|null $button_text
- * @property string|null $button_url
- * @property string|null $image_url
- * @property bool $is_active
- * @property bool $is_featured
- * @property int $sort_order
- * @property string|null $target
- * @property string|null $css_class
- * @property array|null $metadata
- * @property Carbon|null $published_at
- * @property Carbon|null $expires_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read string $header_slider_url
- * @property-read string $display_title
- * @property-read string $display_description
- * @property-read bool $has_button
- * @property-read bool $has_image
- * @property-read bool $is_expired
- * @property-read bool $is_published
- * @property-read bool $is_recent
- * @property-read string $status_label
- * @property-read \Illuminate\Database\Eloquent\Collection|Media[] $media
- * @property-read int|null $media_count
+ * @property int                $id
+ * @property null|string        $title
+ * @property null|string        $sub_title
+ * @property null|string        $description
+ * @property null|string        $button_text
+ * @property null|string        $button_url
+ * @property null|string        $image_url
+ * @property bool               $is_active
+ * @property bool               $is_featured
+ * @property int                $sort_order
+ * @property null|string        $target
+ * @property null|string        $css_class
+ * @property null|array         $metadata
+ * @property null|Carbon        $published_at
+ * @property null|Carbon        $expires_at
+ * @property null|Carbon        $created_at
+ * @property null|Carbon        $updated_at
+ * @property null|Carbon        $deleted_at
+ * @property string             $header_slider_url
+ * @property string             $display_title
+ * @property string             $display_description
+ * @property bool               $has_button
+ * @property bool               $has_image
+ * @property bool               $is_expired
+ * @property bool               $is_published
+ * @property bool               $is_recent
+ * @property string             $status_label
+ * @property Collection|Media[] $media
+ * @property null|int           $media_count
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder featured()
@@ -84,20 +84,17 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class HeaderSlider extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes;
+    use HasFactory;
+    use InteractsWithMedia;
+    use SoftDeletes;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'header_sliders';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const ALL = 2;
     public const ACTIVE = 1;
     public const DEACTIVE = 0;
-    
+
     public const STATUS = [
         self::ALL => 'Select Status',
         self::ACTIVE => 'Active',
@@ -105,7 +102,7 @@ class HeaderSlider extends Model implements HasMedia
     ];
 
     /**
-     * Target constants
+     * Target constants.
      */
     public const TARGET_SELF = '_self';
     public const TARGET_BLANK = '_blank';
@@ -113,9 +110,35 @@ class HeaderSlider extends Model implements HasMedia
     public const TARGET_TOP = '_top';
 
     /**
-     * Media collection path constant
+     * Media collection path constant.
      */
     public const PATH = 'header-sliders';
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'title' => 'nullable|string|max:255',
+        'sub_title' => 'nullable|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'button_text' => 'nullable|string|max:100',
+        'button_url' => 'nullable|url|max:500',
+        'image_url' => 'nullable|url|max:500',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'integer|min:0|max:999',
+        'target' => 'nullable|string|in:_self,_blank,_parent,_top',
+        'css_class' => 'nullable|string|max:255',
+        'metadata' => 'nullable|array',
+        'published_at' => 'nullable|date',
+        'expires_at' => 'nullable|date|after:published_at',
+        'header_slider' => 'sometimes|required|mimes:jpeg,jpg,png,webp|max:2048',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'header_sliders';
 
     /**
      * The attributes that are mass assignable.
@@ -145,52 +168,12 @@ class HeaderSlider extends Model implements HasMedia
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'metadata' => 'array',
-            'published_at' => 'datetime',
-            'expires_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * The attributes that should be appended to arrays.
      */
     protected $appends = ['header_slider_url'];
 
     /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'title' => 'nullable|string|max:255',
-        'sub_title' => 'nullable|string|max:255',
-        'description' => 'nullable|string|max:1000',
-        'button_text' => 'nullable|string|max:100',
-        'button_url' => 'nullable|url|max:500',
-        'image_url' => 'nullable|url|max:500',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'sort_order' => 'integer|min:0|max:999',
-        'target' => 'nullable|string|in:_self,_blank,_parent,_top',
-        'css_class' => 'nullable|string|max:255',
-        'metadata' => 'nullable|array',
-        'published_at' => 'nullable|date',
-        'expires_at' => 'nullable|date|after:published_at',
-        'header_slider' => 'sometimes|required|mimes:jpeg,jpg,png,webp|max:2048',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -198,7 +181,8 @@ class HeaderSlider extends Model implements HasMedia
             ->logOnly(['title', 'description', 'is_active', 'is_featured', 'sort_order'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Header slider has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Header slider has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -244,7 +228,8 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('published_at')
-              ->orWhere('published_at', '<=', now());
+                ->orWhere('published_at', '<=', now())
+            ;
         });
     }
 
@@ -263,7 +248,8 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('expires_at')
-              ->orWhere('expires_at', '>=', now());
+                ->orWhere('expires_at', '>=', now())
+            ;
         });
     }
 
@@ -273,7 +259,8 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNotNull('expires_at')
-                    ->where('expires_at', '<', now());
+            ->where('expires_at', '<', now())
+        ;
     }
 
     // =============================================
@@ -311,7 +298,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->whereBetween('created_at', [
             now()->startOfWeek(),
-            now()->endOfWeek()
+            now()->endOfWeek(),
         ]);
     }
 
@@ -321,7 +308,8 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -335,8 +323,9 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNotNull('image_url')
-              ->where('image_url', '!=', '')
-              ->orWhereHas('media');
+                ->where('image_url', '!=', '')
+                ->orWhereHas('media')
+            ;
         });
     }
 
@@ -347,7 +336,8 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('image_url')
-              ->orWhere('image_url', '');
+                ->orWhere('image_url', '')
+            ;
         })->whereDoesntHave('media');
     }
 
@@ -357,9 +347,10 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeWithButtons(Builder $query): Builder
     {
         return $query->whereNotNull('button_text')
-                    ->where('button_text', '!=', '')
-                    ->whereNotNull('button_url')
-                    ->where('button_url', '!=', '');
+            ->where('button_text', '!=', '')
+            ->whereNotNull('button_url')
+            ->where('button_url', '!=', '')
+        ;
     }
 
     /**
@@ -369,9 +360,10 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('button_text')
-              ->orWhere('button_text', '')
-              ->orWhereNull('button_url')
-              ->orWhere('button_url', '');
+                ->orWhere('button_text', '')
+                ->orWhereNull('button_url')
+                ->orWhere('button_url', '')
+            ;
         });
     }
 
@@ -381,7 +373,8 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeWithSubtitles(Builder $query): Builder
     {
         return $query->whereNotNull('sub_title')
-                    ->where('sub_title', '!=', '');
+            ->where('sub_title', '!=', '')
+        ;
     }
 
     /**
@@ -391,7 +384,8 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('sub_title')
-              ->orWhere('sub_title', '');
+                ->orWhere('sub_title', '')
+            ;
         });
     }
 
@@ -414,9 +408,10 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('sub_title', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%")
-              ->orWhere('button_text', 'like', "%{$term}%");
+                ->orWhere('sub_title', 'like', "%{$term}%")
+                ->orWhere('description', 'like', "%{$term}%")
+                ->orWhere('button_text', 'like', "%{$term}%")
+            ;
         });
     }
 
@@ -446,7 +441,8 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     /**
@@ -455,8 +451,9 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeDisplayOrder(Builder $query): Builder
     {
         return $query->orderBy('is_active', 'desc')
-                    ->orderBy('sort_order', 'asc')
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     /**
@@ -465,7 +462,8 @@ class HeaderSlider extends Model implements HasMedia
     public function scopePriority(Builder $query): Builder
     {
         return $query->orderBy('is_featured', 'desc')
-                    ->orderBy('sort_order', 'asc');
+            ->orderBy('sort_order', 'asc')
+        ;
     }
 
     /**
@@ -625,9 +623,9 @@ class HeaderSlider extends Model implements HasMedia
      */
     public function isAvailable(): bool
     {
-        return $this->is_active && 
-               $this->is_published && 
-               !$this->is_expired;
+        return $this->is_active
+               && $this->is_published
+               && !$this->is_expired;
     }
 
     /**
@@ -645,7 +643,7 @@ class HeaderSlider extends Model implements HasMedia
     /**
      * Get cached active sliders for homepage.
      */
-    public static function getCachedHomepage(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedHomepage(): Collection
     {
         return Cache::remember('header_sliders.homepage', 3600, function () {
             return static::homepage()->get();
@@ -655,7 +653,7 @@ class HeaderSlider extends Model implements HasMedia
     /**
      * Get cached active sliders.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('header_sliders.active', 3600, function () {
             return static::active()->ordered()->get();
@@ -676,6 +674,25 @@ class HeaderSlider extends Model implements HasMedia
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'metadata' => 'array',
+            'published_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

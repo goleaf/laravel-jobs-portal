@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TokensRequest extends FormRequest
@@ -14,7 +14,7 @@ class TokensRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated to view their tokens
-        return $this->user() !== null;
+        return null !== $this->user();
     }
 
     /**
@@ -59,6 +59,16 @@ class TokensRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Additional validation can be added here if needed
+        });
+    }
+
+    /**
      * Handle a failed validation attempt for API requests.
      */
     protected function failedValidation(Validator $validator)
@@ -99,14 +109,4 @@ class TokensRequest extends FormRequest
             'limit' => $this->integer('limit', 20),
         ]);
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Additional validation can be added here if needed
-        });
-    }
-} 
+}

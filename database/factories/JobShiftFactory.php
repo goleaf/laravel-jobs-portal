@@ -18,18 +18,18 @@ class JobShiftFactory extends Factory
     {
         $shifts = [
             'Day Shift',
-            'Night Shift', 
+            'Night Shift',
             'Morning Shift',
             'Evening Shift',
-            'Flexible Hours'
+            'Flexible Hours',
         ];
-        
+
         $shift = $this->faker->unique()->randomElement($shifts);
-        
+
         return [
             'shift' => $shift,
-            'description' => 'Work shift: ' . $shift,
-            'is_default' => $this->faker->boolean(20)
+            'description' => 'Work shift: '.$shift,
+            'is_default' => $this->faker->boolean(20),
         ];
     }
 }

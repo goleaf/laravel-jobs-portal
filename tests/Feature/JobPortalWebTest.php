@@ -6,17 +6,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobPortalWebTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
-     * Test that homepage loads successfully
+     * Test that homepage loads successfully.
      */
-    public function test_homepage_loads_successfully()
+    public function testHomepageLoadsSuccessfully()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Find Your Dream Job Today');
         $response->assertSee('Job Portal');
@@ -25,12 +31,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test homepage contains expected sections
+     * Test homepage contains expected sections.
      */
-    public function test_homepage_contains_expected_sections()
+    public function testHomepageContainsExpectedSections()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         // Hero section
         $response->assertSee('Connect with top employers');
@@ -48,12 +54,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test jobs index page loads
+     * Test jobs index page loads.
      */
-    public function test_jobs_index_page_loads()
+    public function testJobsIndexPageLoads()
     {
         $response = $this->get('/jobs');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Browse Jobs');
         $response->assertSee('Find Your Dream Job');
@@ -62,12 +68,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test jobs search functionality
+     * Test jobs search functionality.
      */
-    public function test_jobs_search_functionality()
+    public function testJobsSearchFunctionality()
     {
         $response = $this->get('/jobs?keyword=developer&location=New+York&category=technology');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Browse Jobs');
         // Check that search parameters are preserved
@@ -77,12 +83,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test job detail page loads
+     * Test job detail page loads.
      */
-    public function test_job_detail_page_loads()
+    public function testJobDetailPageLoads()
     {
         $response = $this->get('/jobs/1');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Job Details');
         $response->assertSee('Senior Software Developer');
@@ -94,12 +100,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test companies index page loads
+     * Test companies index page loads.
      */
-    public function test_companies_index_page_loads()
+    public function testCompaniesIndexPageLoads()
     {
         $response = $this->get('/companies');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Browse Companies');
         $response->assertSee('Discover amazing companies');
@@ -108,23 +114,23 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test company detail page loads
+     * Test company detail page loads.
      */
-    public function test_company_detail_page_loads()
+    public function testCompanyDetailPageLoads()
     {
         $response = $this->get('/company/1');
-        
+
         $response->assertStatus(200);
         // This route should load even if it doesn't have specific content yet
     }
 
     /**
-     * Test about us page loads
+     * Test about us page loads.
      */
-    public function test_about_us_page_loads()
+    public function testAboutUsPageLoads()
     {
         $response = $this->get('/about-us');
-        
+
         $response->assertStatus(200);
         $response->assertSee('About Our Job Portal');
         $response->assertSee('Our Mission');
@@ -135,12 +141,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test contact page loads
+     * Test contact page loads.
      */
-    public function test_contact_page_loads()
+    public function testContactPageLoads()
     {
         $response = $this->get('/contact');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Contact Us');
         $response->assertSee('Send us a Message');
@@ -150,12 +156,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test navigation menu is present
+     * Test navigation menu is present.
      */
-    public function test_navigation_menu_is_present()
+    public function testNavigationMenuIsPresent()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Home');
         $response->assertSee('Jobs');
@@ -167,12 +173,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test footer is present on pages
+     * Test footer is present on pages.
      */
-    public function test_footer_is_present()
+    public function testFooterIsPresent()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Quick Links');
         $response->assertSee('For Job Seekers');
@@ -182,13 +188,13 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test login and register routes exist
+     * Test login and register routes exist.
      */
-    public function test_auth_routes_exist()
+    public function testAuthRoutesExist()
     {
         $loginResponse = $this->get('/login');
         $registerResponse = $this->get('/register');
-        
+
         // These might return different status codes depending on auth setup
         // but should not return 404
         $this->assertNotEquals(404, $loginResponse->status());
@@ -196,32 +202,32 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test API test route works
+     * Test API test route works.
      */
-    public function test_api_test_route_works()
+    public function testApiTestRouteWorks()
     {
         $response = $this->get('/test');
-        
+
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 'ok',
-            'message' => 'Laravel is working!'
+            'message' => 'Laravel is working!',
         ]);
         $response->assertJsonStructure([
             'status',
             'message',
             'timestamp',
-            'memory_usage'
+            'memory_usage',
         ]);
     }
 
     /**
-     * Test responsive design elements are present
+     * Test responsive design elements are present.
      */
-    public function test_responsive_design_elements()
+    public function testResponsiveDesignElements()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         // Check for Bootstrap classes that ensure responsiveness
         $response->assertSee('container');
@@ -231,39 +237,39 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test error handling for non-existent pages
+     * Test error handling for non-existent pages.
      */
-    public function test_404_error_handling()
+    public function test404ErrorHandling()
     {
         $response = $this->get('/non-existent-page');
-        
+
         $response->assertStatus(404);
     }
 
     /**
-     * Test search form submission
+     * Test search form submission.
      */
-    public function test_search_form_submission()
+    public function testSearchFormSubmission()
     {
         $searchData = [
             'keyword' => 'Software Developer',
             'location' => 'San Francisco',
-            'category' => 'technology'
+            'category' => 'technology',
         ];
-        
-        $response = $this->get('/jobs?' . http_build_query($searchData));
-        
+
+        $response = $this->get('/jobs?'.http_build_query($searchData));
+
         $response->assertStatus(200);
         $response->assertSee('Software Developer');
     }
 
     /**
-     * Test that CSS and JS assets are referenced
+     * Test that CSS and JS assets are referenced.
      */
-    public function test_assets_are_referenced()
+    public function testAssetsAreReferenced()
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         // Check for Bootstrap CSS
         $response->assertSee('bootstrap');
@@ -274,12 +280,12 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test job filtering functionality
+     * Test job filtering functionality.
      */
-    public function test_job_filtering_functionality()
+    public function testJobFilteringFunctionality()
     {
         $response = $this->get('/jobs');
-        
+
         $response->assertStatus(200);
         // Check filter options are present
         $response->assertSee('Job Type');
@@ -292,27 +298,27 @@ class JobPortalWebTest extends TestCase
     }
 
     /**
-     * Test company search functionality
+     * Test company search functionality.
      */
-    public function test_company_search_functionality()
+    public function testCompanySearchFunctionality()
     {
         $response = $this->get('/companies?search=tech&industry=technology');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Browse Companies');
     }
 
     /**
-     * Test social media and sharing elements
+     * Test social media and sharing elements.
      */
-    public function test_social_media_elements()
+    public function testSocialMediaElements()
     {
         $response = $this->get('/jobs/1');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Share this Job');
         $response->assertSee('fa-facebook');
         $response->assertSee('fa-twitter');
         $response->assertSee('fa-linkedin');
     }
-} 
+}

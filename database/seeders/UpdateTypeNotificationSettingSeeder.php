@@ -6,7 +6,7 @@ use App\Models\NotificationSetting;
 use Illuminate\Database\Seeder;
 
 /**
- * Class UpdateTypeNotificationSettingSeeder
+ * Class UpdateTypeNotificationSettingSeeder.
  */
 class UpdateTypeNotificationSettingSeeder extends Seeder
 {

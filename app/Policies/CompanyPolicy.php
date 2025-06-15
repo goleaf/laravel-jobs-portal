@@ -36,8 +36,8 @@ class CompanyPolicy
      */
     public function update(User $user, Company $company): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $user->id === $company->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $user->id === $company->user_id);
     }
 
     /**
@@ -85,8 +85,8 @@ class CompanyPolicy
      */
     public function viewAnalytics(User $user, Company $company): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $user->id === $company->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $user->id === $company->user_id);
     }
 
     /**
@@ -94,7 +94,7 @@ class CompanyPolicy
      */
     public function manageJobs(User $user, Company $company): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $user->id === $company->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $user->id === $company->user_id);
     }
-} 
+}

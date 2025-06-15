@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-use App\Traits\HasTaxonomy;
+
 use App\Services\FileService;
+use App\Traits\HasTaxonomy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,53 +13,53 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class Candidate
+ * Class Candidate.
  *
  * @version July 20, 2020, 5:48 am UTC
  *
- * @property int $id
- * @property int $user_id
- * @property string $unique_id
- * @property string|null $father_name
- * @property int|null $marital_status_id
- * @property string|null $nationality
- * @property string|null $national_id_card
- * @property string|null $experience
- * @property int|null $career_level_id
- * @property int|null $industry_id
- * @property int|null $functional_area_id
- * @property string|null $current_salary
- * @property string|null $expected_salary
- * @property string|null $image_path
- * @property string|null $resume_path
- * @property Carbon|null $available_at
- * @property int|null $immediate_available
- * @property int|null $is_active
- * @property int $job_alert
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection|CandidateEducation[] $candidateEducation
- * @property-read Collection|CandidateExperience[] $candidateExperience
- * @property-read User $user
- * @property-read mixed $candidate_url
- * @property-read mixed $city_name
- * @property-read mixed $country_name
- * @property-read string $full_location
- * @property-read mixed $state_name
- * @property-read Collection|\App\Models\JobType[] $jobAlerts
- * @property-read int|null $job_alerts_count
- * @property-read Collection|\App\Models\JobApplication[] $jobApplications
- * @property-read int|null $job_applications_count
- * @property-read Collection|\App\Models\JobApplication[] $penddingJobApplications
- * @property-read int|null $pendding_job_applications_count
- * @property-read mixed $profile_completion_percentage
- * @property-read mixed $formatted_current_salary
- * @property-read mixed $formatted_expected_salary
- * @property-read mixed $experience_level
+ * @property int                              $id
+ * @property int                              $user_id
+ * @property string                           $unique_id
+ * @property null|string                      $father_name
+ * @property null|int                         $marital_status_id
+ * @property null|string                      $nationality
+ * @property null|string                      $national_id_card
+ * @property null|string                      $experience
+ * @property null|int                         $career_level_id
+ * @property null|int                         $industry_id
+ * @property null|int                         $functional_area_id
+ * @property null|string                      $current_salary
+ * @property null|string                      $expected_salary
+ * @property null|string                      $image_path
+ * @property null|string                      $resume_path
+ * @property null|Carbon                      $available_at
+ * @property null|int                         $immediate_available
+ * @property null|int                         $is_active
+ * @property int                              $job_alert
+ * @property null|Carbon                      $created_at
+ * @property null|Carbon                      $updated_at
+ * @property CandidateEducation[]|Collection  $candidateEducation
+ * @property CandidateExperience[]|Collection $candidateExperience
+ * @property User                             $user
+ * @property mixed                            $candidate_url
+ * @property mixed                            $city_name
+ * @property mixed                            $country_name
+ * @property string                           $full_location
+ * @property mixed                            $state_name
+ * @property Collection|JobType[]             $jobAlerts
+ * @property null|int                         $job_alerts_count
+ * @property Collection|JobApplication[]      $jobApplications
+ * @property null|int                         $job_applications_count
+ * @property Collection|JobApplication[]      $penddingJobApplications
+ * @property null|int                         $pendding_job_applications_count
+ * @property mixed                            $profile_completion_percentage
+ * @property mixed                            $formatted_current_salary
+ * @property mixed                            $formatted_expected_salary
+ * @property mixed                            $experience_level
  *
  * @method static Builder|Candidate newModelQuery()
  * @method static Builder|Candidate newQuery()
@@ -112,38 +113,35 @@ use Spatie\Activitylog\LogOptions;
  */
 class Candidate extends Model
 {
-    use HasFactory, LogsActivity, HasTaxonomy;
+    use HasFactory;
+    use LogsActivity;
+    use HasTaxonomy;
 
-    public $table = 'candidates';
-
-    /**
-     * Default eager loading for performance
-     */
-    protected $with = ['user', 'maritalStatus', 'careerLevel', 'industry', 'functionalArea'];
-
-    const RESUME_PATH = 'candidates/resumes';
-    const IMAGE_PATH = 'candidates/images';
+    public const RESUME_PATH = 'candidates/resumes';
+    public const IMAGE_PATH = 'candidates/images';
 
     public const CANDIDATE_LOGIN_TYPE = 1;
     public const CANDIDATE_EMP_TYPE = 2;
 
-    const ALL = 2;
-    const ACTIVE = 1;
-    const DEACTIVE = 0;
+    public const ALL = 2;
+    public const ACTIVE = 1;
+    public const DEACTIVE = 0;
 
-    const STATUS = [
+    public const STATUS = [
         self::ALL => 'All',
         self::ACTIVE => 'Active',
         self::DEACTIVE => 'Deactive',
     ];
 
-    const IMMEDIATE_AVAILABLE = 1;
-    const Not_IMMEDIATE_AVAILABLE = 0;
-    const IMMEDIATE = [
+    public const IMMEDIATE_AVAILABLE = 1;
+    public const Not_IMMEDIATE_AVAILABLE = 0;
+    public const IMMEDIATE = [
         self::ALL => 'All',
         self::IMMEDIATE_AVAILABLE => 'Immediate Available',
         self::Not_IMMEDIATE_AVAILABLE => 'Not Immediate Available',
     ];
+
+    public $table = 'candidates';
 
     public $fillable = [
         'user_id',
@@ -166,44 +164,7 @@ class Candidate extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'int',
-            'user_id' => 'int',
-            'country_id' => 'int',
-            'state_id' => 'int',
-            'city_id' => 'int',
-            'marital_status_id' => 'int',
-            'career_level_id' => 'int',
-            'industry_id' => 'int',
-            'functional_area_id' => 'int',
-            'first_name' => 'string',
-            'last_name' => 'string',
-            'email' => 'string',
-            'phone' => 'string',
-            'date_of_birth' => 'date',
-            'gender' => 'string',
-            'experience_years' => 'int',
-            'current_salary' => 'decimal:2',
-            'expected_salary' => 'decimal:2',
-            'immediate_available' => 'int',
-            'is_verified' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_available' => 'boolean',
-            'is_immediate_available' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-
-    /**
-     * Validation rules with multilingual support
+     * Validation rules with multilingual support.
      *
      * @var array
      */
@@ -228,56 +189,33 @@ class Candidate extends Model
         'national_id_card' => 'nullable|string|max:50',
     ];
 
+    /**
+     * Default eager loading for performance.
+     */
+    protected $with = ['user', 'maritalStatus', 'careerLevel', 'industry', 'functionalArea'];
+
     protected $appends = [
-        'country_name', 
-        'state_name', 
-        'city_name', 
-        'full_location', 
+        'country_name',
+        'state_name',
+        'city_name',
+        'full_location',
         'candidate_url',
         'profile_completion_percentage',
         'formatted_current_salary',
         'formatted_expected_salary',
-        'experience_level'
+        'experience_level',
     ];
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Generate unique ID
-        static::creating(function ($candidate) {
-            if (!$candidate->unique_id) {
-                $candidate->unique_id = 'CAND-' . strtoupper(uniqid());
-            }
-        });
-
-        // Clear cache when candidate is updated
-        static::updated(function ($candidate) {
-            cache()->forget("candidate.{$candidate->id}");
-            cache()->forget("candidate.{$candidate->id}.profile_completion");
-            cache()->tags(['candidates', 'candidate-' . $candidate->id])->flush();
-        });
-
-        // Clear cache when candidate is deleted
-        static::deleted(function ($candidate) {
-            cache()->forget("candidate.{$candidate->id}");
-            cache()->forget("candidate.{$candidate->id}.profile_completion");
-            cache()->tags(['candidates', 'candidate-' . $candidate->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['career_level_id', 'industry_id', 'functional_area_id', 'current_salary', 'expected_salary', 'is_active'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     public function getCountryNameAttribute()
@@ -304,11 +242,17 @@ class Candidate extends Model
     public function getFullLocationAttribute(): string
     {
         $location = [];
-        
-        if ($this->city_name) $location[] = $this->city_name;
-        if ($this->state_name) $location[] = $this->state_name;
-        if ($this->country_name) $location[] = $this->country_name;
-        
+
+        if ($this->city_name) {
+            $location[] = $this->city_name;
+        }
+        if ($this->state_name) {
+            $location[] = $this->state_name;
+        }
+        if ($this->country_name) {
+            $location[] = $this->country_name;
+        }
+
         return implode(', ', $location) ?: __('common.location_not_specified');
     }
 
@@ -316,8 +260,9 @@ class Candidate extends Model
     {
         return cache()->remember("candidate.{$this->id}.candidate_url", 3600, function () {
             if ($this->image_path) {
-                return asset('storage/' . $this->image_path);
+                return asset('storage/'.$this->image_path);
             }
+
             return asset('assets/img/default-candidate-avatar.png');
         });
     }
@@ -330,27 +275,27 @@ class Candidate extends Model
         return cache()->remember("candidate.{$this->id}.profile_completion", 3600, function () {
             $fields = [
                 'father_name', 'nationality', 'experience', 'career_level_id',
-                'industry_id', 'functional_area_id', 'current_salary', 
-                'expected_salary', 'image_path', 'resume_path'
+                'industry_id', 'functional_area_id', 'current_salary',
+                'expected_salary', 'image_path', 'resume_path',
             ];
-            
+
             $filledFields = 0;
             foreach ($fields as $field) {
-                if (!empty($this->$field)) {
-                    $filledFields++;
+                if (!empty($this->{$field})) {
+                    ++$filledFields;
                 }
             }
-            
+
             // Add user fields
             if ($this->user) {
                 $userFields = ['phone', 'dob', 'gender'];
                 foreach ($userFields as $field) {
-                    if (!empty($this->user->$field)) {
-                        $filledFields++;
+                    if (!empty($this->user->{$field})) {
+                        ++$filledFields;
                     }
                 }
             }
-            
+
             return round(($filledFields / (count($fields) + 3)) * 100);
         });
     }
@@ -363,6 +308,7 @@ class Candidate extends Model
         if (!$this->current_salary) {
             return __('common.not_specified');
         }
+
         return number_format($this->current_salary, 2);
     }
 
@@ -374,6 +320,7 @@ class Candidate extends Model
         if (!$this->expected_salary) {
             return __('common.not_specified');
         }
+
         return number_format($this->expected_salary, 2);
     }
 
@@ -385,7 +332,7 @@ class Candidate extends Model
         if (!$this->experience) {
             return __('candidate.fresh_graduate');
         }
-        
+
         return match (true) {
             $this->experience < 1 => __('candidate.entry_level'),
             $this->experience < 3 => __('candidate.junior_level'),
@@ -443,15 +390,17 @@ class Candidate extends Model
     public function penddingJobApplications(): HasMany
     {
         return $this->hasMany(JobApplication::class, 'candidate_id')
-                    ->where('status', JobApplication::STATUS_APPLIED);
+            ->where('status', JobApplication::STATUS_APPLIED)
+        ;
     }
 
     public function getResumeUrl(): ?string
     {
         return cache()->remember("candidate.{$this->id}.resume_url", 3600, function () {
             if ($this->resume_path) {
-                return asset('storage/' . $this->resume_path);
+                return asset('storage/'.$this->resume_path);
             }
+
             return null;
         });
     }
@@ -460,18 +409,19 @@ class Candidate extends Model
     {
         try {
             $fileService = app(FileService::class);
-            
+
             // Delete old image if exists
             if ($this->image_path) {
                 $fileService->deleteFile($this->image_path);
             }
-            
+
             $this->image_path = $fileService->uploadFile($file, self::IMAGE_PATH);
             $this->save();
-            
+
             return true;
         } catch (\Exception $e) {
-            \Log::error('Failed to upload candidate profile image: ' . $e->getMessage());
+            \Log::error('Failed to upload candidate profile image: '.$e->getMessage());
+
             return false;
         }
     }
@@ -480,24 +430,27 @@ class Candidate extends Model
     {
         try {
             $fileService = app(FileService::class);
-            
+
             // Delete old resume if exists
             if ($this->resume_path) {
                 $fileService->deleteFile($this->resume_path);
             }
-            
+
             $this->resume_path = $fileService->uploadFile($file, self::RESUME_PATH);
             $this->save();
-            
+
             return true;
         } catch (\Exception $e) {
-            \Log::error('Failed to upload candidate resume: ' . $e->getMessage());
+            \Log::error('Failed to upload candidate resume: '.$e->getMessage());
+
             return false;
         }
     }
 
     /**
      * Scope for active candidates.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -506,6 +459,8 @@ class Candidate extends Model
 
     /**
      * Scope for inactive candidates.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -514,6 +469,8 @@ class Candidate extends Model
 
     /**
      * Scope for verified candidates.
+     *
+     * @param mixed $query
      */
     public function scopeVerified($query)
     {
@@ -522,6 +479,8 @@ class Candidate extends Model
 
     /**
      * Scope for unverified candidates.
+     *
+     * @param mixed $query
      */
     public function scopeUnverified($query)
     {
@@ -530,6 +489,8 @@ class Candidate extends Model
 
     /**
      * Scope for featured candidates.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -538,6 +499,8 @@ class Candidate extends Model
 
     /**
      * Scope for non-featured candidates.
+     *
+     * @param mixed $query
      */
     public function scopeNotFeatured($query)
     {
@@ -546,6 +509,8 @@ class Candidate extends Model
 
     /**
      * Scope for available candidates.
+     *
+     * @param mixed $query
      */
     public function scopeAvailable($query)
     {
@@ -554,6 +519,8 @@ class Candidate extends Model
 
     /**
      * Scope for unavailable candidates.
+     *
+     * @param mixed $query
      */
     public function scopeUnavailable($query)
     {
@@ -562,6 +529,8 @@ class Candidate extends Model
 
     /**
      * Scope for immediately available candidates.
+     *
+     * @param mixed $query
      */
     public function scopeImmediatelyAvailable($query)
     {
@@ -570,6 +539,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by country.
+     *
+     * @param mixed $query
      */
     public function scopeByCountry($query, int $countryId)
     {
@@ -578,6 +549,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by state.
+     *
+     * @param mixed $query
      */
     public function scopeByState($query, int $stateId)
     {
@@ -586,6 +559,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by city.
+     *
+     * @param mixed $query
      */
     public function scopeByCity($query, int $cityId)
     {
@@ -594,6 +569,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by career level.
+     *
+     * @param mixed $query
      */
     public function scopeByCareerLevel($query, int $careerLevelId)
     {
@@ -602,6 +579,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by functional area.
+     *
+     * @param mixed $query
      */
     public function scopeByFunctionalArea($query, int $functionalAreaId)
     {
@@ -610,6 +589,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by marital status.
+     *
+     * @param mixed $query
      */
     public function scopeByMaritalStatus($query, int $maritalStatusId)
     {
@@ -618,17 +599,22 @@ class Candidate extends Model
 
     /**
      * Scope for searching candidates.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('first_name', 'like', "%{$term}%")
-                    ->orWhere('last_name', 'like', "%{$term}%")
-                    ->orWhere('email', 'like', "%{$term}%")
-                    ->orWhere('phone', 'like', "%{$term}%");
+            ->orWhere('last_name', 'like', "%{$term}%")
+            ->orWhere('email', 'like', "%{$term}%")
+            ->orWhere('phone', 'like', "%{$term}%")
+        ;
     }
 
     /**
      * Scope for recent candidates.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -637,6 +623,8 @@ class Candidate extends Model
 
     /**
      * Scope for old candidates.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -645,6 +633,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by experience range.
+     *
+     * @param mixed $query
      */
     public function scopeByExperienceRange($query, int $min, int $max)
     {
@@ -653,6 +643,8 @@ class Candidate extends Model
 
     /**
      * Scope for entry level candidates.
+     *
+     * @param mixed $query
      */
     public function scopeEntryLevel($query)
     {
@@ -661,6 +653,8 @@ class Candidate extends Model
 
     /**
      * Scope for experienced candidates.
+     *
+     * @param mixed $query
      */
     public function scopeExperienced($query)
     {
@@ -669,6 +663,8 @@ class Candidate extends Model
 
     /**
      * Scope for senior candidates.
+     *
+     * @param mixed $query
      */
     public function scopeSenior($query)
     {
@@ -677,6 +673,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by salary range.
+     *
+     * @param mixed $query
      */
     public function scopeBySalaryRange($query, float $min, float $max)
     {
@@ -685,6 +683,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by gender.
+     *
+     * @param mixed $query
      */
     public function scopeByGender($query, string $gender)
     {
@@ -693,6 +693,8 @@ class Candidate extends Model
 
     /**
      * Scope for male candidates.
+     *
+     * @param mixed $query
      */
     public function scopeMale($query)
     {
@@ -701,6 +703,8 @@ class Candidate extends Model
 
     /**
      * Scope for female candidates.
+     *
+     * @param mixed $query
      */
     public function scopeFemale($query)
     {
@@ -709,6 +713,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates with resumes.
+     *
+     * @param mixed $query
      */
     public function scopeWithResumes($query)
     {
@@ -717,6 +723,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates without resumes.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutResumes($query)
     {
@@ -725,6 +733,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates with job applications.
+     *
+     * @param mixed $query
      */
     public function scopeWithApplications($query)
     {
@@ -733,6 +743,8 @@ class Candidate extends Model
 
     /**
      * Scope for candidates with skills.
+     *
+     * @param mixed $query
      */
     public function scopeWithSkills($query)
     {
@@ -741,17 +753,21 @@ class Candidate extends Model
 
     /**
      * Scope for candidates by age range.
+     *
+     * @param mixed $query
      */
     public function scopeByAgeRange($query, int $minAge, int $maxAge)
     {
         $maxDate = now()->subYears($minAge)->format('Y-m-d');
         $minDate = now()->subYears($maxAge + 1)->format('Y-m-d');
-        
+
         return $query->whereBetween('date_of_birth', [$minDate, $maxDate]);
     }
 
     /**
      * Scope for young candidates (under 30).
+     *
+     * @param mixed $query
      */
     public function scopeYoung($query)
     {
@@ -760,21 +776,27 @@ class Candidate extends Model
 
     /**
      * Scope for alphabetical ordering.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
         return $query->orderBy('first_name', 'asc')
-                    ->orderBy('last_name', 'asc');
+            ->orderBy('last_name', 'asc')
+        ;
     }
 
     /**
      * Scope for popular candidates (with most applications).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('jobApplications')
-                    ->orderBy('job_applications_count', 'desc')
-                    ->limit($limit);
+            ->orderBy('job_applications_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -790,10 +812,75 @@ class Candidate extends Model
      */
     public function isJobReady(): bool
     {
-        return $this->is_active && 
-               $this->resume_path && 
-               $this->career_level_id && 
-               $this->industry_id && 
-               $this->functional_area_id;
+        return $this->is_active
+               && $this->resume_path
+               && $this->career_level_id
+               && $this->industry_id
+               && $this->functional_area_id;
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'int',
+            'user_id' => 'int',
+            'country_id' => 'int',
+            'state_id' => 'int',
+            'city_id' => 'int',
+            'marital_status_id' => 'int',
+            'career_level_id' => 'int',
+            'industry_id' => 'int',
+            'functional_area_id' => 'int',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'email' => 'string',
+            'phone' => 'string',
+            'date_of_birth' => 'date',
+            'gender' => 'string',
+            'experience_years' => 'int',
+            'current_salary' => 'decimal:2',
+            'expected_salary' => 'decimal:2',
+            'immediate_available' => 'int',
+            'is_verified' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_available' => 'boolean',
+            'is_immediate_available' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Generate unique ID
+        static::creating(function ($candidate) {
+            if (!$candidate->unique_id) {
+                $candidate->unique_id = 'CAND-'.strtoupper(uniqid());
+            }
+        });
+
+        // Clear cache when candidate is updated
+        static::updated(function ($candidate) {
+            cache()->forget("candidate.{$candidate->id}");
+            cache()->forget("candidate.{$candidate->id}.profile_completion");
+            cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+        });
+
+        // Clear cache when candidate is deleted
+        static::deleted(function ($candidate) {
+            cache()->forget("candidate.{$candidate->id}");
+            cache()->forget("candidate.{$candidate->id}.profile_completion");
+            cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+        });
     }
 }

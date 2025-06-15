@@ -7,7 +7,7 @@ return [
     'select_language' => '选择语言',
     'language_changed' => '语言已成功更改为 :language',
     'language_not_supported' => '不支持语言 :language',
-    
+
     // Locale Names
     'languages' => [
         'en' => '英语',
@@ -20,7 +20,7 @@ return [
         'tr' => '土耳其语',
         'zh' => '中文',
     ],
-    
+
     // Locale Settings
     'direction' => 'ltr',
     'native_name' => '中文',
@@ -29,14 +29,14 @@ return [
     'date_format' => 'Y-m-d',
     'time_format' => 'H:i',
     'datetime_format' => 'Y-m-d H:i',
-    
+
     // System Messages
     'loading' => '正在加载...',
     'error' => '错误',
     'success' => '成功',
     'warning' => '警告',
     'info' => '信息',
-    
+
     // Navigation
     'home' => '首页',
     'back' => '返回',
@@ -52,7 +52,7 @@ return [
     'filter' => '筛选',
     'reset' => '重置',
     'refresh' => '刷新',
-    
+
     // Time and Dates
     'today' => '今天',
     'yesterday' => '昨天',
@@ -63,7 +63,7 @@ return [
     'this_month' => '本月',
     'last_month' => '上月',
     'next_month' => '下月',
-    
+
     // Numbers and Counting
     'first' => '第一',
     'second' => '第二',
@@ -76,7 +76,7 @@ return [
     'showing' => '显示',
     'to' => '到',
     'results' => '结果',
-    
+
     // Status
     'active' => '活跃',
     'inactive' => '不活跃',

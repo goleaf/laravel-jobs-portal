@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\SalaryCurrency;
 use App\Http\Resources\SalaryCurrencyResource;
+use App\Models\SalaryCurrency;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for SalaryCurrency
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class SalaryCurrencyApiController extends Controller
 {
@@ -21,20 +21,20 @@ class SalaryCurrencyApiController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = SalaryCurrency::query();
-        
+
         // Apply filters
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
-        
+
         if ($request->has('status')) {
             $query->where('is_active', $request->boolean('status'));
         }
-        
+
         // Pagination
         $perPage = min($request->integer('per_page', 15), 100);
         $data = $query->paginate($perPage);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'SalaryCurrency list retrieved successfully',
@@ -44,7 +44,7 @@ class SalaryCurrencyApiController extends Controller
                 'last_page' => $data->lastPage(),
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
-            ]
+            ],
         ]);
     }
 
@@ -56,45 +56,49 @@ class SalaryCurrencyApiController extends Controller
         try {
             $data = $request->validated();
             $item = SalaryCurrency::create($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'SalaryCurrency created successfully',
-                'data' => new SalaryCurrencyResource($item)
+                'data' => new SalaryCurrencyResource($item),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create salarycurrency',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $item = SalaryCurrency::findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'SalaryCurrency retrieved successfully',
-                'data' => new SalaryCurrencyResource($item)
+                'data' => new SalaryCurrencyResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'SalaryCurrency not found',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateSalaryCurrencyRequest $request, $id): JsonResponse
     {
@@ -102,39 +106,41 @@ class SalaryCurrencyApiController extends Controller
             $item = SalaryCurrency::findOrFail($id);
             $data = $request->validated();
             $item->update($data);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'SalaryCurrency updated successfully',
-                'data' => new SalaryCurrencyResource($item)
+                'data' => new SalaryCurrencyResource($item),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update salarycurrency',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $item = SalaryCurrency::findOrFail($id);
             $item->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'SalaryCurrency deleted successfully'
+                'message' => 'SalaryCurrency deleted successfully',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete salarycurrency',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

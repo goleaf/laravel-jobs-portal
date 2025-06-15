@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\SalaryCurrency;
 
 /**
- * Class SalaryCurrencyRepository
+ * Class SalaryCurrencyRepository.
  *
  * @version July 7, 2020, 6:41 am UTC
  */
@@ -19,7 +19,7 @@ class SalaryCurrencyRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class SalaryCurrencyRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return SalaryCurrency::class;

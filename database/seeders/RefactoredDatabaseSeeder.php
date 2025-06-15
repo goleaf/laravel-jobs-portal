@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class RefactoredDatabaseSeeder extends Seeder
 {
@@ -14,12 +13,12 @@ class RefactoredDatabaseSeeder extends Seeder
     public function run()
     {
         $this->command->info('🚀 Starting refactored database seeding with Enhanced patterns...');
-        
+
         // Use Enhanced pattern: Disable foreign key constraints during seeding
         Schema::withoutForeignKeyConstraints(function () {
             $this->seedInOrder();
         });
-        
+
         $this->command->info('✅ Refactored database seeding completed successfully!');
     }
 
@@ -79,4 +78,4 @@ class RefactoredDatabaseSeeder extends Seeder
             PostsSeeder::class, // Now safe - user with ID 1 exists
         ]);
     }
-} 
+}

@@ -9,9 +9,9 @@ use App\Repositories\CityRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+
 class CityController extends AppBaseController
 {
     /**
@@ -27,7 +27,6 @@ class CityController extends AppBaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Application|Factory|Response|View
      */
     public function index(): View
@@ -69,7 +68,6 @@ class CityController extends AppBaseController
 
     /**
      * Remove the specified resource from storage.
-     *
      *
      * @throws \Exception
      */

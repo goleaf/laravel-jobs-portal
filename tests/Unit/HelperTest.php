@@ -2,66 +2,73 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class HelperTest extends TestCase
 {
     /** @test */
-    public function str_limit_truncates_string_correctly()
+    public function strLimitTruncatesStringCorrectly()
     {
-        $this->assertEquals('Laravel...', \Illuminate\Support\Str::limit('Laravel Framework', 7));
-        $this->assertEquals('Laravel Framework', \Illuminate\Support\Str::limit('Laravel Framework', 20));
+        $this->assertEquals('Laravel...', Str::limit('Laravel Framework', 7));
+        $this->assertEquals('Laravel Framework', Str::limit('Laravel Framework', 20));
     }
 
     /** @test */
-    public function str_slug_converts_string_to_slug()
+    public function strSlugConvertsStringToSlug()
     {
-        $this->assertEquals('laravel-framework', \Illuminate\Support\Str::slug('Laravel Framework'));
-        $this->assertEquals('laravel-framework-version-10', \Illuminate\Support\Str::slug('Laravel Framework (Version 10)'));
+        $this->assertEquals('laravel-framework', Str::slug('Laravel Framework'));
+        $this->assertEquals('laravel-framework-version-10', Str::slug('Laravel Framework (Version 10)'));
     }
 
     /** @test */
-    public function array_get_returns_default_for_missing_key()
+    public function arrayGetReturnsDefaultForMissingKey()
     {
         $array = ['name' => 'Taylor', 'age' => 25];
 
-        $this->assertEquals('Taylor', \Illuminate\Support\Arr::get($array, 'name'));
-        $this->assertEquals('Unknown', \Illuminate\Support\Arr::get($array, 'gender', 'Unknown'));
-        $this->assertNull(\Illuminate\Support\Arr::get($array, 'gender'));
+        $this->assertEquals('Taylor', Arr::get($array, 'name'));
+        $this->assertEquals('Unknown', Arr::get($array, 'gender', 'Unknown'));
+        $this->assertNull(Arr::get($array, 'gender'));
     }
 
     /** @test */
-    public function array_has_checks_if_key_exists()
+    public function arrayHasChecksIfKeyExists()
     {
         $array = ['product' => ['name' => 'Laravel', 'price' => 'free']];
 
-        $this->assertTrue(\Illuminate\Support\Arr::has($array, 'product'));
-        $this->assertTrue(\Illuminate\Support\Arr::has($array, 'product.name'));
-        $this->assertFalse(\Illuminate\Support\Arr::has($array, 'product.discount'));
+        $this->assertTrue(Arr::has($array, 'product'));
+        $this->assertTrue(Arr::has($array, 'product.name'));
+        $this->assertFalse(Arr::has($array, 'product.discount'));
     }
 
     /** @test */
-    public function config_get_returns_default_for_missing_key()
+    public function configGetReturnsDefaultForMissingKey()
     {
         // We can only test the function exists as we don't have a Laravel app instance in Unit tests
         $this->assertTrue(function_exists('config'));
     }
 
     /** @test */
-    public function auth_check_returns_boolean()
+    public function authCheckReturnsBoolean()
     {
         // We can only test the function exists as we don't have a Laravel app instance in Unit tests
         $this->assertTrue(function_exists('auth'));
     }
 
     /** @test */
-    public function now_returns_carbon_instance()
+    public function nowReturnsCarbonInstance()
     {
         $this->assertTrue(function_exists('now'));
     }
 
     /** @test */
-    public function bcrypt_hashes_passwords()
+    public function bcryptHashesPasswords()
     {
         $this->assertTrue(function_exists('bcrypt'));
 

@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'avatar_url' => $this->getAvatarUrl(),
-            
+
             // Personal Information
             'personal_info' => [
                 'date_of_birth' => $this->dob?->toDateString(),
@@ -39,7 +39,7 @@ class UserResource extends JsonResource
                     'code' => $this->nationality?->short_code,
                 ]),
             ],
-            
+
             // Location Information
             'location' => [
                 'country' => $this->when($this->country_id, [
@@ -57,7 +57,7 @@ class UserResource extends JsonResource
                 ]),
                 'formatted' => $this->getFormattedLocation(),
             ],
-            
+
             // Account Information
             'account' => [
                 'language' => $this->language ?? app()->getLocale(),
@@ -68,7 +68,7 @@ class UserResource extends JsonResource
                 'email_verified_at' => $this->email_verified_at?->toISOString(),
                 'status_label' => $this->getStatusLabel(),
             ],
-            
+
             // Role and Permissions
             'role_info' => [
                 'primary_role' => $this->getPrimaryRole(),
@@ -82,7 +82,7 @@ class UserResource extends JsonResource
                 'is_employer' => $this->hasRole('employer'),
                 'is_candidate' => $this->hasRole('candidate'),
             ],
-            
+
             // Profile Completion
             'profile' => [
                 'completion_percentage' => $this->getProfileCompletionPercentage(),
@@ -90,7 +90,7 @@ class UserResource extends JsonResource
                 'is_complete' => $this->isProfileComplete(),
                 'last_profile_update' => $this->updated_at?->toISOString(),
             ],
-            
+
             // Statistics (conditional based on role)
             'statistics' => $this->when($this->hasRole('candidate'), [
                 'applications_count' => $this->whenCounted('jobApplications'),
@@ -101,7 +101,7 @@ class UserResource extends JsonResource
                 'jobs_posted' => $this->whenCounted('postedJobs'),
                 'active_jobs' => $this->whenCounted('activeJobs'),
             ]),
-            
+
             // Dates
             'dates' => [
                 'created_at' => $this->created_at?->toISOString(),
@@ -112,12 +112,12 @@ class UserResource extends JsonResource
                 'member_since' => $this->created_at?->diffForHumans(),
                 'last_active' => $this->last_login_at?->diffForHumans(),
             ],
-            
+
             // Relationships (conditionally loaded)
             'candidate' => $this->whenLoaded('candidate'),
             'companies' => $this->whenLoaded('companies'),
             'job_applications' => $this->whenLoaded('jobApplications'),
-            
+
             // Permissions for current user
             'permissions' => [
                 'can_view_profile' => $request->user()?->can('view', $this->resource) ?? false,
@@ -125,7 +125,7 @@ class UserResource extends JsonResource
                 'can_delete' => $request->user()?->can('delete', $this->resource) ?? false,
                 'can_impersonate' => $request->user()?->can('impersonate', $this->resource) ?? false,
             ],
-            
+
             // Links
             'links' => [
                 'self' => route('api.users.show', $this->id),
@@ -141,7 +141,7 @@ class UserResource extends JsonResource
      */
     private function getFullName(): string
     {
-        return trim($this->first_name . ' ' . $this->last_name);
+        return trim($this->first_name.' '.$this->last_name);
     }
 
     /**
@@ -150,11 +150,12 @@ class UserResource extends JsonResource
     private function getAvatarUrl(): string
     {
         if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+            return asset('storage/'.$this->avatar);
         }
 
         // Generate Gravatar URL
         $hash = md5(strtolower(trim($this->email)));
+
         return "https://www.gravatar.com/avatar/{$hash}?d=mp&s=200";
     }
 
@@ -181,7 +182,7 @@ class UserResource extends JsonResource
             return null;
         }
 
-        return __('users.gender.' . $this->gender);
+        return __('users.gender.'.$this->gender);
     }
 
     /**
@@ -190,7 +191,8 @@ class UserResource extends JsonResource
     private function getLanguageLabel(): string
     {
         $language = $this->language ?? app()->getLocale();
-        return __('languages.' . $language);
+
+        return __('languages.'.$language);
     }
 
     /**
@@ -236,13 +238,13 @@ class UserResource extends JsonResource
     {
         $fields = [
             'first_name', 'last_name', 'email', 'phone', 'dob', 'gender',
-            'country_id', 'state_id', 'city_id', 'avatar'
+            'country_id', 'state_id', 'city_id', 'avatar',
         ];
 
         $completed = 0;
         foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $completed++;
+            if (!empty($this->{$field})) {
+                ++$completed;
             }
         }
 
@@ -264,7 +266,7 @@ class UserResource extends JsonResource
 
         $missing = [];
         foreach ($fields as $field => $label) {
-            if (empty($this->$field)) {
+            if (empty($this->{$field})) {
                 $missing[] = $label;
             }
         }
@@ -286,14 +288,16 @@ class UserResource extends JsonResource
     private function getProfileUrl(): string
     {
         $role = $this->getPrimaryRole();
-        
+
         switch ($role) {
             case 'candidate':
                 return route('candidates.show', $this->id);
+
             case 'employer':
                 return route('employers.show', $this->id);
+
             default:
                 return route('users.show', $this->id);
         }
     }
-} 
+}

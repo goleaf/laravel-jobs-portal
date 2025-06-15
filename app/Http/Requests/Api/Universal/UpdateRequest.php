@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateRequest extends FormRequest
@@ -24,7 +25,7 @@ class UpdateRequest extends FormRequest
 
         // Try to get the resource from the route
         $resource = $this->getRouteResource();
-        
+
         if (!$resource) {
             return false;
         }
@@ -111,63 +112,6 @@ class UpdateRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Resource update validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Update slug if name or title is being updated
-        if (($this->has('name') || $this->has('title')) && !$this->has('slug')) {
-            $this->merge([
-                'slug' => \Str::slug($this->name ?: $this->title)
-            ]);
-        }
-
-        // Convert boolean strings
-        foreach (['is_active', 'is_featured', 'is_verified'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-
-        // Clean and format tags
-        if ($this->has('tags') && is_array($this->tags)) {
-            $this->merge([
-                'tags' => array_filter(array_map('trim', $this->tags))
-            ]);
-        }
-
-        // Set last modified by current user
-        $this->merge([
-            'last_modified_by' => auth()->id()
-        ]);
-
-        // Clean external_id and reference
-        foreach (['external_id', 'reference', 'version'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => trim($this->$field)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -202,13 +146,70 @@ class UpdateRequest extends FormRequest
     }
 
     /**
-     * Get the resource from the route
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Resource update validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Update slug if name or title is being updated
+        if (($this->has('name') || $this->has('title')) && !$this->has('slug')) {
+            $this->merge([
+                'slug' => \Str::slug($this->name ?: $this->title),
+            ]);
+        }
+
+        // Convert boolean strings
+        foreach (['is_active', 'is_featured', 'is_verified'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+
+        // Clean and format tags
+        if ($this->has('tags') && is_array($this->tags)) {
+            $this->merge([
+                'tags' => array_filter(array_map('trim', $this->tags)),
+            ]);
+        }
+
+        // Set last modified by current user
+        $this->merge([
+            'last_modified_by' => auth()->id(),
+        ]);
+
+        // Clean external_id and reference
+        foreach (['external_id', 'reference', 'version'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => trim($this->{$field}),
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Get the resource from the route.
      */
     private function getRouteResource()
     {
         // Try common route parameter names
         $paramNames = ['candidate', 'company', 'job', 'user', 'skill', 'application', 'id'];
-        
+
         foreach ($paramNames as $param) {
             if ($this->route($param)) {
                 return $this->route($param);
@@ -219,7 +220,9 @@ class UpdateRequest extends FormRequest
     }
 
     /**
-     * Check if the authenticated user owns the resource
+     * Check if the authenticated user owns the resource.
+     *
+     * @param mixed $resource
      */
     private function userOwnsResource($resource): bool
     {
@@ -239,16 +242,16 @@ class UpdateRequest extends FormRequest
         }
 
         // For User model
-        if ($resource instanceof \App\Models\User) {
+        if ($resource instanceof User) {
             return $resource->id === $userId;
         }
 
         // For Company model (through user relationship)
-        if (isset($resource->company) && isset($resource->company->user_id)) {
+        if (isset($resource->company, $resource->company->user_id)) {
             return $resource->company->user_id === $userId;
         }
 
         // Default to false if no ownership pattern matches
         return false;
     }
-} 
+}

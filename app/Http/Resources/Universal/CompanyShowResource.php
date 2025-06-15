@@ -77,13 +77,13 @@ class CompanyShowResource extends JsonResource
                 'status' => $this->status,
                 'profile_completion' => $this->getProfileCompletionPercentage(),
             ],
-            'jobs' => $this->when($this->relationLoaded('jobs'), function() {
-                return $this->jobs->map(function($job) {
+            'jobs' => $this->when($this->relationLoaded('jobs'), function () {
+                return $this->jobs->map(function ($job) {
                     return [
                         'id' => $job->id,
                         'title' => $job->title,
                         'type' => $job->jobType?->name,
-                        'location' => $job->city?->name . ', ' . $job->state?->name,
+                        'location' => $job->city?->name.', '.$job->state?->name,
                         'salary_min' => $job->salary_from,
                         'salary_max' => $job->salary_to,
                         'is_featured' => $job->is_featured,
@@ -98,7 +98,7 @@ class CompanyShowResource extends JsonResource
                 'profile_views' => $this->profile_views ?? 0,
                 'follower_count' => $this->followers()->count(),
             ],
-            'contact_person' => $this->when($this->relationLoaded('user'), function() {
+            'contact_person' => $this->when($this->relationLoaded('user'), function () {
                 return [
                     'name' => $this->user?->name,
                     'email' => $this->user?->email,
@@ -135,6 +135,8 @@ class CompanyShowResource extends JsonResource
 
     /**
      * Customize the outgoing response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -143,33 +145,34 @@ class CompanyShowResource extends JsonResource
     }
 
     /**
-     * Get logo URL
+     * Get logo URL.
      */
     private function getLogoUrl(): ?string
     {
         if ($this->logo) {
-            return asset('storage/' . $this->logo);
+            return asset('storage/'.$this->logo);
         }
-        
+
         // Default logo with company initial
         $initial = substr($this->name, 0, 1);
+
         return "https://ui-avatars.com/api/?name={$initial}&size=200&background=random&format=svg";
     }
 
     /**
-     * Get cover image URL
+     * Get cover image URL.
      */
     private function getCoverImageUrl(): ?string
     {
         if ($this->cover_image) {
-            return asset('storage/' . $this->cover_image);
+            return asset('storage/'.$this->cover_image);
         }
-        
+
         return null;
     }
 
     /**
-     * Get formatted revenue
+     * Get formatted revenue.
      */
     private function getFormattedRevenue(): ?string
     {
@@ -177,11 +180,11 @@ class CompanyShowResource extends JsonResource
             return null;
         }
 
-        return $this->revenueCurrency->symbol . number_format($this->revenue, 0);
+        return $this->revenueCurrency->symbol.number_format($this->revenue, 0);
     }
 
     /**
-     * Get full address string
+     * Get full address string.
      */
     private function getFullAddress(): ?string
     {
@@ -197,32 +200,36 @@ class CompanyShowResource extends JsonResource
     }
 
     /**
-     * Get profile completion percentage
+     * Get profile completion percentage.
      */
     private function getProfileCompletionPercentage(): int
     {
         $fields = [
             'name', 'email', 'phone', 'website', 'description', 'logo',
             'industry_id', 'company_size_id', 'employee_count', 'founded_year',
-            'address', 'country_id', 'state_id', 'city_id'
+            'address', 'country_id', 'state_id', 'city_id',
         ];
 
         $completedFields = 0;
         foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $completedFields++;
+            if (!empty($this->{$field})) {
+                ++$completedFields;
             }
         }
 
         // Bonus points for social links and benefits
-        if (!empty($this->social_linkedin)) $completedFields += 0.5;
-        if (!empty($this->benefits)) $completedFields += 0.5;
+        if (!empty($this->social_linkedin)) {
+            $completedFields += 0.5;
+        }
+        if (!empty($this->benefits)) {
+            $completedFields += 0.5;
+        }
 
         return round(($completedFields / count($fields)) * 100);
     }
 
     /**
-     * Get total applications across all jobs
+     * Get total applications across all jobs.
      */
     private function getTotalApplications(): int
     {
@@ -230,7 +237,7 @@ class CompanyShowResource extends JsonResource
     }
 
     /**
-     * Get average rating
+     * Get average rating.
      */
     private function getAverageRating(): float
     {
@@ -238,29 +245,38 @@ class CompanyShowResource extends JsonResource
     }
 
     /**
-     * Get rating breakdown
+     * Get rating breakdown.
      */
     private function getRatingBreakdown(): array
     {
         $breakdown = [];
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $breakdown[$i] = $this->reviews()->where('rating', $i)->count();
         }
+
         return $breakdown;
     }
 
     /**
-     * Get included relations
+     * Get included relations.
      */
     private function getIncludedRelations(): array
     {
         $included = [];
-        
-        if ($this->relationLoaded('jobs')) $included[] = 'jobs';
-        if ($this->relationLoaded('user')) $included[] = 'contact_person';
-        if ($this->relationLoaded('reviews')) $included[] = 'reviews';
-        if ($this->relationLoaded('followers')) $included[] = 'followers';
+
+        if ($this->relationLoaded('jobs')) {
+            $included[] = 'jobs';
+        }
+        if ($this->relationLoaded('user')) {
+            $included[] = 'contact_person';
+        }
+        if ($this->relationLoaded('reviews')) {
+            $included[] = 'reviews';
+        }
+        if ($this->relationLoaded('followers')) {
+            $included[] = 'followers';
+        }
 
         return $included;
     }
-} 
+}

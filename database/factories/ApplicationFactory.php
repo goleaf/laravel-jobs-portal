@@ -78,4 +78,4 @@ class ApplicationFactory extends Factory
             'status' => 4,
         ]);
     }
-} 
+}

@@ -5,14 +5,19 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class RoutesTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
-     * Test all public routes are accessible
+     * Test all public routes are accessible.
      */
-    public function test_all_public_routes_are_accessible()
+    public function testAllPublicRoutesAreAccessible()
     {
         $routes = [
             '/' => 200,
@@ -32,9 +37,9 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test route names are correctly defined
+     * Test route names are correctly defined.
      */
-    public function test_route_names_are_correctly_defined()
+    public function testRouteNamesAreCorrectlyDefined()
     {
         $namedRoutes = [
             'jobs.index' => '/jobs',
@@ -46,48 +51,48 @@ class RoutesTest extends TestCase
         ];
 
         foreach ($namedRoutes as $name => $expectedPath) {
-            $url = route($name, $name === 'jobs.show' || $name === 'company.show' ? 1 : []);
+            $url = route($name, 'jobs.show' === $name || 'company.show' === $name ? 1 : []);
             $this->assertStringContainsString($expectedPath, $url, "Route name {$name} does not resolve correctly");
         }
     }
 
     /**
-     * Test jobs search with query parameters
+     * Test jobs search with query parameters.
      */
-    public function test_jobs_search_with_query_parameters()
+    public function testJobsSearchWithQueryParameters()
     {
         $searchParams = [
             'keyword' => 'developer',
             'location' => 'San Francisco',
-            'category' => 'technology'
+            'category' => 'technology',
         ];
 
-        $response = $this->get('/jobs?' . http_build_query($searchParams));
-        
+        $response = $this->get('/jobs?'.http_build_query($searchParams));
+
         $response->assertStatus(200);
         $response->assertSee('Browse Jobs');
     }
 
     /**
-     * Test companies search with query parameters
+     * Test companies search with query parameters.
      */
-    public function test_companies_search_with_query_parameters()
+    public function testCompaniesSearchWithQueryParameters()
     {
         $searchParams = [
             'search' => 'tech',
-            'industry' => 'technology'
+            'industry' => 'technology',
         ];
 
-        $response = $this->get('/companies?' . http_build_query($searchParams));
-        
+        $response = $this->get('/companies?'.http_build_query($searchParams));
+
         $response->assertStatus(200);
         $response->assertSee('Browse Companies');
     }
 
     /**
-     * Test job detail page with different IDs
+     * Test job detail page with different IDs.
      */
-    public function test_job_detail_page_with_different_ids()
+    public function testJobDetailPageWithDifferentIds()
     {
         $jobIds = [1, 5, 10, 999];
 
@@ -99,9 +104,9 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test company detail page with different IDs
+     * Test company detail page with different IDs.
      */
-    public function test_company_detail_page_with_different_ids()
+    public function testCompanyDetailPageWithDifferentIds()
     {
         $companyIds = [1, 5, 10, 999];
 
@@ -112,16 +117,16 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test invalid routes return 404
+     * Test invalid routes return 404.
      */
-    public function test_invalid_routes_return_404()
+    public function testInvalidRoutesReturn404()
     {
         $invalidRoutes = [
             '/invalid-page',
             '/jobs/abc',
             '/company/xyz',
             '/random-route',
-            '/admin/unauthorized'
+            '/admin/unauthorized',
         ];
 
         foreach ($invalidRoutes as $route) {
@@ -131,30 +136,30 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test API test route returns JSON
+     * Test API test route returns JSON.
      */
-    public function test_api_test_route_returns_json()
+    public function testApiTestRouteReturnsJson()
     {
         $response = $this->get('/test');
-        
+
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/json');
         $response->assertJsonStructure([
             'status',
             'message',
             'timestamp',
-            'memory_usage'
+            'memory_usage',
         ]);
-        
+
         $data = $response->json();
         $this->assertEquals('ok', $data['status']);
         $this->assertEquals('Laravel is working!', $data['message']);
     }
 
     /**
-     * Test POST routes that are defined
+     * Test POST routes that are defined.
      */
-    public function test_post_routes()
+    public function testPostRoutes()
     {
         // Test login route (should exist but may redirect or return specific response)
         $loginResponse = $this->post('/login');
@@ -167,9 +172,9 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test routes with special characters in search
+     * Test routes with special characters in search.
      */
-    public function test_routes_with_special_characters()
+    public function testRoutesWithSpecialCharacters()
     {
         $specialSearches = [
             '/jobs?keyword=C%2B%2B+Developer',
@@ -184,15 +189,15 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test routes handle empty parameters gracefully
+     * Test routes handle empty parameters gracefully.
      */
-    public function test_routes_handle_empty_parameters()
+    public function testRoutesHandleEmptyParameters()
     {
         $routesWithEmptyParams = [
             '/jobs?keyword=&location=&category=',
             '/companies?search=&industry=',
             '/jobs?',
-            '/companies?'
+            '/companies?',
         ];
 
         foreach ($routesWithEmptyParams as $route) {
@@ -202,15 +207,15 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test that routes handle concurrent requests
+     * Test that routes handle concurrent requests.
      */
-    public function test_routes_handle_concurrent_requests()
+    public function testRoutesHandleConcurrentRequests()
     {
         $routes = ['/', '/jobs', '/companies', '/about-us', '/contact'];
-        
+
         foreach ($routes as $route) {
             // Simulate multiple rapid requests
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 5; ++$i) {
                 $response = $this->get($route);
                 $response->assertStatus(200);
             }
@@ -218,9 +223,9 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test routes with malformed parameters
+     * Test routes with malformed parameters.
      */
-    public function test_routes_with_malformed_parameters()
+    public function testRoutesWithMalformedParameters()
     {
         $malformedRoutes = [
             '/jobs?keyword[]=invalid',
@@ -236,21 +241,21 @@ class RoutesTest extends TestCase
     }
 
     /**
-     * Test route caching doesn't break functionality
+     * Test route caching doesn't break functionality.
      */
-    public function test_route_caching_compatibility()
+    public function testRouteCachingCompatibility()
     {
         // Test that all routes work the same way multiple times
         // This helps ensure route caching won't break anything
-        
-        for ($i = 0; $i < 3; $i++) {
+
+        for ($i = 0; $i < 3; ++$i) {
             $response = $this->get('/');
             $response->assertStatus(200);
             $response->assertSee('Find Your Dream Job Today');
-            
+
             $response = $this->get('/jobs');
             $response->assertStatus(200);
             $response->assertSee('Browse Jobs');
         }
     }
-} 
+}

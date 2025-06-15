@@ -2,20 +2,24 @@
 
 namespace App\Foundation;
 
-use App\Http\Controllers\UniversalBaseController;
 use App\Foundation\Contracts\ApplicationServiceInterface;
 use App\Foundation\Contracts\Command;
 use App\Foundation\Contracts\Query;
+use App\Http\Controllers\UniversalBaseController;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Validation\ValidationException;
 
 /**
- * Enhanced Base Controller
- * 
+ * Enhanced Base Controller.
+ *
  * Extends UniversalBaseController with clean architecture patterns:
  * - Service layer integration
  * - Command/Query pattern support
@@ -26,13 +30,7 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 abstract class BaseController extends UniversalBaseController
 {
     /**
-     * Execute command through application service
-     *
-     * @param ApplicationServiceInterface $service
-     * @param Command $command
-     * @param string $successMessage
-     * @param int $successStatus
-     * @return JsonResponse
+     * Execute command through application service.
      */
     protected function executeCommand(
         ApplicationServiceInterface $service,
@@ -42,7 +40,7 @@ abstract class BaseController extends UniversalBaseController
     ): JsonResponse {
         try {
             $result = $service->executeCommand($command);
-            
+
             return $this->successResponse(
                 $result,
                 $successMessage,
@@ -55,12 +53,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Execute query through application service
-     *
-     * @param ApplicationServiceInterface $service
-     * @param Query $query
-     * @param string $successMessage
-     * @return JsonResponse
+     * Execute query through application service.
      */
     protected function executeQuery(
         ApplicationServiceInterface $service,
@@ -69,7 +62,7 @@ abstract class BaseController extends UniversalBaseController
     ): JsonResponse {
         try {
             $result = $service->executeQuery($query);
-            
+
             return $this->successResponse(
                 $result,
                 $successMessage,
@@ -82,13 +75,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Enhanced success response with resource support
-     *
-     * @param mixed $data
-     * @param string $message
-     * @param int $status
-     * @param array $meta
-     * @return JsonResponse
+     * Enhanced success response with resource support.
      */
     protected function successResponse(
         mixed $data = null,
@@ -114,14 +101,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Enhanced error response with context
-     *
-     * @param string $message
-     * @param int $status
-     * @param array $errors
-     * @param ?string $code
-     * @param array $context
-     * @return JsonResponse
+     * Enhanced error response with context.
      */
     protected function errorResponse(
         string $message = 'Error occurred',
@@ -138,7 +118,7 @@ abstract class BaseController extends UniversalBaseController
                 'request_id' => $this->getRequestId(),
                 'timestamp' => now()->toISOString(),
                 'status_code' => $status,
-            ]
+            ],
         ];
 
         if ($code) {
@@ -153,12 +133,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Created response (201)
-     *
-     * @param mixed $data
-     * @param string $message
-     * @param array $meta
-     * @return JsonResponse
+     * Created response (201).
      */
     protected function createdResponse(
         mixed $data = null,
@@ -169,10 +144,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * No content response (204)
-     *
-     * @param string $message
-     * @return JsonResponse
+     * No content response (204).
      */
     protected function noContentResponse(string $message = 'Operation completed'): JsonResponse
     {
@@ -180,13 +152,8 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Execute action with rate limiting
+     * Execute action with rate limiting.
      *
-     * @param string $action
-     * @param callable $callback
-     * @param int $maxAttempts
-     * @param int $decayMinutes
-     * @return mixed
      * @throws ThrottleRequestsException
      */
     protected function executeWithRateLimit(
@@ -196,37 +163,33 @@ abstract class BaseController extends UniversalBaseController
         int $decayMinutes = 1
     ): mixed {
         $key = $this->getRateLimitKey($action);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             $seconds = RateLimiter::availableIn($key);
+
             throw new ThrottleRequestsException(
                 "Too many attempts for {$action}. Try again in {$seconds} seconds."
             );
         }
 
         RateLimiter::hit($key, $decayMinutes * 60);
-        
+
         return $callback();
     }
 
     /**
-     * Get rate limit key for current request
-     *
-     * @param string $action
-     * @return string
+     * Get rate limit key for current request.
      */
     private function getRateLimitKey(string $action): string
     {
         $request = request();
         $identifier = $request->user() ? $request->user()->id : $request->ip();
-        
+
         return "rate_limit_{$action}_{$identifier}";
     }
 
     /**
-     * Get unique request ID
-     *
-     * @return string
+     * Get unique request ID.
      */
     private function getRequestId(): string
     {
@@ -234,11 +197,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Handle command execution exception
-     *
-     * @param \Exception $exception
-     * @param Command $command
-     * @return JsonResponse
+     * Handle command execution exception.
      */
     private function handleCommandException(\Exception $exception, Command $command): JsonResponse
     {
@@ -251,7 +210,7 @@ abstract class BaseController extends UniversalBaseController
         ]);
 
         $status = $this->getExceptionStatus($exception);
-        
+
         return $this->errorResponse(
             $exception->getMessage(),
             $status,
@@ -262,11 +221,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Handle query execution exception
-     *
-     * @param \Exception $exception
-     * @param Query $query
-     * @return JsonResponse
+     * Handle query execution exception.
      */
     private function handleQueryException(\Exception $exception, Query $query): JsonResponse
     {
@@ -277,7 +232,7 @@ abstract class BaseController extends UniversalBaseController
         ]);
 
         $status = $this->getExceptionStatus($exception);
-        
+
         return $this->errorResponse(
             'Failed to retrieve data',
             $status,
@@ -288,11 +243,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Get command metadata for response
-     *
-     * @param Command $command
-     * @param ApplicationServiceInterface $service
-     * @return array
+     * Get command metadata for response.
      */
     private function getCommandMetadata(Command $command, ApplicationServiceInterface $service): array
     {
@@ -303,11 +254,7 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Get query metadata for response
-     *
-     * @param Query $query
-     * @param ApplicationServiceInterface $service
-     * @return array
+     * Get query metadata for response.
      */
     private function getQueryMetadata(Query $query, ApplicationServiceInterface $service): array
     {
@@ -319,19 +266,16 @@ abstract class BaseController extends UniversalBaseController
     }
 
     /**
-     * Get HTTP status code from exception
-     *
-     * @param \Exception $exception
-     * @return int
+     * Get HTTP status code from exception.
      */
     private function getExceptionStatus(\Exception $exception): int
     {
-        return match(true) {
-            $exception instanceof \Illuminate\Validation\ValidationException => 422,
-            $exception instanceof \Illuminate\Auth\AuthenticationException => 401,
-            $exception instanceof \Illuminate\Auth\Access\AuthorizationException => 403,
-            $exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException => 404,
-            $exception instanceof \Illuminate\Http\Exceptions\ThrottleRequestsException => 429,
+        return match (true) {
+            $exception instanceof ValidationException => 422,
+            $exception instanceof AuthenticationException => 401,
+            $exception instanceof AuthorizationException => 403,
+            $exception instanceof ModelNotFoundException => 404,
+            $exception instanceof ThrottleRequestsException => 429,
             default => 500
         };
     }

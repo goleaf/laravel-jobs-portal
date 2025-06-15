@@ -6,8 +6,8 @@ use App\Events\JobApplicationStatusChanged;
 use App\Models\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class SendRealTimeNotification implements ShouldQueue
 {
@@ -16,10 +16,7 @@ class SendRealTimeNotification implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct() {}
 
     /**
      * Handle the event.
@@ -33,7 +30,19 @@ class SendRealTimeNotification implements ShouldQueue
     }
 
     /**
-     * Create database notification record
+     * Handle failed job.
+     */
+    public function failed(JobApplicationStatusChanged $event, \Throwable $exception): void
+    {
+        Log::error('Failed to send real-time notification', [
+            'application_id' => $event->jobApplication->id,
+            'error' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+        ]);
+    }
+
+    /**
+     * Create database notification record.
      */
     private function createNotification(JobApplicationStatusChanged $event): void
     {
@@ -66,7 +75,7 @@ class SendRealTimeNotification implements ShouldQueue
                         'data' => json_encode([
                             'application_id' => $event->jobApplication->id,
                             'job_title' => $event->jobApplication->job->title,
-                            'candidate_name' => $event->jobApplication->candidate->first_name . ' ' . $event->jobApplication->candidate->last_name,
+                            'candidate_name' => $event->jobApplication->candidate->first_name.' '.$event->jobApplication->candidate->last_name,
                             'old_status' => $event->oldStatus,
                             'new_status' => $event->newStatus,
                         ]),
@@ -83,12 +92,12 @@ class SendRealTimeNotification implements ShouldQueue
     }
 
     /**
-     * Update activity statistics in cache
+     * Update activity statistics in cache.
      */
     private function updateActivityStats(JobApplicationStatusChanged $event): void
     {
         $today = now()->format('Y-m-d');
-        
+
         // Update daily activity stats
         $statsKey = "daily_activity:{$today}";
         $stats = Cache::get($statsKey, [
@@ -98,17 +107,22 @@ class SendRealTimeNotification implements ShouldQueue
             'hires_made' => 0,
         ]);
 
-        $stats['status_changes']++;
+        ++$stats['status_changes'];
 
         switch ($event->newStatus) {
             case 'reviewed':
                 $stats['applications_reviewed']++;
+
                 break;
+
             case 'interview_scheduled':
                 $stats['interviews_scheduled']++;
+
                 break;
+
             case 'hired':
                 $stats['hires_made']++;
+
                 break;
         }
 
@@ -120,13 +134,13 @@ class SendRealTimeNotification implements ShouldQueue
             'status_changes' => 0,
             'active_applications' => 0,
         ]);
-        
-        $companyStats['status_changes']++;
+
+        ++$companyStats['status_changes'];
         Cache::put($companyStatsKey, $companyStats, now()->addDays(30));
     }
 
     /**
-     * Log status change for audit trail
+     * Log status change for audit trail.
      */
     private function logStatusChange(JobApplicationStatusChanged $event): void
     {
@@ -144,30 +158,18 @@ class SendRealTimeNotification implements ShouldQueue
     }
 
     /**
-     * Update real-time dashboard statistics
+     * Update real-time dashboard statistics.
      */
     private function updateDashboardStats(JobApplicationStatusChanged $event): void
     {
         // Clear cached dashboard stats to force refresh
         Cache::forget("user:stats:{$event->jobApplication->candidate_id}:candidate");
-        
+
         if ($event->jobApplication->job->company->user) {
             Cache::forget("user:stats:{$event->jobApplication->job->company->user->id}:employer");
         }
 
         // Update global application stats
         Cache::forget('app:stats');
-    }
-
-    /**
-     * Handle failed job
-     */
-    public function failed(JobApplicationStatusChanged $event, \Throwable $exception): void
-    {
-        Log::error('Failed to send real-time notification', [
-            'application_id' => $event->jobApplication->id,
-            'error' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString(),
-        ]);
     }
 }

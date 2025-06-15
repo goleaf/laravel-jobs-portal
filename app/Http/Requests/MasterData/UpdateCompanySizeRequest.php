@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\MasterData;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class UpdateCompanySizeRequest extends FormRequest
@@ -21,22 +23,22 @@ class UpdateCompanySizeRequest extends FormRequest
     public function rules(): array
     {
         $companySizeId = $this->route('companySize')->id ?? $this->route('company_size');
-        
+
         return [
             'size' => [
                 'required',
                 'string',
                 'max:255',
                 Rule::unique('company_sizes', 'size')->ignore($companySizeId),
-                'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/'
+                'regex:/^[a-zA-Z0-9\s\-+()]{2,}$/',
             ],
             'is_active' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
             'is_default' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
         ];
     }
@@ -70,6 +72,21 @@ class UpdateCompanySizeRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // Additional business logic validation
+            if ($this->is_default && false === $this->is_active) {
+                $validator->errors()->add('is_active', __('Default company sizes must be active'));
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -77,20 +94,20 @@ class UpdateCompanySizeRequest extends FormRequest
         // Convert string boolean values to actual booleans
         if ($this->has('is_active')) {
             $this->merge([
-                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
 
         if ($this->has('is_default')) {
             $this->merge([
-                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             ]);
         }
 
         // Trim and clean the size field
         if ($this->has('size')) {
             $this->merge([
-                'size' => trim($this->size)
+                'size' => trim($this->size),
             ]);
         }
     }
@@ -98,31 +115,18 @@ class UpdateCompanySizeRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            throw new HttpResponseException(
                 response()->json([
                     'success' => false,
                     'message' => __('validation.failed'),
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422)
             );
         }
 
         parent::failedValidation($validator);
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            // Additional business logic validation
-            if ($this->is_default && $this->is_active === false) {
-                $validator->errors()->add('is_active', __('Default company sizes must be active'));
-            }
-        });
     }
 }

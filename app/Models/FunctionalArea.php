@@ -3,30 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class FunctionalArea
+ * Class FunctionalArea.
  *
  * @version July 4, 2020, 7:26 am UTC
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property bool $is_default
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read int|null $candidates_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
+ * @property int                    $id
+ * @property string                 $name
+ * @property null|string            $description
+ * @property bool                   $is_default
+ * @property bool                   $is_active
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property Collection|Job[]       $jobs
+ * @property null|int               $jobs_count
+ * @property Candidate[]|Collection $candidates
+ * @property null|int               $candidates_count
+ * @property mixed                  $usage_count
+ * @property mixed                  $formatted_usage_stats
  *
  * @method static Builder|FunctionalArea newModelQuery()
  * @method static Builder|FunctionalArea newQuery()
@@ -58,7 +60,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class FunctionalArea extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -95,48 +98,22 @@ class FunctionalArea extends Model
 
     /**
      * Scope a query to only include featured records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFeatured(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeFeatured(Builder $query): Builder
     {
-        return $query->where("is_featured", true);
+        return $query->where('is_featured', true);
     }
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when functional area is updated
-        static::updated(function ($functionalArea) {
-            cache()->forget("functional_area.{$functionalArea->id}");
-            cache()->forget("functional_areas.popular");
-            cache()->forget("functional_areas.trending");
-            cache()->tags(['functional_areas', 'functional_area-' . $functionalArea->id])->flush();
-        });
-
-        // Clear cache when functional area is deleted
-        static::deleted(function ($functionalArea) {
-            cache()->forget("functional_area.{$functionalArea->id}");
-            cache()->forget("functional_areas.popular");
-            cache()->forget("functional_areas.trending");
-            cache()->tags(['functional_areas', 'functional_area-' . $functionalArea->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -236,7 +213,8 @@ class FunctionalArea extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -261,8 +239,9 @@ class FunctionalArea extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->orderBy('jobs_count', 'desc')
-                    ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -287,8 +266,9 @@ class FunctionalArea extends Model
     public function scopeTechnology(Builder $query): Builder
     {
         return $query->where('name', 'like', '%technology%')
-                    ->orWhere('name', 'like', '%IT%')
-                    ->orWhere('name', 'like', '%software%');
+            ->orWhere('name', 'like', '%IT%')
+            ->orWhere('name', 'like', '%software%')
+        ;
     }
 
     /**
@@ -297,8 +277,9 @@ class FunctionalArea extends Model
     public function scopeBusiness(Builder $query): Builder
     {
         return $query->where('name', 'like', '%business%')
-                    ->orWhere('name', 'like', '%management%')
-                    ->orWhere('name', 'like', '%admin%');
+            ->orWhere('name', 'like', '%management%')
+            ->orWhere('name', 'like', '%admin%')
+        ;
     }
 
     /**
@@ -307,15 +288,16 @@ class FunctionalArea extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        },
-                        'candidates' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count')
-                    ->orderByDesc('candidates_count');
+            'jobs' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+            'candidates' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('jobs_count')
+            ->orderByDesc('candidates_count')
+        ;
     }
 
     /**
@@ -324,7 +306,8 @@ class FunctionalArea extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount(['jobs', 'candidates'])
-                    ->havingRaw('(jobs_count + candidates_count) >= ?', [$count]);
+            ->havingRaw('(jobs_count + candidates_count) >= ?', [$count])
+        ;
     }
 
     /**
@@ -333,23 +316,9 @@ class FunctionalArea extends Model
     public function scopeHighDemand(Builder $query, int $minJobs = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $minJobs)
-                    ->orderByDesc('jobs_count');
-    }
-
-    /**
-     * Get demand level based on usage.
-     */
-    private function getDemandLevel(): string
-    {
-        $jobsCount = $this->jobs()->count();
-        
-        return match (true) {
-            $jobsCount >= 50 => __('functional_area.high_demand'),
-            $jobsCount >= 20 => __('functional_area.medium_demand'),
-            $jobsCount >= 5 => __('functional_area.low_demand'),
-            default => __('functional_area.minimal_demand')
-        };
+            ->having('jobs_count', '>=', $minJobs)
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -363,15 +332,55 @@ class FunctionalArea extends Model
     /**
      * Get related functional areas.
      */
-    public function getRelatedAreas(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public function getRelatedAreas(int $limit = 5): Collection
     {
         return cache()->remember("functional_area.{$this->id}.related", 3600, function () use ($limit) {
             return static::where('id', '!=', $this->id)
-                          ->active()
-                          ->withCount('jobs')
-                          ->orderByDesc('jobs_count')
-                          ->limit($limit)
-                          ->get();
+                ->active()
+                ->withCount('jobs')
+                ->orderByDesc('jobs_count')
+                ->limit($limit)
+                ->get()
+            ;
         });
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when functional area is updated
+        static::updated(function ($functionalArea) {
+            cache()->forget("functional_area.{$functionalArea->id}");
+            cache()->forget('functional_areas.popular');
+            cache()->forget('functional_areas.trending');
+            cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+        });
+
+        // Clear cache when functional area is deleted
+        static::deleted(function ($functionalArea) {
+            cache()->forget("functional_area.{$functionalArea->id}");
+            cache()->forget('functional_areas.popular');
+            cache()->forget('functional_areas.trending');
+            cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+        });
+    }
+
+    /**
+     * Get demand level based on usage.
+     */
+    private function getDemandLevel(): string
+    {
+        $jobsCount = $this->jobs()->count();
+
+        return match (true) {
+            $jobsCount >= 50 => __('functional_area.high_demand'),
+            $jobsCount >= 20 => __('functional_area.medium_demand'),
+            $jobsCount >= 5 => __('functional_area.low_demand'),
+            default => __('functional_area.minimal_demand')
+        };
     }
 }

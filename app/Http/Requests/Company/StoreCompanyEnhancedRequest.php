@@ -2,14 +2,15 @@
 
 namespace App\Http\Requests\Company;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Models\Company;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Enhanced Enhanced Form Request for Store Company
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Following proven MasterData pattern
+ * Following proven MasterData pattern.
  */
 class StoreCompanyEnhancedRequest extends FormRequest
 {
@@ -20,16 +21,16 @@ class StoreCompanyEnhancedRequest extends FormRequest
     {
         // Enhanced Pattern: Role-based authorization
         return auth()->check() && (
-            auth()->user()->hasRole('Admin') || 
-            auth()->user()->hasRole('Employer')
+            auth()->user()->hasRole('Admin')
+            || auth()->user()->hasRole('Employer')
         );
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Enhanced Pattern: Comprehensive validation with security
+     * Enhanced Pattern: Comprehensive validation with security.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -41,45 +42,45 @@ class StoreCompanyEnhancedRequest extends FormRequest
             'industry_id' => ['required', 'integer', 'exists:industries,id'],
             'ownership_type_id' => ['required', 'integer', 'exists:ownership_types,id'],
             'company_size_id' => ['required', 'integer', 'exists:company_sizes,id'],
-            
+
             // Contact Information
             'phone' => ['nullable', 'string', 'max:20'],
             'fax' => ['nullable', 'string', 'max:20'],
             'website' => ['nullable', 'url', 'max:255'],
-            
+
             // Location Information
             'country_id' => ['required', 'integer', 'exists:countries,id'],
             'state_id' => ['nullable', 'integer', 'exists:states,id'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'location' => ['nullable', 'string', 'max:255'],
             'location2' => ['nullable', 'string', 'max:255'],
-            
+
             // Company Details
             'details' => ['nullable', 'string', 'max:65000'],
             'no_of_offices' => ['nullable', 'integer', 'min:1', 'max:10000'],
-            'established_in' => ['nullable', 'integer', 'min:1800', 'max:' . date('Y')],
-            
+            'established_in' => ['nullable', 'integer', 'min:1800', 'max:'.date('Y')],
+
             // Social Media
             'facebook_url' => ['nullable', 'url', 'max:255'],
             'twitter_url' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'google_plus_url' => ['nullable', 'url', 'max:255'],
             'pinterest_url' => ['nullable', 'url', 'max:255'],
-            
+
             // User Information
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'string', 'min:8'],
-            
+
             // Status and Settings
             'is_active' => ['boolean'],
             'is_featured' => ['boolean'],
-            
+
             // File Uploads
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'], // 5MB max
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'], // 5MB max
-            
+
             // Security
             'g-recaptcha-response' => [
                 'nullable',
@@ -89,7 +90,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
                     }
                 },
             ],
-            
+
             // Terms and Privacy
             'terms_accepted' => ['required', 'accepted'],
             'privacy_accepted' => ['required', 'accepted'],
@@ -98,7 +99,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Enhanced Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -145,7 +146,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Enhanced Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -179,8 +180,29 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     * Enhanced Pattern: Performance optimization.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($this->hasEnhancedValidationConflicts()) {
+                $validator->errors()->add('name', __('validation.company_conflict'));
+            }
+
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('details', __('validation.suspicious_content'));
+            }
+
+            if ($this->hasInvalidSocialMediaUrls()) {
+                $validator->errors()->add('social_media', __('validation.invalid_social_media'));
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
+     * Enhanced Pattern: Data normalization.
      */
     protected function prepareForValidation(): void
     {
@@ -203,109 +225,8 @@ class StoreCompanyEnhancedRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     * Enhanced Pattern: Performance optimization
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->hasEnhancedValidationConflicts()) {
-                $validator->errors()->add('name', __('validation.company_conflict'));
-            }
-            
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('details', __('validation.suspicious_content'));
-            }
-            
-            if ($this->hasInvalidSocialMediaUrls()) {
-                $validator->errors()->add('social_media', __('validation.invalid_social_media'));
-            }
-        });
-    }
-
-    /**
-     * Enhanced Pattern: Enhanced business logic validation
-     */
-    private function hasEnhancedValidationConflicts(): bool
-    {
-        // Check for existing company with similar name/email
-        if ($this->name && $this->email) {
-            $existingCompany = \App\Models\Company::where('name', 'LIKE', '%' . $this->name . '%')
-                ->orWhereHas('user', function($query) {
-                    $query->where('email', $this->email);
-                })
-                ->exists();
-                
-            return $existingCompany;
-        }
-        
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Content security validation
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        if (!$this->details) return false;
-        
-        $suspiciousPatterns = [
-            'spam', 'scam', 'free money', 'click here',
-            'guaranteed income', 'work from home guaranteed'
-        ];
-        
-        $content = strtolower($this->details);
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: Social media URL validation
-     */
-    private function hasInvalidSocialMediaUrls(): bool
-    {
-        $socialUrls = [
-            'facebook_url' => 'facebook.com',
-            'twitter_url' => 'twitter.com',
-            'linkedin_url' => 'linkedin.com',
-        ];
-        
-        foreach ($socialUrls as $field => $expectedDomain) {
-            $url = $this->$field;
-            if ($url && !empty($url) && strpos($url, $expectedDomain) === false) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Enhanced Pattern: URL normalization helper
-     */
-    private function normalizeUrl(?string $url): ?string
-    {
-        if (empty($url)) return null;
-        
-        $url = trim($url);
-        
-        // Add https:// if no protocol specified
-        if (!preg_match('/^https?:\/\//', $url)) {
-            $url = 'https://' . $url;
-        }
-        
-        return $url;
-    }
-
-    /**
      * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with security monitoring
+     * Enhanced Pattern: Enhanced error handling with security monitoring.
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -323,4 +244,89 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
         parent::failedValidation($validator);
     }
-} 
+
+    /**
+     * Enhanced Pattern: Enhanced business logic validation.
+     */
+    private function hasEnhancedValidationConflicts(): bool
+    {
+        // Check for existing company with similar name/email
+        if ($this->name && $this->email) {
+            $existingCompany = Company::where('name', 'LIKE', '%'.$this->name.'%')
+                ->orWhereHas('user', function ($query) {
+                    $query->where('email', $this->email);
+                })
+                ->exists()
+            ;
+
+            return $existingCompany;
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Content security validation.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        if (!$this->details) {
+            return false;
+        }
+
+        $suspiciousPatterns = [
+            'spam', 'scam', 'free money', 'click here',
+            'guaranteed income', 'work from home guaranteed',
+        ];
+
+        $content = strtolower($this->details);
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: Social media URL validation.
+     */
+    private function hasInvalidSocialMediaUrls(): bool
+    {
+        $socialUrls = [
+            'facebook_url' => 'facebook.com',
+            'twitter_url' => 'twitter.com',
+            'linkedin_url' => 'linkedin.com',
+        ];
+
+        foreach ($socialUrls as $field => $expectedDomain) {
+            $url = $this->{$field};
+            if ($url && !empty($url) && false === strpos($url, $expectedDomain)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Enhanced Pattern: URL normalization helper.
+     */
+    private function normalizeUrl(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        $url = trim($url);
+
+        // Add https:// if no protocol specified
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://'.$url;
+        }
+
+        return $url;
+    }
+}

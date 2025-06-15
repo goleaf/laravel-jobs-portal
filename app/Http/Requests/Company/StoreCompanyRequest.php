@@ -2,13 +2,16 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\City;
+use App\Models\CompanySize;
+use App\Models\State;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
 /**
- * Class StoreCompanyRequest
- * 
+ * Class StoreCompanyRequest.
+ *
  * Handles company creation requests with comprehensive validation,
  * business logic validation, file handling, and multilingual support.
  */
@@ -20,7 +23,7 @@ class StoreCompanyRequest extends FormRequest
     public function authorize(): bool
     {
         $user = auth()->user();
-        
+
         // Users must be authenticated to create companies
         if (!$user) {
             return false;
@@ -130,7 +133,7 @@ class StoreCompanyRequest extends FormRequest
                 'required',
                 'integer',
                 'min:1800',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
             ],
 
             'employee_count' => [
@@ -436,7 +439,7 @@ class StoreCompanyRequest extends FormRequest
 
             // reCAPTCHA for security
             'g-recaptcha-response' => [
-                'required_if:' . (config('app.env') === 'production' ? 'true' : 'false'),
+                'required_if:'.('production' === config('app.env') ? 'true' : 'false'),
                 'string',
             ],
         ];
@@ -571,52 +574,9 @@ class StoreCompanyRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean and format data
-        $this->merge([
-            'name' => $this->name ? trim($this->name) : null,
-            'email' => $this->email ? strtolower(trim($this->email)) : null,
-            'website' => $this->website ? $this->formatUrl($this->website) : null,
-            'phone' => $this->phone ? $this->formatPhone($this->phone) : null,
-            'description' => $this->description ? trim($this->description) : null,
-            'short_description' => $this->short_description ? trim($this->short_description) : null,
-            'stock_symbol' => $this->stock_symbol ? strtoupper(trim($this->stock_symbol)) : null,
-            'ceo_name' => $this->ceo_name ? trim($this->ceo_name) : null,
-        ]);
-
-        // Ensure boolean fields are properly typed
-        $booleanFields = ['is_private', 'is_featured', 'is_verified', 'terms_accepted', 'privacy_policy_accepted'];
-        foreach ($booleanFields as $field) {
-            if ($this->has($field)) {
-                $this->merge([$field => $this->boolean($field)]);
-            }
-        }
-
-        // Ensure numeric fields are properly typed
-        $numericFields = ['founded_year', 'employee_count', 'revenue', 'latitude', 'longitude'];
-        foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->$field)) {
-                $this->merge([$field => is_numeric($this->$field) ? (float) $this->$field : null]);
-            }
-        }
-
-        // Clean array fields
-        $arrayFields = ['benefits', 'technologies', 'certifications', 'awards', 'values'];
-        foreach ($arrayFields as $field) {
-            if ($this->has($field) && is_array($this->$field)) {
-                $cleanArray = array_filter(array_map('trim', $this->$field), function ($item) {
-                    return !empty($item);
-                });
-                $this->merge([$field => array_values($cleanArray)]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
+     *
+     * @param mixed $validator
      */
     public function withValidator($validator): void
     {
@@ -626,140 +586,6 @@ class StoreCompanyRequest extends FormRequest
             $this->validateGeographicConsistency($validator);
             $this->validateSocialMediaConsistency($validator);
         });
-    }
-
-    /**
-     * Validate business logic constraints.
-     */
-    protected function validateBusinessLogic($validator): void
-    {
-        // Validate company size vs employee count consistency
-        if ($this->company_size_id && $this->employee_count) {
-            $companySize = \App\Models\CompanySize::find($this->company_size_id);
-            if ($companySize) {
-                $min = $companySize->min_employees ?? 0;
-                $max = $companySize->max_employees ?? PHP_INT_MAX;
-                
-                if ($this->employee_count < $min || $this->employee_count > $max) {
-                    $validator->errors()->add('employee_count', __('validation.company_store.employee_count_size_mismatch'));
-                }
-            }
-        }
-
-        // Validate founded year vs company age
-        if ($this->founded_year) {
-            $age = now()->year - $this->founded_year;
-            if ($age < 0) {
-                $validator->errors()->add('founded_year', __('validation.company_store.founded_year_future'));
-            }
-            
-            if ($age > 200) {
-                $validator->errors()->add('founded_year', __('validation.company_store.founded_year_too_old'));
-            }
-        }
-
-        // Validate stock symbol for public companies
-        if ($this->company_type === 'corporation' && $this->revenue > 1000000 && !$this->stock_symbol) {
-            // Large corporations might be expected to have stock symbols
-            // This is a business rule that can be adjusted
-        }
-
-        // Validate headquarters in office locations
-        if ($this->office_locations) {
-            $headquartersCount = collect($this->office_locations)
-                ->where('is_headquarters', true)
-                ->count();
-                
-            if ($headquartersCount > 1) {
-                $validator->errors()->add('office_locations', __('validation.company_store.multiple_headquarters'));
-            }
-        }
-    }
-
-    /**
-     * Validate admin-specific fields.
-     */
-    protected function validateAdminFields($validator): void
-    {
-        $user = auth()->user();
-        
-        // Only admins can set featured/verified status
-        $adminOnlyFields = ['is_featured', 'is_verified'];
-        foreach ($adminOnlyFields as $field) {
-            if ($this->has($field) && $this->$field && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
-                $validator->errors()->add($field, __('validation.company_store.admin_only_field'));
-            }
-        }
-    }
-
-    /**
-     * Validate geographic consistency.
-     */
-    protected function validateGeographicConsistency($validator): void
-    {
-        // Validate state belongs to country
-        if ($this->country_id && $this->state_id) {
-            $stateExists = \App\Models\State::where('id', $this->state_id)
-                ->where('country_id', $this->country_id)
-                ->exists();
-                
-            if (!$stateExists) {
-                $validator->errors()->add('state_id', __('validation.company_store.state_country_mismatch'));
-            }
-        }
-
-        // Validate city belongs to state
-        if ($this->state_id && $this->city_id) {
-            $cityExists = \App\Models\City::where('id', $this->city_id)
-                ->where('state_id', $this->state_id)
-                ->exists();
-                
-            if (!$cityExists) {
-                $validator->errors()->add('city_id', __('validation.company_store.city_state_mismatch'));
-            }
-        }
-    }
-
-    /**
-     * Validate social media consistency.
-     */
-    protected function validateSocialMediaConsistency($validator): void
-    {
-        // Check for reasonable social media presence
-        $socialFields = ['social_facebook', 'social_twitter', 'social_linkedin', 'social_instagram'];
-        $socialCount = 0;
-        
-        foreach ($socialFields as $field) {
-            if (!empty($this->$field)) {
-                $socialCount++;
-            }
-        }
-        
-        // For companies with websites, suggest having at least one social media presence
-        if ($this->website && $socialCount === 0) {
-            // This is just a suggestion, not an error
-            // Could be implemented as a warning in the UI
-        }
-    }
-
-    /**
-     * Format URL to ensure proper protocol.
-     */
-    private function formatUrl($url): string
-    {
-        if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
-            return 'https://' . $url;
-        }
-        return $url;
-    }
-
-    /**
-     * Format phone number.
-     */
-    private function formatPhone($phone): string
-    {
-        // Remove any non-digit characters except + and spaces for international format
-        return preg_replace('/[^\d\+\s\-\(\)]/', '', $phone);
     }
 
     /**
@@ -815,5 +641,200 @@ class StoreCompanyRequest extends FormRequest
             'is_verified' => $this->is_verified ?? false,
             'is_active' => true, // New companies are active by default
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Clean and format data
+        $this->merge([
+            'name' => $this->name ? trim($this->name) : null,
+            'email' => $this->email ? strtolower(trim($this->email)) : null,
+            'website' => $this->website ? $this->formatUrl($this->website) : null,
+            'phone' => $this->phone ? $this->formatPhone($this->phone) : null,
+            'description' => $this->description ? trim($this->description) : null,
+            'short_description' => $this->short_description ? trim($this->short_description) : null,
+            'stock_symbol' => $this->stock_symbol ? strtoupper(trim($this->stock_symbol)) : null,
+            'ceo_name' => $this->ceo_name ? trim($this->ceo_name) : null,
+        ]);
+
+        // Ensure boolean fields are properly typed
+        $booleanFields = ['is_private', 'is_featured', 'is_verified', 'terms_accepted', 'privacy_policy_accepted'];
+        foreach ($booleanFields as $field) {
+            if ($this->has($field)) {
+                $this->merge([$field => $this->boolean($field)]);
+            }
+        }
+
+        // Ensure numeric fields are properly typed
+        $numericFields = ['founded_year', 'employee_count', 'revenue', 'latitude', 'longitude'];
+        foreach ($numericFields as $field) {
+            if ($this->has($field) && !empty($this->{$field})) {
+                $this->merge([$field => is_numeric($this->{$field}) ? (float) $this->{$field} : null]);
+            }
+        }
+
+        // Clean array fields
+        $arrayFields = ['benefits', 'technologies', 'certifications', 'awards', 'values'];
+        foreach ($arrayFields as $field) {
+            if ($this->has($field) && is_array($this->{$field})) {
+                $cleanArray = array_filter(array_map('trim', $this->{$field}), function ($item) {
+                    return !empty($item);
+                });
+                $this->merge([$field => array_values($cleanArray)]);
+            }
+        }
+    }
+
+    /**
+     * Validate business logic constraints.
+     *
+     * @param mixed $validator
+     */
+    protected function validateBusinessLogic($validator): void
+    {
+        // Validate company size vs employee count consistency
+        if ($this->company_size_id && $this->employee_count) {
+            $companySize = CompanySize::find($this->company_size_id);
+            if ($companySize) {
+                $min = $companySize->min_employees ?? 0;
+                $max = $companySize->max_employees ?? PHP_INT_MAX;
+
+                if ($this->employee_count < $min || $this->employee_count > $max) {
+                    $validator->errors()->add('employee_count', __('validation.company_store.employee_count_size_mismatch'));
+                }
+            }
+        }
+
+        // Validate founded year vs company age
+        if ($this->founded_year) {
+            $age = now()->year - $this->founded_year;
+            if ($age < 0) {
+                $validator->errors()->add('founded_year', __('validation.company_store.founded_year_future'));
+            }
+
+            if ($age > 200) {
+                $validator->errors()->add('founded_year', __('validation.company_store.founded_year_too_old'));
+            }
+        }
+
+        // Validate stock symbol for public companies
+        if ('corporation' === $this->company_type && $this->revenue > 1000000 && !$this->stock_symbol) {
+            // Large corporations might be expected to have stock symbols
+            // This is a business rule that can be adjusted
+        }
+
+        // Validate headquarters in office locations
+        if ($this->office_locations) {
+            $headquartersCount = collect($this->office_locations)
+                ->where('is_headquarters', true)
+                ->count()
+            ;
+
+            if ($headquartersCount > 1) {
+                $validator->errors()->add('office_locations', __('validation.company_store.multiple_headquarters'));
+            }
+        }
+    }
+
+    /**
+     * Validate admin-specific fields.
+     *
+     * @param mixed $validator
+     */
+    protected function validateAdminFields($validator): void
+    {
+        $user = auth()->user();
+
+        // Only admins can set featured/verified status
+        $adminOnlyFields = ['is_featured', 'is_verified'];
+        foreach ($adminOnlyFields as $field) {
+            if ($this->has($field) && $this->{$field} && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
+                $validator->errors()->add($field, __('validation.company_store.admin_only_field'));
+            }
+        }
+    }
+
+    /**
+     * Validate geographic consistency.
+     *
+     * @param mixed $validator
+     */
+    protected function validateGeographicConsistency($validator): void
+    {
+        // Validate state belongs to country
+        if ($this->country_id && $this->state_id) {
+            $stateExists = State::where('id', $this->state_id)
+                ->where('country_id', $this->country_id)
+                ->exists()
+            ;
+
+            if (!$stateExists) {
+                $validator->errors()->add('state_id', __('validation.company_store.state_country_mismatch'));
+            }
+        }
+
+        // Validate city belongs to state
+        if ($this->state_id && $this->city_id) {
+            $cityExists = City::where('id', $this->city_id)
+                ->where('state_id', $this->state_id)
+                ->exists()
+            ;
+
+            if (!$cityExists) {
+                $validator->errors()->add('city_id', __('validation.company_store.city_state_mismatch'));
+            }
+        }
+    }
+
+    /**
+     * Validate social media consistency.
+     *
+     * @param mixed $validator
+     */
+    protected function validateSocialMediaConsistency($validator): void
+    {
+        // Check for reasonable social media presence
+        $socialFields = ['social_facebook', 'social_twitter', 'social_linkedin', 'social_instagram'];
+        $socialCount = 0;
+
+        foreach ($socialFields as $field) {
+            if (!empty($this->{$field})) {
+                ++$socialCount;
+            }
+        }
+
+        // For companies with websites, suggest having at least one social media presence
+        if ($this->website && 0 === $socialCount) {
+            // This is just a suggestion, not an error
+            // Could be implemented as a warning in the UI
+        }
+    }
+
+    /**
+     * Format URL to ensure proper protocol.
+     *
+     * @param mixed $url
+     */
+    private function formatUrl($url): string
+    {
+        if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+            return 'https://'.$url;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Format phone number.
+     *
+     * @param mixed $phone
+     */
+    private function formatPhone($phone): string
+    {
+        // Remove any non-digit characters except + and spaces for international format
+        return preg_replace('/[^\d\+\s\-\(\)]/', '', $phone);
     }
 }

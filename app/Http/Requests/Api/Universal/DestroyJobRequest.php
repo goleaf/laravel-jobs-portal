@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Job;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DestroyJobRequest extends FormRequest
@@ -16,8 +17,8 @@ class DestroyJobRequest extends FormRequest
         // Check if user can delete jobs
         // This should be restricted to admins or job owners (employers)
         return $this->user() && (
-            $this->user()->hasRole('admin') || 
-            $this->user()->hasRole('employer') && $this->userOwnsJob()
+            $this->user()->hasRole('admin')
+            || $this->user()->hasRole('employer') && $this->userOwnsJob()
         );
     }
 
@@ -61,6 +62,57 @@ class DestroyJobRequest extends FormRequest
             'notify_applicants' => __('validation.attributes.notify_applicants'),
             'refund_featured' => __('validation.attributes.refund_featured'),
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            $jobId = $this->route('id');
+            $job = Job::find($jobId);
+
+            if (!$job) {
+                $validator->errors()->add('job', __('validation.exists', ['attribute' => __('validation.attributes.job')]));
+
+                return;
+            }
+
+            // Check if job has active applications
+            $activeApplicationsCount = $job->applications()->whereIn('status', ['pending', 'reviewing', 'shortlisted'])->count();
+
+            if ($activeApplicationsCount > 0) {
+                // Require notification decision for active applications
+                if (!$this->has('notify_applicants')) {
+                    $validator->errors()->add('notify_applicants', __('validation.required_when_active_applications'));
+                }
+            }
+
+            // Check if job is featured and eligible for refund
+            if ($job->is_featured && $job->featured_until && $job->featured_until->isFuture()) {
+                if (!$this->has('refund_featured')) {
+                    $validator->errors()->add('refund_featured', __('validation.required_when_featured_active'));
+                }
+            }
+
+            // Check if user owns the job (for non-admins)
+            if ($this->user() && !$this->user()->hasRole('admin')) {
+                if (!$this->userOwnsJob()) {
+                    $validator->errors()->add('authorization', __('auth.forbidden'));
+                }
+            }
+
+            // Validate job status allows deletion
+            if ('closed' === $job->status && 0 === $activeApplicationsCount) {
+                // Allow deletion of closed jobs with no active applications
+            } elseif ('draft' === $job->status) {
+                // Allow deletion of draft jobs
+            } elseif (!$this->user()->hasRole('admin')) {
+                // Only admins can delete active jobs with applications
+                $validator->errors()->add('status', __('validation.job_deletion_not_allowed'));
+            }
+        });
     }
 
     /**
@@ -126,75 +178,25 @@ class DestroyJobRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            $jobId = $this->route('id');
-            $job = \App\Models\Job::find($jobId);
-            
-            if (!$job) {
-                $validator->errors()->add('job', __('validation.exists', ['attribute' => __('validation.attributes.job')]));
-                return;
-            }
-
-            // Check if job has active applications
-            $activeApplicationsCount = $job->applications()->whereIn('status', ['pending', 'reviewing', 'shortlisted'])->count();
-            
-            if ($activeApplicationsCount > 0) {
-                // Require notification decision for active applications
-                if (!$this->has('notify_applicants')) {
-                    $validator->errors()->add('notify_applicants', __('validation.required_when_active_applications'));
-                }
-            }
-
-            // Check if job is featured and eligible for refund
-            if ($job->is_featured && $job->featured_until && $job->featured_until->isFuture()) {
-                if (!$this->has('refund_featured')) {
-                    $validator->errors()->add('refund_featured', __('validation.required_when_featured_active'));
-                }
-            }
-
-            // Check if user owns the job (for non-admins)
-            if ($this->user() && !$this->user()->hasRole('admin')) {
-                if (!$this->userOwnsJob()) {
-                    $validator->errors()->add('authorization', __('auth.forbidden'));
-                }
-            }
-
-            // Validate job status allows deletion
-            if ($job->status === 'closed' && $activeApplicationsCount === 0) {
-                // Allow deletion of closed jobs with no active applications
-            } elseif ($job->status === 'draft') {
-                // Allow deletion of draft jobs
-            } elseif (!$this->user()->hasRole('admin')) {
-                // Only admins can delete active jobs with applications
-                $validator->errors()->add('status', __('validation.job_deletion_not_allowed'));
-            }
-        });
-    }
-
-    /**
-     * Check if the authenticated user owns the job
+     * Check if the authenticated user owns the job.
      */
     private function userOwnsJob(): bool
     {
         $jobId = $this->route('id');
         $user = $this->user();
-        
+
         if (!$user || !$jobId) {
             return false;
         }
 
         // Check if user's company owns the job
-        $job = \App\Models\Job::find($jobId);
+        $job = Job::find($jobId);
         if (!$job) {
             return false;
         }
 
         // Check if user is associated with the company that posted the job
-        return $user->company_id === $job->company_id ||
-               $user->companies()->where('companies.id', $job->company_id)->exists();
+        return $user->company_id === $job->company_id
+               || $user->companies()->where('companies.id', $job->company_id)->exists();
     }
-} 
+}

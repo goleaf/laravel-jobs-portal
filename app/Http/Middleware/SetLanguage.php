@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Models\Setting;
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -13,21 +12,19 @@ use Symfony\Component\HttpFoundation\Response;
 class SetLanguage
 {
     /**
-     * use Illuminate\Support\Facades\Session;
+     * use Illuminate\Support\Facades\Session;.
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response
     {
         $localeLanguage = Session::get('languageName');
         $default = Setting::where('key', '=', 'default_language')->first();
 
-        if (! isset($localeLanguage)) {
-
+        if (!isset($localeLanguage)) {
             if (Auth::user()) {
                 App::setLocale(Auth::user()->language);
             } else {
                 App::setLocale($default->value);
             }
-
         } else {
             if (Auth::user()) {
                 if (isset($localeLanguage)) {

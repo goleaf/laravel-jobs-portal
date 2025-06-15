@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LogoutAllRequest extends FormRequest
@@ -14,7 +14,7 @@ class LogoutAllRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated to revoke all their tokens
-        return $this->user() !== null;
+        return null !== $this->user();
     }
 
     /**
@@ -45,6 +45,20 @@ class LogoutAllRequest extends FormRequest
         return [
             'confirm' => __('validation.attributes.confirm'),
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Additional security check: warn if user has many tokens
+            if ($this->user() && $this->user()->tokens()->count() > 10) {
+                // This is informational, not an error
+                // Could be logged for security monitoring
+            }
+        });
     }
 
     /**
@@ -87,18 +101,4 @@ class LogoutAllRequest extends FormRequest
             ]);
         }
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Additional security check: warn if user has many tokens
-            if ($this->user() && $this->user()->tokens()->count() > 10) {
-                // This is informational, not an error
-                // Could be logged for security monitoring
-            }
-        });
-    }
-} 
+}

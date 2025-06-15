@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 /**
- * Class SettingRepository
+ * Class SettingRepository.
  */
 class SettingRepository extends BaseRepository
 {
@@ -24,17 +24,11 @@ class SettingRepository extends BaseRepository
         'value',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldsSearchable()
     {
         return $this->fieldSearchable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function model()
     {
         return Setting::class;
@@ -45,7 +39,6 @@ class SettingRepository extends BaseRepository
      */
     public function getEnvData()
     {
-
         // $env = new DotenvEditor();
         // $key = $env->getContent();
         // // $data['mail'] = collect($key)->only([
@@ -80,24 +73,24 @@ class SettingRepository extends BaseRepository
     {
         // Enhanced setting update with Collection forget() patterns
         $settingsData = collect($input);
-        
+
         // Clean form metadata with forget()
         $formMetadata = ['_token', '_method', 'submit', 'csrf_token', 'redirect'];
         $settingsData->forget($formMetadata);
-        
+
         // Process cookie consent
         $settingsData->put('cookie_consent_enabled', !empty($input['cookie_consent_enabled']));
-        
+
         // Define environment setting keys using collection operations
         $envKeys = collect([
-            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect', 
-            'pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster', 
-            'stripe_key', 'stripe_secret', 'stripe_webhook_key', 
-            'paypal_client_id', 'paypal_secret', 'paystack_key', 'paystack_secret', 'paystack_payment_url', 
-            'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect', 
-            'cookie_consent_enabled'
+            'facebook_app_id', 'facebook_app_secret', 'facebook_redirect',
+            'pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster',
+            'stripe_key', 'stripe_secret', 'stripe_webhook_key',
+            'paypal_client_id', 'paypal_secret', 'paystack_key', 'paystack_secret', 'paystack_payment_url',
+            'linkedin_client_id', 'linkedin_client_secret', 'google_client_id', 'google_client_secret', 'google_redirect',
+            'cookie_consent_enabled',
         ]);
-        
+
         // Extract environment settings using collection operations
         $envSettingInputArray = $settingsData->only($envKeys->toArray())->toArray();
 
@@ -119,7 +112,7 @@ class SettingRepository extends BaseRepository
         // $env = new DotenvEditor();
         $inputArr = Arr::except($input, ['_token']);
 
-        if ($inputArr['sectionName'] == 'env_setting') {
+        if ('env_setting' == $inputArr['sectionName']) {
             // $env->setAutoBackup(true);
 
             $envSetting = EnvSetting::pluck('value', 'key')->toArray();
@@ -150,23 +143,23 @@ class SettingRepository extends BaseRepository
             // }
         }
 
-        if ($inputArr['sectionName'] == 'social_settings') {
+        if ('social_settings' == $inputArr['sectionName']) {
             $inputArr['facebook_url'] = (empty($inputArr['facebook_url'])) ? '' : $inputArr['facebook_url'];
             $inputArr['twitter_url'] = (empty($inputArr['twitter_url'])) ? '' : $inputArr['twitter_url'];
             $inputArr['google_plus_url'] = (empty($inputArr['google_plus_url'])) ? '' : $inputArr['google_plus_url'];
             $inputArr['linkedIn_url'] = (empty($inputArr['linkedIn_url'])) ? '' : $inputArr['linkedIn_url'];
         }
-        if ($inputArr['sectionName'] == 'general') {
-            $inputArr['enable_google_recaptcha'] = (! isset($inputArr['enable_google_recaptcha'])) ? false : $inputArr['enable_google_recaptcha'];
+        if ('general' == $inputArr['sectionName']) {
+            $inputArr['enable_google_recaptcha'] = (!isset($inputArr['enable_google_recaptcha'])) ? false : $inputArr['enable_google_recaptcha'];
         }
         foreach ($inputArr as $key => $value) {
             /** @var Setting $setting */
             $setting = Setting::where('key', $key)->first();
-            if (! $setting) {
+            if (!$setting) {
                 continue;
             }
 
-            if (in_array($key, ['logo', 'favicon', 'footer_logo']) && ! empty($value)) {
+            if (in_array($key, ['logo', 'favicon', 'footer_logo']) && !empty($value)) {
                 $this->fileUpload($setting, $value);
 
                 continue;
@@ -179,6 +172,8 @@ class SettingRepository extends BaseRepository
     }
 
     /**
+     * @param mixed $file
+     *
      * @return mixed
      *
      * @throws DiskDoesNotExist
@@ -196,7 +191,7 @@ class SettingRepository extends BaseRepository
 
     public function createOrUpdateEnv($env, $key, $value): bool
     {
-        if (! $env->keyExists($key)) {
+        if (!$env->keyExists($key)) {
             $env->addData([
                 $key => $value,
             ]);

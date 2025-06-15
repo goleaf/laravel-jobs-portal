@@ -6,11 +6,10 @@ use App\Models\Candidate;
 use App\Models\FunctionalArea;
 use App\Models\Job;
 use App\Repositories\FunctionalAreaRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class FunctionalAreaController extends AppBaseController
 {
     /** @var FunctionalAreaRepository */
@@ -24,7 +23,6 @@ class FunctionalAreaController extends AppBaseController
     /**
      * Display a listing of the FunctionalArea.
      *
-     * @param  Request  $request
      * @return Factory|View
      */
     public function index(): View
@@ -65,8 +63,7 @@ class FunctionalAreaController extends AppBaseController
     /**
      * Remove the specified FunctionalArea from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(FunctionalArea $functionalArea): JsonResponse
     {

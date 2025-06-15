@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-
 use App\Models\CmsServices;
 use App\Models\Setting;
 use App\Models\User;
@@ -11,12 +10,12 @@ use App\Repositories\WebHomeRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
 class HomeController extends AppBaseController
 {
     /** @var WebHomeRepository */
@@ -56,7 +55,7 @@ class HomeController extends AppBaseController
     }
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function sendContactEmail(ContactFormSendContactEmailHomeRequest $request): RedirectResponse
     {
@@ -74,7 +73,7 @@ class HomeController extends AppBaseController
 
         /** @var User $user */
         $user = getLoggedInUser();
-        if (! empty($user)) {
+        if (!empty($user)) {
             $user->update(['language' => $language]);
         }
 

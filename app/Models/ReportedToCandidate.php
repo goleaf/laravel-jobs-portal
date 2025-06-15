@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\Candidate;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
- * App\Models\ReportedToCandidate
+ * App\Models\ReportedToCandidate.
  *
- * @property int $id
- * @property int $user_id
- * @property int $candidate_id
- * @property string $note
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Candidate $candidate
- * @property-read User $user
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $candidate_id
+ * @property string      $note
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Candidate   $candidate
+ * @property User        $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ReportedToCandidate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReportedToCandidate newQuery()

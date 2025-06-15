@@ -89,6 +89,7 @@ class CreateCompaniesSeeder extends Seeder
             } catch (Exception $e) {
                 echo '<pre>';
                 print_r($e->getMessage());
+
                 exit;
             }
         }

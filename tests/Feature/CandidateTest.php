@@ -5,14 +5,29 @@ namespace Tests\Feature;
 use App\Models\Candidate;
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
+use App\Models\CareerLevel;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
+use App\Models\FunctionalArea;
+use App\Models\Industry;
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Models\Language;
+use App\Models\MaritalStatus;
+use App\Models\SalaryCurrency;
+use App\Models\Skill;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CandidateTest extends TestCase
 {
     use RefreshDatabase;
@@ -39,7 +54,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_be_created()
+    public function candidateCanBeCreated()
     {
         $user = User::factory()->create();
 
@@ -65,7 +80,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_be_updated()
+    public function candidateCanBeUpdated()
     {
         $candidate = Candidate::factory()->create();
 
@@ -84,7 +99,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_belongs_to_user()
+    public function candidateBelongsToUser()
     {
         $user = User::factory()->create();
         $candidate = Candidate::factory()->create(['user_id' => $user->id]);
@@ -94,7 +109,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_have_education_records()
+    public function candidateCanHaveEducationRecords()
     {
         $candidate = Candidate::factory()->create();
 
@@ -112,7 +127,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_have_experience_records()
+    public function candidateCanHaveExperienceRecords()
     {
         $candidate = Candidate::factory()->create();
 
@@ -131,7 +146,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_apply_for_jobs()
+    public function candidateCanApplyForJobs()
     {
         $candidate = Candidate::factory()->create();
         $job = Job::factory()->create();
@@ -148,7 +163,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidates_can_be_filtered_by_experience()
+    public function candidatesCanBeFilteredByExperience()
     {
         Candidate::factory()->count(3)->create(['experience' => 5]);
         Candidate::factory()->count(2)->create(['experience' => 2]);
@@ -161,7 +176,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function candidates_can_be_filtered_by_availability()
+    public function candidatesCanBeFilteredByAvailability()
     {
         Candidate::factory()->count(3)->create(['is_immediate_available' => true]);
         Candidate::factory()->count(2)->create(['is_immediate_available' => false]);
@@ -178,7 +193,7 @@ class CandidateTest extends TestCase
     // =========================================
 
     /** @test */
-    public function guests_cannot_access_admin_candidates_section()
+    public function guestsCannotAccessAdminCandidatesSection()
     {
         $this->get('/admin/candidates')->assertRedirect('/login'); // Assuming /admin prefix
         $this->get('/admin/candidates/create')->assertRedirect('/login');
@@ -186,7 +201,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function non_admin_users_cannot_access_admin_candidates_section()
+    public function nonAdminUsersCannotAccessAdminCandidatesSection()
     {
         // Test candidate access
         $this->actingAs($this->candidateUser)->get('/admin/candidates')->assertStatus(403);
@@ -198,7 +213,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_candidates_list()
+    public function adminCanViewCandidatesList()
     {
         $response = $this->actingAs($this->adminUser)->get('/admin/candidates');
         $response->assertStatus(200);
@@ -206,7 +221,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_candidate_details()
+    public function adminCanViewCandidateDetails()
     {
         $response = $this->actingAs($this->adminUser)->get("/admin/candidates/{$this->candidate->id}");
         $response->assertStatus(200);
@@ -215,7 +230,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_edit_candidate_form()
+    public function adminCanViewEditCandidateForm()
     {
         $response = $this->actingAs($this->adminUser)->get("/admin/candidates/{$this->candidate->id}/edit");
         $response->assertStatus(200);
@@ -224,7 +239,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_update_candidate()
+    public function adminCanUpdateCandidate()
     {
         $updateData = [
             // User fields
@@ -237,30 +252,30 @@ class CandidateTest extends TestCase
             'user_type' => User::CANDIDATE, // Required by validation
             'dob' => $this->faker->date(),
             'gender' => 1,
-            'country_id' => \App\Models\Country::factory()->create()->id,
-            'state_id' => \App\Models\State::factory()->create(['country_id' => 1])->id,
-            'city_id' => \App\Models\City::factory()->create(['state_id' => 1])->id,
+            'country_id' => Country::factory()->create()->id,
+            'state_id' => State::factory()->create(['country_id' => 1])->id,
+            'city_id' => City::factory()->create(['state_id' => 1])->id,
             'is_active' => true,
             'is_verified' => true,
             // Candidate fields
             'candidate_id' => $this->candidate->id, // Required by validation
             'father_name' => $this->faker->name('male'),
-            'marital_status_id' => \App\Models\MaritalStatus::factory()->create()->id,
+            'marital_status_id' => MaritalStatus::factory()->create()->id,
             'nationality' => $this->faker->country,
             'national_id_card' => $this->faker->uuid,
             'experience' => 5,
-            'career_level_id' => \App\Models\CareerLevel::factory()->create()->id,
-            'industry_id' => \App\Models\Industry::factory()->create()->id,
-            'functional_area_id' => \App\Models\FunctionalArea::factory()->create()->id,
+            'career_level_id' => CareerLevel::factory()->create()->id,
+            'industry_id' => Industry::factory()->create()->id,
+            'functional_area_id' => FunctionalArea::factory()->create()->id,
             'current_salary' => 60000,
             'expected_salary' => 70000,
-            'salary_currency' => \App\Models\SalaryCurrency::factory()->create()->id,
+            'salary_currency' => SalaryCurrency::factory()->create()->id,
             'address' => $this->faker->address,
             'immediate_available' => true,
             'available_at' => now()->addMonth()->toDateString(),
             // Skills and Languages (adjust based on actual form input names)
-            'skill_ids' => \App\Models\Skill::factory()->count(2)->create()->pluck('id')->toArray(),
-            'language_ids' => \App\Models\Language::factory()->count(2)->create()->pluck('id')->toArray(),
+            'skill_ids' => Skill::factory()->count(2)->create()->pluck('id')->toArray(),
+            'language_ids' => Language::factory()->count(2)->create()->pluck('id')->toArray(),
         ];
 
         $response = $this->actingAs($this->adminUser)->put("/admin/candidates/{$this->candidate->id}", $updateData);
@@ -281,7 +296,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_delete_candidate()
+    public function adminCanDeleteCandidate()
     {
         // Create a new candidate specifically for this test to avoid FK issues
         $testCandidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
@@ -297,7 +312,7 @@ class CandidateTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_change_candidate_status()
+    public function adminCanChangeCandidateStatus()
     {
         $initialStatus = $this->candidateUser->is_active;
 
@@ -309,8 +324,8 @@ class CandidateTest extends TestCase
         $this->assertEquals(!$initialStatus, $this->candidateUser->is_active);
     }
 
-     /** @test */
-    public function admin_can_change_candidate_email_verified_status()
+    /** @test */
+    public function adminCanChangeCandidateEmailVerifiedStatus()
     {
         $this->candidateUser->update(['email_verified_at' => null]); // Ensure initially not verified
 
@@ -333,7 +348,7 @@ class CandidateTest extends TestCase
     // =========================================
 
     /** @test */
-    public function employer_can_report_a_candidate()
+    public function employerCanReportACandidate()
     {
         $reportData = [
             'candidate_id' => $this->candidate->id,

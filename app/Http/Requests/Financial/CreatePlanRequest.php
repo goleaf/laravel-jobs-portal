@@ -16,19 +16,19 @@ class CreatePlanRequest extends FormRequest
     }
 
     /**
+     * Get the validation rules that apply to the request.
+     */
+    public function rules(): array
+    {
+        return Plan::$rules;
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
     {
         $amount = $this->request->get('amount');
         $this->request->set('amount', removeCommaFromNumbers($amount));
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     */
-    public function rules(): array
-    {
-        return Plan::$rules;
     }
 }

@@ -7,12 +7,17 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AuthTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
     /** @test */
-    public function visitor_can_register_as_candidate()
+    public function visitorCanRegisterAsCandidate()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
@@ -26,12 +31,13 @@ class AuthTest extends DuskTestCase
                 ->press('Register')
                 ->waitForLocation('/candidate/profile/edit')
                 ->assertPathIs('/candidate/profile/edit')
-                ->assertSee('Complete your profile');
+                ->assertSee('Complete your profile')
+            ;
         });
     }
 
     /** @test */
-    public function visitor_can_register_as_employer()
+    public function visitorCanRegisterAsEmployer()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
@@ -45,12 +51,13 @@ class AuthTest extends DuskTestCase
                 ->press('Register')
                 ->waitForLocation('/employer/company/edit')
                 ->assertPathIs('/employer/company/edit')
-                ->assertSee('Complete your company profile');
+                ->assertSee('Complete your company profile')
+            ;
         });
     }
 
     /** @test */
-    public function user_can_login_with_correct_credentials()
+    public function userCanLoginWithCorrectCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -66,12 +73,13 @@ class AuthTest extends DuskTestCase
                 ->press('Login')
                 ->waitForLocation('/dashboard')
                 ->assertPathIs('/dashboard')
-                ->assertSee('Dashboard');
+                ->assertSee('Dashboard')
+            ;
         });
     }
 
     /** @test */
-    public function user_cannot_login_with_incorrect_credentials()
+    public function userCannotLoginWithIncorrectCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -86,12 +94,13 @@ class AuthTest extends DuskTestCase
                 ->type('password', 'wrongpassword')
                 ->press('Login')
                 ->assertPathIs('/login')
-                ->assertSee('These credentials do not match our records');
+                ->assertSee('These credentials do not match our records')
+            ;
         });
     }
 
     /** @test */
-    public function user_can_logout()
+    public function userCanLogout()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -111,12 +120,13 @@ class AuthTest extends DuskTestCase
                 ->click('#logout-button')
                 ->waitForLocation('/')
                 ->assertGuest()
-                ->assertPathIs('/');
+                ->assertPathIs('/')
+            ;
         });
     }
 
     /** @test */
-    public function user_can_request_password_reset()
+    public function userCanRequestPasswordReset()
     {
         $user = User::factory()->create([
             'email' => 'reset@example.com',
@@ -132,12 +142,13 @@ class AuthTest extends DuskTestCase
                 ->type('email', 'reset@example.com')
                 ->press('Send Password Reset Link')
                 ->waitForText('We have emailed your password reset link')
-                ->assertSee('We have emailed your password reset link');
+                ->assertSee('We have emailed your password reset link')
+            ;
         });
     }
 
     /** @test */
-    public function inactive_user_cannot_login()
+    public function inactiveUserCannotLogin()
     {
         $user = User::factory()->create([
             'email' => 'inactive@example.com',
@@ -152,12 +163,13 @@ class AuthTest extends DuskTestCase
                 ->type('password', 'password123')
                 ->press('Login')
                 ->assertPathIs('/login')
-                ->assertSee('Your account is not active');
+                ->assertSee('Your account is not active')
+            ;
         });
     }
 
     /** @test */
-    public function candidate_sees_different_dashboard_than_employer()
+    public function candidateSeesDifferentDashboardThanEmployer()
     {
         $candidate = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -183,7 +195,8 @@ class AuthTest extends DuskTestCase
                 ->assertSee('Candidate Dashboard')
                 ->assertSee('My Profile')
                 ->assertSee('Applied Jobs')
-                ->logout();
+                ->logout()
+            ;
 
             // Login as employer
             $browser->visit('/login')

@@ -4,10 +4,16 @@ namespace Tests\Feature;
 
 use App\Models\Setting;
 use App\Models\User;
+use App\Repositories\SettingRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class SettingTest extends TestCase
 {
     use RefreshDatabase;
@@ -18,7 +24,7 @@ class SettingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user for testing
         $this->adminUser = User::factory()->create([
             'user_type' => User::ADMIN,
@@ -32,84 +38,89 @@ class SettingTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_general_settings()
+    public function adminCanViewGeneralSettings()
     {
         $response = $this->actingAs($this->adminUser)
-                         ->get('/settings');
-        
+            ->get('/settings')
+        ;
+
         $response->assertStatus(200);
         $response->assertViewIs('settings.general');
         $response->assertViewHas(['setting', 'sectionName', 'envSetting']);
     }
 
     /** @test */
-    public function admin_can_view_specific_settings_section()
+    public function adminCanViewSpecificSettingsSection()
     {
         $sections = ['general', 'env_setting', 'social_settings'];
-        
+
         foreach ($sections as $section) {
             $response = $this->actingAs($this->adminUser)
-                             ->get('/settings?section=' . $section);
-            
+                ->get('/settings?section='.$section)
+            ;
+
             $response->assertStatus(200);
-            $response->assertViewIs('settings.' . $section);
+            $response->assertViewIs('settings.'.$section);
             $response->assertViewHas('sectionName', $section);
         }
     }
 
     /** @test */
-    public function admin_can_update_general_settings()
+    public function adminCanUpdateGeneralSettings()
     {
         $settingData = [
             'app_name' => 'Updated Job Portal',
             'company_url' => 'https://updated-example.com',
             'region_code' => 'UK',
             'phone' => '9876543210',
-            'sectionName' => 'general'
+            'sectionName' => 'general',
         ];
-        
+
         $response = $this->actingAs($this->adminUser)
-                         ->post('/settings', $settingData);
-        
+            ->post('/settings', $settingData)
+        ;
+
         $response->assertStatus(302); // Redirects back
         $response->assertSessionHas('flash_notification');
-        
+
         // Check database for updated settings
         $this->assertEquals('Updated Job Portal', Setting::where('key', 'app_name')->first()->value);
         $this->assertEquals('https://updated-example.com', Setting::where('key', 'company_url')->first()->value);
     }
 
     /** @test */
-    public function non_admin_cannot_access_settings()
+    public function nonAdminCannotAccessSettings()
     {
         $employerUser = User::factory()->create(['user_type' => User::EMPLOYER]);
-        
+
         $response = $this->actingAs($employerUser)
-                         ->get('/settings');
-        
+            ->get('/settings')
+        ;
+
         // Assuming proper middleware restricting access
         $response->assertStatus(403); // Or 401/404 depending on implementation
     }
 
     /** @test */
-    public function admin_can_update_env_settings()
+    public function adminCanUpdateEnvSettings()
     {
         // Mock the repository to prevent actual .env file changes during tests
-        $this->mock(\App\Repositories\SettingRepository::class, function ($mock) {
+        $this->mock(SettingRepository::class, function ($mock) {
             $mock->shouldReceive('updateSetting')->once()->andReturn(true);
             $mock->shouldReceive('getEnvData')->andReturn([]);
         });
-        
+
         $envData = [
             'app_name' => 'Job Portal',
             'app_url' => 'http://test-url.com',
-            'sectionName' => 'env_setting'
+            'sectionName' => 'env_setting',
         ];
-        
+
         $response = $this->actingAs($this->adminUser)
-                         ->post('/settings', $envData);
-        
+            ->post('/settings', $envData)
+        ;
+
         $response->assertStatus(302); // Redirects back
         $response->assertSessionHas('flash_notification');
     }
-} 
+}

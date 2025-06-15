@@ -4,10 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Candidate;
 use App\Models\User;
-use App\Models\CareerLevel;
-use App\Models\FunctionalArea;
-use App\Models\Industry;
-use App\Models\MaritalStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,7 +22,7 @@ class CandidateFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'unique_id' => 'CND-' . fake()->unique()->numberBetween(100000, 999999),
+            'unique_id' => 'CND-'.fake()->unique()->numberBetween(100000, 999999),
             'father_name' => fake()->name('male'),
             'marital_status_id' => null, // Nullable to avoid foreign key constraints
             'nationality' => fake()->country(),
@@ -80,4 +76,4 @@ class CandidateFactory extends Factory
             'immediate_available' => false,
         ]);
     }
-} 
+}

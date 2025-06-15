@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Skill;
 
 /**
- * Class SkillRepository
+ * Class SkillRepository.
  *
  * @version June 22, 2020, 5:43 am UTC
  */
@@ -19,7 +19,7 @@ class SkillRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class SkillRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Skill::class;

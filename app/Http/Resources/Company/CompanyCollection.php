@@ -30,15 +30,38 @@ class CompanyCollection extends ResourceCollection
     }
 
     /**
-     * Get the pagination metadata.
+     * Get additional data that should be returned with the resource array.
      *
-     * @param Request $request
-     * @return array
+     * @return array<string, mixed>
+     */
+    public function with(Request $request): array
+    {
+        return [
+            'links' => [
+                'self' => $request->url(),
+                'create' => route('api.companies.store'),
+                'export' => route('api.companies.export', $request->query()),
+            ],
+            'actions' => [
+                'bulk_actions' => $this->getBulkActions($request),
+                'export_formats' => ['csv', 'excel', 'pdf'],
+                'import_url' => route('api.companies.import'),
+            ],
+            'cache_info' => [
+                'cached_at' => cache()->get('companies_cached_at'),
+                'cache_key' => 'companies_'.md5($request->getQueryString()),
+                'ttl' => config('cache.ttl.companies', 3600),
+            ],
+        ];
+    }
+
+    /**
+     * Get the pagination metadata.
      */
     protected function getMeta(Request $request): array
     {
         $paginator = $this->resource;
-        
+
         return [
             'pagination' => [
                 'current_page' => $paginator->currentPage(),
@@ -58,16 +81,13 @@ class CompanyCollection extends ResourceCollection
                 'locale' => app()->getLocale(),
                 'user_timezone' => $request->user()?->timezone ?? config('app.timezone'),
                 'version' => '1.0',
-                'response_time' => round((microtime(true) - LARAVEL_START) * 1000, 2) . 'ms',
+                'response_time' => round((microtime(true) - LARAVEL_START) * 1000, 2).'ms',
             ],
         ];
     }
 
     /**
      * Get applied filters information.
-     *
-     * @param Request $request
-     * @return array
      */
     protected function getAppliedFilters(Request $request): array
     {
@@ -196,8 +216,6 @@ class CompanyCollection extends ResourceCollection
 
     /**
      * Get available filter options.
-     *
-     * @return array
      */
     protected function getAvailableFilters(): array
     {
@@ -229,13 +247,11 @@ class CompanyCollection extends ResourceCollection
 
     /**
      * Get collection statistics.
-     *
-     * @return array
      */
     protected function getStatistics(): array
     {
         $collection = $this->collection;
-        
+
         return [
             'summary' => [
                 'total_companies' => $collection->count(),
@@ -268,36 +284,7 @@ class CompanyCollection extends ResourceCollection
     }
 
     /**
-     * Get additional data that should be returned with the resource array.
-     *
-     * @return array<string, mixed>
-     */
-    public function with(Request $request): array
-    {
-        return [
-            'links' => [
-                'self' => $request->url(),
-                'create' => route('api.companies.store'),
-                'export' => route('api.companies.export', $request->query()),
-            ],
-            'actions' => [
-                'bulk_actions' => $this->getBulkActions($request),
-                'export_formats' => ['csv', 'excel', 'pdf'],
-                'import_url' => route('api.companies.import'),
-            ],
-            'cache_info' => [
-                'cached_at' => cache()->get('companies_cached_at'),
-                'cache_key' => 'companies_' . md5($request->getQueryString()),
-                'ttl' => config('cache.ttl.companies', 3600),
-            ],
-        ];
-    }
-
-    /**
      * Get available bulk actions based on user permissions.
-     *
-     * @param Request $request
-     * @return array
      */
     protected function getBulkActions(Request $request): array
     {

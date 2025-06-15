@@ -10,9 +10,9 @@ use App\Repositories\StateRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+
 class StateController extends AppBaseController
 {
     /**
@@ -28,7 +28,6 @@ class StateController extends AppBaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Application|Factory|Response|View
      */
     public function index(): View
@@ -70,7 +69,6 @@ class StateController extends AppBaseController
 
     /**
      * Remove the specified resource from storage.
-     *
      *
      * @throws \Exception
      */

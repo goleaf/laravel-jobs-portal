@@ -6,7 +6,7 @@ use App\Models\NewsLetter;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateNewsLetterRequest
+ * Class CreateNewsLetterRequest.
  */
 class CreateNewsLetterRequest extends FormRequest
 {

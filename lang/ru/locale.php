@@ -2,12 +2,12 @@
 
 return [
     // Language Management
-    'change_language' => 'Изменить язык', //tuutuu
+    'change_language' => 'Изменить язык', // tuutuu
     'current_language' => 'Текущий язык',
     'select_language' => 'Выберите язык',
     'language_changed' => 'Язык успешно изменен на :language',
     'language_not_supported' => 'Язык :language не поддерживается',
-    
+
     // Locale Names
     'languages' => [
         'en' => 'Английский',
@@ -20,7 +20,7 @@ return [
         'tr' => 'Турецкий',
         'zh' => 'Китайский',
     ],
-    
+
     // Locale Settings
     'direction' => 'ltr',
     'native_name' => 'Русский',
@@ -29,14 +29,14 @@ return [
     'date_format' => 'd.m.Y',
     'time_format' => 'H:i',
     'datetime_format' => 'd.m.Y H:i',
-    
+
     // System Messages
     'loading' => 'Загрузка...',
     'error' => 'Ошибка',
     'success' => 'Успех',
     'warning' => 'Предупреждение',
     'info' => 'Информация',
-    
+
     // Navigation
     'home' => 'Главная',
     'back' => 'Назад',
@@ -52,7 +52,7 @@ return [
     'filter' => 'Фильтр',
     'reset' => 'Сброс',
     'refresh' => 'Обновить',
-    
+
     // Time and Dates
     'today' => 'Сегодня',
     'yesterday' => 'Вчера',
@@ -63,7 +63,7 @@ return [
     'this_month' => 'В этом месяце',
     'last_month' => 'В прошлом месяце',
     'next_month' => 'В следующем месяце',
-    
+
     // Numbers and Counting
     'first' => 'Первый',
     'second' => 'Второй',
@@ -76,7 +76,7 @@ return [
     'showing' => 'Показано',
     'to' => 'до',
     'results' => 'результатов',
-    
+
     // Status
     'active' => 'Активный',
     'inactive' => 'Неактивный',

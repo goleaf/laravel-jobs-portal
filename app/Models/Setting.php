@@ -2,36 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Setting Model - Enhanced with Context7 patterns
+ * Setting Model - Enhanced with Context7 patterns.
  *
- * @property int $id
- * @property string $key
- * @property string|null $value
- * @property string|null $category
- * @property string|null $type
- * @property string|null $description
- * @property bool $is_public
- * @property bool $is_editable
- * @property bool $is_active
- * @property array|null $options
- * @property int|null $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read string $logo_url
- * @property-read mixed $parsed_value
- * @property-read string $display_name
- * @property-read string $category_label
- * @property-read string $type_label
+ * @property int         $id
+ * @property string      $key
+ * @property null|string $value
+ * @property null|string $category
+ * @property null|string $type
+ * @property null|string $description
+ * @property bool        $is_public
+ * @property bool        $is_editable
+ * @property bool        $is_active
+ * @property null|array  $options
+ * @property null|int    $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property string      $logo_url
+ * @property mixed       $parsed_value
+ * @property string      $display_name
+ * @property string      $category_label
+ * @property string      $type_label
  *
  * Context7 Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder public()
@@ -67,109 +69,6 @@ class Setting extends Model
 {
     use HasFactory;
     use LogsActivity;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'key',
-        'value',
-        'category',
-        'type',
-        'description',
-        'is_public',
-        'is_editable',
-        'is_active',
-        'options',
-        'sort_order',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [];
-
-    /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_public' => 'boolean',
-            'is_editable' => 'boolean',
-            'is_active' => 'boolean',
-            'options' => 'array',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Configure activity logging.
-     */
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly([
-                'key',
-                'value',
-                'category',
-                'type',
-                'description',
-                'is_public',
-                'is_editable',
-                'is_active',
-                'options',
-                'sort_order',
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
-    /**
-     * Validation rules for creating settings.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'key' => 'required|string|max:255|unique:settings,key',
-        'value' => 'nullable|string',
-        'category' => 'nullable|string|max:100',
-        'type' => 'nullable|string|in:string,integer,boolean,array,json,text,email,url,color,file',
-        'description' => 'nullable|string|max:500',
-        'is_public' => 'boolean',
-        'is_editable' => 'boolean',
-        'is_active' => 'boolean',
-        'options' => 'nullable|array',
-        'sort_order' => 'nullable|integer|min:0',
-    ];
-
-    /**
-     * Update validation rules for settings.
-     *
-     * @param int $id
-     * @return array<string, string>
-     */
-    public static function updateRules(int $id): array
-    {
-        return [
-            'key' => 'required|string|max:255|unique:settings,key,' . $id,
-            'value' => 'nullable|string',
-            'category' => 'nullable|string|max:100',
-            'type' => 'nullable|string|in:string,integer,boolean,array,json,text,email,url,color,file',
-            'description' => 'nullable|string|max:500',
-            'is_public' => 'boolean',
-            'is_editable' => 'boolean',
-            'is_active' => 'boolean',
-            'options' => 'nullable|array',
-            'sort_order' => 'nullable|integer|min:0',
-        ];
-    }
 
     // =============================================
     // CONSTANTS
@@ -223,12 +122,101 @@ class Setting extends Model
         'file' => 'File',
     ];
 
+    /**
+     * Validation rules for creating settings.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'key' => 'required|string|max:255|unique:settings,key',
+        'value' => 'nullable|string',
+        'category' => 'nullable|string|max:100',
+        'type' => 'nullable|string|in:string,integer,boolean,array,json,text,email,url,color,file',
+        'description' => 'nullable|string|max:500',
+        'is_public' => 'boolean',
+        'is_editable' => 'boolean',
+        'is_active' => 'boolean',
+        'options' => 'nullable|array',
+        'sort_order' => 'nullable|integer|min:0',
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'key',
+        'value',
+        'category',
+        'type',
+        'description',
+        'is_public',
+        'is_editable',
+        'is_active',
+        'options',
+        'sort_order',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [];
+
+    /**
+     * Configure activity logging.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'key',
+                'value',
+                'category',
+                'type',
+                'description',
+                'is_public',
+                'is_editable',
+                'is_active',
+                'options',
+                'sort_order',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+        ;
+    }
+
+    /**
+     * Update validation rules for settings.
+     *
+     * @return array<string, string>
+     */
+    public static function updateRules(int $id): array
+    {
+        return [
+            'key' => 'required|string|max:255|unique:settings,key,'.$id,
+            'value' => 'nullable|string',
+            'category' => 'nullable|string|max:100',
+            'type' => 'nullable|string|in:string,integer,boolean,array,json,text,email,url,color,file',
+            'description' => 'nullable|string|max:500',
+            'is_public' => 'boolean',
+            'is_editable' => 'boolean',
+            'is_active' => 'boolean',
+            'options' => 'nullable|array',
+            'sort_order' => 'nullable|integer|min:0',
+        ];
+    }
+
     // =============================================
     // SCOPES - Basic Status
     // =============================================
 
     /**
      * Scope a query to only include active settings.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -237,6 +225,8 @@ class Setting extends Model
 
     /**
      * Scope a query to only include inactive settings.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -245,6 +235,8 @@ class Setting extends Model
 
     /**
      * Scope for public settings.
+     *
+     * @param mixed $query
      */
     public function scopePublic($query)
     {
@@ -253,6 +245,8 @@ class Setting extends Model
 
     /**
      * Scope for private settings.
+     *
+     * @param mixed $query
      */
     public function scopePrivate($query)
     {
@@ -261,6 +255,8 @@ class Setting extends Model
 
     /**
      * Scope for editable settings.
+     *
+     * @param mixed $query
      */
     public function scopeEditable($query)
     {
@@ -269,6 +265,8 @@ class Setting extends Model
 
     /**
      * Scope for non-editable settings.
+     *
+     * @param mixed $query
      */
     public function scopeNonEditable($query)
     {
@@ -281,6 +279,8 @@ class Setting extends Model
 
     /**
      * Scope for settings by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -289,6 +289,8 @@ class Setting extends Model
 
     /**
      * Scope for settings by type.
+     *
+     * @param mixed $query
      */
     public function scopeByType($query, string $type)
     {
@@ -297,6 +299,8 @@ class Setting extends Model
 
     /**
      * Scope for settings by key.
+     *
+     * @param mixed $query
      */
     public function scopeByKey($query, string $key)
     {
@@ -305,19 +309,24 @@ class Setting extends Model
 
     /**
      * Scope for searching settings.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', "%{$term}%")
-                    ->orWhere('value', 'like', "%{$term}%")
-              ->orWhere('category', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+                ->orWhere('value', 'like', "%{$term}%")
+                ->orWhere('category', 'like', "%{$term}%")
+                ->orWhere('description', 'like', "%{$term}%")
+            ;
         });
     }
 
     /**
      * Scope for recent settings.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -326,6 +335,8 @@ class Setting extends Model
 
     /**
      * Scope for old settings.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -338,6 +349,8 @@ class Setting extends Model
 
     /**
      * Scope for general settings.
+     *
+     * @param mixed $query
      */
     public function scopeGeneral($query)
     {
@@ -346,109 +359,135 @@ class Setting extends Model
 
     /**
      * Scope for email settings.
+     *
+     * @param mixed $query
      */
     public function scopeEmail($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'email')
-                    ->orWhere('key', 'like', '%email%')
-                    ->orWhere('key', 'like', '%mail%');
+                ->orWhere('key', 'like', '%email%')
+                ->orWhere('key', 'like', '%mail%')
+            ;
         });
     }
 
     /**
      * Scope for payment settings.
+     *
+     * @param mixed $query
      */
     public function scopePayment($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'payment')
-                    ->orWhere('key', 'like', '%payment%')
-                    ->orWhere('key', 'like', '%stripe%')
-                    ->orWhere('key', 'like', '%paypal%');
+                ->orWhere('key', 'like', '%payment%')
+                ->orWhere('key', 'like', '%stripe%')
+                ->orWhere('key', 'like', '%paypal%')
+            ;
         });
     }
 
     /**
      * Scope for notification settings.
+     *
+     * @param mixed $query
      */
     public function scopeNotification($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'notification')
-                    ->orWhere('key', 'like', '%notification%')
-                    ->orWhere('key', 'like', '%alert%');
+                ->orWhere('key', 'like', '%notification%')
+                ->orWhere('key', 'like', '%alert%')
+            ;
         });
     }
 
     /**
      * Scope for security settings.
+     *
+     * @param mixed $query
      */
     public function scopeSecurity($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'security')
-                    ->orWhere('key', 'like', '%security%')
-                    ->orWhere('key', 'like', '%password%')
-                    ->orWhere('key', 'like', '%auth%');
+                ->orWhere('key', 'like', '%security%')
+                ->orWhere('key', 'like', '%password%')
+                ->orWhere('key', 'like', '%auth%')
+            ;
         });
     }
 
     /**
      * Scope for appearance settings.
+     *
+     * @param mixed $query
      */
     public function scopeAppearance($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'appearance')
-              ->orWhere('key', 'like', '%theme%')
-              ->orWhere('key', 'like', '%color%')
-              ->orWhere('key', 'like', '%logo%');
+                ->orWhere('key', 'like', '%theme%')
+                ->orWhere('key', 'like', '%color%')
+                ->orWhere('key', 'like', '%logo%')
+            ;
         });
     }
 
     /**
      * Scope for social media settings.
+     *
+     * @param mixed $query
      */
     public function scopeSocial($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'social')
-              ->orWhere('key', 'like', '%facebook%')
-              ->orWhere('key', 'like', '%twitter%')
-              ->orWhere('key', 'like', '%linkedin%')
-              ->orWhere('key', 'like', '%instagram%');
+                ->orWhere('key', 'like', '%facebook%')
+                ->orWhere('key', 'like', '%twitter%')
+                ->orWhere('key', 'like', '%linkedin%')
+                ->orWhere('key', 'like', '%instagram%')
+            ;
         });
     }
 
     /**
      * Scope for SEO settings.
+     *
+     * @param mixed $query
      */
     public function scopeSeo($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'seo')
-              ->orWhere('key', 'like', '%seo%')
-              ->orWhere('key', 'like', '%meta%')
-              ->orWhere('key', 'like', '%sitemap%');
+                ->orWhere('key', 'like', '%seo%')
+                ->orWhere('key', 'like', '%meta%')
+                ->orWhere('key', 'like', '%sitemap%')
+            ;
         });
     }
 
     /**
      * Scope for API settings.
+     *
+     * @param mixed $query
      */
     public function scopeApi($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'api')
-              ->orWhere('key', 'like', '%api%')
-              ->orWhere('key', 'like', '%token%')
-              ->orWhere('key', 'like', '%key%');
+                ->orWhere('key', 'like', '%api%')
+                ->orWhere('key', 'like', '%token%')
+                ->orWhere('key', 'like', '%key%')
+            ;
         });
     }
 
     /**
      * Scope for system settings.
+     *
+     * @param mixed $query
      */
     public function scopeSystem($query)
     {
@@ -461,6 +500,8 @@ class Setting extends Model
 
     /**
      * Scope for boolean type settings.
+     *
+     * @param mixed $query
      */
     public function scopeBoolean($query)
     {
@@ -469,6 +510,8 @@ class Setting extends Model
 
     /**
      * Scope for string type settings.
+     *
+     * @param mixed $query
      */
     public function scopeString($query)
     {
@@ -477,6 +520,8 @@ class Setting extends Model
 
     /**
      * Scope for integer type settings.
+     *
+     * @param mixed $query
      */
     public function scopeInteger($query)
     {
@@ -485,6 +530,8 @@ class Setting extends Model
 
     /**
      * Scope for array type settings.
+     *
+     * @param mixed $query
      */
     public function scopeArray($query)
     {
@@ -493,6 +540,8 @@ class Setting extends Model
 
     /**
      * Scope for JSON type settings.
+     *
+     * @param mixed $query
      */
     public function scopeJson($query)
     {
@@ -501,6 +550,8 @@ class Setting extends Model
 
     /**
      * Scope for text type settings.
+     *
+     * @param mixed $query
      */
     public function scopeText($query)
     {
@@ -509,6 +560,8 @@ class Setting extends Model
 
     /**
      * Scope for email type settings.
+     *
+     * @param mixed $query
      */
     public function scopeEmailType($query)
     {
@@ -517,6 +570,8 @@ class Setting extends Model
 
     /**
      * Scope for URL type settings.
+     *
+     * @param mixed $query
      */
     public function scopeUrl($query)
     {
@@ -525,6 +580,8 @@ class Setting extends Model
 
     /**
      * Scope for color type settings.
+     *
+     * @param mixed $query
      */
     public function scopeColor($query)
     {
@@ -533,6 +590,8 @@ class Setting extends Model
 
     /**
      * Scope for file type settings.
+     *
+     * @param mixed $query
      */
     public function scopeFile($query)
     {
@@ -545,6 +604,8 @@ class Setting extends Model
 
     /**
      * Scope a query to only include popular records.
+     *
+     * @param mixed $query
      */
     public function scopePopular($query)
     {
@@ -553,15 +614,20 @@ class Setting extends Model
 
     /**
      * Scope for user-configurable settings.
+     *
+     * @param mixed $query
      */
     public function scopeUser($query)
     {
         return $query->where('is_editable', true)
-                    ->where('is_public', true);
+            ->where('is_public', true)
+        ;
     }
 
     /**
      * Scope for required settings.
+     *
+     * @param mixed $query
      */
     public function scopeRequired($query)
     {
@@ -570,6 +636,8 @@ class Setting extends Model
 
     /**
      * Scope for optional settings.
+     *
+     * @param mixed $query
      */
     public function scopeOptional($query)
     {
@@ -578,6 +646,8 @@ class Setting extends Model
 
     /**
      * Scope for alphabetical ordering.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -586,11 +656,14 @@ class Setting extends Model
 
     /**
      * Scope for ordering by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeBySortOrder($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('key', 'asc');
+            ->orderBy('key', 'asc')
+        ;
     }
 
     // =============================================
@@ -600,12 +673,12 @@ class Setting extends Model
     /**
      * Get cached settings by category.
      */
-    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCategory(string $category): Collection
     {
         return Cache::remember(
             "settings_category_{$category}",
             now()->addHours(24),
-            fn() => static::active()
+            fn () => static::active()
                 ->byCategory($category)
                 ->bySortOrder()
                 ->get()
@@ -615,12 +688,12 @@ class Setting extends Model
     /**
      * Get cached public settings.
      */
-    public static function getCachedPublic(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPublic(): Collection
     {
         return Cache::remember(
             'settings_public',
             now()->addHours(12),
-            fn() => static::active()
+            fn () => static::active()
                 ->public()
                 ->bySortOrder()
                 ->get()
@@ -629,6 +702,8 @@ class Setting extends Model
 
     /**
      * Get cached setting value by key.
+     *
+     * @param null|mixed $default
      */
     public static function getCachedValue(string $key, $default = null)
     {
@@ -637,6 +712,7 @@ class Setting extends Model
             now()->addHours(6),
             function () use ($key, $default) {
                 $setting = static::active()->byKey($key)->first();
+
                 return $setting ? $setting->parsed_value : $default;
             }
         );
@@ -645,12 +721,12 @@ class Setting extends Model
     /**
      * Get cached editable settings.
      */
-    public static function getCachedEditable(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedEditable(): Collection
     {
         return Cache::remember(
             'settings_editable',
             now()->addHours(6),
-            fn() => static::active()
+            fn () => static::active()
                 ->editable()
                 ->bySortOrder()
                 ->get()
@@ -716,7 +792,7 @@ class Setting extends Model
      */
     public function isSystem(): bool
     {
-        return !$this->is_editable || $this->category === 'system';
+        return !$this->is_editable || 'system' === $this->category;
     }
 
     /**
@@ -733,18 +809,20 @@ class Setting extends Model
     public function isSensitive(): bool
     {
         $sensitiveKeys = ['password', 'secret', 'key', 'token', 'api'];
-        
+
         foreach ($sensitiveKeys as $sensitive) {
             if (str_contains(strtolower($this->key), $sensitive)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     /**
      * Set setting value with type casting.
+     *
+     * @param mixed $value
      */
     public function setValue($value): void
     {
@@ -776,6 +854,22 @@ class Setting extends Model
     }
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_public' => 'boolean',
+            'is_editable' => 'boolean',
+            'is_active' => 'boolean',
+            'options' => 'array',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
      * Boot the model.
      */
     protected static function boot()
@@ -789,6 +883,5 @@ class Setting extends Model
         static::deleted(function ($setting) {
             $setting->clearCaches();
         });
-
     }
 }

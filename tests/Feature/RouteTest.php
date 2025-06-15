@@ -2,21 +2,25 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class RouteTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function important_routes_exist()
+    public function importantRoutesExist()
     {
         $importantRoutes = [
             '/',
             '/login',
-            '/register'
+            '/register',
         ];
 
         foreach ($importantRoutes as $route) {
@@ -29,11 +33,11 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_routes_require_login()
+    public function authenticatedRoutesRequireLogin()
     {
         $protectedRoutes = [
             '/dashboard',
-            '/profile'
+            '/profile',
         ];
 
         foreach ($protectedRoutes as $route) {

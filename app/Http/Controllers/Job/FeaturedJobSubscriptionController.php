@@ -10,11 +10,9 @@ use App\Models\NotificationSetting;
 use App\Models\SalaryCurrency;
 use App\Models\Transaction;
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +22,8 @@ use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class FeaturedJobSubscriptionController
+ * Class FeaturedJobSubscriptionController.
  */
-
 class FeaturedJobSubscriptionController extends AppBaseController
 {
     /**
@@ -43,7 +40,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
             $companyId = getLoggedInUser()->company->id;
             $companyJobsId = Job::whereCompanyId($companyId)->pluck('id')->toArray();
 
-            if (! in_array($jobId, $companyJobsId)) {
+            if (!in_array($jobId, $companyJobsId)) {
                 return $this->sendError(__('messages.common.seems_message'));
             }
             $job = Job::findOrFail($jobId);
@@ -86,7 +83,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
     /**
      * @return Application|Redirector|RedirectResponse
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function paymentSuccess(PaymentSuccessFeaturedJobSubscriptionRequest $request): RedirectResponse
     {
@@ -97,7 +94,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
         }
         setStripeApiKey();
 
-        $sessionData = \Stripe\Checkout\Session::retrieve($sessionId);
+        $sessionData = Session::retrieve($sessionId);
         $currency = SalaryCurrency::where('currency_code', $sessionData->currency)->select('id')->first();
         $stripeID = $sessionData->id;
         $jobId = $sessionData->client_reference_id;
@@ -116,11 +113,11 @@ class FeaturedJobSubscriptionController extends AppBaseController
         ];
         FeaturedRecord::create($featuredRecord);
         $loggedInUser = getLoggedInUser();
-        NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
+        1 == NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
             'type',
             'employer'
-        )->first()->value == 1 ?
-            addNotification([
+        )->first()->value
+            ? addNotification([
                 Notification::MARK_JOB_FEATURED,
                 $adminId,
                 Notification::ADMIN,
@@ -141,7 +138,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
     }
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function handleFailedPayment(): RedirectResponse
     {

@@ -12,6 +12,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class WebRoutesTest extends TestCase
 {
     use RefreshDatabase;
@@ -20,12 +25,12 @@ class WebRoutesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create essential CMS services data required by home page
         CmsServices::create(['key' => 'home_title', 'value' => 'Find Your Dream Job']);
         CmsServices::create(['key' => 'home_description', 'value' => 'Discover opportunities with top companies.']);
         CmsServices::create(['key' => 'home_banner', 'value' => 'front_web/images/hero-img.png']);
-        
+
         // Create essential settings
         Setting::create(['key' => 'slider_is_active', 'value' => '0']);
         Setting::create(['key' => 'is_full_slider', 'value' => '0']);
@@ -33,7 +38,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function homepage_loads_successfully()
+    public function homepageLoadsSuccessfully()
     {
         $response = $this->get('/');
 
@@ -41,7 +46,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function login_page_loads_successfully()
+    public function loginPageLoadsSuccessfully()
     {
         $response = $this->get('/login');
 
@@ -49,7 +54,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function register_page_loads_successfully()
+    public function registerPageLoadsSuccessfully()
     {
         $response = $this->get('/register');
 
@@ -57,7 +62,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function about_page_loads_successfully()
+    public function aboutPageLoadsSuccessfully()
     {
         $response = $this->get('/about-us');
 
@@ -65,7 +70,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function contact_page_loads_successfully()
+    public function contactPageLoadsSuccessfully()
     {
         $response = $this->get('/contact');
 
@@ -73,7 +78,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function jobs_page_loads_successfully()
+    public function jobsPageLoadsSuccessfully()
     {
         $response = $this->get('/jobs');
 
@@ -81,7 +86,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function companies_page_loads_successfully()
+    public function companiesPageLoadsSuccessfully()
     {
         $response = $this->get('/companies');
 
@@ -89,7 +94,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function job_details_page_loads_successfully()
+    public function jobDetailsPageLoadsSuccessfully()
     {
         $job = Job::factory()->create([
             'status' => Job::STATUS_OPEN,
@@ -102,7 +107,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function company_details_page_loads_successfully()
+    public function companyDetailsPageLoadsSuccessfully()
     {
         $company = Company::factory()->create([
             'is_active' => true,
@@ -114,7 +119,7 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticated_users_are_redirected_from_dashboard()
+    public function unauthenticatedUsersAreRedirectedFromDashboard()
     {
         $response = $this->get('/dashboard');
 
@@ -122,78 +127,84 @@ class WebRoutesTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_users_can_access_dashboard()
+    public function authenticatedUsersCanAccessDashboard()
     {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->get('/dashboard');
+            ->get('/dashboard')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function candidate_can_access_profile_page()
+    public function candidateCanAccessProfilePage()
     {
         $user = User::factory()->create(['user_type' => User::CANDIDATE]);
         Candidate::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->get('/candidate/profile');
+            ->get('/candidate/profile')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function company_can_access_profile_page()
+    public function companyCanAccessProfilePage()
     {
         $user = User::factory()->create(['user_type' => User::EMPLOYER]);
         Company::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->get('/employer/company');
+            ->get('/employer/company')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function employer_can_access_job_creation_page()
+    public function employerCanAccessJobCreationPage()
     {
         $user = User::factory()->create(['user_type' => User::EMPLOYER]);
         Company::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->get('/employer/jobs/create');
+            ->get('/employer/jobs/create')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function candidate_can_access_applied_jobs_page()
+    public function candidateCanAccessAppliedJobsPage()
     {
         $user = User::factory()->create(['user_type' => User::CANDIDATE]);
         Candidate::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->get('/candidate/applied-jobs');
+            ->get('/candidate/applied-jobs')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function employer_can_access_job_applications_page()
+    public function employerCanAccessJobApplicationsPage()
     {
         $user = User::factory()->create(['user_type' => User::EMPLOYER]);
         Company::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->get('/employer/jobs/applications');
+            ->get('/employer/jobs/applications')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function admin_can_access_admin_dashboard()
+    public function adminCanAccessAdminDashboard()
     {
         $admin = User::factory()->create([
             'user_type' => User::ADMIN,
@@ -201,13 +212,14 @@ class WebRoutesTest extends TestCase
         ]);
 
         $response = $this->actingAs($admin)
-            ->get('/admin/dashboard');
+            ->get('/admin/dashboard')
+        ;
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function non_admin_cannot_access_admin_dashboard()
+    public function nonAdminCannotAccessAdminDashboard()
     {
         $user = User::factory()->create([
             'user_type' => User::CANDIDATE,

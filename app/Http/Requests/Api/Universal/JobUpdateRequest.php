@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
@@ -12,9 +12,10 @@ class JobUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $job = $this->route('job');
+
         return auth()->check() && (
-            auth()->user()->id === $job->company->user_id ||
-            auth()->user()->hasRole('admin')
+            auth()->user()->id === $job->company->user_id
+            || auth()->user()->hasRole('admin')
         );
     }
 
@@ -69,13 +70,26 @@ class JobUpdateRequest extends FormRequest
         ];
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($this->has(['salary_from', 'salary_to']) && $this->salary_from > $this->salary_to) {
+                $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary.');
+            }
+
+            if ($this->has(['experience_years_min', 'experience_years_max']) && $this->experience_years_min > $this->experience_years_max) {
+                $validator->errors()->add('experience_years_max', 'Maximum experience must be greater than minimum.');
+            }
+        });
+    }
+
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
             response()->json([
                 'success' => false,
                 'message' => 'Job update validation failed',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -89,22 +103,9 @@ class JobUpdateRequest extends FormRequest
         foreach (['is_remote', 'is_freelance', 'hide_salary', 'is_featured'] as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
                 ]);
             }
         }
     }
-
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            if ($this->has(['salary_from', 'salary_to']) && $this->salary_from > $this->salary_to) {
-                $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary.');
-            }
-
-            if ($this->has(['experience_years_min', 'experience_years_max']) && $this->experience_years_min > $this->experience_years_max) {
-                $validator->errors()->add('experience_years_max', 'Maximum experience must be greater than minimum.');
-            }
-        });
-    }
-} 
+}

@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Console\Commands\TranslationCommand;
+use App\Helpers\LanguageHelper;
+use App\Services\TranslationService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Collection;
-use Illuminate\Http\Request;
-use App\Services\TranslationService;
-use App\Helpers\LanguageHelper;
-use App\Console\Commands\TranslationCommand;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Translation Service Provider
- * Comprehensive internationalization service registration and configuration
- * 
+ * Comprehensive internationalization service registration and configuration.
+ *
  * Features:
  * - Service registration and binding
  * - Blade directive registration
@@ -27,7 +27,7 @@ use App\Console\Commands\TranslationCommand;
 class TranslationServiceProvider extends ServiceProvider
 {
     /**
-     * Register services
+     * Register services.
      */
     public function register(): void
     {
@@ -60,7 +60,7 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services
+     * Bootstrap services.
      */
     public function boot(): void
     {
@@ -84,7 +84,20 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register custom Blade directives for translation
+     * Get the services provided by the provider.
+     */
+    public function provides(): array
+    {
+        return [
+            TranslationService::class,
+            LanguageHelper::class,
+            'translation.service',
+            'language.helper',
+        ];
+    }
+
+    /**
+     * Register custom Blade directives for translation.
      */
     private function registerBladeDirectives(): void
     {
@@ -117,11 +130,12 @@ class TranslationServiceProvider extends ServiceProvider
         Blade::directive('langFlag', function ($expression) {
             $flags = [
                 'en' => '🇺🇸', 'ar' => '🇸🇦', 'de' => '🇩🇪', 'es' => '🇪🇸',
-                'fr' => '🇫🇷', 'pt' => '🇵🇹', 'ru' => '🇷🇺', 'tr' => '🇹🇷', 'zh' => '🇨🇳'
+                'fr' => '🇫🇷', 'pt' => '🇵🇹', 'ru' => '🇷🇺', 'tr' => '🇹🇷', 'zh' => '🇨🇳',
             ];
+
             return "<?php 
                 \$locale = {$expression};
-                \$flags = " . var_export($flags, true) . ";
+                \$flags = ".var_export($flags, true).";
                 echo \$flags[\$locale] ?? '🌐';
             ?>";
         });
@@ -133,7 +147,7 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register view composers
+     * Register view composers.
      */
     private function registerViewComposers(): void
     {
@@ -163,7 +177,7 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register helpful macros
+     * Register helpful macros.
      */
     private function registerMacros(): void
     {
@@ -181,7 +195,7 @@ class TranslationServiceProvider extends ServiceProvider
             Request::macro('preferredLocale', function () {
                 $availableLocales = array_keys(config('app.available_locales', []));
                 $acceptLanguage = $this->header('Accept-Language');
-                
+
                 if (!$acceptLanguage) {
                     return config('app.locale', 'en');
                 }
@@ -189,26 +203,26 @@ class TranslationServiceProvider extends ServiceProvider
                 foreach (explode(',', $acceptLanguage) as $lang) {
                     $lang = trim(explode(';', $lang)[0]);
                     $lang = strtolower(substr($lang, 0, 2));
-                    
+
                     if (in_array($lang, $availableLocales)) {
                         return $lang;
                     }
                 }
-                
+
                 return config('app.locale', 'en');
             });
         }
     }
 
     /**
-     * Setup locale-specific configurations
+     * Setup locale-specific configurations.
      */
     private function setupLocaleConfiguration(): void
     {
         // Set timezone based on locale if needed
         $currentLocale = App::getLocale();
         $localeConfig = config("app.available_locales.{$currentLocale}", []);
-        
+
         // You could set timezone based on locale
         // if (isset($localeConfig['timezone'])) {
         //     config(['app.timezone' => $localeConfig['timezone']]);
@@ -226,7 +240,7 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register event listeners
+     * Register event listeners.
      */
     private function registerEventListeners(): void
     {
@@ -239,7 +253,7 @@ class TranslationServiceProvider extends ServiceProvider
         // Listen for translation updates
         app('events')->listen('translation.updated', function ($locale, $key = null) {
             TranslationService::clearCache();
-            
+
             // Trigger frontend refresh if needed
             if (app()->bound('pusher')) {
                 app('pusher')->trigger('translations', 'updated', [
@@ -252,14 +266,14 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Preload critical translations for performance
+     * Preload critical translations for performance.
      */
     private function preloadCriticalTranslations(): void
     {
         if (!app()->runningInConsole() && !app()->runningUnitTests()) {
             $currentLocale = App::getLocale();
             $criticalNamespaces = ['common', 'messages', 'validation', 'auth'];
-            
+
             foreach ($criticalNamespaces as $namespace) {
                 try {
                     TranslationService::getNamespaceTranslations($currentLocale, $namespace);
@@ -271,7 +285,7 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register helper functions
+     * Register helper functions.
      */
     private function registerHelperFunctions(): void
     {
@@ -280,24 +294,11 @@ class TranslationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register configuration
+     * Register configuration.
      */
     private function registerConfiguration(): void
     {
         // Merge configuration if needed
-        $this->mergeConfigFrom(__DIR__ . '/../../config/translation.php', 'translation');
-    }
-
-    /**
-     * Get the services provided by the provider
-     */
-    public function provides(): array
-    {
-        return [
-            TranslationService::class,
-            LanguageHelper::class,
-            'translation.service',
-            'language.helper',
-        ];
+        $this->mergeConfigFrom(__DIR__.'/../../config/translation.php', 'translation');
     }
 }

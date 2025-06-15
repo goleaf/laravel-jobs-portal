@@ -133,20 +133,22 @@ class DestroyCandidateResource extends JsonResource
 
     /**
      * Customize the outgoing response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
         $response->header('X-Resource-Type', 'DestroyCandidateResource');
         $response->header('X-Operation', 'candidate-deletion');
         $response->header('X-Audit-Trail', 'logged');
-        
+
         // Set appropriate status code
         $statusCode = $this->resource['force_delete'] ? 204 : 200;
         $response->setStatusCode($statusCode);
     }
 
     /**
-     * Get deletion message based on deletion type
+     * Get deletion message based on deletion type.
      */
     private function getDeletionMessage(): string
     {
@@ -158,7 +160,7 @@ class DestroyCandidateResource extends JsonResource
     }
 
     /**
-     * Get warnings based on deletion context
+     * Get warnings based on deletion context.
      */
     private function getWarnings(): array
     {
@@ -185,7 +187,7 @@ class DestroyCandidateResource extends JsonResource
     }
 
     /**
-     * Get recommendations for post-deletion actions
+     * Get recommendations for post-deletion actions.
      */
     private function getRecommendations(): array
     {
@@ -207,4 +209,4 @@ class DestroyCandidateResource extends JsonResource
 
         return $recommendations;
     }
-} 
+}

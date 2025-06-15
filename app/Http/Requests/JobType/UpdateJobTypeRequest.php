@@ -3,7 +3,9 @@
 namespace App\Http\Requests\JobType;
 
 use App\Models\JobType;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UpdateJobTypeRequest extends FormRequest
@@ -14,13 +16,14 @@ class UpdateJobTypeRequest extends FormRequest
     public function authorize(): bool
     {
         $jobType = $this->route('job_type') ?? $this->route('jobType');
+
         return $this->user()->can('update', $jobType);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -155,7 +158,7 @@ class UpdateJobTypeRequest extends FormRequest
         // Auto-generate slug if name changed but slug not provided
         if ($this->has('name') && !$this->has('slug')) {
             $this->merge([
-                'slug' => \Illuminate\Support\Str::slug($this->name),
+                'slug' => Str::slug($this->name),
             ]);
         }
 
@@ -191,7 +194,7 @@ class UpdateJobTypeRequest extends FormRequest
     protected function passedValidation(): void
     {
         $jobType = $this->route('job_type') ?? $this->route('jobType');
-        
+
         // Log significant changes
         if ($this->has('is_active') && $jobType->is_active !== $this->is_active) {
             \Log::info('Job type status changed', [
@@ -210,4 +213,4 @@ class UpdateJobTypeRequest extends FormRequest
             ]);
         }
     }
-} 
+}

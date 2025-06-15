@@ -30,7 +30,7 @@ class ConvertRappasoftTables extends Command
     public function handle()
     {
         $path = $this->option('path');
-        $this->info("Searching for Rappasoft datatable files in: $path");
+        $this->info("Searching for Rappasoft datatable files in: {$path}");
 
         // Search for all PHP files that extend LivewireDatatables
         $phpFiles = File::glob("{$path}/**/*.php");
@@ -40,12 +40,12 @@ class ConvertRappasoftTables extends Command
             $content = File::get($file);
 
             // Check if file is a Rappasoft livewire datatable
-            if (strpos($content, 'Rappasoft\LaravelLivewireTables') !== false) {
-                $this->info("Found Rappasoft datatable: $file");
+            if (false !== strpos($content, 'Rappasoft\LaravelLivewireTables')) {
+                $this->info("Found Rappasoft datatable: {$file}");
 
                 // Replace the namespace and base class
                 $content = preg_replace(
-                    '/use Rappasoft\\\\LaravelLivewireTables\\\\.*?;/m',
+                    '/use Rappasoft\\\LaravelLivewireTables\\\.*?;/m',
                     'use App\Http\Livewire\BaseTable;',
                     $content
                 );
@@ -95,12 +95,12 @@ class ConvertRappasoftTables extends Command
 
                 // Save the updated file
                 File::put($file, $content);
-                $this->info("Updated file: $file");
-                $count++;
+                $this->info("Updated file: {$file}");
+                ++$count;
             }
         }
 
-        $this->info("Converted $count Rappasoft datatable files to BaseTable");
+        $this->info("Converted {$count} Rappasoft datatable files to BaseTable");
 
         return Command::SUCCESS;
     }
@@ -122,10 +122,10 @@ class ConvertRappasoftTables extends Command
         }
 
         // Extract model from namespace import or from $model property
-        preg_match('/use\s+App\\\\Models\\\\([^;]+);/', $content, $modelMatches);
+        preg_match('/use\s+App\\\Models\\\([^;]+);/', $content, $modelMatches);
         $modelName = $modelMatches[1] ?? null;
 
-        if (! $modelName) {
+        if (!$modelName) {
             preg_match('/protected\s+\$model\s*=\s*([^:]+)::class/', $content, $propertyMatches);
             if (isset($propertyMatches[1])) {
                 $parts = explode('\\', $propertyMatches[1]);
@@ -133,7 +133,7 @@ class ConvertRappasoftTables extends Command
             }
         }
 
-        if (! $modelName) {
+        if (!$modelName) {
             $this->error("Could not detect model for {$className}. Please convert manually.");
 
             return;
@@ -216,10 +216,10 @@ class ConvertRappasoftTables extends Command
         return <<<PHP
 <?php
 
-namespace App\Console\Commands;
+namespace App\\Console\\Commands;
 
-use App\Models\\{$modelName};
-use Illuminate\Database\Eloquent\Builder;
+use App\\Models\\{$modelName};
+use Illuminate\\Database\\Eloquent\\Builder;
 
 class {$className} extends BaseTable
 {

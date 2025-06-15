@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\FAQ;
 use App\Repositories\FAQRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class FAQController extends AppBaseController
 {
     /** @var FAQRepository */
@@ -22,10 +21,9 @@ class FAQController extends AppBaseController
     /**
      * Display a listing of the FAQ.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -73,8 +71,7 @@ class FAQController extends AppBaseController
     /**
      * Remove the specified FAQ from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(FAQ $faq): JsonResponse
     {

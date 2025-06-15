@@ -17,7 +17,7 @@ class CandidateShowResource extends JsonResource
             'user_id' => $this->user_id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'full_name' => $this->first_name . ' ' . $this->last_name,
+            'full_name' => $this->first_name.' '.$this->last_name,
             'phone' => $this->phone,
             'email' => $this->user?->email,
             'date_of_birth' => $this->date_of_birth?->format('Y-m-d'),
@@ -71,8 +71,8 @@ class CandidateShowResource extends JsonResource
                 'website_url' => $this->website_url,
                 'portfolio_url' => $this->portfolio_url,
             ],
-            'skills' => $this->when($this->relationLoaded('skills'), function() {
-                return $this->skills->map(function($skill) {
+            'skills' => $this->when($this->relationLoaded('skills'), function () {
+                return $this->skills->map(function ($skill) {
                     return [
                         'id' => $skill->id,
                         'name' => $skill->name,
@@ -81,8 +81,8 @@ class CandidateShowResource extends JsonResource
                     ];
                 });
             }),
-            'languages' => $this->when($this->relationLoaded('languages'), function() {
-                return $this->languages->map(function($language) {
+            'languages' => $this->when($this->relationLoaded('languages'), function () {
+                return $this->languages->map(function ($language) {
                     return [
                         'id' => $language->id,
                         'name' => $language->name,
@@ -90,8 +90,8 @@ class CandidateShowResource extends JsonResource
                     ];
                 });
             }),
-            'education' => $this->when($this->relationLoaded('educations'), function() {
-                return $this->educations->map(function($education) {
+            'education' => $this->when($this->relationLoaded('educations'), function () {
+                return $this->educations->map(function ($education) {
                     return [
                         'id' => $education->id,
                         'degree_level' => $education->degreeLevel?->name,
@@ -104,8 +104,8 @@ class CandidateShowResource extends JsonResource
                     ];
                 });
             }),
-            'experience' => $this->when($this->relationLoaded('experiences'), function() {
-                return $this->experiences->map(function($experience) {
+            'experience' => $this->when($this->relationLoaded('experiences'), function () {
+                return $this->experiences->map(function ($experience) {
                     return [
                         'id' => $experience->id,
                         'company' => $experience->company,
@@ -118,7 +118,7 @@ class CandidateShowResource extends JsonResource
                     ];
                 });
             }),
-            'applications_count' => $this->when($this->relationLoaded('applications'), function() {
+            'applications_count' => $this->when($this->relationLoaded('applications'), function () {
                 return $this->applications->count();
             }),
             'statistics' => [
@@ -152,6 +152,8 @@ class CandidateShowResource extends JsonResource
 
     /**
      * Customize the outgoing response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -160,7 +162,7 @@ class CandidateShowResource extends JsonResource
     }
 
     /**
-     * Get the full address string
+     * Get the full address string.
      */
     private function getFullAddress(): ?string
     {
@@ -176,35 +178,36 @@ class CandidateShowResource extends JsonResource
     }
 
     /**
-     * Get formatted salary
+     * Get formatted salary.
      */
     private function getFormattedSalary(string $type): ?string
     {
-        $amount = $type === 'current' ? $this->current_salary : $this->expected_salary;
-        
+        $amount = 'current' === $type ? $this->current_salary : $this->expected_salary;
+
         if (!$amount || !$this->salaryCurrency) {
             return null;
         }
 
-        return $this->salaryCurrency->symbol . number_format($amount, 0);
+        return $this->salaryCurrency->symbol.number_format($amount, 0);
     }
 
     /**
-     * Get avatar URL
+     * Get avatar URL.
      */
     private function getAvatarUrl(): ?string
     {
         if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+            return asset('storage/'.$this->avatar);
         }
-        
+
         // Default avatar with initials
-        $initials = substr($this->first_name, 0, 1) . substr($this->last_name, 0, 1);
+        $initials = substr($this->first_name, 0, 1).substr($this->last_name, 0, 1);
+
         return "https://ui-avatars.com/api/?name={$initials}&size=200&background=random";
     }
 
     /**
-     * Get profile completion percentage
+     * Get profile completion percentage.
      */
     private function getProfileCompletionPercentage(): int
     {
@@ -212,13 +215,13 @@ class CandidateShowResource extends JsonResource
             'first_name', 'last_name', 'phone', 'date_of_birth', 'gender',
             'address', 'country_id', 'state_id', 'city_id', 'career_level_id',
             'industry_id', 'current_salary', 'expected_salary', 'bio',
-            'linkedin_url', 'experience_years'
+            'linkedin_url', 'experience_years',
         ];
 
         $completedFields = 0;
         foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $completedFields++;
+            if (!empty($this->{$field})) {
+                ++$completedFields;
             }
         }
 
@@ -226,18 +229,28 @@ class CandidateShowResource extends JsonResource
     }
 
     /**
-     * Get included relations
+     * Get included relations.
      */
     private function getIncludedRelations(): array
     {
         $included = [];
-        
-        if ($this->relationLoaded('skills')) $included[] = 'skills';
-        if ($this->relationLoaded('languages')) $included[] = 'languages';
-        if ($this->relationLoaded('educations')) $included[] = 'education';
-        if ($this->relationLoaded('experiences')) $included[] = 'experience';
-        if ($this->relationLoaded('applications')) $included[] = 'applications';
+
+        if ($this->relationLoaded('skills')) {
+            $included[] = 'skills';
+        }
+        if ($this->relationLoaded('languages')) {
+            $included[] = 'languages';
+        }
+        if ($this->relationLoaded('educations')) {
+            $included[] = 'education';
+        }
+        if ($this->relationLoaded('experiences')) {
+            $included[] = 'experience';
+        }
+        if ($this->relationLoaded('applications')) {
+            $included[] = 'applications';
+        }
 
         return $included;
     }
-} 
+}

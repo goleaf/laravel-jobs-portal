@@ -76,7 +76,7 @@ class ShowCompanyResource extends JsonResource
                     'last_active' => $this->last_active_at?->toISOString(),
                 ],
             ],
-            
+
             // Include relationships if requested
             'user' => $this->whenLoaded('user', function () {
                 return [
@@ -87,7 +87,7 @@ class ShowCompanyResource extends JsonResource
                     'email_verified_at' => $this->user->email_verified_at?->toISOString(),
                 ];
             }),
-            
+
             'jobs' => $this->whenLoaded('jobs', function () {
                 return $this->jobs->map(function ($job) {
                     return [
@@ -101,7 +101,7 @@ class ShowCompanyResource extends JsonResource
                     ];
                 });
             }),
-            
+
             'employees' => $this->whenLoaded('employees', function () {
                 return $this->employees->map(function ($employee) {
                     return [
@@ -114,7 +114,7 @@ class ShowCompanyResource extends JsonResource
                     ];
                 });
             }),
-            
+
             'industry' => $this->whenLoaded('industry', function () {
                 return [
                     'id' => $this->industry->id,
@@ -122,7 +122,7 @@ class ShowCompanyResource extends JsonResource
                     'category' => $this->industry->category ?? null,
                 ];
             }),
-            
+
             'size_info' => $this->whenLoaded('size', function () {
                 return [
                     'id' => $this->size->id,
@@ -155,6 +155,8 @@ class ShowCompanyResource extends JsonResource
 
     /**
      * Customize the response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -163,40 +165,40 @@ class ShowCompanyResource extends JsonResource
     }
 
     /**
-     * Check if company profile is complete
+     * Check if company profile is complete.
      */
     private function isProfileComplete(): bool
     {
         $requiredFields = ['name', 'description', 'website', 'industry', 'company_size', 'address'];
-        
+
         foreach ($requiredFields as $field) {
-            if (empty($this->$field)) {
+            if (empty($this->{$field})) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Get profile completion percentage
+     * Get profile completion percentage.
      */
     private function getProfileCompletionPercentage(): int
     {
         $fields = [
-            'name', 'description', 'website', 'logo', 'industry', 
+            'name', 'description', 'website', 'logo', 'industry',
             'company_size', 'founded_year', 'address', 'phone', 'email',
-            'linkedin_url', 'twitter_url'
+            'linkedin_url', 'twitter_url',
         ];
-        
+
         $completedFields = 0;
-        
+
         foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $completedFields++;
+            if (!empty($this->{$field})) {
+                ++$completedFields;
             }
         }
-        
+
         return (int) round(($completedFields / count($fields)) * 100);
     }
-} 
+}

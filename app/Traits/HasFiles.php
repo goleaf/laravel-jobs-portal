@@ -76,7 +76,7 @@ trait HasFiles
     {
         $fileUploadService = app(FileUploadService::class);
 
-        if (! $fileUploadService->exists($path)) {
+        if (!$fileUploadService->exists($path)) {
             throw new \Exception("File does not exist at path: {$path}");
         }
 

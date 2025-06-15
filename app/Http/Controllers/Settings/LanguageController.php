@@ -6,11 +6,12 @@ use App\Models\Language;
 use App\Repositories\LanguageRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+
 class LanguageController extends AppBaseController
 {
     /** @var LanguageRepository */
@@ -24,7 +25,6 @@ class LanguageController extends AppBaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
      * @throws \Exception
@@ -77,7 +77,6 @@ class LanguageController extends AppBaseController
     /**
      * Remove the specified resource from storage.
      *
-     *
      * @throws \Exception
      */
     public function destroy(Language $language): JsonResponse
@@ -103,9 +102,9 @@ class LanguageController extends AppBaseController
     }
 
     /**
-     * Change the application language
+     * Change the application language.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function changeLanguage(ChangeLanguageLanguageRequest $request, string $locale)
     {

@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\JobStage;
 
 /**
- * Class JobStageRepository
+ * Class JobStageRepository.
  */
 class JobStageRepository extends BaseRepository
 {
@@ -18,7 +18,7 @@ class JobStageRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -26,8 +26,8 @@ class JobStageRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return JobStage::class;

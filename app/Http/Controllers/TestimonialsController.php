@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Testimonial;
 use App\Repositories\TestimonialRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 class TestimonialsController extends AppBaseController
 {
     /**
@@ -23,10 +22,9 @@ class TestimonialsController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -63,8 +61,6 @@ class TestimonialsController extends AppBaseController
 
     /**
      * Update the specified resource in storage.
-     *
-     * @return void
      */
     public function update(UpdateTestimonialUpdateTestimonialsRequest $request, Testimonial $testimonial)
     {
@@ -77,8 +73,7 @@ class TestimonialsController extends AppBaseController
     /**
      * Remove the specified resource from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Testimonial $testimonial): JsonResponse
     {
@@ -87,15 +82,11 @@ class TestimonialsController extends AppBaseController
         return $this->sendSuccess(__('messages.flash.testimonial_delete'));
     }
 
-    /**
-     * @param  int  $media
-     */
     public function downloadImage(Testimonial $testimonial): Media
     {
         $media = $testimonial->getMedia('testimonials')->first()->id;
-        /** @var Media $mediaItem */
-        $mediaItem = Media::findOrFail($media);
 
-        return $mediaItem;
+        /** @var Media $mediaItem */
+        return Media::findOrFail($media);
     }
 }

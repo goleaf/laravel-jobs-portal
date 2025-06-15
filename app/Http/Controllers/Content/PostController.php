@@ -6,16 +6,15 @@ use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostComment;
 use App\Repositories\PostRepository;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 class PostController extends AppBaseController
 {
     /** @var PostRepository */
@@ -29,10 +28,9 @@ class PostController extends AppBaseController
     /**
      * Display a listing of the Blog.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -52,7 +50,7 @@ class PostController extends AppBaseController
     /**
      * Store a newly created Blog in storage.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function store(CreatePostStorePostRequest $request): RedirectResponse
     {
@@ -91,7 +89,7 @@ class PostController extends AppBaseController
     /**
      * Update the specified Blog in storage.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function update(UpdatePostUpdatePostRequest $request, Post $post): RedirectResponse
     {
@@ -120,7 +118,6 @@ class PostController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function getAllComments(): View

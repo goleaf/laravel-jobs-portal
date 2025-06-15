@@ -5,47 +5,48 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * File Model - Enhanced with Enhanced patterns
+ * File Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $name
- * @property string $original_name
- * @property string $path
- * @property string|null $disk
- * @property string|null $mime_type
- * @property int|null $size
- * @property string|null $extension
- * @property bool $is_active
- * @property bool $is_public
- * @property bool $is_temporary
- * @property string|null $model_type
- * @property int|null $model_id
- * @property int|null $user_id
- * @property array|null $metadata
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read Model|null $model
- * @property-read User|null $user
- * @property-read string $url
- * @property-read string $human_readable_size
- * @property-read bool $is_image
- * @property-read bool $is_document
- * @property-read bool $is_video
- * @property-read bool $is_audio
- * @property-read bool $exists
+ * @property int         $id
+ * @property string      $name
+ * @property string      $original_name
+ * @property string      $path
+ * @property null|string $disk
+ * @property null|string $mime_type
+ * @property null|int    $size
+ * @property null|string $extension
+ * @property bool        $is_active
+ * @property bool        $is_public
+ * @property bool        $is_temporary
+ * @property null|string $model_type
+ * @property null|int    $model_id
+ * @property null|int    $user_id
+ * @property null|array  $metadata
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property null|Model  $model
+ * @property null|User   $user
+ * @property string      $url
+ * @property string      $human_readable_size
+ * @property bool        $is_image
+ * @property bool        $is_document
+ * @property bool        $is_video
+ * @property bool        $is_audio
+ * @property bool        $exists
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder public()
@@ -72,15 +73,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class File extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'files';
-
-    /**
-     * File type constants
+     * File type constants.
      */
     public const TYPE_IMAGE = 'image';
     public const TYPE_DOCUMENT = 'document';
@@ -89,24 +87,49 @@ class File extends Model
     public const TYPE_OTHER = 'other';
 
     /**
-     * Image extensions
+     * Image extensions.
      */
     public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
 
     /**
-     * Document extensions
+     * Document extensions.
      */
     public const DOCUMENT_EXTENSIONS = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'rtf'];
 
     /**
-     * Video extensions
+     * Video extensions.
      */
     public const VIDEO_EXTENSIONS = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'];
 
     /**
-     * Audio extensions
+     * Audio extensions.
      */
     public const AUDIO_EXTENSIONS = ['mp3', 'wav', 'flac', 'aac', 'ogg', 'wma'];
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:255',
+        'original_name' => 'required|string|max:255',
+        'path' => 'required|string|max:500',
+        'disk' => 'nullable|string|max:50',
+        'mime_type' => 'nullable|string|max:100',
+        'size' => 'nullable|integer|min:0',
+        'extension' => 'nullable|string|max:10',
+        'is_active' => 'boolean',
+        'is_public' => 'boolean',
+        'is_temporary' => 'boolean',
+        'model_type' => 'nullable|string|max:255',
+        'model_id' => 'nullable|integer',
+        'user_id' => 'nullable|integer|exists:users,id',
+        'metadata' => 'nullable|array',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'files';
 
     /**
      * The attributes that are mass assignable.
@@ -136,47 +159,7 @@ class File extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'size' => 'integer',
-            'is_active' => 'boolean',
-            'is_public' => 'boolean',
-            'is_temporary' => 'boolean',
-            'model_id' => 'integer',
-            'user_id' => 'integer',
-            'metadata' => 'array',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:255',
-        'original_name' => 'required|string|max:255',
-        'path' => 'required|string|max:500',
-        'disk' => 'nullable|string|max:50',
-        'mime_type' => 'nullable|string|max:100',
-        'size' => 'nullable|integer|min:0',
-        'extension' => 'nullable|string|max:10',
-        'is_active' => 'boolean',
-        'is_public' => 'boolean',
-        'is_temporary' => 'boolean',
-        'model_type' => 'nullable|string|max:255',
-        'model_id' => 'nullable|integer',
-        'user_id' => 'nullable|integer|exists:users,id',
-        'metadata' => 'nullable|array',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -184,7 +167,8 @@ class File extends Model
             ->logOnly(['name', 'original_name', 'path', 'size', 'is_active', 'is_public'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "File has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "File has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -202,7 +186,7 @@ class File extends Model
     /**
      * Get the user who uploaded the file.
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -297,7 +281,8 @@ class File extends Model
     public function scopeByModel(Builder $query, string $modelType, int $modelId): Builder
     {
         return $query->where('model_type', $modelType)
-                    ->where('model_id', $modelId);
+            ->where('model_id', $modelId)
+        ;
     }
 
     /**
@@ -381,10 +366,11 @@ class File extends Model
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
-        return $query->where('name', 'like', '%' . $term . '%')
-                    ->orWhere('original_name', 'like', '%' . $term . '%')
-                    ->orWhere('extension', 'like', '%' . $term . '%')
-                    ->orWhere('mime_type', 'like', '%' . $term . '%');
+        return $query->where('name', 'like', '%'.$term.'%')
+            ->orWhere('original_name', 'like', '%'.$term.'%')
+            ->orWhere('extension', 'like', '%'.$term.'%')
+            ->orWhere('mime_type', 'like', '%'.$term.'%')
+        ;
     }
 
     /**
@@ -415,8 +401,8 @@ class File extends Model
         if ($this->is_public) {
             return Storage::disk($this->disk ?? 'public')->url($this->path);
         }
-        
-        return asset('storage/' . $this->path);
+
+        return asset('storage/'.$this->path);
     }
 
     /**
@@ -427,11 +413,11 @@ class File extends Model
         $bytes = $this->size ?? 0;
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
-        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; ++$i) {
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     /**
@@ -508,23 +494,23 @@ class File extends Model
     public function getFileType(): string
     {
         $extension = strtolower($this->extension);
-        
+
         if (in_array($extension, self::IMAGE_EXTENSIONS)) {
             return self::TYPE_IMAGE;
         }
-        
+
         if (in_array($extension, self::DOCUMENT_EXTENSIONS)) {
             return self::TYPE_DOCUMENT;
         }
-        
+
         if (in_array($extension, self::VIDEO_EXTENSIONS)) {
             return self::TYPE_VIDEO;
         }
-        
+
         if (in_array($extension, self::AUDIO_EXTENSIONS)) {
             return self::TYPE_AUDIO;
         }
-        
+
         return self::TYPE_OTHER;
     }
 
@@ -536,7 +522,7 @@ class File extends Model
         if ($this->exists) {
             return Storage::disk($this->disk ?? 'public')->delete($this->path);
         }
-        
+
         return true;
     }
 
@@ -601,6 +587,26 @@ class File extends Model
             Cache::forget("user.{$this->user_id}.files_count");
             Cache::forget("user.{$this->user_id}.storage_used");
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'size' => 'integer',
+            'is_active' => 'boolean',
+            'is_public' => 'boolean',
+            'is_temporary' => 'boolean',
+            'model_id' => 'integer',
+            'user_id' => 'integer',
+            'metadata' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

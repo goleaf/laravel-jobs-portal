@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Transaction;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TransactionPolicy
 {
@@ -21,8 +20,8 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole(['Employer', 'Candidate']) && $user->id === $transaction->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole(['Employer', 'Candidate']) && $user->id === $transaction->user_id);
     }
 
     /**

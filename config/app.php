@@ -1,10 +1,18 @@
 <?php
 
+use App\Facades\Form;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\RouteServiceProvider;
+use App\Providers\TranslationServiceProvider;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\ServiceProvider;
+use Laracasts\Flash\Flash;
+use Laravel\Socialite\Facades\Socialite;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -246,18 +254,14 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
+        // Package Service Providers...
         // Barryvdh\Debugbar\ServiceProvider::class,
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\TranslationServiceProvider::class,
+        // Application Service Providers...
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        TranslationServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -273,12 +277,11 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Flash' => Laracasts\Flash\Flash::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Form' => App\Facades\Form::class,
+        'Flash' => Flash::class,
+        'Redis' => Redis::class,
+        'Socialite' => Socialite::class,
+        'Form' => Form::class,
     ])->toArray(),
 
     'is_version' => env('IS_VERSION', true),
-
 ];

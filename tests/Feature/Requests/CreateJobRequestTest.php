@@ -3,65 +3,46 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\CreateJobRequest;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
+use App\Models\CareerLevel;
+use App\Models\Country;
+use App\Models\FunctionalArea;
 use App\Models\JobCategory;
 use App\Models\JobType;
-use App\Models\CareerLevel;
-use App\Models\FunctionalArea;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CreateJobRequestTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create required reference data
         $this->createReferenceData();
     }
 
     /**
-     * Create reference data needed for job creation.
-     */
-    protected function createReferenceData()
-    {
-        // Create basic reference data that jobs depend on
-        if (class_exists(\App\Models\JobCategory::class)) {
-            JobCategory::factory()->create(['id' => 1]);
-        }
-        if (class_exists(\App\Models\JobType::class)) {
-            JobType::factory()->create(['id' => 1]);
-        }
-        if (class_exists(\App\Models\CareerLevel::class)) {
-            CareerLevel::factory()->create(['id' => 1]);
-        }
-        if (class_exists(\App\Models\FunctionalArea::class)) {
-            FunctionalArea::factory()->create(['id' => 1]);
-        }
-        if (class_exists(\App\Models\Country::class)) {
-            Country::factory()->create(['id' => 1]);
-        }
-    }
-
-    /**
      * Test that the request has proper validation rules.
      */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new CreateJobRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
-        
+
         // Check specific rules exist
         $this->assertArrayHasKey('title', $rules);
         $this->assertArrayHasKey('description', $rules);
@@ -73,11 +54,11 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test authorization for employer users.
      */
-    public function test_employer_user_is_authorized()
+    public function testEmployerUserIsAuthorized()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        
+
         $request = new CreateJobRequest();
         // Placeholder until role system is implemented
         $this->assertTrue(true);
@@ -86,7 +67,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test validation passes with valid data.
      */
-    public function test_validation_passes_with_valid_data()
+    public function testValidationPassesWithValidData()
     {
         $data = $this->getValidData();
 
@@ -94,7 +75,7 @@ class CreateJobRequestTest extends TestCase
         $validator = Validator::make($data, $request->rules());
 
         if (!$validator->passes()) {
-            $this->fail('Validation failed with errors: ' . json_encode($validator->errors()->toArray()));
+            $this->fail('Validation failed with errors: '.json_encode($validator->errors()->toArray()));
         }
 
         $this->assertTrue($validator->passes());
@@ -103,7 +84,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test title is required.
      */
-    public function test_title_is_required()
+    public function testTitleIsRequired()
     {
         $data = $this->getValidData();
         unset($data['title']);
@@ -118,7 +99,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test description is required.
      */
-    public function test_description_is_required()
+    public function testDescriptionIsRequired()
     {
         $data = $this->getValidData();
         unset($data['description']);
@@ -133,7 +114,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test description minimum length.
      */
-    public function test_description_minimum_length()
+    public function testDescriptionMinimumLength()
     {
         $data = $this->getValidData();
         $data['description'] = 'Short'; // Less than 50 characters
@@ -148,7 +129,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test job_category_id is required.
      */
-    public function test_job_category_id_is_required()
+    public function testJobCategoryIdIsRequired()
     {
         $data = $this->getValidData();
         unset($data['job_category_id']);
@@ -163,7 +144,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test job_type_id is required.
      */
-    public function test_job_type_id_is_required()
+    public function testJobTypeIdIsRequired()
     {
         $data = $this->getValidData();
         unset($data['job_type_id']);
@@ -178,7 +159,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test location is required.
      */
-    public function test_location_is_required()
+    public function testLocationIsRequired()
     {
         $data = $this->getValidData();
         unset($data['location']);
@@ -193,7 +174,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary validation - salary_to must be greater than salary_from.
      */
-    public function test_salary_to_must_be_greater_than_salary_from()
+    public function testSalaryToMustBeGreaterThanSalaryFrom()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 100000;
@@ -209,7 +190,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary fields accept numeric values.
      */
-    public function test_salary_fields_accept_numeric_values()
+    public function testSalaryFieldsAcceptNumericValues()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 50000;
@@ -224,7 +205,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary fields reject non-numeric values.
      */
-    public function test_salary_fields_reject_non_numeric_values()
+    public function testSalaryFieldsRejectNonNumericValues()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 'not-a-number';
@@ -239,7 +220,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test expires_at must be future date.
      */
-    public function test_expires_at_must_be_future_date()
+    public function testExpiresAtMustBeFutureDate()
     {
         $data = $this->getValidData();
         $data['expires_at'] = '2020-01-01'; // Past date
@@ -254,7 +235,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test experience field accepts valid range.
      */
-    public function test_experience_accepts_valid_range()
+    public function testExperienceAcceptsValidRange()
     {
         $data = $this->getValidData();
         $data['experience'] = 5;
@@ -268,7 +249,7 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test experience field rejects values over 50.
      */
-    public function test_experience_rejects_over_50()
+    public function testExperienceRejectsOver50()
     {
         $data = $this->getValidData();
         $data['experience'] = 60; // Over maximum
@@ -283,24 +264,24 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test gender field accepts valid values.
      */
-    public function test_gender_accepts_valid_values()
+    public function testGenderAcceptsValidValues()
     {
         $data = $this->getValidData();
-        
+
         foreach ([0, 1, 2] as $gender) {
             $data['gender'] = $gender;
 
             $request = new CreateJobRequest();
             $validator = Validator::make($data, $request->rules());
 
-            $this->assertTrue($validator->passes(), "Gender value $gender should be valid");
+            $this->assertTrue($validator->passes(), "Gender value {$gender} should be valid");
         }
     }
 
     /**
      * Test gender field rejects invalid values.
      */
-    public function test_gender_rejects_invalid_values()
+    public function testGenderRejectsInvalidValues()
     {
         $data = $this->getValidData();
         $data['gender'] = 5; // Invalid value
@@ -315,14 +296,14 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function test_custom_error_messages_are_defined()
+    public function testCustomErrorMessagesAreDefined()
     {
         $request = new CreateJobRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
-            
+
             // Check specific custom messages
             $this->assertArrayHasKey('title.required', $messages);
             $this->assertArrayHasKey('description.required', $messages);
@@ -334,15 +315,38 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function test_custom_attributes_are_defined()
+    public function testCustomAttributesAreDefined()
     {
         $request = new CreateJobRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
         } else {
             $this->assertTrue(true, 'No custom attributes method defined');
+        }
+    }
+
+    /**
+     * Create reference data needed for job creation.
+     */
+    protected function createReferenceData()
+    {
+        // Create basic reference data that jobs depend on
+        if (class_exists(JobCategory::class)) {
+            JobCategory::factory()->create(['id' => 1]);
+        }
+        if (class_exists(JobType::class)) {
+            JobType::factory()->create(['id' => 1]);
+        }
+        if (class_exists(CareerLevel::class)) {
+            CareerLevel::factory()->create(['id' => 1]);
+        }
+        if (class_exists(FunctionalArea::class)) {
+            FunctionalArea::factory()->create(['id' => 1]);
+        }
+        if (class_exists(Country::class)) {
+            Country::factory()->create(['id' => 1]);
         }
     }
 
@@ -391,4 +395,4 @@ class CreateJobRequestTest extends TestCase
             'expires_at' => '2020-01-01', // Past date
         ];
     }
-} 
+}

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Job;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class ApplyJobRequest
+ * Class ApplyJobRequest.
  */
 class ApplyJobRequest extends FormRequest
 {
@@ -15,16 +15,6 @@ class ApplyJobRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $expectedSalary = removeCommaFromNumbers($this->request->get('expected_salary'));
-
-        $this->request->set('expected_salary', $expectedSalary);
     }
 
     /**
@@ -54,5 +44,15 @@ class ApplyJobRequest extends FormRequest
             'resume_id.required' => __('messages.flash.resume_field_required'),
             'g-recaptcha-response.required' => __('messages.flash.verify_google_recaptcha'),
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $expectedSalary = removeCommaFromNumbers($this->request->get('expected_salary'));
+
+        $this->request->set('expected_salary', $expectedSalary);
     }
 }

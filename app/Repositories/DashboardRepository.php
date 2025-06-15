@@ -13,7 +13,6 @@ use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class DashboardRepository
+ * Class DashboardRepository.
  *
  * @version July 7, 2020, 5:07 am UTC
  */
@@ -62,14 +61,16 @@ class DashboardRepository
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get();
+                ->get()
+            ;
             $candidate = Candidate::whereHas('user', function (Builder $query) {
                 $query->where('is_active', 1);
             })->addSelect([\DB::raw('DAY(created_at) as day,created_at')])
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get();
+                ->get()
+            ;
             $period = CarbonPeriod::create($startDate, $endDate);
 
             foreach ($period as $date) {
@@ -79,7 +80,7 @@ class DashboardRepository
             }
 
             return $data;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -94,7 +95,8 @@ class DashboardRepository
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get();
+                ->get()
+            ;
 
             $period = CarbonPeriod::create($startDate, $endDate);
 
@@ -104,7 +106,7 @@ class DashboardRepository
             }
 
             return $data;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -161,14 +163,13 @@ class DashboardRepository
     }
 
     /**
-     * @return Job[]|Builder[]|Collection
+     * @return Builder[]|Collection|Job[]
      */
     public function getEmployerRecentJobsData()
     {
         $user = Auth::user();
-        $jobs = Job::whereCompanyId($user->owner_id)->orderByDesc('created_at')->limit(5)->get();
 
-        return $jobs;
+        return Job::whereCompanyId($user->owner_id)->orderByDesc('created_at')->limit(5)->get();
     }
 
     /**
@@ -177,35 +178,34 @@ class DashboardRepository
     public function getEmployerRecentFollowerData()
     {
         $user = Auth::user();
-        $followers = FavouriteCompany::with('user')->where(
+
+        return FavouriteCompany::with('user')->where(
             'company_id',
             $user->owner_id
         )->orderByDesc('created_at')->limit(5)->get();
-
-        return $followers;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getDate(string $startDate, string $endDate): array
     {
         $dateArr = [];
         $subStartDate = '';
         $subEndDate = '';
-        if (! ($startDate && $endDate)) {
-            $data = [
+        if (!($startDate && $endDate)) {
+            return [
                 'dateArr' => $dateArr,
                 'startDate' => $subStartDate,
                 'endDate' => $subEndDate,
             ];
-
-            return $data;
         }
         $end = trim(substr($endDate, 0, 10));
         $start = Carbon::parse($startDate)->toDateString();
+
         /** @var \Illuminate\Support\Carbon $startDate */
         $startDate = Carbon::createFromFormat('Y-m-d', $start);
+
         /** @var \Illuminate\Support\Carbon $endDate */
         $endDate = Carbon::createFromFormat('Y-m-d', $end);
 
@@ -218,13 +218,11 @@ class DashboardRepository
         $subStartDate = Carbon::parse($start)->startOfDay()->format('Y-m-d H:i:s');
         $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
 
-        $data = [
+        return [
             'dateArr' => $dateArr,
             'startDate' => $subStartDate,
             'endDate' => $subEndDate,
         ];
-
-        return $data;
     }
 
     /**
@@ -241,7 +239,7 @@ class DashboardRepository
             $query->where('id', $jobTitleId);
         })->pluck('id');
 
-        $jobApplications = JobApplication::when($gender != '', function (Builder $query) use ($gender) {
+        $jobApplications = JobApplication::when('' != $gender, function (Builder $query) use ($gender) {
             $query->whereHas('candidate.user', function (Builder $query) use ($gender) {
                 $query->where('gender', '=', $gender);
             });
@@ -260,7 +258,8 @@ class DashboardRepository
                 $item->date = Carbon::parse($item->date);
 
                 return $item;
-            });
+            })
+        ;
         $period = CarbonPeriod::create($dateS, $dateE);
 
         // get all date labels

@@ -6,7 +6,7 @@ use App\Models\HeaderSlider;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateHeaderSliderRequest
+ * Class CreateHeaderSliderRequest.
  */
 class CreateHeaderSliderRequest extends FormRequest
 {

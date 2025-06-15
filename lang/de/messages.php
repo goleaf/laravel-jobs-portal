@@ -102,7 +102,6 @@ return [
         'expires_on' => 'Läuft aus am',
         'verify_captcha' => 'Sie müssen Google Recaptcha verifizieren.',
         'app_footer_logo' => 'Fußzeilenlogo',
-
     ],
 
     'cms_service' => [
@@ -748,7 +747,6 @@ return [
         'subscriber' => 'Abonnent',
         'please_enter_salary_range_to_greater_than_salary_range_from' => 'Bitte Gehaltsspanne bis größer als Gehaltsspanne von eingeben.',
         'remove_favourite_jobs' => 'Lieblingsjob entfernen',
-
     ],
     'candidate' => [
         'new_admin' => 'Neuer Administrator',
@@ -891,7 +889,6 @@ return [
         'valid_pinterest_url' => 'Bitte gib eine gültige Pinterest-URL ein',
         'valid_google_plus_url' => 'Bitte geben Sie eine gültige Google Plus-URL ein',
         'live_jobs' => 'Live-Jobs',
-
     ],
     'employer_dashboard' => [
         'dashboard' => 'Instrumententafel',

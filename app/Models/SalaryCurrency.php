@@ -3,42 +3,45 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * SalaryCurrency Model - Enhanced with Enhanced patterns
+ * SalaryCurrency Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $currency_name
- * @property string $currency_code
- * @property string $currency_symbol
- * @property float|null $exchange_rate
- * @property string|null $base_currency
- * @property bool $is_active
- * @property bool $is_default
- * @property bool $is_crypto
- * @property array|null $supported_countries
- * @property int $decimal_places
- * @property string|null $number_format
- * @property \Illuminate\Support\Carbon|null $last_rate_update
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read mixed $usage_statistics
- * @property-read mixed $formatted_symbol
- * @property-read mixed $exchange_info
- * @property-read mixed $market_value
- * @property-read mixed $currency_trend
- * @property-read mixed $conversion_data
- * @property-read mixed $regional_info
+ * @property int              $id
+ * @property string           $currency_name
+ * @property string           $currency_code
+ * @property string           $currency_symbol
+ * @property null|float       $exchange_rate
+ * @property null|string      $base_currency
+ * @property bool             $is_active
+ * @property bool             $is_default
+ * @property bool             $is_crypto
+ * @property null|array       $supported_countries
+ * @property int              $decimal_places
+ * @property null|string      $number_format
+ * @property null|Carbon      $last_rate_update
+ * @property null|Carbon      $created_at
+ * @property null|Carbon      $updated_at
+ * @property Collection|Job[] $jobs
+ * @property null|int         $jobs_count
+ * @property mixed            $usage_statistics
+ * @property mixed            $formatted_symbol
+ * @property mixed            $exchange_info
+ * @property mixed            $market_value
+ * @property mixed            $currency_trend
+ * @property mixed            $conversion_data
+ * @property mixed            $regional_info
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder|SalaryCurrency active()
  * @method static Builder|SalaryCurrency inactive()
  * @method static Builder|SalaryCurrency default()
@@ -71,6 +74,25 @@ class SalaryCurrency extends Model
     use LogsActivity;
 
     /**
+     * Validation rules for creating salary currencies.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name',
+        'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code',
+        'currency_symbol' => 'required|string|max:10',
+        'exchange_rate' => 'nullable|numeric|min:0',
+        'base_currency' => 'nullable|string|size:3',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_crypto' => 'boolean',
+        'supported_countries' => 'nullable|array',
+        'decimal_places' => 'integer|min:0|max:8',
+        'number_format' => 'nullable|string|max:50',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -99,26 +121,6 @@ class SalaryCurrency extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_crypto' => 'boolean',
-            'exchange_rate' => 'decimal:8',
-            'decimal_places' => 'integer',
-            'supported_countries' => 'array',
-            'last_rate_update' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -136,39 +138,20 @@ class SalaryCurrency extends Model
                 'decimal_places',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating salary currencies.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name',
-        'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code',
-        'currency_symbol' => 'required|string|max:10',
-        'exchange_rate' => 'nullable|numeric|min:0',
-        'base_currency' => 'nullable|string|size:3',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_crypto' => 'boolean',
-        'supported_countries' => 'nullable|array',
-        'decimal_places' => 'integer|min:0|max:8',
-        'number_format' => 'nullable|string|max:50',
-    ];
 
     /**
      * Update validation rules for salary currencies.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name,' . $id,
-            'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code,' . $id,
+            'currency_name' => 'required|string|max:100|unique:salary_currencies,currency_name,'.$id,
+            'currency_code' => 'required|string|size:3|unique:salary_currencies,currency_code,'.$id,
             'currency_symbol' => 'required|string|max:10',
             'exchange_rate' => 'nullable|numeric|min:0',
             'base_currency' => 'nullable|string|size:3',
@@ -243,6 +226,7 @@ class SalaryCurrency extends Model
     public function scopeMajor(Builder $query): Builder
     {
         $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
+
         return $query->whereIn('currency_code', $majorCurrencies);
     }
 
@@ -252,6 +236,7 @@ class SalaryCurrency extends Model
     public function scopeMinor(Builder $query): Builder
     {
         $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
+
         return $query->whereNotIn('currency_code', $majorCurrencies);
     }
 
@@ -261,9 +246,10 @@ class SalaryCurrency extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('currency_name', 'like', '%' . $term . '%')
-              ->orWhere('currency_code', 'like', '%' . $term . '%')
-              ->orWhere('currency_symbol', 'like', '%' . $term . '%');
+            $q->where('currency_name', 'like', '%'.$term.'%')
+                ->orWhere('currency_code', 'like', '%'.$term.'%')
+                ->orWhere('currency_symbol', 'like', '%'.$term.'%')
+            ;
         });
     }
 
@@ -301,7 +287,7 @@ class SalaryCurrency extends Model
         return $query->withCount([
             'jobs as recent_jobs_count' => function ($q) {
                 $q->active()->where('created_at', '>=', now()->subDays(30));
-            }
+            },
         ])->orderBy('recent_jobs_count', 'desc');
     }
 
@@ -311,7 +297,8 @@ class SalaryCurrency extends Model
     public function scopeStable(Builder $query): Builder
     {
         return $query->where('is_crypto', false)
-                    ->whereIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
+            ->whereIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY'])
+        ;
     }
 
     /**
@@ -320,7 +307,8 @@ class SalaryCurrency extends Model
     public function scopeVolatile(Builder $query): Builder
     {
         return $query->where('is_crypto', true)
-                    ->orWhereNotIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
+            ->orWhereNotIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY'])
+        ;
     }
 
     /**
@@ -338,7 +326,8 @@ class SalaryCurrency extends Model
     {
         return $query->where(function ($q) use ($hours) {
             $q->whereNull('last_rate_update')
-              ->orWhere('last_rate_update', '<', now()->subHours($hours));
+                ->orWhere('last_rate_update', '<', now()->subHours($hours))
+            ;
         });
     }
 
@@ -382,7 +371,7 @@ class SalaryCurrency extends Model
         return $query->withCount([
             'jobs as recent_jobs_count' => function ($q) {
                 $q->where('created_at', '>=', now()->subDays(30));
-            }
+            },
         ])->orderBy('recent_jobs_count', 'desc');
     }
 
@@ -415,7 +404,7 @@ class SalaryCurrency extends Model
             $jobCount = $this->jobs()->count();
             $activeJobCount = $this->jobs()->active()->count();
             $totalSalaryPosted = $this->jobs()->sum('salary_from');
-            
+
             return [
                 'total_jobs' => $jobCount,
                 'active_jobs' => $activeJobCount,
@@ -490,7 +479,7 @@ class SalaryCurrency extends Model
     public function getConversionDataAttribute(): array
     {
         $baseCurrency = static::default()->first();
-        
+
         return [
             'to_base_rate' => $baseCurrency ? ($this->exchange_rate / $baseCurrency->exchange_rate) : $this->exchange_rate,
             'from_base_rate' => $baseCurrency ? ($baseCurrency->exchange_rate / $this->exchange_rate) : (1 / $this->exchange_rate),
@@ -533,6 +522,7 @@ class SalaryCurrency extends Model
 
         // Convert through base currency (usually USD)
         $baseAmount = $amount / $fromCurrency->exchange_rate;
+
         return $baseAmount * $this->exchange_rate;
     }
 
@@ -550,11 +540,11 @@ class SalaryCurrency extends Model
     public function formatAmount(float $amount, bool $includeSymbol = true): string
     {
         $formatted = number_format($amount, $this->decimal_places);
-        
+
         if ($includeSymbol) {
-            return $this->currency_symbol . ' ' . $formatted;
+            return $this->currency_symbol.' '.$formatted;
         }
-        
+
         return $formatted;
     }
 
@@ -568,6 +558,7 @@ class SalaryCurrency extends Model
         }
 
         $staleHours = $this->is_crypto ? 1 : 24; // Crypto rates update more frequently
+
         return $this->last_rate_update->lt(now()->subHours($staleHours));
     }
 
@@ -577,11 +568,12 @@ class SalaryCurrency extends Model
     public function calculateUsagePercentage(): float
     {
         $totalJobs = Job::count();
-        if ($totalJobs === 0) {
+        if (0 === $totalJobs) {
             return 0;
         }
 
         $currencyJobs = $this->jobs()->count();
+
         return ($currencyJobs / $totalJobs) * 100;
     }
 
@@ -593,7 +585,8 @@ class SalaryCurrency extends Model
         return static::withCount('jobs')
             ->orderBy('jobs_count', 'desc')
             ->pluck('id')
-            ->search($this->id) + 1;
+            ->search($this->id) + 1
+        ;
     }
 
     /**
@@ -604,11 +597,13 @@ class SalaryCurrency extends Model
         $recentJobs = $this->jobs()->where('created_at', '>=', now()->subDays(30))->count();
         $previousJobs = $this->jobs()
             ->whereBetween('created_at', [now()->subDays(60), now()->subDays(30)])
-            ->count();
+            ->count()
+        ;
 
         if ($recentJobs > $previousJobs) {
             return 'up';
-        } elseif ($recentJobs < $previousJobs) {
+        }
+        if ($recentJobs < $previousJobs) {
             return 'down';
         }
 
@@ -621,11 +616,12 @@ class SalaryCurrency extends Model
     public function calculateAdoptionRate(): float
     {
         $activeJobs = Job::active()->count();
-        if ($activeJobs === 0) {
+        if (0 === $activeJobs) {
             return 0;
         }
 
         $currencyActiveJobs = $this->jobs()->active()->count();
+
         return ($currencyActiveJobs / $activeJobs) * 100;
     }
 
@@ -670,6 +666,74 @@ class SalaryCurrency extends Model
     }
 
     // =============================================
+    // STATIC METHODS & CACHING
+    // =============================================
+
+    /**
+     * Get cached active currencies.
+     */
+    public static function getCachedActive(): Collection
+    {
+        return Cache::remember('salary_currencies_active', 3600, function () {
+            return static::active()->orderBy('currency_name')->get();
+        });
+    }
+
+    /**
+     * Get cached default currency.
+     */
+    public static function getCachedDefault(): ?SalaryCurrency
+    {
+        return Cache::remember('salary_currency_default', 3600, function () {
+            return static::default()->first();
+        });
+    }
+
+    /**
+     * Get cached popular currencies.
+     */
+    public static function getCachedPopular(int $limit = 10): Collection
+    {
+        return Cache::remember("salary_currencies_popular_{$limit}", 1800, function () use ($limit) {
+            return static::popular()->active()->limit($limit)->get();
+        });
+    }
+
+    /**
+     * Clear related caches.
+     */
+    public function clearCaches(): void
+    {
+        Cache::forget('salary_currencies_active');
+        Cache::forget('salary_currency_default');
+        Cache::forget("currency.{$this->id}.usage_stats");
+
+        // Clear pattern-based caches
+        $this->clearCachePattern('salary_currencies_*');
+        $this->clearCachePattern("currency.{$this->id}.*");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_crypto' => 'boolean',
+            'exchange_rate' => 'decimal:8',
+            'decimal_places' => 'integer',
+            'supported_countries' => 'array',
+            'last_rate_update' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    // =============================================
     // PROTECTED HELPER METHODS
     // =============================================
 
@@ -680,7 +744,7 @@ class SalaryCurrency extends Model
     {
         $factors = [
             'usage' => $this->calculateUsagePercentage(),
-            'stability' => $this->getStabilityRating() === 'stable' ? 100 : 50,
+            'stability' => 'stable' === $this->getStabilityRating() ? 100 : 50,
             'liquidity' => $this->getLiquidityScore(),
             'adoption' => count($this->supported_countries ?? []) * 2,
         ];
@@ -694,13 +758,14 @@ class SalaryCurrency extends Model
     protected function getStabilityRating(): string
     {
         $volatility = $this->calculateVolatilityIndex();
-        
+
         if ($volatility < 25) {
             return 'stable';
-        } elseif ($volatility < 60) {
+        }
+        if ($volatility < 60) {
             return 'moderate';
         }
-        
+
         return 'volatile';
     }
 
@@ -710,6 +775,7 @@ class SalaryCurrency extends Model
     protected function getLiquidityScore(): float
     {
         $majorCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD'];
+
         return in_array($this->currency_code, $majorCurrencies) ? 95.0 : 60.0;
     }
 
@@ -864,68 +930,6 @@ class SalaryCurrency extends Model
     }
 
     // =============================================
-    // STATIC METHODS & CACHING
-    // =============================================
-
-    /**
-     * Get cached active currencies.
-     */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
-    {
-        return Cache::remember('salary_currencies_active', 3600, function () {
-            return static::active()->orderBy('currency_name')->get();
-        });
-    }
-
-    /**
-     * Get cached default currency.
-     */
-    public static function getCachedDefault(): ?SalaryCurrency
-    {
-        return Cache::remember('salary_currency_default', 3600, function () {
-            return static::default()->first();
-        });
-    }
-
-    /**
-     * Get cached popular currencies.
-     */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
-    {
-        return Cache::remember("salary_currencies_popular_{$limit}", 1800, function () use ($limit) {
-            return static::popular()->active()->limit($limit)->get();
-        });
-    }
-
-    /**
-     * Clear related caches.
-     */
-    public function clearCaches(): void
-    {
-        Cache::forget('salary_currencies_active');
-        Cache::forget('salary_currency_default');
-        Cache::forget("currency.{$this->id}.usage_stats");
-        
-        // Clear pattern-based caches
-        $this->clearCachePattern('salary_currencies_*');
-        $this->clearCachePattern("currency.{$this->id}.*");
-    }
-
-    /**
-     * Clear cache by pattern.
-     */
-    private function clearCachePattern(string $pattern): void
-    {
-        if (method_exists(Cache::getStore(), 'flush')) {
-            // For stores that support pattern clearing
-            $keys = Cache::getStore()->getRedis()->keys($pattern);
-            if (!empty($keys)) {
-                Cache::getStore()->getRedis()->del($keys);
-            }
-        }
-    }
-
-    // =============================================
     // MODEL EVENTS
     // =============================================
 
@@ -951,5 +955,19 @@ class SalaryCurrency extends Model
                 static::where('id', '!=', $currency->id)->update(['is_default' => false]);
             }
         });
+    }
+
+    /**
+     * Clear cache by pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        if (method_exists(Cache::getStore(), 'flush')) {
+            // For stores that support pattern clearing
+            $keys = Cache::getStore()->getRedis()->keys($pattern);
+            if (!empty($keys)) {
+                Cache::getStore()->getRedis()->del($keys);
+            }
+        }
     }
 }

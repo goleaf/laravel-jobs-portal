@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Flash;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+
 class VerificationController extends Controller
 {
     /*
@@ -34,6 +32,16 @@ class VerificationController extends Controller
     protected $redirectTo = RouteServiceProvider::ADMIN_HOME;
 
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        //        $this->middleware('auth');
+        $this->middleware('signed')->only('verify');
+        $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+
+    /**
      * @return string
      */
     public function redirectTo(RedirectToVerificationRequest $request)
@@ -41,7 +49,7 @@ class VerificationController extends Controller
         $user = User::find($request->route('id'));
         $user->update(['is_verified' => 1]);
 
-        if (getLoggedInUser() != null) {
+        if (null != getLoggedInUser()) {
             if (Auth::user()->hasRole('Admin')) {
                 return RouteServiceProvider::ADMIN_HOME;
             }
@@ -55,34 +63,21 @@ class VerificationController extends Controller
             }
         } else {
             $userRole = $user->roles()->first()->name;
-            if ($userRole == 'Candidate') {
-                Flash::success(__('messages.flash.success_verify'));
+            if ('Candidate' == $userRole) {
+                \Flash::success(__('messages.flash.success_verify'));
 
                 return route('front.candidate.login');
-            } else {
-                Flash::success(__('messages.flash.success_verify'));
-
-                return route('front.employee.login');
             }
-        }
-    }
+            \Flash::success(__('messages.flash.success_verify'));
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+            return route('front.employee.login');
+        }
     }
 
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -92,7 +87,7 @@ class VerificationController extends Controller
         $user = User::find($request->id);
 
         if ($request->route('id') != $user->getKey()) {
-            throw new AuthorizationException;
+            throw new AuthorizationException();
         }
 
         if ($user->markEmailAsVerified()) {

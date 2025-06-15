@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,7 +18,7 @@ return new class extends Migration
             $table->boolean('analytics_access')->default(false)->after('priority_support');
             $table->integer('max_featured_jobs')->default(0)->after('analytics_access');
             $table->integer('duration_days')->default(30)->after('max_featured_jobs');
-            
+
             // Add indexes for frequently used columns
             $table->index('is_active');
             $table->index('is_featured');
@@ -36,7 +35,7 @@ return new class extends Migration
             $table->dropIndex(['plans_is_active_index']);
             $table->dropIndex(['plans_is_featured_index']);
             $table->dropIndex(['plans_is_active_is_featured_index']);
-            
+
             $table->dropColumn([
                 'is_active',
                 'is_featured',

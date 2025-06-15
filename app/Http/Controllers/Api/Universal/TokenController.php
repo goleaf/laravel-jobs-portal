@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api\Universal;
 
 use App\Http\Controllers\UniversalBaseController;
 use App\Http\Requests\Api\Universal\LoginRequest;
-use App\Http\Requests\Api\Universal\UserRequest;
-use App\Http\Requests\Api\Universal\LogoutRequest;
 use App\Http\Requests\Api\Universal\LogoutAllRequest;
+use App\Http\Requests\Api\Universal\LogoutRequest;
 use App\Http\Requests\Api\Universal\TokensRequest;
-use App\Http\Resources\Universal\LoginResource;
+use App\Http\Requests\Api\Universal\UserRequest;
 use App\Http\Resources\Universal\AuthUserResource;
+use App\Http\Resources\Universal\LoginResource;
 use App\Http\Resources\Universal\LogoutResource;
 use App\Http\Resources\Universal\TokenCollection;
 use App\Models\User;
@@ -19,12 +19,12 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * Universal Token Authentication Controller
- * Implements Sanctum authentication with Universal best practices
+ * Implements Sanctum authentication with Universal best practices.
  */
 class TokenController extends UniversalBaseController
 {
     /**
-     * Universal Pattern: Login and issue API token
+     * Universal Pattern: Login and issue API token.
      */
     public function login(LoginRequest $request): JsonResponse
     {
@@ -43,7 +43,7 @@ class TokenController extends UniversalBaseController
                 'jobs:read',
                 'jobs:create',
                 'applications:create',
-                'profile:update'
+                'profile:update',
             ]);
 
             $data = [
@@ -58,37 +58,37 @@ class TokenController extends UniversalBaseController
             ];
 
             return response()->json((new LoginResource($data))->toArray($request))
-                ->setStatusCode(200);
-
+                ->setStatusCode(200)
+            ;
         } catch (ValidationException $e) {
             return $this->errorResponse('Invalid credentials', 401, $e->errors());
         } catch (\Exception $e) {
             return $this->errorResponse('Authentication failed', 500, [], [
-                'exception' => $e->getMessage()
+                'exception' => $e->getMessage(),
             ]);
         }
     }
 
     /**
-     * Universal Pattern: Get authenticated user details
+     * Universal Pattern: Get authenticated user details.
      */
     public function user(UserRequest $request): JsonResponse
     {
         try {
             $user = $request->user();
-            
-            return response()->json((new AuthUserResource($user))->toArray($request))
-                ->setStatusCode(200);
 
+            return response()->json((new AuthUserResource($user))->toArray($request))
+                ->setStatusCode(200)
+            ;
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve user', 500, [], [
-                'exception' => $e->getMessage()
+                'exception' => $e->getMessage(),
             ]);
         }
     }
 
     /**
-     * Universal Pattern: Logout and revoke token
+     * Universal Pattern: Logout and revoke token.
      */
     public function logout(LogoutRequest $request): JsonResponse
     {
@@ -96,7 +96,7 @@ class TokenController extends UniversalBaseController
             // Get current token info before deletion
             $currentToken = $request->user()->currentAccessToken();
             $remainingTokens = $request->user()->tokens()->count() - 1;
-            
+
             // Revoke current token
             $currentToken->delete();
 
@@ -106,17 +106,17 @@ class TokenController extends UniversalBaseController
             ];
 
             return response()->json((new LogoutResource($data))->toArray($request))
-                ->setStatusCode(200);
-
+                ->setStatusCode(200)
+            ;
         } catch (\Exception $e) {
             return $this->errorResponse('Logout failed', 500, [], [
-                'exception' => $e->getMessage()
+                'exception' => $e->getMessage(),
             ]);
         }
     }
 
     /**
-     * Universal Pattern: Revoke all tokens
+     * Universal Pattern: Revoke all tokens.
      */
     public function logoutAll(LogoutAllRequest $request): JsonResponse
     {
@@ -126,18 +126,17 @@ class TokenController extends UniversalBaseController
             $request->user()->tokens()->delete();
 
             return $this->jsonResponse([
-                'revoked_tokens' => $tokensCount
+                'revoked_tokens' => $tokensCount,
             ], 'All tokens revoked successfully');
-
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to revoke tokens', 500, [], [
-                'exception' => $e->getMessage()
+                'exception' => $e->getMessage(),
             ]);
         }
     }
 
     /**
-     * Universal Pattern: List user tokens
+     * Universal Pattern: List user tokens.
      */
     public function tokens(TokensRequest $request): JsonResponse
     {
@@ -164,11 +163,11 @@ class TokenController extends UniversalBaseController
             });
 
             return response()->json((new TokenCollection($tokens))->toArray($request))
-                ->setStatusCode(200);
-
+                ->setStatusCode(200)
+            ;
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve tokens', 500, [], [
-                'exception' => $e->getMessage()
+                'exception' => $e->getMessage(),
             ]);
         }
     }

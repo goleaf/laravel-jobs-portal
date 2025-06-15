@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Noticeboard;
 use App\Repositories\NoticeboardRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class NoticeboardController extends AppBaseController
 {
     /** @var NoticeboardRepository */
@@ -22,10 +21,9 @@ class NoticeboardController extends AppBaseController
     /**
      * Display a listing of the Noticeboard.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -79,8 +77,7 @@ class NoticeboardController extends AppBaseController
     /**
      * Remove the specified Noticeboard from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Noticeboard $noticeboard): JsonResponse
     {
@@ -92,7 +89,7 @@ class NoticeboardController extends AppBaseController
     public function changeStatus($id): JsonResponse
     {
         $notice = Noticeboard::findOrFail($id);
-        $status = ! $notice->is_active;
+        $status = !$notice->is_active;
         $notice->update(['is_active' => $status]);
 
         return $this->sendSuccess(__('messages.flash.status_update'));

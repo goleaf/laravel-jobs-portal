@@ -2,52 +2,54 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * City Model - Enhanced with Enhanced patterns
+ * City Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $state_id
- * @property string $name
- * @property bool $is_active
- * @property bool $is_featured
- * @property bool $is_metropolitan
- * @property bool $is_major
- * @property float|null $latitude
- * @property float|null $longitude
- * @property string|null $timezone
- * @property int|null $population
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \App\Models\State $state
- * @property-read \App\Models\Country $country
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read string $full_name
- * @property-read string $display_name
- * @property-read string|null $coordinates
- * @property-read string $population_category
- * @property-read int $companies_count
- * @property-read int $active_companies_count
- * @property-read int $jobs_count
- * @property-read int $active_jobs_count
- * @property-read int $candidates_count
- * @property-read int $active_candidates_count
- * @property-read int $users_count
+ * @property int                    $id
+ * @property int                    $state_id
+ * @property string                 $name
+ * @property bool                   $is_active
+ * @property bool                   $is_featured
+ * @property bool                   $is_metropolitan
+ * @property bool                   $is_major
+ * @property null|float             $latitude
+ * @property null|float             $longitude
+ * @property null|string            $timezone
+ * @property null|int               $population
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property State                  $state
+ * @property Country                $country
+ * @property Collection|User[]      $users
+ * @property Collection|Company[]   $companies
+ * @property Collection|Job[]       $jobs
+ * @property Candidate[]|Collection $candidates
+ * @property string                 $full_name
+ * @property string                 $display_name
+ * @property null|string            $coordinates
+ * @property string                 $population_category
+ * @property int                    $companies_count
+ * @property int                    $active_companies_count
+ * @property int                    $jobs_count
+ * @property int                    $active_jobs_count
+ * @property int                    $candidates_count
+ * @property int                    $active_candidates_count
+ * @property int                    $users_count
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -85,63 +87,6 @@ class City extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'state_id',
-        'name',
-        'is_active',
-        'is_featured',
-        'latitude',
-        'longitude',
-        'timezone',
-        'population',
-        'is_metropolitan',
-        'is_major'
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = ['deleted_at'];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_metropolitan' => 'boolean',
-            'is_major' => 'boolean',
-            'latitude' => 'decimal:8',
-            'longitude' => 'decimal:8',
-            'population' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Get the activity log options for the model.
-     */
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'state_id', 'is_active', 'is_featured', 'is_metropolitan', 'is_major'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
-    /**
      * Validation rules for creating cities.
      *
      * @var array<string, string>
@@ -160,15 +105,51 @@ class City extends Model
     ];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'state_id',
+        'name',
+        'is_active',
+        'is_featured',
+        'latitude',
+        'longitude',
+        'timezone',
+        'population',
+        'is_metropolitan',
+        'is_major',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = ['deleted_at'];
+
+    /**
+     * Get the activity log options for the model.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'state_id', 'is_active', 'is_featured', 'is_metropolitan', 'is_major'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+        ;
+    }
+
+    /**
      * Update validation rules for cities.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'name' => 'required|string|max:180|unique:cities,name,' . $id,
+            'name' => 'required|string|max:180|unique:cities,name,'.$id,
             'state_id' => 'required|integer|exists:states,id',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -239,6 +220,8 @@ class City extends Model
 
     /**
      * Scope a query to only include active cities.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -247,6 +230,8 @@ class City extends Model
 
     /**
      * Scope a query to only include inactive cities.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -255,6 +240,8 @@ class City extends Model
 
     /**
      * Scope a query to only include featured cities.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -263,6 +250,8 @@ class City extends Model
 
     /**
      * Scope a query to only include non-featured cities.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -275,6 +264,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities by state.
+     *
+     * @param mixed $query
      */
     public function scopeByState($query, int $stateId)
     {
@@ -283,6 +274,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities by multiple states.
+     *
+     * @param mixed $query
      */
     public function scopeInStates($query, array $stateIds)
     {
@@ -291,6 +284,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities by country.
+     *
+     * @param mixed $query
      */
     public function scopeByCountry($query, int $countryId)
     {
@@ -301,26 +296,34 @@ class City extends Model
 
     /**
      * Scope a query to get cities with coordinates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCoordinates($query)
     {
         return $query->whereNotNull('latitude')
-                    ->whereNotNull('longitude');
+            ->whereNotNull('longitude')
+        ;
     }
 
     /**
      * Scope a query to get cities without coordinates.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutCoordinates($query)
     {
         return $query->where(function ($q) {
             $q->whereNull('latitude')
-              ->orWhereNull('longitude');
+                ->orWhereNull('longitude')
+            ;
         });
     }
 
     /**
      * Scope a query to filter cities by timezone.
+     *
+     * @param mixed $query
      */
     public function scopeByTimezone($query, string $timezone)
     {
@@ -329,22 +332,27 @@ class City extends Model
 
     /**
      * Scope a query for cities near coordinates.
+     *
+     * @param mixed $query
      */
     public function scopeNear($query, float $latitude, float $longitude, float $radius = 50)
     {
         return $query->whereRaw(
-            "ST_Distance_Sphere(POINT(longitude, latitude), POINT(?, ?)) <= ?",
+            'ST_Distance_Sphere(POINT(longitude, latitude), POINT(?, ?)) <= ?',
             [$longitude, $latitude, $radius * 1000]
         );
     }
 
     /**
      * Scope a query for cities within bounding box.
+     *
+     * @param mixed $query
      */
     public function scopeWithinBounds($query, float $northLat, float $southLat, float $eastLng, float $westLng)
     {
         return $query->whereBetween('latitude', [$southLat, $northLat])
-                    ->whereBetween('longitude', [$westLng, $eastLng]);
+            ->whereBetween('longitude', [$westLng, $eastLng])
+        ;
     }
 
     // =============================================
@@ -353,6 +361,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities by population range.
+     *
+     * @param mixed $query
      */
     public function scopeByPopulationRange($query, int $min, int $max)
     {
@@ -361,6 +371,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities with population greater than.
+     *
+     * @param mixed $query
      */
     public function scopePopulationGreaterThan($query, int $population)
     {
@@ -369,6 +381,8 @@ class City extends Model
 
     /**
      * Scope a query to filter cities with population less than.
+     *
+     * @param mixed $query
      */
     public function scopePopulationLessThan($query, int $population)
     {
@@ -377,37 +391,48 @@ class City extends Model
 
     /**
      * Scope a query to get major cities (population > 1 million).
+     *
+     * @param mixed $query
      */
     public function scopeMajor($query)
     {
         return $query->where(function ($q) {
             $q->where('is_major', true)
-              ->orWhere('population', '>', 1000000);
+                ->orWhere('population', '>', 1000000)
+            ;
         });
     }
 
     /**
      * Scope a query to get metropolitan cities.
+     *
+     * @param mixed $query
      */
     public function scopeMetropolitan($query)
     {
         return $query->where(function ($q) {
             $q->where('is_metropolitan', true)
-              ->orWhere('population', '>', 500000);
+                ->orWhere('population', '>', 500000)
+            ;
         });
     }
 
     /**
      * Scope a query to get non-metropolitan cities.
+     *
+     * @param mixed $query
      */
     public function scopeNonMetropolitan($query)
     {
         return $query->where('is_metropolitan', false)
-                    ->where('population', '<=', 500000);
+            ->where('population', '<=', 500000)
+        ;
     }
 
     /**
      * Scope a query to get small cities.
+     *
+     * @param mixed $query
      */
     public function scopeSmall($query)
     {
@@ -416,6 +441,8 @@ class City extends Model
 
     /**
      * Scope a query to get medium cities.
+     *
+     * @param mixed $query
      */
     public function scopeMedium($query)
     {
@@ -424,6 +451,8 @@ class City extends Model
 
     /**
      * Scope a query to get large cities.
+     *
+     * @param mixed $query
      */
     public function scopeLarge($query)
     {
@@ -436,6 +465,8 @@ class City extends Model
 
     /**
      * Scope a query to search cities by name.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -444,6 +475,8 @@ class City extends Model
 
     /**
      * Scope a query to get recent cities.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -452,6 +485,8 @@ class City extends Model
 
     /**
      * Scope a query to get old cities.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -460,6 +495,8 @@ class City extends Model
 
     /**
      * Scope a query to order cities alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -472,6 +509,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with companies.
+     *
+     * @param mixed $query
      */
     public function scopeWithCompanies($query)
     {
@@ -480,6 +519,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with active companies.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCompanies($query)
     {
@@ -490,6 +531,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithJobs($query)
     {
@@ -498,6 +541,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with active jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -508,6 +553,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidates($query)
     {
@@ -516,6 +563,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with active candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -526,6 +575,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with users.
+     *
+     * @param mixed $query
      */
     public function scopeWithUsers($query)
     {
@@ -534,6 +585,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with active state.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveState($query)
     {
@@ -544,6 +597,8 @@ class City extends Model
 
     /**
      * Scope a query to include cities with active country.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCountry($query)
     {
@@ -554,38 +609,47 @@ class City extends Model
 
     /**
      * Scope a query to get popular cities (with most companies).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount(['companies' => function ($q) {
             $q->where('is_active', true);
         }])
-        ->orderBy('companies_count', 'desc')
-        ->limit($limit);
+            ->orderBy('companies_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get popular cities by jobs.
+     *
+     * @param mixed $query
      */
     public function scopePopularByJobs($query, int $limit = 10)
     {
         return $query->withCount(['jobs' => function ($q) {
             $q->where('status', 'active');
         }])
-        ->orderBy('jobs_count', 'desc')
-        ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get popular cities by candidates.
+     *
+     * @param mixed $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
         return $query->withCount(['candidates' => function ($q) {
             $q->where('is_active', true);
         }])
-        ->orderBy('candidates_count', 'desc')
-        ->limit($limit);
+            ->orderBy('candidates_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     // =============================================
@@ -595,12 +659,12 @@ class City extends Model
     /**
      * Get cached cities for a state.
      */
-    public static function getCachedByState(int $stateId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByState(int $stateId): Collection
     {
         return Cache::remember(
             "cities_state_{$stateId}",
             now()->addHours(24),
-            fn() => static::active()
+            fn () => static::active()
                 ->byState($stateId)
                 ->alphabetical()
                 ->get()
@@ -610,12 +674,12 @@ class City extends Model
     /**
      * Get cached cities for a country.
      */
-    public static function getCachedByCountry(int $countryId): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCountry(int $countryId): Collection
     {
         return Cache::remember(
             "cities_country_{$countryId}",
             now()->addHours(24),
-            fn() => static::active()
+            fn () => static::active()
                 ->byCountry($countryId)
                 ->with('state')
                 ->alphabetical()
@@ -626,12 +690,12 @@ class City extends Model
     /**
      * Get cached active cities.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember(
             'cities_active',
             now()->addHours(12),
-            fn() => static::active()
+            fn () => static::active()
                 ->with(['state', 'country'])
                 ->alphabetical()
                 ->get()
@@ -641,12 +705,12 @@ class City extends Model
     /**
      * Get cached featured cities.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember(
             'cities_featured',
             now()->addHours(6),
-            fn() => static::active()
+            fn () => static::active()
                 ->featured()
                 ->with(['state', 'country'])
                 ->alphabetical()
@@ -657,12 +721,12 @@ class City extends Model
     /**
      * Get cached major cities.
      */
-    public static function getCachedMajor(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedMajor(): Collection
     {
         return Cache::remember(
             'cities_major',
             now()->addHours(12),
-            fn() => static::active()
+            fn () => static::active()
                 ->major()
                 ->with(['state', 'country'])
                 ->alphabetical()
@@ -679,7 +743,7 @@ class City extends Model
      */
     public function getFullNameAttribute(): string
     {
-        return $this->name . ', ' . $this->state->name . ', ' . $this->state->country->name;
+        return $this->name.', '.$this->state->name.', '.$this->state->country->name;
     }
 
     /**
@@ -687,7 +751,7 @@ class City extends Model
      */
     public function getDisplayNameAttribute(): string
     {
-        return $this->name . ', ' . $this->state->name;
+        return $this->name.', '.$this->state->name;
     }
 
     /**
@@ -727,6 +791,7 @@ class City extends Model
         if ($this->population >= 50000) {
             return 'medium';
         }
+
         return 'small';
     }
 
@@ -754,7 +819,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_companies_count",
             now()->addHours(6),
-            fn() => $this->companies()->count()
+            fn () => $this->companies()->count()
         );
     }
 
@@ -766,7 +831,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_active_companies_count",
             now()->addHours(6),
-            fn() => $this->companies()->where('is_active', true)->count()
+            fn () => $this->companies()->where('is_active', true)->count()
         );
     }
 
@@ -778,7 +843,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_jobs_count",
             now()->addHours(6),
-            fn() => $this->jobs()->count()
+            fn () => $this->jobs()->count()
         );
     }
 
@@ -790,7 +855,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_active_jobs_count",
             now()->addHours(6),
-            fn() => $this->jobs()->where('status', 'active')->count()
+            fn () => $this->jobs()->where('status', 'active')->count()
         );
     }
 
@@ -802,7 +867,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_candidates_count",
             now()->addHours(6),
-            fn() => $this->candidates()->count()
+            fn () => $this->candidates()->count()
         );
     }
 
@@ -814,7 +879,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_active_candidates_count",
             now()->addHours(6),
-            fn() => $this->candidates()->where('is_active', true)->count()
+            fn () => $this->candidates()->where('is_active', true)->count()
         );
     }
 
@@ -826,7 +891,7 @@ class City extends Model
         return Cache::remember(
             "city_{$this->id}_users_count",
             now()->addHours(6),
-            fn() => $this->users()->count()
+            fn () => $this->users()->count()
         );
     }
 
@@ -849,9 +914,9 @@ class City extends Model
         $deltaLat = $lat2 - $lat1;
         $deltaLon = $lon2 - $lon1;
 
-        $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
-             cos($lat1) * cos($lat2) *
-             sin($deltaLon / 2) * sin($deltaLon / 2);
+        $a = sin($deltaLat / 2) * sin($deltaLat / 2)
+             + cos($lat1) * cos($lat2)
+             * sin($deltaLon / 2) * sin($deltaLon / 2);
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
@@ -887,6 +952,27 @@ class City extends Model
     }
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_metropolitan' => 'boolean',
+            'is_major' => 'boolean',
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+            'population' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+    /**
      * Boot the model.
      */
     protected static function boot()
@@ -900,6 +986,5 @@ class City extends Model
         static::deleted(function ($city) {
             $city->clearCaches();
         });
-
     }
-} 
+}

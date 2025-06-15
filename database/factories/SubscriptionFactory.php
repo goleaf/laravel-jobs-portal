@@ -22,7 +22,7 @@ class SubscriptionFactory extends Factory
         return [
             'user_id' => fake()->numberBetween(1, 3), // Use existing user IDs
             'name' => fake()->randomElement(['default', 'premium', 'basic']),
-            'stripe_id' => 'sub_' . fake()->regexify('[A-Za-z0-9]{40}'),
+            'stripe_id' => 'sub_'.fake()->regexify('[A-Za-z0-9]{40}'),
             'stripe_status' => fake()->randomElement(['active', 'inactive', 'canceled', 'trialing']),
             'stripe_plan' => fake()->randomElement(['plan_basic', 'plan_premium', 'plan_enterprise']),
             'stripe_price' => fake()->randomElement(['price_basic', 'price_premium', 'price_enterprise']),

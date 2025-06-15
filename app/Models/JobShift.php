@@ -2,27 +2,29 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class JobShift
+ * Class JobShift.
  *
- * @property int $id
- * @property string $shift
- * @property string $description
- * @property bool $is_default
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
+ * @property int                             $id
+ * @property string                          $shift
+ * @property string                          $description
+ * @property bool                            $is_default
+ * @property bool                            $is_active
+ * @property null|\Illuminate\Support\Carbon $created_at
+ * @property null|\Illuminate\Support\Carbon $updated_at
+ * @property Collection|Job[]                $jobs
+ * @property null|int                        $jobs_count
+ * @property mixed                           $usage_count
+ * @property mixed                           $formatted_usage_stats
  *
  * @method static Builder|JobShift newModelQuery()
  * @method static Builder|JobShift newQuery()
@@ -59,7 +61,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class JobShift extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -101,38 +104,15 @@ class JobShift extends Model
     ];
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when job shift is updated
-        static::updated(function ($jobShift) {
-            cache()->forget("job_shift.{$jobShift->id}");
-            cache()->forget("job_shifts.popular");
-            cache()->forget("job_shifts.trending");
-            cache()->tags(['job_shifts', 'job_shift-' . $jobShift->id])->flush();
-        });
-
-        // Clear cache when job shift is deleted
-        static::deleted(function ($jobShift) {
-            cache()->forget("job_shift.{$jobShift->id}");
-            cache()->forget("job_shifts.popular");
-            cache()->forget("job_shifts.trending");
-            cache()->tags(['job_shifts', 'job_shift-' . $jobShift->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['shift', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -162,7 +142,7 @@ class JobShift extends Model
     }
 
     /**
-     * Relationship: Jobs
+     * Relationship: Jobs.
      */
     public function jobs(): HasMany
     {
@@ -225,7 +205,8 @@ class JobShift extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('shift', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -242,8 +223,9 @@ class JobShift extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->orderBy('jobs_count', 'desc')
-                    ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -260,11 +242,12 @@ class JobShift extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
+            'jobs' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -273,7 +256,8 @@ class JobShift extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $count);
+            ->having('jobs_count', '>=', $count)
+        ;
     }
 
     /**
@@ -282,8 +266,9 @@ class JobShift extends Model
     public function scopeHighDemand(Builder $query, int $minJobs = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->having('jobs_count', '>=', $minJobs)
-                    ->orderByDesc('jobs_count');
+            ->having('jobs_count', '>=', $minJobs)
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -292,8 +277,9 @@ class JobShift extends Model
     public function scopeDayShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%day%')
-                    ->orWhere('shift', 'like', '%morning%')
-                    ->orWhere('shift', 'like', '%first%');
+            ->orWhere('shift', 'like', '%morning%')
+            ->orWhere('shift', 'like', '%first%')
+        ;
     }
 
     /**
@@ -302,8 +288,9 @@ class JobShift extends Model
     public function scopeNightShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%night%')
-                    ->orWhere('shift', 'like', '%third%')
-                    ->orWhere('shift', 'like', '%graveyard%');
+            ->orWhere('shift', 'like', '%third%')
+            ->orWhere('shift', 'like', '%graveyard%')
+        ;
     }
 
     /**
@@ -312,7 +299,8 @@ class JobShift extends Model
     public function scopeMorningShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%morning%')
-                    ->orWhere('shift', 'like', '%first%');
+            ->orWhere('shift', 'like', '%first%')
+        ;
     }
 
     /**
@@ -321,7 +309,8 @@ class JobShift extends Model
     public function scopeEveningShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%evening%')
-                    ->orWhere('shift', 'like', '%second%');
+            ->orWhere('shift', 'like', '%second%')
+        ;
     }
 
     /**
@@ -330,8 +319,9 @@ class JobShift extends Model
     public function scopeFlexibleHours(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%flexible%')
-                    ->orWhere('shift', 'like', '%flex%')
-                    ->orWhere('shift', 'like', '%variable%');
+            ->orWhere('shift', 'like', '%flex%')
+            ->orWhere('shift', 'like', '%variable%')
+        ;
     }
 
     /**
@@ -340,8 +330,9 @@ class JobShift extends Model
     public function scopeFixedShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%fixed%')
-                    ->orWhere('shift', 'like', '%regular%')
-                    ->orWhere('shift', 'like', '%standard%');
+            ->orWhere('shift', 'like', '%regular%')
+            ->orWhere('shift', 'like', '%standard%')
+        ;
     }
 
     /**
@@ -350,44 +341,9 @@ class JobShift extends Model
     public function scopeRotatingShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%rotating%')
-                    ->orWhere('shift', 'like', '%rotation%')
-                    ->orWhere('shift', 'like', '%alternating%');
-    }
-
-    /**
-     * Get demand level based on usage.
-     */
-    private function getDemandLevel(): string
-    {
-        $jobsCount = $this->jobs()->count();
-        
-        return match (true) {
-            $jobsCount >= 50 => __('job_shift.high_demand'),
-            $jobsCount >= 25 => __('job_shift.medium_demand'),
-            $jobsCount >= 5 => __('job_shift.low_demand'),
-            default => __('job_shift.minimal_demand')
-        };
-    }
-
-    /**
-     * Get shift type classification.
-     */
-    private function getShiftType(): string
-    {
-        $shift = strtolower($this->shift);
-        
-        return match (true) {
-            str_contains($shift, 'day') || str_contains($shift, 'morning') || str_contains($shift, 'first') => 'day',
-            str_contains($shift, 'night') || str_contains($shift, 'third') || str_contains($shift, 'graveyard') => 'night',
-            str_contains($shift, 'evening') || str_contains($shift, 'second') => 'evening',
-            str_contains($shift, 'flexible') || str_contains($shift, 'flex') => 'flexible',
-            str_contains($shift, 'rotating') || str_contains($shift, 'rotation') => 'rotating',
-            str_contains($shift, 'fixed') || str_contains($shift, 'regular') => 'fixed',
-            str_contains($shift, 'split') => 'split',
-            str_contains($shift, 'on-call') || str_contains($shift, 'oncall') => 'on-call',
-            str_contains($shift, 'weekend') => 'weekend',
-            default => 'standard'
-        };
+            ->orWhere('shift', 'like', '%rotation%')
+            ->orWhere('shift', 'like', '%alternating%')
+        ;
     }
 
     /**
@@ -403,7 +359,7 @@ class JobShift extends Model
      */
     public function isDayShift(): bool
     {
-        return $this->getShiftType() === 'day';
+        return 'day' === $this->getShiftType();
     }
 
     /**
@@ -411,7 +367,7 @@ class JobShift extends Model
      */
     public function isNightShift(): bool
     {
-        return $this->getShiftType() === 'night';
+        return 'night' === $this->getShiftType();
     }
 
     /**
@@ -419,7 +375,7 @@ class JobShift extends Model
      */
     public function isFlexible(): bool
     {
-        return $this->getShiftType() === 'flexible';
+        return 'flexible' === $this->getShiftType();
     }
 
     /**
@@ -427,21 +383,22 @@ class JobShift extends Model
      */
     public function isRotating(): bool
     {
-        return $this->getShiftType() === 'rotating';
+        return 'rotating' === $this->getShiftType();
     }
 
     /**
      * Get related job shifts.
      */
-    public function getRelatedShifts(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public function getRelatedShifts(int $limit = 5): Collection
     {
         return cache()->remember("job_shift.{$this->id}.related", 3600, function () use ($limit) {
             return static::where('id', '!=', $this->id)
-                          ->active()
-                          ->withCount('jobs')
-                          ->orderByDesc('jobs_count')
-                          ->limit($limit)
-                          ->get();
+                ->active()
+                ->withCount('jobs')
+                ->orderByDesc('jobs_count')
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
 
@@ -451,17 +408,17 @@ class JobShift extends Model
     public function getDurationHours(): ?float
     {
         if ($this->start_time && $this->end_time) {
-            $start = \Carbon\Carbon::parse($this->start_time);
-            $end = \Carbon\Carbon::parse($this->end_time);
-            
+            $start = Carbon::parse($this->start_time);
+            $end = Carbon::parse($this->end_time);
+
             // Handle overnight shifts
             if ($end->lt($start)) {
                 $end->addDay();
             }
-            
+
             return $start->diffInHours($end);
         }
-        
+
         return $this->duration_hours;
     }
 
@@ -471,12 +428,72 @@ class JobShift extends Model
     public function isOvernightShift(): bool
     {
         if ($this->start_time && $this->end_time) {
-            $start = \Carbon\Carbon::parse($this->start_time);
-            $end = \Carbon\Carbon::parse($this->end_time);
-            
+            $start = Carbon::parse($this->start_time);
+            $end = Carbon::parse($this->end_time);
+
             return $end->lt($start);
         }
-        
+
         return $this->isNightShift();
     }
-} 
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when job shift is updated
+        static::updated(function ($jobShift) {
+            cache()->forget("job_shift.{$jobShift->id}");
+            cache()->forget('job_shifts.popular');
+            cache()->forget('job_shifts.trending');
+            cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+        });
+
+        // Clear cache when job shift is deleted
+        static::deleted(function ($jobShift) {
+            cache()->forget("job_shift.{$jobShift->id}");
+            cache()->forget('job_shifts.popular');
+            cache()->forget('job_shifts.trending');
+            cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+        });
+    }
+
+    /**
+     * Get demand level based on usage.
+     */
+    private function getDemandLevel(): string
+    {
+        $jobsCount = $this->jobs()->count();
+
+        return match (true) {
+            $jobsCount >= 50 => __('job_shift.high_demand'),
+            $jobsCount >= 25 => __('job_shift.medium_demand'),
+            $jobsCount >= 5 => __('job_shift.low_demand'),
+            default => __('job_shift.minimal_demand')
+        };
+    }
+
+    /**
+     * Get shift type classification.
+     */
+    private function getShiftType(): string
+    {
+        $shift = strtolower($this->shift);
+
+        return match (true) {
+            str_contains($shift, 'day') || str_contains($shift, 'morning') || str_contains($shift, 'first') => 'day',
+            str_contains($shift, 'night') || str_contains($shift, 'third') || str_contains($shift, 'graveyard') => 'night',
+            str_contains($shift, 'evening') || str_contains($shift, 'second') => 'evening',
+            str_contains($shift, 'flexible') || str_contains($shift, 'flex') => 'flexible',
+            str_contains($shift, 'rotating') || str_contains($shift, 'rotation') => 'rotating',
+            str_contains($shift, 'fixed') || str_contains($shift, 'regular') => 'fixed',
+            str_contains($shift, 'split') => 'split',
+            str_contains($shift, 'on-call') || str_contains($shift, 'oncall') => 'on-call',
+            str_contains($shift, 'weekend') => 'weekend',
+            default => 'standard'
+        };
+    }
+}

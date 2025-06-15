@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Candidate;
+use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
-use App\Models\City;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CandidateExperience>
@@ -24,17 +24,17 @@ class CandidateExperienceFactory extends Factory
         $country = Country::inRandomOrder()->first();
         $state = null;
         $city = null;
-        
+
         if ($country) {
             $state = State::where('country_id', $country->id)->inRandomOrder()->first();
             if ($state) {
                 $city = City::where('state_id', $state->id)->inRandomOrder()->first();
             }
         }
-        
+
         $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year');
         $currentlyWorking = $this->faker->boolean(30);
-        
+
         return [
             'candidate_id' => Candidate::factory(),
             'experience_title' => $this->faker->jobTitle,

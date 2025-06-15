@@ -9,20 +9,16 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+
 class AboutUsController extends AppBaseController
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return void
      */
-    public function index()
-    {
-        //
-    }
+    public function index() {}
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function FAQLists(): View
     {

@@ -19,11 +19,11 @@ class ResetPasswordRequest extends FormRequest
      */
     public function rules(): array
     {
-        return array (
-  'token' => 'required|string',
-  'email' => 'required|email|exists:users,email',
-  'password' => 'required|string|min:8|confirmed',
-);
+        return [
+            'token' => 'required|string',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ];
     }
 
     /**
@@ -31,14 +31,14 @@ class ResetPasswordRequest extends FormRequest
      */
     public function messages(): array
     {
-        return array (
-  'token.required' => 'Reset token is required',
-  'email.required' => 'Email is required',
-  'email.exists' => 'Email not found in our records',
-  'password.required' => 'Password is required',
-  'password.min' => 'Password must be at least 8 characters',
-  'password.confirmed' => 'Password confirmation does not match',
-);
+        return [
+            'token.required' => 'Reset token is required',
+            'email.required' => 'Email is required',
+            'email.exists' => 'Email not found in our records',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 8 characters',
+            'password.confirmed' => 'Password confirmation does not match',
+        ];
     }
 
     /**

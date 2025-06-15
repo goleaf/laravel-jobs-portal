@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class EmailTemplateController extends Controller
 {
     /**
@@ -17,6 +17,8 @@ class EmailTemplateController extends Controller
 
     /**
      * Show the form for editing the specified email template.
+     *
+     * @param mixed $template
      */
     public function edit($template): View
     {

@@ -2,80 +2,84 @@
 
 namespace Tests\Unit\Requests\MasterData;
 
-use Tests\TestCase;
 use App\Http\Requests\MasterData\UpdateCareerLevelRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 /**
  * Enhanced Unit Test for UpdateCareerLevelRequest
- * Testing validation rules and authorization
+ * Testing validation rules and authorization.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class UpdateCareerLevelRequestTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     protected User $admin;
     protected User $employer;
     protected User $candidate;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create roles first
-        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Admin']);
-        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Employer']);  
-        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Candidate']);
-        
+        Role::firstOrCreate(['name' => 'Admin']);
+        Role::firstOrCreate(['name' => 'Employer']);
+        Role::firstOrCreate(['name' => 'Candidate']);
+
         // Create users and assign roles
         $this->admin = User::factory()->create();
         $this->admin->assignRole('Admin');
-        
+
         $this->employer = User::factory()->create();
         $this->employer->assignRole('Employer');
-        
+
         $this->candidate = User::factory()->create();
         $this->candidate->assignRole('Candidate');
     }
-    
+
     /** @test */
-    public function admin_is_authorized(): void
+    public function adminIsAuthorized(): void
     {
         $request = new UpdateCareerLevelRequest();
         $request->setUserResolver(function () {
             return $this->admin;
         });
-        
+
         $this->assertTrue($request->authorize());
     }
-    
+
     /** @test */
-    public function employer_is_authorized(): void
+    public function employerIsAuthorized(): void
     {
         $request = new UpdateCareerLevelRequest();
         $request->setUserResolver(function () {
             return $this->employer;
         });
-        
+
         $this->assertTrue($request->authorize());
     }
-    
+
     /** @test */
-    public function candidate_is_not_authorized(): void
+    public function candidateIsNotAuthorized(): void
     {
         $request = new UpdateCareerLevelRequest();
         $request->setUserResolver(function () {
             return $this->candidate;
         });
-        
+
         $this->assertFalse($request->authorize());
     }
-    
+
     /** @test */
-    public function validation_passes_with_valid_data(): void
+    public function validationPassesWithValidData(): void
     {
         $request = new UpdateCareerLevelRequest();
         $data = [
@@ -84,57 +88,57 @@ class UpdateCareerLevelRequestTest extends TestCase
             'to_year' => 10,
             'is_active' => true,
         ];
-        
+
         $validator = Validator::make($data, $request->rules());
-        
+
         $this->assertTrue($validator->passes());
     }
-    
+
     /** @test */
-    public function validation_fails_with_invalid_data(): void
+    public function validationFailsWithInvalidData(): void
     {
         $request = new UpdateCareerLevelRequest();
         $data = [
             'level_name' => '', // Empty level_name should fail
         ];
-        
+
         $validator = Validator::make($data, $request->rules());
-        
+
         $this->assertFalse($validator->passes());
         $this->assertArrayHasKey('level_name', $validator->errors()->toArray());
     }
-    
+
     /** @test */
-    public function validation_sanitizes_data(): void
+    public function validationSanitizesData(): void
     {
         $request = new UpdateCareerLevelRequest();
         $request->merge([
             'name' => '  Test Name  ',
-            'is_active' => 'true'
+            'is_active' => 'true',
         ]);
-        
+
         $request->prepareForValidation();
-        
+
         $this->assertEquals('Test Name', $request->input('name'));
         $this->assertTrue($request->input('is_active'));
     }
-    
+
     /** @test */
-    public function has_proper_error_messages(): void
+    public function hasProperErrorMessages(): void
     {
         $request = new UpdateCareerLevelRequest();
         $messages = $request->messages();
-        
+
         $this->assertIsArray($messages);
         $this->assertNotEmpty($messages);
     }
-    
+
     /** @test */
-    public function has_proper_field_attributes(): void
+    public function hasProperFieldAttributes(): void
     {
         $request = new UpdateCareerLevelRequest();
         $attributes = $request->attributes();
-        
+
         $this->assertIsArray($attributes);
         $this->assertNotEmpty($attributes);
     }

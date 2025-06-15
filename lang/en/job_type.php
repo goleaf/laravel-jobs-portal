@@ -336,4 +336,4 @@ return [
             'max' => 'Meta description cannot exceed 160 characters.',
         ],
     ],
-]; 
+];

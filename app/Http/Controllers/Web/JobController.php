@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Job\CreateJobRequest;
-use App\Http\Requests\Job\UpdateJobRequest;
-use App\Http\Requests\Job\StoreRequest;
-use App\Http\Requests\Job\SaveFavouriteJobRequest;
-use App\Http\Requests\Job\ReportJobAbuseRequest;
 use App\Http\Requests\Job\EmailJobToFriendRequest;
+use App\Http\Requests\Job\ReportJobAbuseRequest;
+use App\Http\Requests\Job\SaveFavouriteJobRequest;
+use App\Http\Requests\Job\UpdateJobRequest;
 use App\Models\Job;
 use App\Repositories\JobRepository;
-use Auth;
-use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
@@ -38,24 +35,25 @@ class JobController extends AppBaseController
     public function index(Request $request): View
     {
         // Check if this is an admin request (based on route or user role)
-        if ($request->route()->getPrefix() === 'admin' || (auth()->check() && auth()->user()->hasRole('Admin'))) {
+        if ('admin' === $request->route()->getPrefix() || (auth()->check() && auth()->user()->hasRole('Admin'))) {
             // Use enhanced model scopes for admin job listing
             $jobs = Job::with(['company', 'jobCategory', 'currency', 'jobType'])
-                     ->when($request->get('status'), function ($query, $status) {
-                         return $query->byStatus($status);
-                     })
-                     ->when($request->get('featured'), function ($query) {
-                         return $query->featured();
-                     })
-                     ->when($request->get('company_id'), function ($query, $companyId) {
-                         return $query->byCompany($companyId);
-                     })
-                     ->when($request->get('search'), function ($query, $search) {
-                         return $query->keywordSearch($search);
-                     })
-                     ->recent()
-                     ->paginate(15);
-                     
+                ->when($request->get('status'), function ($query, $status) {
+                    return $query->byStatus($status);
+                })
+                ->when($request->get('featured'), function ($query) {
+                    return $query->featured();
+                })
+                ->when($request->get('company_id'), function ($query, $companyId) {
+                    return $query->byCompany($companyId);
+                })
+                ->when($request->get('search'), function ($query, $search) {
+                    return $query->keywordSearch($search);
+                })
+                ->recent()
+                ->paginate(15)
+            ;
+
             return view('admin.jobs.index', compact('jobs'));
         }
 
@@ -67,7 +65,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Show the form for creating a new job (admin)
+     * Show the form for creating a new job (admin).
      */
     public function create(): View
     {
@@ -75,7 +73,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Store a newly created job (admin)
+     * Store a newly created job (admin).
      */
     public function store(CreateJobRequest $request)
     {
@@ -84,27 +82,37 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Display the specified job (admin)
+     * Display the specified job (admin).
+     *
+     * @param mixed $id
      */
     public function show($id): View
     {
         $job = Job::with(['company', 'jobCategory', 'currency', 'jobType', 'jobsSkill', 'jobsTag'])
-                  ->findOrFail($id);
+            ->findOrFail($id)
+        ;
+
         return view('admin.jobs.show', compact('job'));
     }
 
     /**
-     * Show the form for editing the specified job (admin)
+     * Show the form for editing the specified job (admin).
+     *
+     * @param mixed $id
      */
     public function edit($id): View
     {
         $job = Job::with(['company', 'jobCategory', 'currency', 'jobType'])
-                  ->findOrFail($id);
+            ->findOrFail($id)
+        ;
+
         return view('admin.jobs.edit', compact('job'));
     }
 
     /**
-     * Update the specified job (admin)
+     * Update the specified job (admin).
+     *
+     * @param mixed $id
      */
     public function update(UpdateJobRequest $request, $id)
     {
@@ -113,17 +121,20 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Remove the specified job (admin)
+     * Remove the specified job (admin).
+     *
+     * @param mixed $id
      */
     public function destroy($id)
     {
         $job = Job::findOrFail($id);
         $job->delete();
+
         return redirect()->route('admin.jobs.index')->with('success', 'Job deleted successfully');
     }
 
     /**
-     * Enhanced job details using model scopes
+     * Enhanced job details using model scopes.
      *
      * @return Application|Factory|View
      */
@@ -131,27 +142,29 @@ class JobController extends AppBaseController
     {
         // Use enhanced eager loading and scopes
         $job = Job::with([
-                    'jobsTag', 
-                    'jobCategory', 
-                    'jobShift', 
-                    'jobsSkill', 
-                    'company',
-                    'currency',
-                    'jobType',
-                    'appliedJobs' => function ($query) {
-                        $query->pending();
-                    }
-                  ])
-                  ->where('job_id', $uniqueJobId)
-                  ->first();
+            'jobsTag',
+            'jobCategory',
+            'jobShift',
+            'jobsSkill',
+            'company',
+            'currency',
+            'jobType',
+            'appliedJobs' => function ($query) {
+                $query->pending();
+            },
+        ])
+            ->where('job_id', $uniqueJobId)
+            ->first()
+        ;
 
         if (empty($job)) {
             Flash::error('Job not found');
+
             return redirect()->back();
         }
 
         // Check job access permissions
-        if ($job->status == Job::STATUS_DRAFT && Auth::user()?->hasRole('Candidate')) {
+        if (Job::STATUS_DRAFT == $job->status && \Auth::user()?->hasRole('Candidate')) {
             abort(404);
         }
 
@@ -159,7 +172,7 @@ class JobController extends AppBaseController
         $data['isActive'] = $data['isApplied'] = $data['isJobAddedToFavourite'] = $data['isJobReportedAsAbuse'] = false;
 
         // Get candidate-specific data if logged in
-        if (Auth::check() && Auth::user()->hasRole('Candidate')) {
+        if (\Auth::check() && \Auth::user()->hasRole('Candidate')) {
             $data = $this->jobRepository->getJobDetails($job);
         }
 
@@ -168,20 +181,22 @@ class JobController extends AppBaseController
 
         // Enhanced job count using scopes
         $data['jobsCount'] = Job::active()
-                               ->byCompany($job->company_id)
-                               ->count();
+            ->byCompany($job->company_id)
+            ->count()
+        ;
 
         // Check job status using model method
         $data['isActive'] = $job->isActive();
 
         // Enhanced related jobs query using scopes
         $data['getRelatedJobs'] = Job::with(['jobCategory', 'jobShift', 'jobsSkill', 'company'])
-                                    ->byCategory($job->job_category_id)
-                                    ->active()
-                                    ->where('id', '!=', $job->id)
-                                    ->recent()
-                                    ->limit(6)
-                                    ->get();
+            ->byCategory($job->job_category_id)
+            ->active()
+            ->where('id', '!=', $job->id)
+            ->recent()
+            ->limit(6)
+            ->get()
+        ;
 
         // Social sharing URLs
         $url = [
@@ -195,13 +210,13 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Enhanced favourite job functionality
+     * Enhanced favourite job functionality.
      */
     public function saveFavouriteJob(SaveFavouriteJobRequest $request): JsonResponse
     {
         $input = $request->all();
         $favouriteJob = $this->jobRepository->storeFavouriteJobs($input);
-        
+
         if ($favouriteJob) {
             return $this->sendResponse($favouriteJob, __('messages.flash.fav_job_added'));
         }
@@ -210,7 +225,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Enhanced job abuse reporting
+     * Enhanced job abuse reporting.
      */
     public function reportJobAbuse(ReportJobAbuseRequest $request): JsonResponse
     {
@@ -221,7 +236,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Enhanced email job to friend functionality
+     * Enhanced email job to friend functionality.
      */
     public function emailJobToFriend(EmailJobToFriendRequest $request): JsonResponse
     {
@@ -232,7 +247,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Get jobs by filters using enhanced scopes
+     * Get jobs by filters using enhanced scopes.
      */
     public function getJobsByFilters(Request $request): JsonResponse
     {
@@ -283,16 +298,24 @@ class JobController extends AppBaseController
         switch ($request->get('sort', 'recent')) {
             case 'recent':
                 $query->recent();
+
                 break;
+
             case 'popular':
                 $query->popular();
+
                 break;
+
             case 'salary_high':
                 $query->orderBy('salary_from', 'desc');
+
                 break;
+
             case 'salary_low':
                 $query->orderBy('salary_from', 'asc');
+
                 break;
+
             default:
                 $query->recent();
         }
@@ -303,7 +326,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * Get job statistics using enhanced scopes
+     * Get job statistics using enhanced scopes.
      */
     public function getJobStatistics(): JsonResponse
     {

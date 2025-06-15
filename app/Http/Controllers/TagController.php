@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Repositories\JobTagRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class TagController extends AppBaseController
 {
     /** @var JobTagRepository */
@@ -22,10 +21,9 @@ class TagController extends AppBaseController
     /**
      * Display a listing of the JobTag.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -61,8 +59,6 @@ class TagController extends AppBaseController
 
     /**
      * Update the specified JobTag in storage.
-     *
-     * @param  Tag  $jobTag
      */
     public function update(UpdateTagUpdateTagRequest $request, Tag $tag): JsonResponse
     {
@@ -75,18 +71,15 @@ class TagController extends AppBaseController
     /**
      * Remove the specified JobTag from storage.
      *
-     * @param  Tag  $jobTag
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Tag $tag): JsonResponse
     {
         $jobTag = $tag->jobs()->pluck('tag_id')->toArray();
         if (in_array($tag->id, $jobTag)) {
             return $this->sendError(__('messages.flash.job_tag_cant_delete'));
-        } else {
-            $tag->delete();
         }
+        $tag->delete();
 
         return $this->sendSuccess(__('messages.flash.job_tag_delete'));
     }

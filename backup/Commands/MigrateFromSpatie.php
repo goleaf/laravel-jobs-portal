@@ -28,13 +28,13 @@ class MigrateFromSpatie extends Command
      */
     public function handle()
     {
-        if (! Schema::hasTable('media')) {
+        if (!Schema::hasTable('media')) {
             $this->error('Media table does not exist. Nothing to migrate.');
 
             return 1;
         }
 
-        if (! Schema::hasTable('files')) {
+        if (!Schema::hasTable('files')) {
             $this->error('Files table does not exist. Please run migrations first.');
 
             return 1;
@@ -42,7 +42,7 @@ class MigrateFromSpatie extends Command
 
         $mediaCount = DB::table('media')->count();
 
-        if ($mediaCount === 0) {
+        if (0 === $mediaCount) {
             $this->info('No media records found to migrate.');
 
             return 0;
@@ -59,9 +59,10 @@ class MigrateFromSpatie extends Command
                 $exists = File::where('model_type', $media->model_type)
                     ->where('model_id', $media->model_id)
                     ->where('path', $media->id.'/'.$media->file_name)
-                    ->exists();
+                    ->exists()
+                ;
 
-                if (! $exists) {
+                if (!$exists) {
                     // Create new file record
                     File::create([
                         'model_type' => $media->model_type,

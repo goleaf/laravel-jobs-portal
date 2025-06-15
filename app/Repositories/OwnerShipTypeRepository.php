@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\OwnerShipType;
 
 /**
- * Class OwnerShipTypeRepository
+ * Class OwnerShipTypeRepository.
  *
  * @version June 22, 2020, 9:47 am UTC
  */
@@ -20,7 +20,7 @@ class OwnerShipTypeRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -28,8 +28,8 @@ class OwnerShipTypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return OwnerShipType::class;

@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Setting;
 
 /**
- * Class PrivacyPolicyRepository
+ * Class PrivacyPolicyRepository.
  */
 class PrivacyPolicyRepository extends BaseRepository
 {
@@ -17,17 +17,11 @@ class PrivacyPolicyRepository extends BaseRepository
         'value',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldsSearchable()
     {
         return $this->fieldSearchable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function model()
     {
         return Setting::class;

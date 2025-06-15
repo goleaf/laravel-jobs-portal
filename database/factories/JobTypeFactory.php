@@ -36,7 +36,7 @@ class JobTypeFactory extends Factory
             'On-Site',
             'Consultant',
             'Volunteer',
-            'Seasonal'
+            'Seasonal',
         ];
 
         $colors = [
@@ -62,7 +62,7 @@ class JobTypeFactory extends Factory
             'users',
             'star',
             'globe',
-            'calendar'
+            'calendar',
         ];
 
         return [
@@ -201,4 +201,4 @@ class JobTypeFactory extends Factory
             'is_default' => true,
         ]);
     }
-} 
+}

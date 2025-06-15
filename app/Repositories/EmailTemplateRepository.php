@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\EmailTemplate;
 
 /**
- * Class EmailTemplateRepository
+ * Class EmailTemplateRepository.
  */
 class EmailTemplateRepository extends BaseRepository
 {
@@ -20,7 +20,7 @@ class EmailTemplateRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -28,8 +28,8 @@ class EmailTemplateRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model(): string
     {
         return EmailTemplate::class;

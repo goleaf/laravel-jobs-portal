@@ -2,13 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
+use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
-use App\Models\Company;
-use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobManagementTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,10 +31,10 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function employer_can_create_job()
+    public function employerCanCreateJob()
     {
         $category = Category::factory()->create();
-        
+
         $jobData = [
             'title' => 'Software Developer',
             'description' => 'Looking for a skilled developer',
@@ -39,7 +44,7 @@ class JobManagementTest extends TestCase
             'salary_max' => 80000,
             'location' => 'New York',
             'job_type' => 'full-time',
-            'experience_level' => 'mid-level'
+            'experience_level' => 'mid-level',
         ];
 
         $response = $this->actingAs($this->employer)->post('/jobs', $jobData);
@@ -49,7 +54,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function candidate_can_apply_for_job()
+    public function candidateCanApplyForJob()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id]);
 
@@ -58,12 +63,12 @@ class JobManagementTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseHas('job_applications', [
             'job_id' => $job->id,
-            'user_id' => $this->candidate->id
+            'user_id' => $this->candidate->id,
         ]);
     }
 
     /** @test */
-    public function jobs_can_be_searched()
+    public function jobsCanBeSearched()
     {
         Job::factory()->create(['title' => 'PHP Developer']);
         Job::factory()->create(['title' => 'JavaScript Developer']);
@@ -76,7 +81,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function jobs_can_be_filtered_by_category()
+    public function jobsCanBeFilteredByCategory()
     {
         $techCategory = Category::factory()->create(['name' => 'Technology']);
         $marketingCategory = Category::factory()->create(['name' => 'Marketing']);

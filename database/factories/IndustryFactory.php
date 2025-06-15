@@ -24,9 +24,9 @@ class IndustryFactory extends Factory
             'Pharmaceuticals', 'Insurance', 'Banking', 'E-commerce', 'Gaming',
             'Fashion', 'Sports', 'Travel', 'Logistics', 'Mining',
             'Chemical', 'Textile', 'Furniture', 'Electronics', 'Software Development',
-            'Cybersecurity', 'Artificial Intelligence', 'Renewable Energy', 'Oil & Gas', 'Publishing'
+            'Cybersecurity', 'Artificial Intelligence', 'Renewable Energy', 'Oil & Gas', 'Publishing',
         ];
-        
+
         return [
             'name' => $this->faker->unique()->randomElement($industries),
             'description' => $this->faker->paragraph(3),

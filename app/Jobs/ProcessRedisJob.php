@@ -10,11 +10,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Example Redis-backed job for performance testing
+ * Example Redis-backed job for performance testing.
  */
 class ProcessRedisJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $timeout = 60;
     public $tries = 3;
@@ -32,7 +35,7 @@ class ProcessRedisJob implements ShouldQueue
         Log::info('Processing Redis job', [
             'data' => $this->data,
             'attempts' => $this->attempts(),
-            'queue' => 'redis'
+            'queue' => 'redis',
         ]);
 
         // Simulate processing
@@ -45,7 +48,7 @@ class ProcessRedisJob implements ShouldQueue
     {
         Log::error('Redis job failed', [
             'data' => $this->data,
-            'error' => $exception->getMessage()
+            'error' => $exception->getMessage(),
         ]);
     }
 }

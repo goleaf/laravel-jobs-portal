@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Notification
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Notification>
  */
@@ -34,7 +34,7 @@ class NotificationFactory extends Factory
             'title' => fake()->sentence(3),
             'text' => fake()->word(),
             'meta' => fake()->word(),
-            'read_at' => fake()->dateTimeBetween('-1 year', 'now')
+            'read_at' => fake()->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

@@ -2,40 +2,42 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * SalaryPeriod Model - Enhanced with Enhanced patterns
+ * SalaryPeriod Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $period
- * @property string|null $description
- * @property bool $is_active
- * @property bool $is_default
- * @property bool $is_featured
- * @property int|null $sort_order
- * @property float|null $multiplier_hours
- * @property float|null $multiplier_days
- * @property float|null $multiplier_months
- * @property float|null $multiplier_years
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read string $display_name
- * @property-read string $period_type
- * @property-read int $jobs_count
- * @property-read int $active_jobs_count
- * @property-read int $candidates_count
- * @property-read int $active_candidates_count
+ * @property int                    $id
+ * @property string                 $period
+ * @property null|string            $description
+ * @property bool                   $is_active
+ * @property bool                   $is_default
+ * @property bool                   $is_featured
+ * @property null|int               $sort_order
+ * @property null|float             $multiplier_hours
+ * @property null|float             $multiplier_days
+ * @property null|float             $multiplier_months
+ * @property null|float             $multiplier_years
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property Collection|Job[]       $jobs
+ * @property Candidate[]|Collection $candidates
+ * @property string                 $display_name
+ * @property string                 $period_type
+ * @property int                    $jobs_count
+ * @property int                    $active_jobs_count
+ * @property int                    $candidates_count
+ * @property int                    $active_candidates_count
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -62,6 +64,24 @@ class SalaryPeriod extends Model
 {
     use HasFactory;
     use LogsActivity;
+
+    /**
+     * Validation rules for creating salary periods.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'period' => 'required|string|max:150|unique:salary_periods,period',
+        'description' => 'nullable|string|max:500',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0|max:999',
+        'multiplier_hours' => 'nullable|numeric|min:0',
+        'multiplier_days' => 'nullable|numeric|min:0',
+        'multiplier_months' => 'nullable|numeric|min:0',
+        'multiplier_years' => 'nullable|numeric|min:0',
+    ];
 
     /**
      * The table associated with the model.
@@ -97,27 +117,6 @@ class SalaryPeriod extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'multiplier_hours' => 'decimal:4',
-            'multiplier_days' => 'decimal:4',
-            'multiplier_months' => 'decimal:4',
-            'multiplier_years' => 'decimal:4',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -125,37 +124,19 @@ class SalaryPeriod extends Model
         return LogOptions::defaults()
             ->logOnly(['period', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating salary periods.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'period' => 'required|string|max:150|unique:salary_periods,period',
-        'description' => 'nullable|string|max:500',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_featured' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0|max:999',
-        'multiplier_hours' => 'nullable|numeric|min:0',
-        'multiplier_days' => 'nullable|numeric|min:0',
-        'multiplier_months' => 'nullable|numeric|min:0',
-        'multiplier_years' => 'nullable|numeric|min:0',
-    ];
 
     /**
      * Update validation rules for salary periods.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'period' => 'required|string|max:150|unique:salary_periods,period,' . $id,
+            'period' => 'required|string|max:150|unique:salary_periods,period,'.$id,
             'description' => 'nullable|string|max:500',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
@@ -194,6 +175,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include active salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -202,6 +185,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include inactive salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -210,6 +195,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include featured salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -218,6 +205,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include non-featured salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -226,6 +215,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include default salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeDefault($query)
     {
@@ -234,6 +225,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to only include custom salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeCustom($query)
     {
@@ -246,58 +239,73 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to get hourly periods.
+     *
+     * @param mixed $query
      */
     public function scopeHourly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%hour%')
-              ->orWhere('period', 'like', '%hr%')
-              ->orWhere('period', 'like', '%hourly%');
+                ->orWhere('period', 'like', '%hr%')
+                ->orWhere('period', 'like', '%hourly%')
+            ;
         });
     }
 
     /**
      * Scope a query to get daily periods.
+     *
+     * @param mixed $query
      */
     public function scopeDaily($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%day%')
-              ->orWhere('period', 'like', '%daily%');
+                ->orWhere('period', 'like', '%daily%')
+            ;
         });
     }
 
     /**
      * Scope a query to get weekly periods.
+     *
+     * @param mixed $query
      */
     public function scopeWeekly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%week%')
-              ->orWhere('period', 'like', '%weekly%');
+                ->orWhere('period', 'like', '%weekly%')
+            ;
         });
     }
 
     /**
      * Scope a query to get monthly periods.
+     *
+     * @param mixed $query
      */
     public function scopeMonthly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%month%')
-              ->orWhere('period', 'like', '%monthly%');
+                ->orWhere('period', 'like', '%monthly%')
+            ;
         });
     }
 
     /**
      * Scope a query to get yearly periods.
+     *
+     * @param mixed $query
      */
     public function scopeYearly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%year%')
-              ->orWhere('period', 'like', '%annual%')
-              ->orWhere('period', 'like', '%yearly%');
+                ->orWhere('period', 'like', '%annual%')
+                ->orWhere('period', 'like', '%yearly%')
+            ;
         });
     }
 
@@ -307,17 +315,22 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to search salary periods by name or description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('period', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+                ->orWhere('description', 'like', "%{$term}%")
+            ;
         });
     }
 
     /**
      * Scope a query to get recent salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -326,6 +339,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to get old salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -334,6 +349,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to order salary periods alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -342,11 +359,14 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to order salary periods by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeByOrder($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('period', 'asc');
+            ->orderBy('period', 'asc')
+        ;
     }
 
     // =============================================
@@ -355,6 +375,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to include salary periods with jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithJobs($query)
     {
@@ -363,17 +385,22 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to include salary periods with active jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveJobs($query)
     {
         return $query->whereHas('jobs', function ($q) {
             $q->where('status', 'active')
-              ->where('expire_date', '>', now());
+                ->where('expire_date', '>', now())
+            ;
         });
     }
 
     /**
      * Scope a query to include salary periods with candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidates($query)
     {
@@ -382,6 +409,8 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to include salary periods with active candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -392,40 +421,50 @@ class SalaryPeriod extends Model
 
     /**
      * Scope a query to get popular salary periods (with most jobs).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount(['jobs' => function ($q) {
             $q->where('status', 'active');
         }])
-        ->orderBy('jobs_count', 'desc')
-        ->limit($limit);
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get popular salary periods by candidates.
+     *
+     * @param mixed $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
         return $query->withCount(['candidates' => function ($q) {
             $q->where('is_active', true);
         }])
-        ->orderBy('candidates_count', 'desc')
-        ->limit($limit);
+            ->orderBy('candidates_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get trending salary periods.
+     *
+     * @param mixed $query
      */
     public function scopeTrending($query, int $days = 30, int $limit = 10)
     {
         return $query->withCount(['jobs' => function ($q) use ($days) {
             $q->where('status', 'active')
-              ->where('created_at', '>=', now()->subDays($days));
+                ->where('created_at', '>=', now()->subDays($days))
+            ;
         }])
-        ->having('jobs_count', '>', 0)
-        ->orderBy('jobs_count', 'desc')
-        ->limit($limit);
+            ->having('jobs_count', '>', 0)
+            ->orderBy('jobs_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     // =============================================
@@ -435,60 +474,60 @@ class SalaryPeriod extends Model
     /**
      * Get cached active salary periods.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember(
             'salary_periods_active',
             now()->addHours(24),
-            fn() => static::active()->byOrder()->get()
+            fn () => static::active()->byOrder()->get()
         );
     }
 
     /**
      * Get cached featured salary periods.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember(
             'salary_periods_featured',
             now()->addHours(12),
-            fn() => static::active()->featured()->byOrder()->get()
+            fn () => static::active()->featured()->byOrder()->get()
         );
     }
 
     /**
      * Get cached default salary periods.
      */
-    public static function getCachedDefault(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedDefault(): Collection
     {
         return Cache::remember(
             'salary_periods_default',
             now()->addHours(24),
-            fn() => static::active()->default()->byOrder()->get()
+            fn () => static::active()->default()->byOrder()->get()
         );
     }
 
     /**
      * Get cached popular salary periods.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember(
             "salary_periods_popular_{$limit}",
             now()->addHours(6),
-            fn() => static::active()->popular($limit)->get()
+            fn () => static::active()->popular($limit)->get()
         );
     }
 
     /**
      * Get cached salary periods by type.
      */
-    public static function getCachedByType(string $type): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByType(string $type): Collection
     {
         return Cache::remember(
             "salary_periods_type_{$type}",
             now()->addHours(12),
-            fn() => static::active()->{$type}()->byOrder()->get()
+            fn () => static::active()->{$type}()->byOrder()->get()
         );
     }
 
@@ -510,7 +549,7 @@ class SalaryPeriod extends Model
     public function getPeriodTypeAttribute(): string
     {
         $period = strtolower($this->period);
-        
+
         if (str_contains($period, 'hour') || str_contains($period, 'hr')) {
             return 'hourly';
         }
@@ -526,7 +565,7 @@ class SalaryPeriod extends Model
         if (str_contains($period, 'year') || str_contains($period, 'annual') || str_contains($period, 'yearly')) {
             return 'yearly';
         }
-        
+
         return 'custom';
     }
 
@@ -538,7 +577,7 @@ class SalaryPeriod extends Model
         return Cache::remember(
             "salary_period_{$this->id}_jobs_count",
             now()->addHours(6),
-            fn() => $this->jobs()->count()
+            fn () => $this->jobs()->count()
         );
     }
 
@@ -550,7 +589,7 @@ class SalaryPeriod extends Model
         return Cache::remember(
             "salary_period_{$this->id}_active_jobs_count",
             now()->addHours(6),
-            fn() => $this->jobs()->where('status', 'active')->count()
+            fn () => $this->jobs()->where('status', 'active')->count()
         );
     }
 
@@ -562,7 +601,7 @@ class SalaryPeriod extends Model
         return Cache::remember(
             "salary_period_{$this->id}_candidates_count",
             now()->addHours(6),
-            fn() => $this->candidates()->count()
+            fn () => $this->candidates()->count()
         );
     }
 
@@ -574,7 +613,7 @@ class SalaryPeriod extends Model
         return Cache::remember(
             "salary_period_{$this->id}_active_candidates_count",
             now()->addHours(6),
-            fn() => $this->candidates()->where('is_active', true)->count()
+            fn () => $this->candidates()->where('is_active', true)->count()
         );
     }
 
@@ -583,7 +622,7 @@ class SalaryPeriod extends Model
      */
     public function isHourly(): bool
     {
-        return $this->period_type === 'hourly';
+        return 'hourly' === $this->period_type;
     }
 
     /**
@@ -591,7 +630,7 @@ class SalaryPeriod extends Model
      */
     public function isDaily(): bool
     {
-        return $this->period_type === 'daily';
+        return 'daily' === $this->period_type;
     }
 
     /**
@@ -599,7 +638,7 @@ class SalaryPeriod extends Model
      */
     public function isWeekly(): bool
     {
-        return $this->period_type === 'weekly';
+        return 'weekly' === $this->period_type;
     }
 
     /**
@@ -607,7 +646,7 @@ class SalaryPeriod extends Model
      */
     public function isMonthly(): bool
     {
-        return $this->period_type === 'monthly';
+        return 'monthly' === $this->period_type;
     }
 
     /**
@@ -615,7 +654,7 @@ class SalaryPeriod extends Model
      */
     public function isYearly(): bool
     {
-        return $this->period_type === 'yearly';
+        return 'yearly' === $this->period_type;
     }
 
     /**
@@ -631,12 +670,16 @@ class SalaryPeriod extends Model
         switch ($this->period_type) {
             case 'hourly':
                 return $amount * 40 * 52; // 40 hours/week * 52 weeks
+
             case 'daily':
                 return $amount * 5 * 52; // 5 days/week * 52 weeks
+
             case 'weekly':
                 return $amount * 52;
+
             case 'monthly':
                 return $amount * 12;
+
             case 'yearly':
             default:
                 return $amount;
@@ -695,30 +738,24 @@ class SalaryPeriod extends Model
     }
 
     /**
-     * Clear cache keys matching pattern.
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    private function clearCachePattern(string $pattern): void
+    protected function casts(): array
     {
-        if (str_contains($pattern, 'salary_period_' . $this->id)) {
-            $prefix = "salary_period_{$this->id}_";
-            $keys = [
-                $prefix . 'jobs_count',
-                $prefix . 'active_jobs_count',
-                $prefix . 'candidates_count',
-                $prefix . 'active_candidates_count',
-            ];
-
-            foreach ($keys as $key) {
-                Cache::forget($key);
-            }
-        }
-
-        if (str_contains($pattern, 'salary_periods_type_')) {
-            $types = ['hourly', 'daily', 'weekly', 'monthly', 'yearly'];
-            foreach ($types as $type) {
-                Cache::forget("salary_periods_type_{$type}");
-            }
-        }
+        return [
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'multiplier_hours' => 'decimal:4',
+            'multiplier_days' => 'decimal:4',
+            'multiplier_months' => 'decimal:4',
+            'multiplier_years' => 'decimal:4',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 
     /**
@@ -735,6 +772,32 @@ class SalaryPeriod extends Model
         static::deleted(function ($salaryPeriod) {
             $salaryPeriod->clearCaches();
         });
+    }
 
+    /**
+     * Clear cache keys matching pattern.
+     */
+    private function clearCachePattern(string $pattern): void
+    {
+        if (str_contains($pattern, 'salary_period_'.$this->id)) {
+            $prefix = "salary_period_{$this->id}_";
+            $keys = [
+                $prefix.'jobs_count',
+                $prefix.'active_jobs_count',
+                $prefix.'candidates_count',
+                $prefix.'active_candidates_count',
+            ];
+
+            foreach ($keys as $key) {
+                Cache::forget($key);
+            }
+        }
+
+        if (str_contains($pattern, 'salary_periods_type_')) {
+            $types = ['hourly', 'daily', 'weekly', 'monthly', 'yearly'];
+            foreach ($types as $type) {
+                Cache::forget("salary_periods_type_{$type}");
+            }
+        }
     }
 }

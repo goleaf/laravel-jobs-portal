@@ -31,11 +31,11 @@ class LanguageFactory extends Factory
             ['code' => 'hi', 'name' => 'Hindi'],
             ['code' => 'tr', 'name' => 'Turkish'],
             ['code' => 'nl', 'name' => 'Dutch'],
-            ['code' => 'sv', 'name' => 'Swedish']
+            ['code' => 'sv', 'name' => 'Swedish'],
         ];
-        
+
         $language = $this->faker->unique()->randomElement($languages);
-        
+
         return [
             'language' => $language['name'],
             'iso_code' => $language['code'],

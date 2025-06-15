@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-
 use App\Mail\EmailToEmployer;
 use App\Models\Candidate;
 use App\Models\EmailTemplate;
@@ -14,6 +13,7 @@ use App\Repositories\JobApplicationRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
+
 class JobApplicationController extends AppBaseController
 {
     /** @var JobApplicationRepository */
@@ -51,8 +51,8 @@ class JobApplicationController extends AppBaseController
         $job = Job::with(['company.user', 'appliedJobs'])->findOrFail($input['job_id']);
         $employerId = $job->company->user->id;
 
-        $input['application_type'] != 'draft' ? NotificationSetting::where('key', 'JOB_APPLICATION_SUBMITTED')->first()->value == 1 ?
-            addNotification([
+        'draft' != $input['application_type'] ? 1 == NotificationSetting::where('key', 'JOB_APPLICATION_SUBMITTED')->first()->value
+            ? addNotification([
                 Notification::JOB_APPLICATION_SUBMITTED,
                 $employerId,
                 Notification::EMPLOYER,
@@ -73,8 +73,8 @@ class JobApplicationController extends AppBaseController
 
         Mail::to($job->company->user->email)->send(new EmailToEmployer($data));
 
-        return $input['application_type'] == 'draft' ?
-            $this->sendResponse($job->job_id, __('messages.flash.job_application_draft')) :
-            $this->sendResponse($job->job_id, __('messages.flash.job_applied'));
+        return 'draft' == $input['application_type']
+            ? $this->sendResponse($job->job_id, __('messages.flash.job_application_draft'))
+            : $this->sendResponse($job->job_id, __('messages.flash.job_applied'));
     }
 }

@@ -5,10 +5,15 @@ namespace Tests\Unit\Models;
 use App\Models\Candidate;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CandidateModelTest extends TestCase
 {
     /** @test */
-    public function it_has_status_constants()
+    public function itHasStatusConstants()
     {
         $this->assertEquals(1, Candidate::ACTIVE);
         $this->assertEquals(0, Candidate::DEACTIVE);
@@ -18,21 +23,21 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_availability_constants()
+    public function itHasAvailabilityConstants()
     {
         $this->assertEquals(1, Candidate::IMMEDIATE_AVAILABLE);
         $this->assertEquals(0, Candidate::Not_IMMEDIATE_AVAILABLE);
     }
 
     /** @test */
-    public function it_has_path_constants()
+    public function itHasPathConstants()
     {
         $this->assertEquals('candidates/resumes', Candidate::RESUME_PATH);
         $this->assertEquals('candidates/images', Candidate::IMAGE_PATH);
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function itHasCorrectFillableAttributes()
     {
         $candidate = new Candidate();
         $fillable = $candidate->getFillable();
@@ -63,7 +68,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_casts()
+    public function itHasCorrectCasts()
     {
         $candidate = new Candidate();
         $casts = $candidate->getCasts();
@@ -84,7 +89,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_status_array_constants()
+    public function itHasStatusArrayConstants()
     {
         $expectedStatus = [
             2 => 'All',
@@ -96,7 +101,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_immediate_availability_constants()
+    public function itHasImmediateAvailabilityConstants()
     {
         $expectedImmediate = [
             2 => 'All',
@@ -108,7 +113,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_instantiated_with_attributes()
+    public function itCanBeInstantiatedWithAttributes()
     {
         $candidate = new Candidate([
             'user_id' => 1,
@@ -142,10 +147,10 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_relationship_methods()
+    public function itHasRelationshipMethods()
     {
         $candidate = new Candidate();
-        
+
         // Test that relationship methods exist by checking they are callable
         $this->assertTrue(method_exists($candidate, 'user'));
         $this->assertTrue(method_exists($candidate, 'candidateEducation'));
@@ -154,14 +159,14 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_table_name()
+    public function itHasCorrectTableName()
     {
         $candidate = new Candidate();
         $this->assertEquals('candidates', $candidate->getTable());
     }
 
     /** @test */
-    public function it_has_validation_rules()
+    public function itHasValidationRules()
     {
         $expectedRules = [
             'first_name' => 'required|string|max:100',
@@ -186,4 +191,4 @@ class CandidateModelTest extends TestCase
 
         $this->assertEquals($expectedRules, Candidate::$rules);
     }
-} 
+}

@@ -23,7 +23,7 @@ class JobStoreResource extends JsonResource
                 'code' => $this->status,
                 'label' => $this->getStatusLabel(),
                 'color' => $this->getStatusColor(),
-                'badge_class' => $this->getStatusBadgeClass()
+                'badge_class' => $this->getStatusBadgeClass(),
             ],
             'company' => [
                 'id' => $this->company->id,
@@ -31,44 +31,44 @@ class JobStoreResource extends JsonResource
                 'logo_url' => $this->company->company_url,
                 'slug' => $this->company->slug,
                 'is_verified' => $this->company->is_verified,
-                'is_featured' => $this->company->is_featured
+                'is_featured' => $this->company->is_featured,
             ],
             'location' => [
                 'country' => [
                     'id' => $this->country_id,
-                    'name' => $this->country_name
+                    'name' => $this->country_name,
                 ],
                 'state' => [
                     'id' => $this->state_id,
-                    'name' => $this->state_name
+                    'name' => $this->state_name,
                 ],
                 'city' => [
                     'id' => $this->city_id,
-                    'name' => $this->city_name
+                    'name' => $this->city_name,
                 ],
-                'full_location' => $this->full_location
+                'full_location' => $this->full_location,
             ],
             'categories' => [
                 'job_category' => [
                     'id' => $this->job_category_id,
-                    'name' => $this->jobCategory->name ?? null
+                    'name' => $this->jobCategory->name ?? null,
                 ],
                 'job_type' => [
                     'id' => $this->job_type_id,
-                    'name' => $this->jobType->name ?? null
+                    'name' => $this->jobType->name ?? null,
                 ],
                 'career_level' => $this->when($this->career_level_id, [
                     'id' => $this->career_level_id,
-                    'name' => $this->careerLevel->name ?? null
+                    'name' => $this->careerLevel->name ?? null,
                 ]),
                 'functional_area' => [
                     'id' => $this->functional_area_id,
-                    'name' => $this->functionalArea->name ?? null
+                    'name' => $this->functionalArea->name ?? null,
                 ],
                 'job_shift' => $this->when($this->job_shift_id, [
                     'id' => $this->job_shift_id,
-                    'name' => $this->jobShift->name ?? null
-                ])
+                    'name' => $this->jobShift->name ?? null,
+                ]),
             ],
             'salary' => $this->when(!$this->hide_salary, [
                 'from' => $this->salary_from,
@@ -76,45 +76,45 @@ class JobStoreResource extends JsonResource
                 'currency' => [
                     'id' => $this->currency_id,
                     'code' => $this->currency->currency_code ?? null,
-                    'symbol' => $this->currency->currency_symbol ?? null
+                    'symbol' => $this->currency->currency_symbol ?? null,
                 ],
                 'period' => [
                     'id' => $this->salary_period_id,
-                    'name' => $this->salaryPeriod->period ?? null
+                    'name' => $this->salaryPeriod->period ?? null,
                 ],
                 'formatted' => $this->formatted_salary_range,
-                'is_hidden' => false
+                'is_hidden' => false,
             ]),
             'salary_hidden' => $this->when($this->hide_salary, [
                 'is_hidden' => true,
-                'message' => __('jobs.salary_negotiable')
+                'message' => __('jobs.salary_negotiable'),
             ]),
             'requirements' => [
                 'experience' => [
                     'years' => $this->experience,
-                    'formatted' => $this->getFormattedExperience()
+                    'formatted' => $this->getFormattedExperience(),
                 ],
                 'degree_level' => $this->when($this->degree_level_id, [
                     'id' => $this->degree_level_id,
-                    'name' => $this->degreeLevel->name ?? null
+                    'name' => $this->degreeLevel->name ?? null,
                 ]),
                 'position' => $this->position,
                 'gender_preference' => [
                     'code' => $this->no_preference,
-                    'label' => $this->getGenderPreferenceLabel()
-                ]
+                    'label' => $this->getGenderPreferenceLabel(),
+                ],
             ],
             'job_details' => [
                 'description' => $this->description,
                 'key_responsibilities' => $this->when($this->key_responsibilities, $this->key_responsibilities),
                 'benefits' => $this->when($this->benefits, $this->benefits),
-                'requirements' => $this->when($this->requirements, $this->requirements)
+                'requirements' => $this->when($this->requirements, $this->requirements),
             ],
             'features' => [
                 'is_freelance' => $this->is_freelance,
                 'is_featured' => $this->isFeatured(),
                 'is_urgent' => $this->is_urgent ?? false,
-                'is_remote' => $this->is_remote ?? false
+                'is_remote' => $this->is_remote ?? false,
             ],
             'dates' => [
                 'expiry_date' => $this->job_expiry_date?->format('Y-m-d'),
@@ -122,14 +122,14 @@ class JobStoreResource extends JsonResource
                 'days_remaining' => $this->getDaysUntilExpiry(),
                 'is_expired' => $this->isExpired(),
                 'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $this->updated_at->format('Y-m-d H:i:s')
+                'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             ],
             'skills' => $this->whenLoaded('jobsSkill', function () {
                 return $this->jobsSkill->map(function ($skill) {
                     return [
                         'id' => $skill->id,
                         'name' => $skill->name,
-                        'slug' => $skill->slug ?? null
+                        'slug' => $skill->slug ?? null,
                     ];
                 });
             }),
@@ -138,25 +138,25 @@ class JobStoreResource extends JsonResource
                     return [
                         'id' => $tag->id,
                         'name' => $tag->name,
-                        'slug' => $tag->slug ?? null
+                        'slug' => $tag->slug ?? null,
                     ];
                 });
             }),
             'statistics' => [
                 'applications_count' => $this->getApplicationsCount(),
-                'views_count' => $this->views_count ?? 0
+                'views_count' => $this->views_count ?? 0,
             ],
             'urls' => [
                 'show' => route('jobs.show', $this->id),
                 'edit' => $this->when($this->canUserEdit(), route('jobs.edit', $this->id)),
                 'apply' => route('jobs.apply', $this->id),
-                'company_profile' => route('companies.show', $this->company_id)
+                'company_profile' => route('companies.show', $this->company_id),
             ],
             'permissions' => [
                 'can_edit' => $this->canUserEdit(),
                 'can_delete' => $this->canUserDelete(),
                 'can_apply' => $this->canUserApply(),
-                'can_feature' => $this->canUserFeature()
+                'can_feature' => $this->canUserFeature(),
             ],
             'metadata' => [
                 'job_id' => $this->job_id,
@@ -164,8 +164,21 @@ class JobStoreResource extends JsonResource
                 'seo_title' => $this->getSeoTitle(),
                 'seo_description' => $this->getSeoDescription(),
                 'language' => app()->getLocale(),
-                'created_by_admin' => $this->is_created_by_admin ?? false
-            ]
+                'created_by_admin' => $this->is_created_by_admin ?? false,
+            ],
+        ];
+    }
+
+    /**
+     * Additional resource data for successful creation.
+     */
+    public function with(Request $request): array
+    {
+        return [
+            'message' => __('jobs.created_successfully'),
+            'success' => true,
+            'timestamp' => now()->toISOString(),
+            'next_actions' => $this->getNextActions(),
         ];
     }
 
@@ -174,7 +187,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getStatusLabel(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             0 => __('jobs.status.draft'),
             1 => __('jobs.status.live'),
             2 => __('jobs.status.closed'),
@@ -189,7 +202,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getStatusColor(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             0 => 'warning',
             1 => 'success',
             2 => 'danger',
@@ -204,7 +217,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getStatusBadgeClass(): string
     {
-        return 'badge badge-' . $this->getStatusColor();
+        return 'badge badge-'.$this->getStatusColor();
     }
 
     /**
@@ -212,13 +225,14 @@ class JobStoreResource extends JsonResource
      */
     protected function getFormattedExperience(): string
     {
-        if ($this->experience == 0) {
+        if (0 == $this->experience) {
             return __('jobs.experience.entry_level');
-        } elseif ($this->experience == 1) {
-            return __('jobs.experience.one_year');
-        } else {
-            return __('jobs.experience.years', ['years' => $this->experience]);
         }
+        if (1 == $this->experience) {
+            return __('jobs.experience.one_year');
+        }
+
+        return __('jobs.experience.years', ['years' => $this->experience]);
     }
 
     /**
@@ -226,7 +240,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getGenderPreferenceLabel(): string
     {
-        return match($this->no_preference) {
+        return match ($this->no_preference) {
             0 => __('jobs.gender.female'),
             1 => __('jobs.gender.male'),
             2 => __('jobs.gender.both'),
@@ -285,7 +299,7 @@ class JobStoreResource extends JsonResource
         }
 
         // Cannot delete if there are active applications
-        return $this->getApplicationsCount() === 0;
+        return 0 === $this->getApplicationsCount();
     }
 
     /**
@@ -310,14 +324,15 @@ class JobStoreResource extends JsonResource
         }
 
         // Cannot apply if job is not active
-        if ($this->status !== 1 || $this->isExpired()) {
+        if (1 !== $this->status || $this->isExpired()) {
             return false;
         }
 
         // Check if already applied
         return !$this->appliedJobs()
             ->where('user_id', $user->id)
-            ->exists();
+            ->exists()
+        ;
     }
 
     /**
@@ -333,7 +348,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getSeoTitle(): string
     {
-        return $this->job_title . ' - ' . ($this->company->user->name ?? $this->company->name);
+        return $this->job_title.' - '.($this->company->user->name ?? $this->company->name);
     }
 
     /**
@@ -342,20 +357,8 @@ class JobStoreResource extends JsonResource
     protected function getSeoDescription(): string
     {
         $description = strip_tags($this->description);
-        return \Str::limit($description, 160);
-    }
 
-    /**
-     * Additional resource data for successful creation.
-     */
-    public function with(Request $request): array
-    {
-        return [
-            'message' => __('jobs.created_successfully'),
-            'success' => true,
-            'timestamp' => now()->toISOString(),
-            'next_actions' => $this->getNextActions()
-        ];
+        return \Str::limit($description, 160);
     }
 
     /**
@@ -365,12 +368,12 @@ class JobStoreResource extends JsonResource
     {
         $actions = [];
 
-        if ($this->status === 0) { // Draft
+        if (0 === $this->status) { // Draft
             $actions[] = [
                 'action' => 'publish',
                 'label' => __('jobs.actions.publish_job'),
                 'url' => route('jobs.publish', $this->id),
-                'method' => 'POST'
+                'method' => 'POST',
             ];
         }
 
@@ -378,23 +381,23 @@ class JobStoreResource extends JsonResource
             'action' => 'view',
             'label' => __('jobs.actions.view_job'),
             'url' => route('jobs.show', $this->id),
-            'method' => 'GET'
+            'method' => 'GET',
         ];
 
         $actions[] = [
             'action' => 'edit',
             'label' => __('jobs.actions.edit_job'),
             'url' => route('jobs.edit', $this->id),
-            'method' => 'GET'
+            'method' => 'GET',
         ];
 
-        if (auth()->user()->hasRole('admin') || 
-            (auth()->user()->hasRole('employer') && auth()->user()->can('feature-jobs'))) {
+        if (auth()->user()->hasRole('admin')
+            || (auth()->user()->hasRole('employer') && auth()->user()->can('feature-jobs'))) {
             $actions[] = [
                 'action' => 'feature',
                 'label' => __('jobs.actions.make_featured'),
                 'url' => route('jobs.feature', $this->id),
-                'method' => 'POST'
+                'method' => 'POST',
             ];
         }
 

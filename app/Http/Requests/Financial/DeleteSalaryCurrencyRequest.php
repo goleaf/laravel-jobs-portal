@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Enhanced Enhanced Form Request for Delete Action
- * Implements Laravel 12 best practices with Enhanced MCP patterns
+ * Implements Laravel 12 best practices with Enhanced MCP patterns.
  */
 class DeleteSalaryCurrencyRequest extends FormRequest
 {
@@ -19,11 +19,12 @@ class DeleteSalaryCurrencyRequest extends FormRequest
         if (!auth()->check()) {
             return false;
         }
-        
+
         $user = auth()->user();
+
         return $user && (
-            $user->hasRole('Admin') || 
-            $user->hasRole('Employer')
+            $user->hasRole('Admin')
+            || $user->hasRole('Employer')
         );
     }
 
@@ -59,7 +60,7 @@ class DeleteSalaryCurrencyRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
+     * Enhanced Pattern: Data normalization.
      */
     protected function prepareForValidation(): void
     {

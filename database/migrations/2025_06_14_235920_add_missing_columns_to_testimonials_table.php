@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -24,7 +23,7 @@ return new class extends Migration
             $table->string('project_type')->nullable()->after('location');
             $table->integer('sort_order')->nullable()->after('project_type');
             $table->date('testimonial_date')->nullable()->after('sort_order');
-            
+
             // Add soft deletes
             $table->softDeletes()->after('updated_at');
         });
@@ -38,7 +37,7 @@ return new class extends Migration
         Schema::table('testimonials', function (Blueprint $table) {
             $table->dropColumn([
                 'customer_title',
-                'customer_company', 
+                'customer_company',
                 'customer_email',
                 'rating',
                 'is_active',
@@ -48,7 +47,7 @@ return new class extends Migration
                 'project_type',
                 'sort_order',
                 'testimonial_date',
-                'deleted_at'
+                'deleted_at',
             ]);
         });
     }

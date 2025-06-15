@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Content;
 
 use App\Models\PostCategory;
 use App\Repositories\PostCategoryRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class PostCategoryController extends AppBaseController
 {
     /** @var PostCategoryRepository */
@@ -22,10 +21,9 @@ class PostCategoryController extends AppBaseController
     /**
      * Display a listing of the BlogCategory.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -74,8 +72,7 @@ class PostCategoryController extends AppBaseController
     /**
      * Remove the specified BlogCategory from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(PostCategory $postCategory): JsonResponse
     {

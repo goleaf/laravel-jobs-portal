@@ -7,7 +7,7 @@ return [
     'select_language' => 'Sélectionner une langue',
     'language_changed' => 'Langue changée avec succès en :language',
     'language_not_supported' => 'La langue :language n\'est pas supportée',
-    
+
     // Locale Names
     'languages' => [
         'en' => 'Anglais',
@@ -20,7 +20,7 @@ return [
         'tr' => 'Turc',
         'zh' => 'Chinois',
     ],
-    
+
     // Locale Settings
     'direction' => 'ltr',
     'native_name' => 'Français',
@@ -29,14 +29,14 @@ return [
     'date_format' => 'd/m/Y',
     'time_format' => 'H:i',
     'datetime_format' => 'd/m/Y H:i',
-    
+
     // System Messages
     'loading' => 'Chargement...',
     'error' => 'Erreur',
     'success' => 'Succès',
     'warning' => 'Attention',
     'info' => 'Information',
-    
+
     // Navigation
     'home' => 'Accueil',
     'back' => 'Retour',
@@ -52,7 +52,7 @@ return [
     'filter' => 'Filtrer',
     'reset' => 'Réinitialiser',
     'refresh' => 'Actualiser',
-    
+
     // Time and Dates
     'today' => 'Aujourd\'hui',
     'yesterday' => 'Hier',
@@ -63,7 +63,7 @@ return [
     'this_month' => 'Ce mois',
     'last_month' => 'Le mois dernier',
     'next_month' => 'Le mois prochain',
-    
+
     // Numbers and Counting
     'first' => 'Premier',
     'second' => 'Deuxième',
@@ -76,7 +76,7 @@ return [
     'showing' => 'Affichage',
     'to' => 'à',
     'results' => 'résultats',
-    
+
     // Status
     'active' => 'Actif',
     'inactive' => 'Inactif',

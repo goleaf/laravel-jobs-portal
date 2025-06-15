@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 class SubscriptionRepository
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function createStripeCustomer(User $user): bool
     {
@@ -30,8 +30,9 @@ class SubscriptionRepository
             $plan = $this->getDefaultPlan();
 
             DB::beginTransaction();
+
             /** @var Subscription $userSubscription */
-            $userSubscription = new Subscription;
+            $userSubscription = new Subscription();
             $userSubscription->fill([
                 'user_id' => $user->id,
                 'name' => $plan->name,
@@ -47,14 +48,15 @@ class SubscriptionRepository
             DB::commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new Exception($e->getMessage());
+
+            throw new \Exception($e->getMessage());
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function purchaseSubscription(string $sessionId): Subscription
     {
@@ -62,12 +64,13 @@ class SubscriptionRepository
         DB::beginTransaction();
 
         setStripeApiKey();
+
         /** @var Session $sessionData */
         $sessionData = Session::retrieve($sessionId);
 
         $subscriptionId = $sessionData->subscription;
         $envSetting = getEnvSetting();
-        if (! empty($envSetting['stripe_secret'])) {
+        if (!empty($envSetting['stripe_secret'])) {
             $stripe = new StripeClient(
                 $envSetting['stripe_secret']
             );
@@ -108,7 +111,8 @@ class SubscriptionRepository
         $existingSubscription = Subscription::NotOnTrial()
             ->whereUserId($user->id)
             ->active()
-            ->first();
+            ->first()
+        ;
 
         // end trial subscription
         Subscription::whereUserId($user->id)->where(function (Builder $query) {
@@ -117,7 +121,8 @@ class SubscriptionRepository
             ->update([
                 'ends_at' => Carbon::now(),
                 'trial_ends_at' => Carbon::now(),
-            ]);
+            ])
+        ;
 
         /** @var Subscription $tsSubscription */
         $tsSubscription = Subscription::create([
@@ -132,8 +137,8 @@ class SubscriptionRepository
         ]);
 
         $adminId = User::role('Admin')->first()->id;
-        NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value == 1 ?
-                 addNotification([
+        1 == NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value
+                 ? addNotification([
                      Notification::EMPLOYER_PURCHASE_PLAN,
                      $adminId,
                      Notification::ADMIN,
@@ -142,7 +147,7 @@ class SubscriptionRepository
 
         $price = $subscription->items->data[0]->price;
         $invoiceId = $subscription->latest_invoice;
-        $transaction = (new Transaction)->fill([
+        $transaction = (new Transaction())->fill([
             'user_id' => $tsSubscription->user_id,
             'owner_id' => $tsSubscription->id,
             'owner_type' => Subscription::class,
@@ -162,7 +167,7 @@ class SubscriptionRepository
         // if another account subscription already running than cancel it
         if ($existingSubscription && $existingSubscription->user_id === $user->id) {
             // immediately cancel old subscription from strip
-            if ((! $existingSubscription->paypal_payment_id) && ! empty($existingSubscription->stripe_id)) {
+            if ((!$existingSubscription->paypal_payment_id) && !empty($existingSubscription->stripe_id)) {
                 $subscription = \Stripe\Subscription::retrieve(
                     $existingSubscription->stripe_id
                 );
@@ -186,9 +191,9 @@ class SubscriptionRepository
     }
 
     /**
-     * @return Plan|Builder|Model|object|null
+     * @return null|Builder|Model|object|Plan
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getDefaultPlan()
     {
@@ -201,14 +206,14 @@ class SubscriptionRepository
         }
 
         if (empty($plan)) {
-            throw new Exception('Not able to find any plan');
+            throw new \Exception('Not able to find any plan');
         }
 
         return $plan;
     }
 
     /**
-     * @return Subscription|bool
+     * @return bool|Subscription
      */
     public function getUserSubscription(int $userId)
     {
@@ -216,9 +221,10 @@ class SubscriptionRepository
         $subscription = Subscription::whereUserId($userId)
             ->active()
             ->latest()
-            ->first();
+            ->first()
+        ;
 
-        if (! $subscription) {
+        if (!$subscription) {
             return false;
         }
 
@@ -258,7 +264,7 @@ class SubscriptionRepository
 
                 $price = $input['data']['object']['items']['data'][0]['price'];
                 $invoiceId = $input['data']['object']['latest_invoice'];
-                $transaction = (new Transaction)->fill([
+                $transaction = (new Transaction())->fill([
                     'user_id' => $subscription->user_id,
                     'subscription_id' => $subscription->id,
                     'amount' => intval($price['unit_amount'] / 100),
@@ -267,7 +273,7 @@ class SubscriptionRepository
 
                 $transaction->save();
                 DB::commit();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollBack();
                 Log::info($e->getMessage());
             }

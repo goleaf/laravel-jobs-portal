@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers\Enhanced;
 
-use App\Http\Controllers\AppBaseController;
+use App\Events\CustomBroadcast;
 use App\Events\JobApplicationStatusChanged;
+use App\Http\Controllers\AppBaseController;
+use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\User;
-use App\Models\Job;
-use App\Models\Company;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /**
- * Enhanced RealTimeController - Enhanced patterns implementation
- * 
+ * Enhanced RealTimeController - Enhanced patterns implementation.
+ *
  * Demonstrates modern Laravel real-time controller patterns with:
  * - Advanced WebSocket management
  * - Real-time analytics and monitoring
@@ -32,23 +31,23 @@ use Carbon\Carbon;
 class RealTimeController extends AppBaseController
 {
     /**
-     * Cache TTL for real-time data (5 minutes for frequent updates)
+     * Cache TTL for real-time data (5 minutes for frequent updates).
      */
     private const CACHE_TTL = 300;
 
     /**
-     * Cache TTL for dashboard data (2 minutes for live updates)
+     * Cache TTL for dashboard data (2 minutes for live updates).
      */
     private const DASHBOARD_CACHE_TTL = 120;
 
     /**
-     * Get real-time dashboard data with enhanced caching and performance
+     * Get real-time dashboard data with enhanced caching and performance.
      */
     public function getDashboardData(Request $request): JsonResponse
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return $this->sendError('Unauthorized access', 401);
             }
@@ -56,7 +55,7 @@ class RealTimeController extends AppBaseController
             $cacheKey = $this->buildCacheKey('dashboard.data', [
                 'user_id' => $user->id,
                 'user_type' => $user->user_type,
-                'timestamp' => now()->format('Y-m-d-H-i')
+                'timestamp' => now()->format('Y-m-d-H-i'),
             ]);
 
             $data = Cache::remember($cacheKey, self::DASHBOARD_CACHE_TTL, function () use ($user) {
@@ -67,7 +66,7 @@ class RealTimeController extends AppBaseController
                     'real_time_metrics' => $this->getRealTimeMetrics(),
                     'performance_metrics' => $this->getPerformanceMetrics(),
                     'notification_count' => $this->getUnreadNotificationCount($user),
-                    'last_updated' => now()->toISOString()
+                    'last_updated' => now()->toISOString(),
                 ];
             });
 
@@ -76,12 +75,11 @@ class RealTimeController extends AppBaseController
             $data['cache_status'] = 'hit';
 
             return $this->sendResponse($data, 'Dashboard data retrieved successfully');
-
         } catch (\Exception $e) {
             Log::error('Error retrieving dashboard data', [
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return $this->sendServerError('Failed to retrieve dashboard data');
@@ -89,7 +87,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Update job application status with real-time broadcasting and enhanced validation
+     * Update job application status with real-time broadcasting and enhanced validation.
      */
     public function updateApplicationStatus(Request $request, JobApplication $jobApplication): JsonResponse
     {
@@ -99,7 +97,7 @@ class RealTimeController extends AppBaseController
             'notify_candidate' => 'boolean',
             'schedule_interview' => 'boolean',
             'interview_date' => 'nullable|date|after:now',
-            'interview_notes' => 'nullable|string|max:500'
+            'interview_notes' => 'nullable|string|max:500',
         ]);
 
         try {
@@ -125,7 +123,7 @@ class RealTimeController extends AppBaseController
                 'notes' => $request->notes,
                 'updated_by' => $user->id,
                 'status_changed_at' => now(),
-                'previous_status' => $oldStatus
+                'previous_status' => $oldStatus,
             ];
 
             // Handle interview scheduling
@@ -146,7 +144,7 @@ class RealTimeController extends AppBaseController
                 'new_status' => $newStatus,
                 'updated_by' => $user->only(['id', 'name', 'email']),
                 'timestamp' => now()->toISOString(),
-                'notify_candidate' => $request->boolean('notify_candidate', true)
+                'notify_candidate' => $request->boolean('notify_candidate', true),
             ];
 
             event(new JobApplicationStatusChanged($broadcastData));
@@ -161,7 +159,7 @@ class RealTimeController extends AppBaseController
                 'new_status' => $newStatus,
                 'updated_by' => $user->id,
                 'job_id' => $jobApplication->job_id,
-                'candidate_id' => $jobApplication->candidate_id
+                'candidate_id' => $jobApplication->candidate_id,
             ]);
 
             DB::commit();
@@ -172,10 +170,9 @@ class RealTimeController extends AppBaseController
                 'status_transition' => [
                     'from' => $oldStatus,
                     'to' => $newStatus,
-                    'timestamp' => now()->toISOString()
-                ]
+                    'timestamp' => now()->toISOString(),
+                ],
             ], 'Status updated successfully');
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -183,7 +180,7 @@ class RealTimeController extends AppBaseController
                 'application_id' => $jobApplication->id,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return $this->sendServerError('Failed to update status');
@@ -191,26 +188,27 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Get WebSocket authentication token for private channels with enhanced security
+     * Get WebSocket authentication token for private channels with enhanced security.
      */
     public function getWebSocketAuth(Request $request): JsonResponse
     {
         try {
             $user = Auth::user();
-            
+
             if (!$user) {
                 return $this->sendError('Unauthorized access', 401);
             }
 
             $channels = [];
             $permissions = [];
-            
+
             // Add user-specific channels based on role
             switch ($user->user_type) {
                 case 'candidate':
                     $channels[] = "job-application.{$user->id}";
                     $channels[] = "notifications.{$user->id}";
                     $permissions = ['read', 'subscribe'];
+
                     break;
 
                 case 'employer':
@@ -220,13 +218,15 @@ class RealTimeController extends AppBaseController
                         $channels[] = "real-time-stats.{$user->company->id}";
                         $permissions = ['read', 'write', 'subscribe'];
                     }
+
                     break;
 
                 case 'admin':
-                    $channels[] = "admin-dashboard";
-                    $channels[] = "system-health";
-                    $channels[] = "global-stats";
+                    $channels[] = 'admin-dashboard';
+                    $channels[] = 'system-health';
+                    $channels[] = 'global-stats';
                     $permissions = ['read', 'write', 'admin', 'subscribe'];
+
                     break;
             }
 
@@ -238,7 +238,7 @@ class RealTimeController extends AppBaseController
                 'user_id' => $user->id,
                 'channels' => $channels,
                 'permissions' => $permissions,
-                'expires_at' => now()->addHours(24)
+                'expires_at' => now()->addHours(24),
             ], now()->addHours(24));
 
             return $this->sendResponse([
@@ -247,13 +247,12 @@ class RealTimeController extends AppBaseController
                 'permissions' => $permissions,
                 'user_id' => $user->id,
                 'expires_at' => now()->addHours(24)->toISOString(),
-                'server_time' => now()->toISOString()
+                'server_time' => now()->toISOString(),
             ], 'WebSocket authentication token generated');
-
         } catch (\Exception $e) {
             Log::error('Error generating WebSocket auth token', [
                 'user_id' => Auth::id(),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to generate authentication token');
@@ -261,7 +260,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Get live activity feed with enhanced filtering and pagination
+     * Get live activity feed with enhanced filtering and pagination.
      */
     public function getActivityFeed(Request $request): JsonResponse
     {
@@ -277,33 +276,32 @@ class RealTimeController extends AppBaseController
                 'limit' => $limit,
                 'offset' => $offset,
                 'filter' => $filter,
-                'timestamp' => now()->format('Y-m-d-H-i')
+                'timestamp' => now()->format('Y-m-d-H-i'),
             ]);
 
             $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($user, $limit, $offset, $filter) {
                 $activities = collect();
 
-                if ($user->user_type === 'candidate') {
+                if ('candidate' === $user->user_type) {
                     $activities = $this->getCandidateActivities($user, $limit, $offset, $filter);
-                } elseif ($user->user_type === 'employer') {
+                } elseif ('employer' === $user->user_type) {
                     $activities = $this->getEmployerActivities($user, $limit, $offset, $filter);
-                } elseif ($user->user_type === 'admin') {
+                } elseif ('admin' === $user->user_type) {
                     $activities = $this->getAdminActivities($user, $limit, $offset, $filter);
                 }
 
                 return [
                     'activities' => $activities->values()->all(),
                     'total_count' => $activities->count(),
-                    'has_more' => $activities->count() === $limit
+                    'has_more' => $activities->count() === $limit,
                 ];
             });
 
             return $this->sendResponse($data, 'Activity feed retrieved successfully');
-
         } catch (\Exception $e) {
             Log::error('Error retrieving activity feed', [
                 'user_id' => Auth::id(),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to retrieve activity feed');
@@ -311,7 +309,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Get real-time statistics with enhanced metrics
+     * Get real-time statistics with enhanced metrics.
      */
     public function getRealTimeStats(Request $request): JsonResponse
     {
@@ -319,12 +317,12 @@ class RealTimeController extends AppBaseController
             $timeframe = $request->get('timeframe', 'today'); // today, week, month
             $cacheKey = $this->buildCacheKey('realtime.stats', [
                 'timeframe' => $timeframe,
-                'timestamp' => now()->format('Y-m-d-H')
+                'timestamp' => now()->format('Y-m-d-H'),
             ]);
 
             $stats = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($timeframe) {
                 $baseStats = $this->getBaseStats($timeframe);
-                
+
                 return array_merge($baseStats, [
                     'current_time' => now()->toISOString(),
                     'active_users' => $this->getActiveUsersCount(),
@@ -332,15 +330,14 @@ class RealTimeController extends AppBaseController
                     'websocket_connections' => $this->getWebSocketConnections(),
                     'cache_hit_ratio' => $this->getCacheHitRatio(),
                     'response_time_avg' => $this->getAverageResponseTime(),
-                    'error_rate' => $this->getErrorRate()
+                    'error_rate' => $this->getErrorRate(),
                 ]);
             });
 
             return $this->sendResponse($stats, 'Real-time statistics retrieved successfully');
-
         } catch (\Exception $e) {
             Log::error('Error retrieving real-time stats', [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to retrieve statistics');
@@ -348,12 +345,12 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Get system health status with comprehensive monitoring
+     * Get system health status with comprehensive monitoring.
      */
     public function getSystemHealth(): JsonResponse
     {
         try {
-            $cacheKey = 'system.health.' . now()->format('Y-m-d-H-i');
+            $cacheKey = 'system.health.'.now()->format('Y-m-d-H-i');
 
             $health = Cache::remember($cacheKey, 60, function () { // 1 minute cache
                 return [
@@ -366,7 +363,7 @@ class RealTimeController extends AppBaseController
                     'cpu_usage' => $this->getCpuUsage(),
                     'disk_usage' => $this->getDiskUsage(),
                     'uptime' => $this->getSystemUptime(),
-                    'last_check' => now()->toISOString()
+                    'last_check' => now()->toISOString(),
                 ];
             });
 
@@ -375,12 +372,11 @@ class RealTimeController extends AppBaseController
             return $this->sendResponse([
                 'status' => $overallStatus,
                 'components' => $health,
-                'timestamp' => now()->toISOString()
+                'timestamp' => now()->toISOString(),
             ], 'System health retrieved successfully');
-
         } catch (\Exception $e) {
             Log::error('Error retrieving system health', [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to retrieve system health');
@@ -388,7 +384,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Broadcast message to specific channels
+     * Broadcast message to specific channels.
      */
     public function broadcastMessage(Request $request): JsonResponse
     {
@@ -397,7 +393,7 @@ class RealTimeController extends AppBaseController
             'event' => 'required|string',
             'data' => 'required|array',
             'target_users' => 'nullable|array',
-            'target_users.*' => 'integer|exists:users,id'
+            'target_users.*' => 'integer|exists:users,id',
         ]);
 
         try {
@@ -413,30 +409,29 @@ class RealTimeController extends AppBaseController
                 'data' => $request->data,
                 'sender' => $user->only(['id', 'name', 'user_type']),
                 'timestamp' => now()->toISOString(),
-                'channel' => $request->channel
+                'channel' => $request->channel,
             ];
 
             // Broadcast the message
-            broadcast(new \App\Events\CustomBroadcast($request->channel, $broadcastData));
+            broadcast(new CustomBroadcast($request->channel, $broadcastData));
 
             // Log the broadcast
             Log::info('Message broadcasted', [
                 'channel' => $request->channel,
                 'event' => $request->event,
                 'sender_id' => $user->id,
-                'target_users' => $request->target_users ?? 'all'
+                'target_users' => $request->target_users ?? 'all',
             ]);
 
             return $this->sendResponse([
                 'broadcast_sent' => true,
                 'channel' => $request->channel,
-                'timestamp' => now()->toISOString()
+                'timestamp' => now()->toISOString(),
             ], 'Message broadcasted successfully');
-
         } catch (\Exception $e) {
             Log::error('Error broadcasting message', [
                 'channel' => $request->channel ?? null,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to broadcast message');
@@ -444,22 +439,22 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Enhanced authorization check for status updates
+     * Enhanced authorization check for status updates.
      */
     private function canUpdateStatus(JobApplication $jobApplication, string $newStatus, User $user): bool
     {
         // Candidates can only withdraw their applications
-        if ($user->user_type === 'candidate') {
-            return $user->id === $jobApplication->candidate_id && $newStatus === 'withdrawn';
+        if ('candidate' === $user->user_type) {
+            return $user->id === $jobApplication->candidate_id && 'withdrawn' === $newStatus;
         }
 
         // Employers can update applications for their jobs
-        if ($user->user_type === 'employer') {
+        if ('employer' === $user->user_type) {
             return $jobApplication->job->company_id === $user->company?->id;
         }
 
         // Admins can update any application
-        if ($user->user_type === 'admin') {
+        if ('admin' === $user->user_type) {
             return true;
         }
 
@@ -467,7 +462,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Validate status transitions
+     * Validate status transitions.
      */
     private function isValidStatusTransition(string $oldStatus, string $newStatus): bool
     {
@@ -479,30 +474,31 @@ class RealTimeController extends AppBaseController
             'interview_completed' => ['hired', 'rejected'],
             'rejected' => [], // Final state
             'hired' => [], // Final state
-            'withdrawn' => [] // Final state
+            'withdrawn' => [], // Final state
         ];
 
         return in_array($newStatus, $validTransitions[$oldStatus] ?? []);
     }
 
     /**
-     * Generate secure WebSocket token
+     * Generate secure WebSocket token.
      */
     private function generateWebSocketToken(User $user, array $channels): string
     {
-        return hash('sha256', $user->id . implode(',', $channels) . now()->timestamp . config('app.key'));
+        return hash('sha256', $user->id.implode(',', $channels).now()->timestamp.config('app.key'));
     }
 
     /**
-     * Get candidate activities
+     * Get candidate activities.
      */
-    private function getCandidateActivities(User $user, int $limit, int $offset, string $filter): \Illuminate\Support\Collection
+    private function getCandidateActivities(User $user, int $limit, int $offset, string $filter): Collection
     {
         $query = JobApplication::where('candidate_id', $user->id)
-                              ->with(['job.company'])
-                              ->latest();
+            ->with(['job.company'])
+            ->latest()
+        ;
 
-        if ($filter !== 'all') {
+        if ('all' !== $filter) {
             $query->where('status', $filter);
         }
 
@@ -513,32 +509,33 @@ class RealTimeController extends AppBaseController
                 'id' => $app->id,
                 'type' => 'application_status',
                 'title' => "Application for {$app->job->job_title}",
-                'description' => "Status: " . ucfirst(str_replace('_', ' ', $app->status)),
+                'description' => 'Status: '.ucfirst(str_replace('_', ' ', $app->status)),
                 'timestamp' => $app->updated_at,
                 'icon' => $this->getStatusIcon($app->status),
                 'color' => $this->getStatusColor($app->status),
                 'job_id' => $app->job_id,
-                'company' => $app->job->company->company_name ?? 'Unknown Company'
+                'company' => $app->job->company->company_name ?? 'Unknown Company',
             ];
         });
     }
 
     /**
-     * Get employer activities
+     * Get employer activities.
      */
-    private function getEmployerActivities(User $user, int $limit, int $offset, string $filter): \Illuminate\Support\Collection
+    private function getEmployerActivities(User $user, int $limit, int $offset, string $filter): Collection
     {
         if (!$user->company) {
             return collect();
         }
 
         $query = JobApplication::whereHas('job', function ($q) use ($user) {
-                    $q->where('company_id', $user->company->id);
-                })
-                ->with(['job', 'candidate.user'])
-                ->latest();
+            $q->where('company_id', $user->company->id);
+        })
+            ->with(['job', 'candidate.user'])
+            ->latest()
+        ;
 
-        if ($filter !== 'all') {
+        if ('all' !== $filter) {
             $query->where('status', $filter);
         }
 
@@ -555,21 +552,22 @@ class RealTimeController extends AppBaseController
                 'color' => 'blue',
                 'job_id' => $app->job_id,
                 'candidate_id' => $app->candidate_id,
-                'status' => $app->status
+                'status' => $app->status,
             ];
         });
     }
 
     /**
-     * Get admin activities
+     * Get admin activities.
      */
-    private function getAdminActivities(User $user, int $limit, int $offset, string $filter): \Illuminate\Support\Collection
+    private function getAdminActivities(User $user, int $limit, int $offset, string $filter): Collection
     {
         // Admin sees system-wide activities
         $query = JobApplication::with(['job.company', 'candidate.user'])
-                              ->latest();
+            ->latest()
+        ;
 
-        if ($filter !== 'all') {
+        if ('all' !== $filter) {
             $query->where('status', $filter);
         }
 
@@ -586,19 +584,19 @@ class RealTimeController extends AppBaseController
                 'color' => 'purple',
                 'job_id' => $app->job_id,
                 'candidate_id' => $app->candidate_id,
-                'company_id' => $app->job->company_id
+                'company_id' => $app->job->company_id,
             ];
         });
     }
 
     /**
-     * Update real-time statistics
+     * Update real-time statistics.
      */
     private function updateRealTimeStats(string $type, string $value): void
     {
         $today = now()->format('Y-m-d');
         $key = "daily_activity:{$today}";
-        
+
         $stats = Cache::get($key, [
             'status_changes' => 0,
             'applications_reviewed' => 0,
@@ -609,9 +607,16 @@ class RealTimeController extends AppBaseController
         switch ($type) {
             case 'status_change':
                 $stats['status_changes']++;
-                if ($value === 'reviewed') $stats['applications_reviewed']++;
-                if ($value === 'interview_scheduled') $stats['interviews_scheduled']++;
-                if ($value === 'hired') $stats['hires_made']++;
+                if ('reviewed' === $value) {
+                    ++$stats['applications_reviewed'];
+                }
+                if ('interview_scheduled' === $value) {
+                    ++$stats['interviews_scheduled'];
+                }
+                if ('hired' === $value) {
+                    ++$stats['hires_made'];
+                }
+
                 break;
         }
 
@@ -619,7 +624,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Clear real-time related caches
+     * Clear real-time related caches.
      */
     private function clearRealTimeCaches(JobApplication $jobApplication): void
     {
@@ -627,7 +632,7 @@ class RealTimeController extends AppBaseController
             'dashboard.data',
             'activity.feed',
             'realtime.stats',
-            "job_applications.{$jobApplication->job->company_id}"
+            "job_applications.{$jobApplication->job->company_id}",
         ];
 
         foreach ($tags as $tag) {
@@ -636,7 +641,7 @@ class RealTimeController extends AppBaseController
     }
 
     /**
-     * Get various system metrics (placeholder implementations)
+     * Get various system metrics (placeholder implementations).
      */
     private function getActiveUsersCount(): int
     {
@@ -672,7 +677,7 @@ class RealTimeController extends AppBaseController
 
     private function getStatusIcon(string $status): string
     {
-        return match($status) {
+        return match ($status) {
             'pending' => 'clock',
             'reviewed' => 'eye',
             'shortlisted' => 'star',
@@ -687,7 +692,7 @@ class RealTimeController extends AppBaseController
 
     private function getStatusColor(string $status): string
     {
-        return match($status) {
+        return match ($status) {
             'pending' => 'yellow',
             'reviewed' => 'blue',
             'shortlisted' => 'purple',
@@ -701,21 +706,88 @@ class RealTimeController extends AppBaseController
     }
 
     // Placeholder health check methods
-    private function checkDatabaseHealth(): array { return ['status' => 'healthy', 'response_time' => '5ms']; }
-    private function checkRedisHealth(): array { return ['status' => 'healthy', 'response_time' => '2ms']; }
-    private function checkStorageHealth(): array { return ['status' => 'healthy', 'free_space' => '85%']; }
-    private function checkQueueHealth(): array { return ['status' => 'healthy', 'pending_jobs' => 12]; }
-    private function checkWebSocketHealth(): array { return ['status' => 'healthy', 'connections' => 45]; }
-    private function getMemoryUsage(): string { return '65%'; }
-    private function getCpuUsage(): string { return '25%'; }
-    private function getDiskUsage(): string { return '45%'; }
-    private function getSystemUptime(): string { return '15 days'; }
-    private function getUserStats($user): array { return ['applications' => 5, 'interviews' => 2]; }
-    private function getRecentActivities($user): array { return []; }
-    private function getRealTimeMetrics(): array { return ['active_sessions' => 150]; }
-    private function getPerformanceMetrics(): array { return ['avg_response' => '120ms']; }
-    private function getUnreadNotificationCount($user): int { return 3; }
-    private function getBaseStats($timeframe): array { return ['applications' => 100, 'hires' => 15]; }
-    private function calculateOverallHealth($health): string { return 'healthy'; }
-    private function canBroadcast($user, $channel): bool { return $user->user_type === 'admin'; }
-} 
+    private function checkDatabaseHealth(): array
+    {
+        return ['status' => 'healthy', 'response_time' => '5ms'];
+    }
+
+    private function checkRedisHealth(): array
+    {
+        return ['status' => 'healthy', 'response_time' => '2ms'];
+    }
+
+    private function checkStorageHealth(): array
+    {
+        return ['status' => 'healthy', 'free_space' => '85%'];
+    }
+
+    private function checkQueueHealth(): array
+    {
+        return ['status' => 'healthy', 'pending_jobs' => 12];
+    }
+
+    private function checkWebSocketHealth(): array
+    {
+        return ['status' => 'healthy', 'connections' => 45];
+    }
+
+    private function getMemoryUsage(): string
+    {
+        return '65%';
+    }
+
+    private function getCpuUsage(): string
+    {
+        return '25%';
+    }
+
+    private function getDiskUsage(): string
+    {
+        return '45%';
+    }
+
+    private function getSystemUptime(): string
+    {
+        return '15 days';
+    }
+
+    private function getUserStats($user): array
+    {
+        return ['applications' => 5, 'interviews' => 2];
+    }
+
+    private function getRecentActivities($user): array
+    {
+        return [];
+    }
+
+    private function getRealTimeMetrics(): array
+    {
+        return ['active_sessions' => 150];
+    }
+
+    private function getPerformanceMetrics(): array
+    {
+        return ['avg_response' => '120ms'];
+    }
+
+    private function getUnreadNotificationCount($user): int
+    {
+        return 3;
+    }
+
+    private function getBaseStats($timeframe): array
+    {
+        return ['applications' => 100, 'hires' => 15];
+    }
+
+    private function calculateOverallHealth($health): string
+    {
+        return 'healthy';
+    }
+
+    private function canBroadcast($user, $channel): bool
+    {
+        return 'admin' === $user->user_type;
+    }
+}

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Plan
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plan>
  */
@@ -28,7 +28,7 @@ class PlanFactory extends Factory
     public function definition(): array
     {
         $planNames = ['Basic', 'Premium', 'Enterprise', 'Starter', 'Professional', 'Business'];
-        
+
         return [
             'name' => fake()->unique()->randomElement($planNames),
             'stripe_plan_id' => fake()->optional(0.7)->numerify('plan_#####'),

@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Redis-enhanced cache service
- * Extends the basic CacheService with Redis-specific optimizations
+ * Extends the basic CacheService with Redis-specific optimizations.
  */
 class RedisCacheService extends CacheService
 {
@@ -23,7 +23,7 @@ class RedisCacheService extends CacheService
     }
 
     /**
-     * High-performance Redis caching with pipelining
+     * High-performance Redis caching with pipelining.
      */
     public function multiRemember(array $keys, callable $callback, int $ttl = 3600): array
     {
@@ -33,12 +33,12 @@ class RedisCacheService extends CacheService
 
         $results = [];
         $missingKeys = [];
-        
+
         // Pipeline Redis operations for better performance
         $this->redis->pipeline(function ($pipe) use ($keys, &$results, &$missingKeys) {
             foreach ($keys as $key) {
                 $value = $pipe->get($key);
-                if ($value === null) {
+                if (null === $value) {
                     $missingKeys[] = $key;
                 } else {
                     $results[$key] = unserialize($value);
@@ -49,13 +49,13 @@ class RedisCacheService extends CacheService
         // Get missing values and cache them
         if (!empty($missingKeys)) {
             $missingValues = $callback($missingKeys);
-            
+
             $this->redis->pipeline(function ($pipe) use ($missingValues, $ttl) {
                 foreach ($missingValues as $key => $value) {
                     $pipe->setex($key, $ttl, serialize($value));
                 }
             });
-            
+
             $results = array_merge($results, $missingValues);
         }
 
@@ -63,7 +63,7 @@ class RedisCacheService extends CacheService
     }
 
     /**
-     * Redis-specific cache warming
+     * Redis-specific cache warming.
      */
     public function warmCache(array $data): void
     {
@@ -79,7 +79,7 @@ class RedisCacheService extends CacheService
     }
 
     /**
-     * Get cache statistics from Redis
+     * Get cache statistics from Redis.
      */
     public function getRedisStats(): array
     {
@@ -89,6 +89,7 @@ class RedisCacheService extends CacheService
 
         try {
             $info = $this->redis->info();
+
             return [
                 'status' => 'connected',
                 'memory_used' => $info['used_memory_human'] ?? 'N/A',
@@ -107,11 +108,11 @@ class RedisCacheService extends CacheService
         $hits = $info['keyspace_hits'] ?? 0;
         $misses = $info['keyspace_misses'] ?? 0;
         $total = $hits + $misses;
-        
-        if ($total === 0) {
+
+        if (0 === $total) {
             return '0%';
         }
-        
-        return round(($hits / $total) * 100, 2) . '%';
+
+        return round(($hits / $total) * 100, 2).'%';
     }
 }

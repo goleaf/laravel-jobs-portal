@@ -9,34 +9,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * SocialAccount Model - Enhanced with Enhanced patterns
+ * SocialAccount Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property string $provider
- * @property string $provider_id
- * @property string|null $name
- * @property string|null $email
- * @property string|null $avatar
- * @property array|null $provider_data
- * @property bool $is_active
- * @property Carbon|null $last_used_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User $user
- * @property-read string $provider_label
- * @property-read string $provider_icon
- * @property-read bool $is_recent
- * @property-read bool $has_avatar
- * @property-read bool $is_verified
+ * @property int         $id
+ * @property int         $user_id
+ * @property string      $provider
+ * @property string      $provider_id
+ * @property null|string $name
+ * @property null|string $email
+ * @property null|string $avatar
+ * @property null|array  $provider_data
+ * @property bool        $is_active
+ * @property null|Carbon $last_used_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property string      $provider_label
+ * @property string      $provider_icon
+ * @property bool        $is_recent
+ * @property bool        $has_avatar
+ * @property bool        $is_verified
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder byProvider(string $provider)
@@ -61,15 +61,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class SocialAccount extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'social_accounts';
-
-    /**
-     * Provider constants
+     * Provider constants.
      */
     public const PROVIDER_FACEBOOK = 'facebook';
     public const PROVIDER_GOOGLE = 'google';
@@ -78,7 +75,7 @@ class SocialAccount extends Model
     public const PROVIDER_GITHUB = 'github';
 
     /**
-     * Available providers
+     * Available providers.
      */
     public const AVAILABLE_PROVIDERS = [
         self::PROVIDER_FACEBOOK,
@@ -87,6 +84,26 @@ class SocialAccount extends Model
         self::PROVIDER_LINKEDIN,
         self::PROVIDER_GITHUB,
     ];
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'user_id' => 'required|integer|exists:users,id',
+        'provider' => 'required|string|in:facebook,google,twitter,linkedin,github',
+        'provider_id' => 'required|string|max:255',
+        'name' => 'nullable|string|max:255',
+        'email' => 'nullable|email|max:255',
+        'avatar' => 'nullable|url|max:500',
+        'provider_data' => 'nullable|array',
+        'is_active' => 'boolean',
+        'last_used_at' => 'nullable|date',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'social_accounts';
 
     /**
      * The attributes that are mass assignable.
@@ -112,39 +129,7 @@ class SocialAccount extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'provider_data' => 'array',
-            'is_active' => 'boolean',
-            'last_used_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'user_id' => 'required|integer|exists:users,id',
-        'provider' => 'required|string|in:facebook,google,twitter,linkedin,github',
-        'provider_id' => 'required|string|max:255',
-        'name' => 'nullable|string|max:255',
-        'email' => 'nullable|email|max:255',
-        'avatar' => 'nullable|url|max:500',
-        'provider_data' => 'nullable|array',
-        'is_active' => 'boolean',
-        'last_used_at' => 'nullable|date',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -152,7 +137,8 @@ class SocialAccount extends Model
             ->logOnly(['provider', 'is_active', 'last_used_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Social account has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Social account has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -317,14 +303,16 @@ class SocialAccount extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('name', 'like', '%' . $term . '%')
-              ->orWhere('email', 'like', '%' . $term . '%')
-              ->orWhere('provider', 'like', '%' . $term . '%')
-              ->orWhereHas('user', function ($userQuery) use ($term) {
-                  $userQuery->where('first_name', 'like', '%' . $term . '%')
-                           ->orWhere('last_name', 'like', '%' . $term . '%')
-                           ->orWhere('email', 'like', '%' . $term . '%');
-              });
+            $q->where('name', 'like', '%'.$term.'%')
+                ->orWhere('email', 'like', '%'.$term.'%')
+                ->orWhere('provider', 'like', '%'.$term.'%')
+                ->orWhereHas('user', function ($userQuery) use ($term) {
+                    $userQuery->where('first_name', 'like', '%'.$term.'%')
+                        ->orWhere('last_name', 'like', '%'.$term.'%')
+                        ->orWhere('email', 'like', '%'.$term.'%')
+                    ;
+                })
+            ;
         });
     }
 
@@ -354,9 +342,10 @@ class SocialAccount extends Model
     public function scopePopular(Builder $query): Builder
     {
         return $query->select('provider')
-                    ->selectRaw('COUNT(*) as count')
-                    ->groupBy('provider')
-                    ->orderByDesc('count');
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('provider')
+            ->orderByDesc('count')
+        ;
     }
 
     // =============================================
@@ -368,7 +357,7 @@ class SocialAccount extends Model
      */
     public function getProviderLabelAttribute(): string
     {
-        return match($this->provider) {
+        return match ($this->provider) {
             self::PROVIDER_FACEBOOK => 'Facebook',
             self::PROVIDER_GOOGLE => 'Google',
             self::PROVIDER_TWITTER => 'Twitter',
@@ -383,7 +372,7 @@ class SocialAccount extends Model
      */
     public function getProviderIconAttribute(): string
     {
-        return match($this->provider) {
+        return match ($this->provider) {
             self::PROVIDER_FACEBOOK => 'fab fa-facebook',
             self::PROVIDER_GOOGLE => 'fab fa-google',
             self::PROVIDER_TWITTER => 'fab fa-twitter',
@@ -472,9 +461,10 @@ class SocialAccount extends Model
     {
         return Cache::remember('social_accounts.provider_stats', 3600, function () {
             return self::selectRaw('provider, COUNT(*) as count')
-                      ->groupBy('provider')
-                      ->pluck('count', 'provider')
-                      ->toArray();
+                ->groupBy('provider')
+                ->pluck('count', 'provider')
+                ->toArray()
+            ;
         });
     }
 
@@ -499,6 +489,23 @@ class SocialAccount extends Model
 
         // Clear user-specific caches
         Cache::forget("user.{$this->user_id}.social_accounts");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'provider_data' => 'array',
+            'is_active' => 'boolean',
+            'last_used_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

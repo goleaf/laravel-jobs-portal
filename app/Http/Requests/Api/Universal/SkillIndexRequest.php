@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SkillIndexRequest extends FormRequest
@@ -44,7 +44,7 @@ class SkillIndexRequest extends FormRequest
             response()->json([
                 'success' => false,
                 'message' => 'Invalid search parameters',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -57,4 +57,4 @@ class SkillIndexRequest extends FormRequest
             'sort_direction' => $this->sort_direction ?? 'asc',
         ]);
     }
-} 
+}

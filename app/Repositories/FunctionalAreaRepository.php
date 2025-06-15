@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\FunctionalArea;
 
 /**
- * Class FunctionalAreaRepository
+ * Class FunctionalAreaRepository.
  *
  * @version July 4, 2020, 7:26 am UTC
  */
@@ -19,7 +19,7 @@ class FunctionalAreaRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class FunctionalAreaRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return FunctionalArea::class;

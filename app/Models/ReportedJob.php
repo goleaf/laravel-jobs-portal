@@ -9,37 +9,37 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * ReportedJob Model - Enhanced with Enhanced patterns
+ * ReportedJob Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property int $job_id
- * @property string $note
- * @property string|null $reason
- * @property string|null $status
- * @property bool $is_active
- * @property bool $is_resolved
- * @property int|null $priority
- * @property Carbon|null $resolved_at
- * @property int|null $resolved_by
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User $user
- * @property-read Job $job
- * @property-read User|null $resolver
- * @property-read bool $is_recent
- * @property-read bool $is_pending
- * @property-read bool $is_high_priority
- * @property-read string $status_label
- * @property-read string $priority_label
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $job_id
+ * @property string      $note
+ * @property null|string $reason
+ * @property null|string $status
+ * @property bool        $is_active
+ * @property bool        $is_resolved
+ * @property null|int    $priority
+ * @property null|Carbon $resolved_at
+ * @property null|int    $resolved_by
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property Job         $job
+ * @property null|User   $resolver
+ * @property bool        $is_recent
+ * @property bool        $is_pending
+ * @property bool        $is_high_priority
+ * @property string      $status_label
+ * @property string      $priority_label
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder resolved()
@@ -68,15 +68,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class ReportedJob extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'reported_jobs';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_INVESTIGATING = 'investigating';
@@ -84,7 +81,7 @@ class ReportedJob extends Model
     public const STATUS_DISMISSED = 'dismissed';
 
     /**
-     * Reason constants
+     * Reason constants.
      */
     public const REASON_SPAM = 'spam';
     public const REASON_INAPPROPRIATE = 'inappropriate';
@@ -94,12 +91,33 @@ class ReportedJob extends Model
     public const REASON_OTHER = 'other';
 
     /**
-     * Priority constants
+     * Priority constants.
      */
     public const PRIORITY_LOW = 1;
     public const PRIORITY_MEDIUM = 2;
     public const PRIORITY_HIGH = 3;
     public const PRIORITY_URGENT = 4;
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'user_id' => 'required|integer|exists:users,id',
+        'job_id' => 'required|integer|exists:jobs,id',
+        'note' => 'required|string|max:1000',
+        'reason' => 'nullable|string|in:spam,inappropriate,fraud,duplicate,misleading,other',
+        'status' => 'nullable|string|in:pending,investigating,resolved,dismissed',
+        'is_active' => 'boolean',
+        'is_resolved' => 'boolean',
+        'priority' => 'nullable|integer|min:1|max:4',
+        'resolved_by' => 'nullable|integer|exists:users,id',
+        'resolved_at' => 'nullable|date',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'reported_jobs';
 
     /**
      * The attributes that are mass assignable.
@@ -125,43 +143,7 @@ class ReportedJob extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'job_id' => 'integer',
-            'is_active' => 'boolean',
-            'is_resolved' => 'boolean',
-            'priority' => 'integer',
-            'resolved_by' => 'integer',
-            'resolved_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'user_id' => 'required|integer|exists:users,id',
-        'job_id' => 'required|integer|exists:jobs,id',
-        'note' => 'required|string|max:1000',
-        'reason' => 'nullable|string|in:spam,inappropriate,fraud,duplicate,misleading,other',
-        'status' => 'nullable|string|in:pending,investigating,resolved,dismissed',
-        'is_active' => 'boolean',
-        'is_resolved' => 'boolean',
-        'priority' => 'nullable|integer|min:1|max:4',
-        'resolved_by' => 'nullable|integer|exists:users,id',
-        'resolved_at' => 'nullable|date',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -169,7 +151,8 @@ class ReportedJob extends Model
             ->logOnly(['user_id', 'job_id', 'note', 'reason', 'status', 'is_resolved', 'priority'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Reported job has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Reported job has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -389,16 +372,18 @@ class ReportedJob extends Model
      */
     public function scopeSearch(Builder $query, string $term): Builder
     {
-        return $query->where('note', 'like', '%' . $term . '%')
-                    ->orWhere('reason', 'like', '%' . $term . '%')
-                    ->orWhereHas('job', function ($jobQuery) use ($term) {
-                        $jobQuery->where('title', 'like', '%' . $term . '%');
-                    })
-                    ->orWhereHas('user', function ($userQuery) use ($term) {
-                        $userQuery->where('first_name', 'like', '%' . $term . '%')
-                                 ->orWhere('last_name', 'like', '%' . $term . '%')
-                                 ->orWhere('email', 'like', '%' . $term . '%');
-                    });
+        return $query->where('note', 'like', '%'.$term.'%')
+            ->orWhere('reason', 'like', '%'.$term.'%')
+            ->orWhereHas('job', function ($jobQuery) use ($term) {
+                $jobQuery->where('title', 'like', '%'.$term.'%');
+            })
+            ->orWhereHas('user', function ($userQuery) use ($term) {
+                $userQuery->where('first_name', 'like', '%'.$term.'%')
+                    ->orWhere('last_name', 'like', '%'.$term.'%')
+                    ->orWhere('email', 'like', '%'.$term.'%')
+                ;
+            })
+        ;
     }
 
     /**
@@ -434,7 +419,7 @@ class ReportedJob extends Model
      */
     public function getIsPendingAttribute(): bool
     {
-        return $this->status === self::STATUS_PENDING;
+        return self::STATUS_PENDING === $this->status;
     }
 
     /**
@@ -450,7 +435,7 @@ class ReportedJob extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_PENDING => 'Pending',
             self::STATUS_INVESTIGATING => 'Investigating',
             self::STATUS_RESOLVED => 'Resolved',
@@ -464,7 +449,7 @@ class ReportedJob extends Model
      */
     public function getPriorityLabelAttribute(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             self::PRIORITY_LOW => 'Low',
             self::PRIORITY_MEDIUM => 'Medium',
             self::PRIORITY_HIGH => 'High',
@@ -498,7 +483,7 @@ class ReportedJob extends Model
      */
     public function isPending(): bool
     {
-        return $this->status === self::STATUS_PENDING;
+        return self::STATUS_PENDING === $this->status;
     }
 
     /**
@@ -512,7 +497,7 @@ class ReportedJob extends Model
     /**
      * Mark report as resolved.
      */
-    public function markAsResolved(int $resolvedBy = null): bool
+    public function markAsResolved(?int $resolvedBy = null): bool
     {
         return $this->update([
             'is_resolved' => true,
@@ -525,7 +510,7 @@ class ReportedJob extends Model
     /**
      * Mark report as dismissed.
      */
-    public function markAsDismissed(int $resolvedBy = null): bool
+    public function markAsDismissed(?int $resolvedBy = null): bool
     {
         return $this->update([
             'is_resolved' => true,
@@ -577,6 +562,26 @@ class ReportedJob extends Model
         // Clear specific caches
         Cache::forget("job.{$this->job_id}.reports_count");
         Cache::forget("user.{$this->user_id}.reports_count");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'job_id' => 'integer',
+            'is_active' => 'boolean',
+            'is_resolved' => 'boolean',
+            'priority' => 'integer',
+            'resolved_by' => 'integer',
+            'resolved_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

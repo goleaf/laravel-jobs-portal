@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\MasterData;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class UpdateMaritalStatusRequest extends FormRequest
@@ -21,26 +23,26 @@ class UpdateMaritalStatusRequest extends FormRequest
     public function rules(): array
     {
         $maritalStatusId = $this->route('maritalStatus')->id ?? $this->route('marital_status');
-        
+
         return [
             'marital_status' => [
                 'required',
                 'string',
                 'max:150',
-                Rule::unique('marital_statuses', 'marital_status')->ignore($maritalStatusId)
+                Rule::unique('marital_statuses', 'marital_status')->ignore($maritalStatusId),
             ],
             'description' => [
                 'nullable',
                 'string',
-                'max:500'
+                'max:500',
             ],
             'is_default' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
             'is_active' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
         ];
     }
@@ -55,10 +57,10 @@ class UpdateMaritalStatusRequest extends FormRequest
             'marital_status.string' => __('validation.string', ['attribute' => __('validation.attributes.marital_status')]),
             'marital_status.max' => __('validation.max.string', ['attribute' => __('validation.attributes.marital_status'), 'max' => 150]),
             'marital_status.unique' => __('validation.unique', ['attribute' => __('validation.attributes.marital_status')]),
-            
+
             'description.string' => __('validation.string', ['attribute' => __('validation.attributes.description')]),
             'description.max' => __('validation.max.string', ['attribute' => __('validation.attributes.description'), 'max' => 500]),
-            
+
             'is_default.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_default')]),
             'is_active.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_active')]),
         ];
@@ -93,14 +95,14 @@ class UpdateMaritalStatusRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            throw new HttpResponseException(
                 response()->json([
                     'success' => false,
                     'message' => __('validation.failed'),
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422)
             );
         }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LanguageHelper;
 use App\Repositories\TranslationManagerRepository;
 use App\Services\TranslationService;
-use App\Helpers\LanguageHelper;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
@@ -30,24 +30,23 @@ class TranslationManagerController extends AppBaseController
     }
 
     /**
-     * Display a listing of the translations
+     * Display a listing of the translations.
      *
-     * @param Request $request
      * @return Application|Factory|RedirectResponse|View
      */
     public function index(Request $request)
     {
         $selectedLang = $request->get('name', 'en');
         $selectedFile = $request->get('file', 'messages.php');
-        
+
         $langExists = $this->translateManagerRepo->checkLanguageExistOrNot($selectedLang);
         if (!$langExists) {
-            return redirect()->back()->withErrors($selectedLang . ' ' . __('locale.validation.locale_unsupported'));
+            return redirect()->back()->withErrors($selectedLang.' '.__('locale.validation.locale_unsupported'));
         }
 
         $fileExists = $this->translateManagerRepo->checkFileExistOrNot($selectedLang, $selectedFile);
         if (!$fileExists) {
-            return redirect()->back()->withErrors($selectedFile . ' ' . __('messages.common.file_not_found'));
+            return redirect()->back()->withErrors($selectedFile.' '.__('messages.common.file_not_found'));
         }
 
         $oldLang = app()->getLocale();
@@ -62,10 +61,7 @@ class TranslationManagerController extends AppBaseController
     }
 
     /**
-     * Store a new language
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * Store a new language.
      */
     public function store(Request $request): JsonResponse
     {
@@ -87,16 +83,13 @@ class TranslationManagerController extends AppBaseController
     }
 
     /**
-     * Update translations
-     *
-     * @param Request $request
-     * @return RedirectResponse
+     * Update translations.
      */
     public function update(Request $request): RedirectResponse
     {
         $lName = $request->get('translate_language');
         $fileName = $request->get('file_name');
-        
+
         $fileExists = $this->translateManagerRepo->checkFileExistOrNot($lName, $fileName);
         if (!$fileExists) {
             return redirect()->back()->withErrors(__('messages.common.file_not_found'));
@@ -104,20 +97,19 @@ class TranslationManagerController extends AppBaseController
 
         if (!empty($lName)) {
             $result = $request->except(['_token', 'translate_language', 'file_name']);
-            File::put(base_path('lang/' . $lName . '/' . $fileName), '<?php return ' . var_export($result, true) . '?>');
-            
+            File::put(base_path('lang/'.$lName.'/'.$fileName), '<?php return '.var_export($result, true).'?>');
+
             // Clear translation cache
             TranslationService::clearCache();
         }
 
         Flash::success(__('messages.flash.translation_update'));
+
         return redirect()->route('translations.index');
     }
 
     /**
-     * Get translation statistics
-     *
-     * @return JsonResponse
+     * Get translation statistics.
      */
     public function statistics(): JsonResponse
     {
@@ -129,7 +121,7 @@ class TranslationManagerController extends AppBaseController
             $enhancedStats[$locale] = array_merge($stat, [
                 'locale_info' => $availableLocales[$locale] ?? [],
                 'is_rtl' => LanguageHelper::isRtl($locale),
-                'flag' => $this->getFlag($locale)
+                'flag' => $this->getFlag($locale),
             ]);
         }
 
@@ -137,40 +129,33 @@ class TranslationManagerController extends AppBaseController
     }
 
     /**
-     * Get missing translation keys for a locale
-     *
-     * @param string $locale
-     * @return JsonResponse
+     * Get missing translation keys for a locale.
      */
     public function missing(string $locale): JsonResponse
     {
         $availableLocales = array_keys(Config::get('app.available_locales', []));
-        
+
         if (!in_array($locale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
 
         $missingKeys = TranslationService::getMissingKeys($locale);
-        
+
         return $this->sendResponse([
             'locale' => $locale,
             'missing_keys' => $missingKeys,
-            'total_missing' => count($missingKeys)
+            'total_missing' => count($missingKeys),
         ], __('messages.flash.data_retrieved'));
     }
 
     /**
-     * Sync translations from base locale to target locale
-     *
-     * @param Request $request
-     * @param string $locale
-     * @return JsonResponse
+     * Sync translations from base locale to target locale.
      */
     public function sync(Request $request, string $locale): JsonResponse
     {
         $baseLocale = $request->input('base_locale', 'en');
         $availableLocales = array_keys(Config::get('app.available_locales', []));
-        
+
         if (!in_array($locale, $availableLocales) || !in_array($baseLocale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
@@ -184,8 +169,8 @@ class TranslationManagerController extends AppBaseController
             foreach ($missingKeys as $key) {
                 if (isset($baseTranslations[$key])) {
                     // Create placeholder translation
-                    $targetTranslations[$key] = "[{$locale}] " . $baseTranslations[$key];
-                    $synced++;
+                    $targetTranslations[$key] = "[{$locale}] ".$baseTranslations[$key];
+                    ++$synced;
                 }
             }
 
@@ -198,24 +183,20 @@ class TranslationManagerController extends AppBaseController
 
             return $this->sendResponse([
                 'synced_keys' => $synced,
-                'total_missing' => count($missingKeys)
+                'total_missing' => count($missingKeys),
             ], __('messages.flash.translation_sync_success', ['count' => $synced]));
-
         } catch (\Exception $e) {
-            return $this->sendError(__('messages.flash.translation_sync_failed') . ': ' . $e->getMessage());
+            return $this->sendError(__('messages.flash.translation_sync_failed').': '.$e->getMessage());
         }
     }
 
     /**
-     * Export translations for a locale
-     *
-     * @param string $locale
-     * @return Response
+     * Export translations for a locale.
      */
     public function export(string $locale): Response
     {
         $availableLocales = array_keys(Config::get('app.available_locales', []));
-        
+
         if (!in_array($locale, $availableLocales)) {
             abort(400, __('locale.validation.locale_unsupported'));
         }
@@ -225,25 +206,22 @@ class TranslationManagerController extends AppBaseController
 
         return response($jsonContent)
             ->header('Content-Type', 'application/json')
-            ->header('Content-Disposition', "attachment; filename=\"{$locale}-translations.json\"");
+            ->header('Content-Disposition', "attachment; filename=\"{$locale}-translations.json\"")
+        ;
     }
 
     /**
-     * Import translations for a locale
-     *
-     * @param Request $request
-     * @param string $locale
-     * @return JsonResponse
+     * Import translations for a locale.
      */
     public function import(Request $request, string $locale): JsonResponse
     {
         $request->validate([
             'file' => 'required|file|mimes:json|max:2048',
-            'merge' => 'boolean'
+            'merge' => 'boolean',
         ]);
 
         $availableLocales = array_keys(Config::get('app.available_locales', []));
-        
+
         if (!in_array($locale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
@@ -253,7 +231,7 @@ class TranslationManagerController extends AppBaseController
             $content = File::get($file->path());
             $importedTranslations = json_decode($content, true);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
+            if (JSON_ERROR_NONE !== json_last_error()) {
                 return $this->sendError(__('messages.flash.invalid_json_file'));
             }
 
@@ -275,19 +253,15 @@ class TranslationManagerController extends AppBaseController
 
             return $this->sendResponse([
                 'imported_keys' => count($importedTranslations),
-                'total_keys' => count($targetTranslations)
+                'total_keys' => count($targetTranslations),
             ], __('messages.flash.translation_import_success', ['count' => count($importedTranslations)]));
-
         } catch (\Exception $e) {
-            return $this->sendError(__('messages.flash.translation_import_failed') . ': ' . $e->getMessage());
+            return $this->sendError(__('messages.flash.translation_import_failed').': '.$e->getMessage());
         }
     }
 
     /**
-     * Get flag emoji for locale
-     *
-     * @param string $locale
-     * @return string
+     * Get flag emoji for locale.
      */
     private function getFlag(string $locale): string
     {
@@ -300,7 +274,7 @@ class TranslationManagerController extends AppBaseController
             'pt' => '🇵🇹',
             'ru' => '🇷🇺',
             'tr' => '🇹🇷',
-            'zh' => '🇨🇳'
+            'zh' => '🇨🇳',
         ];
 
         return $flags[$locale] ?? '🌐';

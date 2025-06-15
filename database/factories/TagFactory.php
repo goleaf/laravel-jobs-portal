@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Tag
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
@@ -30,7 +30,7 @@ class TagFactory extends Factory
         return [
             'name' => fake()->words(2, true),
             'description' => fake()->paragraph(),
-            'is_default' => fake()->word()
+            'is_default' => fake()->word(),
         ];
     }
 }

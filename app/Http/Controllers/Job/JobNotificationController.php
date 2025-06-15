@@ -11,9 +11,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
+
 class JobNotificationController extends AppBaseController
 {
     /**
@@ -27,7 +27,6 @@ class JobNotificationController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
      * @return Application|Factory|JsonResponse|View
      */
     public function index(): View
@@ -50,7 +49,7 @@ class JobNotificationController extends AppBaseController
 
     public function getEmployerJobs($id = null): JsonResponse
     {
-        if (! empty($id)) {
+        if (!empty($id)) {
             $employerJobs = Company::where('id', $id)->with([
                 'user', 'jobs' => function (HasMany $query) {
                     $query->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->where('status', '=', '1');

@@ -3,31 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Http\Requests\Admin\StoreAdminRequest;
 use App\Http\Requests\Admin\UpdateAdminRequest;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
     /**
      * Display a listing of admin users.
      */
-    public function index(): View|JsonResponse
+    public function index(): JsonResponse|View
     {
         $admins = User::where('role', 'admin')
             ->with(['profile'])
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+        ;
 
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'data' => $admins,
-                'message' => 'Admins retrieved successfully'
+                'message' => 'Admins retrieved successfully',
             ]);
         }
 
@@ -37,12 +37,12 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new admin.
      */
-    public function create(): View|JsonResponse
+    public function create(): JsonResponse|View
     {
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Create admin form data'
+                'message' => 'Create admin form data',
             ]);
         }
 
@@ -52,7 +52,7 @@ class AdminController extends Controller
     /**
      * Store a newly created admin in storage.
      */
-    public function store(StoreAdminRequest $request): RedirectResponse|JsonResponse
+    public function store(StoreAdminRequest $request): JsonResponse|RedirectResponse
     {
         try {
             $admin = User::create([
@@ -70,30 +70,32 @@ class AdminController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => $admin,
-                    'message' => 'Admin created successfully'
+                    'message' => 'Admin created successfully',
                 ], 201);
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.created_successfully'));
+                ->with('success', __('messages.admin.created_successfully'))
+            ;
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to create admin: ' . $e->getMessage()
+                    'message' => 'Failed to create admin: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('messages.admin.creation_failed'));
+                ->with('error', __('messages.admin.creation_failed'))
+            ;
         }
     }
 
     /**
      * Display the specified admin.
      */
-    public function show(User $admin): View|JsonResponse
+    public function show(User $admin): JsonResponse|View
     {
         $admin->load(['profile']);
 
@@ -101,7 +103,7 @@ class AdminController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $admin,
-                'message' => 'Admin retrieved successfully'
+                'message' => 'Admin retrieved successfully',
             ]);
         }
 
@@ -111,13 +113,13 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified admin.
      */
-    public function edit(User $admin): View|JsonResponse
+    public function edit(User $admin): JsonResponse|View
     {
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'data' => $admin,
-                'message' => 'Admin edit form data'
+                'message' => 'Admin edit form data',
             ]);
         }
 
@@ -127,7 +129,7 @@ class AdminController extends Controller
     /**
      * Update the specified admin in storage.
      */
-    public function update(UpdateAdminRequest $request, User $admin): RedirectResponse|JsonResponse
+    public function update(UpdateAdminRequest $request, User $admin): JsonResponse|RedirectResponse
     {
         try {
             $updateData = [
@@ -150,30 +152,32 @@ class AdminController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => $admin->refresh(),
-                    'message' => 'Admin updated successfully'
+                    'message' => 'Admin updated successfully',
                 ]);
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.updated_successfully'));
+                ->with('success', __('messages.admin.updated_successfully'))
+            ;
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to update admin: ' . $e->getMessage()
+                    'message' => 'Failed to update admin: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('messages.admin.update_failed'));
+                ->with('error', __('messages.admin.update_failed'))
+            ;
         }
     }
 
     /**
      * Remove the specified admin from storage.
      */
-    public function destroy(User $admin): RedirectResponse|JsonResponse
+    public function destroy(User $admin): JsonResponse|RedirectResponse
     {
         try {
             // Prevent deletion of current user
@@ -181,25 +185,27 @@ class AdminController extends Controller
                 if (request()->expectsJson()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Cannot delete your own account'
+                        'message' => 'Cannot delete your own account',
                     ], 403);
                 }
 
                 return redirect()->back()
-                    ->with('error', __('messages.admin.cannot_delete_self'));
+                    ->with('error', __('messages.admin.cannot_delete_self'))
+                ;
             }
 
             // Prevent deletion of super admin (if you have such logic)
-            if ($admin->email === 'admin@admin.com' || $admin->hasRole('super-admin')) {
+            if ('admin@admin.com' === $admin->email || $admin->hasRole('super-admin')) {
                 if (request()->expectsJson()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Cannot delete super admin account'
+                        'message' => 'Cannot delete super admin account',
                     ], 403);
                 }
 
                 return redirect()->back()
-                    ->with('error', __('messages.admin.cannot_delete_super_admin'));
+                    ->with('error', __('messages.admin.cannot_delete_super_admin'))
+                ;
             }
 
             $admin->delete();
@@ -207,27 +213,29 @@ class AdminController extends Controller
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Admin deleted successfully'
+                    'message' => 'Admin deleted successfully',
                 ]);
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.deleted_successfully'));
+                ->with('success', __('messages.admin.deleted_successfully'))
+            ;
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to delete admin: ' . $e->getMessage()
+                    'message' => 'Failed to delete admin: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', __('messages.admin.deletion_failed'));
+                ->with('error', __('messages.admin.deletion_failed'))
+            ;
         }
     }
 
     /**
-     * Toggle admin active status
+     * Toggle admin active status.
      */
     public function toggleStatus(User $admin): JsonResponse
     {
@@ -237,12 +245,12 @@ class AdminController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => ['is_active' => $admin->is_active],
-                'message' => 'Admin status updated successfully'
+                'message' => 'Admin status updated successfully',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update admin status: ' . $e->getMessage()
+                'message' => 'Failed to update admin status: '.$e->getMessage(),
             ], 500);
         }
     }

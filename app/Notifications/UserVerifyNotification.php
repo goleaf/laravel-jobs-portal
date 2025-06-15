@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\EmailTemplate;
-use Auth;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,17 +17,17 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param mixed $user
      */
     public function __construct($user = '')
     {
-        $this->user = $user ?: Auth::user();         // if user is not supplied, get from session
+        $this->user = $user ?: \Auth::user();         // if user is not supplied, get from session
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      */
     public function via($notifiable): array
     {
@@ -38,12 +37,13 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      */
     public function toMail($notifiable): MailMessage
     {
         $url = $this->verificationUrl($notifiable);     // verificationUrl required for the verification link
         $user = $this->user;
+
         /** @var EmailTemplate $templateBody */
         $templateBody = EmailTemplate::whereTemplateName('Verify Email')->first();
         $keyVariable = ['{{user_name}}', '{{verify_url}}', '{{from_name}}'];
@@ -51,20 +51,20 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
         $body = str_replace($keyVariable, $value, $templateBody->body);
         $data['body'] = $body;
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject($templateBody->subject)
-            ->view('emails.verify_email', $data);
+            ->view('emails.verify_email', $data)
+        ;
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      */
     public function toArray($notifiable): array
     {
         return [
-            //
         ];
     }
 }

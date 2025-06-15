@@ -9,27 +9,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * FavouriteJob Model - Enhanced with Enhanced patterns
+ * FavouriteJob Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property int $user_id
- * @property int $job_id
- * @property bool $is_active
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read User $user
- * @property-read Job $job
- * @property-read bool $is_recent
- * @property-read bool $job_is_active
- * @property-read bool $job_is_featured
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $job_id
+ * @property bool        $is_active
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User        $user
+ * @property Job         $job
+ * @property bool        $is_recent
+ * @property bool        $job_is_active
+ * @property bool        $job_is_featured
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder recent(int $days = 30)
@@ -52,7 +52,18 @@ use Spatie\Activitylog\LogOptions;
  */
 class FavouriteJob extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'user_id' => 'required|integer|exists:users,id',
+        'job_id' => 'required|integer|exists:jobs,id',
+        'is_active' => 'boolean',
+    ];
 
     /**
      * The table associated with the model.
@@ -76,32 +87,7 @@ class FavouriteJob extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'user_id' => 'integer',
-            'job_id' => 'integer',
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'user_id' => 'required|integer|exists:users,id',
-        'job_id' => 'required|integer|exists:jobs,id',
-        'is_active' => 'boolean',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -109,7 +95,8 @@ class FavouriteJob extends Model
             ->logOnly(['user_id', 'job_id', 'is_active'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Favourite job has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Favourite job has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -186,7 +173,8 @@ class FavouriteJob extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     // =============================================
@@ -263,15 +251,17 @@ class FavouriteJob extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->whereHas('job', function ($jobQuery) use ($term) {
-            $jobQuery->where('title', 'like', '%' . $term . '%')
-                    ->orWhere('description', 'like', '%' . $term . '%')
-                    ->orWhereHas('company', function ($companyQuery) use ($term) {
-                        $companyQuery->where('ceo', 'like', '%' . $term . '%');
-                    });
+            $jobQuery->where('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhereHas('company', function ($companyQuery) use ($term) {
+                    $companyQuery->where('ceo', 'like', '%'.$term.'%');
+                })
+            ;
         })->orWhereHas('user', function ($userQuery) use ($term) {
-            $userQuery->where('first_name', 'like', '%' . $term . '%')
-                     ->orWhere('last_name', 'like', '%' . $term . '%')
-                     ->orWhere('email', 'like', '%' . $term . '%');
+            $userQuery->where('first_name', 'like', '%'.$term.'%')
+                ->orWhere('last_name', 'like', '%'.$term.'%')
+                ->orWhere('email', 'like', '%'.$term.'%')
+            ;
         });
     }
 
@@ -301,9 +291,10 @@ class FavouriteJob extends Model
     public function scopePopular(Builder $query): Builder
     {
         return $query->select('job_id')
-                    ->selectRaw('COUNT(*) as favourites_count')
-                    ->groupBy('job_id')
-                    ->orderByDesc('favourites_count');
+            ->selectRaw('COUNT(*) as favourites_count')
+            ->groupBy('job_id')
+            ->orderByDesc('favourites_count')
+        ;
     }
 
     /**
@@ -312,10 +303,11 @@ class FavouriteJob extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->where('created_at', '>=', now()->subDays(7))
-                    ->select('job_id')
-                    ->selectRaw('COUNT(*) as recent_favourites_count')
-                    ->groupBy('job_id')
-                    ->orderByDesc('recent_favourites_count');
+            ->select('job_id')
+            ->selectRaw('COUNT(*) as recent_favourites_count')
+            ->groupBy('job_id')
+            ->orderByDesc('recent_favourites_count')
+        ;
     }
 
     // =============================================
@@ -401,9 +393,10 @@ class FavouriteJob extends Model
     {
         return Cache::remember("user.{$userId}.job.{$jobId}.favourited", 1800, function () use ($jobId, $userId) {
             return self::where('job_id', $jobId)
-                      ->where('user_id', $userId)
-                      ->active()
-                      ->exists();
+                ->where('user_id', $userId)
+                ->active()
+                ->exists()
+            ;
         });
     }
 
@@ -431,6 +424,22 @@ class FavouriteJob extends Model
         Cache::forget("user.{$this->user_id}.favourites_count");
         Cache::forget("job.{$this->job_id}.favourites_count");
         Cache::forget("user.{$this->user_id}.job.{$this->job_id}.favourited");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'job_id' => 'integer',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

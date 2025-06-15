@@ -17,8 +17,8 @@ class JobApplicationResource extends JsonResource
     {
         $user = $request->user();
         $isCandidate = $user && $user->id === $this->candidate_id;
-        $isEmployer = $user && $user->hasRole('employer') && 
-            $user->companies()->pluck('id')->contains($this->job->company_id ?? null);
+        $isEmployer = $user && $user->hasRole('employer')
+            && $user->companies()->pluck('id')->contains($this->job->company_id ?? null);
         $isAdmin = $user && $user->hasRole('admin');
         $canViewPrivate = $isCandidate || $isEmployer || $isAdmin;
 
@@ -26,10 +26,10 @@ class JobApplicationResource extends JsonResource
             // Basic Information
             'id' => $this->id,
             'status' => $this->status,
-            'status_label' => __('job_application.status.' . $this->status),
+            'status_label' => __('job_application.status.'.$this->status),
             'application_date' => $this->created_at,
             'application_date_human' => $this->created_at->diffForHumans(),
-            
+
             // Job Information
             'job' => $this->whenLoaded('job', function () {
                 return [
@@ -54,7 +54,7 @@ class JobApplicationResource extends JsonResource
                     }),
                 ];
             }),
-            
+
             // Company Information
             'company' => $this->whenLoaded('job.company', function () {
                 return [
@@ -65,7 +65,7 @@ class JobApplicationResource extends JsonResource
                     'is_verified' => $this->job->company->is_profile_verified,
                 ];
             }),
-            
+
             // Candidate Information (visible to employers and admins)
             'candidate' => $this->when($canViewPrivate, function () {
                 return $this->whenLoaded('candidate', function () {
@@ -87,12 +87,13 @@ class JobApplicationResource extends JsonResource
                     ];
                 });
             }),
-            
+
             // Application Details
             'application_details' => [
                 'expected_salary' => $this->when($canViewPrivate, $this->expected_salary),
                 'salary_currency' => $this->when($canViewPrivate, $this->salary_currency),
-                'cover_letter' => $this->when($canViewPrivate && $this->cover_letter, 
+                'cover_letter' => $this->when(
+                    $canViewPrivate && $this->cover_letter,
                     \Str::limit($this->cover_letter, 200)
                 ),
                 'has_cover_letter' => !empty($this->cover_letter),
@@ -102,7 +103,7 @@ class JobApplicationResource extends JsonResource
                 'willing_to_travel' => $this->willing_to_travel,
                 'remote_work_preference' => $this->remote_work_preference,
             ],
-            
+
             // Resume Information
             'resume' => $this->whenLoaded('resume', function () {
                 return [
@@ -113,7 +114,7 @@ class JobApplicationResource extends JsonResource
                     'updated_at' => $this->resume->updated_at,
                 ];
             }),
-            
+
             // Skills
             'skills' => $this->whenLoaded('skills', function () {
                 return $this->skills->map(function ($skill) {
@@ -124,7 +125,7 @@ class JobApplicationResource extends JsonResource
                     ];
                 });
             }),
-            
+
             // Application Progress
             'progress' => [
                 'current_stage' => $this->status,
@@ -150,14 +151,14 @@ class JobApplicationResource extends JsonResource
                         'label' => __('job_application.stages.interview'),
                     ],
                     'hired' => [
-                        'completed' => $this->status === 'hired',
+                        'completed' => 'hired' === $this->status,
                         'date' => $this->hired_at,
                         'label' => __('job_application.stages.hired'),
                     ],
                 ],
                 'progress_percentage' => $this->getProgressPercentage(),
             ],
-            
+
             // Statistics
             'statistics' => [
                 'views_count' => $this->views_count ?? 0,
@@ -165,7 +166,7 @@ class JobApplicationResource extends JsonResource
                 'notes_count' => $this->whenCounted('notes'),
                 'interviews_count' => $this->whenCounted('interviews'),
             ],
-            
+
             // Timestamps
             'timestamps' => [
                 'created_at' => $this->created_at,
@@ -173,7 +174,7 @@ class JobApplicationResource extends JsonResource
                 'created_at_human' => $this->created_at->diffForHumans(),
                 'updated_at_human' => $this->updated_at->diffForHumans(),
             ],
-            
+
             // User Context
             'user_context' => [
                 'can_edit' => $isCandidate,
@@ -184,7 +185,7 @@ class JobApplicationResource extends JsonResource
                 'can_add_notes' => $isEmployer || $isAdmin,
                 'can_download_resume' => $canViewPrivate,
             ],
-            
+
             // Links
             'links' => [
                 'show' => route('api.job-applications.show', $this->id),
@@ -192,20 +193,21 @@ class JobApplicationResource extends JsonResource
                 'job' => route('api.jobs.show', $this->job_id),
                 'company' => route('api.companies.show', $this->job->company_id ?? 0),
                 'candidate' => $this->when($canViewPrivate, route('api.candidates.show', $this->candidate_id)),
-                'resume_download' => $this->when($canViewPrivate && $this->resume, 
+                'resume_download' => $this->when(
+                    $canViewPrivate && $this->resume,
                     route('api.resumes.download', $this->resume_id)
                 ),
             ],
-            
+
             // SEO & Meta
             'seo' => [
                 'title' => __('job_application.seo_title', [
                     'job' => $this->job->title ?? '',
-                    'company' => $this->job->company->name ?? ''
+                    'company' => $this->job->company->name ?? '',
                 ]),
                 'description' => __('job_application.seo_description', [
-                    'status' => __('job_application.status.' . $this->status),
-                    'date' => $this->created_at->format('M d, Y')
+                    'status' => __('job_application.status.'.$this->status),
+                    'date' => $this->created_at->format('M d, Y'),
                 ]),
             ],
         ];
@@ -306,9 +308,9 @@ class JobApplicationResource extends JsonResource
         }
 
         // Employer can view resume if application is shortlisted or beyond
-        if (Auth::user()->hasRole('Employer') && 
-            Auth::id() === $this->job->company->user_id && 
-            in_array($this->status, ['shortlisted', 'interviewed', 'hired'])) {
+        if (Auth::user()->hasRole('Employer')
+            && Auth::id() === $this->job->company->user_id
+            && in_array($this->status, ['shortlisted', 'interviewed', 'hired'])) {
             return true;
         }
 
@@ -462,7 +464,7 @@ class JobApplicationResource extends JsonResource
         }
 
         // Candidate can edit their own application if it's still in applied status
-        if (Auth::id() === $this->candidate_id && $this->status === 'applied') {
+        if (Auth::id() === $this->candidate_id && 'applied' === $this->status) {
             return true;
         }
 
@@ -479,8 +481,8 @@ class JobApplicationResource extends JsonResource
         }
 
         // Candidate can withdraw their own application if not hired/rejected
-        if (Auth::id() === $this->candidate_id && 
-            !in_array($this->status, ['hired', 'rejected', 'withdrawn'])) {
+        if (Auth::id() === $this->candidate_id
+            && !in_array($this->status, ['hired', 'rejected', 'withdrawn'])) {
             return true;
         }
 
@@ -510,7 +512,5 @@ class JobApplicationResource extends JsonResource
         return Auth::user()->hasRole('Admin');
     }
 
-    /**
-     * Additional permission methods would be implemented here...
-     */
-} 
+    // Additional permission methods would be implemented here...
+}

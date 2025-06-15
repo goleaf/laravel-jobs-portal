@@ -2,21 +2,20 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiRateLimit
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response
     {
         $key = $request->ip();
-        
+
         if (RateLimiter::tooManyAttempts($key, 100)) {
             return response()->json([
                 'error' => 'Too many requests. Please try again later.',
-                'retry_after' => RateLimiter::availableIn($key)
+                'retry_after' => RateLimiter::availableIn($key),
             ], 429);
         }
 

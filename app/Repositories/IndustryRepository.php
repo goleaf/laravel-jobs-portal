@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Industry;
 
 /**
- * Class IndustryRepository
+ * Class IndustryRepository.
  *
  * @version June 20, 2020, 5:43 am UTC
  */
@@ -19,7 +19,7 @@ class IndustryRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -27,8 +27,8 @@ class IndustryRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Industry::class;

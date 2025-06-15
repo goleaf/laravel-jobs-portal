@@ -2,17 +2,16 @@
 
 namespace App\Services;
 
+use App\Exceptions\CompanyCreationException;
+use App\Exceptions\CompanyDeletionException;
+use App\Exceptions\CompanyUpdateException;
 use App\Models\Company;
 use App\Models\User;
-use App\Exceptions\CompanyCreationException;
-use App\Exceptions\CompanyUpdateException;
-use App\Exceptions\CompanyDeletionException;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Http\UploadedFile;
-use Exception;
 
 class EnhancedCompanyService
 {
@@ -22,7 +21,7 @@ class EnhancedCompanyService
     ) {}
 
     /**
-     * Create a new company with proper transaction handling
+     * Create a new company with proper transaction handling.
      */
     public function createCompany(array $data): Company
     {
@@ -51,15 +50,17 @@ class EnhancedCompanyService
             $this->notificationService->notifyAdminNewCompany($company);
 
             DB::commit();
+
             return $company->load(['user', 'industry', 'companySize', 'ownershipType']);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new CompanyCreationException('Failed to create company: ' . $e->getMessage());
+
+            throw new CompanyCreationException('Failed to create company: '.$e->getMessage());
         }
     }
 
     /**
-     * Update company with transaction handling
+     * Update company with transaction handling.
      */
     public function updateCompany(Company $company, array $data): Company
     {
@@ -91,15 +92,17 @@ class EnhancedCompanyService
             }
 
             DB::commit();
+
             return $company->fresh(['user', 'industry', 'companySize', 'ownershipType']);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new CompanyUpdateException('Failed to update company: ' . $e->getMessage());
+
+            throw new CompanyUpdateException('Failed to update company: '.$e->getMessage());
         }
     }
 
     /**
-     * Delete company with cascade handling
+     * Delete company with cascade handling.
      */
     public function deleteCompany(Company $company): bool
     {
@@ -129,15 +132,17 @@ class EnhancedCompanyService
             $this->notificationService->notifyAdminCompanyDeleted($company);
 
             DB::commit();
+
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new CompanyDeletionException('Failed to delete company: ' . $e->getMessage());
+
+            throw new CompanyDeletionException('Failed to delete company: '.$e->getMessage());
         }
     }
 
     /**
-     * Search companies with advanced filters
+     * Search companies with advanced filters.
      */
     public function searchCompanies(array $filters): LengthAwarePaginator
     {
@@ -145,7 +150,7 @@ class EnhancedCompanyService
 
         // Apply status filter (default to active)
         if (isset($filters['status'])) {
-            if ($filters['status'] !== 'all') {
+            if ('all' !== $filters['status']) {
                 $query->where('status', $filters['status']);
             }
         } else {
@@ -171,7 +176,8 @@ class EnhancedCompanyService
         if (!empty($filters['location'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('location', 'LIKE', "%{$filters['location']}%")
-                  ->orWhere('location2', 'LIKE', "%{$filters['location']}%");
+                    ->orWhere('location2', 'LIKE', "%{$filters['location']}%")
+                ;
             });
         }
 
@@ -201,7 +207,7 @@ class EnhancedCompanyService
     }
 
     /**
-     * Get featured companies
+     * Get featured companies.
      */
     public function getFeaturedCompanies(int $limit = 10): Collection
     {
@@ -210,11 +216,12 @@ class EnhancedCompanyService
             ->with(['industry', 'companySize', 'user'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get();
+            ->get()
+        ;
     }
 
     /**
-     * Get company statistics
+     * Get company statistics.
      */
     public function getCompanyStats(): array
     {
@@ -236,40 +243,42 @@ class EnhancedCompanyService
             'recent_companies' => Company::with(['user', 'industry'])
                 ->orderBy('created_at', 'desc')
                 ->limit(5)
-                ->get()
+                ->get(),
         ];
     }
 
     /**
-     * Mark company as featured
+     * Mark company as featured.
      */
     public function markAsFeatured(Company $company): bool
     {
         try {
             $company->markAsFeatured();
             $this->notificationService->notifyCompanyFeatured($company);
+
             return true;
-        } catch (Exception $e) {
-            throw new CompanyUpdateException('Failed to mark company as featured: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new CompanyUpdateException('Failed to mark company as featured: '.$e->getMessage());
         }
     }
 
     /**
-     * Unmark company as featured
+     * Unmark company as featured.
      */
     public function unmarkAsFeatured(Company $company): bool
     {
         try {
             $company->unmarkAsFeatured();
             $this->notificationService->notifyCompanyUnfeatured($company);
+
             return true;
-        } catch (Exception $e) {
-            throw new CompanyUpdateException('Failed to unmark company as featured: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new CompanyUpdateException('Failed to unmark company as featured: '.$e->getMessage());
         }
     }
 
     /**
-     * Activate company
+     * Activate company.
      */
     public function activateCompany(Company $company): bool
     {
@@ -277,14 +286,15 @@ class EnhancedCompanyService
             $company->activate();
             $company->user->activate();
             $this->notificationService->notifyCompanyActivated($company);
+
             return true;
-        } catch (Exception $e) {
-            throw new CompanyUpdateException('Failed to activate company: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new CompanyUpdateException('Failed to activate company: '.$e->getMessage());
         }
     }
 
     /**
-     * Deactivate company
+     * Deactivate company.
      */
     public function deactivateCompany(Company $company): bool
     {
@@ -292,14 +302,15 @@ class EnhancedCompanyService
             $company->deactivate();
             $company->user->deactivate();
             $this->notificationService->notifyCompanyDeactivated($company);
+
             return true;
-        } catch (Exception $e) {
-            throw new CompanyUpdateException('Failed to deactivate company: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new CompanyUpdateException('Failed to deactivate company: '.$e->getMessage());
         }
     }
 
     /**
-     * Get companies by user
+     * Get companies by user.
      */
     public function getCompaniesByUser(User $user): Collection
     {
@@ -310,14 +321,15 @@ class EnhancedCompanyService
         if ($user->hasRole(['Admin', 'Super Admin'])) {
             return Company::with(['industry', 'companySize', 'user'])
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->get()
+            ;
         }
 
         return collect();
     }
 
     /**
-     * Bulk update companies
+     * Bulk update companies.
      */
     public function bulkUpdateCompanies(array $companyIds, array $data): int
     {
@@ -325,7 +337,7 @@ class EnhancedCompanyService
 
         try {
             $updated = Company::whereIn('id', $companyIds)->update($data);
-            
+
             // Send notifications if status changed
             if (isset($data['status'])) {
                 $companies = Company::whereIn('id', $companyIds)->get();
@@ -335,15 +347,17 @@ class EnhancedCompanyService
             }
 
             DB::commit();
+
             return $updated;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new CompanyUpdateException('Failed to bulk update companies: ' . $e->getMessage());
+
+            throw new CompanyUpdateException('Failed to bulk update companies: '.$e->getMessage());
         }
     }
 
     /**
-     * Export companies data
+     * Export companies data.
      */
     public function exportCompanies(array $filters = []): Collection
     {
@@ -363,12 +377,13 @@ class EnhancedCompanyService
         }
 
         return $query->with(['industry', 'companySize', 'ownershipType', 'user'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+            ->orderBy('created_at', 'desc')
+            ->get()
+        ;
     }
 
     /**
-     * Get similar companies
+     * Get similar companies.
      */
     public function getSimilarCompanies(Company $company, int $limit = 5): Collection
     {
@@ -378,47 +393,21 @@ class EnhancedCompanyService
             ->with(['industry', 'companySize'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get();
+            ->get()
+        ;
     }
 
     /**
-     * Generate unique slug for company
-     */
-    private function generateUniqueSlug(string $name, ?int $excludeId = null): string
-    {
-        $slug = Str::slug($name);
-        $originalSlug = $slug;
-        $counter = 1;
-
-        $query = Company::where('slug', $slug);
-        if ($excludeId) {
-            $query->where('id', '!=', $excludeId);
-        }
-
-        while ($query->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-            
-            $query = Company::where('slug', $slug);
-            if ($excludeId) {
-                $query->where('id', '!=', $excludeId);
-            }
-        }
-
-        return $slug;
-    }
-
-    /**
-     * Validate company ownership
+     * Validate company ownership.
      */
     public function validateOwnership(Company $company, User $user): bool
     {
-        return $user->hasRole(['Admin', 'Super Admin']) || 
-               ($user->hasRole('Employer') && $user->id === $company->user_id);
+        return $user->hasRole(['Admin', 'Super Admin'])
+               || ($user->hasRole('Employer') && $user->id === $company->user_id);
     }
 
     /**
-     * Get company dashboard data
+     * Get company dashboard data.
      */
     public function getCompanyDashboardData(Company $company): array
     {
@@ -437,4 +426,31 @@ class EnhancedCompanyService
             'company_views' => $company->views ?? 0,
         ];
     }
-} 
+
+    /**
+     * Generate unique slug for company.
+     */
+    private function generateUniqueSlug(string $name, ?int $excludeId = null): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        $query = Company::where('slug', $slug);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        while ($query->exists()) {
+            $slug = $originalSlug.'-'.$counter;
+            ++$counter;
+
+            $query = Company::where('slug', $slug);
+            if ($excludeId) {
+                $query->where('id', '!=', $excludeId);
+            }
+        }
+
+        return $slug;
+    }
+}

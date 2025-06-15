@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ImageSlider;
 use App\Models\Setting;
 use App\Repositories\ImageSliderRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class ImageSliderController extends AppBaseController
 {
     /** @var ImageSliderRepository */
@@ -23,10 +22,9 @@ class ImageSliderController extends AppBaseController
     /**
      * Display a listing of the ImageSlider.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -78,8 +76,7 @@ class ImageSliderController extends AppBaseController
     /**
      * Remove the specified ImageSlider from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(ImageSlider $imageSlider): JsonResponse
     {
@@ -94,7 +91,7 @@ class ImageSliderController extends AppBaseController
     public function changeIsActive(ImageSlider $imageSlider)
     {
         $isActive = $imageSlider->is_active;
-        $imageSlider->update(['is_active' => ! $isActive]);
+        $imageSlider->update(['is_active' => !$isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }
@@ -106,7 +103,7 @@ class ImageSliderController extends AppBaseController
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'is_full_slider')->first();
-        $setting->update(['value' => ! $setting->value]);
+        $setting->update(['value' => !$setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
     }
@@ -118,7 +115,7 @@ class ImageSliderController extends AppBaseController
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'is_slider_active')->first();
-        $setting->update(['value' => ! $setting->value]);
+        $setting->update(['value' => !$setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
         //        return $this->sendSuccess('This functionality not allowed in demo.');

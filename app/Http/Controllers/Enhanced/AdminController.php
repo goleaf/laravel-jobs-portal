@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Enhanced;
 
 use App\Http\Controllers\AppBaseController;
-use App\Models\User;
 use App\Http\Requests\Admin\StoreAdminRequest;
 use App\Http\Requests\Admin\UpdateAdminRequest;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 /**
- * Enhanced AdminController - Enhanced patterns implementation
- * 
+ * Enhanced AdminController - Enhanced patterns implementation.
+ *
  * Demonstrates modern Laravel controller patterns with:
  * - Advanced caching strategies
  * - Comprehensive error handling
@@ -29,12 +29,12 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends AppBaseController
 {
     /**
-     * Cache TTL for admin operations (30 minutes)
+     * Cache TTL for admin operations (30 minutes).
      */
     private const CACHE_TTL = 1800;
 
     /**
-     * Display a listing of admin users with enhanced filtering and search
+     * Display a listing of admin users with enhanced filtering and search.
      */
     public function index(Request $request)
     {
@@ -46,13 +46,13 @@ class AdminController extends AppBaseController
 
             // For web requests, return the view with enhanced data
             $data = $this->prepareAdminsIndexData($request);
-            return view('admin.admins.index', $data);
 
+            return view('admin.admins.index', $data);
         } catch (\Exception $e) {
             Log::error('Error in AdminController@index', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'request' => $request->all()
+                'request' => $request->all(),
             ]);
 
             if ($this->isApiRequest($request)) {
@@ -64,58 +64,9 @@ class AdminController extends AppBaseController
     }
 
     /**
-     * Get admins for API requests with enhanced filtering
+     * Store a newly created admin with enhanced validation and security.
      */
-    private function getAdminsApi(Request $request): JsonResponse
-    {
-        $cacheKey = $this->buildCacheKey('admins.api', $request->all());
-
-        $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
-            $query = User::where('role', 'admin')->with(['profile']);
-
-            // Apply Enhanced scopes for filtering
-            if ($request->filled('search')) {
-                $query->where(function ($q) use ($request) {
-                    $search = $request->get('search');
-                    $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('first_name', 'like', "%{$search}%")
-                      ->orWhere('last_name', 'like', "%{$search}%");
-                });
-            }
-
-            if ($request->filled('is_active')) {
-                $query->where('is_active', $request->boolean('is_active'));
-            }
-
-            if ($request->filled('created_from')) {
-                $query->where('created_at', '>=', $request->get('created_from'));
-            }
-
-            if ($request->filled('created_to')) {
-                $query->where('created_at', '<=', $request->get('created_to'));
-            }
-
-            // Apply sorting
-            $sortBy = $request->get('sort', 'created_at');
-            $sortDirection = $request->get('direction', 'desc');
-            
-            if (in_array($sortBy, ['name', 'email', 'created_at', 'updated_at'])) {
-                $query->orderBy($sortBy, $sortDirection);
-            } else {
-                $query->latest();
-            }
-
-            return $query->paginate($request->get('per_page', 15));
-        });
-
-        return $this->sendPaginatedResponse($data, 'Admins retrieved successfully');
-    }
-
-    /**
-     * Store a newly created admin with enhanced validation and security
-     */
-    public function store(StoreAdminRequest $request): RedirectResponse|JsonResponse
+    public function store(StoreAdminRequest $request): JsonResponse|RedirectResponse
     {
         try {
             DB::beginTransaction();
@@ -130,7 +81,7 @@ class AdminController extends AppBaseController
                 'is_active' => $request->boolean('is_active', true),
                 'phone' => $request->phone,
                 'created_by' => auth()->id(),
-                'email_verified_at' => now()
+                'email_verified_at' => now(),
             ]);
 
             // Clear related caches
@@ -140,7 +91,7 @@ class AdminController extends AppBaseController
             Log::info('Admin created successfully', [
                 'admin_id' => $admin->id,
                 'admin_email' => $admin->email,
-                'created_by' => auth()->id()
+                'created_by' => auth()->id(),
             ]);
 
             DB::commit();
@@ -150,15 +101,15 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin created successfully');
-
+                ->with('success', 'Admin created successfully')
+            ;
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error creating admin', [
                 'error' => $e->getMessage(),
                 'input' => $request->except(['password']),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             if ($this->isApiRequest($request)) {
@@ -167,14 +118,15 @@ class AdminController extends AppBaseController
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to create admin');
+                ->with('error', 'Failed to create admin')
+            ;
         }
     }
 
     /**
-     * Update the specified admin with enhanced validation and security
+     * Update the specified admin with enhanced validation and security.
      */
-    public function update(UpdateAdminRequest $request, User $admin): RedirectResponse|JsonResponse
+    public function update(UpdateAdminRequest $request, User $admin): JsonResponse|RedirectResponse
     {
         try {
             DB::beginTransaction();
@@ -186,7 +138,7 @@ class AdminController extends AppBaseController
                 'email' => $request->email,
                 'is_active' => $request->boolean('is_active', $admin->is_active),
                 'phone' => $request->phone ?? $admin->phone,
-                'updated_by' => auth()->id()
+                'updated_by' => auth()->id(),
             ];
 
             // Only update password if provided
@@ -204,7 +156,7 @@ class AdminController extends AppBaseController
                 'admin_id' => $admin->id,
                 'admin_email' => $admin->email,
                 'updated_by' => auth()->id(),
-                'changes' => $admin->getChanges()
+                'changes' => $admin->getChanges(),
             ]);
 
             DB::commit();
@@ -214,15 +166,15 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin updated successfully');
-
+                ->with('success', 'Admin updated successfully')
+            ;
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error updating admin', [
                 'admin_id' => $admin->id,
                 'error' => $e->getMessage(),
-                'input' => $request->except(['password'])
+                'input' => $request->except(['password']),
             ]);
 
             if ($this->isApiRequest($request)) {
@@ -231,14 +183,15 @@ class AdminController extends AppBaseController
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to update admin');
+                ->with('error', 'Failed to update admin')
+            ;
         }
     }
 
     /**
-     * Remove the specified admin with enhanced security checks
+     * Remove the specified admin with enhanced security checks.
      */
-    public function destroy(User $admin): RedirectResponse|JsonResponse
+    public function destroy(User $admin): JsonResponse|RedirectResponse
     {
         try {
             // Enhanced security checks
@@ -247,15 +200,17 @@ class AdminController extends AppBaseController
                 if ($this->isApiRequest(request())) {
                     return $this->sendError($message, 403);
                 }
+
                 return redirect()->back()->with('error', $message);
             }
 
             // Prevent deletion of super admin
-            if ($admin->email === 'admin@admin.com') {
+            if ('admin@admin.com' === $admin->email) {
                 $message = 'Cannot delete super admin account';
                 if ($this->isApiRequest(request())) {
                     return $this->sendError($message, 403);
                 }
+
                 return redirect()->back()->with('error', $message);
             }
 
@@ -265,7 +220,7 @@ class AdminController extends AppBaseController
             $admin->update([
                 'is_active' => false,
                 'deleted_at' => now(),
-                'deleted_by' => auth()->id()
+                'deleted_by' => auth()->id(),
             ]);
 
             // Clear related caches
@@ -275,7 +230,7 @@ class AdminController extends AppBaseController
             Log::info('Admin deleted/archived successfully', [
                 'admin_id' => $admin->id,
                 'admin_email' => $admin->email,
-                'deleted_by' => auth()->id()
+                'deleted_by' => auth()->id(),
             ]);
 
             DB::commit();
@@ -285,14 +240,14 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin deleted successfully');
-
+                ->with('success', 'Admin deleted successfully')
+            ;
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error deleting admin', [
                 'admin_id' => $admin->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             if ($this->isApiRequest(request())) {
@@ -304,7 +259,7 @@ class AdminController extends AppBaseController
     }
 
     /**
-     * Toggle admin status (active/inactive)
+     * Toggle admin status (active/inactive).
      */
     public function toggleStatus(User $admin): JsonResponse
     {
@@ -320,7 +275,7 @@ class AdminController extends AppBaseController
             $admin->update([
                 'is_active' => $newStatus,
                 'status_changed_by' => auth()->id(),
-                'status_changed_at' => now()
+                'status_changed_at' => now(),
             ]);
 
             // Clear related caches
@@ -331,19 +286,18 @@ class AdminController extends AppBaseController
                 'admin_id' => $admin->id,
                 'admin_email' => $admin->email,
                 'new_status' => $newStatus ? 'active' : 'inactive',
-                'changed_by' => auth()->id()
+                'changed_by' => auth()->id(),
             ]);
 
             DB::commit();
 
             return $this->sendResponse($admin->fresh(), 'Admin status updated successfully');
-
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error toggling admin status', [
                 'admin_id' => $admin->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to update admin status');
@@ -351,14 +305,14 @@ class AdminController extends AppBaseController
     }
 
     /**
-     * Bulk actions for admins
+     * Bulk actions for admins.
      */
     public function bulkAction(Request $request): JsonResponse
     {
         $request->validate([
             'action' => 'required|in:activate,deactivate,delete',
             'admin_ids' => 'required|array|min:1',
-            'admin_ids.*' => 'exists:users,id'
+            'admin_ids.*' => 'exists:users,id',
         ]);
 
         try {
@@ -378,24 +332,27 @@ class AdminController extends AppBaseController
                     $affectedCount = User::whereIn('id', $adminIds)->update([
                         'is_active' => true,
                         'status_changed_by' => auth()->id(),
-                        'status_changed_at' => now()
+                        'status_changed_at' => now(),
                     ]);
+
                     break;
 
                 case 'deactivate':
                     $affectedCount = User::whereIn('id', $adminIds)->update([
                         'is_active' => false,
                         'status_changed_by' => auth()->id(),
-                        'status_changed_at' => now()
+                        'status_changed_at' => now(),
                     ]);
+
                     break;
 
                 case 'delete':
                     $affectedCount = User::whereIn('id', $adminIds)->update([
                         'is_active' => false,
                         'deleted_at' => now(),
-                        'deleted_by' => auth()->id()
+                        'deleted_by' => auth()->id(),
                     ]);
+
                     break;
             }
 
@@ -407,20 +364,19 @@ class AdminController extends AppBaseController
                 'action' => $action,
                 'admin_ids' => $adminIds,
                 'affected_count' => $affectedCount,
-                'performed_by' => auth()->id()
+                'performed_by' => auth()->id(),
             ]);
 
             DB::commit();
 
             return $this->sendSuccess("Successfully {$action}ed {$affectedCount} admin(s)");
-
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error performing bulk action on admins', [
                 'action' => $request->get('action'),
                 'admin_ids' => $request->get('admin_ids'),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $this->sendServerError('Failed to perform bulk action');
@@ -428,7 +384,57 @@ class AdminController extends AppBaseController
     }
 
     /**
-     * Prepare data for admins index view
+     * Get admins for API requests with enhanced filtering.
+     */
+    private function getAdminsApi(Request $request): JsonResponse
+    {
+        $cacheKey = $this->buildCacheKey('admins.api', $request->all());
+
+        $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
+            $query = User::where('role', 'admin')->with(['profile']);
+
+            // Apply Enhanced scopes for filtering
+            if ($request->filled('search')) {
+                $query->where(function ($q) use ($request) {
+                    $search = $request->get('search');
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                    ;
+                });
+            }
+
+            if ($request->filled('is_active')) {
+                $query->where('is_active', $request->boolean('is_active'));
+            }
+
+            if ($request->filled('created_from')) {
+                $query->where('created_at', '>=', $request->get('created_from'));
+            }
+
+            if ($request->filled('created_to')) {
+                $query->where('created_at', '<=', $request->get('created_to'));
+            }
+
+            // Apply sorting
+            $sortBy = $request->get('sort', 'created_at');
+            $sortDirection = $request->get('direction', 'desc');
+
+            if (in_array($sortBy, ['name', 'email', 'created_at', 'updated_at'])) {
+                $query->orderBy($sortBy, $sortDirection);
+            } else {
+                $query->latest();
+            }
+
+            return $query->paginate($request->get('per_page', 15));
+        });
+
+        return $this->sendPaginatedResponse($data, 'Admins retrieved successfully');
+    }
+
+    /**
+     * Prepare data for admins index view.
      */
     private function prepareAdminsIndexData(Request $request): array
     {
@@ -437,21 +443,23 @@ class AdminController extends AppBaseController
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
             // Get admins with enhanced filtering
             $admins = User::where('role', 'admin')
-                        ->with(['profile'])
-                        ->when($request->filled('search'), function ($query) use ($request) {
-                            $search = $request->get('search');
-                            $query->where(function ($q) use ($search) {
-                                $q->where('name', 'like', "%{$search}%")
-                                  ->orWhere('email', 'like', "%{$search}%")
-                                  ->orWhere('first_name', 'like', "%{$search}%")
-                                  ->orWhere('last_name', 'like', "%{$search}%");
-                            });
-                        })
-                        ->when($request->filled('is_active'), function ($query) use ($request) {
-                            $query->where('is_active', $request->boolean('is_active'));
-                        })
-                        ->latest()
-                        ->paginate(20);
+                ->with(['profile'])
+                ->when($request->filled('search'), function ($query) use ($request) {
+                    $search = $request->get('search');
+                    $query->where(function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
+                            ->orWhere('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                        ;
+                    });
+                })
+                ->when($request->filled('is_active'), function ($query) use ($request) {
+                    $query->where('is_active', $request->boolean('is_active'));
+                })
+                ->latest()
+                ->paginate(20)
+            ;
 
             // Get admin statistics
             $statistics = $this->getAdminStatistics();
@@ -459,13 +467,13 @@ class AdminController extends AppBaseController
             return [
                 'admins' => $admins,
                 'statistics' => $statistics,
-                'filters' => $request->only(['search', 'is_active'])
+                'filters' => $request->only(['search', 'is_active']),
             ];
         });
     }
 
     /**
-     * Get admin statistics for dashboard
+     * Get admin statistics for dashboard.
      */
     private function getAdminStatistics(): array
     {
@@ -475,13 +483,13 @@ class AdminController extends AppBaseController
                 'active_admins' => User::where('role', 'admin')->where('is_active', true)->count(),
                 'inactive_admins' => User::where('role', 'admin')->where('is_active', false)->count(),
                 'recent_admins' => User::where('role', 'admin')->where('created_at', '>=', now()->subDays(30))->count(),
-                'admins_today' => User::where('role', 'admin')->whereDate('created_at', today())->count()
+                'admins_today' => User::where('role', 'admin')->whereDate('created_at', today())->count(),
             ];
         });
     }
 
     /**
-     * Clear admin-related caches
+     * Clear admin-related caches.
      */
     private function clearAdminCaches(?int $adminId = null): void
     {

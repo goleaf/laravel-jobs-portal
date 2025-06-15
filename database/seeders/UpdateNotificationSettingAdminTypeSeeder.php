@@ -6,9 +6,9 @@ use App\Models\NotificationSetting;
 use Illuminate\Database\Seeder;
 
 /**
- * Class UpdateNotificationSettingAdminTypeSeeder
+ * Class UpdateNotificationSettingAdminTypeSeeder.
  */
-class UpdateNotificationSettingAdminTypeSeeder extends seeder
+class UpdateNotificationSettingAdminTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -2,45 +2,51 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
+use Tests\TestCase;
 
 /**
  * Universal Test for FrontSettingsController
- * Implements Laravel 12 testing best practices with Universal MCP patterns
+ * Implements Laravel 12 testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class FrontSettingsControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Universal Pattern: Create test user with appropriate permissions
         $this->user = User::factory()->create();
     }
 
     /**
-     * Universal Pattern: Test index/home functionality
+     * Universal Pattern: Test index/home functionality.
      */
-    public function test_index_displays_correctly(): void
+    public function testIndexDisplaysCorrectly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.index'));
+            ->get(route('frontsettings.index'))
+        ;
 
         $response->assertStatus(200);
         $response->assertViewIs('frontsettings.index');
     }
 
     /**
-     * Universal Pattern: Test guest access when appropriate
+     * Universal Pattern: Test guest access when appropriate.
      */
-    public function test_guest_can_access_public_pages(): void
+    public function testGuestCanAccessPublicPages(): void
     {
         $response = $this->get(route('frontsettings.index'));
 
@@ -49,33 +55,35 @@ class FrontSettingsControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test authenticated access
+     * Universal Pattern: Test authenticated access.
      */
-    public function test_authenticated_user_access(): void
+    public function testAuthenticatedUserAccess(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.index'));
+            ->get(route('frontsettings.index'))
+        ;
 
         $response->assertStatus(200);
         $response->assertAuthenticated();
     }
 
     /**
-     * Universal Pattern: Test create form display (if applicable)
+     * Universal Pattern: Test create form display (if applicable).
      */
-    public function test_create_displays_form(): void
+    public function testCreateDisplaysForm(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.create'));
+            ->get(route('frontsettings.create'))
+        ;
 
         // Adjust expectation based on whether route exists
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test store functionality (if applicable)
+     * Universal Pattern: Test store functionality (if applicable).
      */
-    public function test_store_creates_new_record(): void
+    public function testStoreCreatesNewRecord(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -84,7 +92,8 @@ class FrontSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('frontsettings.store'), $data);
+            ->post(route('frontsettings.store'), $data)
+        ;
 
         // Adjust based on actual controller behavior
         $response->assertRedirect();
@@ -92,46 +101,49 @@ class FrontSettingsControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test validation requirements
+     * Universal Pattern: Test validation requirements.
      */
-    public function test_store_validates_required_fields(): void
+    public function testStoreValidatesRequiredFields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('frontsettings.store'), []);
+            ->post(route('frontsettings.store'), [])
+        ;
 
         // Adjust based on actual validation requirements
         $response->assertSessionHasErrors();
     }
 
     /**
-     * Universal Pattern: Test show functionality (if applicable)
+     * Universal Pattern: Test show functionality (if applicable).
      */
-    public function test_show_displays_record(): void
+    public function testShowDisplaysRecord(): void
     {
         // Create test record or use factory
-        $record = (object)['id' => 1, 'name' => 'Test Record'];
+        $record = (object) ['id' => 1, 'name' => 'Test Record'];
 
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.show', 1));
+            ->get(route('frontsettings.show', 1))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test edit form display (if applicable)
+     * Universal Pattern: Test edit form display (if applicable).
      */
-    public function test_edit_displays_form(): void
+    public function testEditDisplaysForm(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.edit', 1));
+            ->get(route('frontsettings.edit', 1))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test update functionality (if applicable)
+     * Universal Pattern: Test update functionality (if applicable).
      */
-    public function test_update_modifies_record(): void
+    public function testUpdateModifiesRecord(): void
     {
         $newData = [
             'name' => 'Updated Name',
@@ -139,28 +151,30 @@ class FrontSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('frontsettings.update', 1), $newData);
+            ->put(route('frontsettings.update', 1), $newData)
+        ;
 
         $response->assertRedirect();
         // $this->assertDatabaseHas('frontsettingss', ['id' => 1, 'name' => 'Updated Name']);
     }
 
     /**
-     * Universal Pattern: Test delete functionality (if applicable)
+     * Universal Pattern: Test delete functionality (if applicable).
      */
-    public function test_destroy_deletes_record(): void
+    public function testDestroyDeletesRecord(): void
     {
         $response = $this->actingAs($this->user)
-            ->delete(route('frontsettings.destroy', 1));
+            ->delete(route('frontsettings.destroy', 1))
+        ;
 
         $response->assertRedirect();
         // $this->assertSoftDeleted('frontsettingss', ['id' => 1]);
     }
 
     /**
-     * Universal Pattern: Test authorization middleware
+     * Universal Pattern: Test authorization middleware.
      */
-    public function test_unauthorized_access_is_prevented(): void
+    public function testUnauthorizedAccessIsPrevented(): void
     {
         $response = $this->get(route('frontsettings.create'));
 
@@ -169,9 +183,9 @@ class FrontSettingsControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test with invalid data
+     * Universal Pattern: Test with invalid data.
      */
-    public function test_handles_invalid_input_gracefully(): void
+    public function testHandlesInvalidInputGracefully(): void
     {
         $invalidData = [
             'name' => '', // Invalid empty name
@@ -180,40 +194,43 @@ class FrontSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('frontsettings.store'), $invalidData);
+            ->post(route('frontsettings.store'), $invalidData)
+        ;
 
         $response->assertSessionHasErrors();
     }
 
     /**
-     * Universal Pattern: Test search functionality (if applicable)
+     * Universal Pattern: Test search functionality (if applicable).
      */
-    public function test_search_functionality(): void
+    public function testSearchFunctionality(): void
     {
         $searchTerm = 'test search';
 
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.index', ['search' => $searchTerm]));
+            ->get(route('frontsettings.index', ['search' => $searchTerm]))
+        ;
 
         $response->assertStatus(200);
         $response->assertViewHas('searchTerm', $searchTerm);
     }
 
     /**
-     * Universal Pattern: Test pagination (if applicable)
+     * Universal Pattern: Test pagination (if applicable).
      */
-    public function test_pagination_works_correctly(): void
+    public function testPaginationWorksCorrectly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('frontsettings.index', ['page' => 2]));
+            ->get(route('frontsettings.index', ['page' => 2]))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test CSRF protection
+     * Universal Pattern: Test CSRF protection.
      */
-    public function test_csrf_protection_is_enforced(): void
+    public function testCsrfProtectionIsEnforced(): void
     {
         $data = ['name' => 'Test'];
 
@@ -223,14 +240,15 @@ class FrontSettingsControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test rate limiting (if applicable)
+     * Universal Pattern: Test rate limiting (if applicable).
      */
-    public function test_rate_limiting_prevents_abuse(): void
+    public function testRateLimitingPreventsAbuse(): void
     {
         // Make multiple requests quickly
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $this->actingAs($this->user)
-                ->post(route('frontsettings.store'), ['name' => 'Test ' . $i]);
+                ->post(route('frontsettings.store'), ['name' => 'Test '.$i])
+            ;
         }
 
         // This test may need adjustment based on actual rate limiting
@@ -238,9 +256,9 @@ class FrontSettingsControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test error handling
+     * Universal Pattern: Test error handling.
      */
-    public function test_handles_server_errors_gracefully(): void
+    public function testHandlesServerErrorsGracefully(): void
     {
         // Test with malformed data that might cause server errors
         $response = $this->actingAs($this->user)

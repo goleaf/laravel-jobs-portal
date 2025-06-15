@@ -5,7 +5,7 @@ namespace App\Http\Requests\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateUserPasswordRequest
+ * Class UpdateUserPasswordRequest.
  */
 class ChangePasswordRequest extends FormRequest
 {
@@ -20,7 +20,7 @@ class ChangePasswordRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array The given data was invalid.
+     * @return array the given data was invalid
      */
     public function rules(): array
     {

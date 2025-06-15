@@ -2,26 +2,31 @@
 
 namespace Tests\Feature\Api\Universal;
 
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 /**
  * Universal API Test for UserApiController
- * Implements Laravel 12 API testing best practices with Universal MCP patterns
+ * Implements Laravel 12 API testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class UserApiControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Universal Pattern: Create authenticated API user with tokens
         $this->user = User::factory()->create();
         Sanctum::actingAs($this->user, [
@@ -33,9 +38,9 @@ class UserApiControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API index endpoint
+     * Universal Pattern: Test API index endpoint.
      */
-    public function test_index_returns_paginated_results(): void
+    public function testIndexReturnsPaginatedResults(): void
     {
         User::factory()->count(3)->create();
 
@@ -46,20 +51,21 @@ class UserApiControllerTest extends TestCase
                 'success',
                 'data' => [
                     'data' => [
-                        '*' => ['id', 'name', 'created_at', 'updated_at']
+                        '*' => ['id', 'name', 'created_at', 'updated_at'],
                     ],
                     'current_page',
                     'per_page',
-                    'total'
+                    'total',
                 ],
-                'meta'
-            ]);
+                'meta',
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API store endpoint
+     * Universal Pattern: Test API store endpoint.
      */
-    public function test_store_creates_new_resource(): void
+    public function testStoreCreatesNewResource(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -80,8 +86,9 @@ class UserApiControllerTest extends TestCase
                 'success',
                 'message',
                 'data' => ['id', 'name', 'email'],
-                'meta'
-            ]);
+                'meta',
+            ])
+        ;
 
         $this->assertDatabaseHas('users', [
             'name' => $data['name'],
@@ -90,9 +97,9 @@ class UserApiControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API validation
+     * Universal Pattern: Test API validation.
      */
-    public function test_store_validates_required_fields(): void
+    public function testStoreValidatesRequiredFields(): void
     {
         $response = $this->postJson('/api/v1/users', []);
 
@@ -101,13 +108,14 @@ class UserApiControllerTest extends TestCase
                 'success' => false,
                 'message' => 'Validation failed',
             ])
-            ->assertJsonValidationErrors(['name']);
+            ->assertJsonValidationErrors(['name'])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API show endpoint
+     * Universal Pattern: Test API show endpoint.
      */
-    public function test_show_returns_single_resource(): void
+    public function testShowReturnsSingleResource(): void
     {
         $user = User::factory()->create();
 
@@ -119,14 +127,15 @@ class UserApiControllerTest extends TestCase
                 'data' => [
                     'id' => $user->id,
                     'name' => $user->name,
-                ]
-            ]);
+                ],
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test API update endpoint
+     * Universal Pattern: Test API update endpoint.
      */
-    public function test_update_modifies_existing_resource(): void
+    public function testUpdateModifiesExistingResource(): void
     {
         $user = User::factory()->create();
         $updateData = [
@@ -140,7 +149,8 @@ class UserApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'User updated successfully',
-            ]);
+            ])
+        ;
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -149,9 +159,9 @@ class UserApiControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test API delete endpoint
+     * Universal Pattern: Test API delete endpoint.
      */
-    public function test_destroy_deletes_resource(): void
+    public function testDestroyDeletesResource(): void
     {
         $user = User::factory()->create();
 
@@ -161,15 +171,16 @@ class UserApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'User deleted successfully',
-            ]);
+            ])
+        ;
 
         $this->assertSoftDeleted($user);
     }
 
     /**
-     * Universal Pattern: Test unauthorized access
+     * Universal Pattern: Test unauthorized access.
      */
-    public function test_unauthorized_access_returns_401(): void
+    public function testUnauthorizedAccessReturns401(): void
     {
         Sanctum::actingAs($this->user, []); // No abilities
 
@@ -182,12 +193,12 @@ class UserApiControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test rate limiting
+     * Universal Pattern: Test rate limiting.
      */
-    public function test_rate_limiting_prevents_excessive_requests(): void
+    public function testRateLimitingPreventsExcessiveRequests(): void
     {
         // Make requests up to the limit
-        for ($i = 0; $i < 60; $i++) {
+        for ($i = 0; $i < 60; ++$i) {
             $this->getJson('/api/v1/users');
         }
 
@@ -197,9 +208,9 @@ class UserApiControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test search functionality
+     * Universal Pattern: Test search functionality.
      */
-    public function test_index_can_search_resources(): void
+    public function testIndexCanSearchResources(): void
     {
         User::factory()->create(['name' => 'Searchable Item']);
         User::factory()->create(['name' => 'Other Item']);
@@ -207,13 +218,14 @@ class UserApiControllerTest extends TestCase
         $response = $this->getJson('/api/v1/users?search=Searchable');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.data');
+            ->assertJsonCount(1, 'data.data')
+        ;
     }
 
     /**
-     * Universal Pattern: Test resource not found
+     * Universal Pattern: Test resource not found.
      */
-    public function test_show_returns_404_for_nonexistent_resource(): void
+    public function testShowReturns404ForNonexistentResource(): void
     {
         $response = $this->getJson('/api/v1/users/999999');
 
@@ -221,13 +233,14 @@ class UserApiControllerTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'User not found',
-            ]);
+            ])
+        ;
     }
 
     /**
-     * Universal Pattern: Test invalid JSON
+     * Universal Pattern: Test invalid JSON.
      */
-    public function test_store_handles_invalid_json(): void
+    public function testStoreHandlesInvalidJson(): void
     {
         $response = $this->json('POST', '/api/v1/users', 'invalid-json', [
             'Content-Type' => 'application/json',

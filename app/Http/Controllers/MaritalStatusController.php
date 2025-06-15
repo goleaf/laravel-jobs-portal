@@ -7,10 +7,8 @@ use App\Http\Requests\UpdateMaritalStatusRequest;
 use App\Models\Candidate;
 use App\Models\MaritalStatus;
 use App\Repositories\MaritalStatusRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class MaritalStatusController extends AppBaseController
@@ -26,10 +24,9 @@ class MaritalStatusController extends AppBaseController
     /**
      * Display a listing of the MaritalStatus.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -38,9 +35,6 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Store a newly created MaritalStatus in storage.
-     *
-     * @param CreateMaritalStatusRequest $request
-     * @return JsonResponse
      */
     public function store(CreateMaritalStatusRequest $request): JsonResponse
     {
@@ -52,9 +46,6 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param MaritalStatus $maritalStatus
-     * @return JsonResponse
      */
     public function show(MaritalStatus $maritalStatus): JsonResponse
     {
@@ -63,9 +54,6 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Show the form for editing the specified MaritalStatus.
-     *
-     * @param MaritalStatus $maritalStatus
-     * @return JsonResponse
      */
     public function edit(MaritalStatus $maritalStatus): JsonResponse
     {
@@ -74,10 +62,6 @@ class MaritalStatusController extends AppBaseController
 
     /**
      * Update the specified MaritalStatus in storage.
-     *
-     * @param UpdateMaritalStatusRequest $request
-     * @param MaritalStatus $maritalStatus
-     * @return JsonResponse
      */
     public function update(UpdateMaritalStatusRequest $request, MaritalStatus $maritalStatus): JsonResponse
     {
@@ -90,10 +74,7 @@ class MaritalStatusController extends AppBaseController
     /**
      * Remove the specified MaritalStatus from storage.
      *
-     * @param MaritalStatus $maritalStatus
-     * @return JsonResponse
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(MaritalStatus $maritalStatus): JsonResponse
     {

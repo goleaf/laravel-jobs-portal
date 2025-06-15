@@ -2,53 +2,60 @@
 
 namespace Tests\Feature\Auth;
 
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
+use Tests\TestCase;
 
 /**
  * Universal Test for ResetPasswordController
- * Implements Laravel 12 testing best practices with Universal MCP patterns
+ * Implements Laravel 12 testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class ResetPasswordControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Universal Pattern: Create test user with appropriate permissions
         $this->user = User::factory()->create();
     }
 
     /**
-     * Universal Pattern: Test index functionality
+     * Universal Pattern: Test index functionality.
      */
-    public function test_index_displays_correctly(): void
+    public function testIndexDisplaysCorrectly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('resetpassword.index'));
+            ->get(route('resetpassword.index'))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test create form display
+     * Universal Pattern: Test create form display.
      */
-    public function test_create_displays_form(): void
+    public function testCreateDisplaysForm(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('resetpassword.create'));
+            ->get(route('resetpassword.create'))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test successful store operation
+     * Universal Pattern: Test successful store operation.
      */
-    public function test_store_creates_new_record(): void
+    public function testStoreCreatesNewRecord(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -58,7 +65,8 @@ class ResetPasswordControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('resetpassword.store'), $data);
+            ->post(route('resetpassword.store'), $data)
+        ;
 
         $response->assertRedirect();
         $this->assertDatabaseHas('resetpasswords', [
@@ -68,46 +76,49 @@ class ResetPasswordControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test validation errors
+     * Universal Pattern: Test validation errors.
      */
-    public function test_store_validates_required_fields(): void
+    public function testStoreValidatesRequiredFields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('resetpassword.store'), []);
+            ->post(route('resetpassword.store'), [])
+        ;
 
         $response->assertSessionHasErrors(['name']);
     }
 
     /**
-     * Universal Pattern: Test show functionality
+     * Universal Pattern: Test show functionality.
      */
-    public function test_show_displays_record(): void
+    public function testShowDisplaysRecord(): void
     {
         $resetpassword = ResetPassword::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('resetpassword.show', $resetpassword));
+            ->get(route('resetpassword.show', $resetpassword))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test edit form display
+     * Universal Pattern: Test edit form display.
      */
-    public function test_edit_displays_form(): void
+    public function testEditDisplaysForm(): void
     {
         $resetpassword = ResetPassword::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('resetpassword.edit', $resetpassword));
+            ->get(route('resetpassword.edit', $resetpassword))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test successful update operation
+     * Universal Pattern: Test successful update operation.
      */
-    public function test_update_modifies_record(): void
+    public function testUpdateModifiesRecord(): void
     {
         $resetpassword = ResetPassword::factory()->create();
         $newData = [
@@ -116,7 +127,8 @@ class ResetPasswordControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('resetpassword.update', $resetpassword), $newData);
+            ->put(route('resetpassword.update', $resetpassword), $newData)
+        ;
 
         $response->assertRedirect();
         $this->assertDatabaseHas('resetpasswords', [
@@ -126,23 +138,24 @@ class ResetPasswordControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test successful delete operation
+     * Universal Pattern: Test successful delete operation.
      */
-    public function test_destroy_deletes_record(): void
+    public function testDestroyDeletesRecord(): void
     {
         $resetpassword = ResetPassword::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('resetpassword.destroy', $resetpassword));
+            ->delete(route('resetpassword.destroy', $resetpassword))
+        ;
 
         $response->assertRedirect();
         $this->assertSoftDeleted($resetpassword);
     }
 
     /**
-     * Universal Pattern: Test authorization
+     * Universal Pattern: Test authorization.
      */
-    public function test_unauthorized_access_is_prevented(): void
+    public function testUnauthorizedAccessIsPrevented(): void
     {
         $response = $this->get(route('resetpassword.index'));
 
@@ -150,9 +163,9 @@ class ResetPasswordControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test with invalid data
+     * Universal Pattern: Test with invalid data.
      */
-    public function test_store_with_invalid_email(): void
+    public function testStoreWithInvalidEmail(): void
     {
         $data = [
             'name' => 'Test Name',
@@ -161,15 +174,16 @@ class ResetPasswordControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('resetpassword.store'), $data);
+            ->post(route('resetpassword.store'), $data)
+        ;
 
         $response->assertSessionHasErrors(['email']);
     }
 
     /**
-     * Universal Pattern: Test unique validation
+     * Universal Pattern: Test unique validation.
      */
-    public function test_store_prevents_duplicate_names(): void
+    public function testStorePreventsDuplicateNames(): void
     {
         $existing = ResetPassword::factory()->create(['name' => 'Unique Name']);
 

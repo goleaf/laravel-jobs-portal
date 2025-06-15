@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Skill;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
 class SkillStoreRequest extends FormRequest
 {
@@ -109,92 +109,6 @@ class SkillStoreRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Skill creation validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean and format the skill name
-        if ($this->has('name')) {
-            $this->merge([
-                'name' => ucwords(trim($this->name))
-            ]);
-        }
-
-        // Generate slug from name
-        if ($this->has('name') && !$this->has('slug')) {
-            $this->merge([
-                'slug' => \Str::slug($this->name)
-            ]);
-        }
-
-        // Set default values
-        $defaults = [
-            'is_active' => true,
-            'is_featured' => false,
-            'type' => 'technical',
-            'level' => 'intermediate',
-            'certification_required' => false,
-            'demand_score' => 50.0,
-            'market_trend' => 'stable',
-        ];
-
-        foreach ($defaults as $key => $default) {
-            if (!$this->has($key)) {
-                $this->merge([$key => $default]);
-            }
-        }
-
-        // Convert boolean strings
-        foreach (['is_active', 'is_featured', 'certification_required'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-
-        // Clean and format synonyms
-        if ($this->has('synonyms') && is_array($this->synonyms)) {
-            $this->merge([
-                'synonyms' => array_filter(array_map('trim', $this->synonyms))
-            ]);
-        }
-
-        // Clean and format tags
-        if ($this->has('tags') && is_array($this->tags)) {
-            $this->merge([
-                'tags' => array_filter(array_map('trim', $this->tags))
-            ]);
-        }
-
-        // Clean external_id if provided
-        if ($this->has('external_id')) {
-            $this->merge([
-                'external_id' => trim($this->external_id)
-            ]);
-        }
-
-        // Add created_by field
-        $this->merge([
-            'created_by' => auth()->id()
-        ]);
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -202,23 +116,25 @@ class SkillStoreRequest extends FormRequest
         $validator->after(function ($validator) {
             // Check for similar skill names (fuzzy matching)
             if ($this->has('name')) {
-                $similarSkills = \App\Models\Skill::where('name', 'LIKE', '%' . $this->name . '%')
+                $similarSkills = Skill::where('name', 'LIKE', '%'.$this->name.'%')
                     ->where('name', '!=', $this->name)
                     ->limit(5)
                     ->pluck('name')
-                    ->toArray();
+                    ->toArray()
+                ;
 
                 if (!empty($similarSkills)) {
-                    $validator->errors()->add('name', 
-                        'Similar skills already exist: ' . implode(', ', $similarSkills) . 
-                        '. Consider using an existing skill or choose a more specific name.'
+                    $validator->errors()->add(
+                        'name',
+                        'Similar skills already exist: '.implode(', ', $similarSkills)
+                        .'. Consider using an existing skill or choose a more specific name.'
                     );
                 }
             }
 
             // Validate parent skill hierarchy
             if ($this->has('parent_skill_id')) {
-                $parentSkill = \App\Models\Skill::find($this->parent_skill_id);
+                $parentSkill = Skill::find($this->parent_skill_id);
                 if ($parentSkill && $parentSkill->parent_skill_id) {
                     $validator->errors()->add('parent_skill_id', 'Cannot create nested skill hierarchy more than 2 levels deep.');
                 }
@@ -226,10 +142,11 @@ class SkillStoreRequest extends FormRequest
 
             // Validate synonyms don't conflict with existing skill names
             if ($this->has('synonyms') && is_array($this->synonyms)) {
-                $existingSkills = \App\Models\Skill::whereIn('name', $this->synonyms)->pluck('name');
+                $existingSkills = Skill::whereIn('name', $this->synonyms)->pluck('name');
                 if ($existingSkills->count() > 0) {
-                    $validator->errors()->add('synonyms', 
-                        'Synonyms cannot match existing skill names: ' . $existingSkills->implode(', ')
+                    $validator->errors()->add(
+                        'synonyms',
+                        'Synonyms cannot match existing skill names: '.$existingSkills->implode(', ')
                     );
                 }
             }
@@ -257,4 +174,90 @@ class SkillStoreRequest extends FormRequest
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Skill creation validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Clean and format the skill name
+        if ($this->has('name')) {
+            $this->merge([
+                'name' => ucwords(trim($this->name)),
+            ]);
+        }
+
+        // Generate slug from name
+        if ($this->has('name') && !$this->has('slug')) {
+            $this->merge([
+                'slug' => \Str::slug($this->name),
+            ]);
+        }
+
+        // Set default values
+        $defaults = [
+            'is_active' => true,
+            'is_featured' => false,
+            'type' => 'technical',
+            'level' => 'intermediate',
+            'certification_required' => false,
+            'demand_score' => 50.0,
+            'market_trend' => 'stable',
+        ];
+
+        foreach ($defaults as $key => $default) {
+            if (!$this->has($key)) {
+                $this->merge([$key => $default]);
+            }
+        }
+
+        // Convert boolean strings
+        foreach (['is_active', 'is_featured', 'certification_required'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+
+        // Clean and format synonyms
+        if ($this->has('synonyms') && is_array($this->synonyms)) {
+            $this->merge([
+                'synonyms' => array_filter(array_map('trim', $this->synonyms)),
+            ]);
+        }
+
+        // Clean and format tags
+        if ($this->has('tags') && is_array($this->tags)) {
+            $this->merge([
+                'tags' => array_filter(array_map('trim', $this->tags)),
+            ]);
+        }
+
+        // Clean external_id if provided
+        if ($this->has('external_id')) {
+            $this->merge([
+                'external_id' => trim($this->external_id),
+            ]);
+        }
+
+        // Add created_by field
+        $this->merge([
+            'created_by' => auth()->id(),
+        ]);
+    }
+}

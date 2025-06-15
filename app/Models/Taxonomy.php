@@ -2,43 +2,45 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Taxonomy Model - Enhanced with Enhanced patterns
- * 
+ * Taxonomy Model - Enhanced with Enhanced patterns.
+ *
  * Organizes terms into logical categories for the job portal system.
  * Supports hierarchical structures and flexible metadata.
  *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property string|null $description
- * @property string $type
- * @property bool $is_hierarchical
- * @property bool $is_active
- * @property bool $is_public
- * @property array|null $meta
- * @property int $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $terms
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $activeTerms
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Term[] $rootTerms
- * @property-read int $terms_count
- * @property-read int $active_terms_count
- * @property-read string $display_name
- * @property-read string $type_label
+ * @property int               $id
+ * @property string            $name
+ * @property string            $slug
+ * @property null|string       $description
+ * @property string            $type
+ * @property bool              $is_hierarchical
+ * @property bool              $is_active
+ * @property bool              $is_public
+ * @property null|array        $meta
+ * @property int               $sort_order
+ * @property null|Carbon       $created_at
+ * @property null|Carbon       $updated_at
+ * @property null|Carbon       $deleted_at
+ * @property Collection|Term[] $terms
+ * @property Collection|Term[] $activeTerms
+ * @property Collection|Term[] $rootTerms
+ * @property int               $terms_count
+ * @property int               $active_terms_count
+ * @property string            $display_name
+ * @property string            $type_label
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder public()
@@ -59,6 +61,42 @@ class Taxonomy extends Model
 {
     use HasFactory;
     use LogsActivity;
+
+    // =============================================
+    // CONSTANTS
+    // =============================================
+
+    public const TYPES = [
+        'job_category' => 'Job Categories',
+        'job_type' => 'Job Types',
+        'skill' => 'Skills',
+        'industry' => 'Industries',
+        'location' => 'Locations',
+        'experience_level' => 'Experience Levels',
+        'education_level' => 'Education Levels',
+        'company_size' => 'Company Sizes',
+        'salary_range' => 'Salary Ranges',
+        'benefit' => 'Benefits',
+        'tag' => 'Tags',
+        'custom' => 'Custom',
+    ];
+
+    /**
+     * Validation rules for creating taxonomies.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:taxonomies,slug',
+        'description' => 'nullable|string|max:1000',
+        'type' => 'required|string|max:100',
+        'is_hierarchical' => 'boolean',
+        'is_active' => 'boolean',
+        'is_public' => 'boolean',
+        'meta' => 'nullable|array',
+        'sort_order' => 'nullable|integer|min:0',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -87,23 +125,6 @@ class Taxonomy extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_hierarchical' => 'boolean',
-            'is_active' => 'boolean',
-            'is_public' => 'boolean',
-            'meta' => 'array',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            // removed deleted_at since not using SoftDeletes
-        ];
-    }
-
-    /**
      * Configure activity logging.
      */
     public function getActivitylogOptions(): LogOptions
@@ -121,37 +142,20 @@ class Taxonomy extends Model
                 'sort_order',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating taxonomies.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:taxonomies,slug',
-        'description' => 'nullable|string|max:1000',
-        'type' => 'required|string|max:100',
-        'is_hierarchical' => 'boolean',
-        'is_active' => 'boolean',
-        'is_public' => 'boolean',
-        'meta' => 'nullable|array',
-        'sort_order' => 'nullable|integer|min:0',
-    ];
 
     /**
      * Update validation rules for taxonomies.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:taxonomies,slug,' . $id,
+            'slug' => 'required|string|max:255|unique:taxonomies,slug,'.$id,
             'description' => 'nullable|string|max:1000',
             'type' => 'required|string|max:100',
             'is_hierarchical' => 'boolean',
@@ -161,25 +165,6 @@ class Taxonomy extends Model
             'sort_order' => 'nullable|integer|min:0',
         ];
     }
-
-    // =============================================
-    // CONSTANTS
-    // =============================================
-
-    public const TYPES = [
-        'job_category' => 'Job Categories',
-        'job_type' => 'Job Types',
-        'skill' => 'Skills',
-        'industry' => 'Industries',
-        'location' => 'Locations',
-        'experience_level' => 'Experience Levels',
-        'education_level' => 'Education Levels',
-        'company_size' => 'Company Sizes',
-        'salary_range' => 'Salary Ranges',
-        'benefit' => 'Benefits',
-        'tag' => 'Tags',
-        'custom' => 'Custom',
-    ];
 
     // =============================================
     // RELATIONSHIPS
@@ -223,6 +208,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include active taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -231,6 +218,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include inactive taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -239,6 +228,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include public taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopePublic($query)
     {
@@ -247,6 +238,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include private taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopePrivate($query)
     {
@@ -255,6 +248,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include hierarchical taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeHierarchical($query)
     {
@@ -263,6 +258,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to only include flat taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeFlat($query)
     {
@@ -275,6 +272,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to filter by type.
+     *
+     * @param mixed $query
      */
     public function scopeByType($query, string $type)
     {
@@ -283,13 +282,16 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to search taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%")
-              ->orWhere('type', 'like', "%{$term}%");
+                ->orWhere('description', 'like', "%{$term}%")
+                ->orWhere('type', 'like', "%{$term}%")
+            ;
         });
     }
 
@@ -299,6 +301,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to order alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -307,6 +311,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to order by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
@@ -319,6 +325,8 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to include term counts.
+     *
+     * @param mixed $query
      */
     public function scopeWithTermCounts($query)
     {
@@ -327,21 +335,27 @@ class Taxonomy extends Model
 
     /**
      * Scope a query to get popular taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('terms')
-                    ->orderBy('terms_count', 'desc')
-                    ->limit($limit);
+            ->orderBy('terms_count', 'desc')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope a query to get recent taxonomies.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     // =============================================
@@ -351,7 +365,7 @@ class Taxonomy extends Model
     /**
      * Get cached active taxonomies.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('taxonomies.active', 3600, function () {
             return self::active()->ordered()->get();
@@ -361,7 +375,7 @@ class Taxonomy extends Model
     /**
      * Get cached taxonomies by type.
      */
-    public static function getCachedByType(string $type): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByType(string $type): Collection
     {
         return Cache::remember("taxonomies.type.{$type}", 3600, function () use ($type) {
             return self::active()->byType($type)->ordered()->get();
@@ -371,7 +385,7 @@ class Taxonomy extends Model
     /**
      * Get cached public taxonomies.
      */
-    public static function getCachedPublic(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPublic(): Collection
     {
         return Cache::remember('taxonomies.public', 3600, function () {
             return self::active()->public()->ordered()->get();
@@ -440,7 +454,7 @@ class Taxonomy extends Model
     public function getOrCreateTerm(string $name, ?int $parentId = null): Term
     {
         $slug = Str::slug($name);
-        
+
         return $this->terms()->firstOrCreate(
             ['slug' => $slug],
             [
@@ -461,6 +475,23 @@ class Taxonomy extends Model
         Cache::forget('taxonomies.public');
         Cache::forget("taxonomy.{$this->id}.terms");
         Cache::forget("taxonomy.{$this->slug}.terms");
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_hierarchical' => 'boolean',
+            'is_active' => 'boolean',
+            'is_public' => 'boolean',
+            'meta' => 'array',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            // removed deleted_at since not using SoftDeletes
+        ];
     }
 
     // =============================================

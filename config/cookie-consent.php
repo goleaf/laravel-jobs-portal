@@ -1,10 +1,7 @@
 <?php
 
 return [
-
-    /*
-     * Use this setting to enable the cookie consent dialog.
-     */
+    // Use this setting to enable the cookie consent dialog.
     'enabled' => env('COOKIE_CONSENT_ENABLED', true),
 
     /*
@@ -13,8 +10,6 @@ return [
      */
     'cookie_name' => 'laravel_cookie_consent',
 
-    /*
-     * Set the cookie duration in days.  Default is 365 * 20.
-     */
+    // Set the cookie duration in days.  Default is 365 * 20.
     'cookie_lifetime' => 365 * 20,
 ];

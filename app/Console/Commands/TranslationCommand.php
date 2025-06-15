@@ -27,4 +27,4 @@ class TranslationCommand extends Command
     {
         $this->info('Translation command placeholder executed.');
     }
-} 
+}

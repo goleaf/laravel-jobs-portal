@@ -3,15 +3,19 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
 
 /**
- * Universal Enhanced Validation Tests for UpdateCompanyRequest
- * 
+ * Universal Enhanced Validation Tests for UpdateCompanyRequest.
+ *
  * @group validation
  * @group requests
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class UpdateCompanyRequestTest extends TestCase
 {
@@ -20,34 +24,34 @@ class UpdateCompanyRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create authenticated user for testing
         $this->user = User::factory()->create();
     }
 
     /** @test */
-    public function test_authorization_returns_true()
+    public function testAuthorizationReturnsTrue()
     {
         $request = new UpdateCompanyRequest();
-        
+
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
     }
 
     /** @test */
-    public function test_validation_messages_are_defined()
+    public function testValidationMessagesAreDefined()
     {
         $request = new UpdateCompanyRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
@@ -57,10 +61,10 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_validation_attributes_are_defined()
+    public function testValidationAttributesAreDefined()
     {
         $request = new UpdateCompanyRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
@@ -70,230 +74,228 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_name_validation()
+    public function testNameValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('name', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['name'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_email_validation()
+    public function testEmailValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('email', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['email'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_phone_validation()
+    public function testPhoneValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('phone', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['phone'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_website_validation()
+    public function testWebsiteValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('website', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['website'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_industry_id_validation()
+    public function testIndustryIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('industry_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['industry_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_ownership_type_id_validation()
+    public function testOwnershipTypeIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('ownership_type_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['ownership_type_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_company_size_id_validation()
+    public function testCompanySizeIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('company_size_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['company_size_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_established_in_validation()
+    public function testEstablishedInValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('established_in', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['established_in'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_description_validation()
+    public function testDescriptionValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('description', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['description'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_country_id_validation()
+    public function testCountryIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('country_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['country_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_state_id_validation()
+    public function testStateIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('state_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['state_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_city_id_validation()
+    public function testCityIdValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('city_id', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['city_id'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_address_validation()
+    public function testAddressValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('address', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['address'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_postal_code_validation()
+    public function testPostalCodeValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('postal_code', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['postal_code'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_logo_validation()
+    public function testLogoValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('logo', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['logo'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_is_active_validation()
+    public function testIsActiveValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('is_active', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['is_active'];
         $this->assertNotEmpty($fieldRules);
     }
 
     /** @test */
-    public function test_boolean_validation()
+    public function testBooleanValidation()
     {
         $request = new UpdateCompanyRequest();
         $rules = $request->rules();
-        
+
         $this->assertArrayHasKey('boolean', $rules);
-        
+
         // Test field-specific validation rules
         $fieldRules = $rules['boolean'];
         $this->assertNotEmpty($fieldRules);
     }
 
-
-
     /** @test */
-    public function test_valid_data_passes_validation()
+    public function testValidDataPassesValidation()
     {
         $validData = [
             'name' => 'Test Value',
@@ -314,37 +316,37 @@ class UpdateCompanyRequestTest extends TestCase
             'is_active' => true,
             'boolean' => 'Test Value',
         ];
-        
+
         $request = new UpdateCompanyRequest();
         $validator = validator($validData, $request->rules());
-        
+
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function test_request_handles_empty_data_correctly()
+    public function testRequestHandlesEmptyDataCorrectly()
     {
         $emptyData = [];
-        
+
         $request = new UpdateCompanyRequest();
         $validator = validator($emptyData, $request->rules());
-        
+
         // Should handle empty data according to rules
         $this->assertIsArray($validator->errors()->toArray());
     }
 
     /** @test */
-    public function test_security_validation_prevents_xss()
+    public function testSecurityValidationPreventsXss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
             'description' => 'javascript:alert("xss")',
-            'content' => '<img src=x onerror=alert("xss")>'
+            'content' => '<img src=x onerror=alert("xss")>',
         ];
-        
+
         $request = new UpdateCompanyRequest();
         $validator = validator($maliciousData, $request->rules());
-        
+
         // XSS data should either fail validation or be properly sanitized
         if ($validator->passes()) {
             foreach ($maliciousData as $field => $value) {
@@ -357,17 +359,17 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_sql_injection_prevention()
+    public function testSqlInjectionPrevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
             'search' => "1' OR '1'='1",
-            'filter' => "UNION SELECT * FROM passwords"
+            'filter' => 'UNION SELECT * FROM passwords',
         ];
-        
+
         $request = new UpdateCompanyRequest();
         $validator = validator($sqlInjectionData, $request->rules());
-        
+
         // SQL injection patterns should be handled safely
         $this->assertIsArray($validator->errors()->toArray());
     }

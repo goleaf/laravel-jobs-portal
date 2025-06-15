@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ShowCompanyRequest extends FormRequest
@@ -53,6 +53,34 @@ class ShowCompanyRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate include relationships if provided
+            if ($this->has('include') && is_array($this->include)) {
+                $allowedIncludes = ['user', 'jobs', 'employees', 'industry', 'size', 'location'];
+                foreach ($this->include as $include) {
+                    if (!in_array($include, $allowedIncludes)) {
+                        $validator->errors()->add('include', __('validation.in', ['attribute' => __('validation.attributes.include')]));
+                    }
+                }
+            }
+
+            // Validate field selection if provided
+            if ($this->has('fields') && is_array($this->fields)) {
+                $allowedFields = ['id', 'name', 'description', 'website', 'logo', 'industry', 'size', 'location', 'founded_year', 'created_at', 'updated_at'];
+                foreach ($this->fields as $field) {
+                    if (!in_array($field, $allowedFields)) {
+                        $validator->errors()->add('fields', __('validation.in', ['attribute' => __('validation.attributes.fields')]));
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Handle a failed validation attempt for API requests.
      */
     protected function failedValidation(Validator $validator)
@@ -85,32 +113,4 @@ class ShowCompanyRequest extends FormRequest
             ]);
         }
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate include relationships if provided
-            if ($this->has('include') && is_array($this->include)) {
-                $allowedIncludes = ['user', 'jobs', 'employees', 'industry', 'size', 'location'];
-                foreach ($this->include as $include) {
-                    if (!in_array($include, $allowedIncludes)) {
-                        $validator->errors()->add('include', __('validation.in', ['attribute' => __('validation.attributes.include')]));
-                    }
-                }
-            }
-
-            // Validate field selection if provided
-            if ($this->has('fields') && is_array($this->fields)) {
-                $allowedFields = ['id', 'name', 'description', 'website', 'logo', 'industry', 'size', 'location', 'founded_year', 'created_at', 'updated_at'];
-                foreach ($this->fields as $field) {
-                    if (!in_array($field, $allowedFields)) {
-                        $validator->errors()->add('fields', __('validation.in', ['attribute' => __('validation.attributes.fields')]));
-                    }
-                }
-            }
-        });
-    }
-} 
+}

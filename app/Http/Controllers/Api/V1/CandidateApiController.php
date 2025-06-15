@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Models\Candidate;
 use App\Http\Requests\Api\Universal\StoreRequest;
 use App\Http\Requests\Api\Universal\UpdateRequest;
-use App\Http\Requests\Api\Universal\IndexRequest;
+use App\Models\Candidate;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Enhanced API Controller for Candidate Management
  * Generated for Level 4 Complex System Transformation
- * RESTful API following Laravel 12 best practices
+ * RESTful API following Laravel 12 best practices.
  */
 class CandidateApiController extends Controller
 {
@@ -24,50 +23,51 @@ class CandidateApiController extends Controller
     {
         try {
             $query = Candidate::with(['user:id,email,email_verified_at']);
-            
+
             // Apply search filter
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->where('first_name', 'like', "%{$search}%")
-                      ->orWhere('last_name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('phone', 'like', "%{$search}%")
-                      ->orWhereHas('user', function($user) use ($search) {
-                          $user->where('email', 'like', "%{$search}%");
-                      });
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($user) use ($search) {
+                            $user->where('email', 'like', "%{$search}%");
+                        })
+                    ;
                 });
             }
-            
+
             // Apply verification status filter
-            if ($request->has('verified') && $request->verified !== '') {
-                if ($request->verified === 'true') {
-                    $query->whereHas('user', function($user) {
+            if ($request->has('verified') && '' !== $request->verified) {
+                if ('true' === $request->verified) {
+                    $query->whereHas('user', function ($user) {
                         $user->whereNotNull('email_verified_at');
                     });
-                } elseif ($request->verified === 'false') {
-                    $query->whereHas('user', function($user) {
+                } elseif ('false' === $request->verified) {
+                    $query->whereHas('user', function ($user) {
                         $user->whereNull('email_verified_at');
                     });
                 }
             }
-            
+
             // Apply sorting
             $sortBy = $request->get('sort', 'created_at');
             $order = $request->get('order', 'desc');
             $query->orderBy($sortBy, $order);
-            
+
             // Pagination
             $perPage = min($request->integer('per_page', 15), 100);
             $data = $query->withCount('applications')->paginate($perPage);
-            
+
             // Transform data
             $candidates = $data->getCollection()->map(function ($candidate) {
                 return [
                     'id' => $candidate->id,
                     'first_name' => $candidate->first_name,
                     'last_name' => $candidate->last_name,
-                    'name' => trim($candidate->first_name . ' ' . $candidate->last_name),
+                    'name' => trim($candidate->first_name.' '.$candidate->last_name),
                     'email' => $candidate->email ?? $candidate->user?->email,
                     'phone' => $candidate->phone,
                     'date_of_birth' => $candidate->date_of_birth,
@@ -78,12 +78,12 @@ class CandidateApiController extends Controller
                     'experience' => $candidate->experience,
                     'immediate_available' => $candidate->immediate_available,
                     'applications_count' => $candidate->applications_count ?? 0,
-                    'is_verified' => $candidate->user?->email_verified_at !== null,
+                    'is_verified' => null !== $candidate->user?->email_verified_at,
                     'created_at' => $candidate->created_at?->toISOString(),
                     'updated_at' => $candidate->updated_at?->toISOString(),
                 ];
             });
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Candidates retrieved successfully',
@@ -93,13 +93,12 @@ class CandidateApiController extends Controller
                 'per_page' => $data->perPage(),
                 'total' => $data->total(),
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve candidates',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
@@ -111,7 +110,7 @@ class CandidateApiController extends Controller
     {
         try {
             $data = $request->validated();
-            
+
             // Create candidate with validated data
             $candidate = Candidate::create([
                 'first_name' => $data['first_name'] ?? $data['name'] ?? 'New',
@@ -126,38 +125,40 @@ class CandidateApiController extends Controller
                 'experience' => $data['experience'] ?? null,
                 'immediate_available' => $data['immediate_available'] ?? false,
             ]);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Candidate created successfully',
                 'data' => [
                     'id' => $candidate->id,
-                    'name' => trim($candidate->first_name . ' ' . $candidate->last_name),
+                    'name' => trim($candidate->first_name.' '.$candidate->last_name),
                     'email' => $candidate->email,
                     'phone' => $candidate->phone,
                     'created_at' => $candidate->created_at?->toISOString(),
-                ]
+                ],
             ], 201);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create candidate',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param mixed $id
      */
     public function show($id): JsonResponse
     {
         try {
             $candidate = Candidate::with(['user:id,email,email_verified_at'])
                 ->withCount('applications')
-                ->findOrFail($id);
-            
+                ->findOrFail($id)
+            ;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Candidate retrieved successfully',
@@ -165,7 +166,7 @@ class CandidateApiController extends Controller
                     'id' => $candidate->id,
                     'first_name' => $candidate->first_name,
                     'last_name' => $candidate->last_name,
-                    'name' => trim($candidate->first_name . ' ' . $candidate->last_name),
+                    'name' => trim($candidate->first_name.' '.$candidate->last_name),
                     'email' => $candidate->email ?? $candidate->user?->email,
                     'phone' => $candidate->phone,
                     'date_of_birth' => $candidate->date_of_birth,
@@ -176,30 +177,31 @@ class CandidateApiController extends Controller
                     'experience' => $candidate->experience,
                     'immediate_available' => $candidate->immediate_available,
                     'applications_count' => $candidate->applications_count ?? 0,
-                    'is_verified' => $candidate->user?->email_verified_at !== null,
+                    'is_verified' => null !== $candidate->user?->email_verified_at,
                     'created_at' => $candidate->created_at?->toISOString(),
                     'updated_at' => $candidate->updated_at?->toISOString(),
-                ]
+                ],
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Candidate not found',
-                'error' => config('app.debug') ? $e->getMessage() : 'Candidate not found'
+                'error' => config('app.debug') ? $e->getMessage() : 'Candidate not found',
             ], 404);
         }
     }
 
     /**
      * Update the specified resource.
+     *
+     * @param mixed $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
         try {
             $candidate = Candidate::findOrFail($id);
             $data = $request->validated();
-            
+
             // Update candidate with validated data
             $updateData = [];
             if (isset($data['first_name'])) {
@@ -220,60 +222,60 @@ class CandidateApiController extends Controller
             if (isset($data['immediate_available'])) {
                 $updateData['immediate_available'] = $data['immediate_available'];
             }
-            
+
             $candidate->update($updateData);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Candidate updated successfully',
                 'data' => [
                     'id' => $candidate->id,
-                    'name' => trim($candidate->first_name . ' ' . $candidate->last_name),
+                    'name' => trim($candidate->first_name.' '.$candidate->last_name),
                     'email' => $candidate->email,
                     'phone' => $candidate->phone,
                     'updated_at' => $candidate->updated_at?->toISOString(),
-                ]
+                ],
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update candidate',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }
 
     /**
      * Remove the specified resource.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {
         try {
             $candidate = Candidate::findOrFail($id);
-            $candidateName = trim($candidate->first_name . ' ' . $candidate->last_name);
-            
+            $candidateName = trim($candidate->first_name.' '.$candidate->last_name);
+
             // Check if candidate has applications
             $applicationsCount = $candidate->applications()->count();
             if ($applicationsCount > 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => "Cannot delete candidate '{$candidateName}' because they have {$applicationsCount} job applications"
+                    'message' => "Cannot delete candidate '{$candidateName}' because they have {$applicationsCount} job applications",
                 ], 422);
             }
-            
+
             $candidate->delete();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => "Candidate '{$candidateName}' deleted successfully"
+                'message' => "Candidate '{$candidateName}' deleted successfully",
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete candidate',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }

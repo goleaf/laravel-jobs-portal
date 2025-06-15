@@ -11,28 +11,31 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Base Controller Class
- * 
+ * Base Controller Class.
+ *
  * This is the base controller class that all other controllers should extend.
  * It provides common functionality and follows Laravel 12 best practices.
- * 
+ *
  * Features:
  * - Request authorization capabilities
- * - Request validation functionality  
+ * - Request validation functionality
  * - Enhanced enterprise patterns
  * - Modern Laravel 12 structure
  */
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
+    use ValidatesRequests;
 
     /**
-     * Default items per page for pagination
+     * Default items per page for pagination.
      */
     protected int $perPage = 15;
 
     /**
-     * Response structure for consistent API responses
+     * Response structure for consistent API responses.
+     *
+     * @param null|mixed $data
      */
     protected function successResponse($data = null, string $message = 'Operation successful', int $status = 200): JsonResponse
     {
@@ -45,7 +48,9 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Error response structure
+     * Error response structure.
+     *
+     * @param null|mixed $errors
      */
     protected function errorResponse(string $message = 'Operation failed', int $status = 400, $errors = null): JsonResponse
     {
@@ -63,7 +68,10 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Cache wrapper for consistent caching
+     * Cache wrapper for consistent caching.
+     *
+     * @param mixed $ttl
+     * @param mixed $callback
      */
     protected function cacheRemember(string $key, $ttl, $callback)
     {
@@ -72,21 +80,21 @@ abstract class Controller extends BaseController
         } catch (\Exception $e) {
             Log::warning("Cache operation failed for key: {$key}", [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
-            
+
             // Fallback to direct execution if cache fails
             return $callback();
         }
     }
 
     /**
-     * Log user actions for audit trail
+     * Log user actions for audit trail.
      */
     protected function logUserAction(string $action, array $data = [], ?int $userId = null): void
     {
         $userId = $userId ?? auth()->id();
-        
+
         Log::info("User action: {$action}", [
             'user_id' => $userId,
             'action' => $action,
@@ -98,7 +106,7 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Validate and sanitize request data
+     * Validate and sanitize request data.
      */
     protected function sanitizeInput(array $data): array
     {
@@ -106,24 +114,25 @@ abstract class Controller extends BaseController
             if (is_string($value)) {
                 return trim(strip_tags($value));
             }
+
             return $value;
         })->toArray();
     }
 
     /**
-     * Check if request is from API
+     * Check if request is from API.
      */
-    protected function isApiRequest(Request $request = null): bool
+    protected function isApiRequest(?Request $request = null): bool
     {
         $request = $request ?? request();
-        
-        return $request->is('api/*') || 
-               $request->expectsJson() || 
-               $request->header('Accept') === 'application/json';
+
+        return $request->is('api/*')
+               || $request->expectsJson()
+               || 'application/json' === $request->header('Accept');
     }
 
     /**
-     * Handle pagination parameters
+     * Handle pagination parameters.
      */
     protected function getPaginationParams(Request $request): array
     {
@@ -131,20 +140,20 @@ abstract class Controller extends BaseController
             'per_page' => min($request->get('per_page', $this->perPage), 100),
             'page' => $request->get('page', 1),
             'sort' => $request->get('sort', 'id'),
-            'direction' => $request->get('direction', 'desc')
+            'direction' => $request->get('direction', 'desc'),
         ];
     }
 
     /**
-     * Handle search and filter parameters
+     * Handle search and filter parameters.
      */
     protected function getFilterParams(Request $request): array
     {
         return [
             'search' => $request->get('search'),
             'sort_by' => $request->get('sort_by', 'created_at'),
-            'sort_direction' => in_array($request->get('sort_direction'), ['asc', 'desc']) 
-                ? $request->get('sort_direction') 
+            'sort_direction' => in_array($request->get('sort_direction'), ['asc', 'desc'])
+                ? $request->get('sort_direction')
                 : 'desc',
             'status' => $request->get('status'),
             'category' => $request->get('category'),
@@ -152,7 +161,10 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Apply common filters to query
+     * Apply common filters to query.
+     *
+     * @param mixed $query
+     * @param mixed $request
      */
     protected function applyCommonFilters($query, $request)
     {
@@ -182,7 +194,9 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Override this method in child controllers to define search fields
+     * Override this method in child controllers to define search fields.
+     *
+     * @param mixed $query
      */
     protected function applySearchFilter($query, string $searchTerm)
     {
@@ -194,7 +208,7 @@ abstract class Controller extends BaseController
 
     /**
      * Get validation rules for the controller
-     * Override in child controllers
+     * Override in child controllers.
      */
     protected function getValidationRules(string $action = 'store'): array
     {
@@ -203,7 +217,7 @@ abstract class Controller extends BaseController
 
     /**
      * Get validation messages for the controller
-     * Override in child controllers  
+     * Override in child controllers.
      */
     protected function getValidationMessages(): array
     {
@@ -211,7 +225,9 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Log controller action for audit trail
+     * Log controller action for audit trail.
+     *
+     * @param null|mixed $model
      */
     protected function logAction(string $action, $model = null, array $data = []): void
     {
@@ -224,13 +240,13 @@ abstract class Controller extends BaseController
                 'data' => $data,
                 'timestamp' => now(),
                 'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent()
+                'user_agent' => request()->userAgent(),
             ]);
         }
     }
 
     /**
-     * Handle model not found exceptions gracefully
+     * Handle model not found exceptions gracefully.
      */
     protected function handleModelNotFound(string $modelName = 'Record'): array
     {
@@ -241,7 +257,7 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Handle authorization failures gracefully
+     * Handle authorization failures gracefully.
      */
     protected function handleUnauthorized(string $action = 'perform this action'): array
     {
@@ -252,7 +268,9 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Handle validation failures gracefully
+     * Handle validation failures gracefully.
+     *
+     * @param mixed $validator
      */
     protected function handleValidationFailure($validator): array
     {
@@ -262,4 +280,4 @@ abstract class Controller extends BaseController
             status: 422
         );
     }
-} 
+}

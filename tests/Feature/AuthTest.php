@@ -6,16 +6,20 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
 
     /** @test */
-    public function users_can_register_as_candidate()
+    public function usersCanRegisterAsCandidate()
     {
         $userData = [
             'name' => $this->faker->name,
@@ -36,7 +40,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function users_can_register_as_employer()
+    public function usersCanRegisterAsEmployer()
     {
         $userData = [
             'name' => $this->faker->name,
@@ -57,7 +61,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function users_can_login_with_correct_credentials()
+    public function usersCanLoginWithCorrectCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -75,7 +79,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function users_cannot_login_with_incorrect_credentials()
+    public function usersCannotLoginWithIncorrectCredentials()
     {
         User::factory()->create([
             'email' => 'test@example.com',
@@ -93,7 +97,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function inactive_users_cannot_login()
+    public function inactiveUsersCannotLogin()
     {
         User::factory()->create([
             'email' => 'inactive@example.com',
@@ -111,21 +115,22 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function user_can_logout()
+    public function userCanLogout()
     {
         $user = User::factory()->create([
             'is_active' => true,
         ]);
 
         $response = $this->actingAs($user)
-            ->post('/logout');
+            ->post('/logout')
+        ;
 
         $response->assertRedirect('/');
         $this->assertGuest();
     }
 
     /** @test */
-    public function user_can_request_password_reset()
+    public function userCanRequestPasswordReset()
     {
         $user = User::factory()->create([
             'email' => 'reset@example.com',
@@ -141,7 +146,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_password_reset_form()
+    public function userCanViewPasswordResetForm()
     {
         $response = $this->get('/password/reset');
 
@@ -149,7 +154,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function user_can_update_password_with_valid_token()
+    public function userCanUpdatePasswordWithValidToken()
     {
         $user = User::factory()->create([
             'email' => 'password@example.com',
@@ -169,7 +174,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registration_requires_name_email_password()
+    public function registrationRequiresNameEmailPassword()
     {
         $response = $this->post('/register', [
             'password_confirmation' => 'password123',
@@ -187,7 +192,7 @@ class AuthTest extends TestCase
         ]);
         $response->assertSessionHasErrors('email');
 
-         $response = $this->post('/register', [
+        $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'user_type' => User::CANDIDATE,
@@ -197,7 +202,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registration_requires_valid_email()
+    public function registrationRequiresValidEmail()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -210,8 +215,8 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
-     /** @test */
-    public function registration_requires_password_confirmation()
+    /** @test */
+    public function registrationRequiresPasswordConfirmation()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -225,7 +230,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registration_requires_agreeing_to_terms()
+    public function registrationRequiresAgreeingToTerms()
     {
         $response = $this->post('/register', [
             'name' => $this->faker->name,
@@ -239,7 +244,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function login_requires_email_and_password()
+    public function loginRequiresEmailAndPassword()
     {
         $response = $this->post('/login', [
             'email' => 'test@example.com',
@@ -253,7 +258,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_user_is_redirected_from_login_page()
+    public function authenticatedUserIsRedirectedFromLoginPage()
     {
         $user = User::factory()->create(['is_active' => true]);
         $response = $this->actingAs($user)->get('/login');
@@ -261,7 +266,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_user_is_redirected_from_register_page()
+    public function authenticatedUserIsRedirectedFromRegisterPage()
     {
         $user = User::factory()->create(['is_active' => true]);
         $response = $this->actingAs($user)->get('/register');

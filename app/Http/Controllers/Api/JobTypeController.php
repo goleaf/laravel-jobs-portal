@@ -33,8 +33,8 @@ class JobTypeController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $cacheKey = 'job_types_index_' . md5($request->getQueryString() ?? '');
-        
+        $cacheKey = 'job_types_index_'.md5($request->getQueryString() ?? '');
+
         $jobTypes = Cache::remember($cacheKey, 300, function () use ($request) {
             $query = JobType::query();
 
@@ -44,7 +44,7 @@ class JobTypeController extends Controller
             }
 
             if ($request->filled('status')) {
-                $request->status === 'active' 
+                'active' === $request->status
                     ? $query->active()
                     : $query->inactive();
             }
@@ -84,11 +84,11 @@ class JobTypeController extends Controller
 
             // Include relationships
             if ($request->has('include_jobs')) {
-                $query->with(['jobs' => fn($q) => $q->active()->latest()->limit(10)]);
+                $query->with(['jobs' => fn ($q) => $q->active()->latest()->limit(10)]);
             }
 
             if ($request->has('include_counts')) {
-                $query->withCount(['jobs', 'jobs as active_jobs_count' => fn($q) => $q->where('is_active', true)]);
+                $query->withCount(['jobs', 'jobs as active_jobs_count' => fn ($q) => $q->where('is_active', true)]);
             }
 
             return $query->paginate($request->get('per_page', 15));
@@ -111,7 +111,8 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type created');
+            ->log('Job type created')
+        ;
 
         return new JobTypeResource($jobType);
     }
@@ -121,14 +122,14 @@ class JobTypeController extends Controller
      */
     public function show(Request $request, JobType $jobType): JobTypeResource
     {
-        $cacheKey = "job_type_{$jobType->id}_show_" . md5($request->getQueryString() ?? '');
-        
+        $cacheKey = "job_type_{$jobType->id}_show_".md5($request->getQueryString() ?? '');
+
         $jobType = Cache::remember($cacheKey, 600, function () use ($request, $jobType) {
             // Load relationships based on request
             $with = [];
-            
+
             if ($request->has('include_jobs')) {
-                $with['jobs'] = fn($q) => $q->active()->latest()->limit($request->get('jobs_limit', 10));
+                $with['jobs'] = fn ($q) => $q->active()->latest()->limit($request->get('jobs_limit', 10));
             }
 
             if ($request->has('include_related')) {
@@ -160,7 +161,8 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type updated');
+            ->log('Job type updated')
+        ;
 
         return new JobTypeResource($jobType->fresh());
     }
@@ -175,8 +177,8 @@ class JobTypeController extends Controller
             return response()->json([
                 'message' => __('job_type.errors.cannot_delete_in_use'),
                 'errors' => [
-                    'jobs_count' => $jobType->jobs()->count()
-                ]
+                    'jobs_count' => $jobType->jobs()->count(),
+                ],
             ], 422);
         }
 
@@ -184,7 +186,8 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type deleted');
+            ->log('Job type deleted')
+        ;
 
         $jobType->delete();
 
@@ -192,7 +195,7 @@ class JobTypeController extends Controller
         Cache::tags(['job_types', "job_type-{$jobType->id}"])->flush();
 
         return response()->json([
-            'message' => __('job_type.messages.deleted_successfully')
+            'message' => __('job_type.messages.deleted_successfully'),
         ]);
     }
 
@@ -204,7 +207,7 @@ class JobTypeController extends Controller
         Gate::authorize('viewAny', JobType::class);
 
         $cacheKey = 'job_types_statistics';
-        
+
         $stats = Cache::remember($cacheKey, 3600, function () {
             return [
                 'total' => JobType::count(),
@@ -226,7 +229,7 @@ class JobTypeController extends Controller
             'meta' => [
                 'generated_at' => now()->toISOString(),
                 'cache_ttl' => 3600,
-            ]
+            ],
         ]);
     }
 
@@ -254,7 +257,7 @@ class JobTypeController extends Controller
                 'unfeature' => $jobType->update(['is_featured' => false]),
                 'delete' => $jobType->jobs()->exists() ?: $jobType->delete(),
             };
-            $updatedCount++;
+            ++$updatedCount;
         }
 
         // Clear caches
@@ -263,7 +266,8 @@ class JobTypeController extends Controller
         // Log bulk activity
         activity()
             ->causedBy($request->user())
-            ->log("Bulk {$request->action} applied to {$updatedCount} job types");
+            ->log("Bulk {$request->action} applied to {$updatedCount} job types")
+        ;
 
         return response()->json([
             'message' => __('job_type.messages.bulk_updated', ['count' => $updatedCount]),
@@ -284,14 +288,14 @@ class JobTypeController extends Controller
             'filters.demand' => 'in:high,medium,low',
         ]);
 
-        $cacheKey = 'job_types_search_' . md5($request->getQueryString());
-        
+        $cacheKey = 'job_types_search_'.md5($request->getQueryString());
+
         $jobTypes = Cache::remember($cacheKey, 600, function () use ($request) {
             $query = JobType::search($request->q);
 
             // Apply additional filters
             if ($request->has('filters.status')) {
-                $request->input('filters.status') === 'active'
+                'active' === $request->input('filters.status')
                     ? $query->active()
                     : $query->inactive();
             }
@@ -315,9 +319,10 @@ class JobTypeController extends Controller
             return $query
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
-                ->paginate($request->get('per_page', 10));
+                ->paginate($request->get('per_page', 10))
+            ;
         });
 
         return JobTypeResource::collection($jobTypes);
     }
-} 
+}

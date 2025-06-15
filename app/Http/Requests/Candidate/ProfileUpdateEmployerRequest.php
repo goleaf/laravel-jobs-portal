@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Candidate;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProfileUpdateEmployerRequest extends FormRequest
@@ -17,12 +18,11 @@ class ProfileUpdateEmployerRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         return [
-            //
         ];
     }
 }

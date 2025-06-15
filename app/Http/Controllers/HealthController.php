@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\PerformanceMetrics;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+
 class HealthController extends Controller
 {
     public function check(): JsonResponse
@@ -14,7 +15,7 @@ class HealthController extends Controller
             'database' => $this->checkDatabase(),
             'cache' => $this->checkCache(),
             'storage' => $this->checkStorage(),
-            'queue' => $this->checkQueue()
+            'queue' => $this->checkQueue(),
         ];
 
         $healthy = !in_array(false, $checks);
@@ -23,7 +24,7 @@ class HealthController extends Controller
             'status' => $healthy ? 'healthy' : 'unhealthy',
             'timestamp' => now()->toISOString(),
             'checks' => $checks,
-            'metrics' => PerformanceMetrics::getSystemMetrics()
+            'metrics' => PerformanceMetrics::getSystemMetrics(),
         ], $healthy ? 200 : 503);
     }
 
@@ -31,6 +32,7 @@ class HealthController extends Controller
     {
         try {
             DB::connection()->getPdo();
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -41,7 +43,8 @@ class HealthController extends Controller
     {
         try {
             Cache::put('health_check', 'ok', 10);
-            return Cache::get('health_check') === 'ok';
+
+            return 'ok' === Cache::get('health_check');
         } catch (\Exception $e) {
             return false;
         }

@@ -71,4 +71,4 @@ return [
         'avatar_mimes' => 'Avatar must be an image file (jpeg, png, jpg, gif).',
         'avatar_max' => 'Avatar file size cannot exceed 2MB.',
     ],
-]; 
+];

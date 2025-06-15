@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Industry;
+use App\Models\CareerLevel;
 use App\Models\CompanySize;
 use App\Models\FunctionalArea;
-use App\Models\CareerLevel;
+use App\Models\Industry;
+use App\Models\JobShift;
+use App\Models\JobType;
+use App\Models\Language;
+use App\Models\MaritalStatus;
+use App\Models\OwnerShipType;
+use App\Models\RequiredDegreeLevel;
 use App\Models\SalaryCurrency;
 use App\Models\SalaryPeriod;
-use App\Models\JobType;
-use App\Models\JobShift;
-use App\Models\RequiredDegreeLevel;
-use App\Models\MaritalStatus;
-use App\Models\Language;
-use App\Models\OwnerShipType;
+use Illuminate\Database\Seeder;
 
 class TestFactoriesSeeder extends Seeder
 {
@@ -27,7 +27,7 @@ class TestFactoriesSeeder extends Seeder
             Industry::factory(5)->create();
             $this->command->info('✅ Industry factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ Industry factory failed: ' . $e->getMessage());
+            $this->command->error('❌ Industry factory failed: '.$e->getMessage());
         }
 
         try {
@@ -35,7 +35,7 @@ class TestFactoriesSeeder extends Seeder
             CompanySize::factory(5)->create();
             $this->command->info('✅ CompanySize factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ CompanySize factory failed: ' . $e->getMessage());
+            $this->command->error('❌ CompanySize factory failed: '.$e->getMessage());
         }
 
         try {
@@ -43,7 +43,7 @@ class TestFactoriesSeeder extends Seeder
             FunctionalArea::factory(5)->create();
             $this->command->info('✅ FunctionalArea factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ FunctionalArea factory failed: ' . $e->getMessage());
+            $this->command->error('❌ FunctionalArea factory failed: '.$e->getMessage());
         }
 
         try {
@@ -51,7 +51,7 @@ class TestFactoriesSeeder extends Seeder
             CareerLevel::factory(5)->create();
             $this->command->info('✅ CareerLevel factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ CareerLevel factory failed: ' . $e->getMessage());
+            $this->command->error('❌ CareerLevel factory failed: '.$e->getMessage());
         }
 
         try {
@@ -59,7 +59,7 @@ class TestFactoriesSeeder extends Seeder
             SalaryCurrency::factory(5)->create();
             $this->command->info('✅ SalaryCurrency factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ SalaryCurrency factory failed: ' . $e->getMessage());
+            $this->command->error('❌ SalaryCurrency factory failed: '.$e->getMessage());
         }
 
         try {
@@ -67,7 +67,7 @@ class TestFactoriesSeeder extends Seeder
             SalaryPeriod::factory(5)->create();
             $this->command->info('✅ SalaryPeriod factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ SalaryPeriod factory failed: ' . $e->getMessage());
+            $this->command->error('❌ SalaryPeriod factory failed: '.$e->getMessage());
         }
 
         try {
@@ -75,7 +75,7 @@ class TestFactoriesSeeder extends Seeder
             JobType::factory(5)->create();
             $this->command->info('✅ JobType factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ JobType factory failed: ' . $e->getMessage());
+            $this->command->error('❌ JobType factory failed: '.$e->getMessage());
         }
 
         try {
@@ -83,7 +83,7 @@ class TestFactoriesSeeder extends Seeder
             JobShift::factory(5)->create();
             $this->command->info('✅ JobShift factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ JobShift factory failed: ' . $e->getMessage());
+            $this->command->error('❌ JobShift factory failed: '.$e->getMessage());
         }
 
         try {
@@ -91,7 +91,7 @@ class TestFactoriesSeeder extends Seeder
             RequiredDegreeLevel::factory(5)->create();
             $this->command->info('✅ RequiredDegreeLevel factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ RequiredDegreeLevel factory failed: ' . $e->getMessage());
+            $this->command->error('❌ RequiredDegreeLevel factory failed: '.$e->getMessage());
         }
 
         try {
@@ -99,7 +99,7 @@ class TestFactoriesSeeder extends Seeder
             MaritalStatus::factory(5)->create();
             $this->command->info('✅ MaritalStatus factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ MaritalStatus factory failed: ' . $e->getMessage());
+            $this->command->error('❌ MaritalStatus factory failed: '.$e->getMessage());
         }
 
         try {
@@ -107,7 +107,7 @@ class TestFactoriesSeeder extends Seeder
             Language::factory(5)->create();
             $this->command->info('✅ Language factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ Language factory failed: ' . $e->getMessage());
+            $this->command->error('❌ Language factory failed: '.$e->getMessage());
         }
 
         try {
@@ -115,9 +115,9 @@ class TestFactoriesSeeder extends Seeder
             OwnerShipType::factory(5)->create();
             $this->command->info('✅ OwnerShipType factory: OK');
         } catch (\Exception $e) {
-            $this->command->error('❌ OwnerShipType factory failed: ' . $e->getMessage());
+            $this->command->error('❌ OwnerShipType factory failed: '.$e->getMessage());
         }
 
         $this->command->info('🏁 Factory testing complete!');
     }
-} 
+}

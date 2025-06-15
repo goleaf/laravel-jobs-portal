@@ -3,33 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class Industry
+ * Class Industry.
  *
  * @version June 20, 2020, 5:43 am UTC
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property bool $is_default
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
- * @property-read int|null $companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
- * @property-read int|null $candidates_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
- * @property-read mixed $market_presence
+ * @property int                    $id
+ * @property string                 $name
+ * @property null|string            $description
+ * @property bool                   $is_default
+ * @property bool                   $is_active
+ * @property null|Carbon            $created_at
+ * @property null|Carbon            $updated_at
+ * @property Collection|Company[]   $companies
+ * @property null|int               $companies_count
+ * @property Candidate[]|Collection $candidates
+ * @property null|int               $candidates_count
+ * @property Collection|Job[]       $jobs
+ * @property null|int               $jobs_count
+ * @property mixed                  $usage_count
+ * @property mixed                  $formatted_usage_stats
+ * @property mixed                  $market_presence
  *
  * @method static Builder|Industry newModelQuery()
  * @method static Builder|Industry newQuery()
@@ -65,7 +67,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class Industry extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     public $table = 'industries';
 
@@ -84,65 +87,23 @@ class Industry extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Scope a query to only include old records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOld(Builder $query): Builder
     {
-        return $query->orderBy("created_at", "asc");
+        return $query->orderBy('created_at', 'asc');
     }
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when industry is updated
-        static::updated(function ($industry) {
-            cache()->forget("industry.{$industry->id}");
-            cache()->forget("industries.popular");
-            cache()->forget("industries.trending");
-            cache()->tags(['industries', 'industry-' . $industry->id])->flush();
-        });
-
-        // Clear cache when industry is deleted
-        static::deleted(function ($industry) {
-            cache()->forget("industry.{$industry->id}");
-            cache()->forget("industries.popular");
-            cache()->forget("industries.trending");
-            cache()->tags(['industries', 'industry-' . $industry->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -177,7 +138,7 @@ class Industry extends Model
     public function getMarketPresenceAttribute(): string
     {
         $companiesCount = $this->companies()->count();
-        
+
         return match (true) {
             $companiesCount >= 100 => __('industry.dominant_presence'),
             $companiesCount >= 50 => __('industry.strong_presence'),
@@ -294,7 +255,8 @@ class Industry extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -303,9 +265,10 @@ class Industry extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount(['companies', 'candidates'])
-                    ->orderByDesc('companies_count')
-                    ->orderByDesc('candidates_count')
-                    ->limit($limit);
+            ->orderByDesc('companies_count')
+            ->orderByDesc('candidates_count')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -322,7 +285,8 @@ class Industry extends Model
     public function scopeRecent(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+        ;
     }
 
     /**
@@ -331,15 +295,16 @@ class Industry extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'companies' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        },
-                        'candidates' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('companies_count')
-                    ->orderByDesc('candidates_count');
+            'companies' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+            'candidates' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('companies_count')
+            ->orderByDesc('candidates_count')
+        ;
     }
 
     /**
@@ -348,12 +313,13 @@ class Industry extends Model
     public function scopeHighGrowth(Builder $query): Builder
     {
         return $query->withCount([
-                        'companies' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(90));
-                        }
-                    ])
-                    ->having('companies_count', '>=', 5)
-                    ->orderByDesc('companies_count');
+            'companies' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(90));
+            },
+        ])
+            ->having('companies_count', '>=', 5)
+            ->orderByDesc('companies_count')
+        ;
     }
 
     /**
@@ -362,9 +328,10 @@ class Industry extends Model
     public function scopeEmerging(Builder $query): Builder
     {
         return $query->withCount('companies')
-                    ->whereBetween('companies_count', [5, 20])
-                    ->where('created_at', '>=', now()->subYear())
-                    ->orderByDesc('created_at');
+            ->whereBetween('companies_count', [5, 20])
+            ->where('created_at', '>=', now()->subYear())
+            ->orderByDesc('created_at')
+        ;
     }
 
     /**
@@ -373,9 +340,10 @@ class Industry extends Model
     public function scopeEstablished(Builder $query): Builder
     {
         return $query->withCount('companies')
-                    ->having('companies_count', '>=', 20)
-                    ->where('created_at', '<=', now()->subYears(2))
-                    ->orderByDesc('companies_count');
+            ->having('companies_count', '>=', 20)
+            ->where('created_at', '<=', now()->subYears(2))
+            ->orderByDesc('companies_count')
+        ;
     }
 
     /**
@@ -384,7 +352,8 @@ class Industry extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount(['companies', 'candidates'])
-                    ->havingRaw('(companies_count + candidates_count) >= ?', [$count]);
+            ->havingRaw('(companies_count + candidates_count) >= ?', [$count])
+        ;
     }
 
     /**
@@ -392,8 +361,8 @@ class Industry extends Model
      */
     public function isEstablished(): bool
     {
-        return $this->companies()->count() >= 20 && 
-               $this->created_at <= now()->subYears(2);
+        return $this->companies()->count() >= 20
+               && $this->created_at <= now()->subYears(2);
     }
 
     /**
@@ -402,9 +371,10 @@ class Industry extends Model
     public function isEmerging(): bool
     {
         $companiesCount = $this->companies()->count();
-        return $companiesCount >= 5 && 
-               $companiesCount <= 20 && 
-               $this->created_at >= now()->subYear();
+
+        return $companiesCount >= 5
+               && $companiesCount <= 20
+               && $this->created_at >= now()->subYear();
     }
 
     /**
@@ -416,13 +386,13 @@ class Industry extends Model
             $currentQuarter = $this->companies()->where('created_at', '>=', now()->subDays(90))->count();
             $previousQuarter = $this->companies()->whereBetween('created_at', [
                 now()->subDays(180),
-                now()->subDays(90)
+                now()->subDays(90),
             ])->count();
-            
-            if ($previousQuarter === 0) {
+
+            if (0 === $previousQuarter) {
                 return $currentQuarter > 0 ? 100.0 : 0.0;
             }
-            
+
             return round((($currentQuarter - $previousQuarter) / $previousQuarter) * 100, 2);
         });
     }
@@ -430,30 +400,72 @@ class Industry extends Model
     /**
      * Get related industries.
      */
-    public function getRelatedIndustries(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public function getRelatedIndustries(int $limit = 5): Collection
     {
         return cache()->remember("industry.{$this->id}.related", 3600, function () use ($limit) {
             return static::where('id', '!=', $this->id)
-                          ->active()
-                          ->withCount('companies')
-                          ->orderByDesc('companies_count')
-                          ->limit($limit)
-                          ->get();
+                ->active()
+                ->withCount('companies')
+                ->orderByDesc('companies_count')
+                ->limit($limit)
+                ->get()
+            ;
         });
     }
 
     /**
      * Get top companies in this industry.
      */
-    public function getTopCompanies(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public function getTopCompanies(int $limit = 10): Collection
     {
         return cache()->remember("industry.{$this->id}.top_companies", 3600, function () use ($limit) {
             return $this->companies()
-                        ->active()
-                        ->withCount('jobs')
-                        ->orderByDesc('jobs_count')
-                        ->limit($limit)
-                        ->get();
+                ->active()
+                ->withCount('jobs')
+                ->orderByDesc('jobs_count')
+                ->limit($limit)
+                ->get()
+            ;
+        });
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when industry is updated
+        static::updated(function ($industry) {
+            cache()->forget("industry.{$industry->id}");
+            cache()->forget('industries.popular');
+            cache()->forget('industries.trending');
+            cache()->tags(['industries', 'industry-'.$industry->id])->flush();
+        });
+
+        // Clear cache when industry is deleted
+        static::deleted(function ($industry) {
+            cache()->forget("industry.{$industry->id}");
+            cache()->forget('industries.popular');
+            cache()->forget('industries.trending');
+            cache()->tags(['industries', 'industry-'.$industry->id])->flush();
         });
     }
 }

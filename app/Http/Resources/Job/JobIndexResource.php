@@ -4,7 +4,6 @@ namespace App\Http\Resources\Job;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 
 class JobIndexResource extends JsonResource
 {
@@ -26,7 +25,7 @@ class JobIndexResource extends JsonResource
             'category' => $this->jobCategory?->name,
             'location' => [
                 'country' => $this->country?->name,
-                'state' => $this->state?->name, 
+                'state' => $this->state?->name,
                 'city' => $this->city?->name,
                 'is_remote' => $this->is_remote,
             ],
@@ -91,7 +90,7 @@ class JobIndexResource extends JsonResource
      */
     private function getStatusLabel(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'open' => __('jobs.status.open'),
             'closed' => __('jobs.status.closed'),
             'drafted' => __('jobs.status.drafted'),
@@ -102,44 +101,60 @@ class JobIndexResource extends JsonResource
 
     /**
      * Check if user can edit this job.
+     *
+     * @param mixed $user
      */
     private function canUserEdit($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
     }
 
     /**
      * Check if user can delete this job.
+     *
+     * @param mixed $user
      */
     private function canUserDelete($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id && $this->job_applications_count === 0);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && 0 === $this->job_applications_count);
     }
 
     /**
      * Check if user can feature this job.
+     *
+     * @param mixed $user
      */
     private function canUserFeature($user): bool
     {
-        if (!$user) return false;
-        
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id);
     }
 
     /**
      * Check if user can suspend this job.
+     *
+     * @param mixed $user
      */
     private function canUserSuspend($user): bool
     {
-        if (!$user) return false;
-        
+        if (!$user) {
+            return false;
+        }
+
         return $user->hasRole('Admin');
     }
 }

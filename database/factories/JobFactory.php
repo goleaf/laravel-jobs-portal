@@ -2,16 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Job;
 use App\Models\Company;
-use App\Models\JobType;
-use App\Models\JobCategory;
-use App\Models\CareerLevel;
-use App\Models\FunctionalArea;
-use App\Models\JobShift;
-use App\Models\RequiredDegreeLevel;
-use App\Models\SalaryCurrency;
-use App\Models\SalaryPeriod;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,7 +21,7 @@ class JobFactory extends Factory
     public function definition(): array
     {
         return [
-            'job_id' => 'JOB' . fake()->unique()->numerify('######'),
+            'job_id' => 'JOB'.fake()->unique()->numerify('######'),
             'job_title' => fake()->jobTitle(),
             'description' => fake()->text(1000),
             'company_id' => Company::factory(),
@@ -108,4 +100,4 @@ class JobFactory extends Factory
             'job_expiry_date' => fake()->dateTimeBetween('-30 days', '-1 day'),
         ]);
     }
-} 
+}

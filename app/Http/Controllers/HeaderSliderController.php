@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\HeaderSlider;
 use App\Models\Setting;
 use App\Repositories\HeaderSliderRepository;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Class HeaderSliderController
+ * Class HeaderSliderController.
  */
-
 class HeaderSliderController extends AppBaseController
 {
     /** @var HeaderSliderRepository */
@@ -32,10 +29,9 @@ class HeaderSliderController extends AppBaseController
     /**
      * Display a listing of the ImageSlider.
      *
-     * @param  Request  $request
-     * @return Factory|View|Application
+     * @return Application|Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -88,8 +84,7 @@ class HeaderSliderController extends AppBaseController
     /**
      * Remove the specified ImageSlider from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(HeaderSlider $headerSlider): JsonResponse
     {
@@ -104,19 +99,17 @@ class HeaderSliderController extends AppBaseController
     public function changeIsActive(HeaderSlider $headerSlider)
     {
         $isActive = $headerSlider->is_active;
-        $headerSlider->update(['is_active' => ! $isActive]);
+        $headerSlider->update(['is_active' => !$isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }
 
-    /***
-     * @return mixed
-     */
+    // @return mixed
     public function changeSearchDisable()
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'slider_is_active')->first();
-        $setting->update(['value' => ! $setting->value]);
+        $setting->update(['value' => !$setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
         //        return $this->sendSuccess('This functionality not allowed in demo.');

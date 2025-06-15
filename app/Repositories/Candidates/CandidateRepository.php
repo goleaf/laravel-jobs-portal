@@ -17,21 +17,17 @@ use App\Models\User;
 use App\ReportedToCandidate;
 use App\Repositories\BaseRepository;
 use App\Services\FileService;
-use Arr;
-use Auth;
-use DB;
-use Exception;
-use Hash;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use PragmaRX\Countries\Package\Countries;
 use Spatie\Permission\Models\Role;
-use Str;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Throwable;
 
 /**
- * Class CandidateRepository
+ * Class CandidateRepository.
  *
  * @version July 20, 2020, 5:48 am UTC
  */
@@ -55,7 +51,7 @@ class CandidateRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -63,8 +59,8 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Candidate::class;
@@ -75,7 +71,7 @@ class CandidateRepository extends BaseRepository
      */
     public function prepareData()
     {
-        $countries = new Countries;
+        $countries = new Countries();
         $data['countries'] = getCountries();
         $data['maritalStatus'] = MaritalStatus::toBase()->pluck('marital_status', 'id');
         $data['careerLevel'] = CareerLevel::toBase()->pluck('level_name', 'id');
@@ -93,12 +89,13 @@ class CandidateRepository extends BaseRepository
      */
     public function getUniqueCandidateId()
     {
-        $candidateUniqueId = Str::random(12);
+        $candidateUniqueId = \Str::random(12);
         while (true) {
             $isExist = Candidate::whereUniqueId($candidateUniqueId)->exists();
             if ($isExist) {
                 self::getUniqueCandidateId();
             }
+
             break;
         }
 
@@ -106,26 +103,27 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function store(array $input): bool
     {
         try {
-            DB::beginTransaction();
+            \DB::beginTransaction();
             $input['is_active'] = isset($input['is_active']) ? 1 : 0;
             $input['is_verified'] = isset($input['is_verified']) ? 1 : 0;
-            $input['password'] = Hash::make($input['password']);
-            $input['dob'] = (! empty($input['dob'])) ? $input['dob'] : null;
+            $input['password'] = \Hash::make($input['password']);
+            $input['dob'] = (!empty($input['dob'])) ? $input['dob'] : null;
             $input['current_salary'] = removeCommaFromNumbers($input['current_salary']);
             $input['expected_salary'] = removeCommaFromNumbers($input['expected_salary']);
             $input['unique_id'] = $this->getUniqueCandidateId();
             $candidateRole = Role::whereName('Candidate')->first();
+
             /** @var User $user */
-            $user = User::create(Arr::only($input, (new User)->getFillable()));
+            $user = User::create(\Arr::only($input, (new User())->getFillable()));
 
             $candidate = Candidate::create(
                 array_merge(
-                    array_filter(Arr::only($input, (new Candidate)->getFillable())),
+                    array_filter(\Arr::only($input, (new Candidate())->getFillable())),
                     ['user_id' => $user->id]
                 )
             );
@@ -138,12 +136,12 @@ class CandidateRepository extends BaseRepository
             $user->assignRole($candidateRole);
 
             // Update Candidate Skills
-            if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
+            if (isset($input['candidateSkills']) && !empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
 
             // update Candidate Languages
-            if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
+            if (isset($input['candidateLanguage']) && !empty($input['candidateLanguage'])) {
                 $user->candidateLanguage()->sync($input['candidateLanguage']);
             }
 
@@ -154,11 +152,12 @@ class CandidateRepository extends BaseRepository
             //            }
             $user->update(['email_verified_at' => Carbon::now()]);
 
-            DB::commit();
+            \DB::commit();
 
             return true;
-        } catch (Exception $e) {
-            DB::rollBack();
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
@@ -166,20 +165,20 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function updateProfile(array $input): bool
     {
         try {
-            DB::beginTransaction();
-            $input['dob'] = (! empty($input['dob'])) ? $input['dob'] : null;
+            \DB::beginTransaction();
+            $input['dob'] = (!empty($input['dob'])) ? $input['dob'] : null;
             $input['current_salary'] = removeCommaFromNumbers($input['current_salary']);
             $input['expected_salary'] = removeCommaFromNumbers($input['expected_salary']);
 
             /** @var User $user */
-            $user = Auth::user();
+            $user = \Auth::user();
 
-            $userInput = Arr::only(
+            $userInput = \Arr::only(
                 $input,
                 [
                     'first_name', 'last_name', 'email', 'password', 'phone',
@@ -190,12 +189,12 @@ class CandidateRepository extends BaseRepository
 
             $user->update($userInput);
 
-            if ((isset($input['image']))) {
+            if (isset($input['image'])) {
                 $candidate = $user->candidate;
-                $fileService = new FileService;
+                $fileService = new FileService();
 
                 // Delete old image if exists
-                if (! empty($candidate->image_path)) {
+                if (!empty($candidate->image_path)) {
                     $fileService->deleteFile($candidate->image_path);
                 }
 
@@ -210,38 +209,40 @@ class CandidateRepository extends BaseRepository
                 $candidate->save();
             }
 
-            $input['available_at'] = $input['immediate_available'] == 0 ? $input['available_at'] : null;
+            $input['available_at'] = 0 == $input['immediate_available'] ? $input['available_at'] : null;
             $user->candidate->update($input);
 
             // Update Candidate Skills
-            if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
+            if (isset($input['candidateSkills']) && !empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
 
             // update Candidate Languages
-            if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
+            if (isset($input['candidateLanguage']) && !empty($input['candidateLanguage'])) {
                 $user->candidateLanguage()->sync($input['candidateLanguage']);
             }
 
-            DB::commit();
+            \DB::commit();
 
             return true;
-        } catch (Exception $e) {
-            DB::rollBack();
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function updateGeneralInformation(array $input)
     {
         try {
-            DB::beginTransaction();
+            \DB::beginTransaction();
+
             /** @var User $user */
-            $user = Auth::user();
-            $userInput = Arr::only($input, [
+            $user = \Auth::user();
+            $userInput = \Arr::only($input, [
                 'first_name', 'last_name', 'country_id', 'state_id', 'city_id', 'phone', 'facebook_url',
                 'twitter_url',
                 'linkedin_url',
@@ -251,14 +252,15 @@ class CandidateRepository extends BaseRepository
             $user->update($userInput);
             $user->candidate->update($input);
             // Update Candidate Skills
-            if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
+            if (isset($input['candidateSkills']) && !empty($input['candidateSkills'])) {
                 $user->candidateSkill()->sync($input['candidateSkills']);
             }
-            DB::commit();
+            \DB::commit();
 
             return $user;
-        } catch (Exception $e) {
-            DB::rollBack();
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -266,14 +268,15 @@ class CandidateRepository extends BaseRepository
     public function uploadResume(array $input): bool
     {
         try {
-            $user = Auth::user();
+            $user = \Auth::user();
+
             /** @var Candidate $candidate */
             $candidate = Candidate::findOrFail($user->candidate->id);
-            $fileService = new FileService;
+            $fileService = new FileService();
 
-            if (isset($input['file']) && ! empty($input['file'])) {
+            if (isset($input['file']) && !empty($input['file'])) {
                 // Delete old resume if exists
-                if (! empty($candidate->resume_path)) {
+                if (!empty($candidate->resume_path)) {
                     $fileService->deleteFile($candidate->resume_path);
                 }
 
@@ -282,7 +285,7 @@ class CandidateRepository extends BaseRepository
                     $input['file'],
                     'candidates/resumes',
                     'public',
-                    Str::random(8).'_'.$input['title'].'.'.$input['file']->getClientOriginalExtension()
+                    \Str::random(8).'_'.$input['title'].'.'.$input['file']->getClientOriginalExtension()
                 );
 
                 $candidate->resume_path = $resumePath;
@@ -290,7 +293,7 @@ class CandidateRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -301,31 +304,31 @@ class CandidateRepository extends BaseRepository
 
         $input['is_active'] = isset($input['is_active']) ? 1 : 0;
         $input['is_verified'] = isset($input['is_verified']) ? 1 : 0;
-        $input['dob'] = (! empty($input['dob'])) ? $input['dob'] : null;
-        $input['state'] = (! empty($input['state'])) ? $input['state'] : null;
-        $input['city'] = (! empty($input['city'])) ? $input['city'] : null;
+        $input['dob'] = (!empty($input['dob'])) ? $input['dob'] : null;
+        $input['state'] = (!empty($input['state'])) ? $input['state'] : null;
+        $input['city'] = (!empty($input['city'])) ? $input['city'] : null;
         $input['current_salary'] = removeCommaFromNumbers($input['current_salary']);
         $input['expected_salary'] = removeCommaFromNumbers($input['expected_salary']);
-        $input['available_at'] = $input['immediate_available'] == 0 ? $input['available_at'] : null;
+        $input['available_at'] = 0 == $input['immediate_available'] ? $input['available_at'] : null;
 
         /** @var User $user */
         $user = $candidate->user;
 
-        /* @var Candidate $candidate */
+        // @var Candidate $candidate
         $user->update($input);
         $candidate->update($input);
 
-        if (! $user->email_verified_at && $input['is_verified'] == 1) {
+        if (!$user->email_verified_at && 1 == $input['is_verified']) {
             $user->update(['email_verified_at' => Carbon::now()]);
         }
 
         // Update Candidate Skills
-        if (isset($input['candidateSkills']) && ! empty($input['candidateSkills'])) {
+        if (isset($input['candidateSkills']) && !empty($input['candidateSkills'])) {
             $user->candidateSkill()->sync($input['candidateSkills']);
         }
 
         // update Candidate Languages
-        if (isset($input['candidateLanguage']) && ! empty($input['candidateLanguage'])) {
+        if (isset($input['candidateLanguage']) && !empty($input['candidateLanguage'])) {
             $user->candidateLanguage()->sync($input['candidateLanguage']);
         }
 
@@ -336,15 +339,15 @@ class CandidateRepository extends BaseRepository
     {
         try {
             /** @var User $user */
-            $user = Auth::user();
-            if (! Hash::check($input['password_current'], $user->password)) {
+            $user = \Auth::user();
+            if (!\Hash::check($input['password_current'], $user->password)) {
                 throw new UnprocessableEntityHttpException(__('messages.user.password_invalid'));
             }
-            $input['password'] = Hash::make($input['password']);
+            $input['password'] = \Hash::make($input['password']);
             $user->update($input);
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
@@ -352,16 +355,16 @@ class CandidateRepository extends BaseRepository
     public function profileUpdate(array $input): bool
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = \Auth::user();
 
         try {
             $user->update($input);
-            if ((isset($input['image']))) {
+            if (isset($input['image'])) {
                 $candidate = $user->candidate;
-                $fileService = new FileService;
+                $fileService = new FileService();
 
                 // Delete old image if exists
-                if (! empty($candidate->image_path)) {
+                if (!empty($candidate->image_path)) {
                     $fileService->deleteFile($candidate->image_path);
                 }
 
@@ -377,12 +380,14 @@ class CandidateRepository extends BaseRepository
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
 
     /**
+     * @param mixed $candidate
+     *
      * @return mixed
      */
     public function getCandidateDetail($candidate)
@@ -390,7 +395,7 @@ class CandidateRepository extends BaseRepository
         $candidateDetails = Candidate::with('user', 'functionalArea')->findOrFail($candidate);
         // update profile views count
         if ($candidateDetails->user->id != getLoggedInUserId()) {
-            if (! session()->has('user')) {
+            if (!session()->has('user')) {
                 $candidateDetails->user->increment('profile_views');
             }
         }
@@ -413,23 +418,26 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * @param  $companyId
+     * @param mixed $candidateId
+     *
      * @return mixed
      */
     public function isAlreadyReported($candidateId)
     {
-        return ReportedToCandidate::where('user_id', Auth::id())
+        return ReportedToCandidate::where('user_id', \Auth::id())
             ->where('candidate_id', $candidateId)
-            ->exists();
+            ->exists()
+        ;
     }
 
     public function storeReportCandidate($input)
     {
         $candidateReportedAsAbuse = ReportedToCandidate::where('user_id', $input['userId'])
             ->where('candidate_id', $input['candidateId'])
-            ->exists();
+            ->exists()
+        ;
 
-        if (! $candidateReportedAsAbuse) {
+        if (!$candidateReportedAsAbuse) {
             $reportedCandidateNote = trim($input['note']);
             if (empty($reportedCandidateNote)) {
                 throw ValidationException::withMessages([
@@ -449,15 +457,15 @@ class CandidateRepository extends BaseRepository
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     * @param mixed $reportedToCandidate
+     *
+     * @return null|Builder|Builder[]|Collection|Model
      */
     public function getReportedToCandidate($reportedToCandidate)
     {
-        $query = ReportedToCandidate::with([
+        return ReportedToCandidate::with([
             'user', 'candidate.user',
         ])->select('reported_to_candidates.*')->findOrFail($reportedToCandidate);
-
-        return $query;
     }
 
     /**
@@ -465,7 +473,7 @@ class CandidateRepository extends BaseRepository
      */
     public function getJobAlerts()
     {
-        $candidate = Candidate::with('jobAlerts')->whereUserId(Auth::id())->first();
+        $candidate = Candidate::with('jobAlerts')->whereUserId(\Auth::id())->first();
         $data['jobTypes'] = JobType::all();
         $data['jobAlerts'] = $candidate->jobAlerts()->pluck('job_type_id')->toArray();
         $data['candidate'] = $candidate;
@@ -475,19 +483,20 @@ class CandidateRepository extends BaseRepository
 
     public function updateJobAlerts($input): bool
     {
-        $candidate = Candidate::with('jobAlerts')->whereUserId(Auth::id())->first();
+        $candidate = Candidate::with('jobAlerts')->whereUserId(\Auth::id())->first();
+
         try {
             $candidate->job_alert = (isset($input['job_alert'])) ? 1 : 0;
             $candidate->update();
 
-            if (isset($input['job_types']) && ! empty($input['job_types'])) {
+            if (isset($input['job_types']) && !empty($input['job_types'])) {
                 $candidate->jobAlerts()->sync($input['job_types']);
             } else {
                 $candidate->jobAlerts()->sync([]);
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }

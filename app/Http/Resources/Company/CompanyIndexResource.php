@@ -22,12 +22,12 @@ class CompanyIndexResource extends JsonResource
             'email' => $this->when($this->canViewContactInfo(), $this->email),
             'phone' => $this->when($this->canViewContactInfo(), $this->phone),
             'website' => $this->website,
-            
+
             // Basic information
             'details' => $this->when($this->details, str($this->details)->limit(200)),
             'established_in' => $this->established_in,
             'no_of_employees' => $this->no_of_employees,
-            
+
             // Location
             'location' => [
                 'address' => $this->location,
@@ -51,7 +51,7 @@ class CompanyIndexResource extends JsonResource
                     ];
                 }),
             ],
-            
+
             // Categories
             'industry' => $this->whenLoaded('industry', function () {
                 return [
@@ -72,13 +72,13 @@ class CompanyIndexResource extends JsonResource
                     'name' => $this->ownershipType->name,
                 ];
             }),
-            
+
             // Media
             'logo' => [
                 'url' => $this->logo_url,
                 'thumb' => $this->logo_thumb_url,
             ],
-            
+
             // Statistics
             'statistics' => [
                 'jobs_count' => $this->whenCounted('jobs'),
@@ -89,7 +89,7 @@ class CompanyIndexResource extends JsonResource
                 ),
                 'views_count' => $this->when($this->canViewStatistics(), $this->views_count),
             ],
-            
+
             // Status flags
             'flags' => [
                 'is_active' => $this->is_active,
@@ -97,21 +97,21 @@ class CompanyIndexResource extends JsonResource
                 'is_verified' => $this->is_verified,
                 'is_premium' => $this->is_premium,
             ],
-            
+
             // Dates
             'dates' => [
                 'created' => $this->created_at?->toISOString(),
                 'updated' => $this->updated_at?->toISOString(),
                 'verified_at' => $this->verified_at?->toISOString(),
             ],
-            
+
             // URLs
             'urls' => [
                 'view' => route('companies.show', $this->slug),
                 'jobs' => route('companies.jobs', $this->slug),
                 'api' => route('api.companies.show', $this->id),
             ],
-            
+
             // Permissions (for authenticated users)
             'permissions' => $this->when(Auth::check(), function () {
                 return [
@@ -123,7 +123,7 @@ class CompanyIndexResource extends JsonResource
                     'can_contact' => $this->canContact(),
                 ];
             }),
-            
+
             // Social links (if public)
             'social_links' => $this->when($this->hasPublicSocialLinks(), [
                 'facebook' => $this->facebook_url,
@@ -185,11 +185,11 @@ class CompanyIndexResource extends JsonResource
      */
     private function hasPublicSocialLinks(): bool
     {
-        return $this->facebook_url || 
-               $this->twitter_url || 
-               $this->linkedin_url || 
-               $this->google_plus_url || 
-               $this->pinterest_url;
+        return $this->facebook_url
+               || $this->twitter_url
+               || $this->linkedin_url
+               || $this->google_plus_url
+               || $this->pinterest_url;
     }
 
     /**

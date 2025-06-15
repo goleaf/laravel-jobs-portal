@@ -2,17 +2,22 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class RouteTest extends TestCase
 {
     /** @test */
-    public function it_has_welcome_route()
+    public function itHasWelcomeRoute()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
-        
+
         foreach ($routes as $route) {
             if ($route->getName()) {
                 $routeNames[] = $route->getName();
@@ -27,11 +32,11 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_auth_routes()
+    public function itHasAuthRoutes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
-        
+
         foreach ($routes as $route) {
             if ($route->getName()) {
                 $routeNames[] = $route->getName();
@@ -45,11 +50,11 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_candidate_routes()
+    public function itHasCandidateRoutes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
-        
+
         foreach ($routes as $route) {
             if ($route->getName()) {
                 $routeNames[] = $route->getName();
@@ -65,11 +70,11 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_employer_routes()
+    public function itHasEmployerRoutes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
-        
+
         foreach ($routes as $route) {
             if ($route->getName()) {
                 $routeNames[] = $route->getName();
@@ -83,4 +88,4 @@ class RouteTest extends TestCase
         $this->assertContains('employer.jobs.create', $routeNames);
         $this->assertContains('employer.jobs.applications', $routeNames);
     }
-} 
+}

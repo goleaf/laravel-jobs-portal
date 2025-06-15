@@ -1,5 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\Universal\CandidateApiController;
+use App\Http\Controllers\Api\Universal\CompanyApiController;
+use App\Http\Controllers\Api\Universal\JobApiController;
+use App\Http\Controllers\Api\Universal\JobApplicationApiController;
+use App\Http\Controllers\Api\Universal\SkillApiController;
+use App\Http\Controllers\Api\Universal\UserApiController;
+use App\Models\Candidate;
+use App\Models\Company;
+use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,40 +21,38 @@ use Illuminate\Support\Facades\Route;
 
 // Universal API v1 Routes with comprehensive middleware
 Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(function () {
-    
     // Universal Pattern: API Resource routes with caching headers
     Route::middleware(['cache.headers:public;max_age=300'])->group(function () {
-        
         // User API Resource
-        Route::apiResource('user', App\Http\Controllers\Api\Universal\UserApiController::class);
+        Route::apiResource('user', UserApiController::class);
         // Job API Resource
-        Route::apiResource('job', App\Http\Controllers\Api\Universal\JobApiController::class);
+        Route::apiResource('job', JobApiController::class);
         // Company API Resource
-        Route::apiResource('company', App\Http\Controllers\Api\Universal\CompanyApiController::class)->names('api.company');
+        Route::apiResource('company', CompanyApiController::class)->names('api.company');
         // Candidate API Resource
-        Route::apiResource('candidate', App\Http\Controllers\Api\Universal\CandidateApiController::class);
+        Route::apiResource('candidate', CandidateApiController::class);
         // JobApplication API Resource
-        Route::apiResource('jobapplication', App\Http\Controllers\Api\Universal\JobApplicationApiController::class);
+        Route::apiResource('jobapplication', JobApplicationApiController::class);
         // Skill API Resource
-        Route::apiResource('skill', App\Http\Controllers\Api\Universal\SkillApiController::class);
+        Route::apiResource('skill', SkillApiController::class);
     });
-    
+
     // Universal Pattern: Public endpoints with longer caching
     Route::middleware(['cache.headers:public;max_age=1800'])->group(function () {
         Route::get('/stats', function () {
             return response()->json([
-                'jobs_count' => \App\Models\Job::count(),
-                'companies_count' => \App\Models\Company::count(),
-                'candidates_count' => \App\Models\Candidate::count(),
-                'applications_count' => \App\Models\JobApplication::count(),
+                'jobs_count' => Job::count(),
+                'companies_count' => Company::count(),
+                'candidates_count' => Candidate::count(),
+                'applications_count' => JobApplication::count(),
             ]);
         });
-        
+
         Route::get('/health', function () {
             return response()->json([
                 'status' => 'healthy',
                 'timestamp' => now()->toISOString(),
-                'version' => config('app.version', '1.0.0')
+                'version' => config('app.version', '1.0.0'),
             ]);
         });
     });
@@ -52,16 +60,16 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(functio
 
 // Universal Pattern: Guest API endpoints (no authentication required)
 Route::middleware(['throttle:60,1'])->prefix('v1/public')->group(function () {
-    Route::get('/jobs', [App\Http\Controllers\Api\Universal\JobApiController::class, 'index']);
-    Route::get('/jobs/{job}', [App\Http\Controllers\Api\Universal\JobApiController::class, 'show']);
-    Route::get('/companies', [App\Http\Controllers\Api\Universal\CompanyApiController::class, 'index']);
-    Route::get('/companies/{company}', [App\Http\Controllers\Api\Universal\CompanyApiController::class, 'show']);
+    Route::get('/jobs', [JobApiController::class, 'index']);
+    Route::get('/jobs/{job}', [JobApiController::class, 'show']);
+    Route::get('/companies', [CompanyApiController::class, 'index']);
+    Route::get('/companies/{company}', [CompanyApiController::class, 'show']);
 });
 
 // Legacy API endpoints for testing
 Route::get('/jobs', function () {
     return response()->json([
         'message' => 'API endpoint requires authentication',
-        'status' => 'unauthorized'
+        'status' => 'unauthorized',
     ], 401);
 })->name('api.jobs.index');

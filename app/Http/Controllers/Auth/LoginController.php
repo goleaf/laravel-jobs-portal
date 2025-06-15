@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Auth;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
@@ -37,8 +36,6 @@ class LoginController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -72,18 +69,19 @@ class LoginController extends Controller
 
         $this->clearLoginAttempts($request);
 
-        if (Auth::user()->hasRole('Admin')) {
+        if (\Auth::user()->hasRole('Admin')) {
             $this->redirectTo = RouteServiceProvider::ADMIN_HOME;
         }
 
-        if (Auth::user()->hasRole(['Employer', 'Candidate'])) {
-            Auth::logout();
+        if (\Auth::user()->hasRole(['Employer', 'Candidate'])) {
+            \Auth::logout();
 
-            return Redirect::to('/admin/login')
+            return \Redirect::to('/admin/login')
                 ->withInput()
                 ->withErrors([
                     'error' => 'These credentials do not match our records.',
-                ]);
+                ])
+            ;
         }
 
         if (isset($request->remember)) {
@@ -91,14 +89,16 @@ class LoginController extends Controller
                 ?: redirect()->intended($this->redirectPath())
                     ->withCookie(\Cookie::make('email', $request->email, 3600))
                     ->withCookie(\Cookie::make('password', $request->password, 3600))
-                    ->withCookie(\Cookie::make('remember', 1, 3600));
+                    ->withCookie(\Cookie::make('remember', 1, 3600))
+            ;
         }
 
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath())
                 ->withCookie(\Cookie::forget('email'))
                 ->withCookie(\Cookie::forget('password'))
-                ->withCookie(\Cookie::forget('remember'));
+                ->withCookie(\Cookie::forget('remember'))
+        ;
     }
 
     protected function showResetEmailPage()

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reset Language Lines
@@ -18,5 +17,4 @@ return [
     'throttled' => 'Yeniden denemeden önce lütfen bekleyin.',
     'token' => 'Bu şifre sıfırlama belirteci geçersiz.',
     'user' => 'Bu e-posta adresine sahip bir kullanıcı bulamıyoruz.',
-
 ];

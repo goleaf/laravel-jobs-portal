@@ -7,11 +7,11 @@ use App\Models\SalaryCurrency;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
+
 class FrontSettingsController extends AppBaseController
 {
     /**
@@ -39,7 +39,7 @@ class FrontSettingsController extends AppBaseController
         (isset($inputArr['featured_companies_enable'])) ? $inputArr['featured_companies_enable'] = 1 : $inputArr['featured_companies_enable'] = 0;
         (isset($inputArr['latest_jobs_enable'])) ? $inputArr['latest_jobs_enable'] = 1 : $inputArr['latest_jobs_enable'] = 0;
 
-        if ($inputArr['featured_jobs_enable'] == FrontSetting::FEATURED_JOBS_ENABLED) {
+        if (FrontSetting::FEATURED_JOBS_ENABLED == $inputArr['featured_jobs_enable']) {
             if (isset($inputArr['featured_jobs_price']) && empty($inputArr['featured_jobs_price'])) {
                 Flash::error(__('messages.flash.feature_job_price'));
 
@@ -50,11 +50,11 @@ class FrontSettingsController extends AppBaseController
         foreach ($inputArr as $key => $value) {
             /** @var FrontSetting $frontSetting */
             $frontSetting = FrontSetting::where('key', $key)->first();
-            if (! $frontSetting) {
+            if (!$frontSetting) {
                 continue;
             }
 
-            if (in_array($key, ['advertise_image']) && ! empty($value)) {
+            if (in_array($key, ['advertise_image']) && !empty($value)) {
                 $this->fileUpload($frontSetting, $value);
 
                 continue;
@@ -68,6 +68,9 @@ class FrontSettingsController extends AppBaseController
     }
 
     /**
+     * @param mixed $frontSetting
+     * @param mixed $file
+     *
      * @return mixed
      */
     public function fileUpload($frontSetting, $file)
@@ -80,6 +83,8 @@ class FrontSettingsController extends AppBaseController
     }
 
     /**
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function changeJobFeatured($id)
@@ -90,6 +95,8 @@ class FrontSettingsController extends AppBaseController
     }
 
     /**
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function changeCompanyFeatured($id)
@@ -100,6 +107,8 @@ class FrontSettingsController extends AppBaseController
     }
 
     /**
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function changeJobCountry($id)

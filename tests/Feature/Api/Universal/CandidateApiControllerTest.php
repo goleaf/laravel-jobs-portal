@@ -2,27 +2,33 @@
 
 namespace Tests\Feature\Api\Universal;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Candidate;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
 use App\Models\CareerLevel;
-use App\Models\Industry;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\FunctionalArea;
+use App\Models\Industry;
 use App\Models\SalaryCurrency;
+use App\Models\State;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 /**
  * Universal API Test for CandidateApiController
- * Implements Laravel 12 API testing best practices with Universal MCP patterns
+ * Implements Laravel 12 API testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class CandidateApiControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected $baseUrl = '/api/universal/candidates';
     protected $user;
@@ -32,13 +38,13 @@ class CandidateApiControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test users
         $this->user = User::factory()->create([
             'user_type' => 'candidate',
             'is_active' => 1,
         ]);
-        
+
         $this->adminUser = User::factory()->create([
             'user_type' => 'admin',
             'is_active' => 1,
@@ -52,7 +58,7 @@ class CandidateApiControllerTest extends TestCase
         $industry = Industry::factory()->create();
         $functionalArea = FunctionalArea::factory()->create();
         $currency = SalaryCurrency::factory()->create();
-        
+
         // Create test candidate
         $this->candidate = Candidate::factory()->create([
             'user_id' => $this->user->id,
@@ -67,7 +73,7 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_list_candidates_with_pagination()
+    public function itCanListCandidatesWithPagination()
     {
         // Create additional candidates
         Candidate::factory()->count(5)->create();
@@ -88,20 +94,21 @@ class CandidateApiControllerTest extends TestCase
                             'profile',
                             'created_at',
                             'updated_at',
-                        ]
+                        ],
                     ],
                     'meta' => [
                         'current_page',
                         'per_page',
                         'total',
                         'last_page',
-                    ]
-                ]
-            ]);
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_can_search_candidates_by_keyword()
+    public function itCanSearchCandidatesByKeyword()
     {
         // Create candidate with specific name
         $searchCandidate = Candidate::factory()->create([
@@ -109,30 +116,32 @@ class CandidateApiControllerTest extends TestCase
             'last_name' => 'Developer',
         ]);
 
-        $response = $this->getJson($this->baseUrl . '?search=John');
+        $response = $this->getJson($this->baseUrl.'?search=John');
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.candidates.0.personal.first_name', 'John');
+            ->assertJsonPath('data.candidates.0.personal.first_name', 'John')
+        ;
     }
 
     /** @test */
-    public function it_can_filter_candidates_by_location()
+    public function itCanFilterCandidatesByLocation()
     {
         $country = Country::factory()->create(['name' => 'Test Country']);
         Candidate::factory()->create([
             'country_id' => $country->id,
         ]);
 
-        $response = $this->getJson($this->baseUrl . '?filter_location=Test Country');
+        $response = $this->getJson($this->baseUrl.'?filter_location=Test Country');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.candidates');
+            ->assertJsonCount(1, 'data.candidates')
+        ;
     }
 
     /** @test */
-    public function it_can_show_specific_candidate()
+    public function itCanShowSpecificCandidate()
     {
-        $response = $this->getJson($this->baseUrl . '/' . $this->candidate->id);
+        $response = $this->getJson($this->baseUrl.'/'.$this->candidate->id);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -172,16 +181,17 @@ class CandidateApiControllerTest extends TestCase
                         ],
                         'created_at',
                         'updated_at',
-                    ]
-                ]
+                    ],
+                ],
             ])
-            ->assertJsonPath('data.candidate.id', $this->candidate->id);
+            ->assertJsonPath('data.candidate.id', $this->candidate->id)
+        ;
     }
 
     /** @test */
-    public function it_can_show_candidate_with_relationships()
+    public function itCanShowCandidateWithRelationships()
     {
-        $response = $this->getJson($this->baseUrl . '/' . $this->candidate->id . '?include=user,skills,experiences');
+        $response = $this->getJson($this->baseUrl.'/'.$this->candidate->id.'?include=user,skills,experiences');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -190,13 +200,14 @@ class CandidateApiControllerTest extends TestCase
                         'user',
                         'skills',
                         'experiences',
-                    ]
-                ]
-            ]);
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_requires_authentication_to_create_candidate()
+    public function itRequiresAuthenticationToCreateCandidate()
     {
         $candidateData = [
             'first_name' => 'Jane',
@@ -210,7 +221,7 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function authenticated_user_can_create_candidate()
+    public function authenticatedUserCanCreateCandidate()
     {
         Sanctum::actingAs($this->user);
 
@@ -238,9 +249,10 @@ class CandidateApiControllerTest extends TestCase
                         'personal',
                         'professional',
                         'location',
-                    ]
-                ]
-            ]);
+                    ],
+                ],
+            ])
+        ;
 
         $this->assertDatabaseHas('candidates', [
             'first_name' => 'Jane',
@@ -250,18 +262,19 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_required_fields_when_creating_candidate()
+    public function itValidatesRequiredFieldsWhenCreatingCandidate()
     {
         Sanctum::actingAs($this->user);
 
         $response = $this->postJson($this->baseUrl, []);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['first_name', 'last_name']);
+            ->assertJsonValidationErrors(['first_name', 'last_name'])
+        ;
     }
 
     /** @test */
-    public function user_can_update_their_own_candidate_profile()
+    public function userCanUpdateTheirOwnCandidateProfile()
     {
         Sanctum::actingAs($this->user);
 
@@ -270,10 +283,11 @@ class CandidateApiControllerTest extends TestCase
             'summary' => 'Updated bio content',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/' . $this->candidate->id, $updateData);
+        $response = $this->putJson($this->baseUrl.'/'.$this->candidate->id, $updateData);
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.candidate.personal.first_name', 'Updated Name');
+            ->assertJsonPath('data.candidate.personal.first_name', 'Updated Name')
+        ;
 
         $this->assertDatabaseHas('candidates', [
             'id' => $this->candidate->id,
@@ -282,7 +296,7 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_cannot_update_other_users_candidate_profile()
+    public function userCannotUpdateOtherUsersCandidateProfile()
     {
         $otherUser = User::factory()->create(['user_type' => 'candidate']);
         Sanctum::actingAs($otherUser);
@@ -291,13 +305,13 @@ class CandidateApiControllerTest extends TestCase
             'first_name' => 'Unauthorized Update',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/' . $this->candidate->id, $updateData);
+        $response = $this->putJson($this->baseUrl.'/'.$this->candidate->id, $updateData);
 
         $response->assertStatus(403);
     }
 
     /** @test */
-    public function admin_can_update_any_candidate_profile()
+    public function adminCanUpdateAnyCandidateProfile()
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -305,18 +319,19 @@ class CandidateApiControllerTest extends TestCase
             'first_name' => 'Admin Updated',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/' . $this->candidate->id, $updateData);
+        $response = $this->putJson($this->baseUrl.'/'.$this->candidate->id, $updateData);
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.candidate.personal.first_name', 'Admin Updated');
+            ->assertJsonPath('data.candidate.personal.first_name', 'Admin Updated')
+        ;
     }
 
     /** @test */
-    public function user_can_delete_their_own_candidate_profile()
+    public function userCanDeleteTheirOwnCandidateProfile()
     {
         Sanctum::actingAs($this->user);
 
-        $response = $this->deleteJson($this->baseUrl . '/' . $this->candidate->id, [
+        $response = $this->deleteJson($this->baseUrl.'/'.$this->candidate->id, [
             'confirmation' => true,
             'reason' => 'No longer looking for jobs',
         ]);
@@ -330,32 +345,34 @@ class CandidateApiControllerTest extends TestCase
                         'deletion_details',
                         'cleanup_summary',
                         'audit_trail',
-                    ]
-                ]
-            ]);
+                    ],
+                ],
+            ])
+        ;
 
         $this->assertSoftDeleted('candidates', ['id' => $this->candidate->id]);
     }
 
     /** @test */
-    public function deletion_requires_confirmation()
+    public function deletionRequiresConfirmation()
     {
         Sanctum::actingAs($this->user);
 
-        $response = $this->deleteJson($this->baseUrl . '/' . $this->candidate->id, [
+        $response = $this->deleteJson($this->baseUrl.'/'.$this->candidate->id, [
             'reason' => 'Test deletion',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['confirmation']);
+            ->assertJsonValidationErrors(['confirmation'])
+        ;
     }
 
     /** @test */
-    public function admin_can_force_delete_candidate()
+    public function adminCanForceDeleteCandidate()
     {
         Sanctum::actingAs($this->adminUser);
 
-        $response = $this->deleteJson($this->baseUrl . '/' . $this->candidate->id, [
+        $response = $this->deleteJson($this->baseUrl.'/'.$this->candidate->id, [
             'confirmation' => true,
             'force_delete' => true,
             'reason' => 'Policy violation',
@@ -365,7 +382,7 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_rate_limiting_on_creation()
+    public function itHandlesRateLimitingOnCreation()
     {
         Sanctum::actingAs($this->user);
 
@@ -376,23 +393,23 @@ class CandidateApiControllerTest extends TestCase
         ];
 
         // Make multiple rapid requests
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $response = $this->postJson($this->baseUrl, $candidateData);
-            if ($response->status() === 429) {
+            if (429 === $response->status()) {
                 break;
             }
         }
 
         // Should eventually hit rate limit
-        $this->assertTrue($response->status() === 201 || $response->status() === 429);
+        $this->assertTrue(201 === $response->status() || 429 === $response->status());
     }
 
     /** @test */
-    public function it_includes_statistics_when_requested()
+    public function itIncludesStatisticsWhenRequested()
     {
         Sanctum::actingAs($this->user);
 
-        $response = $this->getJson($this->baseUrl . '/' . $this->candidate->id . '?with_stats=true');
+        $response = $this->getJson($this->baseUrl.'/'.$this->candidate->id.'?with_stats=true');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -404,14 +421,15 @@ class CandidateApiControllerTest extends TestCase
                             'active_applications',
                             'profile_views',
                             'response_rate',
-                        ]
-                    ]
-                ]
-            ]);
+                        ],
+                    ],
+                ],
+            ])
+        ;
     }
 
     /** @test */
-    public function it_validates_salary_range_consistency()
+    public function itValidatesSalaryRangeConsistency()
     {
         Sanctum::actingAs($this->user);
 
@@ -428,7 +446,7 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_concurrent_updates_gracefully()
+    public function itHandlesConcurrentUpdatesGracefully()
     {
         Sanctum::actingAs($this->user);
 
@@ -437,14 +455,14 @@ class CandidateApiControllerTest extends TestCase
         ];
 
         // Simulate concurrent updates
-        $response1 = $this->putJson($this->baseUrl . '/' . $this->candidate->id, $updateData);
-        $response2 = $this->putJson($this->baseUrl . '/' . $this->candidate->id, $updateData);
+        $response1 = $this->putJson($this->baseUrl.'/'.$this->candidate->id, $updateData);
+        $response2 = $this->putJson($this->baseUrl.'/'.$this->candidate->id, $updateData);
 
-        $this->assertTrue($response1->status() === 200 || $response2->status() === 200);
+        $this->assertTrue(200 === $response1->status() || 200 === $response2->status());
     }
 
     /** @test */
-    public function it_validates_phone_number_format()
+    public function itValidatesPhoneNumberFormat()
     {
         Sanctum::actingAs($this->user);
 
@@ -457,17 +475,18 @@ class CandidateApiControllerTest extends TestCase
         $response = $this->postJson($this->baseUrl, $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['phone']);
+            ->assertJsonValidationErrors(['phone'])
+        ;
     }
 
     /** @test */
-    public function it_handles_file_upload_for_avatar()
+    public function itHandlesFileUploadForAvatar()
     {
         Sanctum::actingAs($this->user);
 
-        $file = \Illuminate\Http\UploadedFile::fake()->image('avatar.jpg', 300, 300);
+        $file = UploadedFile::fake()->image('avatar.jpg', 300, 300);
 
-        $response = $this->putJson($this->baseUrl . '/' . $this->candidate->id, [
+        $response = $this->putJson($this->baseUrl.'/'.$this->candidate->id, [
             'avatar' => $file,
             'first_name' => 'Updated',
         ]);
@@ -476,9 +495,9 @@ class CandidateApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_proper_error_for_nonexistent_candidate()
+    public function itReturnsProperErrorForNonexistentCandidate()
     {
-        $response = $this->getJson($this->baseUrl . '/99999');
+        $response = $this->getJson($this->baseUrl.'/99999');
 
         $response->assertStatus(404)
             ->assertJson([

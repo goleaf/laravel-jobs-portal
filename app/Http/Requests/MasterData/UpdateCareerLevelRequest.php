@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\MasterData;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class UpdateCareerLevelRequest extends FormRequest
@@ -21,32 +23,32 @@ class UpdateCareerLevelRequest extends FormRequest
     public function rules(): array
     {
         $careerLevelId = $this->route('careerLevel')->id ?? $this->route('career_level');
-        
+
         return [
             'level_name' => [
                 'required',
                 'string',
                 'max:150',
-                Rule::unique('career_levels', 'level_name')->ignore($careerLevelId)
+                Rule::unique('career_levels', 'level_name')->ignore($careerLevelId),
             ],
             'description' => [
                 'nullable',
                 'string',
-                'max:500'
+                'max:500',
             ],
             'is_default' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
             'is_active' => [
                 'sometimes',
-                'boolean'
+                'boolean',
             ],
             'sort_order' => [
                 'sometimes',
                 'integer',
                 'min:0',
-                'max:999'
+                'max:999',
             ],
         ];
     }
@@ -61,13 +63,13 @@ class UpdateCareerLevelRequest extends FormRequest
             'level_name.string' => __('validation.string', ['attribute' => __('validation.attributes.level_name')]),
             'level_name.max' => __('validation.max.string', ['attribute' => __('validation.attributes.level_name'), 'max' => 150]),
             'level_name.unique' => __('validation.unique', ['attribute' => __('validation.attributes.level_name')]),
-            
+
             'description.string' => __('validation.string', ['attribute' => __('validation.attributes.description')]),
             'description.max' => __('validation.max.string', ['attribute' => __('validation.attributes.description'), 'max' => 500]),
-            
+
             'is_default.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_default')]),
             'is_active.boolean' => __('validation.boolean', ['attribute' => __('validation.attributes.is_active')]),
-            
+
             'sort_order.integer' => __('validation.integer', ['attribute' => __('validation.attributes.sort_order')]),
             'sort_order.min' => __('validation.min.numeric', ['attribute' => __('validation.attributes.sort_order'), 'min' => 0]),
             'sort_order.max' => __('validation.max.numeric', ['attribute' => __('validation.attributes.sort_order'), 'max' => 999]),
@@ -104,14 +106,14 @@ class UpdateCareerLevelRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            throw new HttpResponseException(
                 response()->json([
                     'success' => false,
                     'message' => __('validation.failed'),
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422)
             );
         }

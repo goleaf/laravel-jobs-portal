@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\FAQ;
 
 /**
- * Class FAQRepository
+ * Class FAQRepository.
  */
 class FAQRepository extends BaseRepository
 {
@@ -17,7 +17,7 @@ class FAQRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -25,8 +25,8 @@ class FAQRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return FAQ::class;

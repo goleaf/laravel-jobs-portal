@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
-
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostComment;
@@ -12,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+
 class PostController extends AppBaseController
 {
     /** @var PostRepository */

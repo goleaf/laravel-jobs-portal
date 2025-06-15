@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class PerformanceMetrics
 {
@@ -15,7 +15,7 @@ class PerformanceMetrics
                 'cache' => self::getCacheMetrics(),
                 'queue' => self::getQueueMetrics(),
                 'memory' => self::getMemoryUsage(),
-                'response_time' => self::getAverageResponseTime()
+                'response_time' => self::getAverageResponseTime(),
             ];
         });
     }
@@ -29,7 +29,7 @@ class PerformanceMetrics
         return [
             'connection_time_ms' => round($connectionTime, 2),
             'active_connections' => DB::select('SHOW PROCESSLIST')[0] ?? 'N/A',
-            'slow_queries' => 0 // Would integrate with slow query log
+            'slow_queries' => 0, // Would integrate with slow query log
         ];
     }
 
@@ -38,7 +38,7 @@ class PerformanceMetrics
         return [
             'hit_rate' => '95%', // Would calculate from actual metrics
             'memory_usage' => '45%',
-            'keys_count' => rand(1000, 5000)
+            'keys_count' => rand(1000, 5000),
         ];
     }
 
@@ -47,7 +47,7 @@ class PerformanceMetrics
         return [
             'pending_jobs' => 0,
             'failed_jobs' => 0,
-            'processed_today' => rand(100, 1000)
+            'processed_today' => rand(100, 1000),
         ];
     }
 
@@ -56,7 +56,7 @@ class PerformanceMetrics
         return [
             'current_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
             'peak_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 2),
-            'limit_mb' => ini_get('memory_limit')
+            'limit_mb' => ini_get('memory_limit'),
         ];
     }
 

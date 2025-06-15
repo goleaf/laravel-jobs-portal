@@ -6,12 +6,17 @@ use App\Models\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class ApplicationModelTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_be_created()
+    public function itCanBeCreated()
     {
         // Skip test - Generic Application model not needed for job portal
         // JobApplication model is used instead for job applications
@@ -19,14 +24,14 @@ class ApplicationModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_required_fillable_fields()
+    public function itHasRequiredFillableFields()
     {
-        // Skip test - Generic Application model not needed for job portal  
+        // Skip test - Generic Application model not needed for job portal
         $this->markTestSkipped('Generic Application model not used in job portal - using JobApplication instead');
     }
 
     /** @test */
-    public function it_can_be_soft_deleted()
+    public function itCanBeSoftDeleted()
     {
         // Skip test - Generic Application model not needed for job portal
         $this->markTestSkipped('Generic Application model not used in job portal - using JobApplication instead');

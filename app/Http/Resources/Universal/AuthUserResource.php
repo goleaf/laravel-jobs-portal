@@ -61,6 +61,8 @@ class AuthUserResource extends JsonResource
 
     /**
      * Customize the response for the resource.
+     *
+     * @param mixed $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -68,35 +70,35 @@ class AuthUserResource extends JsonResource
     }
 
     /**
-     * Check if user profile is complete (helper method)
+     * Check if user profile is complete (helper method).
      */
     private function isProfileComplete(): bool
     {
         $requiredFields = ['name', 'email'];
-        
+
         foreach ($requiredFields as $field) {
-            if (empty($this->$field)) {
+            if (empty($this->{$field})) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Get profile completion percentage (helper method)
+     * Get profile completion percentage (helper method).
      */
     private function getProfileCompletionPercentage(): int
     {
         $fields = ['name', 'email', 'phone', 'first_name', 'last_name'];
         $completedFields = 0;
-        
+
         foreach ($fields as $field) {
-            if (!empty($this->$field)) {
-                $completedFields++;
+            if (!empty($this->{$field})) {
+                ++$completedFields;
             }
         }
-        
+
         return (int) round(($completedFields / count($fields)) * 100);
     }
-} 
+}

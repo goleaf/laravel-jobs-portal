@@ -2,48 +2,49 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * BrandingSliders Model - Enhanced with Enhanced patterns
+ * BrandingSliders Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $title
- * @property string|null $description
- * @property string|null $link_url
- * @property string|null $button_text
- * @property bool $is_active
- * @property bool $is_featured
- * @property bool $open_in_new_tab
- * @property int|null $sort_order
- * @property int|null $view_count
- * @property int|null $click_count
- * @property \Illuminate\Support\Carbon|null $start_date
- * @property \Illuminate\Support\Carbon|null $end_date
- * @property array|null $meta
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
- * @property-read string $branding_slider_url
- * @property-read string $status_label
- * @property-read bool $is_live
- * @property-read bool $has_link
- * @property-read bool $has_image
- * @property-read float $click_through_rate
- * @property-read string $display_text
+ * @property int                             $id
+ * @property string                          $title
+ * @property null|string                     $description
+ * @property null|string                     $link_url
+ * @property null|string                     $button_text
+ * @property bool                            $is_active
+ * @property bool                            $is_featured
+ * @property bool                            $open_in_new_tab
+ * @property null|int                        $sort_order
+ * @property null|int                        $view_count
+ * @property null|int                        $click_count
+ * @property null|\Illuminate\Support\Carbon $start_date
+ * @property null|\Illuminate\Support\Carbon $end_date
+ * @property null|array                      $meta
+ * @property null|\Illuminate\Support\Carbon $created_at
+ * @property null|\Illuminate\Support\Carbon $updated_at
+ * @property null|\Illuminate\Support\Carbon $deleted_at
+ * @property Collection|Media[]              $media
+ * @property string                          $branding_slider_url
+ * @property string                          $status_label
+ * @property bool                            $is_live
+ * @property bool                            $has_link
+ * @property bool                            $has_image
+ * @property float                           $click_through_rate
+ * @property string                          $display_text
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -76,14 +77,7 @@ class BrandingSliders extends Model implements HasMedia
     use LogsActivity;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'branding_sliders';
-
-    /**
-     * Status constants
+     * Status constants.
      */
     public const ALL = 2;
     public const ACTIVE = 1;
@@ -95,10 +89,39 @@ class BrandingSliders extends Model implements HasMedia
     ];
 
     /**
-     * Media collection constants
+     * Media collection constants.
      */
     public const PATH = 'branding-sliders';
     public const SLIDER_IMAGE_COLLECTION = 'slider_images';
+
+    /**
+     * Validation rules for creating branding sliders.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string|max:500',
+        'link_url' => 'nullable|url|max:500',
+        'button_text' => 'nullable|string|max:100',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'open_in_new_tab' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0',
+        'view_count' => 'nullable|integer|min:0',
+        'click_count' => 'nullable|integer|min:0',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date|after:start_date',
+        'meta' => 'nullable|array',
+        'branding_slider' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'branding_sliders';
 
     /**
      * The attributes that are mass assignable.
@@ -149,30 +172,6 @@ class BrandingSliders extends Model implements HasMedia
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'open_in_new_tab' => 'boolean',
-            'sort_order' => 'integer',
-            'view_count' => 'integer',
-            'click_count' => 'integer',
-            'start_date' => 'datetime',
-            'end_date' => 'datetime',
-            'meta' => 'array',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -180,35 +179,13 @@ class BrandingSliders extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly(['title', 'description', 'link_url', 'is_active', 'is_featured', 'sort_order'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating branding sliders.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string|max:500',
-        'link_url' => 'nullable|url|max:500',
-        'button_text' => 'nullable|string|max:100',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
-        'open_in_new_tab' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0',
-        'view_count' => 'nullable|integer|min:0',
-        'click_count' => 'nullable|integer|min:0',
-        'start_date' => 'nullable|date',
-        'end_date' => 'nullable|date|after:start_date',
-        'meta' => 'nullable|array',
-        'branding_slider' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
-    ];
 
     /**
      * Update validation rules for branding sliders.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
@@ -237,6 +214,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include active sliders.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -245,6 +224,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include inactive sliders.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -253,6 +234,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include featured sliders.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -261,6 +244,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include non-featured sliders.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -273,36 +258,47 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include live sliders (active and within date range).
+     *
+     * @param mixed $query
      */
     public function scopeLive($query)
     {
         return $query->where('is_active', true)
-                    ->where(function ($q) {
-                        $q->whereNull('start_date')
-                          ->orWhere('start_date', '<=', now());
-                    })
-                    ->where(function ($q) {
-                        $q->whereNull('end_date')
-                          ->orWhere('end_date', '>=', now());
-                    });
+            ->where(function ($q) {
+                $q->whereNull('start_date')
+                    ->orWhere('start_date', '<=', now())
+                ;
+            })
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now())
+                ;
+            })
+        ;
     }
 
     /**
      * Scope to only include expired sliders.
+     *
+     * @param mixed $query
      */
     public function scopeExpired($query)
     {
         return $query->whereNotNull('end_date')
-                    ->where('end_date', '<', now());
+            ->where('end_date', '<', now())
+        ;
     }
 
     /**
      * Scope to only include scheduled sliders (not yet started).
+     *
+     * @param mixed $query
      */
     public function scopeScheduled($query)
     {
         return $query->whereNotNull('start_date')
-                    ->where('start_date', '>', now());
+            ->where('start_date', '>', now())
+        ;
     }
 
     // =============================================
@@ -311,26 +307,34 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include sliders with links.
+     *
+     * @param mixed $query
      */
     public function scopeWithLinks($query)
     {
         return $query->whereNotNull('link_url')
-                    ->where('link_url', '!=', '');
+            ->where('link_url', '!=', '')
+        ;
     }
 
     /**
      * Scope to only include sliders without links.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutLinks($query)
     {
         return $query->where(function ($q) {
             $q->whereNull('link_url')
-              ->orWhere('link_url', '');
+                ->orWhere('link_url', '')
+            ;
         });
     }
 
     /**
      * Scope to only include sliders with images.
+     *
+     * @param mixed $query
      */
     public function scopeWithImages($query)
     {
@@ -341,6 +345,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to only include sliders without images.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutImages($query)
     {
@@ -355,17 +361,22 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to search sliders by title or description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('title', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%');
+            $q->where('title', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope to get sliders created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -374,6 +385,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to get old sliders created before specified days.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -386,25 +399,33 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to get popular sliders (by view count).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query)
     {
         return $query->where('view_count', '>', 100)
-                    ->orderBy('view_count', 'desc');
+            ->orderBy('view_count', 'desc')
+        ;
     }
 
     /**
      * Scope to get trending sliders (recent and popular).
+     *
+     * @param mixed $query
      */
     public function scopeTrending($query, int $days = 7)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->where('view_count', '>', 10)
-                    ->orderBy('view_count', 'desc');
+            ->where('view_count', '>', 10)
+            ->orderBy('view_count', 'desc')
+        ;
     }
 
     /**
      * Scope to get most viewed sliders.
+     *
+     * @param mixed $query
      */
     public function scopeMostViewed($query, int $limit = 10)
     {
@@ -413,6 +434,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to get most clicked sliders.
+     *
+     * @param mixed $query
      */
     public function scopeMostClicked($query, int $limit = 10)
     {
@@ -421,6 +444,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to get sliders with high click-through rate.
+     *
+     * @param mixed $query
      */
     public function scopeHighCTR($query, float $minRate = 5.0)
     {
@@ -433,15 +458,20 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to order sliders by sort order and creation date.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc')
+        ;
     }
 
     /**
      * Scope to order sliders alphabetically by title.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -450,6 +480,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to get random sliders.
+     *
+     * @param mixed $query
      */
     public function scopeRandom($query, int $limit = 5)
     {
@@ -458,6 +490,8 @@ class BrandingSliders extends Model implements HasMedia
 
     /**
      * Scope to order by performance metrics.
+     *
+     * @param mixed $query
      */
     public function scopeByPerformance($query)
     {
@@ -471,7 +505,7 @@ class BrandingSliders extends Model implements HasMedia
     /**
      * Get cached live sliders.
      */
-    public static function getCachedLive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedLive(): Collection
     {
         return Cache::remember('branding_sliders.live', now()->addMinutes(30), function () {
             return static::live()->ordered()->get();
@@ -481,7 +515,7 @@ class BrandingSliders extends Model implements HasMedia
     /**
      * Get cached featured sliders.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('branding_sliders.featured', now()->addMinutes(30), function () {
             return static::featured()->live()->ordered()->get();
@@ -491,7 +525,7 @@ class BrandingSliders extends Model implements HasMedia
     /**
      * Get cached homepage sliders.
      */
-    public static function getCachedHomepage(int $limit = 5): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedHomepage(int $limit = 5): Collection
     {
         return Cache::remember("branding_sliders.homepage.{$limit}", now()->addMinutes(15), function () use ($limit) {
             return static::live()->withImages()->ordered()->limit($limit)->get();
@@ -501,7 +535,7 @@ class BrandingSliders extends Model implements HasMedia
     /**
      * Get cached popular sliders.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("branding_sliders.popular.{$limit}", now()->addHours(1), function () use ($limit) {
             return static::popular()->limit($limit)->get();
@@ -521,6 +555,7 @@ class BrandingSliders extends Model implements HasMedia
         if ($media) {
             return $media->getFullUrl();
         }
+
         return asset('assets/img/default-slider.jpg');
     }
 
@@ -541,6 +576,7 @@ class BrandingSliders extends Model implements HasMedia
         if ($this->end_date && $this->end_date->isPast()) {
             return 'Expired';
         }
+
         return 'Active';
     }
 
@@ -549,11 +585,17 @@ class BrandingSliders extends Model implements HasMedia
      */
     public function getIsLiveAttribute(): bool
     {
-        if (!$this->is_active) return false;
-        
-        if ($this->start_date && $this->start_date->isFuture()) return false;
-        if ($this->end_date && $this->end_date->isPast()) return false;
-        
+        if (!$this->is_active) {
+            return false;
+        }
+
+        if ($this->start_date && $this->start_date->isFuture()) {
+            return false;
+        }
+        if ($this->end_date && $this->end_date->isPast()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -578,7 +620,10 @@ class BrandingSliders extends Model implements HasMedia
      */
     public function getClickThroughRateAttribute(): float
     {
-        if ($this->view_count == 0) return 0;
+        if (0 == $this->view_count) {
+            return 0;
+        }
+
         return round(($this->click_count / $this->view_count) * 100, 2);
     }
 
@@ -653,7 +698,7 @@ class BrandingSliders extends Model implements HasMedia
     /**
      * Schedule the slider.
      */
-    public function schedule(\Carbon\Carbon $startDate, \Carbon\Carbon $endDate = null): bool
+    public function schedule(Carbon $startDate, ?Carbon $endDate = null): bool
     {
         return $this->update([
             'start_date' => $startDate,
@@ -693,31 +738,35 @@ class BrandingSliders extends Model implements HasMedia
     {
         $this->addMediaCollection(self::SLIDER_IMAGE_COLLECTION)
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+        ;
     }
 
     /**
      * Define media conversions.
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(300)
             ->height(200)
             ->sharpen(10)
-            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION);
+            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION)
+        ;
 
         $this->addMediaConversion('slider')
             ->width(1200)
             ->height(600)
             ->sharpen(10)
-            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION);
+            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION)
+        ;
 
         $this->addMediaConversion('mobile')
             ->width(800)
             ->height(400)
             ->sharpen(10)
-            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION);
+            ->performOnCollections(self::SLIDER_IMAGE_COLLECTION)
+        ;
     }
 
     // =============================================
@@ -735,7 +784,7 @@ class BrandingSliders extends Model implements HasMedia
         ];
 
         // Clear homepage cache variants
-        for ($i = 3; $i <= 10; $i++) {
+        for ($i = 3; $i <= 10; ++$i) {
             $cacheKeys[] = "branding_sliders.homepage.{$i}";
             $cacheKeys[] = "branding_sliders.popular.{$i}";
         }
@@ -743,6 +792,30 @@ class BrandingSliders extends Model implements HasMedia
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'open_in_new_tab' => 'boolean',
+            'sort_order' => 'integer',
+            'view_count' => 'integer',
+            'click_count' => 'integer',
+            'start_date' => 'datetime',
+            'end_date' => 'datetime',
+            'meta' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

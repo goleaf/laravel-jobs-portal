@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -40,43 +39,55 @@ return new class extends Migration
 
             $table->foreign('company_id')->references('id')->on('companies')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('salary_period_id')->references('id')->on('salary_periods')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('currency_id')->references('id')->on('salary_currencies')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('job_type_id')->references('id')->on('job_types')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('career_level_id')->references('id')->on('career_levels')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('functional_area_id')->references('id')->on('functional_areas')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('job_shift_id')->references('id')->on('job_shifts')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('degree_level_id')->references('id')->on('required_degree_levels')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
             $table->foreign('job_category_id')->references('id')->on('job_categories')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->foreign('country_id')->references('id')->on('countries')
                 ->onDelete('set null')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+            ;
 
             $table->foreign('state_id')->references('id')->on('states')
                 ->onDelete('set null')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+            ;
 
             $table->foreign('city_id')->references('id')->on('cities')
                 ->onDelete('set null')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+            ;
         });
     }
 

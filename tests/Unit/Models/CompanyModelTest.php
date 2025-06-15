@@ -6,35 +6,40 @@ use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CompanyModelTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_be_created()
+    public function itCanBeCreated()
     {
         $Company = Company::factory()->create();
-        
+
         $this->assertInstanceOf(Company::class, $Company);
         $this->assertModelExists($Company);
     }
 
     /** @test */
-    public function it_has_required_fillable_fields()
+    public function itHasRequiredFillableFields()
     {
         $Company = new Company();
         $fillable = $Company->getFillable();
-        
+
         $this->assertIsArray($fillable);
         $this->assertNotEmpty($fillable);
     }
 
     /** @test */
-    public function it_can_be_soft_deleted()
+    public function itCanBeSoftDeleted()
     {
         $Company = Company::factory()->create();
         $Company->delete();
-        
+
         $this->assertSoftDeleted($Company);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Config;
-use App\Services\TranslationService;
 use App\Helpers\LanguageHelper;
+use App\Services\TranslationService;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 
 class TranslationCommand extends Command
 {
@@ -32,9 +32,7 @@ class TranslationCommand extends Command
     protected $description = 'Comprehensive translation management tool';
 
     /**
-     * Available locales
-     *
-     * @var array
+     * Available locales.
      */
     private array $availableLocales;
 
@@ -49,8 +47,6 @@ class TranslationCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -59,38 +55,43 @@ class TranslationCommand extends Command
         switch ($action) {
             case 'scan':
                 return $this->scanForHardcodedStrings();
+
             case 'missing':
                 return $this->showMissingTranslations();
+
             case 'sync':
                 return $this->syncTranslations();
+
             case 'stats':
                 return $this->showStatistics();
+
             case 'export':
                 return $this->exportTranslations();
+
             case 'import':
                 return $this->importTranslations();
+
             default:
                 $this->error("Unknown action: {$action}");
                 $this->showHelp();
+
                 return 1;
         }
     }
 
     /**
-     * Scan for hardcoded strings in the application
-     *
-     * @return int
+     * Scan for hardcoded strings in the application.
      */
     private function scanForHardcodedStrings(): int
     {
         $this->info('🔍 Scanning for hardcoded strings...');
-        
+
         $hardcodedStrings = [];
         $scanPaths = [
             app_path(),
             resource_path('views'),
             resource_path('js'),
-            base_path('routes')
+            base_path('routes'),
         ];
 
         $patterns = [
@@ -103,25 +104,27 @@ class TranslationCommand extends Command
         ];
 
         foreach ($scanPaths as $path) {
-            if (!File::exists($path)) continue;
-            
+            if (!File::exists($path)) {
+                continue;
+            }
+
             $files = File::allFiles($path);
             foreach ($files as $file) {
                 if (in_array($file->getExtension(), ['php', 'blade.php', 'js', 'vue', 'ts'])) {
                     $content = File::get($file);
-                    
+
                     foreach ($patterns as $pattern) {
                         preg_match_all($pattern, $content, $matches);
                         foreach ($matches[1] as $match) {
                             // Skip if it's likely a translation key
-                            if (strpos($match, '.') !== false || strpos($match, '_') !== false) {
+                            if (false !== strpos($match, '.') || false !== strpos($match, '_')) {
                                 continue;
                             }
-                            
+
                             $hardcodedStrings[] = [
                                 'string' => $match,
                                 'file' => $file->getRelativePathname(),
-                                'suggested_key' => $this->generateTranslationKey($match)
+                                'suggested_key' => $this->generateTranslationKey($match),
                             ];
                         }
                     }
@@ -131,106 +134,107 @@ class TranslationCommand extends Command
 
         if (empty($hardcodedStrings)) {
             $this->info('✅ No hardcoded strings found!');
+
             return 0;
         }
 
-        $this->warn("Found " . count($hardcodedStrings) . " potentially hardcoded strings:");
-        
+        $this->warn('Found '.count($hardcodedStrings).' potentially hardcoded strings:');
+
         $headers = ['String', 'File', 'Suggested Key'];
         $this->table($headers, array_slice($hardcodedStrings, 0, 20)); // Limit output
 
         if (count($hardcodedStrings) > 20) {
-            $this->info("... and " . (count($hardcodedStrings) - 20) . " more");
+            $this->info('... and '.(count($hardcodedStrings) - 20).' more');
         }
 
         return 0;
     }
 
     /**
-     * Show missing translations for a locale
-     *
-     * @return int
+     * Show missing translations for a locale.
      */
     private function showMissingTranslations(): int
     {
         $locale = $this->option('locale');
-        
+
         if (!$locale) {
             $locale = $this->choice('Select locale to check for missing translations:', $this->availableLocales);
         }
 
         if (!in_array($locale, $this->availableLocales)) {
             $this->error("Unsupported locale: {$locale}");
+
             return 1;
         }
 
         $this->info("🔍 Checking missing translations for locale: {$locale}");
-        
+
         $missingKeys = TranslationService::getMissingKeys($locale);
-        
+
         if (empty($missingKeys)) {
             $this->info("✅ No missing translations found for {$locale}!");
+
             return 0;
         }
 
-        $this->warn("Found " . count($missingKeys) . " missing translation keys:");
-        
+        $this->warn('Found '.count($missingKeys).' missing translation keys:');
+
         $tableData = [];
         foreach (array_slice($missingKeys, 0, 20) as $key) {
             $tableData[] = [$key];
         }
-        
+
         $this->table(['Missing Keys'], $tableData);
-        
+
         if (count($missingKeys) > 20) {
-            $this->info("... and " . (count($missingKeys) - 20) . " more");
+            $this->info('... and '.(count($missingKeys) - 20).' more');
         }
 
         return 0;
     }
 
     /**
-     * Sync translations from source to target locale
-     *
-     * @return int
+     * Sync translations from source to target locale.
      */
     private function syncTranslations(): int
     {
         $targetLocale = $this->option('locale');
         $sourceLocale = $this->option('source') ?? 'en';
-        
+
         if (!$targetLocale) {
             $targetLocale = $this->choice('Select target locale:', $this->availableLocales);
         }
 
         if (!in_array($targetLocale, $this->availableLocales) || !in_array($sourceLocale, $this->availableLocales)) {
-            $this->error("Unsupported locale");
+            $this->error('Unsupported locale');
+
             return 1;
         }
 
         $this->info("🔄 Syncing translations from {$sourceLocale} to {$targetLocale}...");
-        
+
         $sourceTranslations = TranslationService::getAllTranslations($sourceLocale);
         $targetTranslations = TranslationService::getAllTranslations($targetLocale);
         $missingKeys = TranslationService::getMissingKeys($targetLocale, $sourceLocale);
 
         if (empty($missingKeys)) {
-            $this->info("✅ No missing translations to sync!");
+            $this->info('✅ No missing translations to sync!');
+
             return 0;
         }
 
         $synced = 0;
         $autoTranslate = $this->option('auto-translate');
-        
+
         foreach ($missingKeys as $key) {
             if (isset($sourceTranslations[$key])) {
                 if ($autoTranslate) {
                     // In a real implementation, integrate with translation service
-                    $targetTranslations[$key] = "[AUTO] " . $sourceTranslations[$key];
+                    $targetTranslations[$key] = '[AUTO] '.$sourceTranslations[$key];
                 } else {
-                    $targetTranslations[$key] = "[{$targetLocale}] " . $sourceTranslations[$key];
+                    $targetTranslations[$key] = "[{$targetLocale}] ".$sourceTranslations[$key];
                 }
-                $synced++;
+                ++$synced;
             }
         }
 
@@ -242,33 +246,32 @@ class TranslationCommand extends Command
         TranslationService::clearCache();
 
         $this->info("✅ Synced {$synced} translation keys!");
+
         return 0;
     }
 
     /**
-     * Show translation statistics
-     *
-     * @return int
+     * Show translation statistics.
      */
     private function showStatistics(): int
     {
         $this->info('📊 Translation Statistics');
-        
+
         $stats = TranslationService::getStatistics();
         $tableData = [];
-        
+
         foreach ($stats as $locale => $stat) {
             $localeConfig = Config::get("app.available_locales.{$locale}", []);
             $flag = $this->getFlag($locale);
             $rtl = LanguageHelper::isRtl($locale) ? ' (RTL)' : '';
-            
+
             $tableData[] = [
                 "{$flag} {$locale}{$rtl}",
                 $localeConfig['native'] ?? $locale,
                 $stat['translated_keys'],
                 $stat['missing_keys'],
-                $stat['coverage_percentage'] . '%',
-                $stat['is_complete'] ? '✅' : '❌'
+                $stat['coverage_percentage'].'%',
+                $stat['is_complete'] ? '✅' : '❌',
             ];
         }
 
@@ -279,22 +282,21 @@ class TranslationCommand extends Command
     }
 
     /**
-     * Export translations
-     *
-     * @return int
+     * Export translations.
      */
     private function exportTranslations(): int
     {
         $locale = $this->option('locale');
         $format = $this->option('format');
         $file = $this->option('file');
-        
+
         if (!$locale) {
             $locale = $this->choice('Select locale to export:', $this->availableLocales);
         }
 
         if (!in_array($locale, $this->availableLocales)) {
             $this->error("Unsupported locale: {$locale}");
+
             return 1;
         }
 
@@ -303,64 +305,67 @@ class TranslationCommand extends Command
         }
 
         $this->info("📤 Exporting {$locale} translations to {$file}...");
-        
+
         $translations = TranslationService::getAllTranslations($locale);
-        
+
         // Ensure directory exists
         File::ensureDirectoryExists(dirname($file));
-        
-        if ($format === 'json') {
+
+        if ('json' === $format) {
             $content = json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } else {
-            $content = "<?php\n\nreturn " . var_export($translations, true) . ";\n";
+            $content = "<?php\n\nreturn ".var_export($translations, true).";\n";
         }
 
         File::put($file, $content);
-        
-        $this->info("✅ Exported " . count($translations) . " translations to {$file}");
+
+        $this->info('✅ Exported '.count($translations)." translations to {$file}");
+
         return 0;
     }
 
     /**
-     * Import translations
-     *
-     * @return int
+     * Import translations.
      */
     private function importTranslations(): int
     {
         $locale = $this->option('locale');
         $file = $this->option('file');
         $merge = $this->option('merge');
-        
+
         if (!$locale) {
             $locale = $this->choice('Select target locale:', $this->availableLocales);
         }
 
         if (!$file) {
-            $this->error("File path is required for import");
+            $this->error('File path is required for import');
+
             return 1;
         }
 
         if (!File::exists($file)) {
             $this->error("File not found: {$file}");
+
             return 1;
         }
 
         $this->info("📥 Importing translations to {$locale} from {$file}...");
-        
+
         $content = File::get($file);
-        
+
         if (str_ends_with($file, '.json')) {
             $importedTranslations = json_decode($content, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $this->error("Invalid JSON file");
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                $this->error('Invalid JSON file');
+
                 return 1;
             }
         } else {
             // Assume PHP file
             $importedTranslations = include $file;
             if (!is_array($importedTranslations)) {
-                $this->error("Invalid PHP array file");
+                $this->error('Invalid PHP array file');
+
                 return 1;
             }
         }
@@ -379,34 +384,33 @@ class TranslationCommand extends Command
         // Clear cache
         TranslationService::clearCache();
 
-        $this->info("✅ Imported " . count($importedTranslations) . " translations!");
+        $this->info('✅ Imported '.count($importedTranslations).' translations!');
+
         return 0;
     }
 
     /**
-     * Generate a translation key from a string
-     *
-     * @param string $string
-     * @return string
+     * Generate a translation key from a string.
      */
     private function generateTranslationKey(string $string): string
     {
         $key = strtolower($string);
         $key = preg_replace('/[^a-z0-9\s]/', '', $key);
         $key = str_replace(' ', '_', trim($key));
-        
+
         // Add appropriate namespace based on content
         if (preg_match('/\b(save|edit|delete|create|add|cancel|submit)\b/i', $string)) {
             return "common.{$key}";
-        } elseif (preg_match('/\b(error|success|warning|info)\b/i', $string)) {
-            return "messages.{$key}";
-        } else {
-            return "app.{$key}";
         }
+        if (preg_match('/\b(error|success|warning|info)\b/i', $string)) {
+            return "messages.{$key}";
+        }
+
+        return "app.{$key}";
     }
 
     /**
-     * Show help information
+     * Show help information.
      */
     private function showHelp(): void
     {
@@ -420,10 +424,7 @@ class TranslationCommand extends Command
     }
 
     /**
-     * Get flag emoji for locale
-     *
-     * @param string $locale
-     * @return string
+     * Get flag emoji for locale.
      */
     private function getFlag(string $locale): string
     {
@@ -436,7 +437,7 @@ class TranslationCommand extends Command
             'pt' => '🇵🇹',
             'ru' => '🇷🇺',
             'tr' => '🇹🇷',
-            'zh' => '🇨🇳'
+            'zh' => '🇨🇳',
         ];
 
         return $flags[$locale] ?? '🌐';

@@ -2,42 +2,44 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * MaritalStatus Model - Enhanced with Enhanced patterns
+ * MaritalStatus Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $marital_status
- * @property string|null $description
- * @property string|null $display_name
- * @property string|null $short_code
- * @property bool $is_active
- * @property bool $is_default
- * @property bool $is_featured
- * @property int|null $sort_order
- * @property string|null $color
- * @property string|null $icon
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidates
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $activeCandidates
- * @property-read string $status_name
- * @property-read string $status_category
- * @property-read int $candidates_count
- * @property-read int $active_candidates_count
- * @property-read bool $is_single
- * @property-read bool $is_married
- * @property-read bool $is_divorced
- * @property-read bool $is_widowed
+ * @property int               $id
+ * @property string            $marital_status
+ * @property null|string       $description
+ * @property null|string       $display_name
+ * @property null|string       $short_code
+ * @property bool              $is_active
+ * @property bool              $is_default
+ * @property bool              $is_featured
+ * @property null|int          $sort_order
+ * @property null|string       $color
+ * @property null|string       $icon
+ * @property null|Carbon       $created_at
+ * @property null|Carbon       $updated_at
+ * @property Collection|User[] $candidates
+ * @property Collection|User[] $activeCandidates
+ * @property string            $status_name
+ * @property string            $status_category
+ * @property int               $candidates_count
+ * @property int               $active_candidates_count
+ * @property bool              $is_single
+ * @property bool              $is_married
+ * @property bool              $is_divorced
+ * @property bool              $is_widowed
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -70,14 +72,7 @@ class MaritalStatus extends Model
     use LogsActivity;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'marital_status';
-
-    /**
-     * Marital status categories
+     * Marital status categories.
      */
     public const CATEGORY_SINGLE = 'single';
     public const CATEGORY_MARRIED = 'married';
@@ -87,7 +82,7 @@ class MaritalStatus extends Model
     public const CATEGORY_OTHER = 'other';
 
     /**
-     * Standard marital statuses
+     * Standard marital statuses.
      */
     public const STATUS_SINGLE = 'Single';
     public const STATUS_MARRIED = 'Married';
@@ -96,6 +91,31 @@ class MaritalStatus extends Model
     public const STATUS_SEPARATED = 'Separated';
     public const STATUS_DOMESTIC_PARTNERSHIP = 'Domestic Partnership';
     public const STATUS_CIVIL_UNION = 'Civil Union';
+
+    /**
+     * Validation rules for creating marital statuses.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'marital_status' => 'required|string|max:100|unique:marital_statuses,marital_status',
+        'description' => 'nullable|string|max:500',
+        'display_name' => 'nullable|string|max:100',
+        'short_code' => 'nullable|string|max:10|unique:marital_statuses,short_code',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0',
+        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+        'icon' => 'nullable|string|max:50',
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'marital_status';
 
     /**
      * The attributes that are mass assignable.
@@ -124,24 +144,6 @@ class MaritalStatus extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -149,40 +151,22 @@ class MaritalStatus extends Model
         return LogOptions::defaults()
             ->logOnly(['marital_status', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating marital statuses.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'marital_status' => 'required|string|max:100|unique:marital_statuses,marital_status',
-        'description' => 'nullable|string|max:500',
-        'display_name' => 'nullable|string|max:100',
-        'short_code' => 'nullable|string|max:10|unique:marital_statuses,short_code',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_featured' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0',
-        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-        'icon' => 'nullable|string|max:50',
-    ];
 
     /**
      * Update validation rules for marital statuses.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'marital_status' => 'required|string|max:100|unique:marital_statuses,marital_status,' . $id,
+            'marital_status' => 'required|string|max:100|unique:marital_statuses,marital_status,'.$id,
             'description' => 'nullable|string|max:500',
             'display_name' => 'nullable|string|max:100',
-            'short_code' => 'nullable|string|max:10|unique:marital_statuses,short_code,' . $id,
+            'short_code' => 'nullable|string|max:10|unique:marital_statuses,short_code,'.$id,
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'is_featured' => 'boolean',
@@ -226,6 +210,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include active marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -234,6 +220,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include inactive marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -242,6 +230,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include featured marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -250,6 +240,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include non-featured marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -258,6 +250,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include default marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeDefault($query)
     {
@@ -266,6 +260,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to only include custom marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeCustom($query)
     {
@@ -278,19 +274,24 @@ class MaritalStatus extends Model
 
     /**
      * Scope to search marital statuses by name or description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('marital_status', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhere('display_name', 'like', '%' . $term . '%')
-              ->orWhere('short_code', 'like', '%' . $term . '%');
+            $q->where('marital_status', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhere('display_name', 'like', '%'.$term.'%')
+                ->orWhere('short_code', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope to get marital statuses created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -299,6 +300,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get old marital statuses created before specified days.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -311,6 +314,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to order marital statuses alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -319,6 +324,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to order marital statuses by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
@@ -331,6 +338,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get marital statuses with candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidates($query)
     {
@@ -339,6 +348,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get marital statuses without candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutCandidates($query)
     {
@@ -347,6 +358,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get marital statuses with active candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -357,6 +370,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get marital statuses with candidate counts.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidateCounts($query)
     {
@@ -377,6 +392,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get popular marital statuses by candidate count.
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -387,6 +404,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get marital statuses with minimum candidates.
+     *
+     * @param mixed $query
      */
     public function scopeMinCandidates($query, int $minCandidates = 5)
     {
@@ -399,70 +418,88 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get single marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeSingle($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%single%')
-              ->orWhere('marital_status', 'like', '%unmarried%')
-              ->orWhere('marital_status', 'like', '%never%married%')
-              ->orWhere('marital_status', 'like', '%bachelor%')
-              ->orWhere('marital_status', 'like', '%spinster%');
+                ->orWhere('marital_status', 'like', '%unmarried%')
+                ->orWhere('marital_status', 'like', '%never%married%')
+                ->orWhere('marital_status', 'like', '%bachelor%')
+                ->orWhere('marital_status', 'like', '%spinster%')
+            ;
         });
     }
 
     /**
      * Scope to get married marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeMarried($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%married%')
-              ->orWhere('marital_status', 'like', '%spouse%')
-              ->orWhere('marital_status', 'like', '%civil%union%')
-              ->orWhere('marital_status', 'like', '%domestic%partnership%');
+                ->orWhere('marital_status', 'like', '%spouse%')
+                ->orWhere('marital_status', 'like', '%civil%union%')
+                ->orWhere('marital_status', 'like', '%domestic%partnership%')
+            ;
         });
     }
 
     /**
      * Scope to get divorced/separated marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeDivorced($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%divorced%')
-              ->orWhere('marital_status', 'like', '%separated%')
-              ->orWhere('marital_status', 'like', '%annulled%');
+                ->orWhere('marital_status', 'like', '%separated%')
+                ->orWhere('marital_status', 'like', '%annulled%')
+            ;
         });
     }
 
     /**
      * Scope to get widowed marital statuses.
+     *
+     * @param mixed $query
      */
     public function scopeWidowed($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%widowed%')
-              ->orWhere('marital_status', 'like', '%widow%')
-              ->orWhere('marital_status', 'like', '%widower%');
+                ->orWhere('marital_status', 'like', '%widow%')
+                ->orWhere('marital_status', 'like', '%widower%')
+            ;
         });
     }
 
     /**
      * Scope to get marital statuses by category.
+     *
+     * @param mixed $query
      */
     public function scopeByCategory($query, string $category)
     {
         switch ($category) {
             case self::CATEGORY_SINGLE:
                 return $query->single();
+
             case self::CATEGORY_MARRIED:
                 return $query->married();
+
             case self::CATEGORY_DIVORCED:
             case self::CATEGORY_SEPARATED:
                 return $query->divorced();
+
             case self::CATEGORY_WIDOWED:
                 return $query->widowed();
+
             default:
                 return $query;
         }
@@ -470,6 +507,8 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get available marital statuses (single, divorced, widowed).
+     *
+     * @param mixed $query
      */
     public function scopeAvailable($query)
     {
@@ -478,9 +517,10 @@ class MaritalStatus extends Model
                 $subQuery->select('id')->from('marital_statuses');
                 $subQuery->where(function ($sq) {
                     $sq->where('marital_status', 'like', '%single%')
-                       ->orWhere('marital_status', 'like', '%divorced%')
-                       ->orWhere('marital_status', 'like', '%widowed%')
-                       ->orWhere('marital_status', 'like', '%separated%');
+                        ->orWhere('marital_status', 'like', '%divorced%')
+                        ->orWhere('marital_status', 'like', '%widowed%')
+                        ->orWhere('marital_status', 'like', '%separated%')
+                    ;
                 });
             });
         });
@@ -488,13 +528,16 @@ class MaritalStatus extends Model
 
     /**
      * Scope to get unavailable marital statuses (married, partnership).
+     *
+     * @param mixed $query
      */
     public function scopeUnavailable($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%married%')
-              ->orWhere('marital_status', 'like', '%partnership%')
-              ->orWhere('marital_status', 'like', '%civil%union%');
+                ->orWhere('marital_status', 'like', '%partnership%')
+                ->orWhere('marital_status', 'like', '%civil%union%')
+            ;
         });
     }
 
@@ -505,7 +548,7 @@ class MaritalStatus extends Model
     /**
      * Get cached active marital statuses.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('marital_statuses.active', now()->addHours(12), function () {
             return static::active()->ordered()->get();
@@ -515,7 +558,7 @@ class MaritalStatus extends Model
     /**
      * Get cached featured marital statuses.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('marital_statuses.featured', now()->addHours(6), function () {
             return static::featured()->active()->ordered()->get();
@@ -525,7 +568,7 @@ class MaritalStatus extends Model
     /**
      * Get cached popular marital statuses.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("marital_statuses.popular.{$limit}", now()->addHours(6), function () use ($limit) {
             return static::popular($limit)->active()->get();
@@ -535,7 +578,7 @@ class MaritalStatus extends Model
     /**
      * Get cached marital statuses by category.
      */
-    public static function getCachedByCategory(string $category): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedByCategory(string $category): Collection
     {
         return Cache::remember("marital_statuses.category.{$category}", now()->addHours(12), function () use ($category) {
             return static::byCategory($category)->active()->ordered()->get();
@@ -563,11 +606,14 @@ class MaritalStatus extends Model
 
         if (str_contains($status, 'single') || str_contains($status, 'unmarried') || str_contains($status, 'never')) {
             return self::CATEGORY_SINGLE;
-        } elseif (str_contains($status, 'married') || str_contains($status, 'spouse') || str_contains($status, 'union')) {
+        }
+        if (str_contains($status, 'married') || str_contains($status, 'spouse') || str_contains($status, 'union')) {
             return self::CATEGORY_MARRIED;
-        } elseif (str_contains($status, 'divorced') || str_contains($status, 'separated')) {
+        }
+        if (str_contains($status, 'divorced') || str_contains($status, 'separated')) {
             return self::CATEGORY_DIVORCED;
-        } elseif (str_contains($status, 'widowed') || str_contains($status, 'widow')) {
+        }
+        if (str_contains($status, 'widowed') || str_contains($status, 'widow')) {
             return self::CATEGORY_WIDOWED;
         }
 
@@ -595,7 +641,7 @@ class MaritalStatus extends Model
      */
     public function getIsSingleAttribute(): bool
     {
-        return $this->status_category === self::CATEGORY_SINGLE;
+        return self::CATEGORY_SINGLE === $this->status_category;
     }
 
     /**
@@ -603,7 +649,7 @@ class MaritalStatus extends Model
      */
     public function getIsMarriedAttribute(): bool
     {
-        return $this->status_category === self::CATEGORY_MARRIED;
+        return self::CATEGORY_MARRIED === $this->status_category;
     }
 
     /**
@@ -611,7 +657,7 @@ class MaritalStatus extends Model
      */
     public function getIsDivorcedAttribute(): bool
     {
-        return $this->status_category === self::CATEGORY_DIVORCED;
+        return self::CATEGORY_DIVORCED === $this->status_category;
     }
 
     /**
@@ -619,7 +665,7 @@ class MaritalStatus extends Model
      */
     public function getIsWidowedAttribute(): bool
     {
-        return $this->status_category === self::CATEGORY_WIDOWED;
+        return self::CATEGORY_WIDOWED === $this->status_category;
     }
 
     // =============================================
@@ -683,7 +729,7 @@ class MaritalStatus extends Model
      */
     public function isUnavailable(): bool
     {
-        return $this->status_category === self::CATEGORY_MARRIED;
+        return self::CATEGORY_MARRIED === $this->status_category;
     }
 
     /**
@@ -693,6 +739,7 @@ class MaritalStatus extends Model
     {
         $color = $this->color ?: '#6c757d';
         $name = $this->status_name;
+
         return "<span class=\"badge\" style=\"background-color: {$color};\">{$name}</span>";
     }
 
@@ -714,6 +761,7 @@ class MaritalStatus extends Model
         ];
 
         $icon = $defaultIcons[$this->status_category] ?? 'fas fa-question';
+
         return "<i class=\"{$icon}\"></i>";
     }
 
@@ -754,6 +802,24 @@ class MaritalStatus extends Model
         }
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     // =============================================
     // BOOT METHOD
     // =============================================
@@ -773,6 +839,5 @@ class MaritalStatus extends Model
         static::deleted(function ($model) {
             $model->clearCaches();
         });
-
     }
 }

@@ -5,18 +5,23 @@ namespace Tests\Unit;
 use App\Models\Candidate;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class SimpleModelTest extends TestCase
 {
     /** @test */
-    public function it_can_instantiate_candidate_model()
+    public function itCanInstantiateCandidateModel()
     {
         $candidate = new Candidate();
-        
+
         $this->assertInstanceOf(Candidate::class, $candidate);
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function itHasCorrectFillableAttributes()
     {
         $candidate = new Candidate();
         $fillable = $candidate->getFillable();
@@ -47,7 +52,7 @@ class SimpleModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_casts()
+    public function itHasCorrectCasts()
     {
         $candidate = new Candidate();
         $casts = $candidate->getCasts();
@@ -56,14 +61,14 @@ class SimpleModelTest extends TestCase
         $this->assertArrayHasKey('id', $casts);
         $this->assertArrayHasKey('user_id', $casts);
         $this->assertArrayHasKey('immediate_available', $casts);
-        
+
         // Laravel 12 uses 'int' for auto-generated casts
         $this->assertEquals('int', $casts['id']);
         $this->assertEquals('int', $casts['user_id']);
     }
 
     /** @test */
-    public function it_has_status_constants()
+    public function itHasStatusConstants()
     {
         $this->assertEquals(1, Candidate::ACTIVE);
         $this->assertEquals(0, Candidate::DEACTIVE);
@@ -73,9 +78,9 @@ class SimpleModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_table_name()
+    public function itHasTableName()
     {
         $candidate = new Candidate();
         $this->assertEquals('candidates', $candidate->getTable());
     }
-} 
+}

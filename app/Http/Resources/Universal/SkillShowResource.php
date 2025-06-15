@@ -31,8 +31,8 @@ class SkillShowResource extends JsonResource
                 'demand_score' => $this->getDemandScore(),
                 'trending_score' => $this->getTrendingScore(),
             ],
-            'related_skills' => $this->when($this->relationLoaded('relatedSkills'), function() {
-                return $this->relatedSkills->take(10)->map(function($skill) {
+            'related_skills' => $this->when($this->relationLoaded('relatedSkills'), function () {
+                return $this->relatedSkills->take(10)->map(function ($skill) {
                     return [
                         'id' => $skill->id,
                         'name' => $skill->name,
@@ -41,8 +41,8 @@ class SkillShowResource extends JsonResource
                     ];
                 });
             }),
-            'recent_jobs' => $this->when($this->relationLoaded('jobs'), function() {
-                return $this->jobs()->latest()->take(5)->get()->map(function($job) {
+            'recent_jobs' => $this->when($this->relationLoaded('jobs'), function () {
+                return $this->jobs()->latest()->take(5)->get()->map(function ($job) {
                     return [
                         'id' => $job->id,
                         'title' => $job->title,
@@ -59,8 +59,8 @@ class SkillShowResource extends JsonResource
                 'currency' => 'USD', // Default currency
                 'data_points' => $this->getSalaryDataPoints(),
             ],
-            'learning_resources' => $this->when($this->relationLoaded('learningResources'), function() {
-                return $this->learningResources->map(function($resource) {
+            'learning_resources' => $this->when($this->relationLoaded('learningResources'), function () {
+                return $this->learningResources->map(function ($resource) {
                     return [
                         'id' => $resource->id,
                         'title' => $resource->title,
@@ -106,9 +106,11 @@ class SkillShowResource extends JsonResource
     {
         $jobCount = $this->jobs()->where('created_at', '>=', now()->subMonths(3))->count();
         $candidateCount = $this->candidates()->where('created_at', '>=', now()->subMonths(3))->count();
-        
-        if ($candidateCount == 0) return 100.0;
-        
+
+        if (0 == $candidateCount) {
+            return 100.0;
+        }
+
         return min(100, ($jobCount / $candidateCount) * 100);
     }
 
@@ -116,9 +118,11 @@ class SkillShowResource extends JsonResource
     {
         $recentJobs = $this->jobs()->where('created_at', '>=', now()->subMonth())->count();
         $previousJobs = $this->jobs()->whereBetween('created_at', [now()->subMonths(2), now()->subMonth()])->count();
-        
-        if ($previousJobs == 0) return $recentJobs > 0 ? 100.0 : 0.0;
-        
+
+        if (0 == $previousJobs) {
+            return $recentJobs > 0 ? 100.0 : 0.0;
+        }
+
         return (($recentJobs - $previousJobs) / $previousJobs) * 100;
     }
 
@@ -128,7 +132,8 @@ class SkillShowResource extends JsonResource
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
             ->selectRaw('AVG((salary_from + salary_to) / 2) as avg_salary')
-            ->value('avg_salary');
+            ->value('avg_salary')
+        ;
     }
 
     private function getSalaryRange(): array
@@ -137,7 +142,8 @@ class SkillShowResource extends JsonResource
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
             ->selectRaw('MIN(salary_from) as min_salary, MAX(salary_to) as max_salary')
-            ->first();
+            ->first()
+        ;
 
         return [
             'min' => $salaries->min_salary ?? null,
@@ -150,17 +156,24 @@ class SkillShowResource extends JsonResource
         return $this->jobs()
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
-            ->count();
+            ->count()
+        ;
     }
 
     private function getIncludedRelations(): array
     {
         $included = [];
-        
-        if ($this->relationLoaded('relatedSkills')) $included[] = 'related_skills';
-        if ($this->relationLoaded('jobs')) $included[] = 'recent_jobs';
-        if ($this->relationLoaded('learningResources')) $included[] = 'learning_resources';
+
+        if ($this->relationLoaded('relatedSkills')) {
+            $included[] = 'related_skills';
+        }
+        if ($this->relationLoaded('jobs')) {
+            $included[] = 'recent_jobs';
+        }
+        if ($this->relationLoaded('learningResources')) {
+            $included[] = 'learning_resources';
+        }
 
         return $included;
     }
-} 
+}

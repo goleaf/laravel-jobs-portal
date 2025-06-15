@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\City;
+use App\Models\Company;
+use App\Models\CompanySize;
+use App\Models\State;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Str;
 
 class CreateCompanyRequest extends FormRequest
 {
@@ -21,7 +26,7 @@ class CreateCompanyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -52,7 +57,7 @@ class CreateCompanyRequest extends FormRequest
                 'max:255',
                 'regex:/^https?:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             ],
-            
+
             // Location information
             'country_id' => [
                 'required',
@@ -65,7 +70,7 @@ class CreateCompanyRequest extends FormRequest
                 'exists:states,id',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->country_id) {
-                        $state = \App\Models\State::find($value);
+                        $state = State::find($value);
                         if (!$state || $state->country_id != $this->country_id) {
                             $fail(__('companies.validation.state_country_mismatch'));
                         }
@@ -78,7 +83,7 @@ class CreateCompanyRequest extends FormRequest
                 'exists:cities,id',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->state_id) {
-                        $city = \App\Models\City::find($value);
+                        $city = City::find($value);
                         if (!$city || $city->state_id != $this->state_id) {
                             $fail(__('companies.validation.city_state_mismatch'));
                         }
@@ -86,14 +91,14 @@ class CreateCompanyRequest extends FormRequest
                 },
             ],
             'location' => 'nullable|string|max:500',
-            
+
             // Company details
             'details' => 'nullable|string|max:5000',
             'established_in' => [
                 'nullable',
                 'integer',
                 'min:1800',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
             ],
             'no_of_employees' => [
                 'nullable',
@@ -101,7 +106,7 @@ class CreateCompanyRequest extends FormRequest
                 'min:1',
                 'max:1000000',
             ],
-            
+
             // Industry and ownership
             'industry_id' => [
                 'nullable',
@@ -118,7 +123,7 @@ class CreateCompanyRequest extends FormRequest
                 'integer',
                 'exists:company_sizes,id',
             ],
-            
+
             // Social media links
             'facebook_url' => [
                 'nullable',
@@ -150,7 +155,7 @@ class CreateCompanyRequest extends FormRequest
                 'max:255',
                 'regex:/^https?:\/\/(www\.)?pinterest\.com\/.*$/',
             ],
-            
+
             // User account information
             'first_name' => [
                 'required',
@@ -173,7 +178,7 @@ class CreateCompanyRequest extends FormRequest
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/',
             ],
             'password_confirmation' => 'required|string|min:8|max:255',
-            
+
             // Files
             'logo' => [
                 'nullable',
@@ -182,11 +187,11 @@ class CreateCompanyRequest extends FormRequest
                 'max:2048',
                 'dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
             ],
-            
+
             // Flags
             'is_active' => 'sometimes|boolean',
             'is_featured' => 'sometimes|boolean',
-            
+
             // Security
             'g-recaptcha-response' => [
                 'nullable',
@@ -273,6 +278,67 @@ class CreateCompanyRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Check for duplicate company names (case-insensitive)
+            if ($this->name) {
+                $existingCompany = Company::whereRaw('LOWER(name) = ?', [strtolower($this->name)])->first();
+                if ($existingCompany) {
+                    $validator->errors()->add('name', __('companies.validation.name_exists'));
+                }
+            }
+
+            // Validate website domain doesn't belong to another company
+            if ($this->website) {
+                $domain = parse_url($this->website, PHP_URL_HOST);
+                if ($domain) {
+                    $existingCompany = Company::where('website', 'like', '%'.$domain.'%')->first();
+                    if ($existingCompany) {
+                        $validator->errors()->add('website', __('companies.validation.website_exists'));
+                    }
+                }
+            }
+
+            // Business logic validation
+            if ($this->hasBusinessLogicConflicts()) {
+                $validator->errors()->add('general', __('companies.validation.business_conflict'));
+            }
+
+            // Content security validation
+            if ($this->hasSuspiciousContent()) {
+                $validator->errors()->add('general', __('companies.validation.suspicious_content'));
+            }
+        });
+    }
+
+    /**
+     * Get validated data with processed fields.
+     */
+    public function getProcessedData(): array
+    {
+        $validated = $this->validated();
+
+        return array_merge($validated, [
+            'slug' => Str::slug($validated['name']),
+            'created_by' => Auth::id(),
+            'user_data' => [
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']),
+                'phone' => $validated['phone'] ?? null,
+                'country_id' => $validated['country_id'],
+                'state_id' => $validated['state_id'] ?? null,
+                'city_id' => $validated['city_id'] ?? null,
+                'is_active' => $validated['is_active'] ?? true,
+            ],
+        ]);
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -287,77 +353,6 @@ class CreateCompanyRequest extends FormRequest
             'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
             'is_featured' => filter_var($this->is_featured, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
         ]);
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Check for duplicate company names (case-insensitive)
-            if ($this->name) {
-                $existingCompany = \App\Models\Company::whereRaw('LOWER(name) = ?', [strtolower($this->name)])->first();
-                if ($existingCompany) {
-                    $validator->errors()->add('name', __('companies.validation.name_exists'));
-                }
-            }
-            
-            // Validate website domain doesn't belong to another company
-            if ($this->website) {
-                $domain = parse_url($this->website, PHP_URL_HOST);
-                if ($domain) {
-                    $existingCompany = \App\Models\Company::where('website', 'like', '%' . $domain . '%')->first();
-                    if ($existingCompany) {
-                        $validator->errors()->add('website', __('companies.validation.website_exists'));
-                    }
-                }
-            }
-            
-            // Business logic validation
-            if ($this->hasBusinessLogicConflicts()) {
-                $validator->errors()->add('general', __('companies.validation.business_conflict'));
-            }
-            
-            // Content security validation
-            if ($this->hasSuspiciousContent()) {
-                $validator->errors()->add('general', __('companies.validation.suspicious_content'));
-            }
-        });
-    }
-
-    /**
-     * Check for business logic conflicts.
-     */
-    private function hasBusinessLogicConflicts(): bool
-    {
-        // Check if company size matches employee count
-        if ($this->company_size_id && $this->no_of_employees) {
-            $companySize = \App\Models\CompanySize::find($this->company_size_id);
-            if ($companySize) {
-                // Add logic to validate employee count against company size ranges
-                // This would depend on your company size definitions
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Check for suspicious content.
-     */
-    private function hasSuspiciousContent(): bool
-    {
-        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit', 'phishing'];
-        $content = strtolower(($this->name ?? '') . ' ' . ($this->details ?? '') . ' ' . ($this->website ?? ''));
-        
-        foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     /**
@@ -376,26 +371,36 @@ class CreateCompanyRequest extends FormRequest
     }
 
     /**
-     * Get validated data with processed fields.
+     * Check for business logic conflicts.
      */
-    public function getProcessedData(): array
+    private function hasBusinessLogicConflicts(): bool
     {
-        $validated = $this->validated();
-        
-        return array_merge($validated, [
-            'slug' => \Illuminate\Support\Str::slug($validated['name']),
-            'created_by' => Auth::id(),
-            'user_data' => [
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'email' => $validated['email'],
-                'password' => bcrypt($validated['password']),
-                'phone' => $validated['phone'] ?? null,
-                'country_id' => $validated['country_id'],
-                'state_id' => $validated['state_id'] ?? null,
-                'city_id' => $validated['city_id'] ?? null,
-                'is_active' => $validated['is_active'] ?? true,
-            ],
-        ]);
+        // Check if company size matches employee count
+        if ($this->company_size_id && $this->no_of_employees) {
+            $companySize = CompanySize::find($this->company_size_id);
+            if ($companySize) {
+                // Add logic to validate employee count against company size ranges
+                // This would depend on your company size definitions
+            }
+        }
+
+        return false;
     }
-} 
+
+    /**
+     * Check for suspicious content.
+     */
+    private function hasSuspiciousContent(): bool
+    {
+        $suspiciousPatterns = ['spam', 'scam', 'virus', 'malware', 'hack', 'exploit', 'phishing'];
+        $content = strtolower(($this->name ?? '').' '.($this->details ?? '').' '.($this->website ?? ''));
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (false !== strpos($content, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

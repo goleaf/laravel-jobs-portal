@@ -5,17 +5,22 @@ namespace Tests\Unit\Models;
 use App\Models\JobCategory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobCategoryModelTest extends TestCase
 {
     /** @test */
-    public function it_has_correct_table_name()
+    public function itHasCorrectTableName()
     {
         $jobCategory = new JobCategory();
         $this->assertEquals('job_categories', $jobCategory->getTable());
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function itHasCorrectFillableAttributes()
     {
         $jobCategory = new JobCategory();
         $fillable = $jobCategory->getFillable();
@@ -32,7 +37,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_casts()
+    public function itHasCorrectCasts()
     {
         $jobCategory = new JobCategory();
         $casts = $jobCategory->getCasts();
@@ -51,7 +56,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_featured_constants()
+    public function itHasFeaturedConstants()
     {
         $expectedFeatured = [
             2 => 'All',
@@ -63,7 +68,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_instantiated_with_attributes()
+    public function itCanBeInstantiatedWithAttributes()
     {
         $jobCategory = new JobCategory([
             'name' => 'Technology',
@@ -77,16 +82,16 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_relationship_methods()
+    public function itHasRelationshipMethods()
     {
         $jobCategory = new JobCategory();
-        
+
         // Test that relationship methods exist
         $this->assertTrue(method_exists($jobCategory, 'jobs'));
     }
 
     /** @test */
-    public function it_has_validation_rules()
+    public function itHasValidationRules()
     {
         $expectedRules = [
             'name' => 'required|max:160|unique:job_categories,name',
@@ -97,7 +102,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_status_constants()
+    public function itHasStatusConstants()
     {
         $this->assertEquals(2, JobCategory::ALL);
         $this->assertEquals(1, JobCategory::IS_FEATURED);
@@ -105,8 +110,8 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_path_constant()
+    public function itHasPathConstant()
     {
         $this->assertEquals('job_category', JobCategory::PATH);
     }
-} 
+}

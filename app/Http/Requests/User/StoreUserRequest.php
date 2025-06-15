@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\Rule;
+use App\Models\City;
+use App\Models\State;
 use App\Models\User;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Validator;
 
 class StoreUserRequest extends FormRequest
 {
@@ -21,7 +25,7 @@ class StoreUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -101,28 +105,29 @@ class StoreUserRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             // Additional validation for state/city based on country
             if ($this->filled('state_id') && $this->filled('country_id')) {
-                $stateExists = \App\Models\State::where('id', $this->input('state_id'))
+                $stateExists = State::where('id', $this->input('state_id'))
                     ->where('country_id', $this->input('country_id'))
-                    ->exists();
-                
+                    ->exists()
+                ;
+
                 if (!$stateExists) {
                     $validator->errors()->add('state_id', 'The selected state does not belong to the selected country.');
                 }
             }
 
             if ($this->filled('city_id') && $this->filled('state_id')) {
-                $cityExists = \App\Models\City::where('id', $this->input('city_id'))
+                $cityExists = City::where('id', $this->input('city_id'))
                     ->where('state_id', $this->input('state_id'))
-                    ->exists();
-                
+                    ->exists()
+                ;
+
                 if (!$cityExists) {
                     $validator->errors()->add('city_id', 'The selected city does not belong to the selected state.');
                 }
@@ -134,7 +139,7 @@ class StoreUserRequest extends FormRequest
                 if ($this->filled($field)) {
                     $url = $this->input($field);
                     $domain = parse_url($url, PHP_URL_HOST);
-                    
+
                     $expectedDomains = [
                         'facebook_url' => ['facebook.com', 'www.facebook.com', 'fb.com'],
                         'twitter_url' => ['twitter.com', 'www.twitter.com', 'x.com', 'www.x.com'],
@@ -153,9 +158,27 @@ class StoreUserRequest extends FormRequest
     }
 
     /**
-     * Handle a passed validation attempt.
+     * Get the validated data from the request.
      *
-     * @return void
+     * @param null|string $key
+     * @param mixed       $default
+     *
+     * @return mixed
+     */
+    public function validated($key = null, $default = null)
+    {
+        $validated = parent::validated($key, $default);
+
+        // Ensure password is properly hashed if it's in the validated data
+        if (isset($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        }
+
+        return $validated;
+    }
+
+    /**
+     * Handle a passed validation attempt.
      */
     protected function passedValidation(): void
     {
@@ -171,23 +194,4 @@ class StoreUserRequest extends FormRequest
         // Remove non-fillable fields from request
         $this->request->remove(['terms_accepted', 'privacy_accepted', 'password_confirmation']);
     }
-
-    /**
-     * Get the validated data from the request.
-     *
-     * @param  string|null  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function validated($key = null, $default = null)
-    {
-        $validated = parent::validated($key, $default);
-        
-        // Ensure password is properly hashed if it's in the validated data
-        if (isset($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
-        }
-
-        return $validated;
-    }
-} 
+}

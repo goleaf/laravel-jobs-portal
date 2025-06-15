@@ -2,13 +2,15 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\NoMaliciousContent;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Validator;
 
 /**
- * Request validation for AuthController::register
- * 
+ * Request validation for AuthController::register.
+ *
  * @enhanced by RequestValidationImprover
  */
 class RegisterRequest extends FormRequest
@@ -24,7 +26,7 @@ class RegisterRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -41,10 +43,10 @@ class RegisterRequest extends FormRequest
                     ->letters()
                     ->numbers()
                     ->symbols()
-                    ->uncompromised()
+                    ->uncompromised(),
             ],
             'phone' => ['nullable', 'string', 'max:20'],
-            'terms' => ['required', 'accepted']
+            'terms' => ['required', 'accepted'],
         ];
     }
 
@@ -68,7 +70,7 @@ class RegisterRequest extends FormRequest
             'password.numbers' => 'Password must contain numbers',
             'password.symbols' => 'Password must contain symbols',
             'password.uncompromised' => 'The given password has appeared in a data breach. Please choose a different password.',
-            'terms.required' => 'You must accept the terms and conditions'
+            'terms.required' => 'You must accept the terms and conditions',
         ];
     }
 
@@ -88,29 +90,9 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Sanitize input data
-        if ($this->has('first_name')) {
-            $this->merge([
-                'first_name' => strip_tags($this->first_name)
-            ]);
-        }
-        
-        if ($this->has('last_name')) {
-            $this->merge([
-                'last_name' => strip_tags($this->last_name)
-            ]);
-        }
-    }
-
-    /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
@@ -125,5 +107,24 @@ class RegisterRequest extends FormRequest
                 }
             }
         });
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('first_name')) {
+            $this->merge([
+                'first_name' => strip_tags($this->first_name),
+            ]);
+        }
+
+        if ($this->has('last_name')) {
+            $this->merge([
+                'last_name' => strip_tags($this->last_name),
+            ]);
+        }
     }
 }

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Candidate;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CandidatePolicy
 {
@@ -21,8 +20,8 @@ class CandidatePolicy
      */
     public function view(User $user, Candidate $candidate): bool
     {
-        return $user->hasRole(['Admin', 'Employer']) || 
-               ($user->hasRole('Candidate') && $user->id === $candidate->user_id);
+        return $user->hasRole(['Admin', 'Employer'])
+               || ($user->hasRole('Candidate') && $user->id === $candidate->user_id);
     }
 
     /**
@@ -38,8 +37,8 @@ class CandidatePolicy
      */
     public function update(User $user, Candidate $candidate): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Candidate') && $user->id === $candidate->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Candidate') && $user->id === $candidate->user_id);
     }
 
     /**

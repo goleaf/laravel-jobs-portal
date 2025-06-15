@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostComment;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class PostCategoryRepository
+ * Class PostCategoryRepository.
  */
 class PostRepository extends BaseRepository
 {
@@ -25,7 +24,7 @@ class PostRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -33,8 +32,8 @@ class PostRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Post::class;
@@ -43,19 +42,19 @@ class PostRepository extends BaseRepository
     public function store($input): bool
     {
         try {
-            /** @var Post $post */
+            // @var Post $post
             $input['created_by'] = getLoggedInUserId();
             $blogInput = Arr::only($input, ['title', 'description', 'created_by', 'is_default']);
             $post = $this->create($blogInput);
 
-            if (isset($input['image']) && ! empty($input['image'])) {
+            if (isset($input['image']) && !empty($input['image'])) {
                 $post->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
             // update blog assign Categories
-            if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
+            if (isset($input['blogCategories']) && !empty($input['blogCategories'])) {
                 $post->postAssignCategories()->sync($input['blogCategories']);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
@@ -65,18 +64,18 @@ class PostRepository extends BaseRepository
     public function updateBlog($blog, $input): bool
     {
         try {
-            /** @var Post $blog */
+            // @var Post $blog
             $blog->update($input);
 
-            if (isset($input['image']) && ! empty($input['image'])) {
+            if (isset($input['image']) && !empty($input['image'])) {
                 $blog->clearMediaCollection(Post::PATH);
                 $blog->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
             // update blog assign Categories
-            if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
+            if (isset($input['blogCategories']) && !empty($input['blogCategories'])) {
                 $blog->postAssignCategories()->sync($input['blogCategories']);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
@@ -103,6 +102,8 @@ class PostRepository extends BaseRepository
     }
 
     /**
+     * @param mixed $blog
+     *
      * @return mixed
      */
     public function getBlogDetails($blog)
@@ -137,7 +138,8 @@ class PostRepository extends BaseRepository
         }, 'media'])->withCount('comments')
             ->whereHas('postAssignCategories', function (Builder $q) use ($categoryId) {
                 $q->where('post_categories_id', '=', $categoryId);
-            })->paginate(10);
+            })->paginate(10)
+        ;
         $blogIds = $data['blogs']->pluck('id')->toArray();
         $data['blogCategories'] = PostCategory::withCount('postAssignCategories')->toBase()->get();
         $data['blogCategory'] = PostCategory::toBase()->pluck('name', 'id');
@@ -151,6 +153,9 @@ class PostRepository extends BaseRepository
     }
 
     /**
+     * @param mixed $blogId
+     * @param mixed $input
+     *
      * @return mixed
      */
     public function createComment($blogId, $input)
@@ -168,8 +173,9 @@ class PostRepository extends BaseRepository
             DB::commit();
 
             return $comment;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Candidate;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateEducationCandidateRequest extends FormRequest
 {
@@ -18,7 +18,7 @@ class UpdateEducationCandidateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -79,6 +79,18 @@ class UpdateEducationCandidateRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Add any custom validation logic here
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -88,15 +100,5 @@ class UpdateEducationCandidateRequest extends FormRequest
         $this->merge([
             // Add any automatic data transformations
         ]);
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            // Add any custom validation logic here
-        });
     }
 }

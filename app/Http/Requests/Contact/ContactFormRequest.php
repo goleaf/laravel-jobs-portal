@@ -19,14 +19,14 @@ class ContactFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return array (
-  'first_name' => 'required|string|max:255',
-  'last_name' => 'nullable|string|max:255',
-  'email' => 'required|email',
-  'phone' => 'nullable|string|max:20',
-  'subject' => 'required|string|max:255',
-  'message' => 'required|string|min:10',
-);
+        return [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|min:10',
+        ];
     }
 
     /**
@@ -34,14 +34,14 @@ class ContactFormRequest extends FormRequest
      */
     public function messages(): array
     {
-        return array (
-  'first_name.required' => 'First name is required',
-  'email.required' => 'Email is required',
-  'email.email' => 'Please enter a valid email address',
-  'subject.required' => 'Subject is required',
-  'message.required' => 'Message is required',
-  'message.min' => 'Message must be at least 10 characters',
-);
+        return [
+            'first_name.required' => 'First name is required',
+            'email.required' => 'Email is required',
+            'email.email' => 'Please enter a valid email address',
+            'subject.required' => 'Subject is required',
+            'message.required' => 'Message is required',
+            'message.min' => 'Message must be at least 10 characters',
+        ];
     }
 
     /**

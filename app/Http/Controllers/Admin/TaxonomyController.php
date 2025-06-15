@@ -13,8 +13,8 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
- * TaxonomyController - Enhanced with Enhanced patterns
- * 
+ * TaxonomyController - Enhanced with Enhanced patterns.
+ *
  * Manages taxonomies with full CRUD operations, search, filtering,
  * and bulk operations following Laravel best practices.
  */
@@ -23,7 +23,7 @@ class TaxonomyController extends Controller
     /**
      * Display a listing of taxonomies.
      */
-    public function index(Request $request): View|JsonResponse
+    public function index(Request $request): JsonResponse|View
     {
         $query = Taxonomy::query();
 
@@ -39,18 +39,18 @@ class TaxonomyController extends Controller
 
         // Filter by status
         if ($request->filled('status')) {
-            if ($request->status === 'active') {
+            if ('active' === $request->status) {
                 $query->active();
-            } elseif ($request->status === 'inactive') {
+            } elseif ('inactive' === $request->status) {
                 $query->inactive();
             }
         }
 
         // Filter by visibility
         if ($request->filled('visibility')) {
-            if ($request->visibility === 'public') {
+            if ('public' === $request->visibility) {
                 $query->public();
-            } elseif ($request->visibility === 'private') {
+            } elseif ('private' === $request->visibility) {
                 $query->private();
             }
         }
@@ -58,27 +58,36 @@ class TaxonomyController extends Controller
         // Sort options
         $sortBy = $request->get('sort_by', 'name');
         $sortDirection = $request->get('sort_direction', 'asc');
-        
+
         switch ($sortBy) {
             case 'name':
                 $query->alphabetical();
+
                 break;
+
             case 'created_at':
                 $query->orderBy('created_at', $sortDirection);
+
                 break;
+
             case 'sort_order':
                 $query->ordered();
+
                 break;
+
             case 'terms_count':
                 $query->withTermCounts()->orderBy('terms_count', $sortDirection);
+
                 break;
+
             default:
                 $query->alphabetical();
         }
 
         $taxonomies = $query->withCount('terms')
-                           ->paginate(20)
-                           ->withQueryString();
+            ->paginate(20)
+            ->withQueryString()
+        ;
 
         // Get available types for filter
         $types = Taxonomy::distinct('type')->pluck('type')->toArray();
@@ -94,7 +103,7 @@ class TaxonomyController extends Controller
                     'visibility' => $request->visibility,
                     'sort_by' => $sortBy,
                     'sort_direction' => $sortDirection,
-                ]
+                ],
             ]);
         }
 
@@ -107,17 +116,17 @@ class TaxonomyController extends Controller
     public function create(): View
     {
         $types = Taxonomy::TYPES;
-        
+
         return view('admin.taxonomies.create', compact('types'));
     }
 
     /**
      * Store a newly created taxonomy.
      */
-    public function store(TaxonomyCreateRequest $request): RedirectResponse|JsonResponse
+    public function store(TaxonomyCreateRequest $request): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
-        
+
         // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['name']);
@@ -128,19 +137,20 @@ class TaxonomyController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Taxonomy created successfully.',
-                'taxonomy' => $taxonomy->load('terms')
+                'taxonomy' => $taxonomy->load('terms'),
             ], 201);
         }
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy created successfully.');
+            ->with('success', 'Taxonomy created successfully.')
+        ;
     }
 
     /**
      * Display the specified taxonomy.
      */
-    public function show(Taxonomy $taxonomy): View|JsonResponse
+    public function show(Taxonomy $taxonomy): JsonResponse|View
     {
         $taxonomy->load(['terms' => function ($query) {
             $query->ordered();
@@ -152,15 +162,15 @@ class TaxonomyController extends Controller
             'active_terms' => $taxonomy->terms()->active()->count(),
             'total_usage' => $taxonomy->terms()->sum('usage_count'),
             'recently_used' => $taxonomy->terms()
-                                      ->whereNotNull('last_used_at')
-                                      ->where('last_used_at', '>=', now()->subDays(30))
-                                      ->count(),
+                ->whereNotNull('last_used_at')
+                ->where('last_used_at', '>=', now()->subDays(30))
+                ->count(),
         ];
 
         if (request()->expectsJson()) {
             return response()->json([
                 'taxonomy' => $taxonomy,
-                'usage_stats' => $usage_stats
+                'usage_stats' => $usage_stats,
             ]);
         }
 
@@ -173,17 +183,17 @@ class TaxonomyController extends Controller
     public function edit(Taxonomy $taxonomy): View
     {
         $types = Taxonomy::TYPES;
-        
+
         return view('admin.taxonomies.edit', compact('taxonomy', 'types'));
     }
 
     /**
      * Update the specified taxonomy.
      */
-    public function update(TaxonomyUpdateRequest $request, Taxonomy $taxonomy): RedirectResponse|JsonResponse
+    public function update(TaxonomyUpdateRequest $request, Taxonomy $taxonomy): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
-        
+
         // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['name']);
@@ -195,31 +205,33 @@ class TaxonomyController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Taxonomy updated successfully.',
-                'taxonomy' => $taxonomy->fresh()->load('terms')
+                'taxonomy' => $taxonomy->fresh()->load('terms'),
             ]);
         }
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy updated successfully.');
+            ->with('success', 'Taxonomy updated successfully.')
+        ;
     }
 
     /**
      * Remove the specified taxonomy.
      */
-    public function destroy(Taxonomy $taxonomy): RedirectResponse|JsonResponse
+    public function destroy(Taxonomy $taxonomy): JsonResponse|RedirectResponse
     {
         // Check if taxonomy has terms
         if ($taxonomy->terms()->count() > 0) {
             if (request()->expectsJson()) {
                 return response()->json([
-                    'message' => 'Cannot delete taxonomy with existing terms. Please remove all terms first.'
+                    'message' => 'Cannot delete taxonomy with existing terms. Please remove all terms first.',
                 ], 422);
             }
 
             return redirect()
                 ->route('admin.taxonomies.index')
-                ->with('error', 'Cannot delete taxonomy with existing terms. Please remove all terms first.');
+                ->with('error', 'Cannot delete taxonomy with existing terms. Please remove all terms first.')
+            ;
         }
 
         $taxonomy->clearCaches();
@@ -227,13 +239,14 @@ class TaxonomyController extends Controller
 
         if (request()->expectsJson()) {
             return response()->json([
-                'message' => 'Taxonomy deleted successfully.'
+                'message' => 'Taxonomy deleted successfully.',
             ]);
         }
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy deleted successfully.');
+            ->with('success', 'Taxonomy deleted successfully.')
+        ;
     }
 
     /**
@@ -242,14 +255,14 @@ class TaxonomyController extends Controller
     public function toggleStatus(Taxonomy $taxonomy): JsonResponse
     {
         $taxonomy->update([
-            'is_active' => !$taxonomy->is_active
+            'is_active' => !$taxonomy->is_active,
         ]);
 
         $taxonomy->clearCaches();
 
         return response()->json([
             'message' => 'Taxonomy status updated successfully.',
-            'is_active' => $taxonomy->is_active
+            'is_active' => $taxonomy->is_active,
         ]);
     }
 
@@ -261,7 +274,7 @@ class TaxonomyController extends Controller
         $request->validate([
             'action' => 'required|in:activate,deactivate,delete',
             'taxonomy_ids' => 'required|array',
-            'taxonomy_ids.*' => 'exists:taxonomies,id'
+            'taxonomy_ids.*' => 'exists:taxonomies,id',
         ]);
 
         $taxonomies = Taxonomy::whereIn('id', $request->taxonomy_ids);
@@ -270,12 +283,14 @@ class TaxonomyController extends Controller
         switch ($request->action) {
             case 'activate':
                 $taxonomies->update(['is_active' => true]);
-                $message = "$count taxonomies activated successfully.";
+                $message = "{$count} taxonomies activated successfully.";
+
                 break;
 
             case 'deactivate':
                 $taxonomies->update(['is_active' => false]);
-                $message = "$count taxonomies deactivated successfully.";
+                $message = "{$count} taxonomies deactivated successfully.";
+
                 break;
 
             case 'delete':
@@ -283,12 +298,13 @@ class TaxonomyController extends Controller
                 $taxonomiesWithTerms = $taxonomies->has('terms')->count();
                 if ($taxonomiesWithTerms > 0) {
                     return response()->json([
-                        'message' => "Cannot delete $taxonomiesWithTerms taxonomies that have terms."
+                        'message' => "Cannot delete {$taxonomiesWithTerms} taxonomies that have terms.",
                     ], 422);
                 }
 
                 $taxonomies->delete();
-                $message = "$count taxonomies deleted successfully.";
+                $message = "{$count} taxonomies deleted successfully.";
+
                 break;
         }
 
@@ -316,9 +332,9 @@ class TaxonomyController extends Controller
         }
 
         if ($request->filled('status')) {
-            if ($request->status === 'active') {
+            if ('active' === $request->status) {
                 $query->active();
-            } elseif ($request->status === 'inactive') {
+            } elseif ('inactive' === $request->status) {
                 $query->inactive();
             }
         }
@@ -366,12 +382,13 @@ class TaxonomyController extends Controller
     public function terms(Taxonomy $taxonomy): JsonResponse
     {
         $terms = $taxonomy->terms()
-                         ->active()
-                         ->ordered()
-                         ->get();
+            ->active()
+            ->ordered()
+            ->get()
+        ;
 
         return response()->json([
-            'terms' => $terms
+            'terms' => $terms,
         ]);
     }
 }

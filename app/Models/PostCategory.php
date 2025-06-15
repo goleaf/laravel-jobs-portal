@@ -2,41 +2,43 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * PostCategory Model - Enhanced with Enhanced patterns
+ * PostCategory Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property bool $is_default
- * @property bool $is_active
- * @property bool $is_featured
- * @property int|null $sort_order
- * @property string|null $color
- * @property string|null $icon
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $activePosts
- * @property-read string $display_name
- * @property-read string $slug
- * @property-read string $badge_html
- * @property-read string|null $icon_html
- * @property-read int $posts_count
- * @property-read int $active_posts_count
- * @property-read array $stats
+ * @property int               $id
+ * @property string            $name
+ * @property null|string       $description
+ * @property bool              $is_default
+ * @property bool              $is_active
+ * @property bool              $is_featured
+ * @property null|int          $sort_order
+ * @property null|string       $color
+ * @property null|string       $icon
+ * @property null|Carbon       $created_at
+ * @property null|Carbon       $updated_at
+ * @property null|Carbon       $deleted_at
+ * @property Collection|Post[] $posts
+ * @property Collection|Post[] $activePosts
+ * @property string            $display_name
+ * @property string            $slug
+ * @property string            $badge_html
+ * @property null|string       $icon_html
+ * @property int               $posts_count
+ * @property int               $active_posts_count
+ * @property array             $stats
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -64,48 +66,9 @@ use Spatie\Activitylog\LogOptions;
  */
 class PostCategory extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
-
-    protected $fillable = [
-        'name',
-        'description',
-        'is_default',
-        'is_active',
-        'is_featured',
-        'sort_order',
-        'color',
-        'icon'
-    ];
-
-    protected $hidden = [
-        'deleted_at'
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'name' => 'string',
-            'description' => 'string',
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'color' => 'string',
-            'icon' => 'string',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime'
-        ];
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'description', 'is_default', 'is_active', 'is_featured'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     public static array $rules = [
         'name' => 'required|string|max:255|unique:post_categories,name',
@@ -115,8 +78,32 @@ class PostCategory extends Model
         'is_featured' => 'boolean',
         'sort_order' => 'nullable|integer|min:0',
         'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-        'icon' => 'nullable|string|max:50'
+        'icon' => 'nullable|string|max:50',
     ];
+
+    protected $fillable = [
+        'name',
+        'description',
+        'is_default',
+        'is_active',
+        'is_featured',
+        'sort_order',
+        'color',
+        'icon',
+    ];
+
+    protected $hidden = [
+        'deleted_at',
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'description', 'is_default', 'is_active', 'is_featured'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+        ;
+    }
 
     // ==============================================
     // RELATIONSHIPS
@@ -179,8 +166,9 @@ class PostCategory extends Model
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('name', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%');
+            $q->where('name', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+            ;
         });
     }
 
@@ -244,7 +232,7 @@ class PostCategory extends Model
             },
             'posts as featured_posts_count' => function ($q) {
                 $q->where('posts.is_featured', true);
-            }
+            },
         ]);
     }
 
@@ -270,42 +258,42 @@ class PostCategory extends Model
 
     public function scopeNameLike($query, string $name)
     {
-        return $query->where('name', 'like', '%' . $name . '%');
+        return $query->where('name', 'like', '%'.$name.'%');
     }
 
     // ==============================================
     // CACHING METHODS
     // ==============================================
 
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('post_categories.active', now()->addHours(6), function () {
             return static::active()->ordered()->get();
         });
     }
 
-    public static function getCachedDefault(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedDefault(): Collection
     {
         return Cache::remember('post_categories.default', now()->addHours(12), function () {
             return static::default()->active()->ordered()->get();
         });
     }
 
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('post_categories.featured', now()->addHours(6), function () {
             return static::featured()->active()->ordered()->get();
         });
     }
 
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("post_categories.popular.{$limit}", now()->addHours(6), function () use ($limit) {
             return static::popular($limit)->active()->get();
         });
     }
 
-    public static function getCachedTrending(int $days = 30, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedTrending(int $days = 30, int $limit = 10): Collection
     {
         return Cache::remember("post_categories.trending.{$days}.{$limit}", now()->addHours(3), function () use ($days, $limit) {
             return static::trending($days, $limit)->active()->get();
@@ -343,9 +331,10 @@ class PostCategory extends Model
     public function getDisplayNameAttribute(): string
     {
         $name = $this->name;
-        if ($this->posts_count !== null) {
+        if (null !== $this->posts_count) {
             $name .= " ({$this->posts_count})";
         }
+
         return $name;
     }
 
@@ -373,6 +362,7 @@ class PostCategory extends Model
     {
         $color = $this->color ?: '#6c757d';
         $icon = $this->icon ? "<i class=\"{$this->icon} me-1\"></i>" : '';
+
         return "<span class=\"badge\" style=\"background-color: {$color};\">{$icon}{$this->name}</span>";
     }
 
@@ -420,7 +410,7 @@ class PostCategory extends Model
             'recent_posts' => $this->recentPosts()->count(),
             'is_popular' => $this->posts()->count() >= 5,
             'is_trending' => $this->recentPosts()->count() >= 3,
-            'created_days_ago' => $this->created_at?->diffInDays(now())
+            'created_days_ago' => $this->created_at?->diffInDays(now()),
         ];
     }
 
@@ -429,7 +419,7 @@ class PostCategory extends Model
         $cacheKeys = [
             'post_categories.active',
             'post_categories.default',
-            'post_categories.featured'
+            'post_categories.featured',
         ];
 
         for ($i = 5; $i <= 20; $i += 5) {
@@ -439,6 +429,24 @@ class PostCategory extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'description' => 'string',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'color' => 'string',
+            'icon' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     protected static function boot()
@@ -457,4 +465,4 @@ class PostCategory extends Model
             $model->clearCaches();
         });
     }
-} 
+}

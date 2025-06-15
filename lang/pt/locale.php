@@ -7,7 +7,7 @@ return [
     'select_language' => 'Selecionar idioma',
     'language_changed' => 'Idioma alterado com sucesso para :language',
     'language_not_supported' => 'O idioma :language não é suportado',
-    
+
     // Locale Names
     'languages' => [
         'en' => 'Inglês',
@@ -20,7 +20,7 @@ return [
         'tr' => 'Turco',
         'zh' => 'Chinês',
     ],
-    
+
     // Locale Settings
     'direction' => 'ltr',
     'native_name' => 'Português',
@@ -29,14 +29,14 @@ return [
     'date_format' => 'd/m/Y',
     'time_format' => 'H:i',
     'datetime_format' => 'd/m/Y H:i',
-    
+
     // System Messages
     'loading' => 'Carregando...',
     'error' => 'Erro',
     'success' => 'Sucesso',
     'warning' => 'Aviso',
     'info' => 'Informação',
-    
+
     // Navigation
     'home' => 'Início',
     'back' => 'Voltar',
@@ -52,7 +52,7 @@ return [
     'filter' => 'Filtrar',
     'reset' => 'Redefinir',
     'refresh' => 'Atualizar',
-    
+
     // Time and Dates
     'today' => 'Hoje',
     'yesterday' => 'Ontem',
@@ -63,7 +63,7 @@ return [
     'this_month' => 'Este mês',
     'last_month' => 'Mês passado',
     'next_month' => 'Próximo mês',
-    
+
     // Numbers and Counting
     'first' => 'Primeiro',
     'second' => 'Segundo',
@@ -76,7 +76,7 @@ return [
     'showing' => 'Mostrando',
     'to' => 'para',
     'results' => 'resultados',
-    
+
     // Status
     'active' => 'Ativo',
     'inactive' => 'Inativo',

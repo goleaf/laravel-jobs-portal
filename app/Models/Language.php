@@ -2,38 +2,37 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Language Model - Enhanced with Enhanced patterns
+ * Language Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $language
- * @property string $iso_code
- * @property bool $is_default
- * @property bool $is_active
- * @property bool $is_featured
- * @property int|null $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidates
- * @property-read string $display_name
- * @property-read string $native_name
- * @property-read int $candidates_count
- * @property-read bool $is_popular
- * @property-read bool $is_major
- * @property-read bool $is_european
+ * @property int               $id
+ * @property string            $language
+ * @property string            $iso_code
+ * @property bool              $is_default
+ * @property bool              $is_active
+ * @property bool              $is_featured
+ * @property null|int          $sort_order
+ * @property null|Carbon       $created_at
+ * @property null|Carbon       $updated_at
+ * @property Collection|User[] $candidates
+ * @property string            $display_name
+ * @property string            $native_name
+ * @property int               $candidates_count
+ * @property bool              $is_popular
+ * @property bool              $is_major
+ * @property bool              $is_european
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -58,38 +57,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class Language extends Model
 {
+    use HasFactory;
+    use LogsActivity;
     public $table = 'languages';
-    use HasFactory, LogsActivity;
-
-    protected $fillable = [
-        'language',
-        'iso_code',
-        'is_default',
-        'is_active',
-        'is_featured',
-        'sort_order',
-    ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array<string, string>
      */
@@ -102,8 +75,17 @@ class Language extends Model
         'sort_order' => 'nullable|integer|min:0',
     ];
 
+    protected $fillable = [
+        'language',
+        'iso_code',
+        'is_default',
+        'is_active',
+        'is_featured',
+        'sort_order',
+    ];
+
     /**
-     * Get all candidates that use this language
+     * Get all candidates that use this language.
      */
     public function candidates(): BelongsToMany
     {
@@ -112,6 +94,8 @@ class Language extends Model
 
     /**
      * Scope for active languages.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -120,6 +104,8 @@ class Language extends Model
 
     /**
      * Scope for inactive languages.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -128,6 +114,8 @@ class Language extends Model
 
     /**
      * Scope for default languages.
+     *
+     * @param mixed $query
      */
     public function scopeDefault($query)
     {
@@ -136,6 +124,8 @@ class Language extends Model
 
     /**
      * Scope for custom languages.
+     *
+     * @param mixed $query
      */
     public function scopeCustom($query)
     {
@@ -144,17 +134,22 @@ class Language extends Model
 
     /**
      * Scope for searching languages by name or ISO code.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('language', 'like', '%' . $term . '%')
-              ->orWhere('iso_code', 'like', '%' . $term . '%');
+            $q->where('language', 'like', '%'.$term.'%')
+                ->orWhere('iso_code', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope for alphabetically ordered languages.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -163,6 +158,8 @@ class Language extends Model
 
     /**
      * Scope for languages with candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithCandidates($query)
     {
@@ -171,6 +168,8 @@ class Language extends Model
 
     /**
      * Scope for languages without candidates.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutCandidates($query)
     {
@@ -179,6 +178,8 @@ class Language extends Model
 
     /**
      * Scope for recent languages.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -187,6 +188,8 @@ class Language extends Model
 
     /**
      * Scope for old languages.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -195,16 +198,21 @@ class Language extends Model
 
     /**
      * Scope for popular languages (most used by candidates).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('candidates')
-                    ->orderByDesc('candidates_count')
-                    ->limit($limit);
+            ->orderByDesc('candidates_count')
+            ->limit($limit)
+        ;
     }
 
     /**
      * Scope for featured languages.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -213,6 +221,8 @@ class Language extends Model
 
     /**
      * Scope for non-featured languages.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -221,6 +231,8 @@ class Language extends Model
 
     /**
      * Scope for languages by ISO code.
+     *
+     * @param mixed $query
      */
     public function scopeByIsoCode($query, string $code)
     {
@@ -229,24 +241,32 @@ class Language extends Model
 
     /**
      * Scope for European languages.
+     *
+     * @param mixed $query
      */
     public function scopeEuropean($query)
     {
         $europeanCodes = ['en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru', 'sv', 'da', 'no', 'fi'];
+
         return $query->whereIn('iso_code', $europeanCodes);
     }
 
     /**
      * Scope for major world languages.
+     *
+     * @param mixed $query
      */
     public function scopeMajor($query)
     {
         $majorCodes = ['en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr'];
+
         return $query->whereIn('iso_code', $majorCodes);
     }
 
     /**
      * Scope for regional languages.
+     *
+     * @param mixed $query
      */
     public function scopeRegional($query, string $region)
     {
@@ -259,11 +279,14 @@ class Language extends Model
         ];
 
         $codes = $regionalCodes[strtolower($region)] ?? [];
+
         return $query->whereIn('iso_code', $codes);
     }
 
     /**
      * Scope for languages with counts loaded.
+     *
+     * @param mixed $query
      */
     public function scopeWithCounts($query)
     {
@@ -272,11 +295,14 @@ class Language extends Model
 
     /**
      * Scope for ordered languages (by sort_order, then alphabetical).
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
-                    ->orderBy('language', 'asc');
+            ->orderBy('language', 'asc')
+        ;
     }
 
     /**
@@ -287,20 +313,20 @@ class Language extends Model
         return LogOptions::defaults()
             ->logOnly(['language', 'iso_code', 'is_default', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
      * Update validation rules for languages.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'language' => 'required|string|max:150|unique:languages,language,' . $id,
-            'iso_code' => 'required|string|max:10|unique:languages,iso_code,' . $id . '|regex:/^[a-z]{2}(-[A-Z]{2})?$/',
+            'language' => 'required|string|max:150|unique:languages,language,'.$id,
+            'iso_code' => 'required|string|max:10|unique:languages,iso_code,'.$id.'|regex:/^[a-z]{2}(-[A-Z]{2})?$/',
             'is_default' => 'boolean',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -317,6 +343,7 @@ class Language extends Model
         if (isset($this->candidates_count)) {
             $name .= " ({$this->candidates_count})";
         }
+
         return $name;
     }
 
@@ -382,7 +409,7 @@ class Language extends Model
     public function getIsMajorAttribute(): bool
     {
         return in_array($this->iso_code, [
-            'en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr'
+            'en', 'zh', 'es', 'hi', 'ar', 'pt', 'ru', 'ja', 'de', 'fr',
         ]);
     }
 
@@ -392,7 +419,7 @@ class Language extends Model
     public function getIsEuropeanAttribute(): bool
     {
         return in_array($this->iso_code, [
-            'en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru', 'sv', 'da', 'no', 'fi'
+            'en', 'fr', 'de', 'es', 'it', 'pt', 'nl', 'pl', 'ru', 'sv', 'da', 'no', 'fi',
         ]);
     }
 
@@ -489,6 +516,24 @@ class Language extends Model
     }
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
      * Boot the model and register model events.
      */
     protected static function boot()
@@ -503,6 +548,5 @@ class Language extends Model
         static::deleted(function ($model) {
             $model->clearCaches();
         });
-
     }
 }

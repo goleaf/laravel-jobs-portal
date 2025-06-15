@@ -2,38 +2,40 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Tag Model - Enhanced with Enhanced patterns
+ * Tag Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property string|null $slug
- * @property string|null $color
- * @property bool $is_active
- * @property bool $is_default
- * @property bool $is_featured
- * @property int|null $sort_order
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $activeJobs
- * @property-read string $display_name
- * @property-read int $jobs_count
- * @property-read int $active_jobs_count
- * @property-read bool $is_popular
+ * @property int              $id
+ * @property string           $name
+ * @property null|string      $description
+ * @property null|string      $slug
+ * @property null|string      $color
+ * @property bool             $is_active
+ * @property bool             $is_default
+ * @property bool             $is_featured
+ * @property null|int         $sort_order
+ * @property null|Carbon      $created_at
+ * @property null|Carbon      $updated_at
+ * @property null|Carbon      $deleted_at
+ * @property Collection|Job[] $jobs
+ * @property Collection|Job[] $activeJobs
+ * @property string           $display_name
+ * @property int              $jobs_count
+ * @property int              $active_jobs_count
+ * @property bool             $is_popular
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static \Illuminate\Database\Eloquent\Builder active()
  * @method static \Illuminate\Database\Eloquent\Builder inactive()
  * @method static \Illuminate\Database\Eloquent\Builder featured()
@@ -60,6 +62,22 @@ class Tag extends Model
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
+
+    /**
+     * Validation rules for creating tags.
+     *
+     * @var array<string, string>
+     */
+    public static array $rules = [
+        'name' => 'required|string|max:100|unique:tags,name',
+        'description' => 'nullable|string|max:500',
+        'slug' => 'nullable|string|max:100|unique:tags,slug',
+        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order' => 'nullable|integer|min:0',
+    ];
 
     /**
      * The table associated with the model.
@@ -94,25 +112,6 @@ class Tag extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_featured' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Get the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
@@ -120,37 +119,21 @@ class Tag extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
-
-    /**
-     * Validation rules for creating tags.
-     *
-     * @var array<string, string>
-     */
-    public static array $rules = [
-        'name' => 'required|string|max:100|unique:tags,name',
-        'description' => 'nullable|string|max:500',
-        'slug' => 'nullable|string|max:100|unique:tags,slug',
-        'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_featured' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0',
-    ];
 
     /**
      * Update validation rules for tags.
      *
-     * @param int $id
      * @return array<string, string>
      */
     public static function updateRules(int $id): array
     {
         return [
-            'name' => 'required|string|max:100|unique:tags,name,' . $id,
+            'name' => 'required|string|max:100|unique:tags,name,'.$id,
             'description' => 'nullable|string|max:500',
-            'slug' => 'nullable|string|max:100|unique:tags,slug,' . $id,
+            'slug' => 'nullable|string|max:100|unique:tags,slug,'.$id,
             'color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
@@ -201,6 +184,8 @@ class Tag extends Model
 
     /**
      * Scope to only include active tags.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -209,6 +194,8 @@ class Tag extends Model
 
     /**
      * Scope to only include inactive tags.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -217,6 +204,8 @@ class Tag extends Model
 
     /**
      * Scope to only include featured tags.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -225,6 +214,8 @@ class Tag extends Model
 
     /**
      * Scope to only include non-featured tags.
+     *
+     * @param mixed $query
      */
     public function scopeNonFeatured($query)
     {
@@ -233,6 +224,8 @@ class Tag extends Model
 
     /**
      * Scope to only include default tags.
+     *
+     * @param mixed $query
      */
     public function scopeDefault($query)
     {
@@ -241,6 +234,8 @@ class Tag extends Model
 
     /**
      * Scope to only include custom tags.
+     *
+     * @param mixed $query
      */
     public function scopeCustom($query)
     {
@@ -253,18 +248,23 @@ class Tag extends Model
 
     /**
      * Scope to search tags by name and description.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
-            $q->where('name', 'like', '%' . $term . '%')
-              ->orWhere('description', 'like', '%' . $term . '%')
-              ->orWhere('slug', 'like', '%' . $term . '%');
+            $q->where('name', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+                ->orWhere('slug', 'like', '%'.$term.'%')
+            ;
         });
     }
 
     /**
      * Scope to get tags created within specified days.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -273,6 +273,8 @@ class Tag extends Model
 
     /**
      * Scope to get old tags created before specified days.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -281,6 +283,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags by color.
+     *
+     * @param mixed $query
      */
     public function scopeByColor($query, string $color)
     {
@@ -293,6 +297,8 @@ class Tag extends Model
 
     /**
      * Scope to order tags alphabetically.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -301,6 +307,8 @@ class Tag extends Model
 
     /**
      * Scope to order tags by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
@@ -313,6 +321,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags with jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithJobs($query)
     {
@@ -321,6 +331,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags without jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutJobs($query)
     {
@@ -329,6 +341,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags with active jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -339,6 +353,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags with featured jobs.
+     *
+     * @param mixed $query
      */
     public function scopeWithFeaturedJobs($query)
     {
@@ -349,6 +365,8 @@ class Tag extends Model
 
     /**
      * Scope to get tags with job counts.
+     *
+     * @param mixed $query
      */
     public function scopeWithJobCounts($query)
     {
@@ -369,6 +387,8 @@ class Tag extends Model
 
     /**
      * Scope to get popular tags by job count.
+     *
+     * @param mixed $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -379,17 +399,22 @@ class Tag extends Model
 
     /**
      * Scope to get trending tags by recent activity.
+     *
+     * @param mixed $query
      */
     public function scopeTrending($query, int $days = 30, int $limit = 10)
     {
         return $query->withCount(['jobs as recent_jobs_count' => function ($q) use ($days) {
             $q->where('jobs.is_active', true)
-              ->where('jobs.created_at', '>=', now()->subDays($days));
+                ->where('jobs.created_at', '>=', now()->subDays($days))
+            ;
         }])->orderBy('recent_jobs_count', 'desc')->limit($limit);
     }
 
     /**
      * Scope to get tags with minimum jobs.
+     *
+     * @param mixed $query
      */
     public function scopeMinJobs($query, int $minJobs = 5)
     {
@@ -403,7 +428,7 @@ class Tag extends Model
     /**
      * Get cached active tags.
      */
-    public static function getCachedActive(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedActive(): Collection
     {
         return Cache::remember('tags.active', now()->addHours(6), function () {
             return static::active()->alphabetical()->get();
@@ -413,7 +438,7 @@ class Tag extends Model
     /**
      * Get cached featured tags.
      */
-    public static function getCachedFeatured(): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedFeatured(): Collection
     {
         return Cache::remember('tags.featured', now()->addHours(6), function () {
             return static::featured()->active()->alphabetical()->get();
@@ -423,7 +448,7 @@ class Tag extends Model
     /**
      * Get cached popular tags.
      */
-    public static function getCachedPopular(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedPopular(int $limit = 10): Collection
     {
         return Cache::remember("tags.popular.{$limit}", now()->addHours(3), function () use ($limit) {
             return static::popular($limit)->active()->get();
@@ -433,7 +458,7 @@ class Tag extends Model
     /**
      * Get cached trending tags.
      */
-    public static function getCachedTrending(int $days = 30, int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    public static function getCachedTrending(int $days = 30, int $limit = 10): Collection
     {
         return Cache::remember("tags.trending.{$days}.{$limit}", now()->addHours(3), function () use ($days, $limit) {
             return static::trending($days, $limit)->active()->get();
@@ -453,6 +478,7 @@ class Tag extends Model
         if (isset($this->jobs_count)) {
             $name .= " ({$this->jobs_count})";
         }
+
         return $name;
     }
 
@@ -586,6 +612,7 @@ class Tag extends Model
     public function getBadgeHtml(): string
     {
         $color = $this->color ?: '#6c757d';
+
         return "<span class=\"badge\" style=\"background-color: {$color};\">{$this->name}</span>";
     }
 
@@ -618,6 +645,25 @@ class Tag extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_default' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================

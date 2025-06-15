@@ -20,8 +20,6 @@ class UpdateFAQRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = FAQ::$rules;
-
-        return $rules;
+        return FAQ::$rules;
     }
 }

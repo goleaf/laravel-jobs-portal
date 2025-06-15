@@ -20,13 +20,13 @@ class CareerLevelFactory extends Factory
             'Entry Level',
             'Junior Level',
             'Mid Level',
-            'Senior Level', 
+            'Senior Level',
             'Lead Level',
             'Principal Level',
             'Manager Level',
-            'Director Level'
+            'Director Level',
         ];
-        
+
         return [
             'level_name' => $this->faker->unique()->randomElement($careerLevels),
         ];

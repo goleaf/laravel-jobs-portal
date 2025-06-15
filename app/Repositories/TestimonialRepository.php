@@ -3,11 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\Testimonial;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class TestimonialRepository
+ * Class TestimonialRepository.
  */
 class TestimonialRepository extends BaseRepository
 {
@@ -37,13 +36,13 @@ class TestimonialRepository extends BaseRepository
             /** @var Testimonial $testimonial */
             $testimonial = $this->create($input);
 
-            if (isset($input['customer_image']) && ! empty($input['customer_image'])) {
+            if (isset($input['customer_image']) && !empty($input['customer_image'])) {
                 $testimonial->addMedia($input['customer_image'])->toMediaCollection(
                     Testimonial::PATH,
                     config('app.media_disc')
                 );
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
 
@@ -56,14 +55,14 @@ class TestimonialRepository extends BaseRepository
             /** @var Testimonial $testimonial */
             $testimonial = $this->update($input, $testimonialId);
 
-            if (! empty($input['customer_image'])) {
+            if (!empty($input['customer_image'])) {
                 $testimonial->clearMediaCollection(Testimonial::PATH);
                 $testimonial->addMedia($input['customer_image'])->toMediaCollection(
                     Testimonial::PATH,
                     config('app.media_disc')
                 );
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }

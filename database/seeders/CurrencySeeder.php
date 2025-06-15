@@ -6,7 +6,7 @@ use App\Models\SalaryCurrency;
 use Illuminate\Database\Seeder;
 
 /**
- * Class CurrencySeeder
+ * Class CurrencySeeder.
  */
 class CurrencySeeder extends Seeder
 {
@@ -704,7 +704,7 @@ class CurrencySeeder extends Seeder
         foreach ($input as $data) {
             if (in_array($data['currency_name'], $salaryCurrencies)) {
                 $salaryCurrency = SalaryCurrency::whereCurrencyName($data['currency_name'])->first();
-                if ($salaryCurrency != null) {
+                if (null != $salaryCurrency) {
                     $salaryCurrency->update([
                         'currency_icon' => $data['currency_icon'], 'currency_code' => $data['currency_code'],
                     ]);
@@ -713,7 +713,7 @@ class CurrencySeeder extends Seeder
                 }
             } else {
                 $salaryCurrency = SalaryCurrency::whereCurrencyName($data['currency_name'])->first();
-                if ($salaryCurrency != null) {
+                if (null != $salaryCurrency) {
                     $salaryCurrency->update([
                         'currency_icon' => $data['currency_icon'], 'currency_code' => $data['currency_code'],
                     ]);

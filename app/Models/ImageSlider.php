@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * App\Models\ImageSlider
+ * App\Models\ImageSlider.
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider newQuery()
@@ -17,13 +19,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @mixin \Eloquent
  *
- * @property int $id
- * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $image_slider_url
- * @property-read \Illuminate\Database\Eloquent\Collection|Media[] $media
- * @property-read int|null $media_count
+ * @property int                $id
+ * @property null|string        $description
+ * @property null|Carbon        $created_at
+ * @property null|Carbon        $updated_at
+ * @property mixed              $image_slider_url
+ * @property Collection|Media[] $media
+ * @property null|int           $media_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider whereDescription($value)
@@ -36,13 +38,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class ImageSlider extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
     use HasFactory;
+    use InteractsWithMedia;
 
-    const ALL = 2;
-    const ACTIVE = 1;
-    const DEACTIVE = 0;
-    const STATUS = [
+    public const ALL = 2;
+    public const ACTIVE = 1;
+    public const DEACTIVE = 0;
+    public const STATUS = [
         self::ALL => 'Select Status',
         self::ACTIVE => 'Active',
         self::DEACTIVE => 'Deactive',
@@ -58,33 +60,13 @@ class ImageSlider extends Model implements HasMedia
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
         'image_slider' => 'required|mimes:jpeg,jpg,png',
     ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-        protected function casts(): array
-    {
-        return [
-            'is_featured' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-
-        'id' => 'integer',
-        'description' => 'string',
-        'is_active' => 'boolean',
-    
-        ];
-    }
-
 
     /**
      * @var array
@@ -98,18 +80,17 @@ class ImageSlider extends Model implements HasMedia
     {
         /** @var Media $media */
         $media = $this->media->first();
-        if (! empty($media)) {
+        if (!empty($media)) {
             return $media->getFullUrl();
         }
 
         return asset('assets/img/infyom-logo.png');
     }
 
-
-
-
     /**
      * Scope for active image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeActive($query)
     {
@@ -118,6 +99,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for inactive image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeInactive($query)
     {
@@ -126,6 +109,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for featured image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeFeatured($query)
     {
@@ -134,6 +119,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for non-featured image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeNotFeatured($query)
     {
@@ -142,15 +129,20 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for searching image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('title', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+        ;
     }
 
     /**
      * Scope for recent image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -159,6 +151,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for old image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -167,6 +161,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for ordering by sort order.
+     *
+     * @param mixed $query
      */
     public function scopeOrdered($query)
     {
@@ -175,6 +171,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for alphabetical ordering.
+     *
+     * @param mixed $query
      */
     public function scopeAlphabetical($query)
     {
@@ -183,6 +181,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for sliders with images.
+     *
+     * @param mixed $query
      */
     public function scopeWithImages($query)
     {
@@ -191,6 +191,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for sliders with links.
+     *
+     * @param mixed $query
      */
     public function scopeWithLinks($query)
     {
@@ -199,6 +201,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for sliders without links.
+     *
+     * @param mixed $query
      */
     public function scopeWithoutLinks($query)
     {
@@ -209,6 +213,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for gallery sliders.
+     *
+     * @param mixed $query
      */
     public function scopeGallery($query)
     {
@@ -217,6 +223,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for promotional sliders.
+     *
+     * @param mixed $query
      */
     public function scopePromotional($query)
     {
@@ -229,6 +237,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for latest image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeLatest($query)
     {
@@ -237,6 +247,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for oldest image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeOldest($query)
     {
@@ -245,6 +257,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for today's image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeToday($query)
     {
@@ -253,6 +267,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for this week's image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeThisWeek($query)
     {
@@ -261,15 +277,20 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for this month's image sliders.
+     *
+     * @param mixed $query
      */
     public function scopeThisMonth($query)
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     /**
      * Scope for popular image sliders (active + featured).
+     *
+     * @param mixed $query
      */
     public function scopePopular($query)
     {
@@ -278,6 +299,8 @@ class ImageSlider extends Model implements HasMedia
 
     /**
      * Scope for homepage display.
+     *
+     * @param mixed $query
      */
     public function scopeHomepage($query)
     {
@@ -337,7 +360,7 @@ class ImageSlider extends Model implements HasMedia
      */
     public static function getCachedActive()
     {
-        return \Illuminate\Support\Facades\Cache::remember('image_sliders.active', 3600, function () {
+        return Cache::remember('image_sliders.active', 3600, function () {
             return static::active()->ordered()->get();
         });
     }
@@ -347,7 +370,7 @@ class ImageSlider extends Model implements HasMedia
      */
     public static function getCachedHomepage()
     {
-        return \Illuminate\Support\Facades\Cache::remember('image_sliders.homepage', 3600, function () {
+        return Cache::remember('image_sliders.homepage', 3600, function () {
             return static::homepage()->get();
         });
     }
@@ -357,9 +380,27 @@ class ImageSlider extends Model implements HasMedia
      */
     public function clearCaches(): void
     {
-        \Illuminate\Support\Facades\Cache::forget('image_sliders.active');
-        \Illuminate\Support\Facades\Cache::forget('image_sliders.homepage');
-        \Illuminate\Support\Facades\Cache::forget('image_sliders.featured');
+        Cache::forget('image_sliders.active');
+        Cache::forget('image_sliders.homepage');
+        Cache::forget('image_sliders.featured');
+    }
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+
+            'id' => 'integer',
+            'description' => 'string',
+            'is_active' => 'boolean',
+        ];
     }
 
     // =============================================

@@ -3,7 +3,26 @@
 namespace App\Http\Controllers\Candidates;
 
 use App\Http\Controllers\AppBaseController;
-
+use App\Http\Requests\Candidates\CandidateUpdateGeneralInformationUpdateGeneralInformationCandidateRequest;
+use App\Http\Requests\Candidates\CandidateUpdateOnlineProfileUpdateOnlineProfileCandidateRequest;
+use App\Http\Requests\Candidates\CandidateUpdateProfileUpdateProfileCandidateRequest;
+use App\Http\Requests\Candidates\ChangePasswordChangePasswordCandidateRequest;
+use App\Http\Requests\Candidates\ChoosePreferenceCandidateRequest;
+use App\Http\Requests\Candidates\DeletedResumeCandidateRequest;
+use App\Http\Requests\Candidates\DeleteFavouriteJobCandidateRequest;
+use App\Http\Requests\Candidates\DestroyFavouriteCompanyCandidateRequest;
+use App\Http\Requests\Candidates\EditCandidateProfileCandidateRequest;
+use App\Http\Requests\Candidates\EditJobAlertCandidateRequest;
+use App\Http\Requests\Candidates\EditProfileCandidateRequest;
+use App\Http\Requests\Candidates\GetCVTemplateCandidateRequest;
+use App\Http\Requests\Candidates\ShowAppliedJobsCandidateRequest;
+use App\Http\Requests\Candidates\ShowCandidateAppliedJobCandidateRequest;
+use App\Http\Requests\Candidates\ShowFavouriteCompaniesCandidateRequest;
+use App\Http\Requests\Candidates\ShowFavouriteJobsCandidateRequest;
+use App\Http\Requests\Candidates\ShowScheduleSlotBookCandidateRequest;
+use App\Http\Requests\Candidates\UpdateCandidateProfileProfileUpdateCandidateRequest;
+use App\Http\Requests\Candidates\UpdateJobAlertCandidateRequest;
+use App\Http\Requests\Candidates\UploadResumeCandidateRequest;
 use App\Models\CandidateEducation;
 use App\Models\CandidateExperience;
 use App\Models\FavouriteCompany;
@@ -13,37 +32,12 @@ use App\Models\JobApplicationSchedule;
 use App\Models\RequiredDegreeLevel;
 use App\Models\User;
 use App\Repositories\Candidates\CandidateRepository;
-use Auth;
-use Carbon\Carbon;
-use Exception;
-use Flash;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use App\Http\Requests\Candidates\EditProfileCandidateRequest;
-use App\Http\Requests\Candidates\CandidateUpdateProfileUpdateProfileCandidateRequest;
-use App\Http\Requests\Candidates\CandidateUpdateGeneralInformationUpdateGeneralInformationCandidateRequest;
-use App\Http\Requests\Candidates\CandidateUpdateOnlineProfileUpdateOnlineProfileCandidateRequest;
-use App\Http\Requests\Candidates\UploadResumeCandidateRequest;
-use App\Http\Requests\Candidates\UpdateJobAlertCandidateRequest;
-use App\Http\Requests\Candidates\ChangePasswordChangePasswordCandidateRequest;
-use App\Http\Requests\Candidates\UpdateCandidateProfileProfileUpdateCandidateRequest;
-use App\Http\Requests\Candidates\ChoosePreferenceCandidateRequest;
-use App\Http\Requests\Candidates\ShowFavouriteJobsCandidateRequest;
-use App\Http\Requests\Candidates\DeleteFavouriteJobCandidateRequest;
-use App\Http\Requests\Candidates\GetCVTemplateCandidateRequest;
-use App\Http\Requests\Candidates\ShowFavouriteCompaniesCandidateRequest;
-use App\Http\Requests\Candidates\EditJobAlertCandidateRequest;
-use App\Http\Requests\Candidates\EditCandidateProfileCandidateRequest;
-use App\Http\Requests\Candidates\ShowCandidateAppliedJobCandidateRequest;
-use App\Http\Requests\Candidates\DeletedResumeCandidateRequest;
-use App\Http\Requests\Candidates\ShowAppliedJobsCandidateRequest;
-use App\Http\Requests\Candidates\ShowScheduleSlotBookCandidateRequest;
-use App\Http\Requests\Candidates\DestroyFavouriteCompanyCandidateRequest;
 
 class CandidateController extends AppBaseController
 {
@@ -61,39 +55,39 @@ class CandidateController extends AppBaseController
     /**
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function editProfile(EditProfileCandidateRequest $request): View
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = \Auth::user();
 
         $user->phone = preparePhoneNumber($user->phone, $user->region_code);
         $data = $this->candidateRepository->prepareData();
         $countries = getCountries();
         $states = $cities = null;
-        if (! empty($user->country_id)) {
+        if (!empty($user->country_id)) {
             $states = getStates($user->country_id);
         }
-        if (! empty($user->state_id)) {
+        if (!empty($user->state_id)) {
             $cities = getCities($user->state_id);
         }
         $candidateSkills = $user->candidateSkill()->pluck('skill_id')->toArray();
         $candidateLanguage = $user->candidateLanguage()->pluck('language_id')->toArray();
-        $sectionName = ($request->section === null) ? 'general' : $request->section;
+        $sectionName = (null === $request->section) ? 'general' : $request->section;
         $data['sectionName'] = $sectionName;
-        if ($sectionName == 'general') {
-            if (! empty($user->country_id)) {
+        if ('general' == $sectionName) {
+            if (!empty($user->country_id)) {
                 $states = getStates($user->country_id);
             }
-            if (! empty($user->state_id)) {
+            if (!empty($user->state_id)) {
                 $cities = getCities($user->state_id);
             }
         }
-        if ($sectionName == 'resume') {
+        if ('resume' == $sectionName) {
         }
 
-        if ($sectionName == 'career-informations' || $sectionName == 'cv-builder') {
+        if ('career-informations' == $sectionName || 'cv-builder' == $sectionName) {
             $data['candidateExperiences'] = CandidateExperience::where(
                 'candidate_id',
                 $user->owner_id
@@ -112,13 +106,13 @@ class CandidateController extends AppBaseController
         }
 
         return view(
-            "candidate.profile.$sectionName",
+            "candidate.profile.{$sectionName}",
             compact('user', 'data', 'countries', 'states', 'cities', 'candidateSkills', 'candidateLanguage')
         );
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function showFavouriteJobs(ShowFavouriteJobsCandidateRequest $request): View
     {
@@ -130,7 +124,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $fevouriteJobId = FavouriteJob::whereUserId($userId)->pluck('id')->toArray();
 
-        if (! in_array($favouriteJob->id, $fevouriteJobId)) {
+        if (!in_array($favouriteJob->id, $fevouriteJobId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -140,7 +134,7 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      *
      * @throws \Throwable
      */
@@ -148,7 +142,7 @@ class CandidateController extends AppBaseController
     {
         $this->candidateRepository->updateProfile($request->all());
 
-        Flash::success(__('messages.flash.candidate_profile'));
+        \Flash::success(__('messages.flash.candidate_profile'));
 
         return redirect(route('candidate.profile'));
     }
@@ -189,7 +183,7 @@ class CandidateController extends AppBaseController
      */
     public function getCVTemplate(GetCVTemplateCandidateRequest $request)
     {
-        $user = Auth::user();
+        $user = \Auth::user();
         $data['user'] = $user;
         $data['candidateExperiences'] = CandidateExperience::where(
             'candidate_id',
@@ -223,22 +217,22 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * Download resume file
+     * Download resume file.
      */
     public function downloadResume(string $candidateId, string $resumeId): BinaryFileResponse
     {
-        $candidate = Auth::user()->candidate;
+        $candidate = \Auth::user()->candidate;
 
         if ($candidate->id != $candidateId) {
-            Flash::error(__('messages.common.unauthorized'));
+            \Flash::error(__('messages.common.unauthorized'));
 
             return redirect()->back();
         }
 
         $path = storage_path('app/public/'.$candidate->resume_path);
 
-        if (! file_exists($path)) {
-            Flash::error(__('messages.common.file_not_found'));
+        if (!file_exists($path)) {
+            \Flash::error(__('messages.common.file_not_found'));
 
             return redirect()->back();
         }
@@ -247,7 +241,7 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function showFavouriteCompanies(ShowFavouriteCompaniesCandidateRequest $request): View
     {
@@ -259,18 +253,18 @@ class CandidateController extends AppBaseController
      */
     public function editJobAlert(EditJobAlertCandidateRequest $request): View
     {
-        $user = Auth::user();
+        $user = \Auth::user();
 
         return view('candidate.job_alert.edit', compact('user'));
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse
      */
     public function updateJobAlert(UpdateJobAlertCandidateRequest $request): RedirectResponse
     {
         $this->candidateRepository->updateJobAlerts($request->all());
-        Flash::success(__('messages.flash.job_alert'));
+        \Flash::success(__('messages.flash.job_alert'));
 
         return redirect(route('candidate.job.alert'));
     }
@@ -283,7 +277,7 @@ class CandidateController extends AppBaseController
             $user = $this->candidateRepository->changePassword($input);
 
             return $this->sendSuccess(__('messages.flash.password_update'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 422);
         }
     }
@@ -293,7 +287,7 @@ class CandidateController extends AppBaseController
      */
     public function editCandidateProfile(EditCandidateProfileCandidateRequest $request): JsonResponse
     {
-        $user = Auth::user();
+        $user = \Auth::user();
 
         return $this->sendResponse($user, 'Candidate retrieved successfully.');
     }
@@ -304,16 +298,16 @@ class CandidateController extends AppBaseController
 
         try {
             $employer = $this->candidateRepository->profileUpdate($input);
-            Flash::success(__('messages.flash.candidate_profile'));
+            \Flash::success(__('messages.flash.candidate_profile'));
 
             return $this->sendResponse($employer, __('messages.flash.candidate_profile'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 422);
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function showCandidateAppliedJob(ShowCandidateAppliedJobCandidateRequest $request): View
     {
@@ -323,14 +317,14 @@ class CandidateController extends AppBaseController
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deletedResume(Media $media, DeletedResumeCandidateRequest $request)
     {
         $userId = getLoggedInUserId();
         $candidateResumeId = Media::where('model_id', $userId)->pluck('id')->toArray();
 
-        if (! in_array($media->id, $candidateResumeId)) {
+        if (!in_array($media->id, $candidateResumeId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -347,7 +341,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
 
-        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
+        if (!in_array($jobApplication->id, $candidateJobApplicationId)) {
             return view('errors.404');
         }
 
@@ -361,7 +355,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
 
-        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
+        if (!in_array($jobApplication->id, $candidateJobApplicationId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -381,7 +375,7 @@ class CandidateController extends AppBaseController
         $request->validated();
         $scheduleId = $request->get('schedule_id');
         $slotNotes = $request->get('choose_slot_notes');
-        if (! isset($request->rejectSlot)) {
+        if (!isset($request->rejectSlot)) {
             JobApplicationSchedule::whereId($scheduleId)->update(['status' => JobApplicationSchedule::STATUS_SEND, 'rejected_slot_notes' => $slotNotes]);
         } else {
             $jobApplicationSchedules = JobApplicationSchedule::whereJobApplicationId($jobApplication->id);
@@ -409,7 +403,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $favouriteCompanyId = FavouriteCompany::whereUserId($userId)->pluck('id')->toArray();
 
-        if (! in_array($id, $favouriteCompanyId)) {
+        if (!in_array($id, $favouriteCompanyId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 

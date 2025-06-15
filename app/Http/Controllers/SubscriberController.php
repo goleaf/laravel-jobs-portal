@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\NewsLetter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Class SubscriberController
+ * Class SubscriberController.
  */
-
 class SubscriberController extends AppBaseController
 {
     /**
@@ -23,6 +21,8 @@ class SubscriberController extends AppBaseController
 
     /**
      * Remove the specified subscriber from storage.
+     *
+     * @param mixed $id
      */
     public function destroy($id): JsonResponse
     {

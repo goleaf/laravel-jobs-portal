@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\State;
 
 /**
- * Class StateRepository
+ * Class StateRepository.
  *
  * @version July 7, 2020, 5:07 am UTC
  */
@@ -20,7 +20,7 @@ class StateRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -28,8 +28,8 @@ class StateRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return State::class;

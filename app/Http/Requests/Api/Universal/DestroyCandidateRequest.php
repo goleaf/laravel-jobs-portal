@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DestroyCandidateRequest extends FormRequest
@@ -18,7 +18,7 @@ class DestroyCandidateRequest extends FormRequest
         }
 
         $candidate = $this->route('candidate');
-        
+
         if (!$candidate) {
             return false;
         }
@@ -82,73 +82,16 @@ class DestroyCandidateRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Deletion validation failed',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $defaults = [
-            'force_delete' => false,
-            'cleanup_data' => true,
-            'preserve_applications' => true,
-            'preserve_reviews' => true,
-            'notify_employers' => false,
-        ];
-
-        foreach ($defaults as $key => $default) {
-            if (!$this->has($key)) {
-                $this->merge([$key => $default]);
-            }
-        }
-
-        // Convert boolean strings
-        foreach (array_keys($defaults) as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-
-        // Convert confirmation to boolean
-        if ($this->has('confirmation')) {
-            $this->merge([
-                'confirmation' => filter_var($this->confirmation, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-            ]);
-        }
-
-        // Trim reason if provided
-        if ($this->has('reason')) {
-            $this->merge([
-                'reason' => trim($this->reason)
-            ]);
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
             $candidate = $this->route('candidate');
-            
+
             if (!$candidate) {
                 $validator->errors()->add('candidate', 'Candidate not found.');
+
                 return;
             }
 
@@ -181,7 +124,67 @@ class DestroyCandidateRequest extends FormRequest
     }
 
     /**
-     * Check for linked data that might prevent deletion
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Deletion validation failed',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Set default values
+        $defaults = [
+            'force_delete' => false,
+            'cleanup_data' => true,
+            'preserve_applications' => true,
+            'preserve_reviews' => true,
+            'notify_employers' => false,
+        ];
+
+        foreach ($defaults as $key => $default) {
+            if (!$this->has($key)) {
+                $this->merge([$key => $default]);
+            }
+        }
+
+        // Convert boolean strings
+        foreach (array_keys($defaults) as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+
+        // Convert confirmation to boolean
+        if ($this->has('confirmation')) {
+            $this->merge([
+                'confirmation' => filter_var($this->confirmation, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            ]);
+        }
+
+        // Trim reason if provided
+        if ($this->has('reason')) {
+            $this->merge([
+                'reason' => trim($this->reason),
+            ]);
+        }
+    }
+
+    /**
+     * Check for linked data that might prevent deletion.
+     *
+     * @param mixed $candidate
      */
     private function checkLinkedData($candidate): bool
     {
@@ -196,4 +199,4 @@ class DestroyCandidateRequest extends FormRequest
 
         return collect($dependencies)->sum() > 0;
     }
-} 
+}

@@ -2,18 +2,23 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\JobApplication;
 use App\Models\Resume;
-use App\Models\Country;
 use App\Models\State;
-use App\Models\City;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class UserTest extends TestCase
 {
     use RefreshDatabase;
@@ -23,18 +28,18 @@ class UserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create roles
         Role::create(['name' => 'Admin']);
         Role::create(['name' => 'Candidate']);
         Role::create(['name' => 'Employer']);
-        
+
         // Create test user
         $this->user = User::factory()->create();
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes(): void
+    public function itHasCorrectFillableAttributes(): void
     {
         $fillable = [
             'first_name', 'last_name', 'name', 'email', 'phone', 'mobile_phone',
@@ -45,14 +50,14 @@ class UserTest extends TestCase
             'password', 'remember_token', 'avatar', 'cover_image',
             'linkedin_url', 'github_url', 'portfolio_url', 'website_url',
             'bio', 'skills', 'languages', 'availability_status',
-            'preferred_job_type', 'willing_to_relocate', 'remote_work_preference'
+            'preferred_job_type', 'willing_to_relocate', 'remote_work_preference',
         ];
 
         $this->assertEquals($fillable, $this->user->getFillable());
     }
 
     /** @test */
-    public function it_has_correct_casts(): void
+    public function itHasCorrectCasts(): void
     {
         $expectedCasts = [
             'id' => 'int',
@@ -78,26 +83,29 @@ class UserTest extends TestCase
         ];
 
         foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals($cast, $this->user->getCasts()[$attribute] ?? null, 
-                "Cast for {$attribute} should be {$cast}");
+            $this->assertEquals(
+                $cast,
+                $this->user->getCasts()[$attribute] ?? null,
+                "Cast for {$attribute} should be {$cast}"
+            );
         }
     }
 
     /** @test */
-    public function it_hides_sensitive_attributes(): void
+    public function itHidesSensitiveAttributes(): void
     {
         $hidden = ['password', 'remember_token'];
-        
+
         $this->assertEquals($hidden, $this->user->getHidden());
     }
 
     /** @test */
-    public function it_belongs_to_location_models(): void
+    public function itBelongsToLocationModels(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
         $city = City::factory()->create(['state_id' => $state->id]);
-        
+
         $user = User::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -107,14 +115,14 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Country::class, $user->country);
         $this->assertInstanceOf(State::class, $user->state);
         $this->assertInstanceOf(City::class, $user->city);
-        
+
         $this->assertEquals($country->id, $user->country->id);
         $this->assertEquals($state->id, $user->state->id);
         $this->assertEquals($city->id, $user->city->id);
     }
 
     /** @test */
-    public function it_has_one_company(): void
+    public function itHasOneCompany(): void
     {
         $company = Company::factory()->create(['user_id' => $this->user->id]);
 
@@ -123,33 +131,33 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_many_job_applications(): void
+    public function itHasManyJobApplications(): void
     {
         $applications = JobApplication::factory()->count(3)->create(['candidate_id' => $this->user->id]);
 
         $this->assertInstanceOf(Collection::class, $this->user->jobApplications);
         $this->assertCount(3, $this->user->jobApplications);
-        
+
         foreach ($applications as $application) {
             $this->assertTrue($this->user->jobApplications->contains($application));
         }
     }
 
     /** @test */
-    public function it_has_many_resumes(): void
+    public function itHasManyResumes(): void
     {
         $resumes = Resume::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(Collection::class, $this->user->resumes);
         $this->assertCount(2, $this->user->resumes);
-        
+
         foreach ($resumes as $resume) {
             $this->assertTrue($this->user->resumes->contains($resume));
         }
     }
 
     /** @test */
-    public function active_scope_returns_only_active_users(): void
+    public function activeScopeReturnsOnlyActiveUsers(): void
     {
         User::factory()->create(['is_active' => true]);
         User::factory()->create(['is_active' => false]);
@@ -162,7 +170,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function inactive_scope_returns_only_inactive_users(): void
+    public function inactiveScopeReturnsOnlyInactiveUsers(): void
     {
         User::factory()->create(['is_active' => true]);
         User::factory()->create(['is_active' => false]);
@@ -175,7 +183,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function verified_scope_returns_only_verified_users(): void
+    public function verifiedScopeReturnsOnlyVerifiedUsers(): void
     {
         User::factory()->create(['email_verified_at' => now()]);
         User::factory()->create(['email_verified_at' => null]);
@@ -188,7 +196,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function unverified_scope_returns_only_unverified_users(): void
+    public function unverifiedScopeReturnsOnlyUnverifiedUsers(): void
     {
         User::factory()->create(['email_verified_at' => now()]);
         User::factory()->create(['email_verified_at' => null]);
@@ -201,11 +209,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function candidates_scope_returns_only_candidates(): void
+    public function candidatesScopeReturnsOnlyCandidates(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
-        
+
         $employer = User::factory()->create();
         $employer->assignRole('Employer');
 
@@ -216,11 +224,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function employers_scope_returns_only_employers(): void
+    public function employersScopeReturnsOnlyEmployers(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
-        
+
         $employer = User::factory()->create();
         $employer->assignRole('Employer');
 
@@ -231,11 +239,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function by_role_scope_filters_by_role(): void
+    public function byRoleScopeFiltersByRole(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
-        
+
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
 
@@ -246,12 +254,12 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function by_location_scope_filters_by_location(): void
+    public function byLocationScopeFiltersByLocation(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
         $city = City::factory()->create(['state_id' => $state->id]);
-        
+
         User::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -268,7 +276,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function search_scope_searches_in_name_and_email(): void
+    public function searchScopeSearchesInNameAndEmail(): void
     {
         User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe', 'email' => 'john@example.com']);
         User::factory()->create(['first_name' => 'Jane', 'last_name' => 'Smith', 'email' => 'jane@example.com']);
@@ -280,7 +288,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function recent_scope_returns_users_from_last_30_days(): void
+    public function recentScopeReturnsUsersFromLast30Days(): void
     {
         User::factory()->create(['created_at' => now()->subDays(10)]);
         User::factory()->create(['created_at' => now()->subDays(40)]);
@@ -293,7 +301,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function with_experience_scope_filters_by_experience_level(): void
+    public function withExperienceScopeFiltersByExperienceLevel(): void
     {
         User::factory()->create(['experience_level' => 3]);
         User::factory()->create(['experience_level' => 7]);
@@ -306,7 +314,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function available_scope_returns_available_users(): void
+    public function availableScopeReturnsAvailableUsers(): void
     {
         User::factory()->create(['availability_status' => 'available']);
         User::factory()->create(['availability_status' => 'not_available']);
@@ -319,7 +327,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function willing_to_relocate_scope_returns_users_willing_to_relocate(): void
+    public function willingToRelocateScopeReturnsUsersWillingToRelocate(): void
     {
         User::factory()->create(['willing_to_relocate' => true]);
         User::factory()->create(['willing_to_relocate' => false]);
@@ -332,39 +340,39 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_full_name(): void
+    public function itCanGetFullName(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         $this->assertEquals('John Doe', $user->getFullName());
     }
 
     /** @test */
-    public function it_can_get_initials(): void
+    public function itCanGetInitials(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         $this->assertEquals('JD', $user->getInitials());
     }
 
     /** @test */
-    public function it_can_get_age(): void
+    public function itCanGetAge(): void
     {
         $user = User::factory()->create([
-            'date_of_birth' => now()->subYears(25)->format('Y-m-d')
+            'date_of_birth' => now()->subYears(25)->format('Y-m-d'),
         ]);
 
         $this->assertEquals(25, $user->getAge());
     }
 
     /** @test */
-    public function it_returns_null_age_for_users_without_birth_date(): void
+    public function itReturnsNullAgeForUsersWithoutBirthDate(): void
     {
         $user = User::factory()->create(['date_of_birth' => null]);
 
@@ -372,11 +380,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_user_is_candidate(): void
+    public function itCanCheckIfUserIsCandidate(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
-        
+
         $employer = User::factory()->create();
         $employer->assignRole('Employer');
 
@@ -385,11 +393,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_user_is_employer(): void
+    public function itCanCheckIfUserIsEmployer(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
-        
+
         $employer = User::factory()->create();
         $employer->assignRole('Employer');
 
@@ -398,11 +406,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_user_is_admin(): void
+    public function itCanCheckIfUserIsAdmin(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
-        
+
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
 
@@ -411,7 +419,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_avatar_url(): void
+    public function itCanGetAvatarUrl(): void
     {
         $user = User::factory()->create(['avatar' => 'avatars/user.jpg']);
 
@@ -419,7 +427,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_default_avatar_when_no_avatar_set(): void
+    public function itReturnsDefaultAvatarWhenNoAvatarSet(): void
     {
         $user = User::factory()->create(['avatar' => null]);
 
@@ -427,12 +435,12 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_full_location(): void
+    public function itCanGetFullLocation(): void
     {
         $country = Country::factory()->create(['name' => 'United States']);
         $state = State::factory()->create(['name' => 'California', 'country_id' => $country->id]);
         $city = City::factory()->create(['name' => 'San Francisco', 'state_id' => $state->id]);
-        
+
         $user = User::factory()->create([
             'country_id' => $country->id,
             'state_id' => $state->id,
@@ -440,14 +448,14 @@ class UserTest extends TestCase
         ]);
 
         $fullLocation = $user->getFullLocation();
-        
+
         $this->assertStringContainsString('San Francisco', $fullLocation);
         $this->assertStringContainsString('California', $fullLocation);
         $this->assertStringContainsString('United States', $fullLocation);
     }
 
     /** @test */
-    public function it_can_get_experience_level_text(): void
+    public function itCanGetExperienceLevelText(): void
     {
         $user = User::factory()->create(['experience_level' => 3]);
 
@@ -455,7 +463,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_profile_is_complete(): void
+    public function itCanCheckIfProfileIsComplete(): void
     {
         $incompleteUser = User::factory()->create([
             'first_name' => 'John',
@@ -476,7 +484,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_profile_completion_percentage(): void
+    public function itCanGetProfileCompletionPercentage(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',
@@ -487,7 +495,7 @@ class UserTest extends TestCase
         ]);
 
         $percentage = $user->getProfileCompletionPercentage();
-        
+
         $this->assertIsInt($percentage);
         $this->assertGreaterThan(0, $percentage);
         $this->assertLessThanOrEqual(100, $percentage);

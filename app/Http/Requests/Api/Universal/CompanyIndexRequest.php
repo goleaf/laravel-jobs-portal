@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CompanyIndexRequest extends FormRequest
@@ -33,8 +33,8 @@ class CompanyIndexRequest extends FormRequest
             'filter_size' => 'sometimes|string|in:startup,small,medium,large,enterprise',
             'employee_count_min' => 'sometimes|integer|min:0',
             'employee_count_max' => 'sometimes|integer|min:0',
-            'founded_year_min' => 'sometimes|integer|min:1800|max:' . date('Y'),
-            'founded_year_max' => 'sometimes|integer|min:1800|max:' . date('Y'),
+            'founded_year_min' => 'sometimes|integer|min:1800|max:'.date('Y'),
+            'founded_year_max' => 'sometimes|integer|min:1800|max:'.date('Y'),
             'verified_only' => 'sometimes|boolean',
             'featured_only' => 'sometimes|boolean',
         ];
@@ -92,42 +92,6 @@ class CompanyIndexRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'success' => false,
-                'message' => 'Invalid search parameters',
-                'errors' => $validator->errors()
-            ], 422)
-        );
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'per_page' => $this->per_page ?? 20,
-            'sort_by' => $this->sort_by ?? 'created_at',
-            'sort_direction' => $this->sort_direction ?? 'desc',
-        ]);
-
-        // Convert boolean strings
-        foreach (['verified_only', 'featured_only'] as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
-                ]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
      */
     public function withValidator(Validator $validator): void
@@ -148,4 +112,40 @@ class CompanyIndexRequest extends FormRequest
             }
         });
     }
-} 
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Invalid search parameters',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Set default values
+        $this->merge([
+            'per_page' => $this->per_page ?? 20,
+            'sort_by' => $this->sort_by ?? 'created_at',
+            'sort_direction' => $this->sort_direction ?? 'desc',
+        ]);
+
+        // Convert boolean strings
+        foreach (['verified_only', 'featured_only'] as $field) {
+            if ($this->has($field)) {
+                $this->merge([
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                ]);
+            }
+        }
+    }
+}

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for Post
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
@@ -31,7 +31,7 @@ class PostFactory extends Factory
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
             'created_by' => fake()->numberBetween(1, 3), // Use existing user IDs
-            'is_default' => fake()->boolean()
+            'is_default' => fake()->boolean(),
         ];
     }
 }

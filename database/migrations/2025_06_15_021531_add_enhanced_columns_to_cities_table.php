@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -51,7 +50,7 @@ return new class extends Migration
         Schema::table('cities', function (Blueprint $table) {
             // Only drop columns if they exist
             $columnsToDrop = [];
-            
+
             if (Schema::hasColumn('cities', 'is_active')) {
                 $columnsToDrop[] = 'is_active';
             }
@@ -76,7 +75,7 @@ return new class extends Migration
             if (Schema::hasColumn('cities', 'population')) {
                 $columnsToDrop[] = 'population';
             }
-            
+
             if (!empty($columnsToDrop)) {
                 $table->dropColumn($columnsToDrop);
             }

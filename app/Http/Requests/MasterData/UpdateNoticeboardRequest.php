@@ -20,8 +20,6 @@ class UpdateNoticeboardRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = Noticeboard::$rules;
-
-        return $rules;
+        return Noticeboard::$rules;
     }
 }

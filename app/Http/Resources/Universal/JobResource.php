@@ -7,14 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Universal Job Resource
- * Implements MCP best practices for API responses
+ * Implements MCP best practices for API responses.
  */
 class JobResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -29,7 +28,7 @@ class JobResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            
+
             // Universal Pattern: Conditional relationships (prevents N+1)
             'company' => $this->whenLoaded('company'),
             'category' => $this->whenLoaded('category'),
@@ -47,7 +46,7 @@ class JobResource extends JsonResource
     }
 
     /**
-     * Universal Pattern: Add metadata to the response
+     * Universal Pattern: Add metadata to the response.
      */
     public function with(Request $request): array
     {
@@ -55,7 +54,7 @@ class JobResource extends JsonResource
             'meta' => [
                 'timestamp' => now()->toISOString(),
                 'version' => config('app.version', '1.0.0'),
-                'resource_type' => 'job'
+                'resource_type' => 'job',
             ],
         ];
     }

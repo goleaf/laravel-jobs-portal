@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\JobApplication;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class JobApplicationPolicy
 {
@@ -21,9 +20,9 @@ class JobApplicationPolicy
      */
     public function view(User $user, JobApplication $jobApplication): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $user->id === $jobApplication->job->user_id) || 
-               ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $user->id === $jobApplication->job->user_id)
+               || ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
     }
 
     /**
@@ -39,8 +38,8 @@ class JobApplicationPolicy
      */
     public function update(User $user, JobApplication $jobApplication): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
     }
 
     /**
@@ -48,8 +47,8 @@ class JobApplicationPolicy
      */
     public function delete(User $user, JobApplication $jobApplication): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Candidate') && $user->id === $jobApplication->user_id);
     }
 
     /**
@@ -73,7 +72,7 @@ class JobApplicationPolicy
      */
     public function updateStatus(User $user, JobApplication $jobApplication): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $user->id === $jobApplication->job->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $user->id === $jobApplication->job->user_id);
     }
 }

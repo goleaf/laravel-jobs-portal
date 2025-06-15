@@ -14,9 +14,9 @@ class RenameIsActiveToSlierIsActiveInSettingSeeder extends Seeder
     {
         $isActive = Setting::where(['key' => 'is_active'])->first();
         $exist = Setting::where('key', 'slider_is_active')->exists();
-        if ($isActive && ! $exist) {
+        if ($isActive && !$exist) {
             $isActive->update(['key' => 'slider_is_active']);
-        } elseif (! $exist) {
+        } elseif (!$exist) {
             Setting::create(['key' => 'slider_is_active', 'value' => 1]);
         }
     }

@@ -2,15 +2,17 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\Company;
+use App\Rules\NoMaliciousContent;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use App\Models\Company;
-use App\Rules\NoMaliciousContent;
+use Illuminate\Validation\Validator;
 
 /**
- * Request validation for CompanyController::store
- * 
+ * Request validation for CompanyController::store.
+ *
  * @enhanced by RequestValidationImprover
  */
 class UpdateCompanyRequest extends FormRequest
@@ -21,12 +23,12 @@ class UpdateCompanyRequest extends FormRequest
     public function authorize(): bool
     {
         $company = $this->route('company');
-        
+
         // Admin can update any company
         if (Auth::user()->hasRole('Admin')) {
             return true;
         }
-        
+
         // Company owner can update their own company
         return $company && Auth::user()->id === $company->user_id;
     }
@@ -34,12 +36,12 @@ class UpdateCompanyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         $company = $this->route('company');
-        
+
         return [
             // Basic company information
             'name' => [
@@ -66,7 +68,7 @@ class UpdateCompanyRequest extends FormRequest
                 'url',
                 'max:255',
             ],
-            
+
             // Location information
             'country_id' => [
                 'sometimes',
@@ -84,14 +86,14 @@ class UpdateCompanyRequest extends FormRequest
                 'exists:cities,id',
             ],
             'location' => 'nullable|string|max:500',
-            
+
             // Company details
             'details' => 'nullable|string|max:5000',
             'established_in' => [
                 'nullable',
                 'integer',
                 'min:1800',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
             ],
             'no_of_employees' => [
                 'nullable',
@@ -99,7 +101,7 @@ class UpdateCompanyRequest extends FormRequest
                 'min:1',
                 'max:1000000',
             ],
-            
+
             // Industry and ownership
             'industry_id' => [
                 'nullable',
@@ -116,7 +118,7 @@ class UpdateCompanyRequest extends FormRequest
                 'integer',
                 'exists:company_sizes,id',
             ],
-            
+
             // Social media links
             'facebook_url' => [
                 'nullable',
@@ -136,7 +138,7 @@ class UpdateCompanyRequest extends FormRequest
                 'max:255',
                 'regex:/^https?:\/\/(www\.)?linkedin\.com\/.*$/',
             ],
-            
+
             // Files
             'logo' => [
                 'nullable',
@@ -145,7 +147,7 @@ class UpdateCompanyRequest extends FormRequest
                 'max:2048',
                 'dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
             ],
-            
+
             // Flags (admin only)
             'is_active' => [
                 'sometimes',
@@ -217,34 +219,14 @@ class UpdateCompanyRequest extends FormRequest
             'job_description' => 'job description',
             'job_expiry_date' => 'job expiry date',
             'salary_from' => 'minimum salary',
-            'salary_to' => 'maximum salary'
+            'salary_to' => 'maximum salary',
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Sanitize input data
-        if ($this->has('job_title')) {
-            $this->merge([
-                'job_title' => strip_tags($this->job_title)
-            ]);
-        }
-        
-        if ($this->has('job_description')) {
-            $this->merge([
-                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>')
-            ]);
-        }
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
+     * @param Validator $validator
      */
     public function withValidator($validator): void
     {
@@ -255,7 +237,7 @@ class UpdateCompanyRequest extends FormRequest
                     $validator->errors()->add('salary_to', 'Maximum salary must be greater than minimum salary');
                 }
             }
-            
+
             // Check for malicious content in text fields
             foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
@@ -274,12 +256,31 @@ class UpdateCompanyRequest extends FormRequest
     public function getProcessedData(): array
     {
         $data = $this->validated();
-        
+
         // Remove admin-only fields if user is not admin
         if (!Auth::user()->hasRole('Admin')) {
             unset($data['is_active'], $data['is_featured']);
         }
-        
+
         return $data;
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Sanitize input data
+        if ($this->has('job_title')) {
+            $this->merge([
+                'job_title' => strip_tags($this->job_title),
+            ]);
+        }
+
+        if ($this->has('job_description')) {
+            $this->merge([
+                'job_description' => strip_tags($this->job_description, '<p><br><ul><ol><li><strong><em>'),
+            ]);
+        }
     }
 }

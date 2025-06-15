@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('featured_records', function (Blueprint $table) {
-            $table->string('stripe_id')->nullable()->change();
-            $table->text('meta')->nullable()->change();
+        Schema::table('email_templates', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('featured_records', function (Blueprint $table) {});
+        Schema::table('email_templates', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

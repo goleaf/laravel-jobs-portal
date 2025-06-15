@@ -33,4 +33,4 @@ class NoMaliciousContent implements Rule
     {
         return 'The :attribute contains potentially malicious content.';
     }
-} 
+}

@@ -22,7 +22,7 @@ return [
     'auto_detect_language' => 'اكتشاف اللغة تلقائياً من المتصفح',
     'default_language' => 'اللغة الافتراضية',
     'fallback_language' => 'اللغة الاحتياطية',
-    
+
     // Language names in Arabic
     'languages' => [
         'en' => 'الإنجليزية',
@@ -35,25 +35,25 @@ return [
         'tr' => 'التركية',
         'zh' => 'الصينية',
     ],
-    
+
     // RTL Information
     'rtl_languages' => 'اللغات من اليمين إلى اليسار',
     'ltr_languages' => 'اللغات من اليسار إلى اليمين',
     'text_direction' => 'اتجاه النص',
     'left_to_right' => 'من اليسار إلى اليمين',
     'right_to_left' => 'من اليمين إلى اليسار',
-    
+
     // Browser detection
     'browser_language_detected' => 'تم اكتشاف لغة المتصفح: :language',
     'browser_language_not_supported' => 'لغة المتصفح غير مدعومة، تم التعيين افتراضياً إلى :language',
-    
+
     // Validation messages
     'validation' => [
         'locale_required' => 'اللغة مطلوبة',
         'locale_invalid' => 'اللغة المختارة غير صحيحة',
         'locale_unsupported' => 'اللغة :locale غير مدعومة',
     ],
-    
+
     // Success/Error messages
     'messages' => [
         'switched_to' => 'تم تغيير اللغة إلى :language',

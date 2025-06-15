@@ -7,15 +7,17 @@ use App\Models\Job;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Stripe\StripeClient;
 
 class PlanRepository
 {
     /**
-     * @throws Exception
+     * @param mixed $input
+     *
+     * @throws \Exception
      */
     public function createPlan($input): bool
     {
@@ -30,14 +32,15 @@ class PlanRepository
             DB::commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function updatePlan(array $input, Plan $plan): bool
     {
@@ -50,14 +53,15 @@ class PlanRepository
             DB::commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function deletePlan(Plan $plan)
     {
@@ -66,19 +70,20 @@ class PlanRepository
 
             $plan->delete();
             DB::commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
 
         try {
             $envSetting = getEnvSetting();
-            if (! empty($envSetting['stripe_secret'])) {
-                $stripe = new \Stripe\StripeClient(
+            if (!empty($envSetting['stripe_secret'])) {
+                $stripe = new StripeClient(
                     $envSetting['stripe_secret']
                 );
             } else {
-                $stripe = new \Stripe\StripeClient(
+                $stripe = new StripeClient(
                     config('services.stripe.secret_key')
                 );
             }
@@ -86,15 +91,13 @@ class PlanRepository
                 $plan->stripe_plan_id,
                 []
             );
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             Log::info($exception->getMessage());
         }
     }
 
     /**
-     * @return null
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getPlans()
     {
@@ -106,7 +109,8 @@ class PlanRepository
             ->where('stripe_status', '!=', Subscription::PENDING)
             ->where('stripe_status', '!=', Subscription::REJECTED)
             ->latest()
-            ->first();
+            ->first()
+        ;
 
         $data['activePlanId'] = null;
 

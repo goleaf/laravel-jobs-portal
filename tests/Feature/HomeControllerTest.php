@@ -2,53 +2,60 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\User;
+use Tests\TestCase;
 
 /**
  * Universal Test for HomeController
- * Implements Laravel 12 testing best practices with Universal MCP patterns
+ * Implements Laravel 12 testing best practices with Universal MCP patterns.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class HomeControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Universal Pattern: Create test user with appropriate permissions
         $this->user = User::factory()->create();
     }
 
     /**
-     * Universal Pattern: Test index functionality
+     * Universal Pattern: Test index functionality.
      */
-    public function test_index_displays_correctly(): void
+    public function testIndexDisplaysCorrectly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('home.index'));
+            ->get(route('home.index'))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test create form display
+     * Universal Pattern: Test create form display.
      */
-    public function test_create_displays_form(): void
+    public function testCreateDisplaysForm(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('home.create'));
+            ->get(route('home.create'))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test successful store operation
+     * Universal Pattern: Test successful store operation.
      */
-    public function test_store_creates_new_record(): void
+    public function testStoreCreatesNewRecord(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -58,7 +65,8 @@ class HomeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('home.store'), $data);
+            ->post(route('home.store'), $data)
+        ;
 
         $response->assertRedirect();
         $this->assertDatabaseHas('homes', [
@@ -68,46 +76,49 @@ class HomeControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test validation errors
+     * Universal Pattern: Test validation errors.
      */
-    public function test_store_validates_required_fields(): void
+    public function testStoreValidatesRequiredFields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('home.store'), []);
+            ->post(route('home.store'), [])
+        ;
 
         $response->assertSessionHasErrors(['name']);
     }
 
     /**
-     * Universal Pattern: Test show functionality
+     * Universal Pattern: Test show functionality.
      */
-    public function test_show_displays_record(): void
+    public function testShowDisplaysRecord(): void
     {
         $home = Home::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('home.show', $home));
+            ->get(route('home.show', $home))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test edit form display
+     * Universal Pattern: Test edit form display.
      */
-    public function test_edit_displays_form(): void
+    public function testEditDisplaysForm(): void
     {
         $home = Home::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('home.edit', $home));
+            ->get(route('home.edit', $home))
+        ;
 
         $response->assertStatus(200);
     }
 
     /**
-     * Universal Pattern: Test successful update operation
+     * Universal Pattern: Test successful update operation.
      */
-    public function test_update_modifies_record(): void
+    public function testUpdateModifiesRecord(): void
     {
         $home = Home::factory()->create();
         $newData = [
@@ -116,7 +127,8 @@ class HomeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('home.update', $home), $newData);
+            ->put(route('home.update', $home), $newData)
+        ;
 
         $response->assertRedirect();
         $this->assertDatabaseHas('homes', [
@@ -126,23 +138,24 @@ class HomeControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test successful delete operation
+     * Universal Pattern: Test successful delete operation.
      */
-    public function test_destroy_deletes_record(): void
+    public function testDestroyDeletesRecord(): void
     {
         $home = Home::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('home.destroy', $home));
+            ->delete(route('home.destroy', $home))
+        ;
 
         $response->assertRedirect();
         $this->assertSoftDeleted($home);
     }
 
     /**
-     * Universal Pattern: Test authorization
+     * Universal Pattern: Test authorization.
      */
-    public function test_unauthorized_access_is_prevented(): void
+    public function testUnauthorizedAccessIsPrevented(): void
     {
         $response = $this->get(route('home.index'));
 
@@ -150,9 +163,9 @@ class HomeControllerTest extends TestCase
     }
 
     /**
-     * Universal Pattern: Test with invalid data
+     * Universal Pattern: Test with invalid data.
      */
-    public function test_store_with_invalid_email(): void
+    public function testStoreWithInvalidEmail(): void
     {
         $data = [
             'name' => 'Test Name',
@@ -161,15 +174,16 @@ class HomeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('home.store'), $data);
+            ->post(route('home.store'), $data)
+        ;
 
         $response->assertSessionHasErrors(['email']);
     }
 
     /**
-     * Universal Pattern: Test unique validation
+     * Universal Pattern: Test unique validation.
      */
-    public function test_store_prevents_duplicate_names(): void
+    public function testStorePreventsDuplicateNames(): void
     {
         $existing = Home::factory()->create(['name' => 'Unique Name']);
 

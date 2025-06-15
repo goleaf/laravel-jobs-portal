@@ -2,64 +2,69 @@
 
 namespace Tests\Feature\Auth;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function users_can_login_with_valid_credentials()
+    public function usersCanLoginWithValidCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password123')
+            'password' => Hash::make('password123'),
         ]);
 
         $response = $this->post('/login', [
             'email' => 'test@example.com',
-            'password' => 'password123'
+            'password' => 'password123',
         ]);
 
         $this->assertAuthenticatedAs($user);
     }
 
     /** @test */
-    public function users_cannot_login_with_invalid_credentials()
+    public function usersCannotLoginWithInvalidCredentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password123')
+            'password' => Hash::make('password123'),
         ]);
 
         $response = $this->post('/login', [
             'email' => 'test@example.com',
-            'password' => 'wrong-password'
+            'password' => 'wrong-password',
         ]);
 
         $this->assertGuest();
     }
 
     /** @test */
-    public function users_can_register_with_valid_data()
+    public function usersCanRegisterWithValidData()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password123',
-            'password_confirmation' => 'password123'
+            'password_confirmation' => 'password123',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com'
+            'email' => 'test@example.com',
         ]);
     }
 
     /** @test */
-    public function authenticated_users_can_logout()
+    public function authenticatedUsersCanLogout()
     {
         $user = User::factory()->create();
         $this->actingAs($user);

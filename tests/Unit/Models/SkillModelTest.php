@@ -5,17 +5,22 @@ namespace Tests\Unit\Models;
 use App\Models\Skill;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class SkillModelTest extends TestCase
 {
     /** @test */
-    public function it_has_correct_table_name()
+    public function itHasCorrectTableName()
     {
         $skill = new Skill();
         $this->assertEquals('skills', $skill->getTable());
     }
 
     /** @test */
-    public function it_has_correct_fillable_attributes()
+    public function itHasCorrectFillableAttributes()
     {
         $skill = new Skill();
         $fillable = $skill->getFillable();
@@ -32,7 +37,7 @@ class SkillModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_correct_casts()
+    public function itHasCorrectCasts()
     {
         $skill = new Skill();
         $casts = $skill->getCasts();
@@ -50,7 +55,7 @@ class SkillModelTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_instantiated_with_attributes()
+    public function itCanBeInstantiatedWithAttributes()
     {
         $skill = new Skill([
             'name' => 'PHP',
@@ -64,10 +69,10 @@ class SkillModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_relationship_methods()
+    public function itHasRelationshipMethods()
     {
         $skill = new Skill();
-        
+
         // Test that relationship methods exist
         $this->assertTrue(method_exists($skill, 'jobs'));
         $this->assertTrue(method_exists($skill, 'candidate'));
@@ -75,7 +80,7 @@ class SkillModelTest extends TestCase
     }
 
     /** @test */
-    public function it_has_validation_rules()
+    public function itHasValidationRules()
     {
         $expectedRules = [
             'name' => 'required|unique:skills,name|max:150',
@@ -83,4 +88,4 @@ class SkillModelTest extends TestCase
 
         $this->assertEquals($expectedRules, Skill::$rules);
     }
-} 
+}

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ShowCandidateRequest extends FormRequest
@@ -14,20 +14,20 @@ class ShowCandidateRequest extends FormRequest
     public function authorize(): bool
     {
         $candidate = $this->route('candidate');
-        
+
         // Public profiles can be viewed by anyone
-        if ($candidate && $candidate->visibility === 'public') {
+        if ($candidate && 'public' === $candidate->visibility) {
             return true;
         }
-        
+
         // Private profiles require authentication and ownership or admin access
         if (!auth()->check()) {
             return false;
         }
-        
-        return auth()->user()->id === $candidate->user_id || 
-               auth()->user()->hasRole('admin') ||
-               auth()->user()->hasRole('employer');
+
+        return auth()->user()->id === $candidate->user_id
+               || auth()->user()->hasRole('admin')
+               || auth()->user()->hasRole('employer');
     }
 
     /**
@@ -75,6 +75,48 @@ class ShowCandidateRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate include relationships
+            if ($this->has('include')) {
+                $allowedIncludes = [
+                    'user', 'skills', 'languages', 'educations', 'experiences',
+                    'applications', 'resumes', 'reviews', 'country', 'state',
+                    'city', 'careerLevel', 'industry', 'salaryCurrency',
+                ];
+
+                $includes = explode(',', $this->include);
+                foreach ($includes as $include) {
+                    $include = trim($include);
+                    if (!in_array($include, $allowedIncludes)) {
+                        $validator->errors()->add('include', "Invalid include relationship: {$include}");
+                    }
+                }
+            }
+
+            // Validate field selection
+            if ($this->has('fields')) {
+                $allowedFields = [
+                    'id', 'first_name', 'last_name', 'email', 'phone', 'bio',
+                    'location', 'career', 'salary', 'skills', 'availability',
+                    'profile', 'social_links', 'statistics', 'timestamps',
+                ];
+
+                $fields = explode(',', $this->fields);
+                foreach ($fields as $field) {
+                    $field = trim($field);
+                    if (!in_array($field, $allowedFields)) {
+                        $validator->errors()->add('fields', "Invalid field selection: {$field}");
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Handle a failed validation attempt.
      */
     protected function failedValidation(Validator $validator): void
@@ -83,7 +125,7 @@ class ShowCandidateRequest extends FormRequest
             response()->json([
                 'success' => false,
                 'message' => 'Invalid request parameters',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
@@ -97,51 +139,9 @@ class ShowCandidateRequest extends FormRequest
         foreach (['with_stats', 'with_applications', 'with_reviews'] as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->$field, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+                    $field => filter_var($this->{$field}, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
                 ]);
             }
         }
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate include relationships
-            if ($this->has('include')) {
-                $allowedIncludes = [
-                    'user', 'skills', 'languages', 'educations', 'experiences', 
-                    'applications', 'resumes', 'reviews', 'country', 'state', 
-                    'city', 'careerLevel', 'industry', 'salaryCurrency'
-                ];
-                
-                $includes = explode(',', $this->include);
-                foreach ($includes as $include) {
-                    $include = trim($include);
-                    if (!in_array($include, $allowedIncludes)) {
-                        $validator->errors()->add('include', "Invalid include relationship: {$include}");
-                    }
-                }
-            }
-
-            // Validate field selection
-            if ($this->has('fields')) {
-                $allowedFields = [
-                    'id', 'first_name', 'last_name', 'email', 'phone', 'bio', 
-                    'location', 'career', 'salary', 'skills', 'availability',
-                    'profile', 'social_links', 'statistics', 'timestamps'
-                ];
-                
-                $fields = explode(',', $this->fields);
-                foreach ($fields as $field) {
-                    $field = trim($field);
-                    if (!in_array($field, $allowedFields)) {
-                        $validator->errors()->add('fields', "Invalid field selection: {$field}");
-                    }
-                }
-            }
-        });
-    }
-} 
+}

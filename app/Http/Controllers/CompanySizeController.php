@@ -7,15 +7,14 @@ use App\Http\Requests\UpdateCompanySizeRequest;
 use App\Models\Company;
 use App\Models\CompanySize;
 use App\Repositories\CompanySizeRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * CompanySizeController
- * 
+ * CompanySizeController.
+ *
  * Handles company size management for the Laravel Job Portal
  * Enhanced Level 4 transformation - Universal CRUD patterns
  */
@@ -32,10 +31,9 @@ class CompanySizeController extends AppBaseController
     /**
      * Display a listing of the CompanySize.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -91,7 +89,7 @@ class CompanySizeController extends AppBaseController
     /**
      * Remove the specified CompanySize from storage.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(CompanySize $companySize): JsonResponse
     {
@@ -108,12 +106,12 @@ class CompanySizeController extends AppBaseController
     }
 
     /**
-     * Get company sizes data for DataTables
+     * Get company sizes data for DataTables.
      */
     public function getData(Request $request): JsonResponse
     {
         $companySizes = $this->companySizeRepository->all();
-        
+
         return datatables($companySizes)
             ->addColumn('action', function ($companySize) {
                 return view('company_sizes.action', compact('companySize'))->render();
@@ -122,6 +120,7 @@ class CompanySizeController extends AppBaseController
                 return $companySize->created_at->format('Y-m-d H:i:s');
             })
             ->rawColumns(['action'])
-            ->make(true);
+            ->make(true)
+        ;
     }
-} 
+}

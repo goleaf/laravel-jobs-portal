@@ -6,11 +6,10 @@ use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
 use App\Models\JobStage;
 use App\Repositories\JobStageRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class JobStageController extends AppBaseController
 {
     /** @var JobStageRepository */
@@ -24,10 +23,9 @@ class JobStageController extends AppBaseController
     /**
      * Display a listing of the JobType.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -42,7 +40,8 @@ class JobStageController extends AppBaseController
         $input = $request->all();
         $jobStageExists = JobStage::whereName($input['name'])
             ->where('company_id', '=', getLoggedInUser()->owner_id)
-            ->exists();
+            ->exists()
+        ;
         if ($jobStageExists) {
             return $this->sendError('The name has already been taken');
         }
@@ -60,7 +59,7 @@ class JobStageController extends AppBaseController
         $companyId = getLoggedInUser()->company->id;
         $jobStageId = JobStage::whereCompanyId($companyId)->pluck('id')->toArray();
 
-        if (! in_array($jobStage->id, $jobStageId)) {
+        if (!in_array($jobStage->id, $jobStageId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -75,14 +74,15 @@ class JobStageController extends AppBaseController
         $companyId = getLoggedInUser()->company->id;
         $jobStageId = JobStage::whereCompanyId($companyId)->pluck('id')->toArray();
 
-        if (! in_array($jobStage->id, $jobStageId)) {
+        if (!in_array($jobStage->id, $jobStageId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
         $input = $request->all();
         $jobStageExists = JobStage::whereName($input['name'])
             ->whereCompanyId(getLoggedInUser()->owner_id)
-            ->where('id', '!=', $input['jobStageId'])->exists();
+            ->where('id', '!=', $input['jobStageId'])->exists()
+        ;
         if ($jobStageExists) {
             return $this->sendError(__('messages.flash.the_name_has'));
         }
@@ -99,7 +99,7 @@ class JobStageController extends AppBaseController
         $companyId = getLoggedInUser()->company->id;
         $jobStageId = JobStage::whereCompanyId($companyId)->pluck('id')->toArray();
 
-        if (! in_array($jobStage->id, $jobStageId)) {
+        if (!in_array($jobStage->id, $jobStageId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -114,7 +114,7 @@ class JobStageController extends AppBaseController
         $companyId = getLoggedInUser()->company->id;
         $jobStageId = JobStage::whereCompanyId($companyId)->pluck('id')->toArray();
 
-        if (! in_array($jobStage->id, $jobStageId)) {
+        if (!in_array($jobStage->id, $jobStageId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 

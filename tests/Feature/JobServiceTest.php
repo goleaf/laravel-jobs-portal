@@ -2,16 +2,21 @@
 
 namespace Tests\Feature;
 
-use App\Models\Job;
-use App\Models\User;
 use App\Models\Company;
+use App\Models\Job;
 use App\Models\JobCategory;
 use App\Models\JobType;
+use App\Models\User;
 use App\Services\JobService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class JobServiceTest extends TestCase
 {
     use RefreshDatabase;
@@ -23,16 +28,22 @@ class JobServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->jobService = new JobService();
-        
+
         // Create test data
         $this->employer = User::factory()->create();
         $this->company = Company::factory()->create(['user_id' => $this->employer->id]);
         $this->employer->update(['company_id' => $this->company->id]);
     }
 
-    public function test_can_get_active_jobs(): void
+    protected function tearDown(): void
+    {
+        Cache::flush();
+        parent::tearDown();
+    }
+
+    public function testCanGetActiveJobs(): void
     {
         // Create test jobs
         Job::factory()->count(5)->create(['status' => Job::STATUS_OPEN]);
@@ -44,14 +55,14 @@ class JobServiceTest extends TestCase
         $this->assertEquals(5, $activeJobs->total());
     }
 
-    public function test_can_get_featured_jobs(): void
+    public function testCanGetFeaturedJobs(): void
     {
         // Create regular jobs
         Job::factory()->count(3)->create(['status' => Job::STATUS_OPEN]);
-        
+
         // Create featured jobs
         $featuredJobs = Job::factory()->count(2)->create(['status' => Job::STATUS_OPEN]);
-        
+
         foreach ($featuredJobs as $job) {
             $job->featured()->create([
                 'featured_start_date' => now(),
@@ -65,7 +76,7 @@ class JobServiceTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    public function test_can_search_jobs_with_filters(): void
+    public function testCanSearchJobsWithFilters(): void
     {
         $category = JobCategory::factory()->create();
         $jobType = JobType::factory()->create();
@@ -95,7 +106,7 @@ class JobServiceTest extends TestCase
         $this->assertStringContainsString('PHP', $results->first()->job_title);
     }
 
-    public function test_can_create_job(): void
+    public function testCanCreateJob(): void
     {
         $jobData = [
             'job_title' => 'Senior Laravel Developer',
@@ -117,7 +128,7 @@ class JobServiceTest extends TestCase
         ]);
     }
 
-    public function test_can_update_job(): void
+    public function testCanUpdateJob(): void
     {
         $job = Job::factory()->create([
             'job_title' => 'Original Title',
@@ -139,7 +150,7 @@ class JobServiceTest extends TestCase
         ]);
     }
 
-    public function test_can_delete_job(): void
+    public function testCanDeleteJob(): void
     {
         $job = Job::factory()->create(['company_id' => $this->company->id]);
 
@@ -149,7 +160,7 @@ class JobServiceTest extends TestCase
         $this->assertSoftDeleted('jobs', ['id' => $job->id]);
     }
 
-    public function test_can_get_job_statistics(): void
+    public function testCanGetJobStatistics(): void
     {
         // Create various jobs
         Job::factory()->count(5)->create(['status' => Job::STATUS_OPEN]);
@@ -163,13 +174,13 @@ class JobServiceTest extends TestCase
         $this->assertEquals(2, $stats['draft_jobs']);
     }
 
-    public function test_can_get_popular_jobs(): void
+    public function testCanGetPopularJobs(): void
     {
         $popularJob = Job::factory()->create(['status' => Job::STATUS_OPEN]);
         $regularJob = Job::factory()->create(['status' => Job::STATUS_OPEN]);
 
         // Create applications for popular job
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 15; ++$i) {
             $popularJob->appliedJobs()->create([
                 'candidate_id' => User::factory()->create()->id,
                 'expected_salary' => 50000,
@@ -178,7 +189,7 @@ class JobServiceTest extends TestCase
         }
 
         // Create fewer applications for regular job
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $regularJob->appliedJobs()->create([
                 'candidate_id' => User::factory()->create()->id,
                 'expected_salary' => 45000,
@@ -192,7 +203,7 @@ class JobServiceTest extends TestCase
         $this->assertEquals($popularJob->id, $popularJobs->first()->id);
     }
 
-    public function test_can_get_similar_jobs(): void
+    public function testCanGetSimilarJobs(): void
     {
         $category = JobCategory::factory()->create();
         $jobType = JobType::factory()->create();
@@ -223,7 +234,7 @@ class JobServiceTest extends TestCase
         $this->assertFalse($similarJobs->contains('id', $unrelatedJob->id));
     }
 
-    public function test_can_expire_old_jobs(): void
+    public function testCanExpireOldJobs(): void
     {
         // Create jobs with different expiry dates
         Job::factory()->create([
@@ -248,7 +259,7 @@ class JobServiceTest extends TestCase
         $this->assertEquals(2, Job::where('status', Job::STATUS_CLOSED)->count());
     }
 
-    public function test_caching_works_correctly(): void
+    public function testCachingWorksCorrectly(): void
     {
         Cache::flush();
 
@@ -256,7 +267,7 @@ class JobServiceTest extends TestCase
 
         // First call should cache the result
         $firstResult = $this->jobService->getActiveJobs();
-        
+
         // Second call should use cache
         $secondResult = $this->jobService->getActiveJobs();
 
@@ -270,7 +281,7 @@ class JobServiceTest extends TestCase
         $this->assertEquals(4, $thirdResult->total());
     }
 
-    public function test_can_get_jobs_expiring_soon(): void
+    public function testCanGetJobsExpiringSoon(): void
     {
         // Create jobs expiring soon
         Job::factory()->create([
@@ -293,10 +304,4 @@ class JobServiceTest extends TestCase
 
         $this->assertCount(2, $jobsExpiringSoon);
     }
-
-    protected function tearDown(): void
-    {
-        Cache::flush();
-        parent::tearDown();
-    }
-} 
+}

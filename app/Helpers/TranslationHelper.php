@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 /**
- * Class TranslationHelper
+ * Class TranslationHelper.
  *
  * This class provides constants for all translation keys to ensure standardization
  * and to avoid typos when using translation strings.
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\File;
 class TranslationHelper
 {
     /**
-     * Common translation keys that are consistently used across the application
+     * Common translation keys that are consistently used across the application.
      */
     // Common action translations
     public const COMMON_ADD = 'common.add';
@@ -231,7 +231,7 @@ class TranslationHelper
     public const UPDATE = 'app.update';
 
     /**
-     * Get all translations for the current locale
+     * Get all translations for the current locale.
      */
     public static function getAllTranslations(): array
     {
@@ -244,7 +244,7 @@ class TranslationHelper
 
             if (File::exists($langPath)) {
                 foreach (File::allFiles($langPath) as $file) {
-                    if ($file->getExtension() === 'php') {
+                    if ('php' === $file->getExtension()) {
                         $fileName = $file->getBasename('.php');
                         $translations[$fileName] = require $file->getPathname();
                     }
@@ -265,7 +265,7 @@ class TranslationHelper
     }
 
     /**
-     * Get missing translations for a specific locale compared to the fallback locale
+     * Get missing translations for a specific locale compared to the fallback locale.
      */
     public static function getMissingTranslations(?string $locale = null): array
     {
@@ -279,7 +279,7 @@ class TranslationHelper
         $localeFilePath = resource_path("lang/{$locale}.php");
         $fallbackFilePath = resource_path("lang/{$fallbackLocale}.php");
 
-        if (! File::exists($localeFilePath) || ! File::exists($fallbackFilePath)) {
+        if (!File::exists($localeFilePath) || !File::exists($fallbackFilePath)) {
             return [];
         }
 
@@ -292,7 +292,7 @@ class TranslationHelper
         $missing = [];
 
         foreach ($flatFallback as $key => $value) {
-            if (! isset($flatLocale[$key]) || (strpos($flatLocale[$key], '[TRANSLATION_NEEDED]') === 0)) {
+            if (!isset($flatLocale[$key]) || (0 === strpos($flatLocale[$key], '[TRANSLATION_NEEDED]'))) {
                 $missing[$key] = $value;
             }
         }
@@ -301,14 +301,14 @@ class TranslationHelper
     }
 
     /**
-     * Check if a translation key exists for the current locale
+     * Check if a translation key exists for the current locale.
      */
     public static function hasTranslation(string $key): bool
     {
         $locale = App::getLocale();
         $filePath = resource_path("lang/{$locale}.php");
 
-        if (! File::exists($filePath)) {
+        if (!File::exists($filePath)) {
             return false;
         }
 
@@ -317,7 +317,7 @@ class TranslationHelper
 
         $section = array_shift($parts);
 
-        if (! isset($translations[$section])) {
+        if (!isset($translations[$section])) {
             return false;
         }
 
@@ -328,14 +328,14 @@ class TranslationHelper
     }
 
     /**
-     * Get a translation for a key in the standardized format
+     * Get a translation for a key in the standardized format.
      */
     public static function getTranslation(string $key, array $replace = [], ?string $locale = null): string
     {
         $locale = $locale ?? App::getLocale();
         $filePath = resource_path("lang/{$locale}.php");
 
-        if (! File::exists($filePath)) {
+        if (!File::exists($filePath)) {
             return $key;
         }
 
@@ -348,7 +348,7 @@ class TranslationHelper
 
         $section = array_shift($parts);
 
-        if (! isset($translations[$section])) {
+        if (!isset($translations[$section])) {
             return $key;
         }
 
@@ -366,27 +366,7 @@ class TranslationHelper
     }
 
     /**
-     * Flatten translations array into dot notation
-     */
-    protected static function flattenTranslations(array $translations, string $prefix = ''): array
-    {
-        $result = [];
-
-        foreach ($translations as $key => $value) {
-            $newKey = $prefix ? "{$prefix}.{$key}" : $key;
-
-            if (is_array($value)) {
-                $result = array_merge($result, static::flattenTranslations($value, $newKey));
-            } else {
-                $result[$newKey] = $value;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get a translation value following the standardized format
+     * Get a translation value following the standardized format.
      */
     public static function get(string $key, array $replace = [], ?string $locale = null): string
     {
@@ -440,12 +420,32 @@ class TranslationHelper
     }
 
     /**
-     * Standardize a translation key to the new format
+     * Flatten translations array into dot notation.
+     */
+    protected static function flattenTranslations(array $translations, string $prefix = ''): array
+    {
+        $result = [];
+
+        foreach ($translations as $key => $value) {
+            $newKey = $prefix ? "{$prefix}.{$key}" : $key;
+
+            if (is_array($value)) {
+                $result = array_merge($result, static::flattenTranslations($value, $newKey));
+            } else {
+                $result[$newKey] = $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Standardize a translation key to the new format.
      */
     protected static function standardizeTranslationKey(string $key): string
     {
         // Convert legacy 'messages.common.search' to 'common.search'
-        if (strpos($key, 'messages.common.') === 0) {
+        if (0 === strpos($key, 'messages.common.')) {
             return substr_replace($key, 'common.', 0, strlen('messages.common.'));
         }
 
@@ -460,7 +460,7 @@ class TranslationHelper
         ];
 
         foreach ($legacyPrefixes as $legacy => $new) {
-            if (strpos($key, $legacy) === 0) {
+            if (0 === strpos($key, $legacy)) {
                 return substr_replace($key, $new, 0, strlen($legacy));
             }
         }
@@ -471,111 +471,97 @@ class TranslationHelper
 
 if (!function_exists('trans_json')) {
     /**
-     * Get translation from JSON files with enhanced features
-     *
-     * @param string $key
-     * @param array $replace
-     * @param string|null $locale
-     * @return string
+     * Get translation from JSON files with enhanced features.
      */
-    function trans_json(string $key, array $replace = [], string $locale = null): string {
+    function trans_json(string $key, array $replace = [], ?string $locale = null): string
+    {
         return app('translation.service')->get($key, $replace, $locale ?? App::getLocale());
     }
 }
 
 if (!function_exists('is_rtl')) {
     /**
-     * Check if locale is RTL with caching
-     *
-     * @param string|null $locale
-     * @return bool
+     * Check if locale is RTL with caching.
      */
-    function is_rtl(string $locale = null): bool {
+    function is_rtl(?string $locale = null): bool
+    {
         return app('language.helper')->isRtl($locale ?? App::getLocale());
     }
 }
 
 if (!function_exists('lang_direction')) {
     /**
-     * Get language direction with caching
-     *
-     * @param string|null $locale
-     * @return string
+     * Get language direction with caching.
      */
-    function lang_direction(string $locale = null): string {
+    function lang_direction(?string $locale = null): string
+    {
         return app('language.helper')->getDirection($locale ?? App::getLocale());
     }
 }
 
 if (!function_exists('locale_flag')) {
     /**
-     * Get flag emoji for locale
-     *
-     * @param string $locale
-     * @return string
+     * Get flag emoji for locale.
      */
-    function locale_flag(string $locale): string {
+    function locale_flag(string $locale): string
+    {
         $flags = [
             'en' => '🇺🇸', 'ar' => '🇸🇦', 'de' => '🇩🇪', 'es' => '🇪🇸',
-            'fr' => '🇫🇷', 'pt' => '🇵🇹', 'ru' => '🇷🇺', 'tr' => '🇹🇷', 'zh' => '🇨🇳'
+            'fr' => '🇫🇷', 'pt' => '🇵🇹', 'ru' => '🇷🇺', 'tr' => '🇹🇷', 'zh' => '🇨🇳',
         ];
+
         return $flags[$locale] ?? '🌐';
     }
 }
 
 if (!function_exists('trans_has')) {
     /**
-     * Check if translation key exists
-     *
-     * @param string $key
-     * @param string|null $locale
-     * @return bool
+     * Check if translation key exists.
      */
-    function trans_has(string $key, string $locale = null): bool {
+    function trans_has(string $key, ?string $locale = null): bool
+    {
         return app('translation.service')->has($key, $locale ?? App::getLocale());
     }
 }
 
 if (!function_exists('available_locales')) {
     /**
-     * Get available locales
-     *
-     * @return array
+     * Get available locales.
      */
-    function available_locales(): array {
+    function available_locales(): array
+    {
         return array_keys(config('app.available_locales', []));
     }
 }
 
 if (!function_exists('current_locale_config')) {
     /**
-     * Get current locale configuration
-     *
-     * @return array
+     * Get current locale configuration.
      */
-    function current_locale_config(): array {
+    function current_locale_config(): array
+    {
         $locale = App::getLocale();
+
         return config("app.available_locales.{$locale}", []);
     }
 }
 
 if (!function_exists('format_number_locale')) {
     /**
-     * Format number according to current locale
+     * Format number according to current locale.
      *
      * @param mixed $number
-     * @param array $options
-     * @return string
      */
-    function format_number_locale($number, array $options = []): string {
+    function format_number_locale($number, array $options = []): string
+    {
         $locale = $options['locale'] ?? App::getLocale();
         $style = $options['style'] ?? 'decimal';
         $currency = $options['currency'] ?? 'USD';
         $minimumFractionDigits = $options['minimumFractionDigits'] ?? 0;
         $maximumFractionDigits = $options['maximumFractionDigits'] ?? 2;
 
-        $formatter = new \NumberFormatter($locale, constant("\NumberFormatter::{$style}"));
-        if ($style === 'currency') {
+        $formatter = new \NumberFormatter($locale, constant("\\NumberFormatter::{$style}"));
+        if ('currency' === $style) {
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 2);
             $formatter->setTextAttribute(\NumberFormatter::CURRENCY_CODE, $currency);
         } else {
@@ -583,6 +569,6 @@ if (!function_exists('format_number_locale')) {
             $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $maximumFractionDigits);
         }
 
-        return $formatter->format($number) ?: (string)$number;
+        return $formatter->format($number) ?: (string) $number;
     }
 }

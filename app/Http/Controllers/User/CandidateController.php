@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Exports\CandidatesExport;
-
 use App\Models\Candidate;
 use App\Models\Country;
 use App\Models\SalaryCurrency;
@@ -11,19 +10,17 @@ use App\Models\State;
 use App\ReportedToCandidate;
 use App\Repositories\Candidates\CandidateRepository;
 use Carbon\Carbon;
-use Exception;
-use Flash;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 class CandidateController extends AppBaseController
 {
     /** @var CandidateRepository */
@@ -37,10 +34,9 @@ class CandidateController extends AppBaseController
     /**
      * Display a listing of the Candidate.
      *
-     * @param  Request  $request
      * @return Application|Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -64,14 +60,14 @@ class CandidateController extends AppBaseController
     /**
      * Store a newly created Candidate in storage.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function store(CreateCandidateCreateCandidateRequest $request): RedirectResponse
     {
         $input = $request->all();
         $candidate = $this->candidateRepository->store($input);
 
-        Flash::success(__('messages.flash.candidate_save'));
+        \Flash::success(__('messages.flash.candidate_save'));
 
         return redirect(route('candidates.index'));
     }
@@ -91,7 +87,7 @@ class CandidateController extends AppBaseController
     /**
      * Show the form for editing the specified Candidate.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function edit(Candidate $candidate): View
     {
@@ -103,10 +99,10 @@ class CandidateController extends AppBaseController
         $userStates = $userCities = null;
         $countries = Country::pluck('name', 'id');
         $states = State::toBase()->pluck('name', 'id');
-        if (! empty($user->country_id)) {
+        if (!empty($user->country_id)) {
             $userStates = getStates($user->country_id);
         }
-        if (! empty($user->state_id)) {
+        if (!empty($user->state_id)) {
             $userCities = getCities($user->state_id);
         }
 
@@ -116,20 +112,20 @@ class CandidateController extends AppBaseController
     /**
      * Update the specified Candidate in storage.
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function update(Candidate $candidate, UpdateCandidateUpdateCandidateRequest $request): RedirectResponse
     {
         $input = $request->all();
         if (empty($candidate)) {
-            Flash::error(__('messages.flash.candidate_not_found'));
+            \Flash::error(__('messages.flash.candidate_not_found'));
 
             return redirect(route('candidates.index'));
         }
 
         $candidate = $this->candidateRepository->updateCandidate($candidate, $input);
 
-        Flash::success(__('messages.flash.candidate_update'));
+        \Flash::success(__('messages.flash.candidate_update'));
 
         return redirect(route('candidates.index'));
     }
@@ -137,8 +133,7 @@ class CandidateController extends AppBaseController
     /**
      * Remove the specified Candidate from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(Candidate $candidate): JsonResponse
     {
@@ -147,19 +142,21 @@ class CandidateController extends AppBaseController
             $candidate->delete();
 
             return $this->sendSuccess(__('messages.flash.candidate_delete'));
-        } else {
-            return $this->sendError(__('messages.common.seems_message'));
         }
+
+        return $this->sendError(__('messages.common.seems_message'));
     }
 
     /**
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function changeStatus($id)
     {
         $candidate = Candidate::findOrFail($id);
 
-        $status = ! $candidate->user->is_active;
+        $status = !$candidate->user->is_active;
         $candidate->user->update(['is_active' => $status]);
 
         if ($candidate) {
@@ -181,10 +178,9 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
      * @return Application|Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function showReportedCandidates(): View
     {
@@ -192,24 +188,22 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @param  ReportedToCompany  $reportedToCompany
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function showReportedCandiateNote(ShowReportedCandiateNoteCandidateRequest $request)
     {
         $data = $this->candidateRepository->getReportedToCandidate($request->reportedToCandidate);
-        $data['date'] = \Carbon\Carbon::parse($data->created_at)->formatLocalized('%d %b, %Y');
+        $data['date'] = Carbon::parse($data->created_at)->formatLocalized('%d %b, %Y');
 
         return $this->sendResponse($data, 'Retrieved successfully.');
     }
 
     /**
-     * @param  ReportedToCompany  $reportedToCompany
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteReportedCandidate(ReportedToCandidate $reportedToCandidate)
     {
@@ -256,7 +250,7 @@ class CandidateController extends AppBaseController
 
     public function candidateExportExcel(): BinaryFileResponse
     {
-        return Excel::download(new CandidatesExport, 'candidates-'.time().'.xlsx');
+        return Excel::download(new CandidatesExport(), 'candidates-'.time().'.xlsx');
     }
 
     public function resumes(): View
@@ -268,17 +262,14 @@ class CandidateController extends AppBaseController
     {
         try {
             if (Auth::user()->hasRole('Admin')) {
-                $mediaFile = Media::where('id', $media)->first();
-
-                return $mediaFile;
-            } else {
-                $mediaFile = Media::where('id', $media)->where('model_id', getLoggedInUser()->candidate->id)->first();
-                if ($mediaFile) {
-                    return $mediaFile;
-                } else {
-                    return view('errors.404');
-                }
+                return Media::where('id', $media)->first();
             }
+            $mediaFile = Media::where('id', $media)->where('model_id', getLoggedInUser()->candidate->id)->first();
+            if ($mediaFile) {
+                return $mediaFile;
+            }
+
+            return view('errors.404');
         } catch (\Exception $e) {
             return view('errors.404');
         }

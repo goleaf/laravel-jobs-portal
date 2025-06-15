@@ -16,7 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
 /**
- * Class CustomPathGenerator
+ * Class CustomPathGenerator.
  */
 class CustomPathGenerator implements PathGenerator
 {
@@ -27,26 +27,36 @@ class CustomPathGenerator implements PathGenerator
         switch ($media->collection_name) {
             case Setting::PATH:
                 return str_replace('{PARENT_DIR}', 'settings', $path);
+
             case Candidate::RESUME_PATH:
                 return str_replace('{PARENT_DIR}', Candidate::RESUME_PATH, $path);
+
             case Testimonial::PATH:
                 return str_replace('{PARENT_DIR}', 'testimonials', $path);
+
             case User::PROFILE:
                 return str_replace('{PARENT_DIR}', 'profile-pictures', $path);
+
             case Post::PATH:
                 return str_replace('{PARENT_DIR}', Post::PATH, $path);
+
             case ImageSlider::PATH:
                 return str_replace('{PARENT_DIR}', ImageSlider::PATH, $path);
+
             case HeaderSlider::PATH:
                 return str_replace('{PARENT_DIR}', HeaderSlider::PATH, $path);
+
             case BrandingSliders::PATH:
                 return str_replace('{PARENT_DIR}', BrandingSliders::PATH, $path);
+
             case FrontSetting::PATH:
                 return str_replace('{PARENT_DIR}', FrontSetting::PATH, $path);
+
             case JobCategory::PATH:
                 return str_replace('{PARENT_DIR}', JobCategory::PATH, $path);
-            case 'default':
-                return '';
+
+            default:
+                return str_replace('{PARENT_DIR}', 'uploads', $path);
         }
     }
 

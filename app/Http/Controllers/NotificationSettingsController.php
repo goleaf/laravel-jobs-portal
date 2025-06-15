@@ -6,12 +6,12 @@ use App\Models\NotificationSetting;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Laracasts\Flash\Flash;
+
 class NotificationSettingsController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class NotificationSettingsController extends Controller
         foreach ($notificationArray as $key => $value) {
             /** @var NotificationSetting $notificationSetting */
             $notificationSetting = NotificationSetting::where('key', $key)->first();
-            if (! $notificationSetting) {
+            if (!$notificationSetting) {
                 continue;
             }
             $notificationSetting->update(['value' => $value]);

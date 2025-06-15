@@ -2,15 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Exceptions\UserCreationException;
-use App\Exceptions\UserUpdateException;
 use App\Exceptions\UserDeletionException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Exceptions\UserUpdateException;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class EnhancedUserService
 {
@@ -19,7 +18,7 @@ class EnhancedUserService
     ) {}
 
     /**
-     * Create a new user with proper transaction handling
+     * Create a new user with proper transaction handling.
      */
     public function createUser(array $data): User
     {
@@ -41,15 +40,17 @@ class EnhancedUserService
             $this->notificationService->sendWelcomeEmail($user);
 
             DB::commit();
+
             return $user;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new UserCreationException('Failed to create user: ' . $e->getMessage());
+
+            throw new UserCreationException('Failed to create user: '.$e->getMessage());
         }
     }
 
     /**
-     * Update user with transaction handling
+     * Update user with transaction handling.
      */
     public function updateUser(User $user, array $data): User
     {
@@ -71,15 +72,17 @@ class EnhancedUserService
             }
 
             DB::commit();
+
             return $user->fresh();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new UserUpdateException('Failed to update user: ' . $e->getMessage());
+
+            throw new UserUpdateException('Failed to update user: '.$e->getMessage());
         }
     }
 
     /**
-     * Delete user with cascade handling
+     * Delete user with cascade handling.
      */
     public function deleteUser(User $user): bool
     {
@@ -106,15 +109,17 @@ class EnhancedUserService
             $user->delete();
 
             DB::commit();
+
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new UserDeletionException('Failed to delete user: ' . $e->getMessage());
+
+            throw new UserDeletionException('Failed to delete user: '.$e->getMessage());
         }
     }
 
     /**
-     * Search users with filters
+     * Search users with filters.
      */
     public function searchUsers(array $filters): LengthAwarePaginator
     {
@@ -124,8 +129,9 @@ class EnhancedUserService
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('first_name', 'LIKE', "%{$filters['search']}%")
-                  ->orWhere('last_name', 'LIKE', "%{$filters['search']}%")
-                  ->orWhere('email', 'LIKE', "%{$filters['search']}%");
+                    ->orWhere('last_name', 'LIKE', "%{$filters['search']}%")
+                    ->orWhere('email', 'LIKE', "%{$filters['search']}%")
+                ;
             });
         }
 
@@ -149,11 +155,12 @@ class EnhancedUserService
         $query->with(['country', 'state', 'city', 'roles']);
 
         return $query->orderBy('created_at', 'desc')
-                    ->paginate($filters['per_page'] ?? 15);
+            ->paginate($filters['per_page'] ?? 15)
+        ;
     }
 
     /**
-     * Get user statistics
+     * Get user statistics.
      */
     public function getUserStats(): array
     {
@@ -169,70 +176,74 @@ class EnhancedUserService
                 ->whereNotNull('country_id')
                 ->groupBy('country_id')
                 ->with('country:id,name')
-                ->get()
+                ->get(),
         ];
     }
 
     /**
-     * Activate user account
+     * Activate user account.
      */
     public function activateUser(User $user): bool
     {
         try {
             $user->activate();
             $this->notificationService->sendAccountActivatedEmail($user);
+
             return true;
-        } catch (Exception $e) {
-            throw new UserUpdateException('Failed to activate user: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new UserUpdateException('Failed to activate user: '.$e->getMessage());
         }
     }
 
     /**
-     * Deactivate user account
+     * Deactivate user account.
      */
     public function deactivateUser(User $user): bool
     {
         try {
             $user->deactivate();
             $this->notificationService->sendAccountDeactivatedEmail($user);
+
             return true;
-        } catch (Exception $e) {
-            throw new UserUpdateException('Failed to deactivate user: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new UserUpdateException('Failed to deactivate user: '.$e->getMessage());
         }
     }
 
     /**
-     * Verify user email
+     * Verify user email.
      */
     public function verifyUserEmail(User $user): bool
     {
         try {
             $user->update([
                 'email_verified_at' => now(),
-                'is_verified' => true
+                'is_verified' => true,
             ]);
+
             return true;
-        } catch (Exception $e) {
-            throw new UserUpdateException('Failed to verify user email: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new UserUpdateException('Failed to verify user email: '.$e->getMessage());
         }
     }
 
     /**
-     * Change user password
+     * Change user password.
      */
     public function changePassword(User $user, string $newPassword): bool
     {
         try {
             $user->update(['password' => Hash::make($newPassword)]);
             $this->notificationService->sendPasswordChangedEmail($user);
+
             return true;
-        } catch (Exception $e) {
-            throw new UserUpdateException('Failed to change password: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new UserUpdateException('Failed to change password: '.$e->getMessage());
         }
     }
 
     /**
-     * Get users by role
+     * Get users by role.
      */
     public function getUsersByRole(string $role): Collection
     {
@@ -240,22 +251,7 @@ class EnhancedUserService
     }
 
     /**
-     * Assign role to user based on user type
-     */
-    private function assignUserRole(User $user, int $userType): void
-    {
-        $roleName = match($userType) {
-            User::TYPE_ADMIN => 'Admin',
-            User::TYPE_EMPLOYER => 'Employer',
-            User::TYPE_CANDIDATE => 'Candidate',
-            default => throw new \InvalidArgumentException('Invalid user type: ' . $userType)
-        };
-
-        $user->assignRole($roleName);
-    }
-
-    /**
-     * Bulk update users
+     * Bulk update users.
      */
     public function bulkUpdateUsers(array $userIds, array $data): int
     {
@@ -264,15 +260,17 @@ class EnhancedUserService
         try {
             $updated = User::whereIn('id', $userIds)->update($data);
             DB::commit();
+
             return $updated;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            throw new UserUpdateException('Failed to bulk update users: ' . $e->getMessage());
+
+            throw new UserUpdateException('Failed to bulk update users: '.$e->getMessage());
         }
     }
 
     /**
-     * Export users data
+     * Export users data.
      */
     public function exportUsers(array $filters = []): Collection
     {
@@ -288,7 +286,23 @@ class EnhancedUserService
         }
 
         return $query->with(['country', 'state', 'city', 'roles'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+            ->orderBy('created_at', 'desc')
+            ->get()
+        ;
     }
-} 
+
+    /**
+     * Assign role to user based on user type.
+     */
+    private function assignUserRole(User $user, int $userType): void
+    {
+        $roleName = match ($userType) {
+            User::TYPE_ADMIN => 'Admin',
+            User::TYPE_EMPLOYER => 'Employer',
+            User::TYPE_CANDIDATE => 'Candidate',
+            default => throw new \InvalidArgumentException('Invalid user type: '.$userType)
+        };
+
+        $user->assignRole($roleName);
+    }
+}

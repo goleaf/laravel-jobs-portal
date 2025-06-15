@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Api\Universal;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserRequest extends FormRequest
@@ -14,7 +14,7 @@ class UserRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated via Sanctum token
-        return $this->user() !== null;
+        return null !== $this->user();
     }
 
     /**
@@ -46,6 +46,16 @@ class UserRequest extends FormRequest
         return [
             // No attributes needed for this request
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // Additional validation can be added here if needed
+        });
     }
 
     /**
@@ -83,14 +93,4 @@ class UserRequest extends FormRequest
     {
         // No data preparation needed for user details request
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Additional validation can be added here if needed
-        });
-    }
-} 
+}

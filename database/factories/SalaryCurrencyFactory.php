@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Enhanced Factory for SalaryCurrency
- * Generated using Laravel 12 best practices
+ * Generated using Laravel 12 best practices.
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SalaryCurrency>
  */
@@ -47,16 +47,16 @@ class SalaryCurrencyFactory extends Factory
             ['name' => 'Norwegian Krone', 'code' => 'NOK', 'icon' => 'kr'],
             ['name' => 'Swedish Krona', 'code' => 'SEK', 'icon' => 'kr'],
             ['name' => 'Danish Krone', 'code' => 'DKK', 'icon' => 'kr'],
-            ['name' => 'Turkish Lira', 'code' => 'TRY', 'icon' => '₺']
+            ['name' => 'Turkish Lira', 'code' => 'TRY', 'icon' => '₺'],
         ];
-        
+
         $currency = $this->faker->unique()->randomElement($currencies);
-        
+
         return [
             'currency_name' => $currency['name'],
             'is_default' => $this->faker->boolean(5), // 5% chance of being default
             'currency_code' => $currency['code'],
-            'currency_icon' => $currency['icon']
+            'currency_icon' => $currency['icon'],
         ];
     }
 }

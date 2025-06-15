@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\DB;
 class QueryOptimizer
 {
     /**
-     * Optimize job search queries
+     * Optimize job search queries.
      */
     public static function optimizeJobSearch(Builder $query, array $filters = []): Builder
     {
         // Select only necessary columns
         $query->select([
             'id', 'title', 'description', 'company_id', 'location',
-            'salary_min', 'salary_max', 'job_type', 'created_at'
+            'salary_min', 'salary_max', 'job_type', 'created_at',
         ]);
 
         // Eager load relationships
@@ -23,7 +23,7 @@ class QueryOptimizer
 
         // Apply filters efficiently
         if (!empty($filters['location'])) {
-            $query->where('location', 'like', '%' . $filters['location'] . '%');
+            $query->where('location', 'like', '%'.$filters['location'].'%');
         }
 
         if (!empty($filters['category_id'])) {
@@ -45,13 +45,16 @@ class QueryOptimizer
     }
 
     /**
-     * Optimize user dashboard queries
+     * Optimize user dashboard queries.
+     *
+     * @param mixed $userId
+     * @param mixed $userType
      */
     public static function optimizeUserDashboard($userId, $userType): array
     {
         $stats = [];
 
-        if ($userType === 'candidate') {
+        if ('candidate' === $userType) {
             $stats = DB::select("
                 SELECT 
                     COUNT(CASE WHEN status = 'applied' THEN 1 END) as applications_sent,
@@ -76,19 +79,20 @@ class QueryOptimizer
     }
 
     /**
-     * Optimize company search
+     * Optimize company search.
      */
     public static function optimizeCompanySearch(Builder $query, array $filters = []): Builder
     {
         $query->select(['id', 'name', 'logo', 'location', 'industry_id', 'created_at'])
-               ->where('is_active', true);
+            ->where('is_active', true)
+        ;
 
         if (!empty($filters['industry_id'])) {
             $query->where('industry_id', $filters['industry_id']);
         }
 
         if (!empty($filters['location'])) {
-            $query->where('location', 'like', '%' . $filters['location'] . '%');
+            $query->where('location', 'like', '%'.$filters['location'].'%');
         }
 
         return $query;

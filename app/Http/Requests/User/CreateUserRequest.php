@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\City;
+use App\Models\State;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends FormRequest
 {
@@ -20,7 +23,7 @@ class CreateUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -111,6 +114,39 @@ class CreateUserRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param mixed $validator
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            // Validate age requirement for certain roles
+            if ($this->input('dob') && 'candidate' === $this->input('role')) {
+                $age = Carbon::parse($this->input('dob'))->age;
+                if ($age < 16) {
+                    $validator->errors()->add('dob', __('validation.user.dob.minimum_age'));
+                }
+            }
+
+            // Validate location hierarchy
+            if ($this->input('state_id') && $this->input('country_id')) {
+                $state = State::find($this->input('state_id'));
+                if ($state && $state->country_id != $this->input('country_id')) {
+                    $validator->errors()->add('state_id', __('validation.user.state_country_mismatch'));
+                }
+            }
+
+            if ($this->input('city_id') && $this->input('state_id')) {
+                $city = City::find($this->input('city_id'));
+                if ($city && $city->state_id != $this->input('state_id')) {
+                    $validator->errors()->add('city_id', __('validation.user.city_state_mismatch'));
+                }
+            }
+        });
+    }
+
+    /**
      * Prepare the data for validation.
      */
     protected function prepareForValidation(): void
@@ -141,35 +177,4 @@ class CreateUserRequest extends FormRequest
             'ip' => $this->ip(),
         ]);
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            // Validate age requirement for certain roles
-            if ($this->input('dob') && $this->input('role') === 'candidate') {
-                $age = \Carbon\Carbon::parse($this->input('dob'))->age;
-                if ($age < 16) {
-                    $validator->errors()->add('dob', __('validation.user.dob.minimum_age'));
-                }
-            }
-
-            // Validate location hierarchy
-            if ($this->input('state_id') && $this->input('country_id')) {
-                $state = \App\Models\State::find($this->input('state_id'));
-                if ($state && $state->country_id != $this->input('country_id')) {
-                    $validator->errors()->add('state_id', __('validation.user.state_country_mismatch'));
-                }
-            }
-
-            if ($this->input('city_id') && $this->input('state_id')) {
-                $city = \App\Models\City::find($this->input('city_id'));
-                if ($city && $city->state_id != $this->input('state_id')) {
-                    $validator->errors()->add('city_id', __('validation.user.city_state_mismatch'));
-                }
-            }
-        });
-    }
-} 
+}

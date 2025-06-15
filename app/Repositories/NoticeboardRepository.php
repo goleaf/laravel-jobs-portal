@@ -6,12 +6,11 @@ use App\Mail\NewsLetterMail;
 use App\Models\EmailTemplate;
 use App\Models\NewsLetter;
 use App\Models\Noticeboard;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Class NoticeboardRepository
+ * Class NoticeboardRepository.
  */
 class NoticeboardRepository extends BaseRepository
 {
@@ -23,7 +22,7 @@ class NoticeboardRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -31,8 +30,8 @@ class NoticeboardRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Noticeboard::class;
@@ -40,7 +39,7 @@ class NoticeboardRepository extends BaseRepository
 
     public function store($input): bool
     {
-        /* @var  Noticeboard $noticeboard */
+        // @var  Noticeboard $noticeboard
         $noticeboard = $this->create($input);
 
         $newsLetterEmails = NewsLetter::pluck('email')->toArray();
@@ -54,7 +53,7 @@ class NoticeboardRepository extends BaseRepository
                 $data['input'] = $input;
                 $data['body'] = $body;
                 //    Mail::to($newsLetterEmail)->send(new NewsLetterMail($data));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new UnprocessableEntityHttpException($e->getMessage());
             }
         }

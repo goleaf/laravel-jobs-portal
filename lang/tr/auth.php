@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -15,5 +14,4 @@ return [
 
     'failed' => 'Bu kimlik bilgileri kayıtlarımızla eşleşmiyor.',
     'throttle' => 'Çok fazla giriş denemesi. Lütfen saniye sonra tekrar deneyin.',
-
 ];

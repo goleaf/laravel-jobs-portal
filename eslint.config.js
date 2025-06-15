@@ -1,0 +1,1 @@
+module.exports = { "extends": ["eslint:recommended"], "env": { "browser": true, "es6": true, "node": true }, "rules": { "semi": ["error", "always"], "quotes": ["error", "single"], "no-unused-vars": "error", "no-console": "warn" }, "ignores": ["node_modules/**", "vendor/**", "storage/**", "bootstrap/cache/**"] };

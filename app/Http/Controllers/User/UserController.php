@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Requests\User\AdminCreateUserRequest;
+use App\Http\Requests\User\ChangePasswordUserRequest;
+use App\Http\Requests\User\ChangeThemeModeUserRequest;
+use App\Http\Requests\User\CreateAdminUserRequest;
+use App\Http\Requests\User\ProfileUpdateUserRequest;
+use App\Http\Requests\User\UpdateAdminUserRequest;
+use App\Http\Requests\User\UpdateLanguageUserRequest;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Http\Requests\User\ChangePasswordUserRequest;
-use App\Http\Requests\User\ProfileUpdateUserRequest;
-use App\Http\Requests\User\UpdateLanguageUserRequest;
-use App\Http\Requests\User\AdminCreateUserRequest;
-use App\Http\Requests\User\CreateAdminUserRequest;
-use App\Http\Requests\User\UpdateAdminUserRequest;
-use App\Http\Requests\User\ChangeThemeModeUserRequest;
-use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -26,9 +27,8 @@ use Illuminate\View\View;
 use Laracasts\Flash\Flash;
 
 /**
- * Class UserController
+ * Class UserController.
  */
-
 class UserController extends AppBaseController
 {
     /** @var UserRepository */
@@ -47,7 +47,7 @@ class UserController extends AppBaseController
             $user = $this->userRepository->changePassword($input);
 
             return $this->sendSuccess(__('messages.flash.password_update'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 422);
         }
     }
@@ -60,7 +60,7 @@ class UserController extends AppBaseController
             $user = $this->userRepository->profileUpdate($input);
 
             return $this->sendResponse($user, __('messages.flash.profile_update'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 422);
         }
     }
@@ -82,7 +82,7 @@ class UserController extends AppBaseController
         /** @var User $user */
         $user = getLoggedInUser();
         $user->update(['language' => $language]);
-        if (! empty($language)) {
+        if (!empty($language)) {
             Session::put('languageName', $language);
         }
 
@@ -93,7 +93,7 @@ class UserController extends AppBaseController
     {
         $user = User::find(getLoggedInUser()->id);
 
-        if ($user->theme_mode == User::LIGHT_MODE) {
+        if (User::LIGHT_MODE == $user->theme_mode) {
             $user['theme_mode'] = User::DARK_MODE;
         } else {
             $user['theme_mode'] = User::LIGHT_MODE;
@@ -105,13 +105,13 @@ class UserController extends AppBaseController
     }
 
     /**
-     * Get dashboard statistics using new model scopes
+     * Get dashboard statistics using new model scopes.
      */
     public function getDashboardStats(): JsonResponse
     {
         $stats = [
             'recent_users' => User::recent(7)->count(),
-            'candidates' => User::candidates()->count(), 
+            'candidates' => User::candidates()->count(),
             'employers' => User::employers()->count(),
             'admins' => User::admins()->count(),
             'active_jobs' => Job::active()->count(),
@@ -126,7 +126,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function adminIndex(): View
     {
@@ -134,7 +134,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function adminCreate(AdminCreateUserRequest $request): View
     {
@@ -142,7 +142,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function adminStore(CreateAdminUserRequest $request): RedirectResponse
     {
@@ -156,7 +156,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function adminEdit(User $user): View
     {
@@ -170,7 +170,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function adminUpdate(User $user, UpdateAdminUserRequest $request): RedirectResponse
     {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Job;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
 class ApplyJobJobApplicationRequest extends FormRequest
 {
@@ -16,21 +16,9 @@ class ApplyJobJobApplicationRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Clean up expected salary (remove commas, formatting)
-        if ($this->has('expected_salary')) {
-            $expectedSalary = removeCommaFromNumbers($this->input('expected_salary'));
-            $this->merge(['expected_salary' => $expectedSalary]);
-        }
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -38,31 +26,31 @@ class ApplyJobJobApplicationRequest extends FormRequest
             'job_id' => [
                 'required',
                 'integer',
-                'exists:jobs,id'
+                'exists:jobs,id',
             ],
             'resume_id' => [
                 'required',
                 'integer',
-                'exists:resumes,id'
+                'exists:resumes,id',
             ],
             'expected_salary' => [
                 'required',
                 'numeric',
                 'min:0',
-                'max:9999999999'
+                'max:9999999999',
             ],
             'notes' => [
                 'nullable',
                 'string',
-                'max:2000'
-            ]
+                'max:2000',
+            ],
         ];
 
         // Add Google reCAPTCHA validation if enabled
         if (getSettingValue('enable_google_recaptcha')) {
             $rules['g-recaptcha-response'] = [
                 'required',
-                'string'
+                'string',
             ];
         }
 
@@ -104,5 +92,17 @@ class ApplyJobJobApplicationRequest extends FormRequest
             'notes' => __('messages.apply_job.notes'),
             'g-recaptcha-response' => __('messages.common.captcha'),
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Clean up expected salary (remove commas, formatting)
+        if ($this->has('expected_salary')) {
+            $expectedSalary = removeCommaFromNumbers($this->input('expected_salary'));
+            $this->merge(['expected_salary' => $expectedSalary]);
+        }
     }
 }

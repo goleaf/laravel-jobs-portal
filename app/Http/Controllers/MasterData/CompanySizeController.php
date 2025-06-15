@@ -7,10 +7,8 @@ use App\Http\Requests\UpdateCompanySizeRequest;
 use App\Models\Company;
 use App\Models\CompanySize;
 use App\Repositories\CompanySizeRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CompanySizeController extends AppBaseController
@@ -26,10 +24,9 @@ class CompanySizeController extends AppBaseController
     /**
      * Display a listing of the CompanySize.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -69,8 +66,7 @@ class CompanySizeController extends AppBaseController
     /**
      * Remove the specified CompanySize from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(CompanySize $companySize): JsonResponse
     {

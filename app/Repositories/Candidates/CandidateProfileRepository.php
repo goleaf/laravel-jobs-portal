@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Class CandidateProfileRepository
+ * Class CandidateProfileRepository.
  */
 class CandidateProfileRepository extends BaseRepository
 {
@@ -29,7 +29,7 @@ class CandidateProfileRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      */
     public function getFieldsSearchable(): array
     {
@@ -37,8 +37,8 @@ class CandidateProfileRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Candidate::class;
@@ -51,7 +51,7 @@ class CandidateProfileRepository extends BaseRepository
     {
         $input['currently_working'] = isset($input['currently_working']) ? 1 : 0;
         $input['candidate_id'] = Auth::user()->owner_id;
-        $input['end_date'] = (! empty($input['end_date'])) ? $input['end_date'] : null;
+        $input['end_date'] = (!empty($input['end_date'])) ? $input['end_date'] : null;
 
         $candidateExperience = CandidateExperience::create($input);
         $candidateExperience->country = getCountryName($candidateExperience->country_id);
@@ -78,6 +78,7 @@ class CandidateProfileRepository extends BaseRepository
     public function getEducation(CandidateEducation $candidateEducation)
     {
         return CandidateEducation::with('degreeLevel')
-            ->where('id', $candidateEducation->id)->first();
+            ->where('id', $candidateEducation->id)->first()
+        ;
     }
 }

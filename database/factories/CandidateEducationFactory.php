@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Candidate;
-use App\Models\RequiredDegreeLevel;
-use App\Models\Country;
-use App\Models\State;
 use App\Models\City;
+use App\Models\Country;
+use App\Models\RequiredDegreeLevel;
+use App\Models\State;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CandidateEducation>
@@ -25,19 +25,19 @@ class CandidateEducationFactory extends Factory
         $country = Country::inRandomOrder()->first();
         $state = null;
         $city = null;
-        
+
         if ($country) {
             $state = State::where('country_id', $country->id)->inRandomOrder()->first();
             if ($state) {
                 $city = City::where('state_id', $state->id)->inRandomOrder()->first();
             }
         }
-        
+
         return [
             'candidate_id' => Candidate::factory(),
             'degree_level_id' => RequiredDegreeLevel::factory(),
-            'degree_title' => $this->faker->jobTitle . ' Degree',
-            'institute' => $this->faker->company . ' University',
+            'degree_title' => $this->faker->jobTitle.' Degree',
+            'institute' => $this->faker->company.' University',
             'result' => $this->faker->randomElement(['A', 'B', 'C', 'D', 'Pass', 'Distinction', 'First Class', 'Second Class']),
             'year' => $this->faker->numberBetween(2010, 2023),
             'country_id' => $country?->id ?? 1, // Fallback to first country
@@ -52,7 +52,7 @@ class CandidateEducationFactory extends Factory
                 'Law',
                 'Arts',
                 'Mathematics',
-                'Physics'
+                'Physics',
             ]),
             'description' => $this->faker->text(200),
             'is_verified' => $this->faker->boolean(70),

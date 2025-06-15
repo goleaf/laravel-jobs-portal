@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 $modelsWithSoftDeletes = [
     'Country' => 'countries',
-    'Setting' => 'settings', 
+    'Setting' => 'settings',
     'State' => 'states',
     'City' => 'cities',
     'MaritalStatus' => 'marital_status',
@@ -17,7 +17,7 @@ $modelsWithSoftDeletes = [
     'Skill' => 'skills',
     'User' => 'users',
     'BrandingSliders' => 'branding_sliders',
-    'Testimonial' => 'testimonials'
+    'Testimonial' => 'testimonials',
 ];
 
 echo "Checking models with SoftDeletes trait...\n\n";
@@ -27,7 +27,7 @@ $modelsToFix = [];
 foreach ($modelsWithSoftDeletes as $model => $table) {
     try {
         $hasDeletedAt = Schema::hasColumn($table, 'deleted_at');
-        
+
         if (!$hasDeletedAt) {
             $modelsToFix[] = $model;
             echo "❌ {$model} (table: {$table}) - NO deleted_at column\n";
@@ -42,4 +42,4 @@ foreach ($modelsWithSoftDeletes as $model => $table) {
 echo "\n\nModels that need SoftDeletes removed:\n";
 foreach ($modelsToFix as $model) {
     echo "- {$model}\n";
-} 
+}

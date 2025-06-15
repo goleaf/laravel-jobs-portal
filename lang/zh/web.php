@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | All Titles and static string in blade files
@@ -80,7 +79,6 @@ return [
         'latest_job_not_available' => '最新作業不可用。',
         'min' => '最小',
         'max' => '最大',
-
     ],
 
     // jobs menu keys

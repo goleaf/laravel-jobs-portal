@@ -22,8 +22,48 @@ class Category extends Model
         'description',
         'is_active',
         'is_default',
-        'is_featured'
+        'is_featured',
     ];
+
+    /**
+     * Scope a query to only include active categories.
+     *
+     * @param mixed $query
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include inactive categories.
+     *
+     * @param mixed $query
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope a query to only include default categories.
+     *
+     * @param mixed $query
+     */
+    public function scopeDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
+
+    /**
+     * Scope a query to only include featured categories.
+     *
+     * @param mixed $query
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
 
     /**
      * The attributes that should be cast.
@@ -38,36 +78,4 @@ class Category extends Model
             'updated_at' => 'datetime',
         ];
     }
-
-    /**
-     * Scope a query to only include active categories.
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope a query to only include inactive categories.
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('is_active', false);
-    }
-
-    /**
-     * Scope a query to only include default categories.
-     */
-    public function scopeDefault($query)
-    {
-        return $query->where('is_default', true);
-    }
-
-    /**
-     * Scope a query to only include featured categories.
-     */
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true);
-    }
-} 
+}

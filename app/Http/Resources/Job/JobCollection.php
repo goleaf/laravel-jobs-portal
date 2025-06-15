@@ -2,12 +2,18 @@
 
 namespace App\Http\Resources\Job;
 
+use App\Models\CareerLevel;
+use App\Models\Company;
+use App\Models\Job;
+use App\Models\JobCategory;
+use App\Models\JobType;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class JobCollection
- * 
+ * Class JobCollection.
+ *
  * API resource collection for Job listings with pagination,
  * filtering metadata, and performance optimization.
  */
@@ -55,7 +61,7 @@ class JobCollection extends ResourceCollection
     protected function getMeta(Request $request): array
     {
         $pagination = $this->resource->toArray();
-        
+
         return [
             // Pagination information
             'pagination' => [
@@ -151,7 +157,7 @@ class JobCollection extends ResourceCollection
     protected function getNavigationLinks(Request $request): array
     {
         $pagination = $this->resource->toArray();
-        
+
         return [
             'first' => $this->buildPageUrl($request, 1),
             'last' => $this->buildPageUrl($request, $pagination['last_page'] ?? 1),
@@ -173,15 +179,22 @@ class JobCollection extends ResourceCollection
             switch (trim($include)) {
                 case 'categories':
                     $included['categories'] = $this->getUniqueCategories();
+
                     break;
+
                 case 'companies':
                     $included['companies'] = $this->getUniqueCompanies();
+
                     break;
+
                 case 'locations':
                     $included['locations'] = $this->getUniqueLocations();
+
                     break;
+
                 case 'skills':
                     $included['skills'] = $this->getPopularSkills();
+
                     break;
             }
         }
@@ -214,9 +227,9 @@ class JobCollection extends ResourceCollection
     protected function getSalaryStatistics(): array
     {
         $jobsWithSalary = $this->collection->filter(function ($job) {
-            return !$job['salary']['hide_salary'] && 
-                   $job['salary']['salary_from'] && 
-                   $job['salary']['salary_to'];
+            return !$job['salary']['hide_salary']
+                   && $job['salary']['salary_from']
+                   && $job['salary']['salary_to'];
         });
 
         if ($jobsWithSalary->isEmpty()) {
@@ -262,7 +275,8 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->take(10) // Top 10 countries
-            ->toArray();
+            ->toArray()
+        ;
 
         return $locations;
     }
@@ -273,7 +287,7 @@ class JobCollection extends ResourceCollection
     protected function getAppliedFilters(Request $request): array
     {
         $filters = [];
-        
+
         $filterParams = [
             'category' => 'job_category_id',
             'type' => 'job_type_id',
@@ -303,13 +317,13 @@ class JobCollection extends ResourceCollection
     {
         return [
             'categories' => cache()->remember('filter_categories', 3600, function () {
-                return \App\Models\JobCategory::active()->pluck('name', 'id');
+                return JobCategory::active()->pluck('name', 'id');
             }),
             'job_types' => cache()->remember('filter_job_types', 3600, function () {
-                return \App\Models\JobType::active()->pluck('name', 'id');
+                return JobType::active()->pluck('name', 'id');
             }),
             'career_levels' => cache()->remember('filter_career_levels', 3600, function () {
-                return \App\Models\CareerLevel::active()->pluck('level_name', 'id');
+                return CareerLevel::active()->pluck('level_name', 'id');
             }),
             'experience_ranges' => [
                 '0-1' => __('job.experience.entry_level'),
@@ -333,28 +347,28 @@ class JobCollection extends ResourceCollection
     protected function getSearchSuggestions(Request $request): array
     {
         $query = $request->get('search');
-        
+
         if (!$query || strlen($query) < 3) {
             return [];
         }
 
         return cache()->remember("search_suggestions_{$query}", 1800, function () use ($query) {
             return [
-                'job_titles' => \App\Models\Job::where('title', 'like', "%{$query}%")
+                'job_titles' => Job::where('title', 'like', "%{$query}%")
                     ->active()
                     ->pluck('title')
                     ->unique()
                     ->take(5)
                     ->values()
                     ->toArray(),
-                'companies' => \App\Models\Company::where('name', 'like', "%{$query}%")
+                'companies' => Company::where('name', 'like', "%{$query}%")
                     ->active()
                     ->pluck('name')
                     ->unique()
                     ->take(5)
                     ->values()
                     ->toArray(),
-                'skills' => \App\Models\Skill::where('name', 'like', "%{$query}%")
+                'skills' => Skill::where('name', 'like', "%{$query}%")
                     ->active()
                     ->pluck('name')
                     ->unique()
@@ -373,6 +387,7 @@ class JobCollection extends ResourceCollection
         return $this->collection->groupBy('job_category.id')
             ->map(function ($jobs, $categoryId) {
                 $category = $jobs->first()['job_category'] ?? null;
+
                 return [
                     'id' => $categoryId,
                     'name' => $category['name'] ?? __('job.category.unknown'),
@@ -383,7 +398,8 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(20)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
@@ -394,6 +410,7 @@ class JobCollection extends ResourceCollection
         return $this->collection->groupBy('job_type.id')
             ->map(function ($jobs, $typeId) {
                 $type = $jobs->first()['job_type'] ?? null;
+
                 return [
                     'id' => $typeId,
                     'name' => $type['name'] ?? __('job.type.unknown'),
@@ -402,7 +419,8 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortByDesc('count')
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
@@ -412,8 +430,8 @@ class JobCollection extends ResourceCollection
     {
         $query = $request->query();
         $query['page'] = $page;
-        
-        return $request->url() . '?' . http_build_query($query);
+
+        return $request->url().'?'.http_build_query($query);
     }
 
     /**
@@ -423,8 +441,8 @@ class JobCollection extends ResourceCollection
     {
         $params = $request->query();
         ksort($params);
-        
-        return 'jobs_collection_' . md5(serialize($params));
+
+        return 'jobs_collection_'.md5(serialize($params));
     }
 
     /**
@@ -433,13 +451,13 @@ class JobCollection extends ResourceCollection
     protected function getDataFreshness(): string
     {
         $newestJob = $this->collection->max('updated_at');
-        
+
         if (!$newestJob) {
             return 'unknown';
         }
 
         $timeDiff = now()->diffInMinutes($newestJob);
-        
+
         return match (true) {
             $timeDiff < 5 => 'real_time',
             $timeDiff < 30 => 'fresh',
@@ -461,7 +479,8 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(15)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getSalaryRangeAggregation(): array
@@ -477,6 +496,7 @@ class JobCollection extends ResourceCollection
         foreach ($ranges as $label => $range) {
             $count = $this->collection->filter(function ($job) use ($range) {
                 $salary = $job['salary']['salary_from'] ?? 0;
+
                 return $salary >= $range['min'] && $salary < $range['max'];
             })->count();
 
@@ -500,7 +520,8 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortBy('experience')
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getCompanyAggregation(): array
@@ -508,6 +529,7 @@ class JobCollection extends ResourceCollection
         return $this->collection->groupBy('company.id')
             ->map(function ($jobs, $companyId) {
                 $company = $jobs->first()['company'] ?? null;
+
                 return [
                     'id' => $companyId,
                     'name' => $company['name'] ?? __('job.company.unknown'),
@@ -517,13 +539,14 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(20)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getSkillAggregation(): array
     {
         $skills = collect();
-        
+
         $this->collection->each(function ($job) use ($skills) {
             if (isset($job['requirements']['skills'])) {
                 foreach ($job['requirements']['skills'] as $skill) {
@@ -535,6 +558,7 @@ class JobCollection extends ResourceCollection
         return $skills->groupBy('id')
             ->map(function ($skillGroup, $skillId) {
                 $skill = $skillGroup->first();
+
                 return [
                     'id' => $skillId,
                     'name' => $skill['name'],
@@ -544,7 +568,8 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(30)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getCareerLevelAggregation(): array
@@ -552,6 +577,7 @@ class JobCollection extends ResourceCollection
         return $this->collection->groupBy('career_level.id')
             ->map(function ($jobs, $levelId) {
                 $level = $jobs->first()['career_level'] ?? null;
+
                 return [
                     'id' => $levelId,
                     'name' => $level['level_name'] ?? __('job.career_level.unknown'),
@@ -560,7 +586,8 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortByDesc('count')
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getUniqueCategories(): array
@@ -569,7 +596,8 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('id')
             ->values()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getUniqueCompanies(): array
@@ -578,7 +606,8 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('id')
             ->values()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getUniqueLocations(): array
@@ -587,13 +616,14 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('city.id')
             ->values()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     protected function getPopularSkills(): array
     {
         $skills = collect();
-        
+
         $this->collection->each(function ($job) use ($skills) {
             if (isset($job['requirements']['skills'])) {
                 foreach ($job['requirements']['skills'] as $skill) {
@@ -606,6 +636,7 @@ class JobCollection extends ResourceCollection
             ->map(function ($skillGroup) {
                 $skill = $skillGroup->first();
                 $skill['usage_count'] = $skillGroup->count();
+
                 return $skill;
             })
             ->sortByDesc('usage_count')
@@ -613,4 +644,4 @@ class JobCollection extends ResourceCollection
             ->values()
             ->toArray();
     }
-} 
+}

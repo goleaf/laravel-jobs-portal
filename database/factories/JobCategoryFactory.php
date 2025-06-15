@@ -60,4 +60,4 @@ class JobCategoryFactory extends Factory
             'is_active' => false,
         ]);
     }
-} 
+}

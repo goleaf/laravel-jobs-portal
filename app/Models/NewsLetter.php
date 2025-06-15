@@ -8,38 +8,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * NewsLetter Model - Enhanced with Enhanced patterns
+ * NewsLetter Model - Enhanced with Enhanced patterns.
  *
- * @property int $id
- * @property string $email
- * @property string|null $name
- * @property bool $is_active
- * @property bool $is_verified
- * @property string|null $verification_token
- * @property string|null $unsubscribe_token
- * @property Carbon|null $subscribed_at
- * @property Carbon|null $unsubscribed_at
- * @property Carbon|null $verified_at
- * @property Carbon|null $last_email_sent_at
- * @property int|null $emails_sent_count
- * @property array|null $preferences
- * @property string|null $source
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- *
- * @property-read bool $is_subscribed
- * @property-read bool $is_unsubscribed
- * @property-read bool $is_recent
- * @property-read string $status
- * @property-read string $domain
- * @property-read int $days_since_subscription
+ * @property int         $id
+ * @property string      $email
+ * @property null|string $name
+ * @property bool        $is_active
+ * @property bool        $is_verified
+ * @property null|string $verification_token
+ * @property null|string $unsubscribe_token
+ * @property null|Carbon $subscribed_at
+ * @property null|Carbon $unsubscribed_at
+ * @property null|Carbon $verified_at
+ * @property null|Carbon $last_email_sent_at
+ * @property null|int    $emails_sent_count
+ * @property null|array  $preferences
+ * @property null|string $source
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property bool        $is_subscribed
+ * @property bool        $is_unsubscribed
+ * @property bool        $is_recent
+ * @property string      $status
+ * @property string      $domain
+ * @property int         $days_since_subscription
  *
  * Enhanced Enhanced Scopes:
+ *
  * @method static Builder active()
  * @method static Builder inactive()
  * @method static Builder verified()
@@ -66,15 +66,12 @@ use Spatie\Activitylog\LogOptions;
  */
 class NewsLetter extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     /**
-     * The table associated with the model.
-     */
-    protected $table = 'news_letters';
-
-    /**
-     * Source constants
+     * Source constants.
      */
     public const SOURCE_WEBSITE = 'website';
     public const SOURCE_POPUP = 'popup';
@@ -85,12 +82,36 @@ class NewsLetter extends Model
     public const SOURCE_IMPORT = 'import';
 
     /**
-     * Status constants
+     * Status constants.
      */
     public const STATUS_PENDING = 'pending';
     public const STATUS_VERIFIED = 'verified';
     public const STATUS_UNSUBSCRIBED = 'unsubscribed';
     public const STATUS_BOUNCED = 'bounced';
+
+    /**
+     * Validation rules.
+     */
+    public static array $rules = [
+        'email' => 'required|email:filter|unique:news_letters,email',
+        'name' => 'nullable|string|max:255',
+        'is_active' => 'boolean',
+        'is_verified' => 'boolean',
+        'verification_token' => 'nullable|string|max:255',
+        'unsubscribe_token' => 'nullable|string|max:255',
+        'subscribed_at' => 'nullable|date',
+        'unsubscribed_at' => 'nullable|date',
+        'verified_at' => 'nullable|date',
+        'last_email_sent_at' => 'nullable|date',
+        'emails_sent_count' => 'nullable|integer|min:0',
+        'preferences' => 'nullable|array',
+        'source' => 'nullable|string|max:50',
+    ];
+
+    /**
+     * The table associated with the model.
+     */
+    protected $table = 'news_letters';
 
     /**
      * The attributes that are mass assignable.
@@ -121,47 +142,7 @@ class NewsLetter extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_verified' => 'boolean',
-            'subscribed_at' => 'datetime',
-            'unsubscribed_at' => 'datetime',
-            'verified_at' => 'datetime',
-            'last_email_sent_at' => 'datetime',
-            'emails_sent_count' => 'integer',
-            'preferences' => 'array',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
-    }
-
-    /**
-     * Validation rules
-     */
-    public static array $rules = [
-        'email' => 'required|email:filter|unique:news_letters,email',
-        'name' => 'nullable|string|max:255',
-        'is_active' => 'boolean',
-        'is_verified' => 'boolean',
-        'verification_token' => 'nullable|string|max:255',
-        'unsubscribe_token' => 'nullable|string|max:255',
-        'subscribed_at' => 'nullable|date',
-        'unsubscribed_at' => 'nullable|date',
-        'verified_at' => 'nullable|date',
-        'last_email_sent_at' => 'nullable|date',
-        'emails_sent_count' => 'nullable|integer|min:0',
-        'preferences' => 'nullable|array',
-        'source' => 'nullable|string|max:50',
-    ];
-
-    /**
-     * Activity log configuration
+     * Activity log configuration.
      */
     public function getActivitylogOptions(): LogOptions
     {
@@ -169,7 +150,8 @@ class NewsLetter extends Model
             ->logOnly(['email', 'name', 'is_active', 'is_verified', 'source'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Newsletter subscription has been {$eventName}");
+            ->setDescriptionForEvent(fn (string $eventName) => "Newsletter subscription has been {$eventName}")
+        ;
     }
 
     // =============================================
@@ -258,7 +240,8 @@ class NewsLetter extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-                    ->whereYear('created_at', now()->year);
+            ->whereYear('created_at', now()->year)
+        ;
     }
 
     /**
@@ -307,7 +290,8 @@ class NewsLetter extends Model
     public function scopeEngaged(Builder $query): Builder
     {
         return $query->where('last_email_sent_at', '>=', now()->subDays(30))
-                    ->where('emails_sent_count', '>', 0);
+            ->where('emails_sent_count', '>', 0)
+        ;
     }
 
     /**
@@ -317,7 +301,8 @@ class NewsLetter extends Model
     {
         return $query->where(function ($q) use ($days) {
             $q->whereNull('last_email_sent_at')
-              ->orWhere('last_email_sent_at', '<', now()->subDays($days));
+                ->orWhere('last_email_sent_at', '<', now()->subDays($days))
+            ;
         });
     }
 
@@ -331,7 +316,8 @@ class NewsLetter extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('email', 'like', "%{$term}%")
-                    ->orWhere('name', 'like', "%{$term}%");
+            ->orWhere('name', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -402,11 +388,11 @@ class NewsLetter extends Model
         if ($this->is_unsubscribed) {
             return self::STATUS_UNSUBSCRIBED;
         }
-        
+
         if ($this->is_verified) {
             return self::STATUS_VERIFIED;
         }
-        
+
         return self::STATUS_PENDING;
     }
 
@@ -415,7 +401,7 @@ class NewsLetter extends Model
      */
     public function getDomainAttribute(): string
     {
-        return substr(strrchr($this->email, "@"), 1);
+        return substr(strrchr($this->email, '@'), 1);
     }
 
     /**
@@ -426,7 +412,7 @@ class NewsLetter extends Model
         if (!$this->subscribed_at) {
             return 0;
         }
-        
+
         return $this->subscribed_at->diffInDays(now());
     }
 
@@ -519,6 +505,7 @@ class NewsLetter extends Model
     {
         $token = bin2hex(random_bytes(32));
         $this->update(['verification_token' => $token]);
+
         return $token;
     }
 
@@ -529,6 +516,7 @@ class NewsLetter extends Model
     {
         $token = bin2hex(random_bytes(32));
         $this->update(['unsubscribe_token' => $token]);
+
         return $token;
     }
 
@@ -559,12 +547,13 @@ class NewsLetter extends Model
     {
         return Cache::remember('newsletter.subscribers_by_domain', 3600, function () {
             return self::readyForEmail()
-                      ->selectRaw('SUBSTRING_INDEX(email, "@", -1) as domain, COUNT(*) as count')
-                      ->groupBy('domain')
-                      ->orderByDesc('count')
-                      ->limit(10)
-                      ->pluck('count', 'domain')
-                      ->toArray();
+                ->selectRaw('SUBSTRING_INDEX(email, "@", -1) as domain, COUNT(*) as count')
+                ->groupBy('domain')
+                ->orderByDesc('count')
+                ->limit(10)
+                ->pluck('count', 'domain')
+                ->toArray()
+            ;
         });
     }
 
@@ -587,6 +576,27 @@ class NewsLetter extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'is_active' => 'boolean',
+            'is_verified' => 'boolean',
+            'subscribed_at' => 'datetime',
+            'unsubscribed_at' => 'datetime',
+            'verified_at' => 'datetime',
+            'last_email_sent_at' => 'datetime',
+            'emails_sent_count' => 'integer',
+            'preferences' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 
     // =============================================
@@ -617,7 +627,7 @@ class NewsLetter extends Model
             if (is_null($model->source)) {
                 $model->source = self::SOURCE_WEBSITE;
             }
-            
+
             // Generate tokens
             if (is_null($model->verification_token)) {
                 $model->verification_token = bin2hex(random_bytes(32));

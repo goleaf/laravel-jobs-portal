@@ -6,7 +6,7 @@ use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 /**
- * Class AddIsFullSliderSettingSeeder
+ * Class AddIsFullSliderSettingSeeder.
  */
 class AddIsFullSliderSettingSeeder extends Seeder
 {
@@ -16,7 +16,7 @@ class AddIsFullSliderSettingSeeder extends Seeder
     public function run(): void
     {
         $exist = Setting::where('key', 'is_full_slider')->exists();
-        if (! $exist) {
+        if (!$exist) {
             Setting::create(['key' => 'is_full_slider', 'value' => '0']);
         }
     }

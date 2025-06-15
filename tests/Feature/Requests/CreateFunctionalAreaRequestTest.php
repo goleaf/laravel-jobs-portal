@@ -3,23 +3,29 @@
 namespace Tests\Feature\Requests;
 
 use App\Http\Requests\CreateFunctionalAreaRequest;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class CreateFunctionalAreaRequestTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Test that the request has proper validation rules.
      */
-    public function test_validation_rules_are_defined()
+    public function testValidationRulesAreDefined()
     {
         $request = new CreateFunctionalAreaRequest();
         $rules = $request->rules();
-        
+
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
     }
@@ -27,7 +33,7 @@ class CreateFunctionalAreaRequestTest extends TestCase
     /**
      * Test authorization allows all users.
      */
-    public function test_all_users_are_authorized()
+    public function testAllUsersAreAuthorized()
     {
         $request = new CreateFunctionalAreaRequest();
         $this->assertTrue($request->authorize());
@@ -36,10 +42,10 @@ class CreateFunctionalAreaRequestTest extends TestCase
     /**
      * Test validation with valid data.
      */
-    public function test_validation_passes_with_valid_data()
+    public function testValidationPassesWithValidData()
     {
         $data = $this->getValidData();
-        
+
         // Create a mock request with valid data
         $this->assertTrue(true, 'Validation test needs implementation with actual rules');
     }
@@ -47,10 +53,10 @@ class CreateFunctionalAreaRequestTest extends TestCase
     /**
      * Test validation fails with invalid data.
      */
-    public function test_validation_fails_with_invalid_data()
+    public function testValidationFailsWithInvalidData()
     {
         $data = $this->getInvalidData();
-        
+
         // Create a mock request with invalid data
         $this->assertTrue(true, 'Validation test needs implementation with actual rules');
     }
@@ -58,10 +64,10 @@ class CreateFunctionalAreaRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function test_custom_error_messages_are_defined()
+    public function testCustomErrorMessagesAreDefined()
     {
         $request = new CreateFunctionalAreaRequest();
-        
+
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
             $this->assertIsArray($messages);
@@ -73,10 +79,10 @@ class CreateFunctionalAreaRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function test_custom_attributes_are_defined()
+    public function testCustomAttributesAreDefined()
     {
         $request = new CreateFunctionalAreaRequest();
-        
+
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
             $this->assertIsArray($attributes);
@@ -87,12 +93,13 @@ class CreateFunctionalAreaRequestTest extends TestCase
 
     /**
      * Create a test user with specific role.
+     *
+     * @param mixed $role
      */
     protected function createUserWithRole($role = 'user')
     {
-        $user = User::factory()->create();
+        return User::factory()->create();
         // Add role assignment logic based on your role system
-        return $user;
     }
 
     /**

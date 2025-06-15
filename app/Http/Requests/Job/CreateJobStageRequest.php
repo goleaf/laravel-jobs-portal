@@ -6,7 +6,7 @@ use App\Models\JobStage;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateJobStageRequest
+ * Class CreateJobStageRequest.
  */
 class CreateJobStageRequest extends FormRequest
 {

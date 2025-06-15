@@ -6,8 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Class GetJobsRequest
- * 
+ * Class GetJobsRequest.
+ *
  * Handles job listing and filtering requests with comprehensive search parameters,
  * pagination, sorting, and advanced filtering options.
  */
@@ -309,7 +309,7 @@ class GetJobsRequest extends FormRequest
                 Rule::in([
                     'created_at', 'updated_at', 'title', 'salary_from', 'salary_to',
                     'experience', 'application_deadline', 'views_count', 'applications_count',
-                    'relevance', 'company_name', 'location', 'featured', 'random'
+                    'relevance', 'company_name', 'location', 'featured', 'random',
                 ]),
             ],
 
@@ -331,7 +331,7 @@ class GetJobsRequest extends FormRequest
                 Rule::in([
                     'company', 'jobCategory', 'jobType', 'careerLevel', 'degreeLevel',
                     'jobShift', 'skills', 'country', 'state', 'city', 'salaryCurrency',
-                    'salaryPeriod', 'jobApplications', 'views'
+                    'salaryPeriod', 'jobApplications', 'views',
                 ]),
             ],
 
@@ -487,69 +487,9 @@ class GetJobsRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'page' => $this->input('page', 1),
-            'per_page' => $this->input('per_page', 15),
-            'sort' => $this->input('sort', 'created_at'),
-            'direction' => $this->input('direction', 'desc'),
-            'is_active' => $this->input('is_active', true),
-            'exclude_expired' => $this->input('exclude_expired', true),
-            'skills_match' => $this->input('skills_match', 'any'),
-            'track_view' => $this->input('track_view', true),
-            'source' => $this->input('source', 'web'),
-        ]);
-
-        // Clean and validate search query
-        if ($this->has('search') && !empty($this->search)) {
-            $cleanSearch = trim($this->search);
-            $cleanSearch = preg_replace('/\s+/', ' ', $cleanSearch); // Remove extra spaces
-            $this->merge(['search' => $cleanSearch]);
-        }
-
-        // Clean keywords array
-        if ($this->has('keywords') && is_array($this->keywords)) {
-            $cleanKeywords = array_filter(array_map('trim', $this->keywords), function ($keyword) {
-                return !empty($keyword);
-            });
-            $this->merge(['keywords' => array_values($cleanKeywords)]);
-        }
-
-        // Ensure numeric fields are properly typed
-        $numericFields = [
-            'country_id', 'state_id', 'city_id', 'location_radius',
-            'job_category_id', 'job_type_id', 'company_id', 'career_level_id',
-            'salary_min', 'salary_max', 'experience_min', 'experience_max',
-            'page', 'per_page'
-        ];
-
-        foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->$field)) {
-                $this->merge([$field => (int) $this->$field]);
-            }
-        }
-
-        // Ensure boolean fields are properly typed
-        $booleanFields = [
-            'is_remote', 'is_active', 'is_featured', 'is_urgent',
-            'exclude_expired', 'exclude_applied', 'exclude_saved',
-            'only_applied', 'only_saved', 'hide_salary_jobs',
-            'only_new_jobs', 'track_view', 'no_cache'
-        ];
-
-        foreach ($booleanFields as $field) {
-            if ($this->has($field)) {
-                $this->merge([$field => $this->boolean($field)]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
+     *
+     * @param mixed $validator
      */
     public function withValidator($validator): void
     {
@@ -557,64 +497,6 @@ class GetJobsRequest extends FormRequest
             $this->validateAdvancedFilters($validator);
             $this->validateUserSpecificFilters($validator);
         });
-    }
-
-    /**
-     * Validate advanced filter combinations.
-     */
-    protected function validateAdvancedFilters($validator): void
-    {
-        // Validate location hierarchy
-        if ($this->city_id && !$this->state_id) {
-            $validator->errors()->add('state_id', __('validation.job_search.state_required_for_city'));
-        }
-
-        if ($this->state_id && !$this->country_id) {
-            $validator->errors()->add('country_id', __('validation.job_search.country_required_for_state'));
-        }
-
-        // Validate contradictory filters
-        if ($this->exclude_applied && $this->only_applied) {
-            $validator->errors()->add('only_applied', __('validation.job_search.contradictory_applied_filters'));
-        }
-
-        if ($this->exclude_saved && $this->only_saved) {
-            $validator->errors()->add('only_saved', __('validation.job_search.contradictory_saved_filters'));
-        }
-
-        // Validate reasonable search parameters
-        if ($this->per_page > 50 && !auth()->check()) {
-            $validator->errors()->add('per_page', __('validation.job_search.per_page_limit_guest'));
-        }
-    }
-
-    /**
-     * Validate user-specific filters.
-     */
-    protected function validateUserSpecificFilters($validator): void
-    {
-        $user = auth()->user();
-
-        // User-specific filters require authentication
-        $userSpecificFilters = [
-            'exclude_applied', 'exclude_saved', 'only_applied', 'only_saved'
-        ];
-
-        foreach ($userSpecificFilters as $filter) {
-            if ($this->has($filter) && $this->$filter && !$user) {
-                $validator->errors()->add($filter, __('validation.job_search.authentication_required'));
-            }
-        }
-
-        // Check if user has candidate profile for certain filters
-        if ($user && !$user->candidate) {
-            $candidateFilters = ['exclude_applied', 'only_applied'];
-            foreach ($candidateFilters as $filter) {
-                if ($this->has($filter) && $this->$filter) {
-                    $validator->errors()->add($filter, __('validation.job_search.candidate_profile_required'));
-                }
-            }
-        }
     }
 
     /**
@@ -661,7 +543,7 @@ class GetJobsRequest extends FormRequest
             'exclude_expired' => $this->exclude_expired,
             'only_new_jobs' => $this->only_new_jobs,
         ], function ($value) {
-            return $value !== null;
+            return null !== $value;
         });
     }
 
@@ -686,4 +568,128 @@ class GetJobsRequest extends FormRequest
             'direction' => $this->direction,
         ];
     }
-} 
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Set default values
+        $this->merge([
+            'page' => $this->input('page', 1),
+            'per_page' => $this->input('per_page', 15),
+            'sort' => $this->input('sort', 'created_at'),
+            'direction' => $this->input('direction', 'desc'),
+            'is_active' => $this->input('is_active', true),
+            'exclude_expired' => $this->input('exclude_expired', true),
+            'skills_match' => $this->input('skills_match', 'any'),
+            'track_view' => $this->input('track_view', true),
+            'source' => $this->input('source', 'web'),
+        ]);
+
+        // Clean and validate search query
+        if ($this->has('search') && !empty($this->search)) {
+            $cleanSearch = trim($this->search);
+            $cleanSearch = preg_replace('/\s+/', ' ', $cleanSearch); // Remove extra spaces
+            $this->merge(['search' => $cleanSearch]);
+        }
+
+        // Clean keywords array
+        if ($this->has('keywords') && is_array($this->keywords)) {
+            $cleanKeywords = array_filter(array_map('trim', $this->keywords), function ($keyword) {
+                return !empty($keyword);
+            });
+            $this->merge(['keywords' => array_values($cleanKeywords)]);
+        }
+
+        // Ensure numeric fields are properly typed
+        $numericFields = [
+            'country_id', 'state_id', 'city_id', 'location_radius',
+            'job_category_id', 'job_type_id', 'company_id', 'career_level_id',
+            'salary_min', 'salary_max', 'experience_min', 'experience_max',
+            'page', 'per_page',
+        ];
+
+        foreach ($numericFields as $field) {
+            if ($this->has($field) && !empty($this->{$field})) {
+                $this->merge([$field => (int) $this->{$field}]);
+            }
+        }
+
+        // Ensure boolean fields are properly typed
+        $booleanFields = [
+            'is_remote', 'is_active', 'is_featured', 'is_urgent',
+            'exclude_expired', 'exclude_applied', 'exclude_saved',
+            'only_applied', 'only_saved', 'hide_salary_jobs',
+            'only_new_jobs', 'track_view', 'no_cache',
+        ];
+
+        foreach ($booleanFields as $field) {
+            if ($this->has($field)) {
+                $this->merge([$field => $this->boolean($field)]);
+            }
+        }
+    }
+
+    /**
+     * Validate advanced filter combinations.
+     *
+     * @param mixed $validator
+     */
+    protected function validateAdvancedFilters($validator): void
+    {
+        // Validate location hierarchy
+        if ($this->city_id && !$this->state_id) {
+            $validator->errors()->add('state_id', __('validation.job_search.state_required_for_city'));
+        }
+
+        if ($this->state_id && !$this->country_id) {
+            $validator->errors()->add('country_id', __('validation.job_search.country_required_for_state'));
+        }
+
+        // Validate contradictory filters
+        if ($this->exclude_applied && $this->only_applied) {
+            $validator->errors()->add('only_applied', __('validation.job_search.contradictory_applied_filters'));
+        }
+
+        if ($this->exclude_saved && $this->only_saved) {
+            $validator->errors()->add('only_saved', __('validation.job_search.contradictory_saved_filters'));
+        }
+
+        // Validate reasonable search parameters
+        if ($this->per_page > 50 && !auth()->check()) {
+            $validator->errors()->add('per_page', __('validation.job_search.per_page_limit_guest'));
+        }
+    }
+
+    /**
+     * Validate user-specific filters.
+     *
+     * @param mixed $validator
+     */
+    protected function validateUserSpecificFilters($validator): void
+    {
+        $user = auth()->user();
+
+        // User-specific filters require authentication
+        $userSpecificFilters = [
+            'exclude_applied', 'exclude_saved', 'only_applied', 'only_saved',
+        ];
+
+        foreach ($userSpecificFilters as $filter) {
+            if ($this->has($filter) && $this->{$filter} && !$user) {
+                $validator->errors()->add($filter, __('validation.job_search.authentication_required'));
+            }
+        }
+
+        // Check if user has candidate profile for certain filters
+        if ($user && !$user->candidate) {
+            $candidateFilters = ['exclude_applied', 'only_applied'];
+            foreach ($candidateFilters as $filter) {
+                if ($this->has($filter) && $this->{$filter}) {
+                    $validator->errors()->add($filter, __('validation.job_search.candidate_profile_required'));
+                }
+            }
+        }
+    }
+}

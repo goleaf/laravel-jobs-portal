@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class RemoveProviderUniqueRuleFromSocialAccountsSeeder
+ * Class RemoveProviderUniqueRuleFromSocialAccountsSeeder.
  */
 class RemoveProviderUniqueRuleFromSocialAccountsSeeder extends Seeder
 {
@@ -23,7 +23,7 @@ class RemoveProviderUniqueRuleFromSocialAccountsSeeder extends Seeder
 
         Schema::table('social_accounts', function (Blueprint $table) {
             // Skip for SQLite in testing as it doesn't support advanced schema introspection
-            if (config('database.default') === 'sqlite') {
+            if ('sqlite' === config('database.default')) {
                 return;
             }
 

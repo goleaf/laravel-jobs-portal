@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Job;
 use App\Models\Job;
 use App\Models\JobShift;
 use App\Repositories\JobShiftRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class JobShiftController extends AppBaseController
 {
     /** @var JobShiftRepository */
@@ -23,10 +22,9 @@ class JobShiftController extends AppBaseController
     /**
      * Display a listing of the JobShift.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
@@ -74,8 +72,7 @@ class JobShiftController extends AppBaseController
     /**
      * Remove the specified JobShift from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(JobShift $jobShift): JsonResponse
     {

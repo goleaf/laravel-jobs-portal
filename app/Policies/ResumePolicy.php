@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Resume;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ResumePolicy
 {
@@ -21,11 +20,11 @@ class ResumePolicy
      */
     public function view(User $user, Resume $resume): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Employer') && $resume->jobApplications->contains(function ($application) use ($user) {
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Employer') && $resume->jobApplications->contains(function ($application) use ($user) {
                    return $application->job->user_id === $user->id;
-               })) || 
-               ($user->hasRole('Candidate') && $user->id === $resume->user_id);
+               }))
+               || ($user->hasRole('Candidate') && $user->id === $resume->user_id);
     }
 
     /**
@@ -41,8 +40,8 @@ class ResumePolicy
      */
     public function update(User $user, Resume $resume): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Candidate') && $user->id === $resume->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Candidate') && $user->id === $resume->user_id);
     }
 
     /**
@@ -50,8 +49,8 @@ class ResumePolicy
      */
     public function delete(User $user, Resume $resume): bool
     {
-        return $user->hasRole('Admin') || 
-               ($user->hasRole('Candidate') && $user->id === $resume->user_id);
+        return $user->hasRole('Admin')
+               || ($user->hasRole('Candidate') && $user->id === $resume->user_id);
     }
 
     /**

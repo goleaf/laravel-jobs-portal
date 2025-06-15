@@ -4,15 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Company;
 use App\Repositories\UserRepository;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 
 /**
- * Class EmployerController
+ * Class EmployerController.
  */
-
 class EmployerController extends AppBaseController
 {
     /** @var UserRepository */
@@ -31,7 +29,7 @@ class EmployerController extends AppBaseController
             $user = $this->userRepository->changePassword($input);
 
             return $this->sendSuccess(__('messages.flash.password_update'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 422);
         }
     }
@@ -45,7 +43,7 @@ class EmployerController extends AppBaseController
             Flash::success(__('messages.flash.employer_profile'));
 
             return $this->sendResponse($employer, __('messages.flash.employer_profile'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
         }
     }

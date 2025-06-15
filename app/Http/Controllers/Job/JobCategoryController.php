@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Job;
 use App\Models\Job;
 use App\Models\JobCategory;
 use App\Repositories\JobCategoryRepository;
-use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class JobCategoryController extends AppBaseController
 {
     /** @var JobCategoryRepository */
@@ -23,15 +22,14 @@ class JobCategoryController extends AppBaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Factory|View
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function index(): View
     {
         $featured = JobCategory::FEATURED;
-        
+
         // Use new scopes for better performance - only get active categories
         $jobCategories = JobCategory::active()->alphabetical()->get();
 
@@ -39,7 +37,7 @@ class JobCategoryController extends AppBaseController
     }
 
     /**
-     * Get category statistics using new scopes
+     * Get category statistics using new scopes.
      */
     public function getCategoryStats(): JsonResponse
     {
@@ -101,8 +99,7 @@ class JobCategoryController extends AppBaseController
     /**
      * Remove the specified resource from storage.
      *
-     *
-     * @throws Exception
+     * @throws \Exception
      */
     public function destroy(JobCategory $jobCategory): JsonResponse
     {
@@ -124,7 +121,7 @@ class JobCategoryController extends AppBaseController
     public function changeStatus(JobCategory $jobCategory)
     {
         $isFeatured = $jobCategory->is_featured;
-        $jobCategory->update(['is_featured' => ! $isFeatured]);
+        $jobCategory->update(['is_featured' => !$isFeatured]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
     }

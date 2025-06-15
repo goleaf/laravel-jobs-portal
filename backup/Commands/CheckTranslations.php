@@ -29,7 +29,7 @@ class CheckTranslations extends Command
         $baseLocale = $this->option('base');
         $locale = $this->argument('locale');
 
-        if (! $locale) {
+        if (!$locale) {
             $availableLocales = array_keys(config('app.available_locales', []));
             $locales = array_filter($availableLocales, function ($l) use ($baseLocale) {
                 return $l !== $baseLocale;
@@ -45,6 +45,7 @@ class CheckTranslations extends Command
 
             if (empty($missing)) {
                 $this->info("No missing translations found for {$locale}");
+
                 continue;
             }
 

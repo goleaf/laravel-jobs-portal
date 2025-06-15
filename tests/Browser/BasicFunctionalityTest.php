@@ -5,20 +5,26 @@ namespace Tests\Browser;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class BasicFunctionalityTest extends DuskTestCase
 {
     /**
-     * Enhanced pattern: Essential smoke test - most critical check
-     * 
+     * Enhanced pattern: Essential smoke test - most critical check.
+     *
      * @test
      */
-    public function application_loads_without_fatal_errors()
+    public function applicationLoadsWithoutFatalErrors()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->waitFor('body', 30)  // Increased timeout for CI
-                ->assertPresent('body');
-            
+                ->assertPresent('body')
+            ;
+
             // Enhanced pattern: Verify basic page structure
             $pageSource = $browser->driver->getPageSource();
             $this->assertNotEmpty($pageSource);
@@ -29,87 +35,95 @@ class BasicFunctionalityTest extends DuskTestCase
     }
 
     /**
-     * Enhanced pattern: Test core public routes work
-     * 
+     * Enhanced pattern: Test core public routes work.
+     *
      * @test
      */
-    public function essential_routes_are_accessible()
+    public function essentialRoutesAreAccessible()
     {
         $this->browse(function (Browser $browser) {
             // Test homepage
             $browser->visit('/')
                 ->waitFor('body', 20)
-                ->assertPresent('body');
-                
-            // Test login page  
+                ->assertPresent('body')
+            ;
+
+            // Test login page
             $browser->visit('/login')
                 ->waitFor('body', 20)
-                ->assertPresent('body');
-                
+                ->assertPresent('body')
+            ;
+
             // Test register page
             $browser->visit('/register')
                 ->waitFor('body', 20)
-                ->assertPresent('body');
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
-     * Enhanced pattern: Verify no critical HTTP errors
-     * 
+     * Enhanced pattern: Verify no critical HTTP errors.
+     *
      * @test
      */
-    public function pages_return_valid_http_responses()
+    public function pagesReturnValidHttpResponses()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->waitFor('body', 20)
                 ->assertDontSee('500')
                 ->assertDontSee('404')
-                ->assertDontSee('403');
+                ->assertDontSee('403')
+            ;
         });
     }
 
     /**
-     * Enhanced pattern: Test basic navigation works
-     * 
+     * Enhanced pattern: Test basic navigation works.
+     *
      * @test
      */
-    public function browser_navigation_functions()
+    public function browserNavigationFunctions()
     {
         $this->browse(function (Browser $browser) {
             // Start at homepage
             $browser->visit('/')
-                ->waitFor('body', 20);
-            
+                ->waitFor('body', 20)
+            ;
+
             // Navigate to another page
             $browser->visit('/login')
                 ->waitFor('body', 15)
-                ->assertPresent('body');
-            
+                ->assertPresent('body')
+            ;
+
             // Test browser back
             $browser->back()
                 ->waitFor('body', 10)
-                ->assertPresent('body');
+                ->assertPresent('body')
+            ;
         });
     }
 
     /**
-     * Enhanced pattern: Verify JavaScript basics work
-     * 
+     * Enhanced pattern: Verify JavaScript basics work.
+     *
      * @test
      */
-    public function javascript_environment_is_functional()
+    public function javascriptEnvironmentIsFunctional()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->waitFor('body', 20);
-            
+                ->waitFor('body', 20)
+            ;
+
             // Test basic JavaScript functionality
             $windowExists = $browser->script('return typeof window !== "undefined";');
             $this->assertTrue($windowExists);
-            
+
             $documentExists = $browser->script('return typeof document !== "undefined";');
             $this->assertTrue($documentExists);
         });
     }
-} 
+}

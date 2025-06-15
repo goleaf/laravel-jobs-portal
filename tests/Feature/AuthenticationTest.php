@@ -6,12 +6,17 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function users_can_register()
+    public function usersCanRegister()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -26,10 +31,10 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function users_can_login()
+    public function usersCanLogin()
     {
         $user = User::factory()->create([
-            'password' => bcrypt('password123')
+            'password' => bcrypt('password123'),
         ]);
 
         $response = $this->post('/login', [
@@ -42,7 +47,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function users_can_logout()
+    public function usersCanLogout()
     {
         $user = User::factory()->create();
 
@@ -53,7 +58,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function login_requires_valid_credentials()
+    public function loginRequiresValidCredentials()
     {
         $response = $this->post('/login', [
             'email' => 'invalid@example.com',

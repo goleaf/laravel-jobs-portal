@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,7 +16,7 @@ return new class extends Migration
             $table->string('employment_type', 50)->nullable()->after('job_level')->comment('Employment type (Full-time, Part-time, Contract, etc.)');
             $table->decimal('salary', 10, 2)->nullable()->after('employment_type')->comment('Salary amount');
             $table->boolean('is_verified')->default(false)->after('salary')->comment('Whether experience is verified');
-            
+
             // Add indexes for performance
             $table->index('job_level');
             $table->index('employment_type');
@@ -37,7 +36,7 @@ return new class extends Migration
             $table->dropIndex(['candidate_experiences_employment_type_index']);
             $table->dropIndex(['candidate_experiences_is_verified_index']);
             $table->dropIndex(['candidate_experiences_salary_index']);
-            
+
             // Drop added columns
             $table->dropColumn([
                 'job_level',

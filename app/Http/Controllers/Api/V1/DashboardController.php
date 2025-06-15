@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Job;
-use App\Models\Company;
 use App\Models\Candidate;
+use App\Models\Company;
+use App\Models\Job;
 use App\Models\JobApplication;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     /**
-     * Get dashboard statistics
+     * Get dashboard statistics.
      */
     public function getStats(): JsonResponse
     {
@@ -34,45 +34,44 @@ class DashboardController extends Controller
             ];
 
             // Add percentage calculations
-            $stats['active_jobs_percentage'] = $stats['total_jobs'] > 0 
-                ? round(($stats['active_jobs'] / $stats['total_jobs']) * 100, 1) 
-                : 0;
-            
-            $stats['active_companies_percentage'] = $stats['total_companies'] > 0 
-                ? round(($stats['active_companies'] / $stats['total_companies']) * 100, 1) 
+            $stats['active_jobs_percentage'] = $stats['total_jobs'] > 0
+                ? round(($stats['active_jobs'] / $stats['total_jobs']) * 100, 1)
                 : 0;
 
-            $stats['verified_candidates_percentage'] = $stats['total_candidates'] > 0 
-                ? round(($stats['verified_candidates'] / $stats['total_candidates']) * 100, 1) 
+            $stats['active_companies_percentage'] = $stats['total_companies'] > 0
+                ? round(($stats['active_companies'] / $stats['total_companies']) * 100, 1)
+                : 0;
+
+            $stats['verified_candidates_percentage'] = $stats['total_candidates'] > 0
+                ? round(($stats['verified_candidates'] / $stats['total_candidates']) * 100, 1)
                 : 0;
 
             return response()->json([
                 'success' => true,
                 'data' => $stats,
-                'message' => 'Dashboard statistics retrieved successfully'
+                'message' => 'Dashboard statistics retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve dashboard statistics',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
             ], 500);
         }
     }
 
     /**
-     * Get recent jobs
+     * Get recent jobs.
      */
     public function getRecentJobs(Request $request): JsonResponse
     {
         try {
             $limit = $request->get('limit', 10);
-            
+
             $jobs = Job::select([
-                    'id', 'job_title', 'company_id', 'job_category_id', 'job_type_id', 
-                    'status', 'created_at', 'updated_at'
-                ])
+                'id', 'job_title', 'company_id', 'job_category_id', 'job_type_id',
+                'status', 'created_at', 'updated_at',
+            ])
                 ->latest()
                 ->limit($limit)
                 ->get()
@@ -83,44 +82,44 @@ class DashboardController extends Controller
                         'company' => 'N/A', // Simplified for now
                         'category' => 'N/A', // Simplified for now
                         'type' => 'Full-time', // Simplified for now
-                        'is_active' => $job->status == 1,
-                        'status' => $job->status == 1 ? 'Active' : 'Inactive',
+                        'is_active' => 1 == $job->status,
+                        'status' => 1 == $job->status ? 'Active' : 'Inactive',
                         'created_at' => $job->created_at?->toISOString(),
                         'created_ago' => $job->created_at?->diffForHumans(),
                     ];
-                });
+                })
+            ;
 
             return response()->json([
                 'success' => true,
                 'data' => $jobs,
-                'message' => 'Recent jobs retrieved successfully'
+                'message' => 'Recent jobs retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve recent jobs',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
 
     /**
-     * Get recent applications
+     * Get recent applications.
      */
     public function getRecentApplications(Request $request): JsonResponse
     {
         try {
             $limit = $request->get('limit', 10);
-            
+
             $applications = JobApplication::with([
                 'candidate:id,first_name,last_name,email',
-                'job:id,title'
+                'job:id,title',
             ])
                 ->select([
-                    'id', 'candidate_id', 'job_id', 'status', 
-                    'expected_salary', 'created_at'
+                    'id', 'candidate_id', 'job_id', 'status',
+                    'expected_salary', 'created_at',
                 ])
                 ->latest()
                 ->limit($limit)
@@ -128,8 +127,8 @@ class DashboardController extends Controller
                 ->map(function ($application) {
                     return [
                         'id' => $application->id,
-                        'candidate_name' => $application->candidate 
-                            ? trim($application->candidate->first_name . ' ' . $application->candidate->last_name)
+                        'candidate_name' => $application->candidate
+                            ? trim($application->candidate->first_name.' '.$application->candidate->last_name)
                             : 'N/A',
                         'candidate_email' => $application->candidate?->email ?? 'N/A',
                         'job_title' => $application->job?->title ?? 'N/A',
@@ -138,26 +137,26 @@ class DashboardController extends Controller
                         'created_at' => $application->created_at?->toISOString(),
                         'created_ago' => $application->created_at?->diffForHumans(),
                     ];
-                });
+                })
+            ;
 
             return response()->json([
                 'success' => true,
                 'data' => $applications,
-                'message' => 'Recent applications retrieved successfully'
+                'message' => 'Recent applications retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve recent applications',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
 
     /**
-     * Get application status distribution
+     * Get application status distribution.
      */
     public function getApplicationStatusDistribution(): JsonResponse
     {
@@ -167,43 +166,43 @@ class DashboardController extends Controller
                 ->get()
                 ->mapWithKeys(function ($item) {
                     return [ucfirst($item->status ?? 'pending') => $item->count];
-                });
+                })
+            ;
 
             // Ensure all statuses are present
             $statuses = ['Pending', 'Approved', 'Rejected', 'Withdrawn'];
             $result = [];
-            
+
             foreach ($statuses as $status) {
                 $result[] = [
                     'status' => $status,
-                    'count' => $distribution[$status] ?? 0
+                    'count' => $distribution[$status] ?? 0,
                 ];
             }
 
             return response()->json([
                 'success' => true,
                 'data' => $result,
-                'message' => 'Application status distribution retrieved successfully'
+                'message' => 'Application status distribution retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve application status distribution',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
 
     /**
-     * Get monthly job posting trends
+     * Get monthly job posting trends.
      */
     public function getJobPostingTrends(Request $request): JsonResponse
     {
         try {
             $months = $request->get('months', 6);
-            
+
             $trends = Job::select(
                 DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
                 DB::raw('COUNT(*) as count')
@@ -216,34 +215,34 @@ class DashboardController extends Controller
                     return [
                         'month' => $item->month,
                         'month_name' => Carbon::createFromFormat('Y-m', $item->month)->format('M Y'),
-                        'count' => $item->count
+                        'count' => $item->count,
                     ];
-                });
+                })
+            ;
 
             return response()->json([
                 'success' => true,
                 'data' => $trends,
-                'message' => 'Job posting trends retrieved successfully'
+                'message' => 'Job posting trends retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve job posting trends',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
 
     /**
-     * Get top performing companies by job count
+     * Get top performing companies by job count.
      */
     public function getTopCompanies(Request $request): JsonResponse
     {
         try {
             $limit = $request->get('limit', 5);
-            
+
             $companies = Company::withCount('jobs')
                 ->having('jobs_count', '>', 0)
                 ->orderBy('jobs_count', 'desc')
@@ -257,21 +256,21 @@ class DashboardController extends Controller
                         'is_active' => $company->is_active,
                         'logo' => $company->logo,
                     ];
-                });
+                })
+            ;
 
             return response()->json([
                 'success' => true,
                 'data' => $companies,
-                'message' => 'Top companies retrieved successfully'
+                'message' => 'Top companies retrieved successfully',
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve top companies',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-                'data' => []
+                'data' => [],
             ], 500);
         }
     }
-} 
+}

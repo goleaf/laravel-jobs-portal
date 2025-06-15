@@ -3,34 +3,36 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Class RequiredDegreeLevel
+ * Class RequiredDegreeLevel.
  *
  * @version June 20, 2020, 5:50 am UTC
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property int $level_order
- * @property int|null $years_required
- * @property bool $is_default
- * @property bool $is_active
- * @property string|null $certification_required
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Job[] $jobs
- * @property-read int|null $jobs_count
- * @property-read mixed $usage_count
- * @property-read mixed $formatted_usage_stats
- * @property-read mixed $education_category
- * @property-read mixed $career_progression_level
- * @property-read mixed $salary_range_multiplier
+ * @property int              $id
+ * @property string           $name
+ * @property null|string      $description
+ * @property int              $level_order
+ * @property null|int         $years_required
+ * @property bool             $is_default
+ * @property bool             $is_active
+ * @property null|string      $certification_required
+ * @property null|Carbon      $created_at
+ * @property null|Carbon      $updated_at
+ * @property Collection|Job[] $jobs
+ * @property null|int         $jobs_count
+ * @property mixed            $usage_count
+ * @property mixed            $formatted_usage_stats
+ * @property mixed            $education_category
+ * @property mixed            $career_progression_level
+ * @property mixed            $salary_range_multiplier
  *
  * @method static Builder|RequiredDegreeLevel newModelQuery()
  * @method static Builder|RequiredDegreeLevel newQuery()
@@ -74,7 +76,8 @@ use Spatie\Activitylog\LogOptions;
  */
 class RequiredDegreeLevel extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
+    use LogsActivity;
 
     public $table = 'required_degree_levels';
 
@@ -95,66 +98,23 @@ class RequiredDegreeLevel extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'level_order' => 'integer',
-            'years_required' => 'integer',
-            'is_default' => 'boolean',
-            'is_active' => 'boolean',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
-
-    /**
      * Scope a query to only include old records.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOld(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOld(Builder $query): Builder
     {
-        return $query->orderBy("created_at", "asc");
+        return $query->orderBy('created_at', 'asc');
     }
 
     /**
-     * Boot the model.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        // Clear cache when degree level is updated
-        static::updated(function ($degreeLevel) {
-            cache()->forget("required_degree_level.{$degreeLevel->id}");
-            cache()->forget("required_degree_levels.popular");
-            cache()->forget("required_degree_levels.trending");
-            cache()->tags(['required_degree_levels', 'required_degree_level-' . $degreeLevel->id])->flush();
-        });
-
-        // Clear cache when degree level is deleted
-        static::deleted(function ($degreeLevel) {
-            cache()->forget("required_degree_level.{$degreeLevel->id}");
-            cache()->forget("required_degree_levels.popular");
-            cache()->forget("required_degree_levels.trending");
-            cache()->tags(['required_degree_levels', 'required_degree_level-' . $degreeLevel->id])->flush();
-        });
-    }
-
-    /**
-     * Activity log options
+     * Activity log options.
      */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'level_order', 'years_required', 'is_active', 'is_default', 'certification_required'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontSubmitEmptyLogs()
+        ;
     }
 
     /**
@@ -192,7 +152,7 @@ class RequiredDegreeLevel extends Model
     public function getEducationCategoryAttribute(): string
     {
         $name = strtolower($this->name);
-        
+
         return match (true) {
             str_contains($name, 'high school') || str_contains($name, 'diploma') || $this->level_order <= 2 => __('education.category.high_school'),
             str_contains($name, 'certificate') || str_contains($name, 'certification') => __('education.category.certificate'),
@@ -297,8 +257,9 @@ class RequiredDegreeLevel extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-                    ->orWhere('description', 'like', "%{$term}%")
-                    ->orWhere('certification_required', 'like', "%{$term}%");
+            ->orWhere('description', 'like', "%{$term}%")
+            ->orWhere('certification_required', 'like', "%{$term}%")
+        ;
     }
 
     /**
@@ -307,8 +268,9 @@ class RequiredDegreeLevel extends Model
     public function scopePopular(Builder $query, int $limit = 10): Builder
     {
         return $query->withCount('jobs')
-                    ->orderByDesc('jobs_count')
-                    ->limit($limit);
+            ->orderByDesc('jobs_count')
+            ->limit($limit)
+        ;
     }
 
     /**
@@ -333,7 +295,8 @@ class RequiredDegreeLevel extends Model
     public function scopeRecent(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-                    ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+        ;
     }
 
     /**
@@ -342,11 +305,12 @@ class RequiredDegreeLevel extends Model
     public function scopeTrending(Builder $query): Builder
     {
         return $query->withCount([
-                        'jobs' => function ($q) {
-                            $q->where('created_at', '>=', now()->subDays(30));
-                        }
-                    ])
-                    ->orderByDesc('jobs_count');
+            'jobs' => function ($q) {
+                $q->where('created_at', '>=', now()->subDays(30));
+            },
+        ])
+            ->orderByDesc('jobs_count')
+        ;
     }
 
     /**
@@ -379,11 +343,12 @@ class RequiredDegreeLevel extends Model
     public function scopePostgraduate(Builder $query): Builder
     {
         return $query->where(function ($q) {
-                        $q->where('name', 'like', '%master%')
-                          ->orWhere('name', 'like', '%doctoral%')
-              ->orWhere('name', 'like', '%phd%')
-              ->orWhere('level_order', '>=', 7);
-                    });
+            $q->where('name', 'like', '%master%')
+                ->orWhere('name', 'like', '%doctoral%')
+                ->orWhere('name', 'like', '%phd%')
+                ->orWhere('level_order', '>=', 7)
+            ;
+        });
     }
 
     /**
@@ -392,11 +357,12 @@ class RequiredDegreeLevel extends Model
     public function scopeUndergraduate(Builder $query): Builder
     {
         return $query->where(function ($q) {
-                        $q->where('name', 'like', '%bachelor%')
-                          ->orWhere('name', 'like', '%associate%')
-              ->orWhere('name', 'like', '%diploma%')
-              ->orWhereBetween('level_order', [3, 6]);
-                    });
+            $q->where('name', 'like', '%bachelor%')
+                ->orWhere('name', 'like', '%associate%')
+                ->orWhere('name', 'like', '%diploma%')
+                ->orWhereBetween('level_order', [3, 6])
+            ;
+        });
     }
 
     /**
@@ -406,8 +372,9 @@ class RequiredDegreeLevel extends Model
     {
         return $query->where(function ($q) {
             $q->where('name', 'like', '%doctoral%')
-                    ->orWhere('name', 'like', '%phd%')
-                    ->orWhere('name', 'like', '%doctorate%');
+                ->orWhere('name', 'like', '%phd%')
+                ->orWhere('name', 'like', '%doctorate%')
+            ;
         });
     }
 
@@ -418,9 +385,10 @@ class RequiredDegreeLevel extends Model
     {
         return $query->where(function ($q) {
             $q->where('name', 'like', '%professional%')
-                    ->orWhere('name', 'like', '%license%')
-              ->orWhere('name', 'like', '%certification%')
-                    ->orWhereNotNull('certification_required');
+                ->orWhere('name', 'like', '%license%')
+                ->orWhere('name', 'like', '%certification%')
+                ->orWhereNotNull('certification_required')
+            ;
         });
     }
 
@@ -462,7 +430,8 @@ class RequiredDegreeLevel extends Model
     public function scopeRequiresCertification(Builder $query): Builder
     {
         return $query->whereNotNull('certification_required')
-                    ->where('certification_required', '!=', '');
+            ->where('certification_required', '!=', '')
+        ;
     }
 
     /**
@@ -472,10 +441,11 @@ class RequiredDegreeLevel extends Model
     {
         return cache()->remember("required_degree_level.{$this->id}.average_salary", 3600, function () {
             return $this->jobs()
-                        ->whereNotNull('min_salary')
-                        ->whereNotNull('max_salary')
-                        ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
-                        ->value('avg_salary') ?? 0.0;
+                ->whereNotNull('min_salary')
+                ->whereNotNull('max_salary')
+                ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
+                ->value('avg_salary') ?? 0.0
+            ;
         });
     }
 
@@ -484,8 +454,8 @@ class RequiredDegreeLevel extends Model
      */
     public function isEquivalentTo(RequiredDegreeLevel $otherLevel): bool
     {
-        return $this->level_order === $otherLevel->level_order ||
-               abs($this->level_order - $otherLevel->level_order) <= 1;
+        return $this->level_order === $otherLevel->level_order
+               || abs($this->level_order - $otherLevel->level_order) <= 1;
     }
 
     /**
@@ -502,9 +472,10 @@ class RequiredDegreeLevel extends Model
     public function getNextLevel(): ?RequiredDegreeLevel
     {
         return static::where('level_order', '>', $this->level_order)
-                    ->active()
-                    ->orderBy('level_order', 'asc')
-                    ->first();
+            ->active()
+            ->orderBy('level_order', 'asc')
+            ->first()
+        ;
     }
 
     /**
@@ -513,9 +484,10 @@ class RequiredDegreeLevel extends Model
     public function getPreviousLevel(): ?RequiredDegreeLevel
     {
         return static::where('level_order', '<', $this->level_order)
-                    ->active()
-                    ->orderBy('level_order', 'desc')
-                    ->first();
+            ->active()
+            ->orderBy('level_order', 'desc')
+            ->first()
+        ;
     }
 
     /**
@@ -526,8 +498,8 @@ class RequiredDegreeLevel extends Model
         $averageSalary = $this->getAverageSalary();
         $yearsRequired = $this->years_required ?? 4;
         $estimatedCost = $yearsRequired * 15000; // Estimated annual education cost
-        
-        if ($estimatedCost === 0) {
+
+        if (0 === $estimatedCost) {
             return 0.0;
         }
 
@@ -543,7 +515,7 @@ class RequiredDegreeLevel extends Model
             $nextLevel = $this->getNextLevel();
             $averageSalary = $this->getAverageSalary();
             $nextLevelSalary = $nextLevel ? $nextLevel->getAverageSalary() : 0;
-        
+
             return [
                 'current_level' => $this->name,
                 'next_level' => $nextLevel?->name,
@@ -562,21 +534,63 @@ class RequiredDegreeLevel extends Model
     {
         return cache()->remember("required_degree_level.{$this->id}.industry_demand", 3600, function () {
             $jobsByIndustry = $this->jobs()
-                                  ->with('company.industry')
-                                  ->get()
-                                  ->groupBy('company.industry.name')
-                                  ->map(function ($jobs) {
-                                      return $jobs->count();
-                                  })
-                                  ->sortDesc()
-                                  ->take(10);
-            
+                ->with('company.industry')
+                ->get()
+                ->groupBy('company.industry.name')
+                ->map(function ($jobs) {
+                    return $jobs->count();
+                })
+                ->sortDesc()
+                ->take(10)
+            ;
+
             return [
                 'total_jobs' => $this->jobs()->count(),
                 'active_jobs' => $this->jobs()->active()->count(),
                 'top_industries' => $jobsByIndustry->toArray(),
                 'demand_trend' => $this->getDemandTrend(),
             ];
+        });
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'level_order' => 'integer',
+            'years_required' => 'integer',
+            'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear cache when degree level is updated
+        static::updated(function ($degreeLevel) {
+            cache()->forget("required_degree_level.{$degreeLevel->id}");
+            cache()->forget('required_degree_levels.popular');
+            cache()->forget('required_degree_levels.trending');
+            cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
+        });
+
+        // Clear cache when degree level is deleted
+        static::deleted(function ($degreeLevel) {
+            cache()->forget("required_degree_level.{$degreeLevel->id}");
+            cache()->forget('required_degree_levels.popular');
+            cache()->forget('required_degree_levels.trending');
+            cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
         });
     }
 
@@ -588,15 +602,15 @@ class RequiredDegreeLevel extends Model
         $currentMonth = $this->jobs()->where('created_at', '>=', now()->subDays(30))->count();
         $previousMonth = $this->jobs()->whereBetween('created_at', [
             now()->subDays(60),
-            now()->subDays(30)
+            now()->subDays(30),
         ])->count();
-        
-        if ($previousMonth === 0) {
+
+        if (0 === $previousMonth) {
             return $currentMonth > 0 ? 'increasing' : 'stable';
         }
-        
+
         $changePercentage = (($currentMonth - $previousMonth) / $previousMonth) * 100;
-        
+
         return match (true) {
             $changePercentage > 10 => 'rapidly_increasing',
             $changePercentage > 0 => 'increasing',

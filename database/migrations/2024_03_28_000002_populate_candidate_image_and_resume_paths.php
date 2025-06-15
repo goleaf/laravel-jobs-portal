@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -21,13 +20,14 @@ return new class extends Migration
 
         // Get all media items for candidates (resumes)
         $mediaItems = DB::table('media')
-            ->where('model_type', 'App\\Models\\Candidate')
-            ->get();
+            ->where('model_type', 'App\Models\Candidate')
+            ->get()
+        ;
 
         foreach ($mediaItems as $media) {
             $candidate = DB::table('candidates')->where('id', $media->model_id)->first();
 
-            if (! $candidate) {
+            if (!$candidate) {
                 continue;
             }
 
@@ -35,12 +35,12 @@ return new class extends Migration
             $sourcePath = storage_path('app/public/'.$mediaPath);
 
             // Skip if file doesn't exist
-            if (! file_exists($sourcePath)) {
+            if (!file_exists($sourcePath)) {
                 continue;
             }
 
             // Define new path
-            $collection = ($media->collection_name === 'candidate_resumes') ? 'candidates/resumes' : 'candidates/images';
+            $collection = ('candidate_resumes' === $media->collection_name) ? 'candidates/resumes' : 'candidates/images';
             $newPath = $collection.'/'.$media->file_name;
 
             // Copy file to new location
@@ -52,33 +52,36 @@ return new class extends Migration
             }
 
             // Update candidate record
-            if ($media->collection_name === 'candidate_resumes') {
+            if ('candidate_resumes' === $media->collection_name) {
                 DB::table('candidates')
                     ->where('id', $candidate->id)
-                    ->update(['resume_path' => $newPath]);
+                    ->update(['resume_path' => $newPath])
+                ;
             } else {
                 DB::table('candidates')
                     ->where('id', $candidate->id)
-                    ->update(['image_path' => $newPath]);
+                    ->update(['image_path' => $newPath])
+                ;
             }
         }
 
         // Get all profile images from users and copy to candidate records
         $userMedia = DB::table('media')
-            ->where('model_type', 'App\\Models\\User')
+            ->where('model_type', 'App\Models\User')
             ->where('collection_name', 'profile')
-            ->get();
+            ->get()
+        ;
 
         foreach ($userMedia as $media) {
             $user = DB::table('users')->where('id', $media->model_id)->first();
 
-            if (! $user || $user->owner_type !== 'App\\Models\\Candidate') {
+            if (!$user || 'App\Models\Candidate' !== $user->owner_type) {
                 continue;
             }
 
             $candidate = DB::table('candidates')->where('id', $user->owner_id)->first();
 
-            if (! $candidate) {
+            if (!$candidate) {
                 continue;
             }
 
@@ -86,7 +89,7 @@ return new class extends Migration
             $sourcePath = storage_path('app/public/'.$mediaPath);
 
             // Skip if file doesn't exist
-            if (! file_exists($sourcePath)) {
+            if (!file_exists($sourcePath)) {
                 continue;
             }
 
@@ -104,7 +107,8 @@ return new class extends Migration
             // Update candidate record
             DB::table('candidates')
                 ->where('id', $candidate->id)
-                ->update(['image_path' => $newPath]);
+                ->update(['image_path' => $newPath])
+            ;
         }
     }
 

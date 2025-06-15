@@ -2,20 +2,22 @@
 
 namespace App\Services;
 
-use App\Repositories\JobRepository;
-use App\Repositories\CompanyRepository;
+use App\Models\Candidate;
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Repositories\CompanyRepository;
+use App\Repositories\JobRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
- * Universal Job Service - Enhanced Implementation
- * 
+ * Universal Job Service - Enhanced Implementation.
+ *
  * Business logic layer for job operations following Laravel best practices:
  * - Clean separation of concerns
  * - Repository pattern integration
@@ -38,7 +40,7 @@ class UniversalJobService
     }
 
     /**
-     * Get active jobs with advanced filtering
+     * Get active jobs with advanced filtering.
      */
     public function getActiveJobs(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -46,7 +48,7 @@ class UniversalJobService
     }
 
     /**
-     * Search jobs with keyword and filters
+     * Search jobs with keyword and filters.
      */
     public function searchJobs(string $keyword = '', array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -56,7 +58,7 @@ class UniversalJobService
                 'keyword' => $keyword,
                 'filters' => $filters,
                 'user_id' => Auth::id(),
-                'ip' => request()->ip()
+                'ip' => request()->ip(),
             ]);
         }
 
@@ -64,7 +66,7 @@ class UniversalJobService
     }
 
     /**
-     * Get featured jobs for homepage
+     * Get featured jobs for homepage.
      */
     public function getFeaturedJobs(int $limit = 6): Collection
     {
@@ -72,7 +74,7 @@ class UniversalJobService
     }
 
     /**
-     * Get recent jobs
+     * Get recent jobs.
      */
     public function getRecentJobs(int $days = 7, int $limit = 10): Collection
     {
@@ -80,7 +82,7 @@ class UniversalJobService
     }
 
     /**
-     * Get job details with view tracking
+     * Get job details with view tracking.
      */
     public function getJobDetails(int $jobId, bool $trackView = true): ?Job
     {
@@ -94,7 +96,7 @@ class UniversalJobService
     }
 
     /**
-     * Create new job posting
+     * Create new job posting.
      */
     public function createJob(array $jobData, int $companyId): Job
     {
@@ -137,7 +139,7 @@ class UniversalJobService
                 'job_id' => $job->id,
                 'company_id' => $companyId,
                 'user_id' => Auth::id(),
-                'job_title' => $job->job_title
+                'job_title' => $job->job_title,
             ]);
 
             return $job;
@@ -145,7 +147,7 @@ class UniversalJobService
     }
 
     /**
-     * Update existing job
+     * Update existing job.
      */
     public function updateJob(int $jobId, array $jobData): bool
     {
@@ -177,7 +179,7 @@ class UniversalJobService
             Log::info('Universal Job Service: Job updated successfully', [
                 'job_id' => $jobId,
                 'user_id' => Auth::id(),
-                'updated_fields' => array_keys($jobData)
+                'updated_fields' => array_keys($jobData),
             ]);
 
             return $updated;
@@ -185,7 +187,7 @@ class UniversalJobService
     }
 
     /**
-     * Delete job posting
+     * Delete job posting.
      */
     public function deleteJob(int $jobId): bool
     {
@@ -202,7 +204,7 @@ class UniversalJobService
                 // Soft delete by changing status instead of hard delete
                 $deleted = $this->jobRepository->update($jobId, [
                     'status' => Job::STATUS_CLOSED,
-                    'is_suspended' => true
+                    'is_suspended' => true,
                 ]);
             } else {
                 $deleted = $this->jobRepository->delete($jobId);
@@ -211,7 +213,7 @@ class UniversalJobService
             Log::info('Universal Job Service: Job deleted successfully', [
                 'job_id' => $jobId,
                 'user_id' => Auth::id(),
-                'job_title' => $job->job_title
+                'job_title' => $job->job_title,
             ]);
 
             return $deleted;
@@ -219,7 +221,7 @@ class UniversalJobService
     }
 
     /**
-     * Apply for job
+     * Apply for job.
      */
     public function applyForJob(int $jobId, array $applicationData): JobApplication
     {
@@ -227,14 +229,15 @@ class UniversalJobService
             $job = $this->jobRepository->findOrFail($jobId);
 
             // Validate job is still open
-            if ($job->status !== Job::STATUS_OPEN || $job->is_suspended) {
+            if (Job::STATUS_OPEN !== $job->status || $job->is_suspended) {
                 throw new \Exception('This job is no longer accepting applications');
             }
 
             // Check if already applied
             $existingApplication = JobApplication::where('job_id', $jobId)
                 ->where('candidate_id', Auth::id())
-                ->first();
+                ->first()
+            ;
 
             if ($existingApplication) {
                 throw new \Exception('You have already applied for this job');
@@ -253,7 +256,7 @@ class UniversalJobService
             Log::info('Universal Job Service: Job application submitted', [
                 'job_id' => $jobId,
                 'candidate_id' => Auth::id(),
-                'application_id' => $application->id
+                'application_id' => $application->id,
             ]);
 
             return $application;
@@ -261,7 +264,7 @@ class UniversalJobService
     }
 
     /**
-     * Get jobs by company
+     * Get jobs by company.
      */
     public function getJobsByCompany(int $companyId, array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -269,7 +272,7 @@ class UniversalJobService
     }
 
     /**
-     * Get job statistics for dashboard
+     * Get job statistics for dashboard.
      */
     public function getJobStatistics(): array
     {
@@ -277,17 +280,17 @@ class UniversalJobService
     }
 
     /**
-     * Mark jobs as expired
+     * Mark jobs as expired.
      */
     public function markExpiredJobs(): int
     {
         $expiredCount = 0;
-        
+
         $this->jobRepository->processInChunks(100, function ($jobs) use (&$expiredCount) {
             foreach ($jobs as $job) {
-                if ($job->job_expiry_date < now()->toDateString() && $job->status === Job::STATUS_OPEN) {
+                if ($job->job_expiry_date < now()->toDateString() && Job::STATUS_OPEN === $job->status) {
                     $this->jobRepository->markAsExpired($job->id);
-                    $expiredCount++;
+                    ++$expiredCount;
                 }
             }
         });
@@ -295,7 +298,7 @@ class UniversalJobService
         if ($expiredCount > 0) {
             Log::info('Universal Job Service: Expired jobs marked', [
                 'count' => $expiredCount,
-                'date' => now()->toDateString()
+                'date' => now()->toDateString(),
             ]);
         }
 
@@ -303,9 +306,9 @@ class UniversalJobService
     }
 
     /**
-     * Toggle job featured status
+     * Toggle job featured status.
      */
-    public function toggleFeaturedStatus(int $jobId, bool $featured = true, ?\Carbon\Carbon $featuredUntil = null): bool
+    public function toggleFeaturedStatus(int $jobId, bool $featured = true, ?Carbon $featuredUntil = null): bool
     {
         $job = $this->jobRepository->findOrFail($jobId);
 
@@ -320,14 +323,14 @@ class UniversalJobService
             'job_id' => $jobId,
             'featured' => $featured,
             'featured_until' => $featuredUntil?->toDateString(),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
 
         return $updated;
     }
 
     /**
-     * Get jobs for sitemap
+     * Get jobs for sitemap.
      */
     public function getJobsForSitemap(): Collection
     {
@@ -335,85 +338,7 @@ class UniversalJobService
     }
 
     /**
-     * Track job view for analytics
-     */
-    protected function trackJobView(Job $job): void
-    {
-        $cacheKey = "job_view_{$job->id}_" . (Auth::id() ?? request()->ip());
-        
-        // Only track once per user/IP per day
-        if (!Cache::has($cacheKey)) {
-            // Increment view count
-            DB::table('jobs')
-                ->where('id', $job->id)
-                ->increment('views_count');
-
-            // Cache to prevent duplicate tracking
-            Cache::put($cacheKey, true, now()->addDay());
-
-            Log::debug('Universal Job Service: Job view tracked', [
-                'job_id' => $job->id,
-                'user_id' => Auth::id(),
-                'ip' => request()->ip()
-            ]);
-        }
-    }
-
-    /**
-     * Generate unique job slug
-     */
-    protected function generateJobSlug(string $title, int $companyId): string
-    {
-        $baseSlug = \Str::slug($title);
-        $slug = $baseSlug;
-        $counter = 1;
-
-        while ($this->jobRepository->exists(['job_slug' => $slug, 'company_id' => $companyId])) {
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
-    }
-
-    /**
-     * Attach skills to job
-     */
-    protected function attachJobSkills(Job $job, array $skillIds): void
-    {
-        if (!empty($skillIds)) {
-            $job->jobSkills()->attach($skillIds);
-        }
-    }
-
-    /**
-     * Sync job skills
-     */
-    protected function syncJobSkills(Job $job, array $skillIds): void
-    {
-        $job->jobSkills()->sync($skillIds);
-    }
-
-    /**
-     * Attach tags to job
-     */
-    protected function attachJobTags(Job $job, array $tagIds): void
-    {
-        if (!empty($tagIds)) {
-            $job->jobTags()->attach($tagIds);
-        }
-    }
-
-    /**
-     * Sync job tags
-     */
-    protected function syncJobTags(Job $job, array $tagIds): void
-    {
-        $job->jobTags()->sync($tagIds);
-    }
-
-    /**
-     * Get recommended jobs for candidate
+     * Get recommended jobs for candidate.
      */
     public function getRecommendedJobs(int $candidateId, int $limit = 10): Collection
     {
@@ -421,8 +346,8 @@ class UniversalJobService
 
         return Cache::remember($cacheKey, now()->addHours(6), function () use ($candidateId, $limit) {
             // Get candidate skills and preferences
-            $candidate = \App\Models\Candidate::with(['candidateSkills', 'jobCategory'])->find($candidateId);
-            
+            $candidate = Candidate::with(['candidateSkills', 'jobCategory'])->find($candidateId);
+
             if (!$candidate) {
                 return collect();
             }
@@ -431,7 +356,8 @@ class UniversalJobService
                 ->with(['company', 'jobCategory', 'jobType'])
                 ->where('status', Job::STATUS_OPEN)
                 ->where('is_suspended', false)
-                ->where('job_expiry_date', '>=', now()->toDateString());
+                ->where('job_expiry_date', '>=', now()->toDateString())
+            ;
 
             // Match by job category
             if ($candidate->job_category_id) {
@@ -449,4 +375,83 @@ class UniversalJobService
             return $query->latest('created_at')->limit($limit)->get();
         });
     }
-} 
+
+    /**
+     * Track job view for analytics.
+     */
+    protected function trackJobView(Job $job): void
+    {
+        $cacheKey = "job_view_{$job->id}_".(Auth::id() ?? request()->ip());
+
+        // Only track once per user/IP per day
+        if (!Cache::has($cacheKey)) {
+            // Increment view count
+            DB::table('jobs')
+                ->where('id', $job->id)
+                ->increment('views_count')
+            ;
+
+            // Cache to prevent duplicate tracking
+            Cache::put($cacheKey, true, now()->addDay());
+
+            Log::debug('Universal Job Service: Job view tracked', [
+                'job_id' => $job->id,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+            ]);
+        }
+    }
+
+    /**
+     * Generate unique job slug.
+     */
+    protected function generateJobSlug(string $title, int $companyId): string
+    {
+        $baseSlug = \Str::slug($title);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while ($this->jobRepository->exists(['job_slug' => $slug, 'company_id' => $companyId])) {
+            $slug = $baseSlug.'-'.$counter;
+            ++$counter;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Attach skills to job.
+     */
+    protected function attachJobSkills(Job $job, array $skillIds): void
+    {
+        if (!empty($skillIds)) {
+            $job->jobSkills()->attach($skillIds);
+        }
+    }
+
+    /**
+     * Sync job skills.
+     */
+    protected function syncJobSkills(Job $job, array $skillIds): void
+    {
+        $job->jobSkills()->sync($skillIds);
+    }
+
+    /**
+     * Attach tags to job.
+     */
+    protected function attachJobTags(Job $job, array $tagIds): void
+    {
+        if (!empty($tagIds)) {
+            $job->jobTags()->attach($tagIds);
+        }
+    }
+
+    /**
+     * Sync job tags.
+     */
+    protected function syncJobTags(Job $job, array $tagIds): void
+    {
+        $job->jobTags()->sync($tagIds);
+    }
+}

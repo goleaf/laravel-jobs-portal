@@ -2,13 +2,12 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class SEOService
 {
     /**
-     * Generate meta tags for a page
+     * Generate meta tags for a page.
      */
     public static function generateMetaTags(array $data): array
     {
@@ -21,74 +20,74 @@ class SEOService
             'type' => 'website',
             'site_name' => config('app.name', 'Job Portal'),
         ];
-        
+
         return array_merge($defaults, $data);
     }
-    
+
     /**
-     * Generate SEO-friendly title
+     * Generate SEO-friendly title.
      */
     public static function generateTitle(string $title, bool $includeSiteName = true): string
     {
         $siteName = config('app.name', 'Job Portal');
-        
+
         if ($includeSiteName && !str_contains($title, $siteName)) {
-            return $title . ' | ' . $siteName;
+            return $title.' | '.$siteName;
         }
-        
+
         return $title;
     }
-    
+
     /**
-     * Generate meta description
+     * Generate meta description.
      */
     public static function generateDescription(string $content, int $length = 160): string
     {
         $description = strip_tags($content);
         $description = preg_replace('/\s+/', ' ', $description);
         $description = trim($description);
-        
+
         if (strlen($description) > $length) {
             $description = substr($description, 0, $length);
-            $description = substr($description, 0, strrpos($description, ' ')) . '...';
+            $description = substr($description, 0, strrpos($description, ' ')).'...';
         }
-        
+
         return $description;
     }
-    
+
     /**
-     * Generate canonical URL
+     * Generate canonical URL.
      */
     public static function generateCanonicalUrl(?string $url = null): string
     {
         return $url ?: request()->url();
     }
-    
+
     /**
-     * Generate breadcrumb structured data
+     * Generate breadcrumb structured data.
      */
     public static function generateBreadcrumbs(array $breadcrumbs): array
     {
         $structuredData = [
             '@context' => 'https://schema.org',
             '@type' => 'BreadcrumbList',
-            'itemListElement' => []
+            'itemListElement' => [],
         ];
-        
+
         foreach ($breadcrumbs as $index => $breadcrumb) {
             $structuredData['itemListElement'][] = [
                 '@type' => 'ListItem',
                 'position' => $index + 1,
                 'name' => $breadcrumb['name'],
-                'item' => $breadcrumb['url']
+                'item' => $breadcrumb['url'],
             ];
         }
-        
+
         return $structuredData;
     }
-    
+
     /**
-     * Generate job posting structured data
+     * Generate job posting structured data.
      */
     public static function generateJobStructuredData(array $job): array
     {
@@ -100,7 +99,7 @@ class SEOService
             'identifier' => [
                 '@type' => 'PropertyValue',
                 'name' => $job['company']['name'] ?? '',
-                'value' => $job['id'] ?? ''
+                'value' => $job['id'] ?? '',
             ],
             'datePosted' => isset($job['created_at']) ? date('c', strtotime($job['created_at'])) : date('c'),
             'validThrough' => isset($job['expires_on']) ? date('c', strtotime($job['expires_on'])) : date('c', strtotime('+30 days')),
@@ -109,7 +108,7 @@ class SEOService
                 '@type' => 'Organization',
                 'name' => $job['company']['name'] ?? '',
                 'sameAs' => $job['company']['website'] ?? '',
-                'logo' => $job['company']['logo'] ?? ''
+                'logo' => $job['company']['logo'] ?? '',
             ],
             'jobLocation' => [
                 '@type' => 'Place',
@@ -117,8 +116,8 @@ class SEOService
                     '@type' => 'PostalAddress',
                     'addressLocality' => $job['city']['name'] ?? '',
                     'addressRegion' => $job['state']['name'] ?? '',
-                    'addressCountry' => $job['country']['name'] ?? ''
-                ]
+                    'addressCountry' => $job['country']['name'] ?? '',
+                ],
             ],
             'baseSalary' => [
                 '@type' => 'MonetaryAmount',
@@ -127,14 +126,14 @@ class SEOService
                     '@type' => 'QuantitativeValue',
                     'minValue' => $job['salary_from'] ?? null,
                     'maxValue' => $job['salary_to'] ?? null,
-                    'unitText' => $job['salary_period']['period'] ?? 'YEAR'
-                ]
-            ]
+                    'unitText' => $job['salary_period']['period'] ?? 'YEAR',
+                ],
+            ],
         ];
     }
-    
+
     /**
-     * Generate organization structured data
+     * Generate organization structured data.
      */
     public static function generateOrganizationStructuredData(array $company): array
     {
@@ -153,46 +152,46 @@ class SEOService
                 'streetAddress' => $company['location'] ?? '',
                 'addressLocality' => $company['city'] ?? '',
                 'addressRegion' => $company['state'] ?? '',
-                'addressCountry' => $company['country'] ?? ''
-            ]
+                'addressCountry' => $company['country'] ?? '',
+            ],
         ];
     }
-    
+
     /**
-     * Generate FAQ structured data
+     * Generate FAQ structured data.
      */
     public static function generateFAQStructuredData(array $faqs): array
     {
         $structuredData = [
             '@context' => 'https://schema.org',
             '@type' => 'FAQPage',
-            'mainEntity' => []
+            'mainEntity' => [],
         ];
-        
+
         foreach ($faqs as $faq) {
             $structuredData['mainEntity'][] = [
                 '@type' => 'Question',
                 'name' => $faq['question'],
                 'acceptedAnswer' => [
                     '@type' => 'Answer',
-                    'text' => $faq['answer']
-                ]
+                    'text' => $faq['answer'],
+                ],
             ];
         }
-        
+
         return $structuredData;
     }
-    
+
     /**
-     * Generate SEO-friendly slug
+     * Generate SEO-friendly slug.
      */
     public static function generateSlug(string $text): string
     {
         return Str::slug($text, '-');
     }
-    
+
     /**
-     * Get OpenGraph tags
+     * Get OpenGraph tags.
      */
     public static function getOpenGraphTags(array $meta): array
     {
@@ -205,9 +204,9 @@ class SEOService
             'og:site_name' => $meta['site_name'],
         ];
     }
-    
+
     /**
-     * Get Twitter Card tags
+     * Get Twitter Card tags.
      */
     public static function getTwitterCardTags(array $meta): array
     {

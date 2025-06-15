@@ -19,10 +19,10 @@ class UpdateTransactionRequest extends FormRequest
      */
     public function rules(): array
     {
-        return array (
-  'status' => 'required|in:pending,approved,denied,cancelled',
-  'meta' => 'nullable|json',
-);
+        return [
+            'status' => 'required|in:pending,approved,denied,cancelled',
+            'meta' => 'nullable|json',
+        ];
     }
 
     /**
@@ -30,9 +30,9 @@ class UpdateTransactionRequest extends FormRequest
      */
     public function messages(): array
     {
-        return array (
-  'status.required' => 'Status is required',
-);
+        return [
+            'status.required' => 'Status is required',
+        ];
     }
 
     /**

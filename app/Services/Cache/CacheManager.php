@@ -2,13 +2,12 @@
 
 namespace App\Services\Cache;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Cache\Repository;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 /**
- * Enhanced Cache Manager
- * 
+ * Enhanced Cache Manager.
+ *
  * Provides advanced caching capabilities with:
  * - Multi-layer caching strategy
  * - Cache tagging and invalidation
@@ -33,21 +32,19 @@ class CacheManager
     }
 
     /**
-     * Remember a value with caching
+     * Remember a value with caching.
      *
-     * @param string $key
-     * @param callable $callback
      * @param int $ttl TTL in seconds
-     * @return mixed
      */
     public function remember(string $key, callable $callback, int $ttl = 3600): mixed
     {
         if ($value = $this->get($key)) {
-            $this->stats['hits']++;
+            ++$this->stats['hits'];
+
             return $value;
         }
 
-        $this->stats['misses']++;
+        ++$this->stats['misses'];
         $value = $callback();
         $this->put($key, $value, $ttl);
 
@@ -55,23 +52,21 @@ class CacheManager
     }
 
     /**
-     * Flexible caching with stale-while-revalidate pattern
+     * Flexible caching with stale-while-revalidate pattern.
      *
-     * @param string $key
-     * @param callable $callback
      * @param int $freshTtl Fresh time in seconds
      * @param int $staleTtl Additional stale time in seconds
-     * @return mixed
      */
     public function flexible(string $key, callable $callback, int $freshTtl = 3600, int $staleTtl = 7200): mixed
     {
         $cacheData = $this->getRaw($key);
-        
+
         if (!$cacheData) {
             // Cache miss - generate fresh data
             $value = $callback();
             $this->putWithMetadata($key, $value, $freshTtl, $staleTtl);
-            $this->stats['misses']++;
+            ++$this->stats['misses'];
+
             return $value;
         }
 
@@ -81,57 +76,50 @@ class CacheManager
 
         if ($isFresh) {
             // Cache hit - fresh data
-            $this->stats['hits']++;
+            ++$this->stats['hits'];
+
             return $cacheData['value'];
         }
 
         if ($isValid) {
             // Return stale data and refresh in background
             $this->refreshInBackground($key, $callback, $freshTtl, $staleTtl);
-            $this->stats['hits']++;
+            ++$this->stats['hits'];
+
             return $cacheData['value'];
         }
 
         // Cache expired - generate fresh data
         $value = $callback();
         $this->putWithMetadata($key, $value, $freshTtl, $staleTtl);
-        $this->stats['misses']++;
+        ++$this->stats['misses'];
+
         return $value;
     }
 
     /**
-     * Cache with tags for group invalidation
-     *
-     * @param array $tags
-     * @return self
+     * Cache with tags for group invalidation.
      */
     public function tags(array $tags): self
     {
         $instance = clone $this;
         $instance->cache = $this->cache->tags($tags);
+
         return $instance;
     }
 
     /**
-     * Put value in cache
-     *
-     * @param string $key
-     * @param mixed $value
-     * @param int $ttl
-     * @return bool
+     * Put value in cache.
      */
     public function put(string $key, mixed $value, int $ttl = 3600): bool
     {
-        $this->stats['writes']++;
+        ++$this->stats['writes'];
+
         return $this->cache->put($key, $value, $ttl);
     }
 
     /**
-     * Get value from cache
-     *
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
+     * Get value from cache.
      */
     public function get(string $key, mixed $default = null): mixed
     {
@@ -139,10 +127,7 @@ class CacheManager
     }
 
     /**
-     * Check if key exists in cache
-     *
-     * @param string $key
-     * @return bool
+     * Check if key exists in cache.
      */
     public function has(string $key): bool
     {
@@ -150,21 +135,17 @@ class CacheManager
     }
 
     /**
-     * Delete key from cache
-     *
-     * @param string $key
-     * @return bool
+     * Delete key from cache.
      */
     public function forget(string $key): bool
     {
-        $this->stats['deletes']++;
+        ++$this->stats['deletes'];
+
         return $this->cache->forget($key);
     }
 
     /**
-     * Flush all cache
-     *
-     * @return bool
+     * Flush all cache.
      */
     public function flush(): bool
     {
@@ -172,10 +153,7 @@ class CacheManager
     }
 
     /**
-     * Get multiple keys at once
-     *
-     * @param array $keys
-     * @return array
+     * Get multiple keys at once.
      */
     public function many(array $keys): array
     {
@@ -183,78 +161,57 @@ class CacheManager
     }
 
     /**
-     * Put multiple key-value pairs
-     *
-     * @param array $values
-     * @param int $ttl
-     * @return bool
+     * Put multiple key-value pairs.
      */
     public function putMany(array $values, int $ttl = 3600): bool
     {
         $this->stats['writes'] += count($values);
+
         return $this->cache->putMany($values, $ttl);
     }
 
     /**
-     * Add to cache only if key doesn't exist
-     *
-     * @param string $key
-     * @param mixed $value
-     * @param int $ttl
-     * @return bool
+     * Add to cache only if key doesn't exist.
      */
     public function add(string $key, mixed $value, int $ttl = 3600): bool
     {
         if ($this->cache->add($key, $value, $ttl)) {
-            $this->stats['writes']++;
+            ++$this->stats['writes'];
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * Increment a cached value
-     *
-     * @param string $key
-     * @param int $value
-     * @return int|false
+     * Increment a cached value.
      */
-    public function increment(string $key, int $value = 1): int|false
+    public function increment(string $key, int $value = 1): false|int
     {
         return $this->cache->increment($key, $value);
     }
 
     /**
-     * Decrement a cached value
-     *
-     * @param string $key
-     * @param int $value
-     * @return int|false
+     * Decrement a cached value.
      */
-    public function decrement(string $key, int $value = 1): int|false
+    public function decrement(string $key, int $value = 1): false|int
     {
         return $this->cache->decrement($key, $value);
     }
 
     /**
-     * Cache a value forever (until manually removed)
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return bool
+     * Cache a value forever (until manually removed).
      */
     public function forever(string $key, mixed $value): bool
     {
-        $this->stats['writes']++;
+        ++$this->stats['writes'];
+
         return $this->cache->forever($key, $value);
     }
 
     /**
-     * Generate cache key with consistent formatting
-     *
-     * @param string $prefix
-     * @param array $params
-     * @return string
+     * Generate cache key with consistent formatting.
      */
     public function generateKey(string $prefix, array $params = []): string
     {
@@ -264,14 +221,12 @@ class CacheManager
 
         $serialized = serialize($params);
         $hash = md5($serialized);
-        
+
         return "{$prefix}:{$hash}";
     }
 
     /**
-     * Get cache performance statistics
-     *
-     * @return array
+     * Get cache performance statistics.
      */
     public function getStats(): array
     {
@@ -285,9 +240,7 @@ class CacheManager
     }
 
     /**
-     * Clear cache statistics
-     *
-     * @return void
+     * Clear cache statistics.
      */
     public function clearStats(): void
     {
@@ -300,10 +253,7 @@ class CacheManager
     }
 
     /**
-     * Get raw cache data with metadata
-     *
-     * @param string $key
-     * @return array|null
+     * Get raw cache data with metadata.
      */
     private function getRaw(string $key): ?array
     {
@@ -311,13 +261,7 @@ class CacheManager
     }
 
     /**
-     * Put value with metadata for flexible caching
-     *
-     * @param string $key
-     * @param mixed $value
-     * @param int $freshTtl
-     * @param int $staleTtl
-     * @return bool
+     * Put value with metadata for flexible caching.
      */
     private function putWithMetadata(string $key, mixed $value, int $freshTtl, int $staleTtl): bool
     {
@@ -327,31 +271,26 @@ class CacheManager
                 'created_at' => time(),
                 'fresh_until' => time() + $freshTtl,
                 'stale_until' => time() + $freshTtl + $staleTtl,
-            ]
+            ],
         ];
 
-        $this->stats['writes']++;
+        ++$this->stats['writes'];
+
         return $this->cache->put($key, $data, $freshTtl + $staleTtl);
     }
 
     /**
-     * Refresh cache in background (simplified version)
-     *
-     * @param string $key
-     * @param callable $callback
-     * @param int $freshTtl
-     * @param int $staleTtl
-     * @return void
+     * Refresh cache in background (simplified version).
      */
     private function refreshInBackground(string $key, callable $callback, int $freshTtl, int $staleTtl): void
     {
         // In a real implementation, this would dispatch a background job
         // For now, we'll just set a flag to refresh on next request
         $refreshKey = "refresh:{$key}";
-        
+
         if (!$this->cache->has($refreshKey)) {
             $this->cache->put($refreshKey, true, 60); // Prevent multiple refreshes
-            
+
             // Dispatch background job or use queues
             dispatch(function () use ($key, $callback, $freshTtl, $staleTtl) {
                 try {

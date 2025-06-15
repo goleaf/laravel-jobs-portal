@@ -2,14 +2,15 @@
 
 namespace App\Http\Requests\Skill;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Models\Skill;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Enhanced Enhanced Form Request for Store Skill
  * Implements Laravel 12 best practices with Enhanced MCP patterns
- * Following proven MasterData pattern
+ * Following proven MasterData pattern.
  */
 class StoreSkillRequest extends FormRequest
 {
@@ -20,44 +21,44 @@ class StoreSkillRequest extends FormRequest
     {
         // Enhanced Pattern: Role-based authorization
         return auth()->check() && (
-            auth()->user()->hasRole('Admin') || 
-            auth()->user()->hasRole('Employer')
+            auth()->user()->hasRole('Admin')
+            || auth()->user()->hasRole('Employer')
         );
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Enhanced Pattern: Comprehensive skill validation with security
+     * Enhanced Pattern: Comprehensive skill validation with security.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|string|ValidationRule>
      */
     public function rules(): array
     {
         return [
             // Skill Basic Information
             'name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'max:255',
                 'unique:skills,name',
-                'regex:/^[a-zA-Z0-9\s\.\-\+\#]+$/' // Allow alphanumeric, spaces, dots, hyphens, plus, hash
+                'regex:/^[a-zA-Z0-9\s\.\-\+\#]+$/', // Allow alphanumeric, spaces, dots, hyphens, plus, hash
             ],
             'description' => ['nullable', 'string', 'max:1000'],
-            
+
             // Skill Classification
             'category' => [
-                'nullable', 
-                'string', 
+                'nullable',
+                'string',
                 'max:100',
-                'in:technical,soft,language,management,design,marketing,finance,other'
+                'in:technical,soft,language,management,design,marketing,finance,other',
             ],
             'level' => [
-                'nullable', 
-                'string', 
+                'nullable',
+                'string',
                 'max:50',
-                'in:beginner,intermediate,advanced,expert'
+                'in:beginner,intermediate,advanced,expert',
             ],
-            
+
             // Status and Settings
             'is_active' => ['boolean'],
             'is_default' => [
@@ -68,19 +69,19 @@ class StoreSkillRequest extends FormRequest
                     }
                 },
             ],
-            
+
             // Metadata
             'created_by' => ['nullable', 'integer', 'exists:users,id'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
-            
+
             // Tags and Keywords
             'tags' => ['nullable', 'string', 'max:500'],
             'keywords' => ['nullable', 'string', 'max:500'],
-            
+
             // Related Skills (array of skill IDs)
             'related_skills' => ['nullable', 'array', 'max:10'],
             'related_skills.*' => ['integer', 'exists:skills,id'],
-            
+
             // Security
             'g-recaptcha-response' => [
                 'nullable',
@@ -95,7 +96,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
-     * Enhanced Pattern: Multilingual error messages
+     * Enhanced Pattern: Multilingual error messages.
      */
     public function messages(): array
     {
@@ -124,7 +125,7 @@ class StoreSkillRequest extends FormRequest
 
     /**
      * Get custom attributes for validator errors.
-     * Enhanced Pattern: User-friendly field names
+     * Enhanced Pattern: User-friendly field names.
      */
     public function attributes(): array
     {
@@ -144,39 +145,8 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     * Enhanced Pattern: Data normalization
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'name' => trim($this->name ?? ''),
-            'description' => trim($this->description ?? ''),
-            'category' => strtolower(trim($this->category ?? '')),
-            'level' => strtolower(trim($this->level ?? '')),
-            'tags' => $this->normalizeTags($this->tags),
-            'keywords' => $this->normalizeKeywords($this->keywords),
-            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
-            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
-            'created_by' => auth()->id(),
-            
-            // Ensure related_skills is properly formatted
-            'related_skills' => is_array($this->related_skills) 
-                ? array_filter(array_unique($this->related_skills)) 
-                : [],
-        ]);
-
-        // Only allow is_default for admins
-        if (auth()->user() && auth()->user()->hasRole('Admin')) {
-            $this->merge([
-                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            ]);
-        }
-    }
-
-    /**
      * Configure the validator instance.
-     * Enhanced Pattern: Enhanced validation logic
+     * Enhanced Pattern: Enhanced validation logic.
      */
     public function withValidator(Validator $validator): void
     {
@@ -184,11 +154,11 @@ class StoreSkillRequest extends FormRequest
             if ($this->hasEnhancedValidationConflicts()) {
                 $validator->errors()->add('name', __('validation.skill_conflict'));
             }
-            
+
             if ($this->hasSuspiciousContent()) {
                 $validator->errors()->add('name', __('validation.suspicious_content'));
             }
-            
+
             if ($this->hasInvalidRelatedSkills()) {
                 $validator->errors()->add('related_skills', __('validation.invalid_related_skills'));
             }
@@ -204,46 +174,100 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Enhanced Pattern: Enhanced business logic validation
+     * Prepare the data for validation.
+     * Enhanced Pattern: Data normalization.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => trim($this->name ?? ''),
+            'description' => trim($this->description ?? ''),
+            'category' => strtolower(trim($this->category ?? '')),
+            'level' => strtolower(trim($this->level ?? '')),
+            'tags' => $this->normalizeTags($this->tags),
+            'keywords' => $this->normalizeKeywords($this->keywords),
+            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true,
+            'sort_order' => $this->sort_order ? (int) $this->sort_order : 0,
+            'created_by' => auth()->id(),
+
+            // Ensure related_skills is properly formatted
+            'related_skills' => is_array($this->related_skills)
+                ? array_filter(array_unique($this->related_skills))
+                : [],
+        ]);
+
+        // Only allow is_default for admins
+        if (auth()->user() && auth()->user()->hasRole('Admin')) {
+            $this->merge([
+                'is_default' => filter_var($this->is_default, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
+            ]);
+        }
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     * Enhanced Pattern: Enhanced error handling with security monitoring.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        logger()->warning('Enhanced validation failed for StoreSkillRequest', [
+            'errors' => $validator->errors()->toArray(),
+            'controller' => 'Skill',
+            'action' => 'Store',
+            'skill_name' => $this->name,
+            'skill_category' => $this->category,
+            'user_id' => $this->user()?->id,
+            'ip' => $this->ip(),
+            'user_agent' => $this->userAgent(),
+            'suspicious_patterns' => $this->hasSuspiciousContent(),
+            'invalid_format' => $this->hasInvalidSkillFormat(),
+            'excessive_keywords' => $this->hasExcessiveKeywords(),
+            'invalid_related' => $this->hasInvalidRelatedSkills(),
+        ]);
+
+        parent::failedValidation($validator);
+    }
+
+    /**
+     * Enhanced Pattern: Enhanced business logic validation.
      */
     private function hasEnhancedValidationConflicts(): bool
     {
         // Check for similar skill names (case-insensitive, ignoring spaces)
         if ($this->name) {
             $normalizedName = strtolower(str_replace(' ', '', $this->name));
-            
-            $similarSkill = \App\Models\Skill::whereRaw('LOWER(REPLACE(name, " ", "")) = ?', [$normalizedName])
-                ->exists();
-                
-            return $similarSkill;
+
+            return Skill::whereRaw('LOWER(REPLACE(name, " ", "")) = ?', [$normalizedName])
+                ->exists()
+            ;
         }
-        
+
         return false;
     }
 
     /**
-     * Enhanced Pattern: Content security validation
+     * Enhanced Pattern: Content security validation.
      */
     private function hasSuspiciousContent(): bool
     {
         $suspiciousPatterns = [
             'spam', 'scam', 'virus', 'malware', 'hack', 'exploit',
-            'script', 'injection', 'xss', 'sql injection'
+            'script', 'injection', 'xss', 'sql injection',
         ];
-        
-        $content = strtolower($this->name . ' ' . $this->description . ' ' . $this->tags);
-        
+
+        $content = strtolower($this->name.' '.$this->description.' '.$this->tags);
+
         foreach ($suspiciousPatterns as $pattern) {
-            if (strpos($content, $pattern) !== false) {
+            if (false !== strpos($content, $pattern)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     /**
-     * Enhanced Pattern: Related skills validation
+     * Enhanced Pattern: Related skills validation.
      */
     private function hasInvalidRelatedSkills(): bool
     {
@@ -253,9 +277,9 @@ class StoreSkillRequest extends FormRequest
 
         // Check for self-reference (can't be related to itself)
         $skillName = strtolower($this->name);
-        
+
         foreach ($this->related_skills as $relatedSkillId) {
-            $relatedSkill = \App\Models\Skill::find($relatedSkillId);
+            $relatedSkill = Skill::find($relatedSkillId);
             if ($relatedSkill && strtolower($relatedSkill->name) === $skillName) {
                 return true;
             }
@@ -270,11 +294,13 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Enhanced Pattern: Skill format validation
+     * Enhanced Pattern: Skill format validation.
      */
     private function hasInvalidSkillFormat(): bool
     {
-        if (!$this->name) return false;
+        if (!$this->name) {
+            return false;
+        }
 
         // Check for common invalid formats
         $invalidPatterns = [
@@ -301,11 +327,13 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Enhanced Pattern: Keywords validation
+     * Enhanced Pattern: Keywords validation.
      */
     private function hasExcessiveKeywords(): bool
     {
-        if (!$this->keywords) return false;
+        if (!$this->keywords) {
+            return false;
+        }
 
         $keywords = explode(',', $this->keywords);
         $keywords = array_map('trim', $keywords);
@@ -327,58 +355,38 @@ class StoreSkillRequest extends FormRequest
     }
 
     /**
-     * Enhanced Pattern: Tags normalization
+     * Enhanced Pattern: Tags normalization.
      */
     private function normalizeTags(?string $tags): ?string
     {
-        if (empty($tags)) return null;
-        
+        if (empty($tags)) {
+            return null;
+        }
+
         $tagsArray = explode(',', $tags);
         $tagsArray = array_map('trim', $tagsArray);
         $tagsArray = array_filter($tagsArray);
         $tagsArray = array_unique($tagsArray);
         $tagsArray = array_slice($tagsArray, 0, 10); // Limit to 10 tags
-        
+
         return implode(', ', $tagsArray);
     }
 
     /**
-     * Enhanced Pattern: Keywords normalization
+     * Enhanced Pattern: Keywords normalization.
      */
     private function normalizeKeywords(?string $keywords): ?string
     {
-        if (empty($keywords)) return null;
-        
+        if (empty($keywords)) {
+            return null;
+        }
+
         $keywordsArray = explode(',', $keywords);
         $keywordsArray = array_map('trim', $keywordsArray);
         $keywordsArray = array_filter($keywordsArray);
         $keywordsArray = array_unique($keywordsArray);
         $keywordsArray = array_slice($keywordsArray, 0, 15); // Limit to 15 keywords
-        
+
         return implode(', ', $keywordsArray);
     }
-
-    /**
-     * Handle a failed validation attempt.
-     * Enhanced Pattern: Enhanced error handling with security monitoring
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        logger()->warning('Enhanced validation failed for StoreSkillRequest', [
-            'errors' => $validator->errors()->toArray(),
-            'controller' => 'Skill',
-            'action' => 'Store',
-            'skill_name' => $this->name,
-            'skill_category' => $this->category,
-            'user_id' => $this->user()?->id,
-            'ip' => $this->ip(),
-            'user_agent' => $this->userAgent(),
-            'suspicious_patterns' => $this->hasSuspiciousContent(),
-            'invalid_format' => $this->hasInvalidSkillFormat(),
-            'excessive_keywords' => $this->hasExcessiveKeywords(),
-            'invalid_related' => $this->hasInvalidRelatedSkills(),
-        ]);
-
-        parent::failedValidation($validator);
-    }
-} 
+}

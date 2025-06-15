@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Taxonomy;
 use App\Models\Term;
+use Illuminate\Database\Seeder;
 
 class TaxonomySeeder extends Seeder
 {
@@ -29,7 +28,7 @@ class TaxonomySeeder extends Seeder
         // Create basic job category terms
         $jobCategories = [
             'Technology',
-            'Healthcare', 
+            'Healthcare',
             'Finance',
             'Education',
             'Marketing',
@@ -117,7 +116,7 @@ class TaxonomySeeder extends Seeder
         }
 
         $this->command->info('Basic taxonomy system seeded successfully!');
-        $this->command->info('Created ' . Taxonomy::count() . ' taxonomies');
-        $this->command->info('Created ' . Term::count() . ' terms');
+        $this->command->info('Created '.Taxonomy::count().' taxonomies');
+        $this->command->info('Created '.Term::count().' terms');
     }
 }

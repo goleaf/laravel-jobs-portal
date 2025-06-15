@@ -4,21 +4,22 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 class TransactionController extends Controller
 {
     /**
-     * Display a listing of transactions
+     * Display a listing of transactions.
      */
     public function index(): View
     {
         $transactions = Transaction::with('user')->latest()->paginate(15);
+
         return view('admin.transactions.index', compact('transactions'));
     }
 
     /**
-     * Show the form for creating a new transaction
+     * Show the form for creating a new transaction.
      */
     public function create(): View
     {
@@ -26,7 +27,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Store a newly created transaction
+     * Store a newly created transaction.
      */
     public function store(StoreTransactionRequest $request)
     {
@@ -42,30 +43,32 @@ class TransactionController extends Controller
     }
 
     /**
-     * Display the specified transaction
+     * Display the specified transaction.
      */
     public function show(string $id): View
     {
         $transaction = Transaction::with('user')->findOrFail($id);
+
         return view('admin.transactions.show', compact('transaction'));
     }
 
     /**
-     * Show the form for editing the specified transaction
+     * Show the form for editing the specified transaction.
      */
     public function edit(string $id): View
     {
         $transaction = Transaction::findOrFail($id);
+
         return view('admin.transactions.edit', compact('transaction'));
     }
 
     /**
-     * Update the specified transaction
+     * Update the specified transaction.
      */
     public function update(UpdateTransactionRequest $request, string $id)
     {
         $transaction = Transaction::findOrFail($id);
-        
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'amount' => 'required|numeric|min:0',
@@ -78,13 +81,13 @@ class TransactionController extends Controller
     }
 
     /**
-     * Remove the specified transaction
+     * Remove the specified transaction.
      */
     public function destroy(string $id)
     {
         $transaction = Transaction::findOrFail($id);
         $transaction->delete();
-        
+
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction deleted successfully');
     }
 }

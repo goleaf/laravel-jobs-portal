@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\Company;
 
 /**
- * Class ShowCompanyRequest
- * 
- * Handles company detail view requests with authorization checks, 
+ * Class ShowCompanyRequest.
+ *
+ * Handles company detail view requests with authorization checks,
  * data loading options, analytics tracking, and multilingual support.
  */
 class ShowCompanyRequest extends FormRequest
@@ -20,7 +20,7 @@ class ShowCompanyRequest extends FormRequest
     public function authorize(): bool
     {
         $company = $this->route('company');
-        
+
         // Basic access control
         if (!$company) {
             return false;
@@ -32,7 +32,7 @@ class ShowCompanyRequest extends FormRequest
         }
 
         $user = auth()->user();
-        
+
         // Unauthenticated users can't view private/inactive companies
         if (!$user) {
             return false;
@@ -93,7 +93,7 @@ class ShowCompanyRequest extends FormRequest
                     'employees', 'departments', 'reviews', 'ratings', 'followers',
                     'media', 'gallery', 'socialLinks', 'certifications', 'awards',
                     'benefits', 'culture', 'offices', 'technologies', 'clients',
-                    'partnerships', 'financials', 'timeline', 'news', 'events'
+                    'partnerships', 'financials', 'timeline', 'news', 'events',
                 ]),
             ],
 
@@ -453,68 +453,9 @@ class ShowCompanyRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'view_type' => $this->input('view_type', 'full'),
-            'format' => $this->input('format', 'html'),
-            'language' => $this->input('language', app()->getLocale()),
-            'track_view' => $this->input('track_view', true),
-            'respect_privacy_settings' => $this->input('respect_privacy_settings', true),
-            'jobs_limit' => $this->input('jobs_limit', 10),
-            'reviews_limit' => $this->input('reviews_limit', 5),
-            'employees_limit' => $this->input('employees_limit', 20),
-            'media_limit' => $this->input('media_limit', 20),
-            'timeline_limit' => $this->input('timeline_limit', 10),
-            'jobs_status' => $this->input('jobs_status', 'active'),
-            'reviews_sort' => $this->input('reviews_sort', 'newest'),
-            'financial_period' => $this->input('financial_period', 'current_year'),
-        ]);
-
-        // Ensure boolean fields are properly typed
-        $booleanFields = [
-            'load_statistics', 'load_analytics', 'load_performance_metrics',
-            'load_social_proof', 'include_jobs', 'include_reviews', 'include_employees',
-            'include_media', 'include_timeline', 'include_financials', 'track_view',
-            'no_cache', 'admin_view', 'include_sensitive_data', 'include_audit_trail',
-            'include_compliance_data', 'respect_privacy_settings', 'anonymize_sensitive_data'
-        ];
-
-        foreach ($booleanFields as $field) {
-            if ($this->has($field)) {
-                $this->merge([$field => $this->boolean($field)]);
-            }
-        }
-
-        // Ensure numeric fields are properly typed
-        $numericFields = [
-            'jobs_limit', 'jobs_category', 'reviews_limit', 'min_review_rating',
-            'employees_limit', 'media_limit', 'timeline_limit', 'cache_duration'
-        ];
-
-        foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->$field)) {
-                $this->merge([$field => (int) $this->$field]);
-            }
-        }
-
-        // Clean string fields
-        $stringFields = [
-            'track_source', 'track_medium', 'track_campaign', 'employees_role', 'employees_department'
-        ];
-
-        foreach ($stringFields as $field) {
-            if ($this->has($field) && !empty($this->$field)) {
-                $this->merge([$field => trim($this->$field)]);
-            }
-        }
-    }
-
-    /**
      * Configure the validator instance.
+     *
+     * @param mixed $validator
      */
     public function withValidator($validator): void
     {
@@ -523,73 +464,6 @@ class ShowCompanyRequest extends FormRequest
             $this->validateDataAccess($validator);
             $this->validateBusinessLogic($validator);
         });
-    }
-
-    /**
-     * Validate admin access requirements.
-     */
-    protected function validateAdminAccess($validator): void
-    {
-        $user = auth()->user();
-
-        // Admin-specific options require admin role
-        $adminOptions = [
-            'include_financials', 'admin_view', 'include_sensitive_data',
-            'include_audit_trail', 'include_compliance_data'
-        ];
-
-        foreach ($adminOptions as $option) {
-            if ($this->has($option) && $this->$option && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
-                $validator->errors()->add($option, __('validation.company_show.admin_access_required'));
-            }
-        }
-    }
-
-    /**
-     * Validate data access permissions.
-     */
-    protected function validateDataAccess($validator): void
-    {
-        $company = $this->route('company');
-        $user = auth()->user();
-
-        // Financial data requires ownership or admin access
-        if ($this->include_financials && $company) {
-            if (!$user || (!$user->hasRole(['admin', 'super-admin']) && $company->user_id !== $user->id)) {
-                $validator->errors()->add('include_financials', __('validation.company_show.financial_access_denied'));
-            }
-        }
-
-        // Sensitive data requires special permissions
-        if ($this->include_sensitive_data && $company) {
-            if (!$user || !$user->can('viewSensitiveData', $company)) {
-                $validator->errors()->add('include_sensitive_data', __('validation.company_show.sensitive_data_access_denied'));
-            }
-        }
-    }
-
-    /**
-     * Validate business logic constraints.
-     */
-    protected function validateBusinessLogic($validator): void
-    {
-        // Validate reasonable limits for performance
-        if ($this->jobs_limit && $this->jobs_limit > 50) {
-            $validator->errors()->add('jobs_limit', __('validation.company_show.jobs_limit_exceeded'));
-        }
-
-        if ($this->reviews_limit && $this->reviews_limit > 20) {
-            $validator->errors()->add('reviews_limit', __('validation.company_show.reviews_limit_exceeded'));
-        }
-
-        if ($this->employees_limit && $this->employees_limit > 100) {
-            $validator->errors()->add('employees_limit', __('validation.company_show.employees_limit_exceeded'));
-        }
-
-        // Validate include_relations array size for performance
-        if ($this->include_relations && count($this->include_relations) > 20) {
-            $validator->errors()->add('include_relations', __('validation.company_show.too_many_relations'));
-        }
     }
 
     /**
@@ -659,5 +533,139 @@ class ShowCompanyRequest extends FormRequest
             'respect_privacy_settings' => $this->respect_privacy_settings ?? true,
             'anonymize_sensitive_data' => $this->anonymize_sensitive_data ?? false,
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Set default values
+        $this->merge([
+            'view_type' => $this->input('view_type', 'full'),
+            'format' => $this->input('format', 'html'),
+            'language' => $this->input('language', app()->getLocale()),
+            'track_view' => $this->input('track_view', true),
+            'respect_privacy_settings' => $this->input('respect_privacy_settings', true),
+            'jobs_limit' => $this->input('jobs_limit', 10),
+            'reviews_limit' => $this->input('reviews_limit', 5),
+            'employees_limit' => $this->input('employees_limit', 20),
+            'media_limit' => $this->input('media_limit', 20),
+            'timeline_limit' => $this->input('timeline_limit', 10),
+            'jobs_status' => $this->input('jobs_status', 'active'),
+            'reviews_sort' => $this->input('reviews_sort', 'newest'),
+            'financial_period' => $this->input('financial_period', 'current_year'),
+        ]);
+
+        // Ensure boolean fields are properly typed
+        $booleanFields = [
+            'load_statistics', 'load_analytics', 'load_performance_metrics',
+            'load_social_proof', 'include_jobs', 'include_reviews', 'include_employees',
+            'include_media', 'include_timeline', 'include_financials', 'track_view',
+            'no_cache', 'admin_view', 'include_sensitive_data', 'include_audit_trail',
+            'include_compliance_data', 'respect_privacy_settings', 'anonymize_sensitive_data',
+        ];
+
+        foreach ($booleanFields as $field) {
+            if ($this->has($field)) {
+                $this->merge([$field => $this->boolean($field)]);
+            }
+        }
+
+        // Ensure numeric fields are properly typed
+        $numericFields = [
+            'jobs_limit', 'jobs_category', 'reviews_limit', 'min_review_rating',
+            'employees_limit', 'media_limit', 'timeline_limit', 'cache_duration',
+        ];
+
+        foreach ($numericFields as $field) {
+            if ($this->has($field) && !empty($this->{$field})) {
+                $this->merge([$field => (int) $this->{$field}]);
+            }
+        }
+
+        // Clean string fields
+        $stringFields = [
+            'track_source', 'track_medium', 'track_campaign', 'employees_role', 'employees_department',
+        ];
+
+        foreach ($stringFields as $field) {
+            if ($this->has($field) && !empty($this->{$field})) {
+                $this->merge([$field => trim($this->{$field})]);
+            }
+        }
+    }
+
+    /**
+     * Validate admin access requirements.
+     *
+     * @param mixed $validator
+     */
+    protected function validateAdminAccess($validator): void
+    {
+        $user = auth()->user();
+
+        // Admin-specific options require admin role
+        $adminOptions = [
+            'include_financials', 'admin_view', 'include_sensitive_data',
+            'include_audit_trail', 'include_compliance_data',
+        ];
+
+        foreach ($adminOptions as $option) {
+            if ($this->has($option) && $this->{$option} && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
+                $validator->errors()->add($option, __('validation.company_show.admin_access_required'));
+            }
+        }
+    }
+
+    /**
+     * Validate data access permissions.
+     *
+     * @param mixed $validator
+     */
+    protected function validateDataAccess($validator): void
+    {
+        $company = $this->route('company');
+        $user = auth()->user();
+
+        // Financial data requires ownership or admin access
+        if ($this->include_financials && $company) {
+            if (!$user || (!$user->hasRole(['admin', 'super-admin']) && $company->user_id !== $user->id)) {
+                $validator->errors()->add('include_financials', __('validation.company_show.financial_access_denied'));
+            }
+        }
+
+        // Sensitive data requires special permissions
+        if ($this->include_sensitive_data && $company) {
+            if (!$user || !$user->can('viewSensitiveData', $company)) {
+                $validator->errors()->add('include_sensitive_data', __('validation.company_show.sensitive_data_access_denied'));
+            }
+        }
+    }
+
+    /**
+     * Validate business logic constraints.
+     *
+     * @param mixed $validator
+     */
+    protected function validateBusinessLogic($validator): void
+    {
+        // Validate reasonable limits for performance
+        if ($this->jobs_limit && $this->jobs_limit > 50) {
+            $validator->errors()->add('jobs_limit', __('validation.company_show.jobs_limit_exceeded'));
+        }
+
+        if ($this->reviews_limit && $this->reviews_limit > 20) {
+            $validator->errors()->add('reviews_limit', __('validation.company_show.reviews_limit_exceeded'));
+        }
+
+        if ($this->employees_limit && $this->employees_limit > 100) {
+            $validator->errors()->add('employees_limit', __('validation.company_show.employees_limit_exceeded'));
+        }
+
+        // Validate include_relations array size for performance
+        if ($this->include_relations && count($this->include_relations) > 20) {
+            $validator->errors()->add('include_relations', __('validation.company_show.too_many_relations'));
+        }
     }
 }

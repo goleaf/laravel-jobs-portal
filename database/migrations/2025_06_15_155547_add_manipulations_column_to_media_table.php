@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('media', function (Blueprint $table) {
             if (!Schema::hasColumn('media', 'manipulations')) {
-                
+                $table->json('manipulations')->default('[]')->after('uuid');
             }
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
     {
         Schema::table('media', function (Blueprint $table) {
             if (Schema::hasColumn('media', 'manipulations')) {
-                
+                $table->dropColumn('manipulations');
             }
         });
     }

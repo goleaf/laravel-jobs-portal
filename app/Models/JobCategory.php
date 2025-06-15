@@ -82,6 +82,7 @@ class JobCategory extends Model
         'slug',
         'image_path',
         'parent_id',
+        'image',
     ];
 
     /**

@@ -17,7 +17,17 @@ class InquiryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email(),
+            'phone' => $this->faker->phoneNumber(),
+            'subject' => $this->faker->sentence(),
+            'message' => $this->faker->text(),
+            'is_active' => true,
+            'is_read' => false,
+            'is_resolved' => false,
+            'status' => $this->faker->randomElement(['pending', 'in_progress', 'resolved']),
+            'priority' => $this->faker->numberBetween(1, 5),
+            'category' => $this->faker->randomElement(['general', 'technical', 'billing', 'support']),
         ];
     }
 }

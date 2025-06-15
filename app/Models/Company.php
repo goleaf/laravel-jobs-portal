@@ -428,7 +428,7 @@ class Company extends Model implements HasMedia
     /**
      * Get the featured records.
      */
-    public function featured(): MorphOne
+    public function featuredRecord(): MorphOne
     {
         return $this->morphOne(FeaturedRecord::class, 'owner');
     }
@@ -596,7 +596,11 @@ class Company extends Model implements HasMedia
      */
     public function getActiveJobsCount()
     {
-        return $this->jobs()->where('is_active', true)->count();
+        return $this->jobs()->where(function($query) {
+            $query->where('is_active', true)
+                  ->orWhere('status', 'active')
+                  ->orWhere('status', 1); // Job::STATUS_OPEN
+        })->count();
     }
 
     /**

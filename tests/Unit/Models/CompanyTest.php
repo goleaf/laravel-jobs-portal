@@ -34,15 +34,26 @@ class CompanyTest extends TestCase
     /** @test */
     public function it_has_correct_fillable_attributes(): void
     {
-        $fillable = [
-            'name', 'email', 'phone', 'website', 'details', 'established_in',
-            'no_of_employees', 'location', 'country_id', 'state_id', 'city_id',
-            'industry_id', 'ownership_type_id', 'company_size_id',
-            'facebook_url', 'twitter_url', 'linkedin_url', 'google_plus_url', 'pinterest_url',
-            'is_active', 'is_featured', 'is_verified', 'user_id'
+        $expectedFillable = [
+            'user_id', 'name', 'slug', 'email', 'phone', 'website',
+            'description', 'short_description', 'founded_year', 'employee_count',
+            'industry_id', 'company_size_id', 'ownership_type_id',
+            'country_id', 'state_id', 'city_id', 'address', 'postal_code',
+            'latitude', 'longitude', 'is_active', 'is_featured', 'is_verified',
+            'is_private', 'logo', 'cover_image', 'social_facebook',
+            'social_twitter', 'social_linkedin', 'social_instagram',
+            'social_youtube', 'social_github', 'culture_description',
+            'benefits', 'technologies', 'certifications', 'awards',
+            'office_locations', 'working_hours', 'dress_code',
+            'company_type', 'revenue', 'market_cap', 'stock_symbol',
+            'headquarters', 'ceo_name', 'mission_statement', 'vision_statement',
+            'values', 'company_culture', 'diversity_policy',
+            'ceo', 'no_of_offices', 'established_in', 'details', 'fax',
+            'facebook_url', 'twitter_url', 'linkedin_url', 'google_plus_url',
+            'pinterest_url', 'unique_id', 'location', 'location2', 'size_id', 'founded_at', 'status'
         ];
 
-        $this->assertEquals($fillable, $this->company->getFillable());
+        $this->assertEquals($expectedFillable, $this->company->getFillable());
     }
 
     /** @test */

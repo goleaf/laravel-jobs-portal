@@ -132,13 +132,19 @@ class CompanySizeTest extends TestCase
     /** @test */
     public function scope_default_returns_default_company_sizes()
     {
+        // Get initial count of default company sizes
+        $initialDefaultCount = CompanySize::default()->count();
+        
         CompanySize::factory()->count(3)->create(['is_default' => false]);
         CompanySize::factory()->count(1)->create(['is_default' => true]);
         
         $defaultCompanySizes = CompanySize::default()->get();
         
-        $this->assertCount(1, $defaultCompanySizes);
-        $this->assertTrue($defaultCompanySizes->first()->is_default);
+        // Should have 1 more default company size than before
+        $this->assertCount($initialDefaultCount + 1, $defaultCompanySizes);
+        $defaultCompanySizes->each(function ($companySize) {
+            $this->assertTrue($companySize->is_default);
+        });
     }
 
     /** @test */
@@ -171,6 +177,9 @@ class CompanySizeTest extends TestCase
     /** @test */
     public function scope_recent_returns_recently_created_company_sizes()
     {
+        // Get initial count of recent company sizes
+        $initialRecentCount = CompanySize::recent(30)->count();
+        
         // Create old company sizes
         CompanySize::factory()->count(2)->create(['created_at' => now()->subDays(60)]);
         
@@ -179,7 +188,8 @@ class CompanySizeTest extends TestCase
         
         $recentCompanySizes = CompanySize::recent(30)->get();
         
-        $this->assertCount(3, $recentCompanySizes);
+        // Should have 3 more recent company sizes than before
+        $this->assertCount($initialRecentCount + 3, $recentCompanySizes);
     }
 
     /** @test */
@@ -199,6 +209,9 @@ class CompanySizeTest extends TestCase
     /** @test */
     public function scope_with_companies_returns_company_sizes_that_have_companies()
     {
+        // Get initial count of company sizes with companies
+        $initialWithCompaniesCount = CompanySize::withCompanies()->count();
+        
         $companySizeWithCompanies = CompanySize::factory()->create();
         $companySizeWithoutCompanies = CompanySize::factory()->create();
         
@@ -206,8 +219,9 @@ class CompanySizeTest extends TestCase
         
         $companySizesWithCompanies = CompanySize::withCompanies()->get();
         
-        $this->assertCount(1, $companySizesWithCompanies);
-        $this->assertEquals($companySizeWithCompanies->id, $companySizesWithCompanies->first()->id);
+        // Should have 1 more company size with companies than before
+        $this->assertCount($initialWithCompaniesCount + 1, $companySizesWithCompanies);
+        $this->assertTrue($companySizesWithCompanies->contains($companySizeWithCompanies));
     }
 
     /** @test */

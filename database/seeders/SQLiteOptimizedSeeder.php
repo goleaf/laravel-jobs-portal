@@ -182,9 +182,6 @@ class SQLiteOptimizedSeeder extends Seeder
             $this->seedingProgress['front_settings'] = FrontSetting::count();
         }
         
-            $this->seedingProgress['env_settings'] = $envSettings->count();
-        } else {
-        }
         
         $this->command->info("✅ System settings seeded");
     }

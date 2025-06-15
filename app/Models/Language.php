@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -25,7 +24,6 @@ use Spatie\Activitylog\LogOptions;
  * @property int|null $sort_order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $candidates
  * @property-read string $display_name
@@ -60,7 +58,6 @@ use Spatie\Activitylog\LogOptions;
  */
 class Language extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
     public $table = 'languages';
 
     protected $fillable = [
@@ -87,7 +84,6 @@ class Language extends Model
             'sort_order' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
         ];
     }
 
@@ -507,8 +503,5 @@ class Language extends Model
             $model->clearCaches();
         });
 
-        static::restored(function ($model) {
-            $model->clearCaches();
-        });
     }
 }

@@ -58,26 +58,90 @@ class Job extends Model
     public $table = 'jobs';
 
     /**
-     * Job status constants
+     * Job status constants (numeric)
      */
-    public const STATUS_DRAFT = 'draft';
-    public const STATUS_OPEN = 'open';
-    public const STATUS_CLOSED = 'closed';
-    public const STATUS_PAUSED = 'paused';
+    public const STATUS_DRAFT = 0;
+    public const STATUS_OPEN = 1;
+    public const STATUS_CLOSED = 2;
+    public const STATUS_PAUSED = 3;
+    public const STATUS_SUSPENDED = 4;
+
+    /**
+     * Job suspension constants
+     */
+    public const NOT_SUSPENDED = 0;
+
+    /**
+     * Boolean constants
+     */
+    public const YES = 1;
+    public const NO = 0;
+    public const SELECT_FEATURD = 2;
+    public const SELECT_IS_SUSPENDED = 2;
+    public const SELECT_IS_FREELANCER = 2;
+    public const SELECT_JOBS_ACTIVE = 2;
+
+    /**
+     * No preference constants
+     */
+    public const NO_PREFERENCE = [
+        2 => 'Both',
+        1 => 'Male',
+        0 => 'Female',
+    ];
+
+    /**
+     * Gender constants
+     */
+    public const GENDER = [
+        0 => 'Male',
+        1 => 'Female',
+    ];
+
+    /**
+     * Status array constants
+     */
+    public const STATUS_ARRAY = [
+        0 => 'Drafted',
+        1 => 'Live',
+        2 => 'Closed',
+        3 => 'Paused',
+    ];
+
+    /**
+     * Status color constants
+     */
+    public const STATUS_COLOR = [
+        0 => 'warning',
+        1 => 'success',
+        2 => 'danger',
+        3 => 'primary',
+    ];
+
+    /**
+     * Favorite job status constants
+     */
+    public const FAVORITE_JOB_STATUS = [
+        1 => 'Live',
+        2 => 'Closed',
+        3 => 'Paused',
+    ];
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'job_id',
         'job_title', 'title', 'description', 'requirements', 'benefits',
-        'company_id', 'user_id', 'job_type_id', 'career_level_id', 
+        'company_id', 'user_id', 'job_type_id', 'job_category_id', 'career_level_id', 
         'functional_area_id', 'job_shift_id', 'degree_level_id', 'position_id',
         'currency_id', 'salary_period_id', 'country_id', 'state_id', 'city_id',
         'salary_from', 'salary_to', 'salary_min', 'salary_max',
         'job_expiry_date', 'expires_at', 'published_at',
         'country', 'state', 'city', 'location', 'address',
         'no_preference', 'hide_salary', 'is_freelance', 'is_suspended',
-        'is_remote', 'is_featured', 'is_active', 'status'
+        'is_remote', 'is_featured', 'is_active', 'status', 'is_created_by_admin',
+        'position', 'experience', 'last_change', 'key_responsibilities'
     ];
 
     /**
@@ -394,11 +458,134 @@ class Job extends Model
     }
 
     /**
+     * Get the job type.
+     */
+    public function jobType(): BelongsTo
+    {
+        return $this->belongsTo(JobType::class);
+    }
+
+    /**
+     * Get the job category.
+     */
+    public function jobCategory(): BelongsTo
+    {
+        return $this->belongsTo(JobCategory::class);
+    }
+
+    /**
+     * Get the career level.
+     */
+    public function careerLevel(): BelongsTo
+    {
+        return $this->belongsTo(CareerLevel::class);
+    }
+
+    /**
+     * Get the functional area.
+     */
+    public function functionalArea(): BelongsTo
+    {
+        return $this->belongsTo(FunctionalArea::class);
+    }
+
+    /**
+     * Get the job shift.
+     */
+    public function jobShift(): BelongsTo
+    {
+        return $this->belongsTo(JobShift::class);
+    }
+
+    /**
+     * Get the degree level.
+     */
+    public function degreeLevel(): BelongsTo
+    {
+        return $this->belongsTo(RequiredDegreeLevel::class);
+    }
+
+    /**
+     * Get the currency.
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(SalaryCurrency::class);
+    }
+
+    /**
+     * Get the salary period.
+     */
+    public function salaryPeriod(): BelongsTo
+    {
+        return $this->belongsTo(SalaryPeriod::class);
+    }
+
+    /**
+     * Get the country.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Get the state.
+     */
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    /**
+     * Get the city.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
      * Get the applied jobs for this job.
      */
     public function appliedJobs(): HasMany
     {
         return $this->hasMany(AppliedJob::class);
+    }
+
+    /**
+     * Get the job skills.
+     */
+    public function jobsSkill(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'jobs_skills', 'job_id', 'skill_id');
+    }
+
+    /**
+     * Get the job tags.
+     */
+    public function jobsTag(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'jobs_tags', 'job_id', 'tag_id');
+    }
+
+    /**
+     * Get the featured records.
+     */
+    public function featured(): MorphOne
+    {
+        return $this->morphOne(FeaturedRecord::class, 'record');
+    }
+
+    /**
+     * Get the active featured records.
+     */
+    public function activeFeatured(): MorphOne
+    {
+        return $this->morphOne(FeaturedRecord::class, 'record')
+                    ->where('start_date', '<=', now())
+                    ->where('end_date', '>=', now())
+                    ->where('is_active', true);
     }
 
     // Additional scopes and methods can be added here as needed for the job portal project

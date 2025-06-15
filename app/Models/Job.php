@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasTaxonomy;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -56,6 +57,141 @@ class Job extends Model
     use LogsActivity;
     use SoftDeletes;
     use HasTaxonomy;
+    use HasSettingsField;
+
+    /**
+     * Default settings for job model.
+     */
+    public $defaultSettings = [
+        'visibility' => [
+            'public' => true,
+            'searchable' => true,
+            'featured' => false,
+            'highlight' => false,
+            'urgent' => false,
+        ],
+        'application' => [
+            'auto_accept' => false,
+            'require_cover_letter' => false,
+            'require_portfolio' => false,
+            'max_applications' => 100,
+            'application_deadline_reminder' => true,
+            'send_confirmation_email' => true,
+        ],
+        'notifications' => [
+            'new_application' => true,
+            'application_status_change' => true,
+            'job_expiry_reminder' => true,
+            'daily_digest' => false,
+            'weekly_summary' => true,
+        ],
+        'display' => [
+            'show_salary' => true,
+            'show_company_logo' => true,
+            'show_application_count' => false,
+            'show_view_count' => false,
+            'layout' => 'standard', // standard, compact, detailed
+            'color_scheme' => 'default',
+        ],
+        'seo' => [
+            'custom_meta_title' => '',
+            'custom_meta_description' => '',
+            'custom_keywords' => '',
+            'canonical_url' => '',
+            'robots_index' => true,
+            'robots_follow' => true,
+        ],
+        'social' => [
+            'share_enabled' => true,
+            'auto_post_linkedin' => false,
+            'auto_post_twitter' => false,
+            'auto_post_facebook' => false,
+            'custom_share_message' => '',
+        ],
+        'analytics' => [
+            'track_views' => true,
+            'track_applications' => true,
+            'track_shares' => true,
+            'google_analytics_enabled' => false,
+            'custom_tracking_code' => '',
+        ],
+        'workflow' => [
+            'auto_close_on_expiry' => true,
+            'auto_extend_expiry' => false,
+            'require_approval' => false,
+            'auto_publish' => true,
+            'screening_questions_enabled' => false,
+        ],
+        'premium' => [
+            'boost_enabled' => false,
+            'priority_listing' => false,
+            'extended_visibility' => false,
+            'premium_badge' => false,
+            'featured_placement' => false,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'visibility.public' => 'boolean',
+        'visibility.searchable' => 'boolean',
+        'visibility.featured' => 'boolean',
+        'visibility.highlight' => 'boolean',
+        'visibility.urgent' => 'boolean',
+        
+        'application.auto_accept' => 'boolean',
+        'application.require_cover_letter' => 'boolean',
+        'application.require_portfolio' => 'boolean',
+        'application.max_applications' => 'integer|min:1|max:1000',
+        'application.application_deadline_reminder' => 'boolean',
+        'application.send_confirmation_email' => 'boolean',
+        
+        'notifications.new_application' => 'boolean',
+        'notifications.application_status_change' => 'boolean',
+        'notifications.job_expiry_reminder' => 'boolean',
+        'notifications.daily_digest' => 'boolean',
+        'notifications.weekly_summary' => 'boolean',
+        
+        'display.show_salary' => 'boolean',
+        'display.show_company_logo' => 'boolean',
+        'display.show_application_count' => 'boolean',
+        'display.show_view_count' => 'boolean',
+        'display.layout' => 'string|in:standard,compact,detailed',
+        'display.color_scheme' => 'string|in:default,blue,green,red,purple',
+        
+        'seo.custom_meta_title' => 'string|max:60',
+        'seo.custom_meta_description' => 'string|max:160',
+        'seo.custom_keywords' => 'string|max:255',
+        'seo.canonical_url' => 'url|nullable',
+        'seo.robots_index' => 'boolean',
+        'seo.robots_follow' => 'boolean',
+        
+        'social.share_enabled' => 'boolean',
+        'social.auto_post_linkedin' => 'boolean',
+        'social.auto_post_twitter' => 'boolean',
+        'social.auto_post_facebook' => 'boolean',
+        'social.custom_share_message' => 'string|max:280',
+        
+        'analytics.track_views' => 'boolean',
+        'analytics.track_applications' => 'boolean',
+        'analytics.track_shares' => 'boolean',
+        'analytics.google_analytics_enabled' => 'boolean',
+        'analytics.custom_tracking_code' => 'string|max:500',
+        
+        'workflow.auto_close_on_expiry' => 'boolean',
+        'workflow.auto_extend_expiry' => 'boolean',
+        'workflow.require_approval' => 'boolean',
+        'workflow.auto_publish' => 'boolean',
+        'workflow.screening_questions_enabled' => 'boolean',
+        
+        'premium.boost_enabled' => 'boolean',
+        'premium.priority_listing' => 'boolean',
+        'premium.extended_visibility' => 'boolean',
+        'premium.premium_badge' => 'boolean',
+        'premium.featured_placement' => 'boolean',
+    ];
 
     /**
      * Job status constants (numeric).

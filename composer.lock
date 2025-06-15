@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a6eff06c08b703d9e7a91941e63242c",
+    "content-hash": "c999956363f6798ae08ded9d6c0d9de1",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2466,6 +2466,60 @@
                 }
             ],
             "time": "2025-02-03T10:55:03+00:00"
+        },
+        {
+            "name": "justbetter/laravel-unique-values",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justbetter/laravel-unique-values.git",
+                "reference": "5c947d78d7d0cefc65f5d6004816be6f40b9e746"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justbetter/laravel-unique-values/zipball/5c947d78d7d0cefc65f5d6004816be6f40b9e746",
+                "reference": "5c947d78d7d0cefc65f5d6004816be6f40b9e746",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^11.0|^12.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.20",
+                "orchestra/testbench": "^9.0",
+                "pestphp/pest": "^3.7",
+                "phpstan/phpstan-mockery": "^2.0",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JustBetter\\UniqueValues\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JustBetter\\UniqueValues\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Vincent Boon",
+                    "email": "vincent@justbetter.nl",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Package to generate unique values with support for concurrency utilizing cache locking",
+            "support": {
+                "issues": "https://github.com/justbetter/laravel-unique-values/issues",
+                "source": "https://github.com/justbetter/laravel-unique-values/tree/1.0.0"
+            },
+            "time": "2025-03-14T13:16:30+00:00"
         },
         {
             "name": "kelunik/certificate",

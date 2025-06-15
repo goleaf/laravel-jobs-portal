@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\FileService;
 use App\Traits\HasTaxonomy;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -116,6 +117,7 @@ class Candidate extends Model
     use HasFactory;
     use LogsActivity;
     use HasTaxonomy;
+    use HasSettingsField;
 
     public const RESUME_PATH = 'candidates/resumes';
     public const IMAGE_PATH = 'candidates/images';
@@ -883,4 +885,161 @@ class Candidate extends Model
             cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
         });
     }
+
+    /**
+     * Default settings for candidate model.
+     */
+    public $defaultSettings = [
+        'profile' => [
+            'visibility' => 'public', // public, private, recruiters_only
+            'show_contact_info' => true,
+            'show_salary_expectations' => true,
+            'show_experience_details' => true,
+            'show_education_details' => true,
+            'show_skills' => true,
+            'show_resume' => true,
+            'show_profile_image' => true,
+            'searchable' => true,
+        ],
+        'privacy' => [
+            'allow_recruiter_contact' => true,
+            'allow_company_contact' => true,
+            'show_current_company' => false,
+            'anonymous_profile' => false,
+            'hide_from_current_employer' => true,
+            'block_specific_companies' => [],
+            'allow_profile_download' => false,
+        ],
+        'job_preferences' => [
+            'job_alerts_enabled' => true,
+            'preferred_job_types' => [], // remote, onsite, hybrid
+            'preferred_industries' => [],
+            'preferred_locations' => [],
+            'salary_range_min' => 0,
+            'salary_range_max' => 0,
+            'willing_to_relocate' => false,
+            'travel_percentage' => 0, // 0-100
+            'notice_period_days' => 30,
+            'immediate_availability' => false,
+        ],
+        'notifications' => [
+            'job_matches' => true,
+            'application_updates' => true,
+            'recruiter_messages' => true,
+            'profile_views' => false,
+            'weekly_job_digest' => true,
+            'monthly_market_insights' => true,
+            'email_notifications' => true,
+            'sms_notifications' => false,
+            'push_notifications' => true,
+        ],
+        'dashboard' => [
+            'default_view' => 'overview', // overview, jobs, applications, profile
+            'show_profile_completion' => true,
+            'show_recent_applications' => true,
+            'show_job_recommendations' => true,
+            'show_profile_views' => true,
+            'show_saved_jobs' => true,
+            'items_per_page' => 10,
+            'auto_refresh' => false,
+        ],
+        'search' => [
+            'save_search_history' => true,
+            'default_sort' => 'relevance', // relevance, date, salary
+            'results_per_page' => 20,
+            'location_radius' => 50, // km
+            'include_remote_jobs' => true,
+            'auto_apply_filters' => false,
+        ],
+        'career' => [
+            'career_goals' => '',
+            'preferred_work_culture' => '', // startup, corporate, remote, etc.
+            'skills_to_develop' => [],
+            'certifications_pursuing' => [],
+            'languages_spoken' => [],
+            'availability_status' => 'open', // open, passive, not_looking
+        ],
+        'social' => [
+            'linkedin_profile' => '',
+            'github_profile' => '',
+            'portfolio_website' => '',
+            'twitter_handle' => '',
+            'show_social_links' => true,
+            'allow_social_login' => true,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'profile.visibility' => 'string|in:public,private,recruiters_only',
+        'profile.show_contact_info' => 'boolean',
+        'profile.show_salary_expectations' => 'boolean',
+        'profile.show_experience_details' => 'boolean',
+        'profile.show_education_details' => 'boolean',
+        'profile.show_skills' => 'boolean',
+        'profile.show_resume' => 'boolean',
+        'profile.show_profile_image' => 'boolean',
+        'profile.searchable' => 'boolean',
+        
+        'privacy.allow_recruiter_contact' => 'boolean',
+        'privacy.allow_company_contact' => 'boolean',
+        'privacy.show_current_company' => 'boolean',
+        'privacy.anonymous_profile' => 'boolean',
+        'privacy.hide_from_current_employer' => 'boolean',
+        'privacy.block_specific_companies' => 'array',
+        'privacy.allow_profile_download' => 'boolean',
+        
+        'job_preferences.job_alerts_enabled' => 'boolean',
+        'job_preferences.preferred_job_types' => 'array',
+        'job_preferences.preferred_industries' => 'array',
+        'job_preferences.preferred_locations' => 'array',
+        'job_preferences.salary_range_min' => 'numeric|min:0',
+        'job_preferences.salary_range_max' => 'numeric|min:0',
+        'job_preferences.willing_to_relocate' => 'boolean',
+        'job_preferences.travel_percentage' => 'integer|min:0|max:100',
+        'job_preferences.notice_period_days' => 'integer|min:0|max:365',
+        'job_preferences.immediate_availability' => 'boolean',
+        
+        'notifications.job_matches' => 'boolean',
+        'notifications.application_updates' => 'boolean',
+        'notifications.recruiter_messages' => 'boolean',
+        'notifications.profile_views' => 'boolean',
+        'notifications.weekly_job_digest' => 'boolean',
+        'notifications.monthly_market_insights' => 'boolean',
+        'notifications.email_notifications' => 'boolean',
+        'notifications.sms_notifications' => 'boolean',
+        'notifications.push_notifications' => 'boolean',
+        
+        'dashboard.default_view' => 'string|in:overview,jobs,applications,profile',
+        'dashboard.show_profile_completion' => 'boolean',
+        'dashboard.show_recent_applications' => 'boolean',
+        'dashboard.show_job_recommendations' => 'boolean',
+        'dashboard.show_profile_views' => 'boolean',
+        'dashboard.show_saved_jobs' => 'boolean',
+        'dashboard.items_per_page' => 'integer|min:5|max:100',
+        'dashboard.auto_refresh' => 'boolean',
+        
+        'search.save_search_history' => 'boolean',
+        'search.default_sort' => 'string|in:relevance,date,salary',
+        'search.results_per_page' => 'integer|min:10|max:100',
+        'search.location_radius' => 'integer|min:1|max:500',
+        'search.include_remote_jobs' => 'boolean',
+        'search.auto_apply_filters' => 'boolean',
+        
+        'career.career_goals' => 'string|max:1000',
+        'career.preferred_work_culture' => 'string|max:255',
+        'career.skills_to_develop' => 'array',
+        'career.certifications_pursuing' => 'array',
+        'career.languages_spoken' => 'array',
+        'career.availability_status' => 'string|in:open,passive,not_looking',
+        
+        'social.linkedin_profile' => 'url|nullable',
+        'social.github_profile' => 'url|nullable',
+        'social.portfolio_website' => 'url|nullable',
+        'social.twitter_handle' => 'string|max:50|nullable',
+        'social.show_social_links' => 'boolean',
+        'social.allow_social_login' => 'boolean',
+    ];
 }

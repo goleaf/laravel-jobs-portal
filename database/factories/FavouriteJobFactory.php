@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +19,9 @@ class FavouriteJobFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
+            'job_id' => Job::factory(),
+            'is_active' => $this->faker->boolean(90),
         ];
     }
 }

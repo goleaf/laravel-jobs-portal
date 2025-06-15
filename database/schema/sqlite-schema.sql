@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS "countries"(
   "timezone" varchar,
   "languages" text,
   "deleted_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "states"(
   "id" integer primary key autoincrement not null,
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS "states"(
   "is_active" tinyint(1) not null default '1',
   "is_featured" tinyint(1) not null default '0',
   "sort_order" integer not null default '0',
+  "settings" text,
   foreign key("country_id") references "countries"("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "users"(
@@ -72,6 +75,7 @@ CREATE TABLE IF NOT EXISTS "users"(
   "user_type" varchar check("user_type" in('candidate', 'employer', 'admin')) not null default 'candidate',
   "name" varchar,
   "deleted_at" datetime,
+  "settings" text,
   foreign key("country_id") references "countries"("id") on delete set null on update cascade,
   foreign key("state_id") references "states"("id") on delete set null on update cascade,
   foreign key("city_id") references "cities"("id") on delete set null on update cascade
@@ -164,6 +168,8 @@ CREATE TABLE IF NOT EXISTS "job_categories"(
   "is_default" tinyint(1) not null default '0',
   "image_path" varchar,
   "is_active" tinyint(1) not null default '1'
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "job_categories_name_unique" on "job_categories"("name");
 CREATE TABLE IF NOT EXISTS "settings"(
@@ -172,6 +178,8 @@ CREATE TABLE IF NOT EXISTS "settings"(
   "value" text not null,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "company_sizes"(
   "id" integer primary key autoincrement not null,
@@ -189,6 +197,8 @@ CREATE TABLE IF NOT EXISTS "industries"(
   "created_at" datetime,
   "updated_at" datetime,
   "is_default" tinyint(1) not null default '0'
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "industries_name_unique" on "industries"("name");
 CREATE TABLE IF NOT EXISTS "ownership_types"(
@@ -249,6 +259,8 @@ CREATE TABLE IF NOT EXISTS "job_shifts"(
   "created_at" datetime,
   "updated_at" datetime,
   "is_default" tinyint(1) not null default '0'
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "job_shifts_shift_unique" on "job_shifts"("shift");
 CREATE TABLE IF NOT EXISTS "marital_status"(
@@ -286,6 +298,8 @@ CREATE TABLE IF NOT EXISTS "functional_areas"(
   "created_at" datetime,
   "updated_at" datetime,
   "is_default" tinyint(1) not null default '0'
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "functional_areas_name_unique" on "functional_areas"(
   "name"
@@ -309,6 +323,8 @@ CREATE TABLE IF NOT EXISTS "salary_currencies"(
   "is_default" tinyint(1) not null default '0',
   "currency_icon" varchar not null default '$',
   "currency_code" varchar not null
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "salary_currencies_currency_name_unique" on "salary_currencies"(
   "currency_name"
@@ -321,6 +337,8 @@ CREATE TABLE IF NOT EXISTS "skills"(
   "updated_at" datetime,
   "is_default" tinyint(1) not null default '0',
   "deleted_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "jobs_skill"(
   "id" integer primary key autoincrement not null,
@@ -348,6 +366,8 @@ CREATE TABLE IF NOT EXISTS "testimonials"(
   "sort_order" integer,
   "testimonial_date" date,
   "deleted_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "favourite_jobs"(
   "id" integer primary key autoincrement not null,
@@ -355,6 +375,8 @@ CREATE TABLE IF NOT EXISTS "favourite_jobs"(
   "job_id" integer not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "is_active" tinyint(1) not null default '1',
+  "deleted_at" datetime,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("job_id") references "jobs"("id") on delete cascade on update cascade
 );
@@ -365,6 +387,7 @@ CREATE TABLE IF NOT EXISTS "reported_jobs"(
   "note" text not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "settings" text,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("job_id") references "jobs"("id") on delete cascade on update cascade
 );
@@ -386,6 +409,7 @@ CREATE TABLE IF NOT EXISTS "candidate_experiences"(
   "employment_type" varchar,
   "salary" numeric,
   "is_verified" tinyint(1) not null default '0',
+  "settings" text,
   foreign key("candidate_id") references "candidates"("id") on delete cascade on update cascade,
   foreign key("country_id") references "countries"("id") on delete set null on update cascade,
   foreign key("state_id") references "states"("id") on delete set null on update cascade,
@@ -400,6 +424,12 @@ CREATE TABLE IF NOT EXISTS "email_jobs"(
   "friend_email" varchar not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "is_active" tinyint(1) not null default '1',
+  "is_sent" tinyint(1) not null default '0',
+  "status" varchar not null default 'pending',
+  "open_count" integer not null default '0',
+  "click_count" integer not null default '0',
+  "deleted_at" datetime,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("job_id") references "jobs"("id") on delete cascade on update cascade
 );
@@ -409,6 +439,9 @@ CREATE TABLE IF NOT EXISTS "favourite_companies"(
   "company_id" integer not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "is_active" tinyint(1) not null default '1',
+  "is_featured" tinyint(1) not null default '0',
+  "deleted_at" datetime,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("company_id") references "companies"("id") on delete cascade on update cascade
 );
@@ -419,6 +452,7 @@ CREATE TABLE IF NOT EXISTS "reported_to_companies"(
   "note" text not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "settings" text,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("company_id") references "companies"("id") on delete cascade on update cascade
 );
@@ -459,6 +493,8 @@ CREATE TABLE IF NOT EXISTS "news_letters"(
   "email" varchar not null,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "news_letters_email_unique" on "news_letters"("email");
 CREATE TABLE IF NOT EXISTS "noticeboards"(
@@ -478,13 +514,6 @@ CREATE TABLE IF NOT EXISTS "candidate_skills"(
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("skill_id") references "skills"("id") on delete cascade on update cascade
 );
-CREATE TABLE IF NOT EXISTS "faqs"(
-  "id" integer primary key autoincrement not null,
-  "title" varchar not null,
-  "description" text not null,
-  "created_at" datetime,
-  "updated_at" datetime
-);
 CREATE TABLE IF NOT EXISTS "inquiries"(
   "id" integer primary key autoincrement not null,
   "name" varchar not null,
@@ -495,6 +524,13 @@ CREATE TABLE IF NOT EXISTS "inquiries"(
   "created_at" datetime,
   "updated_at" datetime,
   "is_active" tinyint(1) not null default '1'
+  ,
+  "is_read" tinyint(1) not null default '0',
+  "is_resolved" tinyint(1) not null default '0',
+  "status" varchar not null default 'pending',
+  "priority" integer not null default '1',
+  "category" varchar not null default 'general',
+  "phone" varchar
 );
 CREATE TABLE IF NOT EXISTS "post_categories"(
   "id" integer primary key autoincrement not null,
@@ -519,6 +555,7 @@ CREATE TABLE IF NOT EXISTS "posts"(
   "is_default" tinyint(1) not null default '0',
   "image_path" varchar,
   "deleted_at" datetime,
+  "settings" text,
   foreign key("created_by") references "users"("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "post_assigned_categories"(
@@ -535,6 +572,7 @@ CREATE TABLE IF NOT EXISTS "reported_to_candidates"(
   "note" text not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "settings" text,
   foreign key("user_id") references "users"("id") on delete cascade on update cascade,
   foreign key("candidate_id") references "candidates"("id") on delete cascade on update cascade
 );
@@ -562,6 +600,8 @@ CREATE TABLE IF NOT EXISTS "plans"(
   "analytics_access" tinyint(1) not null default '0',
   "max_featured_jobs" integer not null default '0',
   "duration_days" integer not null default '30'
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "plans_name_unique" on "plans"("name");
 CREATE TABLE IF NOT EXISTS "subscription_items"(
@@ -606,6 +646,8 @@ CREATE TABLE IF NOT EXISTS "front_settings"(
   "updated_at" datetime,
   "header_logo_path" varchar,
   "footer_logo_path" varchar
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "featured_records"(
   "id" integer primary key autoincrement not null,
@@ -619,6 +661,7 @@ CREATE TABLE IF NOT EXISTS "featured_records"(
   "created_at" datetime,
   "updated_at" datetime,
   "is_active" tinyint(1) not null default '1',
+  "settings" text,
   foreign key("user_id") references users("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "jobs_alerts"(
@@ -637,6 +680,8 @@ CREATE TABLE IF NOT EXISTS "image_sliders"(
   "created_at" datetime,
   "updated_at" datetime,
   "image_path" varchar
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "notifications"(
   "id" integer primary key autoincrement not null,
@@ -658,6 +703,8 @@ CREATE TABLE IF NOT EXISTS "notification_settings"(
   "created_at" datetime,
   "updated_at" datetime,
   "type" varchar
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "header_sliders"(
   "id" integer primary key autoincrement not null,
@@ -666,6 +713,8 @@ CREATE TABLE IF NOT EXISTS "header_sliders"(
   "updated_at" datetime,
   "image_path" varchar,
   "deleted_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "subscriptions"(
   "id" integer primary key autoincrement not null,
@@ -711,15 +760,8 @@ CREATE TABLE IF NOT EXISTS "branding_sliders"(
   "start_date" datetime,
   "end_date" datetime,
   "meta" text
-);
-CREATE TABLE IF NOT EXISTS "email_templates"(
-  "id" integer primary key autoincrement not null,
-  "template_name" varchar not null,
-  "subject" varchar not null,
-  "body" text not null,
-  "variables" text not null,
-  "created_at" datetime,
-  "updated_at" datetime
+  ,
+  "settings" text
 );
 CREATE UNIQUE INDEX "failed_jobs_uuid_unique" on "failed_jobs"("uuid");
 CREATE TABLE IF NOT EXISTS "post_comments"(
@@ -754,6 +796,7 @@ CREATE TABLE IF NOT EXISTS "job_applications"(
   "created_at" datetime,
   "updated_at" datetime,
   "job_stage_id" integer,
+  "settings" text,
   foreign key("candidate_id") references candidates("id") on delete cascade on update cascade,
   foreign key("job_id") references jobs("id") on delete cascade on update cascade,
   foreign key("job_stage_id") references "job_stages"("id") on delete cascade on update cascade
@@ -782,6 +825,8 @@ CREATE TABLE IF NOT EXISTS "cms_services"(
   "updated_at" datetime,
   "image_path" varchar,
   "deleted_at" datetime
+  ,
+  "settings" text
 );
 CREATE TABLE IF NOT EXISTS "transactions"(
   "id" integer primary key autoincrement not null,
@@ -834,6 +879,9 @@ CREATE TABLE IF NOT EXISTS "jobs"(
   "key_responsibilities" text,
   "deleted_at" datetime,
   "is_featured" tinyint(1) not null default '0',
+  "settings" text,
+  "job_reference" varchar,
+  "slug" varchar,
   foreign key("city_id") references cities("id") on delete set null on update cascade,
   foreign key("state_id") references states("id") on delete set null on update cascade,
   foreign key("country_id") references countries("id") on delete set null on update cascade,
@@ -854,6 +902,9 @@ CREATE TABLE IF NOT EXISTS "env_settings"(
   "value" text not null,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "settings" text,
+  "deleted_at" datetime
 );
 CREATE TABLE IF NOT EXISTS "files"(
   "id" integer primary key autoincrement not null,
@@ -871,6 +922,11 @@ CREATE TABLE IF NOT EXISTS "files"(
   "responsive_images" text,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "is_active" tinyint(1) not null default '1',
+  "is_public" tinyint(1) not null default '0',
+  "is_temporary" tinyint(1) not null default '0',
+  "deleted_at" datetime
 );
 CREATE INDEX "files_model_type_model_id_index" on "files"(
   "model_type",
@@ -943,6 +999,11 @@ CREATE TABLE IF NOT EXISTS "media"(
   "order_column" integer,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "deleted_at" datetime,
+  "is_active" tinyint(1) not null default '1',
+  "is_featured" tinyint(1) not null default '0',
+  "is_processed" tinyint(1) not null default '0'
 );
 CREATE INDEX "media_model_type_model_id_index" on "media"(
   "model_type",
@@ -1090,6 +1151,7 @@ CREATE TABLE IF NOT EXISTS "cities"(
   "timezone" varchar,
   "population" integer,
   "deleted_at" datetime,
+  "settings" text,
   foreign key("state_id") references states("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "candidates"(
@@ -1117,6 +1179,7 @@ CREATE TABLE IF NOT EXISTS "candidates"(
   "resume_path" varchar,
   "image_path" varchar,
   "city_id" integer,
+  "settings" text,
   foreign key("last_change") references users("id") on delete no action on update no action,
   foreign key("user_id") references users("id") on delete cascade on update cascade,
   foreign key("marital_status_id") references marital_status("id") on delete cascade on update cascade,
@@ -1167,6 +1230,7 @@ CREATE TABLE IF NOT EXISTS "companies"(
   "state_id" integer,
   "is_verified" tinyint(1) not null default '0',
   "no_of_employees" integer,
+  "settings" text,
   foreign key("city_id") references cities("id") on delete set null on update cascade,
   foreign key("user_id") references users("id") on delete cascade on update cascade,
   foreign key("industry_id") references industries("id") on delete cascade on update cascade,
@@ -1191,6 +1255,144 @@ CREATE INDEX "featured_records_time_index" on "featured_records"(
 CREATE INDEX "featured_records_is_active_index" on "featured_records"(
   "is_active"
 );
+CREATE TABLE IF NOT EXISTS "frontsettings"(
+  "id" integer primary key autoincrement not null,
+  "key" varchar not null,
+  "value" text,
+  "type" varchar not null default 'text',
+  "group" varchar,
+  "description" text,
+  "is_active" tinyint(1) not null default '1',
+  "created_at" datetime,
+  "updated_at" datetime
+);
+CREATE UNIQUE INDEX "frontsettings_key_unique" on "frontsettings"("key");
+CREATE TABLE IF NOT EXISTS "custommedias"(
+  "id" integer primary key autoincrement not null,
+  "model_type" varchar not null,
+  "model_id" integer not null,
+  "uuid" varchar,
+  "collection_name" varchar not null,
+  "name" varchar not null,
+  "file_name" varchar not null,
+  "mime_type" varchar,
+  "disk" varchar not null,
+  "conversions_disk" varchar,
+  "size" integer not null,
+  "manipulations" text not null,
+  "custom_properties" text not null,
+  "generated_conversions" text not null,
+  "order_column" integer,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "deleted_at" datetime,
+  "is_active" tinyint(1) not null default '1',
+  "is_featured" tinyint(1) not null default '0',
+  "is_processed" tinyint(1) not null default '0',
+  "title" varchar,
+  "description" text,
+  "alt_text" varchar,
+  "caption" text,
+  "copyright" varchar,
+  "responsive_images" text
+);
+CREATE INDEX "custommedias_model_type_model_id_index" on "custommedias"(
+  "model_type",
+  "model_id"
+);
+CREATE INDEX "custommedias_collection_name_index" on "custommedias"(
+  "collection_name"
+);
+CREATE UNIQUE INDEX "custommedias_uuid_unique" on "custommedias"("uuid");
+CREATE TABLE IF NOT EXISTS "faqs"(
+  "id" integer primary key autoincrement not null,
+  "title" varchar not null,
+  "description" text not null,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "category" varchar,
+  "user_id" integer,
+  "is_active" tinyint(1) not null default '1',
+  "is_featured" tinyint(1) not null default '0',
+  "is_published" tinyint(1) not null default '1',
+  "view_count" integer not null default '0',
+  "helpful_count" integer not null default '0',
+  "not_helpful_count" integer not null default '0',
+  "sort_order" integer not null default '0',
+  "tags" text,
+  "meta" text,
+  "published_at" datetime,
+  "deleted_at" datetime,
+  "settings" text,
+  foreign key("user_id") references "users"("id") on delete set null
+);
+CREATE TABLE IF NOT EXISTS "email_templates"(
+  "id" integer primary key autoincrement not null,
+  "template_name" varchar not null,
+  "subject" varchar not null,
+  "body" text not null,
+  "variables" text not null,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "deleted_at" datetime,
+  "settings" text
+);
+CREATE TABLE IF NOT EXISTS "model_settings"(
+  "id" integer primary key autoincrement not null,
+  "model_id" integer not null,
+  "model_type" varchar not null,
+  "settings" text not null,
+  "created_at" datetime,
+  "updated_at" datetime
+);
+CREATE UNIQUE INDEX "model_settings_model_id_model_type_unique" on "model_settings"(
+  "model_id",
+  "model_type"
+);
+CREATE TABLE IF NOT EXISTS "user_settings"(
+  "id" integer primary key autoincrement not null,
+  "user_id" integer not null,
+  "settings" text,
+  "created_at" datetime,
+  "updated_at" datetime,
+  foreign key("user_id") references "users"("id") on delete cascade
+);
+CREATE INDEX "user_settings_user_id_index" on "user_settings"("user_id");
+CREATE TABLE IF NOT EXISTS "health_check_result_history_items"(
+  "id" integer primary key autoincrement not null,
+  "check_name" varchar not null,
+  "check_label" varchar not null,
+  "status" varchar not null,
+  "notification_message" text,
+  "short_summary" varchar,
+  "meta" text not null,
+  "ended_at" datetime not null,
+  "batch" varchar not null,
+  "created_at" datetime,
+  "updated_at" datetime
+);
+CREATE INDEX "health_check_result_history_items_created_at_index" on "health_check_result_history_items"(
+  "created_at"
+);
+CREATE INDEX "health_check_result_history_items_batch_index" on "health_check_result_history_items"(
+  "batch"
+);
+CREATE TABLE IF NOT EXISTS "unique_values"(
+  "id" integer primary key autoincrement not null,
+  "scope" varchar not null,
+  "value" varchar not null,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "subject" varchar
+);
+CREATE UNIQUE INDEX "unique_values_scope_value_unique" on "unique_values"(
+  "scope",
+  "value"
+);
+CREATE INDEX "jobs_job_reference_index" on "jobs"("job_reference");
+CREATE INDEX "jobs_slug_index" on "jobs"("slug");
+CREATE UNIQUE INDEX "jobs_job_reference_unique" on "jobs"("job_reference");
+CREATE UNIQUE INDEX "jobs_slug_unique" on "jobs"("slug");
 
 INSERT INTO migrations VALUES(1,'2014_10_10_045631_create_countries_table',1);
 INSERT INTO migrations VALUES(2,'2014_10_12_045650_create_states_table',1);
@@ -1359,3 +1561,33 @@ INSERT INTO migrations VALUES(166,'2025_06_15_153605_add_deleted_at_to_header_sl
 INSERT INTO migrations VALUES(167,'2025_06_15_153711_add_deleted_at_to_posts_table',13);
 INSERT INTO migrations VALUES(168,'2025_06_15_154118_add_missing_columns_to_companies_table_final',14);
 INSERT INTO migrations VALUES(169,'2025_06_15_154318_add_is_active_to_inquiries_table',15);
+INSERT INTO migrations VALUES(170,'2025_06_15_154415_fix_media_table_manipulations_column',16);
+INSERT INTO migrations VALUES(171,'2025_06_15_154550_add_remaining_columns_to_inquiries_table',16);
+INSERT INTO migrations VALUES(172,'2025_06_15_155547_add_manipulations_column_to_media_table',16);
+INSERT INTO migrations VALUES(173,'2025_06_15_155622_add_missing_columns_to_inquiries_table',16);
+INSERT INTO migrations VALUES(174,'2025_06_15_163504_create_frontsettings_table',16);
+INSERT INTO migrations VALUES(175,'2025_06_15_163509_add_deleted_at_to_media_table',16);
+INSERT INTO migrations VALUES(176,'2025_06_15_171130_create_custommedias_table',16);
+INSERT INTO migrations VALUES(177,'2025_06_15_171142_add_missing_columns_to_email_jobs_table',16);
+INSERT INTO migrations VALUES(178,'2025_06_15_172124_add_deleted_at_to_custommedias_table',16);
+INSERT INTO migrations VALUES(179,'2025_06_15_172529_add_missing_columns_to_faqs_table',16);
+INSERT INTO migrations VALUES(180,'2025_06_15_173743_add_deleted_at_to_email_jobs_table',16);
+INSERT INTO migrations VALUES(181,'2025_06_15_174056_add_missing_columns_to_favourite_companies_table',16);
+INSERT INTO migrations VALUES(182,'2025_06_15_174123_add_missing_columns_to_favourite_jobs_table',16);
+INSERT INTO migrations VALUES(185,'2025_06_15_174138_add_deleted_at_to_email_templates_table',17);
+INSERT INTO migrations VALUES(186,'2025_06_15_175822_add_missing_columns_to_media_table',17);
+INSERT INTO migrations VALUES(187,'2025_06_15_184234_create_model_settings_table',18);
+INSERT INTO migrations VALUES(188,'2025_06_15_184346_add_settings_field_to_users_table',19);
+INSERT INTO migrations VALUES(189,'2025_06_15_184354_add_settings_field_to_companies_table',19);
+INSERT INTO migrations VALUES(190,'2025_06_15_184402_add_settings_field_to_jobs_table',19);
+INSERT INTO migrations VALUES(191,'2025_06_15_185240_create_user_settings_table',20);
+INSERT INTO migrations VALUES(192,'2025_06_15_190108_create_health_tables',21);
+INSERT INTO migrations VALUES(193,'2025_06_15_190314_add_settings_to_core_models_table',22);
+INSERT INTO migrations VALUES(194,'2024_10_11_083000_create_unique_values_table',23);
+INSERT INTO migrations VALUES(195,'2025_02_04_095000_add_subject_to_unique_values_table',23);
+INSERT INTO migrations VALUES(196,'2025_06_15_190732_add_unique_reference_fields_to_jobs_table',24);
+INSERT INTO migrations VALUES(197,'2025_06_15_215817_add_settings_field_to_job_categories_table',25);
+INSERT INTO migrations VALUES(198,'2025_06_15_215857_add_settings_field_to_job_types_table',26);
+INSERT INTO migrations VALUES(199,'2025_06_15_220000_add_missing_columns_to_env_settings_table',27);
+INSERT INTO migrations VALUES(200,'2025_06_15_220001_add_missing_columns_to_files_table',27);
+INSERT INTO migrations VALUES(201,'2025_06_15_220600_add_soft_deletes_to_multiple_tables',28);

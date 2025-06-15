@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c999956363f6798ae08ded9d6c0d9de1",
+    "content-hash": "8a08c29169b70dfbae3edb54646b0551",
     "packages": [
         {
             "name": "amphp/amp",
@@ -4276,6 +4276,68 @@
                 }
             ],
             "time": "2025-04-12T22:26:52+00:00"
+        },
+        {
+            "name": "lumosolutions/actionable",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LumoSolutions/actionable.git",
+                "reference": "844c07e598daae42ffa06ef378d2b3d2acbc6afe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LumoSolutions/actionable/zipball/844c07e598daae42ffa06ef378d2b3d2acbc6afe",
+                "reference": "844c07e598daae42ffa06ef378d2b3d2acbc6afe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^2.9||^3.0",
+                "laravel/pint": "^1.22",
+                "orchestra/testbench": "^10.0.0||^9.0.0||^8.22.0",
+                "pestphp/pest": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LumoSolutions\\Actionable\\ActionableProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LumoSolutions\\Actionable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Anderson",
+                    "email": "richard@lumosolutions.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides a clean, elegant way to create dispatchable and runnable actions in Laravel with built-in array conversion capabilities",
+            "homepage": "https://github.com/lumosolutions/actionable",
+            "keywords": [
+                "actions",
+                "array conversion",
+                "dispatchable",
+                "laravel",
+                "runnable"
+            ],
+            "support": {
+                "issues": "https://github.com/LumoSolutions/actionable/issues",
+                "source": "https://github.com/LumoSolutions/actionable/tree/v1.1.1"
+            },
+            "time": "2025-06-07T16:18:58+00:00"
         },
         {
             "name": "maennchen/zipstream-php",

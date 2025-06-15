@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +19,10 @@ class FavouriteCompanyFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
+            'company_id' => Company::factory(),
+            'is_active' => $this->faker->boolean(80),
+            'is_featured' => $this->faker->boolean(20),
         ];
     }
 }

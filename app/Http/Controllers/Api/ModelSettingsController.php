@@ -51,7 +51,7 @@ class ModelSettingsController extends Controller
     /**
      * Get all settings for a specific model instance.
      */
-    public function getModelSettings(string $model, int $id): JsonResponse
+    public function getModelSettings(string $model, $id): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
@@ -62,9 +62,18 @@ class ModelSettingsController extends Controller
             return response()->json([
                 'success' => true,
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
                 'settings' => $settings,
                 'default_settings' => $instance->defaultSettings ?? [],
+                'data' => [
+                    'user_id' => (int) $id,
+                    'model' => $model,
+                    'id' => (int) $id,
+                    'settings' => $settings,
+                    'default_settings' => $instance->defaultSettings ?? [],
+                    'has_settings' => !empty($settings) || !empty($instance->defaultSettings ?? []),
+                    'is_empty' => empty($settings) && empty($instance->defaultSettings ?? []),
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -77,7 +86,7 @@ class ModelSettingsController extends Controller
     /**
      * Update settings for a specific model instance.
      */
-    public function updateModelSettings(Request $request, string $model, int $id): JsonResponse
+    public function updateModelSettings(Request $request, string $model, $id): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
@@ -107,8 +116,13 @@ class ModelSettingsController extends Controller
                 'success' => true,
                 'message' => 'Settings updated successfully',
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
                 'updated_settings' => $settings,
+                'data' => [
+                    'model' => $model,
+                    'id' => (int) $id,
+                    'updated_settings' => $settings,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -121,7 +135,7 @@ class ModelSettingsController extends Controller
     /**
      * Get a specific setting for a model instance.
      */
-    public function getSpecificSetting(string $model, int $id, string $key): JsonResponse
+    public function getSpecificSetting(string $model, $id, string $key): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
@@ -132,9 +146,15 @@ class ModelSettingsController extends Controller
             return response()->json([
                 'success' => true,
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
                 'key' => $key,
                 'value' => $value,
+                'data' => [
+                    'model' => $model,
+                    'id' => (int) $id,
+                    'key' => $key,
+                    'value' => $value,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -147,7 +167,7 @@ class ModelSettingsController extends Controller
     /**
      * Set a specific setting for a model instance.
      */
-    public function setSpecificSetting(Request $request, string $model, int $id, string $key): JsonResponse
+    public function setSpecificSetting(Request $request, string $model, $id, string $key): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
@@ -177,9 +197,15 @@ class ModelSettingsController extends Controller
                 'success' => true,
                 'message' => 'Setting updated successfully',
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
                 'key' => $key,
                 'value' => $value,
+                'data' => [
+                    'model' => $model,
+                    'id' => (int) $id,
+                    'key' => $key,
+                    'value' => $value,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -192,20 +218,26 @@ class ModelSettingsController extends Controller
     /**
      * Delete a specific setting for a model instance.
      */
-    public function deleteSpecificSetting(string $model, int $id, string $key): JsonResponse
+    public function deleteSpecificSetting(string $model, $id, string $key): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
             $instance = $modelClass::findOrFail($id);
             
-            $instance->settings()->forget($key);
+            // Use delete method instead of forget
+            $instance->settings()->delete($key);
             
             return response()->json([
                 'success' => true,
                 'message' => 'Setting deleted successfully',
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
                 'key' => $key,
+                'data' => [
+                    'model' => $model,
+                    'id' => (int) $id,
+                    'key' => $key,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -218,7 +250,7 @@ class ModelSettingsController extends Controller
     /**
      * Clear all settings for a model instance.
      */
-    public function clearModelSettings(string $model, int $id): JsonResponse
+    public function clearModelSettings(string $model, $id): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($model);
@@ -230,7 +262,11 @@ class ModelSettingsController extends Controller
                 'success' => true,
                 'message' => 'All settings cleared successfully',
                 'model' => $model,
-                'id' => $id,
+                'id' => (int) $id,
+                'data' => [
+                    'model' => $model,
+                    'id' => (int) $id,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -262,6 +298,11 @@ class ModelSettingsController extends Controller
                     'delete_specific' => "DELETE /api/model-settings/{$model}/{id}/{key}",
                     'clear_all' => "DELETE /api/model-settings/{$model}/{id}",
                 ],
+                'data' => [
+                    'model' => $model,
+                    'default_settings' => $instance->defaultSettings ?? [],
+                    'validation_rules' => $instance->settingsRules ?? [],
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -295,6 +336,96 @@ class ModelSettingsController extends Controller
             'supported_models' => $models,
             'total_models' => count($models),
         ]);
+    }
+
+    /**
+     * Demonstration endpoint showcasing Laravel Model Settings functionality.
+     */
+    public function demo(): JsonResponse
+    {
+        try {
+            // Create or find a user for demonstration
+            $user = User::first();
+            if (!$user) {
+                $user = User::factory()->create();
+            }
+            
+            // Demonstrate settings functionality
+            $demonstration = [
+                'basic_operations' => [
+                    'get_setting' => $user->settings()->get('profile.theme', 'light'),
+                    'set_setting' => $user->settings()->set('profile.theme', 'dark'),
+                    'has_setting' => $user->settings()->has('profile.theme'),
+                ],
+                'advanced_features' => [
+                    'default_settings' => $user->defaultSettings ?? [],
+                    'validation_rules' => $user->settingsRules ?? [],
+                    'settings_structure' => 'Nested JSON configuration',
+                ]
+            ];
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Laravel Model Settings demonstration complete',
+                'data' => [
+                    'user_id' => $user->id,
+                    'demonstration' => $demonstration,
+                    'package_info' => [
+                        'name' => 'glorand/laravel-model-settings',
+                        'version' => '8.0.1',
+                        'features' => [
+                            'Field-based settings (JSON columns)',
+                            'Table-based settings (separate table)',
+                            'Default settings configuration',
+                            'Validation rules enforcement',
+                            'Nested settings structure',
+                            'Cache integration',
+                            'Multiple models support'
+                        ]
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Demo failed: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get settings schema for the system.
+     */
+    public function getSchema(): JsonResponse
+    {
+        try {
+            $userInstance = new User();
+            $companyInstance = new Company();
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'user_settings' => [
+                        'default_settings' => $userInstance->defaultSettings ?? [],
+                        'validation_rules' => $userInstance->settingsRules ?? [],
+                    ],
+                    'company_settings' => [
+                        'default_settings' => $companyInstance->defaultSettings ?? [],
+                        'validation_rules' => $companyInstance->settingsRules ?? [],
+                    ],
+                    'package_config' => [
+                        'name' => 'glorand/laravel-model-settings',
+                        'version' => '8.0.1',
+                        'documentation' => 'https://github.com/glorand/laravel-model-settings'
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Schema retrieval failed: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -367,22 +498,22 @@ class ModelSettingsController extends Controller
     /**
      * Legacy methods for backward compatibility
      */
-    public function getUserSettings(int $userId): JsonResponse
+    public function getUserSettings($userId): JsonResponse
     {
         return $this->getModelSettings('users', $userId);
     }
     
-    public function updateUserSettings(Request $request, int $userId): JsonResponse
+    public function updateUserSettings(Request $request, $userId): JsonResponse
     {
         return $this->updateModelSettings($request, 'users', $userId);
     }
     
-    public function getCompanySettings(int $companyId): JsonResponse
+    public function getCompanySettings($companyId): JsonResponse
     {
         return $this->getModelSettings('companies', $companyId);
     }
     
-    public function updateCompanySettings(Request $request, int $companyId): JsonResponse
+    public function updateCompanySettings(Request $request, $companyId): JsonResponse
     {
         return $this->updateModelSettings($request, 'companies', $companyId);
     }

@@ -21,7 +21,7 @@ class FavouriteCompanyTest extends TestCase
         $model = FavouriteCompany::factory()->create();
 
         $this->assertInstanceOf(FavouriteCompany::class, $model);
-        $this->assertDatabaseHas('favouritecompanies', [
+        $this->assertDatabaseHas('favourite_companies', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class FavouriteCompanyTest extends TestCase
         $newData = FavouriteCompany::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('favouritecompanies', [
+        $this->assertDatabaseHas('favourite_companies', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class FavouriteCompanyTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('favouritecompanies', [
+        $this->assertSoftDeleted('favourite_companies', [
             'id' => $modelId,
         ]);
     }

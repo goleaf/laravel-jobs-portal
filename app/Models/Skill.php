@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,6 +76,7 @@ class Skill extends Model
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
+    use HasSettingsField;
 
     // =============================================
     // CONSTANTS
@@ -97,6 +99,112 @@ class Skill extends Model
         'intermediate' => 'Intermediate',
         'advanced' => 'Advanced',
         'expert' => 'Expert',
+    ];
+
+    /**
+     * Default settings for skill model.
+     */
+    public $defaultSettings = [
+        'display' => [
+            'show_in_filters' => true,
+            'show_endorsement_count' => true,
+            'show_level_indicator' => true,
+            'show_category_badge' => true,
+            'featured_placement' => false,
+            'color_scheme' => 'default',
+            'icon_display' => true,
+        ],
+        'endorsement' => [
+            'enable_endorsements' => true,
+            'require_verification' => false,
+            'auto_approve_endorsements' => true,
+            'max_endorsements_per_user' => 5,
+            'endorsement_weight_system' => false,
+            'show_endorser_details' => true,
+        ],
+        'filtering' => [
+            'enable_skill_search' => true,
+            'group_by_category' => true,
+            'show_related_skills' => true,
+            'min_endorsements_to_show' => 0,
+            'hide_inactive_skills' => true,
+            'sort_by_popularity' => false,
+        ],
+        'analytics' => [
+            'track_skill_views' => true,
+            'track_endorsements' => true,
+            'track_job_matches' => true,
+            'popularity_metrics' => true,
+            'trend_analysis' => false,
+        ],
+        'matching' => [
+            'enable_skill_matching' => true,
+            'fuzzy_matching' => true,
+            'synonym_matching' => false,
+            'weight_by_level' => true,
+            'boost_verified_skills' => true,
+        ],
+        'notifications' => [
+            'new_endorsement' => true,
+            'skill_trending' => false,
+            'skill_in_demand' => true,
+            'related_opportunities' => true,
+        ],
+        'privacy' => [
+            'public_endorsements' => true,
+            'show_skill_level' => true,
+            'hide_from_search' => false,
+            'anonymous_endorsements' => false,
+        ],
+    ];
+
+    /**
+     * Settings validation rules.
+     */
+    public $settingsRules = [
+        'display.show_in_filters' => 'boolean',
+        'display.show_endorsement_count' => 'boolean',
+        'display.show_level_indicator' => 'boolean',
+        'display.show_category_badge' => 'boolean',
+        'display.featured_placement' => 'boolean',
+        'display.color_scheme' => 'string|in:default,blue,green,red,purple,orange',
+        'display.icon_display' => 'boolean',
+        
+        'endorsement.enable_endorsements' => 'boolean',
+        'endorsement.require_verification' => 'boolean',
+        'endorsement.auto_approve_endorsements' => 'boolean',
+        'endorsement.max_endorsements_per_user' => 'integer|min:1|max:20',
+        'endorsement.endorsement_weight_system' => 'boolean',
+        'endorsement.show_endorser_details' => 'boolean',
+        
+        'filtering.enable_skill_search' => 'boolean',
+        'filtering.group_by_category' => 'boolean',
+        'filtering.show_related_skills' => 'boolean',
+        'filtering.min_endorsements_to_show' => 'integer|min:0|max:100',
+        'filtering.hide_inactive_skills' => 'boolean',
+        'filtering.sort_by_popularity' => 'boolean',
+        
+        'analytics.track_skill_views' => 'boolean',
+        'analytics.track_endorsements' => 'boolean',
+        'analytics.track_job_matches' => 'boolean',
+        'analytics.popularity_metrics' => 'boolean',
+        'analytics.trend_analysis' => 'boolean',
+        
+        'matching.enable_skill_matching' => 'boolean',
+        'matching.fuzzy_matching' => 'boolean',
+        'matching.synonym_matching' => 'boolean',
+        'matching.weight_by_level' => 'boolean',
+        'matching.boost_verified_skills' => 'boolean',
+        
+        'notifications.new_endorsement' => 'boolean',
+        'notifications.skill_trending' => 'boolean',
+        'notifications.skill_in_demand' => 'boolean',
+        'notifications.related_opportunities' => 'boolean',
+        
+        'privacy.public_endorsements' => 'boolean',
+        'privacy.show_skill_level' => 'boolean',
+        'privacy.hide_from_search' => 'boolean',
+        'privacy.anonymous_endorsements' => 'boolean',
     ];
 
     /**

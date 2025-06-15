@@ -8,7 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class FeaturedRecord extends Model
 {
     use HasFactory;
-    protected $fillable = ['model_type', 'model_id', 'is_featured', 'featured_until'];
+    
+    protected $fillable = [
+        'model_type', 
+        'model_id', 
+        'is_featured', 
+        'featured_until',
+        'owner_id',
+        'owner_type',
+        'user_id',
+        'stripe_id',
+        'start_time',
+        'end_time',
+        'meta',
+        'is_active',
+        'settings'
+    ];
 
     public function scopeActive($query)
     {
@@ -17,6 +32,16 @@ class FeaturedRecord extends Model
 
     protected function casts(): array
     {
-        return ['is_featured' => 'boolean', 'featured_until' => 'datetime', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+        return [
+            'is_featured' => 'boolean', 
+            'featured_until' => 'datetime', 
+            'created_at' => 'datetime', 
+            'updated_at' => 'datetime',
+            'is_active' => 'boolean',
+            'start_time' => 'datetime',
+            'end_time' => 'datetime',
+            'meta' => 'array',
+            'settings' => 'array'
+        ];
     }
 }

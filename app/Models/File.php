@@ -149,6 +149,11 @@ class File extends Model
         'model_id',
         'user_id',
         'metadata',
+        'collection_name',
+        'file_name',
+        'order_column',
+        'custom_properties',
+        'responsive_images',
     ];
 
     /**

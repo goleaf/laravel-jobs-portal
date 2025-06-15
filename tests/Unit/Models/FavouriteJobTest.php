@@ -21,7 +21,7 @@ class FavouriteJobTest extends TestCase
         $model = FavouriteJob::factory()->create();
 
         $this->assertInstanceOf(FavouriteJob::class, $model);
-        $this->assertDatabaseHas('favouritejobs', [
+        $this->assertDatabaseHas('favourite_jobs', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class FavouriteJobTest extends TestCase
         $newData = FavouriteJob::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('favouritejobs', [
+        $this->assertDatabaseHas('favourite_jobs', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class FavouriteJobTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('favouritejobs', [
+        $this->assertSoftDeleted('favourite_jobs', [
             'id' => $modelId,
         ]);
     }

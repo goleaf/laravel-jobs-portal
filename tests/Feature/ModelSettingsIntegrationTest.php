@@ -46,14 +46,18 @@ class ModelSettingsIntegrationTest extends TestCase
     /** @test */
     public function it_can_check_if_settings_exist_and_are_empty()
     {
-        // Initially settings should not exist and be empty
-        $this->assertFalse($this->user->settings()->exist());
-        $this->assertTrue($this->user->settings()->empty());
+        // With defaultSettings configured, settings will exist but be "empty" of custom values
+        $this->assertTrue($this->user->settings()->exist()); // Default settings exist
+        $this->assertFalse($this->user->settings()->empty()); // Default settings are not empty
         
-        // After setting a value, settings should exist and not be empty
+        // Check that we can detect if custom settings have been set
+        $this->assertFalse($this->user->settings()->has('test.key'));
+        
+        // After setting a custom value, settings should still exist and not be empty
         $this->user->settings()->set('test.key', 'test_value');
         $this->assertTrue($this->user->settings()->exist());
         $this->assertFalse($this->user->settings()->empty());
+        $this->assertTrue($this->user->settings()->has('test.key'));
     }
 
     /** @test */
@@ -212,8 +216,8 @@ class ModelSettingsIntegrationTest extends TestCase
     /** @test */
     public function it_works_with_company_settings()
     {
-        // Test company settings functionality
-        $this->assertFalse($this->company->settings()->exist());
+        // Test company settings functionality - with defaultSettings configured, settings will exist
+        $this->assertTrue($this->company->settings()->exist()); // Default settings exist
         
         $companySettings = [
             'branding' => [
@@ -266,7 +270,7 @@ class ModelSettingsIntegrationTest extends TestCase
         $response->assertStatus(200)
                 ->assertJson([
                     'success' => true,
-                    'message' => 'User settings updated successfully'
+                    'message' => 'Settings updated successfully'
                 ]);
 
         // Verify the settings were actually updated

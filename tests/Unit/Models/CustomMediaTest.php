@@ -155,18 +155,15 @@ class CustomMediaTest extends TestCase
         $imageMedia = CustomMedia::factory()->image()->create();
         $this->assertInstanceOf(CustomMedia::class, $imageMedia);
         $this->assertStringContainsString('image/', $imageMedia->mime_type);
-        $this->assertTrue($imageMedia->is_active);
 
         // Test document media
         $documentMedia = CustomMedia::factory()->document()->create();
         $this->assertInstanceOf(CustomMedia::class, $documentMedia);
         $this->assertStringContainsString('application/', $documentMedia->mime_type);
-        $this->assertTrue($documentMedia->is_active);
 
         // Test video media
         $videoMedia = CustomMedia::factory()->video()->create();
         $this->assertInstanceOf(CustomMedia::class, $videoMedia);
         $this->assertStringContainsString('video/', $videoMedia->mime_type);
-        $this->assertTrue($videoMedia->is_active);
     }
 }

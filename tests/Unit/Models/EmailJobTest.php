@@ -21,7 +21,7 @@ class EmailJobTest extends TestCase
         $model = EmailJob::factory()->create();
 
         $this->assertInstanceOf(EmailJob::class, $model);
-        $this->assertDatabaseHas('emailjobs', [
+        $this->assertDatabaseHas('email_jobs', [
             'id' => $model->id,
         ]);
     }
@@ -56,7 +56,7 @@ class EmailJobTest extends TestCase
         $newData = EmailJob::factory()->make()->toArray();
         $model->update($newData);
 
-        $this->assertDatabaseHas('emailjobs', [
+        $this->assertDatabaseHas('email_jobs', [
             'id' => $model->id,
         ]);
     }
@@ -69,7 +69,7 @@ class EmailJobTest extends TestCase
 
         $model->delete();
 
-        $this->assertDatabaseMissing('emailjobs', [
+        $this->assertSoftDeleted('email_jobs', [
             'id' => $modelId,
         ]);
     }

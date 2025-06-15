@@ -82,4 +82,37 @@ class CustomMediaFactory extends Factory
             'file_name' => fake()->word() . '.' . fake()->randomElement(['jpg', 'png', 'gif', 'webp']),
         ]);
     }
+
+    /**
+     * Create document media
+     */
+    public function document(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'mime_type' => fake()->randomElement([
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            ]),
+            'file_name' => fake()->word() . '.' . fake()->randomElement(['pdf', 'doc', 'docx', 'xls', 'xlsx']),
+        ]);
+    }
+
+    /**
+     * Create video media
+     */
+    public function video(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'mime_type' => fake()->randomElement([
+                'video/mp4',
+                'video/avi',
+                'video/quicktime',
+                'video/x-msvideo'
+            ]),
+            'file_name' => fake()->word() . '.' . fake()->randomElement(['mp4', 'avi', 'mov', 'wmv']),
+        ]);
+    }
 }

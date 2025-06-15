@@ -34,7 +34,7 @@ class SystemHealthCheck extends Command
                            {--threshold=5 : Maximum acceptable minutes for tasks}
                            {--alert : Send alerts for critical issues}
                            {--repair : Attempt automatic repairs}
-                           {--verbose : Show detailed output}';
+                           {--detailed : Show detailed output}';
 
     /**
      * The console command description.
@@ -60,17 +60,17 @@ class SystemHealthCheck extends Command
         $this->newLine();
 
         $threshold = (int) $this->option('threshold');
-        $verbose = $this->option('verbose');
+        $detailed = $this->option('detailed');
 
         // Core Health Checks
-        $this->checkDatabaseHealth($verbose);
-        $this->checkQueueHealth($threshold, $verbose);
-        $this->checkJobPortalHealth($verbose);
-        $this->checkSystemResources($verbose);
-        $this->checkScheduledTasks($threshold, $verbose);
-        $this->checkMailSystem($verbose);
-        $this->checkCacheSystem($verbose);
-        $this->checkStorageHealth($verbose);
+        $this->checkDatabaseHealth($detailed);
+        $this->checkQueueHealth($threshold, $detailed);
+        $this->checkJobPortalHealth($detailed);
+        $this->checkSystemResources($detailed);
+        $this->checkScheduledTasks($threshold, $detailed);
+        $this->checkMailSystem($detailed);
+        $this->checkCacheSystem($detailed);
+        $this->checkStorageHealth($detailed);
 
         // Display Results
         $this->displayHealthSummary();

@@ -344,6 +344,32 @@ class CareerLevel extends Model
     }
 
     /**
+     * Scope for entry positions (alias for tests).
+     */
+    public function scopeEntry(Builder $query): Builder
+    {
+        return $query->where('level_name', 'LIKE', '%Entry%')
+                    ->orWhere('level_name', 'LIKE', '%Junior%');
+    }
+
+    /**
+     * Scope for senior positions.
+     */
+    public function scopeSenior(Builder $query): Builder
+    {
+        return $query->where('level_name', 'LIKE', '%Senior%');
+    }
+
+    /**
+     * Scope for management positions.
+     */
+    public function scopeManagement(Builder $query): Builder
+    {
+        return $query->where('level_name', 'LIKE', '%Manager%')
+                    ->orWhere('level_name', 'LIKE', '%Executive%');
+    }
+
+    /**
      * Scope for mid level positions.
      */
     public function scopeMidLevel(Builder $query): Builder

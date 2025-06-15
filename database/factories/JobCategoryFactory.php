@@ -35,7 +35,7 @@ class JobCategoryFactory extends Factory
         ];
 
         return [
-            'name' => fake()->unique()->randomElement($categories),
+            'name' => fake()->randomElement($categories),
             'description' => fake()->sentence(),
             'is_featured' => false,
         ];

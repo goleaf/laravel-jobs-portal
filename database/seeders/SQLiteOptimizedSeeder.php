@@ -156,7 +156,7 @@ class SQLiteOptimizedSeeder extends Seeder
             $this->seedingProgress['states'] = State::count();
             $this->seedingProgress['cities'] = City::count();
             $this->generatedData['states'] = State::all();
-            $this->generatedData['cities'] = City::all();
+            $this->generatedData['cities'] = City::with('state.country')->get();
             $this->command->info("✅ Location data already exists");
         }
     }
@@ -256,17 +256,17 @@ class SQLiteOptimizedSeeder extends Seeder
         if (User::count() == 0) {
             // Optimized counts for SQLite
             $admins = User::factory(3)->create([
-                'user_type' => 1,
+                'user_type' => 'admin',
                 'email_verified_at' => now(),
             ]);
             
             $employers = User::factory(50)->create([
-                'user_type' => 2,
+                'user_type' => 'employer',
                 'email_verified_at' => now(),
             ]);
             
             $candidates = User::factory(100)->create([
-                'user_type' => 3,
+                'user_type' => 'candidate',
                 'email_verified_at' => now(),
             ]);
             
@@ -290,8 +290,8 @@ class SQLiteOptimizedSeeder extends Seeder
         $this->command->info('🏢 Seeding companies...');
         
         if (Company::count() == 0) {
-            $employers = User::where('user_type', 2)->get();
-            $cities = $this->generatedData['cities'] ?? City::all();
+            $employers = User::where('user_type', 'employer')->get();
+            $cities = $this->generatedData['cities'] ?? City::with('state.country')->get();
             $industries = Industry::all();
             $companySizes = CompanySize::all();
             $ownershipTypes = OwnerShipType::all();
@@ -306,9 +306,6 @@ class SQLiteOptimizedSeeder extends Seeder
                     'industry_id' => $industries->isNotEmpty() ? $industries->random()->id : null,
                     'ownership_type_id' => $ownershipTypes->isNotEmpty() ? $ownershipTypes->random()->id : null,
                     'company_size_id' => $companySizes->isNotEmpty() ? $companySizes->random()->id : null,
-                    'city_id' => $city?->id,
-                    'state_id' => $city?->state_id,
-                    'country_id' => $city?->state?->country_id,
                 ]);
                 
                 $companies->push($company);
@@ -401,7 +398,6 @@ class SQLiteOptimizedSeeder extends Seeder
                 $job = Job::factory()->create([
                     'company_id' => $company->id,
                     'job_category_id' => $jobCategories->random()->id,
-                    'city_id' => $company->city_id,
                     'state_id' => $company->state_id,
                     'country_id' => $company->country_id,
                     'is_featured' => rand(0, 100) < 20,
@@ -435,7 +431,7 @@ class SQLiteOptimizedSeeder extends Seeder
         $this->command->info('👨‍💼 Seeding candidates...');
         
         if (Candidate::count() == 0) {
-            $candidateUsers = User::where('user_type', 3)->get();
+            $candidateUsers = User::where('user_type', 'candidate')->get();
             $skills = Skill::all();
             
             $candidates = collect();

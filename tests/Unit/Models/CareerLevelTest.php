@@ -244,6 +244,9 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_with_candidates_returns_career_levels_that_have_candidates()
     {
+        // Get initial count of career levels with candidates
+        $initialWithCandidatesCount = CareerLevel::withCandidates()->count();
+        
         $careerLevelWithCandidates = CareerLevel::factory()->create();
         $careerLevelWithoutCandidates = CareerLevel::factory()->create();
         
@@ -251,21 +254,39 @@ class CareerLevelTest extends TestCase
         
         $careerLevelsWithCandidates = CareerLevel::withCandidates()->get();
         
-        $this->assertCount(1, $careerLevelsWithCandidates);
-        $this->assertEquals($careerLevelWithCandidates->id, $careerLevelsWithCandidates->first()->id);
+        // Should have initial count + 1 new one with candidates
+        $this->assertCount($initialWithCandidatesCount + 1, $careerLevelsWithCandidates);
+        
+        // Verify our specific career level is included
+        $this->assertTrue($careerLevelsWithCandidates->contains('id', $careerLevelWithCandidates->id));
+        
+        // Verify the one without candidates is not included
+        $this->assertFalse($careerLevelsWithCandidates->contains('id', $careerLevelWithoutCandidates->id));
     }
 
     /** @test */
     public function scope_alphabetical_orders_career_levels_by_level_name()
     {
-        CareerLevel::factory()->create(['level_name' => 'Zebra Level']);
-        CareerLevel::factory()->create(['level_name' => 'Alpha Level']);
-        CareerLevel::factory()->create(['level_name' => 'Beta Level']);
+        $zebraLevel = CareerLevel::factory()->create(['level_name' => 'Zebra Level']);
+        $alphaLevel = CareerLevel::factory()->create(['level_name' => 'Alpha Level']);
+        $betaLevel = CareerLevel::factory()->create(['level_name' => 'Beta Level']);
         
         $orderedCareerLevels = CareerLevel::alphabetical()->get();
         
-        $this->assertEquals('Alpha Level', $orderedCareerLevels->first()->level_name);
-        $this->assertEquals('Zebra Level', $orderedCareerLevels->last()->level_name);
+        // Check that our test levels are in the correct alphabetical order within the results
+        $alphaPosition = $orderedCareerLevels->search(function ($item) use ($alphaLevel) {
+            return $item->id === $alphaLevel->id;
+        });
+        $betaPosition = $orderedCareerLevels->search(function ($item) use ($betaLevel) {
+            return $item->id === $betaLevel->id;
+        });
+        $zebraPosition = $orderedCareerLevels->search(function ($item) use ($zebraLevel) {
+            return $item->id === $zebraLevel->id;
+        });
+        
+        // Alpha should come before Beta, and Beta should come before Zebra
+        $this->assertTrue($alphaPosition < $betaPosition);
+        $this->assertTrue($betaPosition < $zebraPosition);
     }
 
     /** @test */

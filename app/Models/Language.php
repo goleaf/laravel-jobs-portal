@@ -59,6 +59,7 @@ use Spatie\Activitylog\LogOptions;
 class Language extends Model
 {
     public $table = 'languages';
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'language',

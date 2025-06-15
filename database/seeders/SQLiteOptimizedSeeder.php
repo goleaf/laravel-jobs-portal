@@ -35,7 +35,6 @@ use App\Models\JobApplication;
 use App\Models\Plan;
 use App\Models\Setting;
 use App\Models\FrontSetting;
-use App\Models\EnvSetting;
 
 class SQLiteOptimizedSeeder extends Seeder
 {
@@ -183,11 +182,8 @@ class SQLiteOptimizedSeeder extends Seeder
             $this->seedingProgress['front_settings'] = FrontSetting::count();
         }
         
-        if (EnvSetting::count() == 0) {
-            $envSettings = EnvSetting::factory(8)->create();
             $this->seedingProgress['env_settings'] = $envSettings->count();
         } else {
-            $this->seedingProgress['env_settings'] = EnvSetting::count();
         }
         
         $this->command->info("✅ System settings seeded");

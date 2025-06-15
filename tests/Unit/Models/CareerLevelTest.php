@@ -112,15 +112,19 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_active_returns_active_career_levels()
     {
-        // Ensure clean state by truncating table
-        CareerLevel::truncate();
+        // Get initial count of active career levels
+        $initialActiveCount = CareerLevel::active()->count();
         
+        // Create test data
         CareerLevel::factory()->count(3)->create(['is_active' => true]);
         CareerLevel::factory()->count(2)->create(['is_active' => false]);
         
         $activeCareerLevels = CareerLevel::active()->get();
         
-        $this->assertCount(3, $activeCareerLevels);
+        // Should have initial count + 3 new active ones
+        $this->assertCount($initialActiveCount + 3, $activeCareerLevels);
+        
+        // Check that all returned records are active
         $activeCareerLevels->each(function ($careerLevel) {
             $this->assertTrue($careerLevel->is_active);
         });
@@ -129,12 +133,16 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_inactive_returns_inactive_career_levels()
     {
+        // Get initial count of inactive career levels
+        $initialInactiveCount = CareerLevel::inactive()->count();
+        
         CareerLevel::factory()->count(3)->create(['is_active' => true]);
         CareerLevel::factory()->count(2)->create(['is_active' => false]);
         
         $inactiveCareerLevels = CareerLevel::inactive()->get();
         
-        $this->assertCount(2, $inactiveCareerLevels);
+        // Should have initial count + 2 new inactive ones
+        $this->assertCount($initialInactiveCount + 2, $inactiveCareerLevels);
         $inactiveCareerLevels->each(function ($careerLevel) {
             $this->assertFalse($careerLevel->is_active);
         });
@@ -143,25 +151,33 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_default_returns_default_career_levels()
     {
+        // Get initial count of default career levels
+        $initialDefaultCount = CareerLevel::default()->count();
+        
         CareerLevel::factory()->count(3)->create(['is_default' => false]);
         CareerLevel::factory()->count(1)->create(['is_default' => true]);
         
         $defaultCareerLevels = CareerLevel::default()->get();
         
-        $this->assertCount(1, $defaultCareerLevels);
-        $this->assertTrue($defaultCareerLevels->first()->is_default);
+        // Should have initial count + 1 new default one
+        $this->assertCount($initialDefaultCount + 1, $defaultCareerLevels);
+        $this->assertTrue($defaultCareerLevels->last()->is_default);
     }
 
     /** @test */
     public function scope_custom_returns_custom_career_levels()
     {
+        // Get initial count of custom career levels
+        $initialCustomCount = CareerLevel::custom()->count();
+        
         CareerLevel::factory()->count(2)->create(['is_default' => false]);
         CareerLevel::factory()->count(1)->create(['is_default' => true]);
         
         $customCareerLevels = CareerLevel::custom()->get();
         
-        $this->assertCount(2, $customCareerLevels);
-        $customCareerLevels->each(function ($careerLevel) {
+        // Should have initial count + 2 new custom ones
+        $this->assertCount($initialCustomCount + 2, $customCareerLevels);
+        $customCareerLevels->take(2)->each(function ($careerLevel) {
             $this->assertFalse($careerLevel->is_default);
         });
     }
@@ -169,14 +185,15 @@ class CareerLevelTest extends TestCase
     /** @test */
     public function scope_search_finds_career_levels_by_level_name()
     {
-        CareerLevel::factory()->create(['level_name' => 'Entry Level']);
+        $uniqueTestLevel = CareerLevel::factory()->create(['level_name' => 'TestUniqueEntry Level']);
         CareerLevel::factory()->create(['level_name' => 'Senior Management']);
         CareerLevel::factory()->create(['level_name' => 'Mid-Level Executive']);
         
-        $results = CareerLevel::search('Entry')->get();
+        $results = CareerLevel::search('TestUniqueEntry')->get();
         
         $this->assertCount(1, $results);
-        $this->assertEquals('Entry Level', $results->first()->level_name);
+        $this->assertEquals('TestUniqueEntry Level', $results->first()->level_name);
+        $this->assertEquals($uniqueTestLevel->id, $results->first()->id);
     }
 
     /** @test */

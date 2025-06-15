@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\ActivityLog\Traits\LogsActivity;
-use Spatie\ActivityLog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
@@ -74,10 +74,6 @@ class FrontSetting extends Model implements HasMedia
     public $fillable = [
         'key',
         'value',
-        'is_active',
-        'is_featured',
-        'description',
-        'metadata',
     ];
 
     /**
@@ -93,9 +89,6 @@ class FrontSetting extends Model implements HasMedia
     {
         return [
             'id' => 'integer',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-            'metadata' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -107,10 +100,7 @@ class FrontSetting extends Model implements HasMedia
     public static $rules = [
         'key' => 'required|string|max:255|unique:front_settings,key',
         'value' => 'required|string',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
         'description' => 'nullable|string|max:500',
-        'metadata' => 'nullable|array',
     ];
 
     /**
@@ -119,7 +109,7 @@ class FrontSetting extends Model implements HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['key', 'value', 'is_active', 'is_featured'])
+            ->logOnly(['key', 'value',  'is_featured'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
             ->setDescriptionForEvent(fn(string $eventName) => "Front setting has been {$eventName}");
@@ -134,7 +124,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true);
+        return $query->where( true);
     }
 
     /**
@@ -142,7 +132,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeInactive(Builder $query): Builder
     {
-        return $query->where('is_active', false);
+        return $query->where( false);
     }
 
     /**
@@ -150,7 +140,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query->where('is_featured', true);
+        return $query->where( true);
     }
 
     /**
@@ -158,7 +148,7 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopeNotFeatured(Builder $query): Builder
     {
-        return $query->where('is_featured', false);
+        return $query->where( false);
     }
 
     /**
@@ -229,7 +219,7 @@ class FrontSetting extends Model implements HasMedia
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', "%{$term}%")
               ->orWhere('value', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+              ->orWhere( 'like', "%{$term}%");
         });
     }
 
@@ -282,8 +272,8 @@ class FrontSetting extends Model implements HasMedia
      */
     public function scopePriority(Builder $query): Builder
     {
-        return $query->orderBy('is_featured', 'desc')
-                    ->orderBy('is_active', 'desc')
+        return $query->orderBy( 'desc')
+                    ->orderBy( 'desc')
                     ->orderBy('key', 'asc');
     }
 

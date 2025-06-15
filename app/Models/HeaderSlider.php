@@ -84,7 +84,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class HeaderSlider extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes, LogsActivity;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     /**
      * The table associated with the model.

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\ImageSlider
@@ -34,7 +36,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class ImageSlider extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
+    use HasFactory;
 
     const ALL = 2;
     const ACTIVE = 1;

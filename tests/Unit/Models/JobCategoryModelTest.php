@@ -38,7 +38,7 @@ class JobCategoryModelTest extends TestCase
         $casts = $jobCategory->getCasts();
 
         $expectedCasts = [
-            'id' => 'integer',
+            'id' => 'int',
             'name' => 'string',
             'description' => 'string',
             'is_featured' => 'boolean',

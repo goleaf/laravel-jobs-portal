@@ -177,6 +177,80 @@ class DataScienceService
     }
     
     /**
+     * Clean data for analysis with intelligent forget() patterns
+     */
+    public static function cleanDataForAnalysis(array $rawData, array $options = []): array
+    {
+        $data = collect($rawData);
+        $originalCount = $data->count();
+        $startTime = microtime(true);
+        
+        // Remove outliers using statistical methods
+        $outlierIndices = self::findOutliers($data, $options['outlier_threshold'] ?? 3);
+        $data->forget($outlierIndices);
+        
+        // Remove null/empty values
+        $emptyIndices = $data->filter(function ($record, $index) {
+            return empty($record) || 
+                   (is_array($record) && count(array_filter($record)) === 0);
+        })->keys();
+        $data->forget($emptyIndices->toArray());
+        
+        // Remove duplicate records
+        $seen = [];
+        $duplicateIndices = [];
+        foreach ($data as $index => $record) {
+            $signature = md5(serialize($record));
+            if (isset($seen[$signature])) {
+                $duplicateIndices[] = $index;
+            } else {
+                $seen[$signature] = true;
+            }
+        }
+        $data->forget($duplicateIndices);
+        
+        $processingTime = (microtime(true) - $startTime) * 1000;
+        
+        return [
+            'cleaned_data' => $data->values()->toArray(),
+            'original_count' => $originalCount,
+            'final_count' => $data->count(),
+            'processing_time_ms' => round($processingTime, 2),
+            'outliers_removed' => count($outlierIndices),
+            'empty_records_removed' => count($emptyIndices),
+            'duplicates_removed' => count($duplicateIndices)
+        ];
+    }
+    
+    /**
+     * Find statistical outliers in dataset
+     */
+    protected static function findOutliers(Collection $data, float $threshold = 3): array
+    {
+        $outlierIndices = [];
+        
+        foreach ($data as $index => $record) {
+            if (is_array($record)) {
+                $numericValues = array_filter($record, 'is_numeric');
+                if (count($numericValues) > 0) {
+                    $mean = array_sum($numericValues) / count($numericValues);
+                    $variance = array_sum(array_map(function($x) use ($mean) { return pow($x - $mean, 2); }, $numericValues)) / count($numericValues);
+                    $stdDev = sqrt($variance);
+                    
+                    foreach ($numericValues as $value) {
+                        if ($stdDev > 0 && abs($value - $mean) > ($threshold * $stdDev)) {
+                            $outlierIndices[] = $index;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return array_unique($outlierIndices);
+    }
+
+    /**
      * Advanced helper methods for data science operations
      */
     protected function detectStatisticalOutliers(Collection $data): array

@@ -175,6 +175,7 @@ class Setting extends Model
     // CONSTANTS
     // =============================================
 
+    public const PATH = 'settings';
     public const COLOR = [
         '0' => '#5EBEC4',
         '1' => '#2568FB',

@@ -150,10 +150,12 @@ class ModelSettingsController extends Controller
                 'key' => $key,
                 'value' => $value,
                 'data' => [
+                    'user_id' => (int) $id,
                     'model' => $model,
                     'id' => (int) $id,
                     'key' => $key,
                     'value' => $value,
+                    'has_setting' => $instance->settings()->has($key),
                 ]
             ]);
         } catch (\Exception $e) {

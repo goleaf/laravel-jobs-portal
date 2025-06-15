@@ -493,7 +493,8 @@ CREATE TABLE IF NOT EXISTS "inquiries"(
   "subject" varchar not null,
   "message" text not null,
   "created_at" datetime,
-  "updated_at" datetime
+  "updated_at" datetime,
+  "is_active" tinyint(1) not null default '1'
 );
 CREATE TABLE IF NOT EXISTS "post_categories"(
   "id" integer primary key autoincrement not null,
@@ -517,6 +518,7 @@ CREATE TABLE IF NOT EXISTS "posts"(
   "updated_at" datetime,
   "is_default" tinyint(1) not null default '0',
   "image_path" varchar,
+  "deleted_at" datetime,
   foreign key("created_by") references "users"("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "post_assigned_categories"(
@@ -553,7 +555,13 @@ CREATE TABLE IF NOT EXISTS "plans"(
   "created_at" datetime,
   "updated_at" datetime,
   "deleted_at" datetime,
-  "salary_currency_id" integer not null
+  "salary_currency_id" integer not null,
+  "is_active" tinyint(1) not null default '1',
+  "is_featured" tinyint(1) not null default '0',
+  "priority_support" tinyint(1) not null default '0',
+  "analytics_access" tinyint(1) not null default '0',
+  "max_featured_jobs" integer not null default '0',
+  "duration_days" integer not null default '30'
 );
 CREATE UNIQUE INDEX "plans_name_unique" on "plans"("name");
 CREATE TABLE IF NOT EXISTS "subscription_items"(
@@ -610,6 +618,7 @@ CREATE TABLE IF NOT EXISTS "featured_records"(
   "meta" text,
   "created_at" datetime,
   "updated_at" datetime,
+  "is_active" tinyint(1) not null default '1',
   foreign key("user_id") references users("id") on delete cascade on update cascade
 );
 CREATE TABLE IF NOT EXISTS "jobs_alerts"(
@@ -655,7 +664,8 @@ CREATE TABLE IF NOT EXISTS "header_sliders"(
   "is_active" tinyint(1) not null default '1',
   "created_at" datetime,
   "updated_at" datetime,
-  "image_path" varchar
+  "image_path" varchar,
+  "deleted_at" datetime
 );
 CREATE TABLE IF NOT EXISTS "subscriptions"(
   "id" integer primary key autoincrement not null,
@@ -838,74 +848,6 @@ CREATE TABLE IF NOT EXISTS "jobs"(
   foreign key("company_id") references companies("id") on delete cascade on update cascade,
   foreign key("last_change") references "users"("id")
 );
-CREATE TABLE IF NOT EXISTS "companies"(
-  "id" integer primary key autoincrement not null,
-  "ceo" varchar,
-  "no_of_offices" integer,
-  "user_id" integer,
-  "industry_id" integer,
-  "ownership_type_id" integer,
-  "company_size_id" integer,
-  "established_in" integer,
-  "details" text,
-  "website" varchar,
-  "location" varchar,
-  "is_featured" tinyint(1) not null default('0'),
-  "fax" varchar,
-  "unique_id" varchar not null,
-  "created_at" datetime,
-  "updated_at" datetime,
-  "location2" varchar,
-  "last_change" integer,
-  "logo_path" varchar,
-  "facebook_url" varchar,
-  "twitter_url" varchar,
-  "linkedin_url" varchar,
-  "google_plus_url" varchar,
-  "pinterest_url" varchar,
-  "slug" varchar,
-  "deleted_at" datetime,
-  "name" varchar,
-  "email" varchar,
-  "phone" varchar,
-  foreign key("user_id") references users("id") on delete cascade on update cascade,
-  foreign key("industry_id") references industries("id") on delete cascade on update cascade,
-  foreign key("ownership_type_id") references ownership_types("id") on delete cascade on update cascade,
-  foreign key("company_size_id") references company_sizes("id") on delete cascade on update cascade,
-  foreign key("last_change") references "users"("id")
-);
-CREATE UNIQUE INDEX "companies_unique_id_unique" on "companies"("unique_id");
-CREATE TABLE IF NOT EXISTS "candidates"(
-  "id" integer primary key autoincrement not null,
-  "user_id" integer not null,
-  "unique_id" varchar not null,
-  "father_name" varchar,
-  "marital_status_id" integer,
-  "nationality" varchar,
-  "national_id_card" varchar,
-  "experience" integer,
-  "career_level_id" integer,
-  "industry_id" integer,
-  "functional_area_id" integer,
-  "current_salary" double,
-  "expected_salary" double,
-  "salary_currency" varchar,
-  "address" text,
-  "immediate_available" tinyint(1) not null default('1'),
-  "created_at" datetime,
-  "updated_at" datetime,
-  "job_alert" tinyint(1) not null default('0'),
-  "available_at" date,
-  "last_change" integer,
-  "resume_path" varchar,
-  "image_path" varchar,
-  foreign key("industry_id") references industries("id") on delete cascade on update cascade,
-  foreign key("functional_area_id") references functional_areas("id") on delete cascade on update cascade,
-  foreign key("career_level_id") references career_levels("id") on delete cascade on update cascade,
-  foreign key("marital_status_id") references marital_status("id") on delete cascade on update cascade,
-  foreign key("user_id") references users("id") on delete cascade on update cascade,
-  foreign key("last_change") references "users"("id")
-);
 CREATE TABLE IF NOT EXISTS "env_settings"(
   "id" integer primary key autoincrement not null,
   "key" varchar not null,
@@ -963,8 +905,6 @@ CREATE INDEX "jobs_status_index" on "jobs"("status");
 CREATE INDEX "jobs_created_at_index" on "jobs"("created_at");
 CREATE INDEX "jobs_company_id_index" on "jobs"("company_id");
 CREATE INDEX "jobs_status_created_at_index" on "jobs"("status", "created_at");
-CREATE INDEX "companies_is_featured_index" on "companies"("is_featured");
-CREATE INDEX "companies_created_at_index" on "companies"("created_at");
 CREATE INDEX "users_user_type_index" on "users"("user_type");
 CREATE INDEX "users_created_at_index" on "users"("created_at");
 CREATE TABLE IF NOT EXISTS "activity_log"(
@@ -1020,7 +960,6 @@ CREATE INDEX "job_types_default_active_index" on "job_types"(
   "is_active"
 );
 CREATE INDEX "job_types_jobs_count_index" on "job_types"("jobs_count");
-CREATE UNIQUE INDEX "companies_slug_unique" on "companies"("slug");
 CREATE TABLE IF NOT EXISTS "taxonomies"(
   "id" integer primary key autoincrement not null,
   "name" varchar not null,
@@ -1152,6 +1091,105 @@ CREATE TABLE IF NOT EXISTS "cities"(
   "population" integer,
   "deleted_at" datetime,
   foreign key("state_id") references states("id") on delete cascade on update cascade
+);
+CREATE TABLE IF NOT EXISTS "candidates"(
+  "id" integer primary key autoincrement not null,
+  "user_id" integer not null,
+  "unique_id" varchar not null,
+  "father_name" varchar,
+  "marital_status_id" integer,
+  "nationality" varchar,
+  "national_id_card" varchar,
+  "experience" integer,
+  "career_level_id" integer,
+  "industry_id" integer,
+  "functional_area_id" integer,
+  "current_salary" double,
+  "expected_salary" double,
+  "salary_currency" varchar,
+  "address" text,
+  "immediate_available" tinyint(1) not null default('1'),
+  "created_at" datetime,
+  "updated_at" datetime,
+  "job_alert" tinyint(1) not null default('0'),
+  "available_at" date,
+  "last_change" integer,
+  "resume_path" varchar,
+  "image_path" varchar,
+  "city_id" integer,
+  foreign key("last_change") references users("id") on delete no action on update no action,
+  foreign key("user_id") references users("id") on delete cascade on update cascade,
+  foreign key("marital_status_id") references marital_status("id") on delete cascade on update cascade,
+  foreign key("career_level_id") references career_levels("id") on delete cascade on update cascade,
+  foreign key("functional_area_id") references functional_areas("id") on delete cascade on update cascade,
+  foreign key("industry_id") references industries("id") on delete cascade on update cascade,
+  foreign key("city_id") references "cities"("id") on delete set null on update cascade
+);
+CREATE INDEX "plans_is_active_index" on "plans"("is_active");
+CREATE INDEX "plans_is_featured_index" on "plans"("is_featured");
+CREATE INDEX "plans_is_active_is_featured_index" on "plans"(
+  "is_active",
+  "is_featured"
+);
+CREATE TABLE IF NOT EXISTS "companies"(
+  "id" integer primary key autoincrement not null,
+  "ceo" varchar,
+  "no_of_offices" integer,
+  "user_id" integer,
+  "industry_id" integer,
+  "ownership_type_id" integer,
+  "company_size_id" integer,
+  "established_in" integer,
+  "details" text,
+  "website" varchar,
+  "location" varchar,
+  "is_featured" tinyint(1) not null default('0'),
+  "fax" varchar,
+  "unique_id" varchar not null,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "location2" varchar,
+  "last_change" integer,
+  "logo_path" varchar,
+  "facebook_url" varchar,
+  "twitter_url" varchar,
+  "linkedin_url" varchar,
+  "google_plus_url" varchar,
+  "pinterest_url" varchar,
+  "slug" varchar,
+  "deleted_at" datetime,
+  "name" varchar,
+  "email" varchar,
+  "phone" varchar,
+  "city_id" integer,
+  "is_active" tinyint(1) not null default('1'),
+  "country_id" integer,
+  "state_id" integer,
+  "is_verified" tinyint(1) not null default '0',
+  "no_of_employees" integer,
+  foreign key("city_id") references cities("id") on delete set null on update cascade,
+  foreign key("user_id") references users("id") on delete cascade on update cascade,
+  foreign key("industry_id") references industries("id") on delete cascade on update cascade,
+  foreign key("ownership_type_id") references ownership_types("id") on delete cascade on update cascade,
+  foreign key("company_size_id") references company_sizes("id") on delete cascade on update cascade,
+  foreign key("last_change") references users("id") on delete no action on update no action,
+  foreign key("country_id") references "countries"("id") on delete set null on update cascade,
+  foreign key("state_id") references "states"("id") on delete set null on update cascade
+);
+CREATE INDEX "companies_created_at_index" on "companies"("created_at");
+CREATE INDEX "companies_is_featured_index" on "companies"("is_featured");
+CREATE UNIQUE INDEX "companies_slug_unique" on "companies"("slug");
+CREATE UNIQUE INDEX "companies_unique_id_unique" on "companies"("unique_id");
+CREATE INDEX "featured_records_owner_index" on "featured_records"(
+  "owner_id",
+  "owner_type"
+);
+CREATE INDEX "featured_records_time_index" on "featured_records"(
+  "start_time",
+  "end_time"
+);
+CREATE INDEX "featured_records_is_active_index" on "featured_records"(
+  "is_active"
 );
 
 INSERT INTO migrations VALUES(1,'2014_10_10_045631_create_countries_table',1);
@@ -1311,4 +1349,13 @@ INSERT INTO migrations VALUES(154,'2025_06_15_015458_add_missing_columns_to_stat
 INSERT INTO migrations VALUES(155,'2025_06_15_015547_add_missing_columns_to_cms_services_table',4);
 INSERT INTO migrations VALUES(157,'2025_06_15_015826_add_missing_columns_to_cities_table',5);
 INSERT INTO migrations VALUES(158,'2025_06_15_021531_add_enhanced_columns_to_cities_table',6);
-INSERT INTO migrations VALUES(159,'2025_06_15_023004_add_soft_deletes_to_cities_table',7);
+INSERT INTO migrations VALUES(160,'2025_06_15_023004_add_soft_deletes_to_cities_table',7);
+INSERT INTO migrations VALUES(161,'2025_06_15_132453_add_city_id_to_companies_and_candidates_tables',7);
+INSERT INTO migrations VALUES(162,'2025_06_15_132938_add_is_active_to_companies_table',8);
+INSERT INTO migrations VALUES(163,'2025_06_15_133502_add_enhanced_columns_to_plans_table',9);
+INSERT INTO migrations VALUES(164,'2025_06_15_142501_add_country_state_to_companies_table',10);
+INSERT INTO migrations VALUES(165,'2025_06_15_153459_fix_featured_records_table_schema',11);
+INSERT INTO migrations VALUES(166,'2025_06_15_153605_add_deleted_at_to_header_sliders_table',12);
+INSERT INTO migrations VALUES(167,'2025_06_15_153711_add_deleted_at_to_posts_table',13);
+INSERT INTO migrations VALUES(168,'2025_06_15_154118_add_missing_columns_to_companies_table_final',14);
+INSERT INTO migrations VALUES(169,'2025_06_15_154318_add_is_active_to_inquiries_table',15);

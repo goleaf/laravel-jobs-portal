@@ -42,7 +42,7 @@ class JobTest extends TestCase
             'title', 'description', 'benefits', 'skills', 'requirements',
             'job_category_id', 'job_type_id', 'career_level_id', 'functional_area_id',
             'salary_from', 'salary_to', 'salary_currency_id', 'salary_period_id',
-            'country_id', 'state_id', 'city_id', 'location',
+            'country_id', 'state_id', 'city_id',
             'experience_from', 'experience_to', 'degree_level_id',
             'job_shift_id', 'no_of_positions', 'job_expiry_date',
             'hide_salary', 'is_freelance', 'is_suspended', 'is_featured',
@@ -347,10 +347,9 @@ class JobTest extends TestCase
             'country_id' => $country->id,
             'state_id' => $state->id,
             'city_id' => $city->id,
-            'location' => '123 Main St',
         ]);
 
-        $fullLocation = $job->getFullLocation();
+        $fullLocation = $job->full_location;
         
         $this->assertStringContainsString('San Francisco', $fullLocation);
         $this->assertStringContainsString('California', $fullLocation);

@@ -492,5 +492,162 @@ class Company extends Model implements HasMedia
         return $this->belongsTo(OwnershipType::class);
     }
 
+    /**
+     * Scope a query to filter by industry.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $industryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByIndustry($query, $industryId)
+    {
+        return $query->where('industry_id', $industryId);
+    }
+
+    /**
+     * Scope a query to filter by location.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $location
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByLocation($query, $location)
+    {
+        return $query->where(function($q) use ($location) {
+            $q->where('city_id', $location)
+              ->orWhere('state_id', $location)
+              ->orWhere('country_id', $location)
+              ->orWhere('address', 'like', "%{$location}%");
+        });
+    }
+
+    /**
+     * Scope a query to filter by company size.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $sizeId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBySize($query, $sizeId)
+    {
+        return $query->where('company_size_id', $sizeId);
+    }
+
+    /**
+     * Scope a query to filter by establishment year range.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $startYear
+     * @param  int  $endYear
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEstablishedBetween($query, $startYear, $endYear)
+    {
+        return $query->whereBetween('established_in', [$startYear, $endYear]);
+    }
+
+    /**
+     * Scope a query to include only companies with jobs.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithJobs($query)
+    {
+        return $query->whereHas('jobs');
+    }
+
+    /**
+     * Get the full location string.
+     *
+     * @return string|null
+     */
+    public function getFullLocation()
+    {
+        $parts = [];
+        
+        if ($this->city) {
+            $parts[] = $this->city->name;
+        }
+        if ($this->state) {
+            $parts[] = $this->state->name;
+        }
+        if ($this->country) {
+            $parts[] = $this->country->name;
+        }
+        
+        return empty($parts) ? null : implode(', ', $parts);
+    }
+
+    /**
+     * Get the total jobs count.
+     *
+     * @return int
+     */
+    public function getJobsCount()
+    {
+        return $this->jobs()->count();
+    }
+
+    /**
+     * Get the active jobs count.
+     *
+     * @return int
+     */
+    public function getActiveJobsCount()
+    {
+        return $this->jobs()->where('is_active', true)->count();
+    }
+
+    /**
+     * Check if company has social links.
+     *
+     * @return bool
+     */
+    public function hasSocialLinks()
+    {
+        return !empty($this->social_facebook) ||
+               !empty($this->social_twitter) ||
+               !empty($this->social_linkedin) ||
+               !empty($this->social_instagram) ||
+               !empty($this->facebook_url) ||
+               !empty($this->twitter_url) ||
+               !empty($this->linkedin_url);
+    }
+
+    /**
+     * Get the company age in years.
+     *
+     * @return int|null
+     */
+    public function getCompanyAge()
+    {
+        if (!$this->established_in && !$this->founded_year) {
+            return null;
+        }
+        
+        $establishedYear = $this->established_in ?: $this->founded_year;
+        return now()->year - $establishedYear;
+    }
+
+    /**
+     * Get employee range description.
+     *
+     * @return string
+     */
+    public function getEmployeeRangeDescription()
+    {
+        if ($this->companySize && $this->companySize->size) {
+            return $this->companySize->size;
+        }
+        
+        if ($this->employee_count || $this->no_of_employees) {
+            $count = $this->employee_count ?: $this->no_of_employees;
+            return $count . ' employees';
+        }
+        
+        return 'Size not specified';
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

@@ -588,5 +588,24 @@ class Job extends Model
                     ->where('is_active', true);
     }
 
+    // ==============================================
+    // ACCESSORS
+    // ==============================================
+
+    /**
+     * Get the full location string for the job.
+     */
+    public function getFullLocationAttribute(): string
+    {
+        $location = [];
+        
+        // Add city, state, country if they exist
+        if ($this->city?->name) $location[] = $this->city->name;
+        if ($this->state?->name) $location[] = $this->state->name;
+        if ($this->country?->name) $location[] = $this->country->name;
+        
+        return implode(', ', $location) ?: __('common.location_not_specified');
+    }
+
     // Additional scopes and methods can be added here as needed for the job portal project
 } 

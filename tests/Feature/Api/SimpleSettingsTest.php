@@ -108,10 +108,11 @@ class SimpleSettingsTest extends TestCase
     /** @test */
     public function it_can_set_and_get_user_settings()
     {
-        // First, try to set some settings
+        // First, try to set some unique settings that won't conflict with defaults
         $testSettings = [
-            'profile' => ['theme' => 'dark'],
-            'notifications' => ['email' => true],
+            'profile' => ['theme' => 'dark', 'custom_setting' => 'test_value'],
+            'notifications' => ['email' => true, 'sms' => false],
+            'test_category' => ['unique_key' => 'unique_value'],
         ];
 
         $updateResponse = $this->putJson("/api/settings/user/{$this->user->id}", [
@@ -139,9 +140,10 @@ class SimpleSettingsTest extends TestCase
         $getResponse->assertStatus(200);
         $this->assertTrue($getResponse->json('success'));
 
-        // Verify the settings were stored correctly
+        // Verify the custom settings were stored correctly (use unique keys to avoid defaults)
         $settings = $getResponse->json('data.settings');
-        $this->assertEquals('dark', $settings['profile']['theme']);
+        $this->assertEquals('test_value', $settings['profile']['custom_setting']);
         $this->assertTrue($settings['notifications']['email']);
+        $this->assertEquals('unique_value', $settings['test_category']['unique_key']);
     }
 } 

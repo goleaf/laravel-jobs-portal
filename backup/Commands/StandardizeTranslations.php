@@ -26,7 +26,7 @@ class StandardizeTranslations extends Command
      *
      * @var array
      */
-    protected $supportedLanguages = ['en', 'lt'];
+    protected $supportedLanguages = ['en'];
 
     /**
      * Execute the console command.

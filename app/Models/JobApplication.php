@@ -34,7 +34,6 @@ class JobApplication extends Model
 {
     /** @use HasFactory<\Database\Factories\JobApplicationFactory> */
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
     use HasSettingsField;
 
@@ -57,6 +56,7 @@ class JobApplication extends Model
     protected $fillable = [
         'job_id',
         'candidate_id',
+        'resume_id',
         'status',
         'cover_letter',
         'resume_path',

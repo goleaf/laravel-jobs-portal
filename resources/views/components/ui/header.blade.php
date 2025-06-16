@@ -30,7 +30,7 @@
                     {{ __('navigation.candidates') }}
                 </x-ui.nav-link>
                 
-                <x-ui.nav-link href="{{ route('about') }}" :active="request()->routeIs('about')">
+                <x-ui.nav-link href="{{ route('aboutus.index') }}" :active="request()->routeIs('aboutus.index')">
                     {{ __('navigation.about') }}
                 </x-ui.nav-link>
                 
@@ -53,29 +53,7 @@
             <!-- Theme Toggle -->
             <x-ui.theme-toggle />
 
-            <!-- User Menu -->
-            @auth
-                <x-ui.user-menu />
-            @else
-                <div class="flex items-center space-x-2">
-                    <x-ui.button 
-                        href="{{ route('login') }}" 
-                        variant="outline" 
-                        size="sm"
-                        class="hidden sm:inline-flex"
-                    >
-                        {{ __('auth.login') }}
-                    </x-ui.button>
-                    
-                    <x-ui.button 
-                        href="{{ route('register') }}" 
-                        variant="primary" 
-                        size="sm"
-                    >
-                        {{ __('auth.register') }}
-                    </x-ui.button>
-                </div>
-            @endauth
+            <!-- Navigation actions (authentication removed per requirements) -->
 
             <!-- Mobile menu button -->
             <button 
@@ -113,7 +91,7 @@
                 {{ __('navigation.candidates') }}
             </x-ui.mobile-nav-link>
             
-            <x-ui.mobile-nav-link href="{{ route('about') }}" :active="request()->routeIs('about')">
+            <x-ui.mobile-nav-link href="{{ route('aboutus.index') }}" :active="request()->routeIs('aboutus.index')">
                 {{ __('navigation.about') }}
             </x-ui.mobile-nav-link>
             
@@ -127,18 +105,6 @@
             <x-ui.quick-search />
         </div>
 
-        @guest
-            <!-- Mobile auth buttons -->
-            <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
-                <div class="space-y-2">
-                    <x-ui.mobile-nav-link href="{{ route('login') }}">
-                        {{ __('auth.login') }}
-                    </x-ui.mobile-nav-link>
-                    <x-ui.mobile-nav-link href="{{ route('register') }}">
-                        {{ __('auth.register') }}
-                    </x-ui.mobile-nav-link>
-                </div>
-            </div>
-        @endguest
+        <!-- Mobile authentication removed per requirements -->
     </div>
 </nav> 

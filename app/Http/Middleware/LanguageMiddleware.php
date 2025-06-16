@@ -53,7 +53,6 @@ class LanguageMiddleware
     private function isExcludedPath(string $path): bool
     {
         $excludedPaths = [
-            'livewire',
             '_debugbar',
             'translations',
             'api',

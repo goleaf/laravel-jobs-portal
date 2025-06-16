@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\JobApplication;
+use App\Models\Job;
+use App\Models\Candidate;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,9 +23,9 @@ class JobApplicationFactory extends Factory
     public function definition(): array
     {
         return [
-            'job_id' => fake()->numberBetween(1, 2), // Use existing jobs from seeder
-            'candidate_id' => fake()->numberBetween(1, 3), // Use existing candidates from seeder
-            'resume_id' => 1, // Use a default resume ID
+            'job_id' => Job::factory(),
+            'candidate_id' => Candidate::factory(),
+            'resume_id' => fake()->numberBetween(1, 100), // Simple resume ID for testing
             'expected_salary' => fake()->numberBetween(40000, 100000),
             'notes' => fake()->text(500),
             'status' => JobApplication::STATUS_PENDING,

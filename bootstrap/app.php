@@ -64,3 +64,4 @@ $app->singleton(
 */
 
 return $app;
+class_alias("App\Models\OwnerShipType", "App\Models\OwnershipType");

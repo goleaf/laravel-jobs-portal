@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\JobTagController;
 use App\Http\Controllers\Admin\JobTypeController;
 use App\Http\Controllers\Admin\MaritalStatusController;
 use App\Http\Controllers\Admin\NotificationSettingController;
-use App\Http\Controllers\Admin\OwnershipTypeController;
+use App\Http\Controllers\Admin\OwnerShipTypeController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostCommentController;
 use App\Http\Controllers\Admin\ReportedJobController;
@@ -337,7 +337,7 @@ Route::middleware(['auth', 'role:admin', 'throttle:admin'])->prefix('admin')->na
         Route::resource('career-levels', CareerLevelController::class);
         Route::resource('degree-levels', DegreeLevelController::class);
         Route::resource('company-sizes', CompanySizeController::class);
-        Route::resource('ownership-types', OwnershipTypeController::class);
+        Route::resource('ownership-types', OwnerShipTypeController::class);
         Route::resource('salary-currencies', SalaryCurrencyController::class);
         Route::resource('salary-periods', SalaryPeriodController::class);
         Route::resource('marital-statuses', MaritalStatusController::class);

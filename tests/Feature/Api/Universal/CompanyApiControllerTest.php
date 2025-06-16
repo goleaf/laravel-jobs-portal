@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\CompanySize;
 use App\Models\Country;
 use App\Models\Industry;
-use App\Models\OwnershipType;
+use App\Models\OwnerShipType;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,7 +55,7 @@ class CompanyApiControllerTest extends TestCase
         $city = City::factory()->create(['state_id' => $state->id]);
         $companySize = CompanySize::factory()->create();
         $industry = Industry::factory()->create();
-        $ownershipType = OwnershipType::factory()->create();
+        $ownershipType = OwnerShipType::factory()->create();
 
         // Create test company
         $this->company = Company::factory()->create([

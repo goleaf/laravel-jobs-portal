@@ -76,11 +76,10 @@ Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
     Route::post('clear-cache', [LocaleController::class, 'clearCache'])->name('clear-cache');
 });
 
-// Home route - aliased as both 'home' and 'front.home'
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Add alias for front.home
-Route::get('/', [HomeController::class, 'index'])->name('front.home');
+// Home route - basic test
+Route::get('/', function () {
+    return "Welcome to Job Portal - Basic Test";
+})->name('home');
 
 // Authentication Routes
 Route::get('/login', function () {

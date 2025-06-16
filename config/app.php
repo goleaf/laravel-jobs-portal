@@ -262,7 +262,7 @@ return [
         EventServiceProvider::class,
         RouteServiceProvider::class,
         TranslationServiceProvider::class,
-        \App\Providers\SettingsServiceProvider::class,
+        // \App\Providers\SettingsServiceProvider::class, // Temporarily disabled to fix function redeclaration
     ])->toArray(),
 
     /*

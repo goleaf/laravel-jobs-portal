@@ -5,6 +5,7 @@ namespace App\Http\Requests\JobApplication;
 use App\Models\JobApplication;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class ShowJobApplicationRequest extends FormRequest
@@ -14,40 +15,8 @@ class ShowJobApplicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user = $this->user();
-        $applicationId = $this->route('jobApplication') ?? $this->route('id');
-
-        if (!$user || !$applicationId) {
-            return false;
-        }
-
-        // Admin can view any application
-        if ($user->hasRole('admin')) {
-            return true;
-        }
-
-        // Find the application
-        $application = JobApplication::find($applicationId);
-        if (!$application) {
-            return false;
-        }
-
-        // Candidate can view their own applications
-        if ($user->hasRole('candidate') && $application->candidate_id === $user->id) {
-            return true;
-        }
-
-        // Employer can view applications for their jobs
-        if ($user->hasRole('employer')) {
-            $userCompanyIds = $user->companies()->pluck('id')->toArray();
-            $jobCompanyId = $application->job->company_id ?? null;
-
-            if ($jobCompanyId && in_array($jobCompanyId, $userCompanyIds)) {
-                return true;
-            }
-        }
-
-        return false;
+        // Based on user requirements: no auth system
+        return true;
     }
 
     /**
@@ -58,235 +27,416 @@ class ShowJobApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // Application ID - required for viewing
+            'id' => [
+                'required',
+                'integer',
+                'min:1',
+                'exists:job_applications,id',
+                function ($attribute, $value, $fail) {
+                    if (!$this->validateApplicationAccessible($value)) {
+                        $fail(__('validation.application_not_accessible'));
+                    }
+                },
+            ],
+
             // Include relationships
-            'include' => ['sometimes', 'array'],
-            'include.*' => ['string', Rule::in([
-                'candidate',
-                'candidate.profile',
-                'candidate.resumes',
-                'candidate.skills',
-                'candidate.experiences',
-                'candidate.educations',
-                'job',
-                'job.company',
-                'job.category',
-                'job.type',
-                'job.skills',
-                'resume',
-                'skills',
-                'notes',
-                'interviews',
-                'documents',
-                'activity_logs',
-            ])],
+            'include' => [
+                'sometimes',
+                'array',
+                'max:15',
+            ],
+
+            'include.*' => [
+                'string',
+                Rule::in([
+                    'job',
+                    'job.company',
+                    'job.category',
+                    'job.type',
+                    'job.skills',
+                    'applicant',
+                    'applicant.profile',
+                    'applicant.skills',
+                    'applicant.education',
+                    'applicant.experience',
+                    'resume',
+                    'cover_letter',
+                    'portfolio',
+                    'interviews',
+                    'interviews.feedback',
+                    'notes',
+                    'activities',
+                    'references',
+                    'documents',
+                    'assessments',
+                    'communications',
+                ]),
+            ],
 
             // Response format options
-            'format' => ['sometimes', 'string', Rule::in(['json', 'pdf', 'html'])],
-            'template' => ['sometimes', 'string', Rule::in(['detailed', 'summary', 'print'])],
+            'format' => [
+                'sometimes',
+                'string',
+                Rule::in(['json', 'detailed', 'summary', 'export']),
+            ],
 
-            // Privacy options
-            'include_private' => ['sometimes', 'boolean'],
-            'include_contact_info' => ['sometimes', 'boolean'],
-            'include_salary_info' => ['sometimes', 'boolean'],
+            // View tracking
+            'track_view' => [
+                'sometimes',
+                'boolean',
+            ],
 
-            // Tracking options
-            'track_view' => ['sometimes', 'boolean'],
-            'mark_as_viewed' => ['sometimes', 'boolean'],
+            'view_context' => [
+                'sometimes',
+                'string',
+                'max:100',
+                Rule::in([
+                    'dashboard',
+                    'job_listing',
+                    'applicant_profile',
+                    'interview_preparation',
+                    'hiring_review',
+                    'analytics',
+                    'export',
+                    'api',
+                ]),
+            ],
 
-            // Language and localization
-            'locale' => ['sometimes', 'string', 'size:2', Rule::in(['en', 'ar', 'es', 'fr', 'de', 'pt', 'ru', 'tr', 'zh'])],
-            'timezone' => ['sometimes', 'string', 'max:50'],
+            // Security and access control
+            'access_token' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+
+            'access_level' => [
+                'sometimes',
+                'string',
+                Rule::in(['basic', 'detailed', 'full', 'admin']),
+            ],
+
+            // Data filtering
+            'fields' => [
+                'sometimes',
+                'array',
+                'max:50',
+            ],
+
+            'fields.*' => [
+                'string',
+                Rule::in([
+                    'id',
+                    'status',
+                    'applied_at',
+                    'updated_at',
+                    'expected_salary',
+                    'availability_date',
+                    'cover_letter_text',
+                    'notes',
+                    'priority',
+                    'match_score',
+                    'interview_status',
+                    'feedback',
+                    'rating',
+                    'skills_match',
+                    'experience_match',
+                    'education_match',
+                    'location_preference',
+                    'remote_work_preference',
+                    'visa_status',
+                    'notice_period',
+                    'references_available',
+                    'portfolio_url',
+                    'linkedin_profile',
+                    'github_profile',
+                    'personal_website',
+                ]),
+            ],
+
+            // Sensitive data access
+            'include_sensitive' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'sensitive_fields' => [
+                'sometimes',
+                'array',
+                'max:20',
+            ],
+
+            'sensitive_fields.*' => [
+                'string',
+                Rule::in([
+                    'personal_phone',
+                    'personal_email',
+                    'home_address',
+                    'salary_history',
+                    'references_contact',
+                    'background_check',
+                    'medical_information',
+                    'emergency_contact',
+                    'bank_details',
+                    'tax_information',
+                    'visa_details',
+                    'criminal_record',
+                ]),
+            ],
+
+            // Analytics and reporting
+            'analytics_context' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+
+            'report_type' => [
+                'sometimes',
+                'string',
+                Rule::in([
+                    'candidate_summary',
+                    'hiring_progress',
+                    'skills_analysis',
+                    'interview_report',
+                    'reference_check',
+                    'background_verification',
+                    'offer_preparation',
+                ]),
+            ],
+
+            // Performance optimization
+            'cache_response' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'cache_duration' => [
+                'sometimes',
+                'integer',
+                'min:60',
+                'max:3600',
+            ],
 
             // Export options
-            'export_fields' => ['sometimes', 'array'],
-            'export_fields.*' => ['string', Rule::in([
-                'basic_info', 'contact_info', 'experience', 'education', 'skills',
-                'resume', 'cover_letter', 'salary_expectations', 'availability',
-                'application_details', 'status_history', 'notes', 'documents',
-            ])],
+            'export_format' => [
+                'sometimes',
+                'string',
+                Rule::in(['pdf', 'docx', 'csv', 'json']),
+            ],
 
-            // Comparison options
-            'compare_with' => ['sometimes', 'array'],
-            'compare_with.*' => ['integer', 'exists:job_applications,id'],
-            'comparison_fields' => ['sometimes', 'array'],
-            'comparison_fields.*' => ['string'],
+            'export_template' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            'export_options' => [
+                'sometimes',
+                'array',
+                'max:10',
+            ],
+
+            'export_options.*' => [
+                'string',
+                Rule::in([
+                    'include_resume',
+                    'include_cover_letter',
+                    'include_portfolio',
+                    'include_references',
+                    'include_interview_notes',
+                    'include_assessments',
+                    'include_communications',
+                    'watermark',
+                    'confidential_header',
+                    'company_branding',
+                ]),
+            ],
+
+            // Audit and compliance
+            'audit_reason' => [
+                'sometimes',
+                'string',
+                'max:500',
+            ],
+
+            'compliance_check' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'gdpr_consent' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            // Real-time features
+            'subscribe_updates' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'notification_preferences' => [
+                'sometimes',
+                'array',
+                'max:10',
+            ],
+
+            'notification_preferences.*' => [
+                'string',
+                Rule::in([
+                    'status_change',
+                    'interview_scheduled',
+                    'feedback_added',
+                    'document_uploaded',
+                    'reference_contacted',
+                    'offer_made',
+                    'deadline_approaching',
+                    'priority_changed',
+                ]),
+            ],
+
+            // Version control
+            'version' => [
+                'sometimes',
+                'string',
+                'max:20',
+            ],
+
+            'snapshot_date' => [
+                'sometimes',
+                'date',
+                'before_or_equal:today',
+                'after:' . now()->subYears(2)->toDateString(),
+            ],
+
+            // Integration parameters
+            'integration_source' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            'external_reference' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+
+            // Quality assurance
+            'qa_mode' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'validation_level' => [
+                'sometimes',
+                'string',
+                Rule::in(['basic', 'standard', 'strict', 'enterprise']),
+            ],
         ];
     }
 
     /**
-     * Get custom error messages for validator errors.
+     * Get custom error messages for validation rules.
      *
      * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'include.array' => __('validation.include_must_be_array'),
-            'include.*.string' => __('validation.include_item_must_be_string'),
-            'include.*.in' => __('validation.invalid_include_relationship'),
-
-            'format.string' => __('validation.format_must_be_string'),
+            'id.required' => __('validation.required_field', ['field' => __('validation.attributes.application_id')]),
+            'id.integer' => __('validation.integer', ['attribute' => __('validation.attributes.application_id')]),
+            'id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.job_application')]),
+            
+            'include.array' => __('validation.array', ['attribute' => __('validation.attributes.include')]),
+            'include.max' => __('validation.max_items', ['attribute' => __('validation.attributes.include'), 'max' => 15]),
+            'include.*.in' => __('validation.invalid_include_relation'),
+            
             'format.in' => __('validation.invalid_format'),
-
-            'template.string' => __('validation.template_must_be_string'),
-            'template.in' => __('validation.invalid_template'),
-
-            'include_private.boolean' => __('validation.include_private_must_be_boolean'),
-            'include_contact_info.boolean' => __('validation.include_contact_info_must_be_boolean'),
-            'include_salary_info.boolean' => __('validation.include_salary_info_must_be_boolean'),
-
-            'track_view.boolean' => __('validation.track_view_must_be_boolean'),
-            'mark_as_viewed.boolean' => __('validation.mark_as_viewed_must_be_boolean'),
-
-            'locale.string' => __('validation.locale_must_be_string'),
-            'locale.size' => __('validation.locale_invalid_length'),
-            'locale.in' => __('validation.locale_not_supported'),
-
-            'timezone.string' => __('validation.timezone_must_be_string'),
-            'timezone.max' => __('validation.timezone_too_long'),
-
-            'export_fields.array' => __('validation.export_fields_must_be_array'),
-            'export_fields.*.string' => __('validation.export_field_must_be_string'),
-            'export_fields.*.in' => __('validation.invalid_export_field'),
-
-            'compare_with.array' => __('validation.compare_with_must_be_array'),
-            'compare_with.*.integer' => __('validation.compare_with_item_must_be_integer'),
-            'compare_with.*.exists' => __('validation.compare_application_not_found'),
-
-            'comparison_fields.array' => __('validation.comparison_fields_must_be_array'),
-            'comparison_fields.*.string' => __('validation.comparison_field_must_be_string'),
+            
+            'view_context.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.view_context'), 'max' => 100]),
+            'view_context.in' => __('validation.invalid_view_context'),
+            
+            'access_token.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.access_token'), 'max' => 255]),
+            'access_level.in' => __('validation.invalid_access_level'),
+            
+            'fields.array' => __('validation.array', ['attribute' => __('validation.attributes.fields')]),
+            'fields.max' => __('validation.max_items', ['attribute' => __('validation.attributes.fields'), 'max' => 50]),
+            'fields.*.in' => __('validation.invalid_field_name'),
+            
+            'sensitive_fields.array' => __('validation.array', ['attribute' => __('validation.attributes.sensitive_fields')]),
+            'sensitive_fields.max' => __('validation.max_items', ['attribute' => __('validation.attributes.sensitive_fields'), 'max' => 20]),
+            'sensitive_fields.*.in' => __('validation.invalid_sensitive_field'),
+            
+            'analytics_context.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.analytics_context'), 'max' => 255]),
+            'report_type.in' => __('validation.invalid_report_type'),
+            
+            'cache_duration.min' => __('validation.min_value', ['attribute' => __('validation.attributes.cache_duration'), 'min' => 60]),
+            'cache_duration.max' => __('validation.max_value', ['attribute' => __('validation.attributes.cache_duration'), 'max' => 3600]),
+            
+            'export_format.in' => __('validation.invalid_export_format'),
+            'export_template.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.export_template'), 'max' => 100]),
+            
+            'export_options.array' => __('validation.array', ['attribute' => __('validation.attributes.export_options')]),
+            'export_options.max' => __('validation.max_items', ['attribute' => __('validation.attributes.export_options'), 'max' => 10]),
+            'export_options.*.in' => __('validation.invalid_export_option'),
+            
+            'audit_reason.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.audit_reason'), 'max' => 500]),
+            
+            'notification_preferences.array' => __('validation.array', ['attribute' => __('validation.attributes.notification_preferences')]),
+            'notification_preferences.max' => __('validation.max_items', ['attribute' => __('validation.attributes.notification_preferences'), 'max' => 10]),
+            'notification_preferences.*.in' => __('validation.invalid_notification_preference'),
+            
+            'version.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.version'), 'max' => 20]),
+            
+            'snapshot_date.before_or_equal' => __('validation.before_or_equal', ['attribute' => __('validation.attributes.snapshot_date'), 'date' => 'today']),
+            'snapshot_date.after' => __('validation.date_range_limit', ['attribute' => __('validation.attributes.snapshot_date')]),
+            
+            'integration_source.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.integration_source'), 'max' => 100]),
+            'external_reference.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.external_reference'), 'max' => 255]),
+            
+            'validation_level.in' => __('validation.invalid_validation_level'),
         ];
     }
 
     /**
-     * Get custom attributes for validator errors.
+     * Get custom attribute names for validation errors.
      *
      * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'include' => __('attributes.include_relationships'),
-            'format' => __('attributes.response_format'),
-            'template' => __('attributes.template'),
-            'include_private' => __('attributes.include_private_info'),
-            'include_contact_info' => __('attributes.include_contact_info'),
-            'include_salary_info' => __('attributes.include_salary_info'),
-            'track_view' => __('attributes.track_view'),
-            'mark_as_viewed' => __('attributes.mark_as_viewed'),
-            'locale' => __('attributes.locale'),
-            'timezone' => __('attributes.timezone'),
-            'export_fields' => __('attributes.export_fields'),
-            'compare_with' => __('attributes.compare_with'),
-            'comparison_fields' => __('attributes.comparison_fields'),
+            'id' => __('validation.attributes.application_id'),
+            'include' => __('validation.attributes.include'),
+            'format' => __('validation.attributes.format'),
+            'track_view' => __('validation.attributes.track_view'),
+            'view_context' => __('validation.attributes.view_context'),
+            'access_token' => __('validation.attributes.access_token'),
+            'access_level' => __('validation.attributes.access_level'),
+            'fields' => __('validation.attributes.fields'),
+            'include_sensitive' => __('validation.attributes.include_sensitive'),
+            'sensitive_fields' => __('validation.attributes.sensitive_fields'),
+            'analytics_context' => __('validation.attributes.analytics_context'),
+            'report_type' => __('validation.attributes.report_type'),
+            'cache_response' => __('validation.attributes.cache_response'),
+            'cache_duration' => __('validation.attributes.cache_duration'),
+            'export_format' => __('validation.attributes.export_format'),
+            'export_template' => __('validation.attributes.export_template'),
+            'export_options' => __('validation.attributes.export_options'),
+            'audit_reason' => __('validation.attributes.audit_reason'),
+            'compliance_check' => __('validation.attributes.compliance_check'),
+            'gdpr_consent' => __('validation.attributes.gdpr_consent'),
+            'subscribe_updates' => __('validation.attributes.subscribe_updates'),
+            'notification_preferences' => __('validation.attributes.notification_preferences'),
+            'version' => __('validation.attributes.version'),
+            'snapshot_date' => __('validation.attributes.snapshot_date'),
+            'integration_source' => __('validation.attributes.integration_source'),
+            'external_reference' => __('validation.attributes.external_reference'),
+            'qa_mode' => __('validation.attributes.qa_mode'),
+            'validation_level' => __('validation.attributes.validation_level'),
         ];
-    }
-
-    /**
-     * Configure the validator instance.
-     *
-     * @param mixed $validator
-     */
-    public function withValidator($validator): void
-    {
-        $validator->after(function ($validator) {
-            $user = $this->user();
-            $applicationId = $this->route('jobApplication') ?? $this->route('id');
-
-            if (!$applicationId) {
-                $validator->errors()->add('application', __('validation.application_id_required'));
-
-                return;
-            }
-
-            $application = JobApplication::find($applicationId);
-            if (!$application) {
-                $validator->errors()->add('application', __('validation.application_not_found'));
-
-                return;
-            }
-
-            // Validate privacy options based on user role
-            if ($this->input('include_private') && !$user->hasRole('admin')) {
-                $isOwner = $user->hasRole('candidate') && $application->candidate_id === $user->id;
-                $isEmployer = $user->hasRole('employer')
-                    && $user->companies()->pluck('id')->contains($application->job->company_id ?? null);
-
-                if (!$isOwner && !$isEmployer) {
-                    $validator->errors()->add('include_private', __('validation.unauthorized_private_access'));
-                }
-            }
-
-            // Validate comparison applications access
-            if ($this->filled('compare_with')) {
-                $compareIds = $this->input('compare_with');
-                $accessibleIds = [];
-
-                if ($user->hasRole('admin')) {
-                    $accessibleIds = JobApplication::whereIn('id', $compareIds)->pluck('id')->toArray();
-                } elseif ($user->hasRole('candidate')) {
-                    $accessibleIds = JobApplication::whereIn('id', $compareIds)
-                        ->where('candidate_id', $user->id)
-                        ->pluck('id')->toArray()
-                    ;
-                } elseif ($user->hasRole('employer')) {
-                    $userCompanyIds = $user->companies()->pluck('id')->toArray();
-                    $accessibleIds = JobApplication::whereIn('id', $compareIds)
-                        ->whereHas('job', function ($query) use ($userCompanyIds) {
-                            $query->whereIn('company_id', $userCompanyIds);
-                        })
-                        ->pluck('id')->toArray()
-                    ;
-                }
-
-                $unauthorizedIds = array_diff($compareIds, $accessibleIds);
-                if (!empty($unauthorizedIds)) {
-                    $validator->errors()->add(
-                        'compare_with',
-                        __('validation.unauthorized_comparison_applications', [
-                            'ids' => implode(', ', $unauthorizedIds),
-                        ])
-                    );
-                }
-            }
-
-            // Validate export fields based on permissions
-            if ($this->filled('export_fields')) {
-                $restrictedFields = ['salary_expectations', 'contact_info'];
-                $requestedFields = $this->input('export_fields');
-
-                if (!$user->hasRole('admin')) {
-                    $isOwner = $user->hasRole('candidate') && $application->candidate_id === $user->id;
-                    $isEmployer = $user->hasRole('employer')
-                        && $user->companies()->pluck('id')->contains($application->job->company_id ?? null);
-
-                    if (!$isOwner && !$isEmployer) {
-                        $unauthorizedFields = array_intersect($requestedFields, $restrictedFields);
-                        if (!empty($unauthorizedFields)) {
-                            $validator->errors()->add(
-                                'export_fields',
-                                __('validation.unauthorized_export_fields', [
-                                    'fields' => implode(', ', $unauthorizedFields),
-                                ])
-                            );
-                        }
-                    }
-                }
-            }
-
-            // Validate format and template combinations
-            if ('pdf' === $this->input('format') && !in_array($this->input('template'), ['detailed', 'summary'])) {
-                $validator->errors()->add('template', __('validation.invalid_pdf_template'));
-            }
-
-            // Validate timezone
-            if ($this->filled('timezone')) {
-                $timezone = $this->input('timezone');
-                if (!in_array($timezone, timezone_identifiers_list())) {
-                    $validator->errors()->add('timezone', __('validation.invalid_timezone'));
-                }
-            }
-        });
     }
 
     /**
@@ -295,64 +445,171 @@ class ShowJobApplicationRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        $defaults = [
-            'format' => 'json',
-            'template' => 'detailed',
-            'include_private' => false,
-            'include_contact_info' => true,
-            'include_salary_info' => true,
-            'track_view' => true,
-            'mark_as_viewed' => false,
-            'locale' => app()->getLocale(),
-            'timezone' => $this->user()?->timezone ?? config('app.timezone'),
-        ];
+        $this->merge([
+            'format' => $this->format ?? 'json',
+            'access_level' => $this->access_level ?? 'basic',
+            'track_view' => $this->boolean('track_view', true),
+            'include_sensitive' => $this->boolean('include_sensitive', false),
+            'cache_response' => $this->boolean('cache_response', true),
+            'cache_duration' => $this->integer('cache_duration', 300),
+            'compliance_check' => $this->boolean('compliance_check', true),
+            'gdpr_consent' => $this->boolean('gdpr_consent', false),
+            'subscribe_updates' => $this->boolean('subscribe_updates', false),
+            'qa_mode' => $this->boolean('qa_mode', false),
+            'validation_level' => $this->validation_level ?? 'standard',
+        ]);
 
-        foreach ($defaults as $key => $value) {
-            if (!$this->has($key)) {
-                $this->merge([$key => $value]);
-            }
-        }
-
-        // Convert string booleans to actual booleans
-        $booleanFields = [
-            'include_private', 'include_contact_info', 'include_salary_info',
-            'track_view', 'mark_as_viewed',
-        ];
-
-        foreach ($booleanFields as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
-                ]);
-            }
-        }
-
-        // Handle comma-separated include relationships
-        if ($this->has('include') && is_string($this->input('include'))) {
+        // Process arrays from comma-separated strings
+        if ($this->has('include') && is_string($this->include)) {
             $this->merge([
-                'include' => array_filter(explode(',', $this->input('include'))),
+                'include' => array_filter(explode(',', $this->include)),
             ]);
         }
 
-        // Handle comma-separated export fields
-        if ($this->has('export_fields') && is_string($this->input('export_fields'))) {
+        if ($this->has('fields') && is_string($this->fields)) {
             $this->merge([
-                'export_fields' => array_filter(explode(',', $this->input('export_fields'))),
+                'fields' => array_filter(explode(',', $this->fields)),
             ]);
         }
 
-        // Handle comma-separated comparison applications
-        if ($this->has('compare_with') && is_string($this->input('compare_with'))) {
+        if ($this->has('sensitive_fields') && is_string($this->sensitive_fields)) {
             $this->merge([
-                'compare_with' => array_map('intval', array_filter(explode(',', $this->input('compare_with')))),
+                'sensitive_fields' => array_filter(explode(',', $this->sensitive_fields)),
             ]);
         }
 
-        // Handle comma-separated comparison fields
-        if ($this->has('comparison_fields') && is_string($this->input('comparison_fields'))) {
+        if ($this->has('export_options') && is_string($this->export_options)) {
             $this->merge([
-                'comparison_fields' => array_filter(explode(',', $this->input('comparison_fields'))),
+                'export_options' => array_filter(explode(',', $this->export_options)),
             ]);
         }
+
+        if ($this->has('notification_preferences') && is_string($this->notification_preferences)) {
+            $this->merge([
+                'notification_preferences' => array_filter(explode(',', $this->notification_preferences)),
+            ]);
+        }
+
+        // Security validation for sensitive data access
+        if ($this->include_sensitive && !$this->validateSensitiveDataAccess()) {
+            $this->merge([
+                'include_sensitive' => false,
+                'sensitive_fields' => [],
+            ]);
+        }
+
+        // Log access attempt for security monitoring
+        Log::info('Job application view request', [
+            'application_id' => $this->id,
+            'access_level' => $this->access_level,
+            'include_sensitive' => $this->include_sensitive,
+            'view_context' => $this->view_context ?? null,
+            'format' => $this->format,
+            'ip' => $this->ip(),
+            'user_agent' => $this->userAgent(),
+            'timestamp' => now(),
+        ]);
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        // Set request metadata
+        $this->merge([
+            'request_id' => 'APP-VIEW-' . date('Ymd') . '-' . strtoupper(substr(md5($this->id . time()), 0, 8)),
+            'validated_at' => now(),
+            'request_source' => $this->header('X-Request-Source', 'web'),
+        ]);
+
+        // Security and performance flags
+        $this->merge([
+            'requires_audit' => $this->shouldAuditAccess(),
+            'use_cache' => $this->shouldUseCache(),
+            'enable_tracking' => $this->track_view,
+            'security_level' => $this->determineSecurityLevel(),
+        ]);
+
+        // GDPR compliance check
+        if ($this->include_sensitive && !$this->gdpr_consent) {
+            Log::warning('Sensitive data access without GDPR consent', [
+                'application_id' => $this->id,
+                'ip' => $this->ip(),
+                'timestamp' => now(),
+            ]);
+        }
+    }
+
+    /**
+     * Validate if application is accessible.
+     */
+    private function validateApplicationAccessible($applicationId): bool
+    {
+        // Check if application exists and is not deleted
+        $application = \DB::table('job_applications')
+            ->where('id', $applicationId)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$application) {
+            return false;
+        }
+
+        // Check if application is in accessible status
+        $restrictedStatuses = ['deleted', 'archived', 'confidential'];
+        if (in_array($application->status ?? '', $restrictedStatuses)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate sensitive data access permissions.
+     */
+    private function validateSensitiveDataAccess(): bool
+    {
+        // Based on user requirements: no auth system
+        // In production, this would check user permissions
+        return true;
+    }
+
+    /**
+     * Determine if access should be audited.
+     */
+    private function shouldAuditAccess(): bool
+    {
+        return $this->include_sensitive || 
+               $this->access_level === 'admin' ||
+               !empty($this->sensitive_fields) ||
+               $this->format === 'export';
+    }
+
+    /**
+     * Determine if response should be cached.
+     */
+    private function shouldUseCache(): bool
+    {
+        return $this->cache_response && 
+               !$this->include_sensitive &&
+               $this->access_level === 'basic' &&
+               empty($this->sensitive_fields);
+    }
+
+    /**
+     * Determine security level for the request.
+     */
+    private function determineSecurityLevel(): string
+    {
+        if ($this->include_sensitive || !empty($this->sensitive_fields)) {
+            return 'high';
+        }
+
+        if ($this->access_level === 'admin' || $this->format === 'export') {
+            return 'medium';
+        }
+
+        return 'low';
     }
 }

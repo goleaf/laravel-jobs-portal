@@ -27,7 +27,7 @@ class UniversalUniqueValueService
      * Generate unique job reference number.
      * Format: JOB-YYYY-XXXXXX (e.g., JOB-2025-000001)
      */
-    public function generateJobReference(int $jobId = null): string
+    public function generateJobReference(string|int|null $jobId = null): string
     {
         return UniqueValue::make()
             ->scope('job-reference')
@@ -45,7 +45,7 @@ class UniversalUniqueValueService
      * Generate unique application tracking code.
      * Format: APP-YYYYMMDD-XXXXX (e.g., APP-20250615-00001)
      */
-    public function generateApplicationCode(int $applicationId = null): string
+    public function generateApplicationCode(string|int|null $applicationId = null): string
     {
         return UniqueValue::make()
             ->scope('application-code')
@@ -63,7 +63,7 @@ class UniversalUniqueValueService
      * Generate unique candidate identification code.
      * Format: CAN-XXXXXX (e.g., CAN-000001)
      */
-    public function generateCandidateCode(int $candidateId = null): string
+    public function generateCandidateCode(string|int|null $candidateId = null): string
     {
         return UniqueValue::make()
             ->scope('candidate-code')
@@ -80,7 +80,7 @@ class UniversalUniqueValueService
      * Generate unique company registration code.
      * Format: COM-YYYY-XXXXX (e.g., COM-2025-00001)
      */
-    public function generateCompanyCode(int $companyId = null): string
+    public function generateCompanyCode(string|int|null $companyId = null): string
     {
         return UniqueValue::make()
             ->scope('company-code')
@@ -98,7 +98,7 @@ class UniversalUniqueValueService
      * Generate unique SEO-friendly slug.
      * Handles concurrency for duplicate titles/names.
      */
-    public function generateUniqueSlug(string $title, string $scope = 'general-slug', int $subjectId = null): string
+    public function generateUniqueSlug(string $title, string $scope = 'general-slug', string|int|null $subjectId = null): string
     {
         $baseSlug = Str::slug($title);
         
@@ -116,7 +116,7 @@ class UniversalUniqueValueService
      * Generate unique invoice/transaction number.
      * Format: INV-YYYYMMDD-XXXXX (e.g., INV-20250615-00001)
      */
-    public function generateInvoiceNumber(int $transactionId = null): string
+    public function generateInvoiceNumber(string|int|null $transactionId = null): string
     {
         return UniqueValue::make()
             ->scope('invoice-number')
@@ -134,7 +134,7 @@ class UniversalUniqueValueService
      * Generate unique API key.
      * Format: 32-character alphanumeric string
      */
-    public function generateApiKey(int $userId = null): string
+    public function generateApiKey(string|int|null $userId = null): string
     {
         return UniqueValue::make()
             ->scope('api-key')
@@ -150,7 +150,7 @@ class UniversalUniqueValueService
      * Generate unique order/booking reference.
      * Format: ORD-YYYYMMDD-HHMMSS-XXX (e.g., ORD-20250615-143022-001)
      */
-    public function generateOrderReference(int $orderId = null): string
+    public function generateOrderReference(string|int|null $orderId = null): string
     {
         return UniqueValue::make()
             ->scope('order-reference')
@@ -170,7 +170,7 @@ class UniversalUniqueValueService
     public function generateCustomUnique(
         string $scope,
         callable $generator,
-        int $subjectId = null,
+        string|int|null $subjectId = null,
         int $maxAttempts = 3
     ): string {
         try {

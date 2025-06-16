@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\HabrViewsDemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1863,4 +1864,17 @@ Route::middleware(['auth', 'role:admin'])->prefix('defibrillator')->name('defibr
         $healthStatus = Cache::get('defibrillator:last_health_check');
         return response()->json($healthStatus);
     })->name('metrics');
+});
+
+// Habr Views Demo Routes
+Route::prefix('habr-views')->name('habr-views.')->group(function () {
+    Route::get('/', [HabrViewsDemoController::class, 'index'])->name('index');
+    Route::get('/job/{job}', [HabrViewsDemoController::class, 'renderJob'])->name('render-job');
+    Route::get('/company/{company}', [HabrViewsDemoController::class, 'renderCompany'])->name('render-company');
+    Route::get('/jobs', [HabrViewsDemoController::class, 'renderJobList'])->name('render-job-list');
+    Route::get('/companies', [HabrViewsDemoController::class, 'renderCompanyList'])->name('render-company-list');
+    Route::get('/dashboard', [HabrViewsDemoController::class, 'renderDashboard'])->name('render-dashboard');
+    Route::get('/performance', [HabrViewsDemoController::class, 'performanceStats'])->name('performance-stats');
+    Route::post('/cache/clear', [HabrViewsDemoController::class, 'clearCache'])->name('clear-cache');
+    Route::get('/benchmark', [HabrViewsDemoController::class, 'benchmark'])->name('benchmark');
 });

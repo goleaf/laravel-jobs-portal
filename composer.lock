@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7983e2e2c07bac085ee429a3f4fc97de",
+    "content-hash": "b065d1f6caa6fdbd63f3e7f689af806a",
     "packages": [
         {
             "name": "amphp/amp",
@@ -5720,6 +5720,55 @@
                 }
             ],
             "time": "2025-05-16T18:30:32+00:00"
+        },
+        {
+            "name": "prosopo/views",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prosopo/php-views.git",
+                "reference": "8a2a4d1d1ed8cc25d5c5725dfba2e0178d12c0f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prosopo/php-views/zipball/8a2a4d1d1ed8cc25d5c5725dfba2e0178d12c0f6",
+                "reference": "8a2a4d1d1ed8cc25d5c5725dfba2e0178d12c0f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Prosopo\\Views\\": "src/",
+                    "Prosopo\\Views\\PrivateClasses\\": "private-classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Maxim Akimov",
+                    "homepage": "https://github.com/light-source/"
+                }
+            ],
+            "description": "Blazing fast Views with model-driven approach, Blade and multi-namespace support.",
+            "homepage": "https://github.com/prosopo/php-views",
+            "keywords": [
+                "blade",
+                "models",
+                "templates",
+                "twig",
+                "views"
+            ],
+            "support": {
+                "issues": "https://github.com/prosopo/php-views/issues",
+                "source": "https://github.com/prosopo/php-views/tree/1.0.5"
+            },
+            "time": "2025-03-18T14:33:36+00:00"
         },
         {
             "name": "psr/cache",

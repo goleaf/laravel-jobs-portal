@@ -262,6 +262,7 @@ return [
         EventServiceProvider::class,
         RouteServiceProvider::class,
         TranslationServiceProvider::class,
+        \App\Providers\SettingsServiceProvider::class,
     ])->toArray(),
 
     /*

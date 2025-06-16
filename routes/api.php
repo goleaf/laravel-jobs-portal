@@ -70,6 +70,13 @@ require __DIR__.'/settings-api.php';
 
 /*
 |--------------------------------------------------------------------------
+| Habr-Based Settings Management API Routes (Enhanced Settings System)
+|--------------------------------------------------------------------------
+*/
+require __DIR__.'/habr-settings-api.php';
+
+/*
+|--------------------------------------------------------------------------
 | Universal Unique Values API Routes (Laravel Unique Values Integration)
 |--------------------------------------------------------------------------
 */

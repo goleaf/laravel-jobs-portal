@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasTaxonomy;
+use App\Traits\Universal\HasUniqueValues;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -57,6 +58,7 @@ class Job extends Model
     use LogsActivity;
     use SoftDeletes;
     use HasTaxonomy;
+    use HasUniqueValues;
     use HasSettingsField;
 
     /**
@@ -771,6 +773,23 @@ class Job extends Model
             'published_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Configure unique value fields for automatic generation.
+     */
+    protected function getUniqueValueFields(): array
+    {
+        return [
+            'job_reference' => [
+                'type' => 'job-reference',
+            ],
+            'slug' => [
+                'type' => 'slug',
+                'source_field' => 'job_title',
+                'scope' => 'job-slug',
+            ],
         ];
     }
 

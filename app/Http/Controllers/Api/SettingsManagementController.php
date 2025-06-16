@@ -31,22 +31,18 @@ class SettingsManagementController extends Controller
     public function getSettings(Request $request, string $modelType, int|string $modelId): JsonResponse
     {
         try {
-            // Validate request parameters
+            // Validate the request
             $this->validateGetRequest($request, $modelType, $modelId);
 
-            // Parse specific keys if provided
-            $settingsKeys = $request->query('keys') ? 
-                explode(',', $request->query('keys')) : null;
+            // Get settings keys filter if provided
+            $settingsKeys = $request->query('keys') ? explode(',', $request->query('keys')) : null;
 
-            // Create settings data object
+            // Create settings data object with cache duration
             $settingsData = ModelSettingsData::forRetrieval(
                 modelType: $this->getModelClass($modelType),
                 modelId: $modelId,
-                settingsKeys: $settingsKeys
+                settingsKeys: $settingsKeys,
             );
-
-            // Set cache duration from request or default
-            $settingsData->cacheDuration = (int) $request->query('cache_duration', 3600);
 
             // Execute the action
             $result = GetModelSettings::run($settingsData);

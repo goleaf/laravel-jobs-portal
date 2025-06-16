@@ -25,6 +25,7 @@
         "laravel/telescope": "^5.9",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.2",
+        "larswiegers/laravel-translations-checker": "^0.9.3",
         "lumosolutions/actionable": "^1.1",
         "predis/predis": "^3.0",
         "pusher/pusher-php-server": "^7.2",

@@ -115,7 +115,8 @@ readonly class ModelSettingsData
     public static function forRetrieval(
         string $modelType,
         int|string $modelId,
-        ?array $settingsKeys = null
+        ?array $settingsKeys = null,
+        ?int $cacheDuration = 3600
     ): self {
         return new self(
             modelType: $modelType,
@@ -123,6 +124,7 @@ readonly class ModelSettingsData
             settings: [],
             operationType: 'get',
             settingsKeys: $settingsKeys,
+            cacheDuration: $cacheDuration,
             timestamp: new \DateTime()
         );
     }

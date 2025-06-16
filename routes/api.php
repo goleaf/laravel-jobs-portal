@@ -63,10 +63,17 @@ require __DIR__.'/api_universal.php';
 
 /*
 |--------------------------------------------------------------------------
-| Settings Management API Routes (Phase 3A: Advanced Integration)
+| Settings Management API Routes (Phase 3: Advanced Integration)
 |--------------------------------------------------------------------------
 */
 require __DIR__.'/settings-api.php';
+
+/*
+|--------------------------------------------------------------------------
+| Universal Unique Values API Routes (Laravel Unique Values Integration)
+|--------------------------------------------------------------------------
+*/
+require __DIR__.'/unique-values-api.php';
 
 // Universal Language API Routes
 Route::group(['prefix' => 'i18n'], function () {

@@ -199,25 +199,42 @@ class UniversalUniqueValueService
     {
         $results = [];
         
+        // Validate the type parameter
+        $validTypes = [
+            'job-reference',
+            'application-code', 
+            'candidate-code',
+            'company-code',
+            'invoice-number',
+            'order-reference',
+            'api-key'
+        ];
+        
+        if (!in_array($type, $validTypes)) {
+            throw new Exception("Invalid batch generation type: {$type}. Valid types are: " . implode(', ', $validTypes));
+        }
+        
         foreach ($subjectIds as $subjectId) {
             try {
-                $results[$subjectId] = match ($type) {
+                $value = match ($type) {
                     'job-reference' => $this->generateJobReference($subjectId),
                     'application-code' => $this->generateApplicationCode($subjectId),
                     'candidate-code' => $this->generateCandidateCode($subjectId),
                     'company-code' => $this->generateCompanyCode($subjectId),
                     'invoice-number' => $this->generateInvoiceNumber($subjectId),
                     'order-reference' => $this->generateOrderReference($subjectId),
-                    default => throw new Exception("Unknown unique value type: {$type}"),
+                    'api-key' => $this->generateApiKey($subjectId),
+                    default => throw new Exception("Unsupported type: {$type}")
                 };
+                
+                $results[$subjectId] = $value;
             } catch (Exception $e) {
-                Log::error('Failed to generate unique value in batch', [
+                Log::error('Failed to generate value in batch', [
                     'type' => $type,
                     'subject_id' => $subjectId,
                     'error' => $e->getMessage(),
                 ]);
-                
-                $results[$subjectId] = null;
+                throw $e;
             }
         }
         

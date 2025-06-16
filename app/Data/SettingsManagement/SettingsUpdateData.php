@@ -412,4 +412,31 @@ class SettingsUpdateData
 
         return $flattened;
     }
+
+    /**
+     * Add version information to the update data
+     */
+    public function withVersion(array $versionInfo): self
+    {
+        $data = $this->toArray();
+        $data['version'] = $versionInfo;
+        
+        return new self(
+            $data['model_type'],
+            $data['model_id'],
+            $data['previous_settings'],
+            $data['new_settings'],
+            $data['changed_keys'],
+            $data['change_count'],
+            $data['change_types'],
+            $data['impact_analysis'],
+            $data['strategy'],
+            $data['user_id'],
+            $data['audit_reason'],
+            $data['performance'],
+            $data['cache_info'],
+            $data['metadata'],
+            $versionInfo
+        );
+    }
 } 

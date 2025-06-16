@@ -49,7 +49,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'general',
                 'description' => 'Main contact email address',
                 'is_public' => true,
-                'validation_rules' => ['email'],
                 'default_value' => 'admin@example.com',
             ],
             
@@ -61,7 +60,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'jobs',
                 'description' => 'Number of jobs displayed per page',
                 'is_public' => true,
-                'validation_rules' => ['integer', 'min:5', 'max:100'],
                 'default_value' => '20',
             ],
             [
@@ -71,7 +69,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'jobs',
                 'description' => 'Default application deadline in days',
                 'is_public' => false,
-                'validation_rules' => ['integer', 'min:1', 'max:365'],
                 'default_value' => '30',
             ],
             [
@@ -90,7 +87,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'jobs',
                 'description' => 'Maximum number of featured jobs on homepage',
                 'is_public' => false,
-                'validation_rules' => ['integer', 'min:1', 'max:50'],
                 'default_value' => '10',
             ],
             
@@ -131,7 +127,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'notifications',
                 'description' => 'Email address for admin notifications',
                 'is_public' => false,
-                'validation_rules' => ['email'],
                 'default_value' => 'admin@example.com',
             ],
             [
@@ -190,7 +185,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'companies',
                 'description' => 'Maximum active jobs per company',
                 'is_public' => false,
-                'validation_rules' => ['integer', 'min:1', 'max:1000'],
                 'default_value' => '50',
             ],
             [
@@ -231,7 +225,6 @@ class SettingsSeeder extends Seeder
                 'group' => 'api',
                 'description' => 'API requests per minute limit',
                 'is_public' => false,
-                'validation_rules' => ['integer', 'min:10', 'max:1000'],
                 'default_value' => '60',
             ],
             [
@@ -255,6 +248,6 @@ class SettingsSeeder extends Seeder
             );
         }
 
-        $this->command->info('Settings seeded successfully with ' . count($settings) . ' settings.');
+        $this->command->info('Habr-based settings seeded successfully with ' . count($settings) . ' settings.');
     }
 }

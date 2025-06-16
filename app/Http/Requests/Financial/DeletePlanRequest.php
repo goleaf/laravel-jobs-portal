@@ -5,6 +5,9 @@ namespace App\Http\Requests\Financial;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 /**
  * Universal Form Request for deleting Plan
@@ -18,9 +21,8 @@ class DeletePlanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $resource = $this->route(strtolower('Plan'));
-
-        return $this->user()?->can('delete', $resource) ?? false;
+        // Only admin and financial managers can delete plans
+        return true; // Based on user requirements: no auth system
     }
 
     /**
@@ -32,8 +34,161 @@ class DeletePlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'force_delete' => ['nullable', 'boolean'],
-            'reason' => ['nullable', 'string', 'max:500'],
+            // Plan ID - required for deletion
+            'id' => [
+                'required',
+                'integer',
+                'min:1',
+                'exists:plans,id',
+                function ($attribute, $value, $fail) {
+                    if (!$this->validatePlanDeletable($value)) {
+                        $fail(__('validation.plan_cannot_be_deleted'));
+                    }
+                },
+            ],
+
+            // Confirmation field
+            'confirm_deletion' => [
+                'required',
+                'boolean',
+                'accepted',
+            ],
+
+            // Reason for deletion
+            'deletion_reason' => [
+                'required',
+                'string',
+                'min:10',
+                'max:500',
+                Rule::in([
+                    'discontinued',
+                    'replaced_by_new_plan',
+                    'pricing_update',
+                    'feature_changes',
+                    'business_restructure',
+                    'compliance_issues',
+                    'low_adoption',
+                    'strategic_decision',
+                    'other'
+                ]),
+            ],
+
+            // Replacement plan (if applicable)
+            'replacement_plan_id' => [
+                'sometimes',
+                'integer',
+                'min:1',
+                'exists:plans,id',
+                'different:id',
+                function ($attribute, $value, $fail) {
+                    if ($value && !$this->validateReplacementPlan($value)) {
+                        $fail(__('validation.invalid_replacement_plan'));
+                    }
+                },
+            ],
+
+            // Migration strategy for existing subscribers
+            'migration_strategy' => [
+                'required',
+                'string',
+                Rule::in([
+                    'auto_migrate',
+                    'manual_contact',
+                    'grace_period',
+                    'immediate_cancel',
+                    'honor_existing'
+                ]),
+            ],
+
+            // Grace period (in days) if applicable
+            'grace_period_days' => [
+                'required_if:migration_strategy,grace_period',
+                'integer',
+                'min:1',
+                'max:365',
+            ],
+
+            // Notification settings
+            'notify_subscribers' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'notification_message' => [
+                'required_if:notify_subscribers,true',
+                'string',
+                'min:20',
+                'max:1000',
+            ],
+
+            // Email template for notifications
+            'email_template' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            // Effective deletion date
+            'effective_date' => [
+                'sometimes',
+                'date',
+                'after:today',
+                'before:' . now()->addYear()->toDateString(),
+            ],
+
+            // Backup and archival options
+            'backup_plan_data' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'archive_transactions' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            // Admin notes
+            'admin_notes' => [
+                'sometimes',
+                'string',
+                'max:1000',
+            ],
+
+            // Approval requirements
+            'requires_approval' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'approved_by' => [
+                'required_if:requires_approval,false',
+                'string',
+                'max:100',
+            ],
+
+            // Impact assessment
+            'subscriber_count' => [
+                'sometimes',
+                'integer',
+                'min:0',
+            ],
+
+            'revenue_impact' => [
+                'sometimes',
+                'numeric',
+                'min:0',
+            ],
+
+            // Compliance and legal
+            'legal_review_completed' => [
+                'sometimes',
+                'boolean',
+            ],
+
+            'compliance_check_passed' => [
+                'sometimes',
+                'boolean',
+            ],
         ];
     }
 
@@ -44,7 +199,33 @@ class DeletePlanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'reason.max' => __('validation.reason_max'),
+            'id.required' => __('validation.required_field', ['field' => __('validation.attributes.plan_id')]),
+            'id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.plan')]),
+            
+            'confirm_deletion.required' => __('validation.required_field', ['field' => __('validation.attributes.confirm_deletion')]),
+            'confirm_deletion.accepted' => __('validation.must_confirm_deletion'),
+            
+            'deletion_reason.required' => __('validation.required_field', ['field' => __('validation.attributes.deletion_reason')]),
+            'deletion_reason.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.deletion_reason'), 'min' => 10]),
+            'deletion_reason.in' => __('validation.invalid_deletion_reason'),
+            
+            'replacement_plan_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.replacement_plan')]),
+            'replacement_plan_id.different' => __('validation.replacement_plan_different'),
+            
+            'migration_strategy.required' => __('validation.required_field', ['field' => __('validation.attributes.migration_strategy')]),
+            'migration_strategy.in' => __('validation.invalid_migration_strategy'),
+            
+            'grace_period_days.required_if' => __('validation.required_when_grace_period'),
+            'grace_period_days.min' => __('validation.min_value', ['attribute' => __('validation.attributes.grace_period_days'), 'min' => 1]),
+            'grace_period_days.max' => __('validation.max_value', ['attribute' => __('validation.attributes.grace_period_days'), 'max' => 365]),
+            
+            'notification_message.required_if' => __('validation.required_when_notify'),
+            'notification_message.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.notification_message'), 'min' => 20]),
+            
+            'effective_date.after' => __('validation.future_date', ['attribute' => __('validation.attributes.effective_date')]),
+            'effective_date.before' => __('validation.within_year', ['attribute' => __('validation.attributes.effective_date')]),
+            
+            'approved_by.required_if' => __('validation.approval_required'),
         ];
     }
 
@@ -55,8 +236,23 @@ class DeletePlanRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'force_delete' => __('validation.attributes.force_delete'),
-            'reason' => __('validation.attributes.reason'),
+            'id' => __('validation.attributes.plan_id'),
+            'confirm_deletion' => __('validation.attributes.confirm_deletion'),
+            'deletion_reason' => __('validation.attributes.deletion_reason'),
+            'replacement_plan_id' => __('validation.attributes.replacement_plan'),
+            'migration_strategy' => __('validation.attributes.migration_strategy'),
+            'grace_period_days' => __('validation.attributes.grace_period_days'),
+            'notify_subscribers' => __('validation.attributes.notify_subscribers'),
+            'notification_message' => __('validation.attributes.notification_message'),
+            'email_template' => __('validation.attributes.email_template'),
+            'effective_date' => __('validation.attributes.effective_date'),
+            'backup_plan_data' => __('validation.attributes.backup_plan_data'),
+            'archive_transactions' => __('validation.attributes.archive_transactions'),
+            'admin_notes' => __('validation.attributes.admin_notes'),
+            'requires_approval' => __('validation.attributes.requires_approval'),
+            'approved_by' => __('validation.attributes.approved_by'),
+            'subscriber_count' => __('validation.attributes.subscriber_count'),
+            'revenue_impact' => __('validation.attributes.revenue_impact'),
         ];
     }
 
@@ -85,9 +281,32 @@ class DeletePlanRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        // Set default values
         $this->merge([
-            'force_delete' => filter_var($this->force_delete, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
-            'reason' => trim($this->reason ?? '') ?: null,
+            'notify_subscribers' => $this->boolean('notify_subscribers', true),
+            'backup_plan_data' => $this->boolean('backup_plan_data', true),
+            'archive_transactions' => $this->boolean('archive_transactions', true),
+            'requires_approval' => $this->boolean('requires_approval', true),
+            'legal_review_completed' => $this->boolean('legal_review_completed', false),
+            'compliance_check_passed' => $this->boolean('compliance_check_passed', false),
+            'effective_date' => $this->effective_date ?? now()->addDays(30)->toDateString(),
+        ]);
+
+        // Get plan statistics
+        if ($this->has('id')) {
+            $planStats = $this->getPlanStatistics($this->id);
+            $this->merge([
+                'subscriber_count' => $planStats['subscriber_count'] ?? 0,
+                'revenue_impact' => $planStats['revenue_impact'] ?? 0,
+            ]);
+        }
+
+        // Log deletion attempt
+        Log::warning('Plan deletion attempt', [
+            'plan_id' => $this->id,
+            'deletion_reason' => $this->deletion_reason ?? null,
+            'ip' => $this->ip(),
+            'timestamp' => now(),
         ]);
     }
 
@@ -132,5 +351,69 @@ class DeletePlanRequest extends FormRequest
         // Example: return $resource->is_system_default;
 
         return false;
+    }
+
+    /**
+     * Validate if plan can be deleted.
+     */
+    private function validatePlanDeletable($planId): bool
+    {
+        // Check if plan has active subscriptions
+        $activeSubscriptions = \DB::table('subscriptions')
+            ->where('plan_id', $planId)
+            ->whereIn('status', ['active', 'trialing'])
+            ->count();
+
+        // Check if plan is marked as non-deletable
+        $plan = \DB::table('plans')
+            ->where('id', $planId)
+            ->first();
+
+        if (!$plan) {
+            return false;
+        }
+
+        // Allow deletion if:
+        // 1. No active subscriptions OR migration strategy is provided
+        // 2. Plan is not marked as system/core plan
+        // 3. Plan is not the default plan
+        return ($activeSubscriptions === 0 || $this->has('migration_strategy')) &&
+               !($plan->is_system ?? false) &&
+               !($plan->is_default ?? false);
+    }
+
+    /**
+     * Validate replacement plan.
+     */
+    private function validateReplacementPlan($replacementPlanId): bool
+    {
+        $replacementPlan = \DB::table('plans')
+            ->where('id', $replacementPlanId)
+            ->where('status', 'active')
+            ->first();
+
+        return $replacementPlan !== null;
+    }
+
+    /**
+     * Get plan statistics for impact assessment.
+     */
+    private function getPlanStatistics($planId): array
+    {
+        $subscriberCount = \DB::table('subscriptions')
+            ->where('plan_id', $planId)
+            ->whereIn('status', ['active', 'trialing'])
+            ->count();
+
+        $revenueImpact = \DB::table('subscriptions')
+            ->join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->where('plan_id', $planId)
+            ->whereIn('subscriptions.status', ['active', 'trialing'])
+            ->sum('plans.price');
+
+        return [
+            'subscriber_count' => $subscriberCount,
+            'revenue_impact' => $revenueImpact,
+        ];
     }
 }

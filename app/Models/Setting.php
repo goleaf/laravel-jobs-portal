@@ -9,6 +9,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Log;
+use LumoSolutions\Actionable\Traits\ArrayConvertible;
 
 /**
  * Setting Model - Enhanced with Context7 patterns.
@@ -69,6 +72,7 @@ class Setting extends Model
 {
     use HasFactory;
     use LogsActivity;
+    use ArrayConvertible;
 
     // =============================================
     // CONSTANTS
@@ -156,6 +160,11 @@ class Setting extends Model
         'is_active',
         'options',
         'sort_order',
+        'group',
+        'validation_rules',
+        'default_value',
+        'created_by',
+        'updated_by'
     ];
 
     /**
@@ -878,10 +887,262 @@ class Setting extends Model
 
         static::saved(function ($setting) {
             $setting->clearCaches();
+            Cache::forget("settings.{$setting->key}");
+            Cache::forget('settings.all');
+            
+            Log::info('Setting updated', [
+                'key' => $setting->key,
+                'value' => $setting->value,
+                'user_id' => auth()->id(),
+            ]);
         });
 
         static::deleted(function ($setting) {
             $setting->clearCaches();
+            Cache::forget("settings.{$setting->key}");
+            Cache::forget('settings.all');
         });
+    }
+
+    /**
+     * Scope to filter by group
+     */
+    public function scopeByGroup($query, string $group)
+    {
+        return $query->where('group', $group);
+    }
+
+    /**
+     * Cast value attribute based on type
+     */
+    protected function value(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return $this->castValue($value, $this->type);
+            },
+            set: function ($value) {
+                return $this->serializeValue($value, $this->type);
+            }
+        );
+    }
+
+    /**
+     * Cast value to appropriate type
+     */
+    private function castValue($value, $type)
+    {
+        switch ($type) {
+            case 'boolean':
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            case 'integer':
+                return (int) $value;
+            case 'float':
+                return (float) $value;
+            case 'array':
+            case 'json':
+                return json_decode($value, true);
+            case 'object':
+                return json_decode($value);
+            default:
+                return $value;
+        }
+    }
+
+    /**
+     * Serialize value for storage
+     */
+    private function serializeValue($value, $type)
+    {
+        switch ($type) {
+            case 'boolean':
+                return $value ? '1' : '0';
+            case 'array':
+            case 'json':
+            case 'object':
+                return json_encode($value);
+            default:
+                return (string) $value;
+        }
+    }
+
+    /**
+     * Get setting value with caching
+     */
+    public static function get(string $key, $default = null)
+    {
+        return Cache::remember("settings.{$key}", 3600, function () use ($key, $default) {
+            $setting = static::where('key', $key)->first();
+            return $setting ? $setting->value : $default;
+        });
+    }
+
+    /**
+     * Set setting value
+     */
+    public static function set(string $key, $value, array $options = [])
+    {
+        $setting = static::firstOrNew(['key' => $key]);
+        
+        $setting->fill([
+            'value' => $value,
+            'type' => $options['type'] ?? 'string',
+            'group' => $options['group'] ?? 'general',
+            'description' => $options['description'] ?? null,
+            'is_public' => $options['is_public'] ?? false,
+            'validation_rules' => $options['validation_rules'] ?? null,
+            'default_value' => $options['default_value'] ?? null,
+            'updated_by' => auth()->id(),
+        ]);
+
+        if ($setting->wasRecentlyCreated) {
+            $setting->created_by = auth()->id();
+        }
+
+        return $setting->save();
+    }
+
+    /**
+     * Get all settings as array with caching
+     */
+    public static function getAll($group = null): array
+    {
+        $cacheKey = $group ? "settings.group.{$group}" : 'settings.all';
+        
+        return Cache::remember($cacheKey, 3600, function () use ($group) {
+            $query = static::query();
+            
+            if ($group) {
+                $query->where('group', $group);
+            }
+            
+            return $query->pluck('value', 'key')->map(function ($value, $key) {
+                $setting = static::where('key', $key)->first();
+                return $setting ? $setting->value : $value;
+            })->toArray();
+        });
+    }
+
+    /**
+     * Check if setting exists
+     */
+    public static function exists(string $key): bool
+    {
+        return static::where('key', $key)->exists();
+    }
+
+    /**
+     * Remove setting
+     */
+    public static function remove(string $key): bool
+    {
+        return static::where('key', $key)->delete();
+    }
+
+    /**
+     * Get settings by group
+     */
+    public static function getGroup(string $group): array
+    {
+        return static::getAll($group);
+    }
+
+    /**
+     * Validate setting value
+     */
+    public function validateValue($value): bool
+    {
+        if (!$this->validation_rules) {
+            return true;
+        }
+
+        $validator = \Validator::make(['value' => $value], [
+            'value' => $this->validation_rules
+        ]);
+
+        return !$validator->fails();
+    }
+
+    /**
+     * Get default value
+     */
+    public function getDefaultValue()
+    {
+        return $this->castValue($this->default_value, $this->type);
+    }
+
+    /**
+     * Reset to default value
+     */
+    public function resetToDefault(): bool
+    {
+        if ($this->default_value !== null) {
+            $this->value = $this->default_value;
+            return $this->save();
+        }
+        
+        return false;
+    }
+
+    /**
+     * Export settings for backup
+     */
+    public static function export($group = null): array
+    {
+        $query = static::query();
+        
+        if ($group) {
+            $query->where('group', $group);
+        }
+        
+        return $query->get()->map(function ($setting) {
+            return [
+                'key' => $setting->key,
+                'value' => $setting->getRawOriginal('value'), // Get raw value without casting
+                'type' => $setting->type,
+                'group' => $setting->group,
+                'description' => $setting->description,
+                'is_public' => $setting->is_public,
+                'validation_rules' => $setting->validation_rules,
+                'default_value' => $setting->default_value,
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Import settings from backup
+     */
+    public static function import(array $settings): int
+    {
+        $imported = 0;
+        
+        foreach ($settings as $settingData) {
+            if (isset($settingData['key'])) {
+                static::updateOrCreate(
+                    ['key' => $settingData['key']],
+                    array_merge($settingData, ['updated_by' => auth()->id()])
+                );
+                $imported++;
+            }
+        }
+        
+        // Clear all caches
+        Cache::flush();
+        
+        return $imported;
+    }
+
+    /**
+     * Get settings schema for API documentation
+     */
+    public static function getSchema(): array
+    {
+        return [
+            'groups' => static::distinct('group')->pluck('group')->filter()->values(),
+            'types' => ['string', 'integer', 'float', 'boolean', 'array', 'json', 'object'],
+            'total_settings' => static::count(),
+            'public_settings' => static::where('is_public', true)->count(),
+            'private_settings' => static::where('is_public', false)->count(),
+        ];
     }
 }

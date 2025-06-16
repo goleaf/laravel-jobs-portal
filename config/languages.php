@@ -15,5 +15,4 @@ return [
         8 => 'zh',
     ],
     'rtl_languages' => ['ar', 'fa', 'he', 'ur'],
-    'json_path' => resource_path('lang/{locale}_json'),
 ];

@@ -242,18 +242,17 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function getPerformanceStats(): array
     {
-        // Create a simple job for benchmarking
-        $job = new \App\Models\Job([
-            'title' => 'Test Job',
-            'description' => 'Test job description',
-            'requirements' => 'Test requirements',
-            'location' => 'Remote',
-            'status' => 'active',
-            'is_active' => true,
-            'is_featured' => false,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Create a simple job for benchmarking without mass assignment
+        $job = new \App\Models\Job();
+        $job->title = 'Test Job';
+        $job->description = 'Test job description';
+        $job->requirements = 'Test requirements';
+        $job->location = 'Remote';
+        $job->status = 'active';
+        $job->is_active = true;
+        $job->is_featured = false;
+        $job->created_at = now();
+        $job->updated_at = now();
 
         // Benchmark job rendering
         $jobBenchmark = $this->benchmark(function () use ($job) {

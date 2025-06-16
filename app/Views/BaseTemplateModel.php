@@ -2,7 +2,6 @@
 
 namespace App\Views;
 
-use Prosopo\Views\BaseTemplateModel as ProsopoBaseTemplateModel;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 
@@ -10,9 +9,10 @@ use Carbon\Carbon;
  * Enhanced Base Template Model for Laravel Job Portal
  * 
  * Based on Habr article patterns for model-oriented templating
- * Extends Prosopo Views with Laravel-specific functionality
+ * Since we're using a simplified approach without full Prosopo Views integration,
+ * we'll create our own base class with similar functionality
  */
-abstract class BaseTemplateModel extends ProsopoBaseTemplateModel
+abstract class BaseTemplateModel
 {
     /**
      * Get formatted date for templates

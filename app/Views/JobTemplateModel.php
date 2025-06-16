@@ -16,45 +16,68 @@ use Carbon\Carbon;
  */
 class JobTemplateModel extends BaseTemplateModel
 {
-    public string $title;
-    public string $description;
-    public ?string $keyResponsibilities;
-    public string $requirements;
-    public ?float $salaryFrom;
-    public ?float $salaryTo;
-    public string $salaryCurrency;
-    public string $salaryPeriod;
-    public string $location;
+    public string $title = '';
+    public string $description = '';
+    public ?string $keyResponsibilities = null;
+    public string $requirements = '';
+    public ?float $salaryFrom = null;
+    public ?float $salaryTo = null;
+    public string $salaryCurrency = 'USD';
+    public string $salaryPeriod = 'month';
+    public string $location = '';
     public Carbon $deadline;
     public Carbon $createdAt;
     public Carbon $updatedAt;
-    public bool $isFeatured;
-    public bool $isActive;
-    public string $status;
-    public int $experienceYears;
-    public string $employmentType;
-    public string $workType; // remote, onsite, hybrid
+    public bool $isFeatured = false;
+    public bool $isActive = true;
+    public string $status = 'active';
+    public int $experienceYears = 0;
+    public string $employmentType = 'full-time';
+    public string $workType = 'onsite'; // remote, onsite, hybrid
     
-    // Related models
-    public CompanyTemplateModel $company;
-    public JobCategoryTemplateModel $category;
-    public JobTypeTemplateModel $jobType;
+    // Related models (initialized as empty objects/arrays)
+    public ?CompanyTemplateModel $company = null;
+    public ?JobCategoryTemplateModel $category = null;
+    public ?JobTypeTemplateModel $jobType = null;
     public array $skills = [];
     public array $applications = [];
     public int $applicationsCount = 0;
     
     // SEO and metadata
-    public string $slug;
-    public string $metaTitle;
-    public string $metaDescription;
+    public string $slug = '';
+    public string $metaTitle = '';
+    public string $metaDescription = '';
     public array $metaKeywords = [];
     
-    // Display helpers
-    public string $statusLabel;
-    public string $urgencyLevel;
-    public bool $isUrgent;
-    public bool $isExpired;
-    public int $daysUntilDeadline;
+    // Display helpers (initialized with defaults)
+    public string $statusLabel = '';
+    public string $urgencyLevel = 'normal';
+    public bool $isUrgent = false;
+    public bool $isExpired = false;
+    public int $daysUntilDeadline = 0;
+
+    public function __construct()
+    {
+        // Initialize Carbon properties
+        $this->deadline = Carbon::now()->addMonth();
+        $this->createdAt = Carbon::now();
+        $this->updatedAt = Carbon::now();
+        
+        // Initialize computed properties
+        $this->updateComputedProperties();
+    }
+
+    /**
+     * Update computed properties based on current state
+     */
+    private function updateComputedProperties(): void
+    {
+        $this->statusLabel = ucfirst($this->status);
+        $this->isExpired = $this->deadline->isPast();
+        $this->daysUntilDeadline = $this->deadline->diffInDays(Carbon::now());
+        $this->isUrgent = $this->daysUntilDeadline <= 7;
+        $this->urgencyLevel = $this->getUrgencyLevel();
+    }
 
     /**
      * Create from Job model
@@ -74,8 +97,8 @@ class JobTemplateModel extends BaseTemplateModel
         $model->salaryPeriod = $job->salary_period ?? 'month';
         $model->location = $job->location ?? '';
         $model->deadline = $job->deadline ? Carbon::parse($job->deadline) : Carbon::now()->addMonth();
-        $model->createdAt = Carbon::parse($job->created_at);
-        $model->updatedAt = Carbon::parse($job->updated_at);
+        $model->createdAt = Carbon::parse($job->created_at ?? now());
+        $model->updatedAt = Carbon::parse($job->updated_at ?? now());
         $model->isFeatured = (bool)$job->is_featured;
         $model->isActive = (bool)$job->is_active;
         $model->status = $job->status ?? 'active';
@@ -106,7 +129,7 @@ class JobTemplateModel extends BaseTemplateModel
         })->toArray() : [];
         
         // Applications count
-        $model->applicationsCount = $job->applications()->count();
+        $model->applicationsCount = $job->applications ? $job->applications()->count() : 0;
         
         // SEO
         $model->slug = $job->slug ?? '';
@@ -116,12 +139,8 @@ class JobTemplateModel extends BaseTemplateModel
             ? explode(',', $job->meta_keywords) 
             : array_column($model->skills, 'name');
         
-        // Display helpers
-        $model->statusLabel = ucfirst($model->status);
-        $model->isExpired = $model->deadline->isPast();
-        $model->daysUntilDeadline = $model->deadline->diffInDays(Carbon::now());
-        $model->isUrgent = $model->daysUntilDeadline <= 7;
-        $model->urgencyLevel = $model->getUrgencyLevel();
+        // Update computed properties
+        $model->updateComputedProperties();
         
         return $model;
     }
@@ -262,7 +281,7 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function url(): string
     {
-        return $this->route('jobs.show', ['job' => $this->slug]);
+        return $this->route('jobs.show', ['job' => $this->slug ?: 'job']);
     }
 
     /**
@@ -270,7 +289,7 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function applyUrl(): string
     {
-        return $this->route('jobs.apply', ['job' => $this->slug]);
+        return $this->route('jobs.apply', ['job' => $this->slug ?: 'job']);
     }
 
     /**

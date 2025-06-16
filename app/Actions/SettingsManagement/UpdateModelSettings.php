@@ -322,7 +322,7 @@ class UpdateModelSettings
     protected function triggerPostUpdateActions(Model $model, SettingsUpdateData $updateData, array $result): void
     {
         // Fire model events
-        $model->fireModelEvent('settingsUpdated', false);
+        event('model.settings.updated', compact('model', 'updateData', 'result'));
 
         // Trigger notifications if this affects user-facing features
         if ($updateData->isSecuritySensitive()) {

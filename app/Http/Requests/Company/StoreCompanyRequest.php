@@ -8,6 +8,8 @@ use App\Models\State;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class StoreCompanyRequest.

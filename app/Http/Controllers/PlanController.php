@@ -9,6 +9,8 @@ use App\Http\Requests\Plan\EditPlanRequest;
 use App\Http\Requests\Plan\IndexPlanRequest;
 use App\Http\Requests\Plan\ShowPlanRequest;
 use App\Http\Requests\Plan\UpdatePlanUpdatePlanRequest;
+use App\Http\Requests\GetPlansForSelectRequest;
+use App\Http\Requests\BulkActionPlanRequest;
 use App\Models\Plan;
 use App\Models\SalaryCurrency;
 use App\Repositories\PlanRepository;
@@ -351,34 +353,21 @@ class PlanController extends AppBaseController
     }
 
     /**
-     * Get plans for select/autocomplete with enhanced caching.
+     * Get plans for select dropdown with enhanced search.
      */
-    public function getPlansForSelect(Request $request): JsonResponse
+    public function getPlansForSelect(GetPlansForSelectRequest $request): JsonResponse
     {
         try {
-            $cacheKey = $this->buildCacheKey('plans.select', $request->only(['search', 'active_only']));
+            $search = $request->input('search', '');
+            $limit = $request->input('limit', 10);
 
-            $plans = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
-                $query = Plan::select('id', 'name', 'price', 'salary_currency_id')
-                    ->with('currency:id,currency_name,currency_icon')
-                ;
+            $plans = $this->planRepository->search($search)->active()->take($limit)->get(['id', 'name', 'price', 'salary_currency_id']);
 
-                if ($request->filled('search')) {
-                    $query->search($request->get('search'));
-                }
-
-                if ($request->boolean('active_only', true)) {
-                    $query->active();
-                }
-
-                return $query->alphabetical()->limit(50)->get();
-            });
-
-            return $this->sendResponse($plans, 'Plans for select retrieved successfully');
+            return $this->sendResponse($plans, 'Plans retrieved for select');
         } catch (\Exception $e) {
-            Log::error('Error getting plans for select', [
+            Log::error('Error retrieving plans for select', [
                 'error' => $e->getMessage(),
-                'request' => $request->all(),
+                'search' => $request->input('search'),
             ]);
 
             return $this->sendServerError('Failed to retrieve plans for select');
@@ -386,57 +375,40 @@ class PlanController extends AppBaseController
     }
 
     /**
-     * Bulk actions for plans (activate, deactivate, delete).
+     * Perform bulk actions on plans with enhanced validation.
      */
-    public function bulkAction(Request $request): JsonResponse
+    public function bulkAction(BulkActionPlanRequest $request): JsonResponse
     {
-        $request->validate([
-            'action' => 'required|in:activate,deactivate,delete',
-            'plan_ids' => 'required|array|min:1',
-            'plan_ids.*' => 'exists:plans,id',
-        ]);
-
         try {
-            DB::beginTransaction();
+            $action = $request->input('action');
+            $planIds = $request->input('plan_ids', []);
 
-            $planIds = $request->get('plan_ids');
-            $action = $request->get('action');
-            $affectedCount = 0;
+            DB::beginTransaction();
 
             switch ($action) {
                 case 'activate':
-                    $affectedCount = Plan::whereIn('id', $planIds)->update([
-                        'is_active' => true,
-                        'updated_by' => auth()->id(),
-                        'updated_at' => now(),
-                    ]);
-
+                    $this->planRepository->activatePlans($planIds);
+                    $message = __('messages.flash.plans_activated');
                     break;
-
                 case 'deactivate':
-                    $affectedCount = Plan::whereIn('id', $planIds)->update([
-                        'is_active' => false,
-                        'updated_by' => auth()->id(),
-                        'updated_at' => now(),
-                    ]);
-
+                    $this->planRepository->deactivatePlans($planIds);
+                    $message = __('messages.flash.plans_deactivated');
                     break;
-
                 case 'delete':
-                    // Check for active subscriptions before deletion
-                    $plansWithSubscriptions = Plan::whereIn('id', $planIds)
-                        ->whereHas('activeSubscriptions')
-                        ->pluck('name')
-                        ->toArray()
-                    ;
-
-                    if (!empty($plansWithSubscriptions)) {
-                        return $this->sendError('Cannot delete plans with active subscriptions: '.implode(', ', $plansWithSubscriptions));
+                    // Check for dependencies before deletion
+                    $dependencies = $this->planRepository->checkBulkDependencies($planIds);
+                    if (!empty($dependencies)) {
+                        return $this->sendError(
+                            __('messages.flash.plans_cant_delete_bulk'),
+                            $dependencies,
+                            422
+                        );
                     }
-
-                    $affectedCount = Plan::whereIn('id', $planIds)->delete();
-
+                    $this->planRepository->deletePlans($planIds);
+                    $message = __('messages.flash.plans_deleted');
                     break;
+                default:
+                    return $this->sendError(__('messages.flash.invalid_action'), [], 422);
             }
 
             // Clear related caches
@@ -446,23 +418,22 @@ class PlanController extends AppBaseController
             Log::info('Bulk action performed on plans', [
                 'action' => $action,
                 'plan_ids' => $planIds,
-                'affected_count' => $affectedCount,
                 'performed_by' => auth()->id(),
             ]);
 
             DB::commit();
 
-            return $this->sendSuccess("Successfully {$action}d {$affectedCount} plan(s)");
+            return $this->sendSuccess($message);
         } catch (\Exception $e) {
             DB::rollBack();
 
             Log::error('Error performing bulk action on plans', [
-                'action' => $request->get('action'),
-                'plan_ids' => $request->get('plan_ids'),
+                'action' => $request->input('action'),
+                'plan_ids' => $request->input('plan_ids'),
                 'error' => $e->getMessage(),
             ]);
 
-            return $this->sendServerError('Failed to perform bulk action');
+            return $this->sendServerError('Failed to perform bulk action on plans');
         }
     }
 

@@ -28,7 +28,7 @@ class IndustryFactory extends Factory
         ];
 
         return [
-            'name' => $this->faker->unique()->randomElement($industries),
+            'name' => $this->faker->unique()->randomElement($industries) . ' ' . $this->faker->unique()->numberBetween(1, 999999),
             'description' => $this->faker->paragraph(3),
             'is_default' => $this->faker->boolean(20), // 20% chance of being default
         ];

@@ -72,7 +72,31 @@ class JobCategory extends Model
     /**
      * Media path constant for file uploads
      */
-    public const PATH = 'job-categories';
+    public const PATH = 'job_category';
+
+    /**
+     * Featured status constants array
+     */
+    public const FEATURED = [
+        2 => 'All',
+        1 => 'Featured',
+        0 => 'Not featured',
+    ];
+
+    /**
+     * Status constants
+     */
+    public const ALL = 2;
+    public const IS_FEATURED = 1;
+    public const NOT_FEATURED = 0;
+
+    /**
+     * Validation rules
+     */
+    public static $rules = [
+        'name' => 'required|max:160|unique:job_categories,name',
+        'customer_image' => 'nullable|mimes:jpeg,jpg,png',
+    ];
 
     /**
      * The attributes that are mass assignable.

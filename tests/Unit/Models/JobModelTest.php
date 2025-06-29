@@ -36,7 +36,7 @@ class JobModelTest extends TestCase
         
         $this->job = Job::factory()->create([
             'company_id' => $this->company->id,
-            'category_id' => $this->category->id
+            'job_category_id' => $this->category->id
         ]);
     }
 

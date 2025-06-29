@@ -611,7 +611,7 @@ class Job extends Model
     /**
      * Get the company that owns the job.
      */
-    public function company(): BelongsTo
+    public function company()
     {
         return $this->belongsTo(Company::class);
     }
@@ -619,7 +619,7 @@ class Job extends Model
     /**
      * Get the job type.
      */
-    public function jobType(): BelongsTo
+    public function jobType()
     {
         return $this->belongsTo(JobType::class);
     }
@@ -627,7 +627,7 @@ class Job extends Model
     /**
      * Get the job category.
      */
-    public function category()
+    public function jobCategory()
     {
         return $this->belongsTo(JobCategory::class, 'job_category_id');
     }
@@ -635,7 +635,7 @@ class Job extends Model
     /**
      * Get the career level.
      */
-    public function careerLevel(): BelongsTo
+    public function careerLevel()
     {
         return $this->belongsTo(CareerLevel::class);
     }
@@ -643,7 +643,7 @@ class Job extends Model
     /**
      * Get the functional area.
      */
-    public function functionalArea(): BelongsTo
+    public function functionalArea()
     {
         return $this->belongsTo(FunctionalArea::class);
     }
@@ -651,7 +651,7 @@ class Job extends Model
     /**
      * Get the job shift.
      */
-    public function jobShift(): BelongsTo
+    public function jobShift()
     {
         return $this->belongsTo(JobShift::class);
     }
@@ -659,23 +659,23 @@ class Job extends Model
     /**
      * Get the degree level.
      */
-    public function degreeLevel(): BelongsTo
+    public function degreeLevel()
     {
-        return $this->belongsTo(RequiredDegreeLevel::class);
+        return $this->belongsTo(DegreeLevel::class);
     }
 
     /**
      * Get the currency.
      */
-    public function currency(): BelongsTo
+    public function currency()
     {
-        return $this->belongsTo(SalaryCurrency::class);
+        return $this->belongsTo(Currency::class);
     }
 
     /**
      * Get the salary period.
      */
-    public function salaryPeriod(): BelongsTo
+    public function salaryPeriod()
     {
         return $this->belongsTo(SalaryPeriod::class);
     }
@@ -683,7 +683,7 @@ class Job extends Model
     /**
      * Get the country.
      */
-    public function country(): BelongsTo
+    public function country()
     {
         return $this->belongsTo(Country::class);
     }
@@ -691,7 +691,7 @@ class Job extends Model
     /**
      * Get the state.
      */
-    public function state(): BelongsTo
+    public function state()
     {
         return $this->belongsTo(State::class);
     }
@@ -699,7 +699,7 @@ class Job extends Model
     /**
      * Get the city.
      */
-    public function city(): BelongsTo
+    public function city()
     {
         return $this->belongsTo(City::class);
     }
@@ -707,7 +707,7 @@ class Job extends Model
     /**
      * Get the applied jobs for this job.
      */
-    public function appliedJobs(): HasMany
+    public function appliedJobs()
     {
         return $this->hasMany(JobApplication::class);
     }
@@ -715,37 +715,33 @@ class Job extends Model
     /**
      * Get the job skills.
      */
-    public function jobsSkill(): BelongsToMany
+    public function jobsSkill()
     {
-        return $this->belongsToMany(Skill::class, 'jobs_skill', 'job_id', 'skill_id');
+        return $this->belongsToMany(Skill::class, 'job_skill');
     }
 
     /**
      * Get the job tags.
      */
-    public function jobsTag(): BelongsToMany
+    public function jobsTag()
     {
-        return $this->belongsToMany(Tag::class, 'jobs_tags', 'job_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'job_tag');
     }
 
     /**
      * Get the featured records.
      */
-    public function featured(): MorphOne
+    public function featured()
     {
-        return $this->morphOne(FeaturedRecord::class, 'owner');
+        return $this->hasOne(FeaturedJob::class);
     }
 
     /**
      * Get the active featured records.
      */
-    public function activeFeatured(): MorphOne
+    public function activeFeatured()
     {
-        return $this->morphOne(FeaturedRecord::class, 'owner')
-            ->where('start_time', '<=', now())
-            ->where('end_time', '>=', now())
-            ->where('is_active', true)
-        ;
+        return $this->hasOne(FeaturedJob::class)->where('is_active', true);
     }
 
     // ==============================================

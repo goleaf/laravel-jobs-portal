@@ -41,7 +41,7 @@ class DatabaseModelValidationTest extends TestCase
 
             // Check for methods that actually exist in the Job model
             $this->assertTrue(method_exists($job, 'company'));
-            $this->assertTrue(method_exists($job, 'appliedJobs')); // This is the actual method name
+            $this->assertTrue(method_exists($job, 'appliedJobs')); // Updated to the actual method name
         // Note: Job model doesn't have user() method based on inspection
         } else {
             $this->assertTrue(true, 'Job model does not exist, skipping test');

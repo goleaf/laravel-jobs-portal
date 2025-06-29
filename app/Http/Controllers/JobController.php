@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\JobRequest;
 use App\Models\Job;
+use App\Repositories\JobRepository;
 use Illuminate\Support\Facades\Gate;
 use JustBetter\UniqueValues\Support\UniqueValue;
 use Illuminate\Support\Str;
@@ -11,11 +12,18 @@ use Carbon\Carbon;
 
 class JobController extends Controller
 {
+    protected $jobRepository;
+
+    public function __construct(JobRepository $jobRepository)
+    {
+        $this->jobRepository = $jobRepository;
+    }
+
     public function index()
     {
         Gate::authorize('viewAny', Job::class);
         // List jobs
-        $jobs = Job::all();
+        $jobs = $this->jobRepository->all();
 
         return view('jobs.index', compact('jobs'));
     }
@@ -56,7 +64,7 @@ class JobController extends Controller
             ->generate();
 
         // Create job with unique values
-        $job = Job::create([
+        $job = $this->jobRepository->create([
             'job_reference' => $jobReference,
             'slug' => $jobSlug,
             // ... other job fields
@@ -86,7 +94,7 @@ class JobController extends Controller
     public function update(JobRequest $request, Job $job)
     {
         Gate::authorize('update', $job);
-        $job->update($request->validated());
+        $this->jobRepository->update($job->id, $request->validated());
 
         return redirect()->route('jobs.index')->with('success', 'Job updated successfully.');
     }
@@ -94,7 +102,7 @@ class JobController extends Controller
     public function destroy(Job $job)
     {
         Gate::authorize('delete', $job);
-        $job->delete();
+        $this->jobRepository->delete($job->id);
 
         return redirect()->route('jobs.index')->with('success', 'Job deleted successfully.');
     }

@@ -22,6 +22,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Support\Str;
 
 /**
  * @internal
@@ -60,23 +61,22 @@ class CandidateTest extends TestCase
 
         $candidateData = [
             'user_id' => $user->id,
-            'expected_salary' => $this->faker->randomNumber(5),
-            'experience' => $this->faker->randomNumber(1),
-            'career_level_id' => 1,
-            'industry_id' => 1,
-            'functional_area_id' => 1,
-            'current_salary' => $this->faker->randomNumber(5),
+            'unique_id' => 'CND-' . strtoupper(Str::random(10)),
+            'expected_salary' => $this->faker->numberBetween(30000, 100000),
+            'experience' => $this->faker->numberBetween(0, 20),
+            'career_level_id' => CareerLevel::factory()->create()->id,
+            'industry_id' => Industry::factory()->create()->id,
+            'functional_area_id' => FunctionalArea::factory()->create()->id,
+            'current_salary' => $this->faker->numberBetween(25000, 80000),
             'address' => $this->faker->address,
-            'is_immediate_available' => true,
+            'immediate_available' => true,
         ];
 
         $candidate = Candidate::create($candidateData);
 
         $this->assertInstanceOf(Candidate::class, $candidate);
-        $this->assertEquals($candidateData['user_id'], $candidate->user_id);
-        $this->assertEquals($candidateData['expected_salary'], $candidate->expected_salary);
-        $this->assertEquals($candidateData['experience'], $candidate->experience);
-        $this->assertTrue($candidate->is_immediate_available);
+        $this->assertDatabaseHas('candidates', $candidateData);
+        $this->assertTrue($candidate->immediate_available);
     }
 
     /** @test */
@@ -84,18 +84,16 @@ class CandidateTest extends TestCase
     {
         $candidate = Candidate::factory()->create();
 
-        $updatedData = [
-            'expected_salary' => $this->faker->randomNumber(5),
-            'current_salary' => $this->faker->randomNumber(5),
-            'is_immediate_available' => false,
+        $updateData = [
+            'current_salary' => $this->faker->numberBetween(40000, 90000),
+            'expected_salary' => $this->faker->numberBetween(45000, 95000),
+            'immediate_available' => false,
         ];
 
-        $candidate->update($updatedData);
-        $candidate->refresh();
+        $candidate->update($updateData);
 
-        $this->assertEquals($updatedData['expected_salary'], $candidate->expected_salary);
-        $this->assertEquals($updatedData['current_salary'], $candidate->current_salary);
-        $this->assertFalse($candidate->is_immediate_available);
+        $this->assertDatabaseHas('candidates', $updateData);
+        $this->assertFalse($candidate->immediate_available);
     }
 
     /** @test */
@@ -154,7 +152,7 @@ class CandidateTest extends TestCase
         $application = JobApplication::factory()->create([
             'candidate_id' => $candidate->id,
             'job_id' => $job->id,
-            'status' => JobApplication::PENDING,
+            'status' => JobApplication::STATUS_PENDING,
         ]);
 
         $this->assertInstanceOf(JobApplication::class, $candidate->jobApplications->first());
@@ -178,11 +176,11 @@ class CandidateTest extends TestCase
     /** @test */
     public function candidatesCanBeFilteredByAvailability()
     {
-        Candidate::factory()->count(3)->create(['is_immediate_available' => true]);
-        Candidate::factory()->count(2)->create(['is_immediate_available' => false]);
+        Candidate::factory()->count(3)->create(['immediate_available' => true]);
+        Candidate::factory()->count(2)->create(['immediate_available' => false]);
 
-        $immediatelyAvailable = Candidate::where('is_immediate_available', true)->get();
-        $notImmediatelyAvailable = Candidate::where('is_immediate_available', false)->get();
+        $immediatelyAvailable = Candidate::where('immediate_available', true)->get();
+        $notImmediatelyAvailable = Candidate::where('immediate_available', false)->get();
 
         $this->assertCount(3, $immediatelyAvailable);
         $this->assertCount(2, $notImmediatelyAvailable);

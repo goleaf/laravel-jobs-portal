@@ -163,6 +163,7 @@ class Candidate extends Model
         'available_at',
         'immediate_available',
         'job_alert',
+        'address',
     ];
 
     /**
@@ -847,7 +848,7 @@ class Candidate extends Model
             'experience_years' => 'int',
             'current_salary' => 'decimal:2',
             'expected_salary' => 'decimal:2',
-            'immediate_available' => 'int',
+            'immediate_available' => 'boolean',
             'is_verified' => 'boolean',
             'is_featured' => 'boolean',
             'is_available' => 'boolean',

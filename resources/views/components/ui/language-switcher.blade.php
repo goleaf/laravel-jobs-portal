@@ -13,6 +13,18 @@
     $availableLocales = config('app.available_locales', []);
     $currentConfig = $availableLocales[$currentLocale] ?? [];
     
+    $flags = [
+        'en' => '🇺🇸',
+        'ar' => '🇸🇦',
+        'de' => '🇩🇪',
+        'es' => '🇪🇸',
+        'fr' => '🇫🇷',
+        'pt' => '🇵🇹',
+        'ru' => '🇷🇺',
+        'tr' => '🇹🇷',
+        'zh' => '🇨🇳',
+    ];
+
     // Size classes
     $sizeClasses = [
         'small' => 'text-xs px-2 py-1',
@@ -24,7 +36,8 @@
     $variantClasses = [
         'default' => 'bg-white border border-gray-300 shadow-sm hover:bg-gray-50',
         'minimal' => 'bg-transparent border-0 hover:bg-gray-100',
-        'outline' => 'bg-transparent border border-gray-300 hover:border-gray-400'
+        'outline' => 'bg-transparent border border-gray-300 hover:border-gray-400',
+        'footer' => 'bg-transparent border-0 hover:text-white text-gray-300'
     ];
 @endphp
 
@@ -40,7 +53,7 @@
                 aria-haspopup="true"
             >
                 @if($showFlags)
-                    <span class="mr-2 text-lg">{{ $this->getFlag($currentLocale) }}</span>
+                    <span class="mr-2 text-lg">{{ $flags[$currentLocale] ?? '🌐' }}</span>
                 @endif
                 
                 @if($showNative)
@@ -82,7 +95,7 @@
                         :disabled="loading"
                     >
                         @if($showFlags)
-                            <span class="mr-3 text-lg">{{ $this->getFlag($locale) }}</span>
+                            <span class="mr-3 text-lg">{{ $flags[$locale] ?? '🌐' }}</span>
                         @endif
                         
                         <div class="flex-1 text-left">
@@ -118,7 +131,7 @@
             >
                 @foreach($availableLocales as $locale => $config)
                     <option value="{{ $locale }}" {{ $locale === $currentLocale ? 'selected' : '' }}>
-                        @if($showFlags){{ $this->getFlag($locale) }} @endif
+                        @if($showFlags){{ $flags[$locale] ?? '🌐' }} @endif
                         {{ $showNative ? ($config['native'] ?? $locale) : ($config['name'] ?? $locale) }}
                     </option>
                 @endforeach
@@ -136,7 +149,7 @@
                     :disabled="loading"
                     title="{{ $config['native'] ?? $locale }}"
                 >
-                    <span class="text-lg">{{ $this->getFlag($locale) }}</span>
+                    <span class="text-lg">{{ $flags[$locale] ?? '🌐' }}</span>
                 </button>
             @endforeach
         </div>
@@ -149,7 +162,7 @@
                 class="flex items-center {{ $sizeClasses[$size] }} {{ $variantClasses[$variant] }} rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 @click="open = !open"
             >
-                <span class="text-lg">{{ $this->getFlag($currentLocale) }}</span>
+                <span class="text-lg">{{ $flags[$currentLocale] ?? '🌐' }}</span>
                 <span class="ml-1 text-xs font-medium uppercase">{{ $currentLocale }}</span>
             </button>
             
@@ -166,7 +179,7 @@
                             class="flex items-center w-full px-3 py-2 text-sm hover:bg-gray-50 first:rounded-t-md last:rounded-b-md"
                             @click="switchLanguage('{{ $locale }}'); open = false"
                         >
-                            <span class="mr-2 text-lg">{{ $this->getFlag($locale) }}</span>
+                            <span class="mr-2 text-lg">{{ $flags[$locale] ?? '🌐' }}</span>
                             <span class="font-medium uppercase">{{ $locale }}</span>
                         </button>
                     @endif
@@ -251,22 +264,4 @@ function languageSwitcher() {
     }
 }
 </script>
-@endpush
-
-@php
-function getFlag($locale) {
-    $flags = [
-        'en' => '🇺🇸',
-        'ar' => '🇸🇦',
-        'de' => '🇩🇪',
-        'es' => '🇪🇸',
-        'fr' => '🇫🇷',
-        'pt' => '🇵🇹',
-        'ru' => '🇷🇺',
-        'tr' => '🇹🇷',
-        'zh' => '🇨🇳'
-    ];
-    
-    return $flags[$locale] ?? '🌐';
-}
-@endphp 
+@endpush 

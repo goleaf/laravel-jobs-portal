@@ -25,7 +25,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if (!$user) {
             return false;
         }
-        
+
         // Only admin, financial managers, or users with currency management permissions
         return $user->hasRole('Admin') || 
                $user->hasRole('Financial Manager') || 
@@ -422,7 +422,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if ($this->filled('country_code')) {
             $this->merge(['country_code' => strtoupper($this->country_code)]);
         }
-        
+
         // Normalize text fields
         $this->merge([
             'currency_name' => trim($this->currency_name ?? ''),
@@ -452,7 +452,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'countries' => array_filter(array_unique(array_map('strtoupper', (array) $this->countries))),
             ]);
         }
-        
+
         if ($this->filled('api_identifiers')) {
             $this->merge([
                 'api_identifiers' => array_filter(array_unique((array) $this->api_identifiers)),
@@ -482,7 +482,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
-    }
+        }
 
     /**
      * Get processed data for currency creation.
@@ -503,7 +503,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if (isset($data['countries'])) {
             $data['countries'] = json_encode($data['countries']);
         }
-        
+
         if (isset($data['api_identifiers'])) {
             $data['api_identifiers'] = json_encode($data['api_identifiers']);
         }
@@ -545,8 +545,8 @@ class StoreSalaryCurrencyRequest extends FormRequest
         
         if (!$rate) {
             return false;
-        }
-        
+    }
+
         // Check for extremely high or low rates that might be errors
         if ($rate > 1000000 || $rate < 0.000001) {
             return true;

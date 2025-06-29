@@ -8,7 +8,7 @@
     <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'Laravel Job Portal') }}</title>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
 
     <!-- Additional Styles -->
     @stack('styles')

@@ -19,10 +19,11 @@ class AuthenticationTest extends TestCase
     public function usersCanRegister()
     {
         $response = $this->post('/register', [
-            'name' => 'Test User',
+            'first_name' => 'Test',
+            'last_name' => 'User',
             'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
         ]);
 
         $response->assertRedirect('/dashboard');
@@ -34,12 +35,12 @@ class AuthenticationTest extends TestCase
     public function usersCanLogin()
     {
         $user = User::factory()->create([
-            'password' => bcrypt('password123'),
+            'password' => bcrypt('Password123!'),
         ]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
-            'password' => 'password123',
+            'password' => 'Password123!',
         ]);
 
         $response->assertRedirect('/dashboard');

@@ -103,7 +103,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('help.candidates') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.job_search_tips') }}
                                 </a>
                             </li>
@@ -117,7 +117,7 @@
                         </h3>
                         <ul class="mt-4 space-y-4">
                             <li>
-                                <a href="{{ route('jobs.create') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('employer.job.create') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.post_job') }}
                                 </a>
                             </li>
@@ -137,7 +137,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('help.employers') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.hiring_solutions') }}
                                 </a>
                             </li>
@@ -153,7 +153,7 @@
                         </h3>
                         <ul class="mt-4 space-y-4">
                             <li>
-                                <a href="{{ route('about') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('aboutus.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.about_us') }}
                                 </a>
                             </li>
@@ -163,17 +163,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('blog.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('posts.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.blog') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('careers') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.careers') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('press') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.press') }}
                                 </a>
                             </li>
@@ -187,22 +187,22 @@
                         </h3>
                         <ul class="mt-4 space-y-4">
                             <li>
-                                <a href="{{ route('help') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.help_center') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('faq') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.faq') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('privacy') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('privacy.policy.list') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.privacy_policy') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('terms') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                                <a href="{{ route('terms.conditions.list') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
                                     {{ __('footer.terms_of_service') }}
                                 </a>
                             </li>
@@ -230,7 +230,7 @@
                 </div>
                 
                 <div class="mt-4 xl:mt-0 xl:col-span-2">
-                    <form class="sm:flex sm:max-w-md xl:max-w-lg" action="{{ route('newsletter.subscribe') }}" method="POST">
+                    <form class="sm:flex sm:max-w-md xl:max-w-lg" action="{{ route('news-letter.create') }}" method="POST">
                         @csrf
                         <label for="newsletter-email" class="sr-only">{{ __('footer.email_address') }}</label>
                         <input 

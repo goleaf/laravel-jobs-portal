@@ -242,6 +242,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::resource('salary-periods', SalaryPeriodController::class);
     Route::resource('company-sizes', CompanySizeController::class);
 
+    // Companies Management
+    Route::resource('companies', CompanyController::class);
+    Route::post('companies/{company}/change-status', [CompanyController::class, 'changeStatus'])->name('companies.change-status');
+    Route::post('companies/{company}/mark-featured', [CompanyController::class, 'markFeatured'])->name('companies.mark-featured');
+    Route::post('companies/{company}/unmark-featured', [CompanyController::class, 'unmarkFeatured'])->name('companies.unmark-featured');
+    Route::post('companies/{company}/change-is-verified', [CompanyController::class, 'changeIsVerified'])->name('companies.change-is-verified');
+
     // Reported Jobs
     Route::resource('reported-jobs', ReportedJobController::class);
 

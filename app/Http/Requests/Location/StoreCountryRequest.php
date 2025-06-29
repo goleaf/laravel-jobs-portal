@@ -457,7 +457,7 @@ class StoreCountryRequest extends FormRequest
         if ($this->filled('timezones')) {
             $this->merge([
                 'timezones' => array_filter(array_unique((array) $this->timezones)),
-            ]);
+        ]);
         }
     }
 

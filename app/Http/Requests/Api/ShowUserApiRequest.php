@@ -38,7 +38,7 @@ class ShowUserApiRequest extends FormRequest
         if (!$user) {
             return false;
         }
-        
+
         // Admin can view any user
         if ($user->hasRole('Admin') || $user->hasRole('Super Admin')) {
             return true;
@@ -302,7 +302,7 @@ class ShowUserApiRequest extends FormRequest
             if ($this->exceedsApiQuota()) {
                 $validator->errors()->add('general', __('api.validation.quota_exceeded'));
             }
-            
+
             // Validate request rate and patterns
             if ($this->hasSuspiciousRequestPattern()) {
                 $validator->errors()->add('general', __('api.validation.suspicious_pattern'));
@@ -493,7 +493,7 @@ class ShowUserApiRequest extends FormRequest
             $unauthorizedFields = array_intersect($requestedFields, $sensitiveFields);
             return !empty($unauthorizedFields);
         }
-        
+
         return false;
     }
 

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="locale" content="{{ app()->getLocale() }}">
     
-    <title>@yield('title', config('app.name', 'Job Portal'))</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
     <meta name="description" content="@yield('description', __('common.site_description'))">
     <meta name="keywords" content="@yield('keywords', __('common.site_keywords'))">
     
@@ -16,8 +16,11 @@
     <!-- Preload critical fonts -->
     <link rel="preload" href="{{ asset('fonts/inter-var.woff2') }}" as="font" type="font/woff2" crossorigin>
     
-    <!-- Styles -->
-    @vite(['resources/css/app.css'])
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
     
     <!-- Additional page styles -->
     @stack('styles')
@@ -41,84 +44,70 @@
     <meta property="twitter:description" content="@yield('description', __('common.site_description'))">
     <meta property="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter antialiased transition-colors duration-300">
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50">
-        {{ __('common.skip_to_content') }}
-    </a>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100">
+        {{-- @include('layouts.navigation') --}}
 
-    <!-- Loading overlay -->
-    <div id="loading-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <!-- Main app wrapper -->
+        <div id="app" class="min-h-screen flex flex-col">
+            <!-- Header -->
+            <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+                <x-ui.header />
+            </header>
+
+            <!-- Main content area -->
+            <main id="main-content" class="flex-1 flex flex-col">
+                <!-- Breadcrumbs -->
+                @if (!request()->routeIs('home'))
+                    <x-ui.breadcrumbs />
+                @endif
+
+                <!-- Flash messages -->
+                <x-ui.flash-messages />
+
+                <!-- Page content -->
+                <div class="flex-1">
+                    @yield('content')
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-gray-900 dark:bg-gray-950 text-white mt-auto">
+                <x-ui.footer />
+            </footer>
         </div>
-    </div>
 
-    <!-- Main app wrapper -->
-    <div id="app" class="min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-            <x-ui.header />
-        </header>
+        <!-- Mobile menu overlay -->
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-30 hidden lg:hidden"></div>
 
-        <!-- Main content area -->
-        <main id="main-content" class="flex-1 flex flex-col">
-            <!-- Breadcrumbs -->
-            @if (!request()->routeIs('home'))
-                <x-ui.breadcrumbs />
-            @endif
-
-            <!-- Flash messages -->
-            <x-ui.flash-messages />
-
-            <!-- Page content -->
-            <div class="flex-1">
-                @yield('content')
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-gray-900 dark:bg-gray-950 text-white mt-auto">
-            <x-ui.footer />
-        </footer>
-    </div>
-
-    <!-- Mobile menu overlay -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-30 hidden lg:hidden"></div>
-
-    <!-- Scripts -->
-    @vite(['resources/js/app.js'])
-    
-    <!-- Additional page scripts -->
-    @stack('scripts')
-
-    <!-- Initialize app -->
-    <script>
-        // Initialize theme
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-
-        // Initialize language and locale
-        window.App = {
-            locale: '{{ app()->getLocale() }}',
-            fallbackLocale: '{{ config('app.fallback_locale') }}',
-            csrfToken: '{{ csrf_token() }}',
-            baseUrl: '{{ url('/') }}',
-            translations: @json(__('common'))
-        };
-
-        // Initialize multilingual system
-        document.addEventListener('DOMContentLoaded', function() {
-            if (window.UniversalI18nSystem) {
-                window.i18n = new UniversalI18nSystem();
+        <!-- Initialize app -->
+        <script>
+            // Initialize theme
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
             }
-        });
-    </script>
 
-    <!-- Page-specific JavaScript -->
-    @stack('page-scripts')
+            // Initialize language and locale
+            window.App = {
+                locale: '{{ app()->getLocale() }}',
+                fallbackLocale: '{{ config('app.fallback_locale') }}',
+                csrfToken: '{{ csrf_token() }}',
+                baseUrl: '{{ url('/') }}',
+                translations: @json(__('common'))
+            };
+
+            // Initialize multilingual system
+            document.addEventListener('DOMContentLoaded', function() {
+                if (window.UniversalI18nSystem) {
+                    window.i18n = new UniversalI18nSystem();
+                }
+            });
+        </script>
+
+        <!-- Page-specific JavaScript -->
+        @stack('page-scripts')
+    </div>
 </body>
 </html> 

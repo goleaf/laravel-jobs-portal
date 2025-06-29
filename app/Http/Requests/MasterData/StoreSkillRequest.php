@@ -475,7 +475,7 @@ class StoreSkillRequest extends FormRequest
         if ($this->filled('related_skills')) {
             $this->merge([
                 'related_skills' => array_filter(array_unique((array) $this->related_skills)),
-            ]);
+        ]);
         }
         
         if ($this->filled('prerequisite_skills')) {

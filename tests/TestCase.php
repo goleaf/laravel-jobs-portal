@@ -38,6 +38,8 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $this->artisan('migrate');
+
         // Optimize memory usage
         ini_set('memory_limit', '2G');
 

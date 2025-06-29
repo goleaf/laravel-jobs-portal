@@ -11,9 +11,11 @@ use App\Models\Job;
 use App\Models\OwnerShipType;
 use App\Models\State;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Spatie\Permission\Models\Role;
 
 /**
  * @internal
@@ -32,7 +34,16 @@ class CompanyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        
+        // Create roles if they don't exist
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'employer']);
+        Role::firstOrCreate(['name' => 'candidate']);
+        
+        // Create admin user and assign admin role
         $this->adminUser = User::factory()->create(['user_type' => User::ADMIN]);
+        $this->adminUser->assignRole('admin');
+        
         $this->employerUser = User::factory()->create(['user_type' => User::EMPLOYER]);
         $this->company = Company::factory()->create(['user_id' => $this->employerUser->id]);
         $this->employerUser->company()->save($this->company);
@@ -50,7 +61,7 @@ class CompanyTest extends TestCase
             'website' => $this->faker->url,
             'location' => $this->faker->address,
             'industry_id' => 1,
-            'size_id' => 1,
+            'company_size_id' => 1,
             'ownership_type_id' => 1,
             'established_in' => $this->faker->year,
             'is_featured' => false,
@@ -59,6 +70,7 @@ class CompanyTest extends TestCase
             'twitter_url' => $this->faker->url,
             'linkedin_url' => $this->faker->url,
             'google_plus_url' => $this->faker->url,
+            'unique_id' => $this->faker->unique()->regexify('[A-Za-z0-9]{10}'),
             'country_id' => 1,
             'state_id' => 1,
             'city_id' => 1,
@@ -132,10 +144,10 @@ class CompanyTest extends TestCase
     public function companyBelongsToCompanySize()
     {
         $companySize = CompanySize::factory()->create();
-        $company = Company::factory()->create(['size_id' => $companySize->id]);
+        $company = Company::factory()->create(['company_size_id' => $companySize->id]);
 
         $this->assertInstanceOf(CompanySize::class, $company->companySize);
-        $this->assertEquals($companySize->id, $company->size_id);
+        $this->assertEquals($companySize->id, $company->company_size_id);
     }
 
     /** @test */
@@ -157,6 +169,9 @@ class CompanyTest extends TestCase
     /** @test */
     public function companiesCanBeFilteredByFeaturedStatus()
     {
+        // Clear existing companies to avoid interference
+        Company::query()->delete();
+        
         Company::factory()->count(3)->create(['is_featured' => true]);
         Company::factory()->count(2)->create(['is_featured' => false]);
 
@@ -170,6 +185,9 @@ class CompanyTest extends TestCase
     /** @test */
     public function companiesCanBeFilteredByActiveStatus()
     {
+        // Clear existing companies to avoid interference
+        Company::query()->delete();
+        
         Company::factory()->count(3)->create(['is_active' => true]);
         Company::factory()->count(2)->create(['is_active' => false]);
 
@@ -396,7 +414,7 @@ class CompanyTest extends TestCase
             'website' => $this->faker->url,
             'location' => $this->faker->address,
             'industry_id' => Industry::factory()->create()->id,
-            'size_id' => CompanySize::factory()->create()->id,
+            'company_size_id' => CompanySize::factory()->create()->id,
             'ownership_type_id' => OwnerShipType::factory()->create()->id,
             'established_in' => $this->faker->year,
             'details' => $this->faker->paragraph,

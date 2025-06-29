@@ -6,7 +6,7 @@
     'showFilters' => true,
     'showCategories' => true,
     'showLocations' => true,
-    'action' => route('job.search'),
+    'action' => route('front.job.listing'),
     'method' => 'GET'
 ])
 
@@ -112,16 +112,16 @@
     <div class="mt-4 pt-4 border-t border-gray-200">
         <div class="flex flex-wrap gap-2">
             <span class="text-sm text-gray-600 mr-2">{{ __('Popular searches:') }}</span>
-            <a href="{{ route('job.search', ['search' => 'developer']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
+            <a href="{{ route('front.job.listing', ['search' => 'developer']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
                 {{ __('Developer') }}
             </a>
-            <a href="{{ route('job.search', ['search' => 'designer']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
+            <a href="{{ route('front.job.listing', ['search' => 'designer']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
                 {{ __('Designer') }}
             </a>
-            <a href="{{ route('job.search', ['search' => 'manager']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
+            <a href="{{ route('front.job.listing', ['search' => 'manager']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
                 {{ __('Manager') }}
             </a>
-            <a href="{{ route('job.search', ['search' => 'marketing']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
+            <a href="{{ route('front.job.listing', ['search' => 'marketing']) }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition duration-150 ease-in-out">
                 {{ __('Marketing') }}
             </a>
         </div>

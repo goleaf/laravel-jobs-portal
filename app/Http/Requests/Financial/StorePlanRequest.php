@@ -403,7 +403,7 @@ class StorePlanRequest extends FormRequest
         if ($this->filled('restrictions')) {
             $this->merge([
                 'restrictions' => array_filter(array_unique((array) $this->restrictions)),
-            ]);
+        ]);
         }
     }
 

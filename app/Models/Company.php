@@ -114,9 +114,9 @@ class Company extends Model implements HasMedia
         'company_type', 'revenue', 'market_cap', 'stock_symbol',
         'headquarters', 'ceo_name', 'mission_statement', 'vision_statement',
         'values', 'company_culture', 'diversity_policy',
-        'ceo', 'no_of_offices', 'established_in', 'details', 'fax',
+        'ceo', 'no_of_offices', 'no_of_employees', 'established_in', 'details', 'fax',
         'facebook_url', 'twitter_url', 'linkedin_url', 'google_plus_url',
-        'pinterest_url', 'unique_id', 'location', 'location2', 'size_id', 'founded_at', 'status',
+        'pinterest_url', 'unique_id', 'location', 'location2', 'founded_at', 'status',
     ];
 
     /**

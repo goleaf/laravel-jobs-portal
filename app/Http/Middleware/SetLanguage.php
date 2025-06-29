@@ -18,12 +18,15 @@ class SetLanguage
     {
         $localeLanguage = Session::get('languageName');
         $default = Setting::where('key', '=', 'default_language')->first();
+        
+        // Set fallback default language if setting not found
+        $defaultLanguage = $default?->value ?? 'en';
 
         if (!isset($localeLanguage)) {
             if (Auth::user()) {
-                App::setLocale(Auth::user()->language);
+                App::setLocale(Auth::user()->language ?? $defaultLanguage);
             } else {
-                App::setLocale($default->value);
+                App::setLocale($defaultLanguage);
             }
         } else {
             if (Auth::user()) {
@@ -31,7 +34,7 @@ class SetLanguage
                     // dump(56456);
                     App::setLocale($localeLanguage);
                 } else {
-                    App::setLocale(Auth::user()->language);
+                    App::setLocale(Auth::user()->language ?? $defaultLanguage);
                 }
             } else {
                 App::setLocale($localeLanguage);

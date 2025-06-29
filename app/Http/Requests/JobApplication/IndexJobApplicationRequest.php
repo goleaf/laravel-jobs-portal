@@ -16,7 +16,7 @@ class IndexJobApplicationRequest extends FormRequest
     public function authorize(): bool
     {
         // Based on user requirements: no auth system
-        return true;
+            return true;
     }
 
     /**
@@ -427,10 +427,10 @@ class IndexJobApplicationRequest extends FormRequest
             'per_page.integer' => __('validation.integer', ['attribute' => __('validation.attributes.per_page')]),
             'per_page.min' => __('validation.min_value', ['attribute' => __('validation.attributes.per_page'), 'min' => 5]),
             'per_page.max' => __('validation.max_value', ['attribute' => __('validation.attributes.per_page'), 'max' => 100]),
-            
+
             'sort_by.in' => __('validation.invalid_sort_field'),
             'sort_direction.in' => __('validation.invalid_sort_direction'),
-            
+
             'status.array' => __('validation.array', ['attribute' => __('validation.attributes.status')]),
             'status.max' => __('validation.max_items', ['attribute' => __('validation.attributes.status'), 'max' => 10]),
             'status.*.in' => __('validation.invalid_application_status'),
@@ -573,9 +573,9 @@ class IndexJobApplicationRequest extends FormRequest
         }
 
         if ($this->has('skills') && is_string($this->skills)) {
-            $this->merge([
+                $this->merge([
                 'skills' => array_filter(array_map('intval', explode(',', $this->skills))),
-            ]);
+                ]);
         }
 
         if ($this->has('search_fields') && is_string($this->search_fields)) {

@@ -16,7 +16,7 @@ class ShowJobApplicationRequest extends FormRequest
     public function authorize(): bool
     {
         // Based on user requirements: no auth system
-        return true;
+            return true;
     }
 
     /**
@@ -50,25 +50,25 @@ class ShowJobApplicationRequest extends FormRequest
             'include.*' => [
                 'string',
                 Rule::in([
-                    'job',
-                    'job.company',
-                    'job.category',
-                    'job.type',
-                    'job.skills',
+                'job',
+                'job.company',
+                'job.category',
+                'job.type',
+                'job.skills',
                     'applicant',
                     'applicant.profile',
                     'applicant.skills',
                     'applicant.education',
                     'applicant.experience',
-                    'resume',
+                'resume',
                     'cover_letter',
                     'portfolio',
                     'interviews',
                     'interviews.feedback',
-                    'notes',
+                'notes',
                     'activities',
                     'references',
-                    'documents',
+                'documents',
                     'assessments',
                     'communications',
                 ]),
@@ -354,7 +354,7 @@ class ShowJobApplicationRequest extends FormRequest
             'include.*.in' => __('validation.invalid_include_relation'),
             
             'format.in' => __('validation.invalid_format'),
-            
+
             'view_context.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.view_context'), 'max' => 100]),
             'view_context.in' => __('validation.invalid_view_context'),
             
@@ -467,9 +467,9 @@ class ShowJobApplicationRequest extends FormRequest
         }
 
         if ($this->has('fields') && is_string($this->fields)) {
-            $this->merge([
+                $this->merge([
                 'fields' => array_filter(explode(',', $this->fields)),
-            ]);
+                ]);
         }
 
         if ($this->has('sensitive_fields') && is_string($this->sensitive_fields)) {

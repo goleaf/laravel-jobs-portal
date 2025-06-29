@@ -52,7 +52,7 @@ if ($disabled) {
             aria-busy="true" 
             aria-describedby="loading-text"
         @endif
-        {{ $attributes }}
+        {{-- {{ $attributes }} --}}
     >
         @if($loading)
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@ if ($disabled) {
             aria-busy="true" 
             aria-describedby="loading-text"
         @endif
-        {{ $attributes }}
+        {{-- {{ $attributes }} --}}
     >
         @if($loading)
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">

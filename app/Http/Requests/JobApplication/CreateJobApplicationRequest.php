@@ -344,9 +344,9 @@ class CreateJobApplicationRequest extends FormRequest
 
         // Clean names
         if ($this->has('first_name')) {
-            $this->merge([
+                $this->merge([
                 'first_name' => trim(ucwords(strtolower($this->first_name))),
-            ]);
+                ]);
         }
 
         if ($this->has('last_name')) {

@@ -437,25 +437,20 @@ class UpdateModelSettings
      */
     protected function flattenArray(array $array, string $prefix = ''): array
     {
-        $flattened = [];
-
+        $result = [];
         foreach ($array as $key => $value) {
-            $newKey = $prefix === '' ? $key : $prefix . '.' . $key;
-
+            $newKey = $prefix ? "{$prefix}.{$key}" : $key;
             if (is_array($value) && !empty($value)) {
-                $flattened = array_merge($flattened, $this->flattenArray($value, $newKey));
+                $result = array_merge($result, $this->flattenArray($value, $newKey));
             } else {
-                $flattened[$newKey] = $value;
+                $result[$newKey] = $value;
             }
         }
 
-        return $flattened;
+        return $result;
     }
 
-    /**
-     * Update model settings with comprehensive validation, caching, and versioning
-     */
-    public function handle(
+    public function execute(
         Model $model,
         array $newSettings,
         string $strategy = 'merge',
@@ -466,134 +461,88 @@ class UpdateModelSettings
         bool $createVersion = true,  // NEW: Control version creation
         ?int $cacheDuration = null
     ): SettingsUpdateData {
-        // ... existing validation and preparation code ...
+        // Prepare the data transfer object
+        $modelSettingsData = new ModelSettingsData(
+            model: $model,
+            newSettings: $newSettings,
+            strategy: $strategy,
+            userId: $userId,
+            auditReason: $auditReason,
+            skipValidation: $skipValidation,
+            createBackup: $createBackup,
+            cacheDuration: $cacheDuration
+        );
 
-        try {
-            DB::beginTransaction();
+        $currentSettings = $model->settings()->all();
 
-            // Get current settings for comparison and versioning
-            $currentSettings = $model->getAllSettings();
-            
-            // Create settings version BEFORE updating (if enabled)
-            $version = null;
-            if ($createVersion) {
-                try {
-                    $version = CreateSettingsVersion::fromModel(
-                        model: $model,
-                        newSettings: $newSettings,
-                        previousSettings: $currentSettings,
-                        changeType: 'update',
-                        userId: $userId,
-                        changeReason: $auditReason ?? 'Settings updated via API'
-                    );
+        // Detect changes and provide a summary
+        $changedKeys = [];
+        $changeSummary = [];
+        $changeAnalysis = [
+            'added' => [],
+            'modified' => [],
+            'removed' => []
+        ];
 
-                    Log::info('Settings version created during update', [
-                        'model_type' => get_class($model),
-                        'model_id' => $model->getKey(),
-                        'version_id' => $version->version_id,
-                        'version_number' => $version->version_number,
-                    ]);
-                } catch (\Exception $e) {
-                    Log::warning('Failed to create settings version during update', [
-                        'model_type' => get_class($model),
-                        'model_id' => $model->getKey(),
-                        'error' => $e->getMessage(),
-                    ]);
-                    
-                    // Continue with update even if versioning fails
+        // Analyze changes for 'merge' and 'replace' strategies
+        if ($strategy === 'merge' || $strategy === 'replace') {
+            foreach ($newSettings as $key => $value) {
+                if (!array_key_exists($key, $currentSettings)) {
+                    $changedKeys[] = $key;
+                    $changeSummary[] = "Added setting '{$key}' with value '{$value}'.";
+                    $changeAnalysis['added'][] = ['key' => $key, 'value' => $value];
+                } elseif ($currentSettings[$key] !== $value) {
+                    $changedKeys[] = $key;
+                    $changeSummary[] = "Changed setting '{$key}' from '{$currentSettings[$key]}' to '{$value}'.";
+                    $changeAnalysis['modified'][] = ['key' => $key, 'old' => $currentSettings[$key], 'new' => $value];
                 }
             }
-
-            // Apply settings based on strategy
-            switch ($strategy) {
-                case 'replace':
-                    foreach ($newSettings as $category => $settings) {
-                        $model->setSetting($category, $settings);
-                    }
-                    break;
-
-                case 'merge':
-                default:
-                    foreach ($newSettings as $category => $settings) {
-                        $existing = $model->getSetting($category, []);
-                        $merged = array_merge($existing, $settings);
-                        $model->setSetting($category, $merged);
-                    }
-                    break;
-
-                case 'deep_merge':
-                    foreach ($newSettings as $category => $settings) {
-                        $existing = $model->getSetting($category, []);
-                        $merged = $this->deepMergeArrays($existing, $settings);
-                        $model->setSetting($category, $merged);
-                    }
-                    break;
-            }
-
-            // Clear related caches
-            $this->clearRelatedCaches($model);
-
-            // Create update data response
-            $updateData = SettingsUpdateData::forRetrieval(
-                model: $model,
-                previousSettings: $currentSettings,
-                newSettings: $model->getAllSettings(),
-                strategy: $strategy,
-                userId: $userId,
-                auditReason: $auditReason,
-                performance: $performance,
-                cacheDuration: $cacheDuration ?? config('settings.cache.ttl', 3600)
-            );
-
-            // Add version information to response
-            if ($version) {
-                $updateData = $updateData->withVersion([
-                    'version_id' => $version->version_id,
-                    'version_number' => $version->version_number,
-                    'created_at' => $version->created_at,
-                    'change_summary' => $version->change_summary,
-                ]);
-            }
-
-            DB::commit();
-
-            // Log successful update
-            Log::info('Settings updated successfully', [
-                'model_type' => get_class($model),
-                'model_id' => $model->getKey(),
-                'strategy' => $strategy,
-                'user_id' => $userId,
-                'changes_count' => count($updateData->getChangedKeys()),
-                'version_created' => $version !== null,
-                'execution_time' => $performance['execution_time_ms'] . 'ms',
-            ]);
-
-            // Fire events
-            event('settings.updated', [
-                'model' => $model,
-                'update_data' => $updateData,
-                'version' => $version,
-            ]);
-
-            return $updateData;
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            
-            Log::error('Failed to update settings', [
-                'model_type' => get_class($model),
-                'model_id' => $model->getKey(),
-                'error' => $e->getMessage(),
-                'user_id' => $userId,
-            ]);
-
-            throw $e;
         }
+
+        // For 'replace' strategy, detect removed keys
+        if ($strategy === 'replace') {
+            foreach ($currentSettings as $key => $value) {
+                if (!array_key_exists($key, $newSettings)) {
+                    $changedKeys[] = $key;
+                    $changeSummary[] = "Removed setting '{$key}'.";
+                    $changeAnalysis['removed'][] = ['key' => $key, 'value' => $value];
+                }
+            }
+        }
+        
+        $updateData = new SettingsUpdateData(
+            modelType: get_class($model),
+            modelId: $model->getKey(),
+            newSettings: $newSettings,
+            updateStrategy: $strategy,
+            userId: $userId,
+            auditReason: $auditReason,
+            validationEnabled: !$skipValidation,
+            backupEnabled: $createBackup,
+            updatedAt: now(),
+            changedKeys: $changedKeys,
+            changeSummary: implode("\n", $changeSummary),
+            changeAnalysis: $changeAnalysis
+        );
+        
+        // Create a version of the settings before updating
+        if ($createVersion) {
+            CreateSettingsVersion::run($model, $updateData);
+        }
+
+        // Perform the update
+        $result = $this->handle($updateData);
+
+        // Post-update actions (like clearing cache) can be added here
+        if ($cacheDuration !== null) {
+            // This is a simplified example; a full implementation would
+            // involve a more robust cache management system.
+            Cache::put("settings:{$updateData->modelType}:{$updateData->modelId}", $model->settings()->all(), $cacheDuration);
+        }
+
+        return $updateData;
     }
 
-    /**
-     * Update settings without creating a version (for internal operations)
-     */
     public static function updateWithoutVersioning(
         Model $model,
         array $newSettings,
@@ -601,13 +550,16 @@ class UpdateModelSettings
         ?int $userId = null,
         ?string $auditReason = null
     ): SettingsUpdateData {
-        return self::run(
-            model: $model,
-            newSettings: $newSettings,
-            strategy: $strategy,
-            userId: $userId,
-            auditReason: $auditReason,
-            createVersion: false
+        return (new self())->execute(
+            $model,
+            $newSettings,
+            $strategy,
+            $userId,
+            $auditReason,
+            true, // skipValidation
+            false, // createBackup
+            false, // createVersion
+            null // cacheDuration
         );
     }
-} 
+}

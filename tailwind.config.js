@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    './resources/views/**/*.blade.php',
-    './resources/js/**/*.{vue,js,ts}',
     './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './resources/**/*.vue',
   ],
   theme: {
     extend: {
@@ -171,70 +171,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    function({ addUtilities, addComponents, theme }) {
-      // Custom utility classes
-      addUtilities({
-        '.text-balance': {
-          'text-wrap': 'balance',
-        },
-        '.scrollbar-hide': {
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        },
-        '.gradient-border': {
-          'background': 'linear-gradient(white, white) padding-box, linear-gradient(45deg, #3b82f6, #8b5cf6) border-box',
-          'border': '2px solid transparent',
-        },
-      });
-
-      // Component classes
-      addComponents({
-        '.btn': {
-          padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-          borderRadius: theme('borderRadius.md'),
-          fontWeight: theme('fontWeight.medium'),
-          fontSize: theme('fontSize.sm'),
-          transition: 'all 0.2s ease-in-out',
-          cursor: 'pointer',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: theme('spacing.2'),
-          '&:focus': {
-            outline: '2px solid',
-            outlineColor: theme('colors.primary.500'),
-            outlineOffset: '2px',
-          },
-          '&:disabled': {
-            opacity: '0.5',
-            cursor: 'not-allowed',
-          },
-        },
-        '.card': {
-          backgroundColor: theme('colors.white'),
-          borderRadius: theme('borderRadius.lg'),
-          boxShadow: theme('boxShadow.soft'),
-          padding: theme('spacing.6'),
-          border: '1px solid',
-          borderColor: theme('colors.neutral.200'),
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            boxShadow: theme('boxShadow.strong'),
-            transform: 'translateY(-1px)',
-          },
-        },
-        '.glass': {
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-        },
-      });
-    },
-  ],
+  plugins: [],
 }

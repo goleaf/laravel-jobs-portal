@@ -1,6 +1,9 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove Bootstrap imports */
+/* Additional custom styles can be added here */
 
 /* Enhanced Custom Styles */
 @layer base {

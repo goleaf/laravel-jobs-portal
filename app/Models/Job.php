@@ -584,6 +584,19 @@ class Job extends Model
         return $query->where('created_at', '>=', Carbon::now()->subDays($days));
     }
 
+    /**
+     * Scope a query to filter jobs by category.
+     *
+     * @param Builder $query
+     * @param int     $categoryId
+     *
+     * @return Builder
+     */
+    public function scopeByCategory($query, $categoryId)
+    {
+        return $query->where('job_category_id', $categoryId);
+    }
+
     // Relationships
 
     /**
@@ -687,7 +700,7 @@ class Job extends Model
      */
     public function appliedJobs(): HasMany
     {
-        return $this->hasMany(AppliedJob::class);
+        return $this->hasMany(JobApplication::class);
     }
 
     /**

@@ -14,6 +14,8 @@ class FeaturedRecord extends Model
         'model_id', 
         'is_featured', 
         'featured_until',
+        'featured_start_date', // Added for test compatibility
+        'featured_end_date',   // Added for test compatibility
         'owner_id',
         'owner_type',
         'user_id',

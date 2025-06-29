@@ -131,6 +131,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         'country_id',
         'state_id',
         'city_id',
+        'company_id', // Added for mass assignment compatibility
         'is_active',
         'is_verified',
         'phone',

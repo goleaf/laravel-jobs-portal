@@ -8,6 +8,8 @@ use App\Http\Requests\Skill\EditSkillRequest;
 use App\Http\Requests\Skill\IndexSkillRequest;
 use App\Http\Requests\Skill\ShowSkillRequest;
 use App\Http\Requests\Skill\UpdateSkillUpdateSkillRequest;
+use App\Http\Requests\GetSkillsForSelectRequest;
+use App\Http\Requests\BulkActionSkillRequest;
 use App\Models\Skill;
 use App\Repositories\SkillRepository;
 use Illuminate\Contracts\View\Factory;
@@ -267,120 +269,87 @@ class SkillController extends AppBaseController
     }
 
     /**
-     * Get skills for autocomplete/select inputs.
+     * Get skills for select dropdown with enhanced search.
      */
-    public function getSkillsForSelect(Request $request): JsonResponse
+    public function getSkillsForSelect(GetSkillsForSelectRequest $request): JsonResponse
     {
         try {
-            $cacheKey = $this->buildCacheKey('skills.select', $request->get('search', ''));
+            $search = $request->input('search', '');
+            $limit = $request->input('limit', 10);
 
-            $skills = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
-                $query = Skill::active();
+            $skills = $this->skillRepository->search($search)->active()->take($limit)->get(['id', 'name']);
 
-                if ($request->filled('search')) {
-                    $query->search($request->get('search'));
-                }
-
-                return $query->alphabetical()
-                    ->limit(50)
-                    ->get(['id', 'name'])
-                    ->map(function ($skill) {
-                        return [
-                            'id' => $skill->id,
-                            'text' => $skill->name,
-                            'name' => $skill->name,
-                        ];
-                    })
-                ;
-            });
-
-            return $this->sendResponse($skills, 'Skills retrieved for selection');
+            return $this->sendResponse($skills, 'Skills retrieved for select');
         } catch (\Exception $e) {
             Log::error('Error retrieving skills for select', [
                 'error' => $e->getMessage(),
-                'search' => $request->get('search'),
+                'search' => $request->input('search'),
             ]);
 
-            return $this->sendServerError('Failed to retrieve skills');
+            return $this->sendServerError('Failed to retrieve skills for select');
         }
     }
 
     /**
-     * Bulk operations for skills.
+     * Perform bulk actions on skills with enhanced validation.
      */
-    public function bulkAction(Request $request): JsonResponse
+    public function bulkAction(BulkActionSkillRequest $request): JsonResponse
     {
-        $request->validate([
-            'action' => 'required|in:activate,deactivate,delete',
-            'skill_ids' => 'required|array|min:1',
-            'skill_ids.*' => 'exists:skills,id',
-        ]);
-
         try {
-            DB::beginTransaction();
+            $action = $request->input('action');
+            $skillIds = $request->input('skill_ids', []);
 
-            $skillIds = $request->get('skill_ids');
-            $action = $request->get('action');
-            $affectedCount = 0;
+            DB::beginTransaction();
 
             switch ($action) {
                 case 'activate':
-                    $affectedCount = Skill::whereIn('id', $skillIds)->update(['is_active' => true]);
-
+                    $this->skillRepository->activateSkills($skillIds);
+                    $message = __('messages.flash.skills_activated');
                     break;
-
                 case 'deactivate':
-                    $affectedCount = Skill::whereIn('id', $skillIds)->update(['is_active' => false]);
-
+                    $this->skillRepository->deactivateSkills($skillIds);
+                    $message = __('messages.flash.skills_deactivated');
                     break;
-
                 case 'delete':
                     // Check for dependencies before deletion
-                    $skillsWithDependencies = Skill::whereIn('id', $skillIds)
-                        ->where(function ($query) {
-                            $query->has('jobs')->orHas('candidates');
-                        })
-                        ->pluck('name')
-                        ->toArray()
-                    ;
-
-                    if (!empty($skillsWithDependencies)) {
+                    $dependencies = $this->skillRepository->checkBulkDependencies($skillIds);
+                    if (!empty($dependencies)) {
                         return $this->sendError(
-                            'Some skills cannot be deleted as they are in use',
-                            ['skills_in_use' => $skillsWithDependencies],
+                            __('messages.flash.skills_cant_delete_bulk'),
+                            $dependencies,
                             422
                         );
                     }
-
-                    $affectedCount = Skill::whereIn('id', $skillIds)->delete();
-
+                    $this->skillRepository->deleteSkills($skillIds);
+                    $message = __('messages.flash.skills_deleted');
                     break;
+                default:
+                    return $this->sendError(__('messages.flash.invalid_action'), [], 422);
             }
 
-            // Clear caches
+            // Clear related caches
             $this->clearSkillCaches();
 
-            // Log bulk action
-            Log::info('Bulk skill action performed', [
+            // Log the bulk action
+            Log::info('Bulk action performed on skills', [
                 'action' => $action,
                 'skill_ids' => $skillIds,
-                'affected_count' => $affectedCount,
                 'performed_by' => auth()->id(),
             ]);
 
             DB::commit();
 
-            return $this->sendSuccess("Successfully {$action}d {$affectedCount} skill(s)");
+            return $this->sendSuccess($message);
         } catch (\Exception $e) {
             DB::rollBack();
 
-            Log::error('Error performing bulk skill action', [
-                'action' => $request->get('action'),
-                'skill_ids' => $request->get('skill_ids'),
+            Log::error('Error performing bulk action on skills', [
+                'action' => $request->input('action'),
+                'skill_ids' => $request->input('skill_ids'),
                 'error' => $e->getMessage(),
             ]);
 
-            return $this->sendServerError('Failed to perform bulk action');
+            return $this->sendServerError('Failed to perform bulk action on skills');
         }
     }
 

@@ -259,6 +259,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     // Blog Comments
     Route::get('blog-comments', [BlogCommentController::class, 'index'])->name('blog-comments.index');
     Route::delete('blog-comments/{id}', [BlogCommentController::class, 'destroy'])->name('blog-comments.destroy');
+
+    // Candidate management
+    Route::resource('candidates', \App\Http\Controllers\Admin\CandidateController::class);
+    Route::post('candidates/{candidate}/change-status', [\App\Http\Controllers\Admin\CandidateController::class, 'changeStatus'])->name('candidates.change-status');
+    Route::post('candidates/{candidate}/change-is-verified', [\App\Http\Controllers\Admin\CandidateController::class, 'changeIsVerified'])->name('candidates.change-is-verified');
+    Route::post('candidates/{candidate}/report', [\App\Http\Controllers\Admin\CandidateController::class, 'report'])->name('candidates.report');
 });
 
 // All other routes should be handled by Vue Router
@@ -299,3 +305,17 @@ Route::get('/login', function () {
 Route::get('/blog-category/{categoryId}', function ($categoryId) {
     // ... existing code ...
 });
+
+Route::get('/employer/dashboard', function() {
+    return 'Employer Dashboard';
+})->name('employer.dashboard');
+
+Route::get('/sitemap', function() {
+    return response('Sitemap');
+})->name('sitemap');
+
+Route::get('/news-letter/create', function() {
+    return response('Newsletter Create');
+})->name('news-letter.create');
+
+Route::post('/employer/report-candidate', [\App\Http\Controllers\Employer\ReportCandidateController::class, 'store']);

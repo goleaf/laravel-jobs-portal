@@ -43,8 +43,13 @@ class CandidateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Create roles if they don't exist
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'employer']);
+        \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'candidate']);
         // Create users and associated models needed for tests
         $this->adminUser = User::factory()->create(['user_type' => User::ADMIN]);
+        $this->adminUser->assignRole('admin');
         $this->candidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
         $this->candidate = Candidate::factory()->create(['user_id' => $this->candidateUser->id]);
 
@@ -113,15 +118,14 @@ class CandidateTest extends TestCase
 
         $education = CandidateEducation::factory()->create([
             'candidate_id' => $candidate->id,
-            'degree_level' => $this->faker->word,
             'degree_title' => $this->faker->sentence,
             'year' => $this->faker->year,
             'institute' => $this->faker->company,
         ]);
 
-        $this->assertInstanceOf(CandidateEducation::class, $candidate->educations->first());
-        $this->assertCount(1, $candidate->educations);
-        $this->assertEquals($education->id, $candidate->educations->first()->id);
+        $this->assertInstanceOf(CandidateEducation::class, $candidate->candidateEducation->first());
+        $this->assertCount(1, $candidate->candidateEducation);
+        $this->assertEquals($education->id, $candidate->candidateEducation->first()->id);
     }
 
     /** @test */
@@ -132,15 +136,14 @@ class CandidateTest extends TestCase
         $experience = CandidateExperience::factory()->create([
             'candidate_id' => $candidate->id,
             'company' => $this->faker->company,
-            'job_title' => $this->faker->jobTitle,
+            'currently_working' => false,
             'start_date' => $this->faker->date(),
             'end_date' => $this->faker->date(),
-            'is_current_job' => false,
         ]);
 
-        $this->assertInstanceOf(CandidateExperience::class, $candidate->experiences->first());
-        $this->assertCount(1, $candidate->experiences);
-        $this->assertEquals($experience->id, $candidate->experiences->first()->id);
+        $this->assertInstanceOf(CandidateExperience::class, $candidate->candidateExperience->first());
+        $this->assertCount(1, $candidate->candidateExperience);
+        $this->assertEquals($experience->id, $candidate->candidateExperience->first()->id);
     }
 
     /** @test */
@@ -163,6 +166,9 @@ class CandidateTest extends TestCase
     /** @test */
     public function candidatesCanBeFilteredByExperience()
     {
+        // Clear existing candidates to avoid interference
+        Candidate::query()->delete();
+
         Candidate::factory()->count(3)->create(['experience' => 5]);
         Candidate::factory()->count(2)->create(['experience' => 2]);
 
@@ -176,6 +182,9 @@ class CandidateTest extends TestCase
     /** @test */
     public function candidatesCanBeFilteredByAvailability()
     {
+        // Clear existing candidates to avoid interference
+        Candidate::query()->delete();
+
         Candidate::factory()->count(3)->create(['immediate_available' => true]);
         Candidate::factory()->count(2)->create(['immediate_available' => false]);
 
@@ -267,7 +276,11 @@ class CandidateTest extends TestCase
             'functional_area_id' => FunctionalArea::factory()->create()->id,
             'current_salary' => 60000,
             'expected_salary' => 70000,
-            'salary_currency' => SalaryCurrency::factory()->create()->id,
+            'salary_currency' => SalaryCurrency::firstOrCreate([
+                'currency_name' => 'Test Dollar',
+                'currency_code' => 'TST',
+                'currency_icon' => 'T$'
+            ])->id,
             'address' => $this->faker->address,
             'immediate_available' => true,
             'available_at' => now()->addMonth()->toDateString(),

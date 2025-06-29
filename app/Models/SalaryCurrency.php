@@ -100,6 +100,7 @@ class SalaryCurrency extends Model
     protected $fillable = [
         'currency_name',
         'currency_code',
+        'currency_icon',
         'currency_symbol',
         'exchange_rate',
         'base_currency',

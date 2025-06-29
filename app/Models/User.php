@@ -124,6 +124,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         'last_name',
         'name', // Test compatibility field
         'email',
+        'email_verified_at', // Added for mass assignment compatibility
         'password',
         'user_type',
         'dob',

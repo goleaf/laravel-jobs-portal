@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexJobRequest;
+use App\Http\Requests\CreateJobRequest;
+use App\Http\Requests\ShowJobRequest;
+use App\Http\Requests\EditJobRequest;
+use App\Http\Requests\DestroyJobRequest;
 use App\Http\Requests\JobRequest;
 use App\Models\Job;
 use App\Repositories\JobRepository;
@@ -19,7 +24,7 @@ class JobController extends Controller
         $this->jobRepository = $jobRepository;
     }
 
-    public function index()
+    public function index(IndexJobRequest $request)
     {
         Gate::authorize('viewAny', Job::class);
         // List jobs
@@ -28,7 +33,7 @@ class JobController extends Controller
         return view('jobs.index', compact('jobs'));
     }
 
-    public function create()
+    public function create(CreateJobRequest $request)
     {
         Gate::authorize('create', Job::class);
 
@@ -77,14 +82,14 @@ class JobController extends Controller
         ]);
     }
 
-    public function show(Job $job)
+    public function show(ShowJobRequest $request, Job $job)
     {
         Gate::authorize('view', $job);
 
         return view('jobs.show', compact('job'));
     }
 
-    public function edit(Job $job)
+    public function edit(EditJobRequest $request, Job $job)
     {
         Gate::authorize('update', $job);
 
@@ -99,7 +104,7 @@ class JobController extends Controller
         return redirect()->route('jobs.index')->with('success', 'Job updated successfully.');
     }
 
-    public function destroy(Job $job)
+    public function destroy(DestroyJobRequest $request, Job $job)
     {
         Gate::authorize('delete', $job);
         $this->jobRepository->delete($job->id);

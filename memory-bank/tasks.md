@@ -1165,7 +1165,7 @@ Successfully implemented a **production-ready model-oriented templating system**
 ## Repository and Controller Updates
 
 - **Repository Check**: Reviewed and confirmed that all models have corresponding repositories. Checked `CandidateRepository.php`, `JobRepository.php`, and `TagRepository.php` for correct implementation with necessary methods following Context7 patterns.
-- **Controller Updates**: Updated `JobController.php` to use `JobRepository` instead of directly using the `Job` model. Reviewed `CompanyController.php` and confirmed it already uses `CompanyRepository`.
+- **Controller Updates**: Updated `JobController.php` to use `JobRepository` instead of directly using the `Job` model. Reviewed `CompanyController.php` and confirmed it already uses `CompanyRepository`. Reviewed `CandidateController.php` and confirmed it already uses `CandidateRepository`.
 - **Model Review**: Checked the `Job` model and confirmed it has necessary scopes, relationships, and casts as per Context7 patterns.
 - **Interface Removal**: Removed interface files (`FeaturedRecordRepositoryInterface.php`, `JobRepositoryInterface.php`, `CandidateRepositoryInterface.php`) as per user request to focus on other aspects of the project.
 

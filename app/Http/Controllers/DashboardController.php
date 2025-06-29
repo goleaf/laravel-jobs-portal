@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\DashboardRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -25,9 +26,14 @@ class DashboardController extends AppBaseController
     /**
      * Display the dashboard.
      */
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         $user = Auth::user();
+
+        // Check if user is authenticated
+        if (!$user) {
+            return redirect('/login');
+        }
 
         // Admin dashboard
         if ($user->hasRole('Admin')) {

@@ -269,6 +269,14 @@ Route::get('/register', function () {
     return view('auth.candidate_register');
 })->name('register');
 
+// POST route for user registration
+Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])
+    ->name('register.store');
+
+// POST route for user login
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
+    ->name('login.store');
+
 Route::get('/employee-login', function () {
     return view('front_web.auth.employee_login');
 })->name('employee.login');

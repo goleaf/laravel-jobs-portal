@@ -68,6 +68,7 @@ class JobServiceTest extends TestCase
                 'featured_start_date' => now(),
                 'featured_end_date' => now()->addDays(30),
                 'is_active' => true,
+                'user_id' => $this->employer->id, // Add required user_id
             ]);
         }
 
@@ -109,12 +110,26 @@ class JobServiceTest extends TestCase
     public function testCanCreateJob(): void
     {
         $jobData = [
+            'job_id' => 'JOB-' . now()->format('Y') . '-' . str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT),
             'job_title' => 'Senior Laravel Developer',
             'description' => 'We are looking for an experienced Laravel developer...',
             'company_id' => $this->company->id,
             'job_category_id' => JobCategory::factory()->create()->id,
             'job_type_id' => JobType::factory()->create()->id,
             'status' => Job::STATUS_OPEN,
+            'career_level_id' => 1,
+            'functional_area_id' => 1,
+            'job_shift_id' => 1,
+            'degree_level_id' => 1,
+            'currency_id' => 1,
+            'salary_period_id' => 1,
+            'salary_from' => 50000,
+            'salary_to' => 80000,
+            'hide_salary' => false,
+            'no_preference' => 0,
+            'is_freelance' => false,
+            'position' => 1,
+            'job_expiry_date' => now()->addDays(30),
         ];
 
         $job = $this->jobService->createJob($jobData);
@@ -185,6 +200,7 @@ class JobServiceTest extends TestCase
                 'candidate_id' => User::factory()->create()->id,
                 'expected_salary' => 50000,
                 'status' => 1,
+                'resume_id' => 1, // Add required resume_id
             ]);
         }
 
@@ -194,6 +210,7 @@ class JobServiceTest extends TestCase
                 'candidate_id' => User::factory()->create()->id,
                 'expected_salary' => 45000,
                 'status' => 1,
+                'resume_id' => 1, // Add required resume_id
             ]);
         }
 

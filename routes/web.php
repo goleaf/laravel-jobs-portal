@@ -180,6 +180,10 @@ Route::post('candidate-profile/update-profile-image', [CandidateController::clas
 Route::get('/candidates', [CandidateController::class, 'index'])->name('candidates.index');
 Route::get('/employers', [EmployerController::class, 'index'])->name('employers.index');
 
+// Employer job management routes
+Route::get('/employer/jobs/create', [JobController::class, 'create'])->name('employer.job.create');
+Route::post('/employer/jobs', [JobController::class, 'store'])->name('employer.job.store');
+
 // Real-time validation
 Route::post('/real-time-validation', [RealTimeController::class, 'validateField'])->name('real-time-validation');
 

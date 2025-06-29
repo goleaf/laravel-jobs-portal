@@ -19,7 +19,7 @@ class JobStageFactory extends Factory
         return [
             'name' => $this->faker->word.' Stage',
             'description' => $this->faker->sentence,
-            'is_active' => $this->faker->boolean(80),
+            'company_id' => 1, // Default company ID for testing
         ];
     }
 }

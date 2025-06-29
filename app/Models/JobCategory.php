@@ -102,6 +102,8 @@ class JobCategory extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'id' => 'int',
+        'name' => 'string',
         'is_featured' => 'boolean',
         'is_default' => 'boolean',
         'is_active' => 'boolean',

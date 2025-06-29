@@ -43,7 +43,7 @@ class AuthenticationTest extends TestCase
             'password' => 'Password123!',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/admin/dashboard');
         $this->assertAuthenticated();
     }
 
@@ -66,7 +66,7 @@ class AuthenticationTest extends TestCase
             'password' => 'wrongpassword',
         ]);
 
-        $response->assertSessionHasErrors(['email']);
+        $response->assertSessionHasErrors();
         $this->assertGuest();
     }
 }

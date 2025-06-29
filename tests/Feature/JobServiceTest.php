@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\JobCategory;
 use App\Models\JobType;
 use App\Models\User;
+use App\Models\JobApplication;
 use App\Services\JobService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
@@ -65,8 +66,8 @@ class JobServiceTest extends TestCase
 
         foreach ($featuredJobs as $job) {
             $job->featured()->create([
-                'featured_start_date' => now(),
-                'featured_end_date' => now()->addDays(30),
+                'start_time' => now(),
+                'end_time' => now()->addDays(30),
                 'is_active' => true,
                 'user_id' => $this->employer->id, // Add required user_id
             ]);
@@ -195,24 +196,18 @@ class JobServiceTest extends TestCase
         $regularJob = Job::factory()->create(['status' => Job::STATUS_OPEN]);
 
         // Create applications for popular job
-        for ($i = 0; $i < 15; ++$i) {
-            $popularJob->appliedJobs()->create([
-                'candidate_id' => User::factory()->create()->id,
-                'expected_salary' => 50000,
-                'status' => 1,
-                'resume_id' => 1, // Add required resume_id
-            ]);
-        }
+        JobApplication::factory()->count(15)->create([
+            'job_id' => $popularJob->id,
+            'expected_salary' => 50000,
+            'status' => 1,
+        ]);
 
         // Create fewer applications for regular job
-        for ($i = 0; $i < 5; ++$i) {
-            $regularJob->appliedJobs()->create([
-                'candidate_id' => User::factory()->create()->id,
-                'expected_salary' => 45000,
-                'status' => 1,
-                'resume_id' => 1, // Add required resume_id
-            ]);
-        }
+        JobApplication::factory()->count(5)->create([
+            'job_id' => $regularJob->id,
+            'expected_salary' => 45000,
+            'status' => 1,
+        ]);
 
         $popularJobs = $this->jobService->getPopularJobs();
 
@@ -278,6 +273,8 @@ class JobServiceTest extends TestCase
 
     public function testCachingWorksCorrectly(): void
     {
+        // Clear existing jobs and cache to prevent interference
+        Job::query()->delete();
         Cache::flush();
 
         Job::factory()->count(3)->create(['status' => Job::STATUS_OPEN]);
@@ -290,8 +287,29 @@ class JobServiceTest extends TestCase
 
         $this->assertEquals($firstResult->total(), $secondResult->total());
 
-        // Create a new job
-        Job::factory()->create(['status' => Job::STATUS_OPEN]);
+        // Create a new job using the service method to trigger cache clearing
+        $this->jobService->createJob([
+            'job_id' => 'JOB-' . now()->format('Y') . '-' . str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT),
+            'job_title' => 'Test Job',
+            'description' => 'Test job description',
+            'company_id' => $this->company->id,
+            'job_category_id' => JobCategory::factory()->create()->id,
+            'job_type_id' => JobType::factory()->create()->id,
+            'status' => Job::STATUS_OPEN,
+            'career_level_id' => 1,
+            'functional_area_id' => 1,
+            'job_shift_id' => 1,
+            'degree_level_id' => 1,
+            'currency_id' => 1,
+            'salary_period_id' => 1,
+            'salary_from' => 50000,
+            'salary_to' => 80000,
+            'hide_salary' => false,
+            'no_preference' => 0,
+            'is_freelance' => false,
+            'position' => 1,
+            'job_expiry_date' => now()->addDays(30),
+        ]);
 
         // Cache should be cleared and reflect new data
         $thirdResult = $this->jobService->getActiveJobs();

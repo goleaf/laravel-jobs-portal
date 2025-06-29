@@ -284,6 +284,10 @@ Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, '
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
     ->name('login.store');
 
+// POST route for user logout
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])
+    ->name('logout');
+
 Route::get('/employee-login', function () {
     return view('front_web.auth.employee_login');
 })->name('employee.login');

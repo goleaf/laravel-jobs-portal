@@ -561,15 +561,11 @@ class Job extends Model
     /**
      * Scope a query to only include featured jobs.
      *
-     * @param Builder $query
-     *
      * @return Builder
      */
     public function scopeFeatured($query)
     {
-        return $query->whereHas('activeFeatured', function ($q) {
-            $q->where('record_type', 'job');
-        });
+        return $query->whereHas('activeFeatured');
     }
 
     /**
@@ -595,6 +591,19 @@ class Job extends Model
     public function scopeByCategory($query, $categoryId)
     {
         return $query->where('job_category_id', $categoryId);
+    }
+
+    /**
+     * Scope a query to get popular jobs (jobs with many applications).
+     *
+     * @param Builder $query
+     * @param int     $minApplications
+     *
+     * @return Builder
+     */
+    public function scopePopular($query, $minApplications = 10)
+    {
+        return $query->has('appliedJobs', '>=', $minApplications);
     }
 
     // Relationships

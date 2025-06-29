@@ -24,7 +24,7 @@ class FeaturedRecord extends Model
         'end_time',
         'meta',
         'is_active',
-        'settings'
+        'settings',
     ];
 
     public function scopeActive($query)

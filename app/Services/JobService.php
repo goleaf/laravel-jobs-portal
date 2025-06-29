@@ -194,7 +194,7 @@ class JobService
             return [
                 'total_jobs' => Job::count(),
                 'active_jobs' => Job::active()->count(),
-                'featured_jobs' => Job::featured()->count(),
+                'featured_jobs' => Job::whereHas('featured')->count(),
                 'jobs_this_month' => Job::whereMonth('created_at', now()->month)->count(),
                 'jobs_today' => Job::whereDate('created_at', today())->count(),
                 'expired_jobs' => Job::where('job_expiry_date', '<', now())->count(),

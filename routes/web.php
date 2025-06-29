@@ -169,6 +169,9 @@ Route::get('admin/password/forgot', [AdminController::class, 'forgotPassword'])-
 // Dashboard route (for both admin and company)
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+// Candidate dashboard
+Route::get('/candidate-dashboard', [DashboardController::class, 'index'])->name('candidate.dashboard');
+
 // Candidate routes
 Route::resource('candidate-profile', CandidateController::class)->except(['create', 'store', 'show', 'destroy']);
 Route::post('candidate-profile/update-profile-image', [CandidateController::class, 'updateProfileImage'])->name('candidate.profile.update-image');
@@ -256,7 +259,11 @@ Route::get('/employer-register', function () {
 
 Route::get('/candidate-register', function () {
     return view('auth.candidate_register');
-})->name('candidate.register')->name('register');
+})->name('candidate.register');
+
+Route::get('/register', function () {
+    return view('auth.candidate_register');
+})->name('register');
 
 Route::get('/employee-login', function () {
     return view('front_web.auth.employee_login');
@@ -264,7 +271,7 @@ Route::get('/employee-login', function () {
 
 Route::get('/login', function () {
     return view('front_web.auth.login');
-})->name('login')->name('front.login');
+})->name('login');
 
 Route::get('/blog-category/{categoryId}', function ($categoryId) {
     // ... existing code ...

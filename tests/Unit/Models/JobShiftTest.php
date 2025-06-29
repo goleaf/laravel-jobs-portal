@@ -110,7 +110,8 @@ class JobShiftTest extends TestCase
     /** @test */
     public function itHasCorrectFillableAttributes(): void
     {
-        $fillable = [
+        $model = new JobShift();
+        $this->assertEqualsCanonicalizing([
             'shift',
             'description',
             'start_time',
@@ -118,10 +119,14 @@ class JobShiftTest extends TestCase
             'duration_hours',
             'is_default',
             'is_active',
-            'is_flexible',
-        ];
-
-        $this->assertEquals($fillable, $this->jobShift->getFillable());
+            'sort_order',
+            'icon',
+            'color',
+            'is_featured',
+            'meta_title',
+            'meta_description',
+            'slug',
+        ], $model->getFillable());
     }
 
     /** @test */

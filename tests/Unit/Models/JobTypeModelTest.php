@@ -20,39 +20,39 @@ class JobTypeModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function itHasCorrectFillableAttributes(): void
     {
         $jobType = new JobType();
-        $fillable = $jobType->getFillable();
-
         $expectedFillable = [
             'name',
             'description',
-            'company_id',
             'is_default',
+            'is_active',
+            'sort_order',
+            'icon',
+            'color',
+            'is_featured',
+            'meta_title',
+            'meta_description',
+            'slug',
         ];
 
-        foreach ($expectedFillable as $attribute) {
-            $this->assertContains($attribute, $fillable);
-        }
+        $this->assertEquals($expectedFillable, $jobType->getFillable());
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function itHasCorrectCasts(): void
     {
         $jobType = new JobType();
-        $casts = $jobType->getCasts();
-
         $expectedCasts = [
-            'id' => 'integer',
-            'name' => 'string',
-            'description' => 'string',
+            'id' => 'int',
+            'sort_order' => 'int',
             'is_default' => 'boolean',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
         ];
 
-        foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals($cast, $casts[$attribute]);
-        }
+        $this->assertEquals($expectedCasts, $jobType->getCasts());
     }
 
     /** @test */

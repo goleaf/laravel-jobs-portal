@@ -22,12 +22,8 @@ class LoginResource extends JsonResource
                 'created_at' => $this->resource['user']['created_at'] ?? null,
                 'updated_at' => $this->resource['user']['updated_at'] ?? null,
             ],
-            'token' => [
-                'access_token' => $this->resource['token'],
-                'token_type' => 'Bearer',
-                'abilities' => $this->resource['abilities'] ?? [],
-                'expires_at' => null, // Sanctum tokens don't expire by default
-            ],
+            'token' => $this->resource['token'],
+            'abilities' => $this->resource['abilities'] ?? [],
             'authentication' => [
                 'authenticated' => true,
                 'login_time' => now()->toISOString(),

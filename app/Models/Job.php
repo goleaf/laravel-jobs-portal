@@ -627,9 +627,9 @@ class Job extends Model
     /**
      * Get the job category.
      */
-    public function jobCategory(): BelongsTo
+    public function category()
     {
-        return $this->belongsTo(JobCategory::class);
+        return $this->belongsTo(JobCategory::class, 'job_category_id');
     }
 
     /**
@@ -776,27 +776,20 @@ class Job extends Model
     /**
      * The attributes that should be cast.
      */
-    protected function casts(): array
-    {
-        return [
-            'salary_from' => 'decimal:2',
-            'salary_to' => 'decimal:2',
-            'salary_min' => 'decimal:2',
-            'salary_max' => 'decimal:2',
-            'no_preference' => 'boolean',
-            'hide_salary' => 'boolean',
-            'is_freelance' => 'boolean',
-            'is_suspended' => 'boolean',
-            'is_remote' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
-            'job_expiry_date' => 'date',
-            'expires_at' => 'datetime',
-            'published_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_remote' => 'boolean',
+        'is_urgent' => 'boolean',
+        'experience_from' => 'integer',
+        'experience_to' => 'integer',
+        'salary_from' => 'integer',
+        'salary_to' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'published_at' => 'datetime',
+        'expires_at' => 'datetime',
+    ];
 
     /**
      * Configure unique value fields for automatic generation.

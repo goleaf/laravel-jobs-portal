@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Universal Token Authentication Controller
@@ -29,6 +30,14 @@ class TokenController extends UniversalBaseController
     public function login(LoginRequest $request): JsonResponse
     {
         try {
+            // Check rate limiting
+            $attemptsKey = 'login_attempts:' . $request->ip();
+            $attempts = Cache::get($attemptsKey, 0);
+            if ($attempts >= 5) {
+                return $this->errorResponse('Too many login attempts. Please try again later.', 429);
+            }
+            Cache::put($attemptsKey, $attempts + 1, 60); // 1 minute TTL
+
             $user = User::where('email', $request->email)->first();
 
             if (!$user || !Hash::check($request->password, $user->password)) {
@@ -59,7 +68,7 @@ class TokenController extends UniversalBaseController
 
             return response()->json((new LoginResource($data))->toArray($request))
                 ->setStatusCode(200)
-            ;
+                ->header('X-API-Version', '1.0.0');
         } catch (ValidationException $e) {
             return $this->errorResponse('Invalid credentials', 401, $e->errors());
         } catch (\Exception $e) {
@@ -75,11 +84,14 @@ class TokenController extends UniversalBaseController
     public function user(UserRequest $request): JsonResponse
     {
         try {
+            if (!$request->user()) {
+                return $this->errorResponse('Unauthenticated', 401);
+            }
             $user = $request->user();
 
             return response()->json((new AuthUserResource($user))->toArray($request))
                 ->setStatusCode(200)
-            ;
+                ->header('X-API-Version', '1.0.0');
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve user', 500, [], [
                 'exception' => $e->getMessage(),
@@ -125,9 +137,11 @@ class TokenController extends UniversalBaseController
             $tokensCount = $request->user()->tokens()->count();
             $request->user()->tokens()->delete();
 
-            return $this->jsonResponse([
+            return response()->json([
+                'success' => true,
+                'message' => 'All tokens revoked successfully',
                 'revoked_tokens' => $tokensCount,
-            ], 'All tokens revoked successfully');
+            ]);
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to revoke tokens', 500, [], [
                 'exception' => $e->getMessage(),

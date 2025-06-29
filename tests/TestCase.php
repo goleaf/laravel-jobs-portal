@@ -25,6 +25,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\SQLiteConnection;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -38,6 +39,12 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        // Ensure SQLite database is used for testing
+        if (config('database.default') !== 'sqlite') {
+            $this->markTestSkipped('Test requires SQLite database');
+        }
+
+        // Run migrations to ensure schema is up to date, avoiding VACUUM
         $this->artisan('migrate');
 
         // Optimize memory usage

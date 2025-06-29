@@ -91,8 +91,8 @@ class JobType extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_default' => 'boolean',
         'is_active' => 'boolean',
+        'is_default' => 'boolean',
         'is_featured' => 'boolean',
         'sort_order' => 'integer',
         'created_at' => 'datetime',

@@ -26,7 +26,7 @@ class UpdateModelSettings
     /**
      * Execute the settings update action
      */
-    public function handle(SettingsUpdateData $updateData): array
+    public function executeUpdate(SettingsUpdateData $updateData): array
     {
         try {
             // Validate the update data
@@ -531,7 +531,7 @@ class UpdateModelSettings
         }
 
         // Perform the update
-        $result = $this->handle($updateData);
+        $result = $this->executeUpdate($updateData);
 
         // Post-update actions (like clearing cache) can be added here
         if ($cacheDuration !== null) {
@@ -561,5 +561,13 @@ class UpdateModelSettings
             false, // createVersion
             null // cacheDuration
         );
+    }
+
+    /**
+     * Run the settings update action (for compatibility with IsRunnable)
+     */
+    public static function run(SettingsUpdateData $updateData): array
+    {
+        return (new static())->executeUpdate($updateData);
     }
 }

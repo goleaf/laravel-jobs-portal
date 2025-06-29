@@ -23,16 +23,19 @@ class JobStage extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'job_stages';
+
     protected $fillable = [
+        'company_id',
         'name',
-        'description',
-        'sort_order',
+        'order',
+        'is_default',
         'is_active',
     ];
 
     protected $casts = [
+        'is_default' => 'boolean',
         'is_active' => 'boolean',
-        'sort_order' => 'integer',
     ];
 
     /**

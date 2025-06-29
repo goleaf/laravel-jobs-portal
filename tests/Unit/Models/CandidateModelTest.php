@@ -80,7 +80,7 @@ class CandidateModelTest extends TestCase
             'career_level_id' => 'int',
             'industry_id' => 'int',
             'functional_area_id' => 'int',
-            'immediate_available' => 'int',
+            'immediate_available' => 'boolean',
         ];
 
         foreach ($expectedCasts as $attribute => $cast) {

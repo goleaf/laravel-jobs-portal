@@ -12,13 +12,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\Contracts\JobRepositoryInterface;
 
 /**
  * Enhanced Job Repository.
  *
  * Comprehensive job management repository with advanced patterns
  */
-class JobRepository extends BaseRepository
+class JobRepository extends BaseRepository implements JobRepositoryInterface
 {
     /**
      * Cache duration for job-related queries (in minutes).
@@ -74,6 +75,11 @@ class JobRepository extends BaseRepository
         'job_expiry_date',
         'last_change',
     ];
+
+    /**
+     * @var string
+     */
+    protected $modelName = Job::class;
 
     public function __construct(Job $model)
     {
@@ -747,5 +753,93 @@ class JobRepository extends BaseRepository
         foreach ($patterns as $pattern) {
             Cache::forget($pattern);
         }
+    }
+
+    /**
+     * Get jobs by status.
+     *
+     * @param string $status
+     * @return mixed
+     */
+    public function getByStatus(string $status)
+    {
+        return $this->model->where('status', $status)->get();
+    }
+
+    /**
+     * Get jobs by category.
+     *
+     * @param int $categoryId
+     * @return mixed
+     */
+    public function getByCategory(int $categoryId)
+    {
+        return $this->model->where('job_category_id', $categoryId)->get();
+    }
+
+    /**
+     * Get jobs by company.
+     *
+     * @param int $companyId
+     * @return mixed
+     */
+    public function getByCompany(int $companyId)
+    {
+        return $this->model->where('company_id', $companyId)->get();
+    }
+
+    /**
+     * Get active jobs.
+     *
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->model->where('status', 'active')->get();
+    }
+
+    /**
+     * Get featured jobs.
+     *
+     * @return mixed
+     */
+    public function getFeatured()
+    {
+        return $this->model->where('is_featured', true)->get();
+    }
+
+    /**
+     * Get recent jobs.
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public function getRecent(int $limit = 10)
+    {
+        return $this->model->orderBy('created_at', 'desc')->take($limit)->get();
+    }
+
+    /**
+     * Get popular jobs.
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public function getPopular(int $limit = 10)
+    {
+        return $this->model->orderBy('views_count', 'desc')->take($limit)->get();
+    }
+
+    /**
+     * Search jobs by title or description.
+     *
+     * @param string $query
+     * @return mixed
+     */
+    public function search(string $query)
+    {
+        return $this->model->where('title', 'like', "%$query%")
+            ->orWhere('description', 'like', "%$query%")
+            ->get();
     }
 }

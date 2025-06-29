@@ -43,46 +43,57 @@ class JobTest extends TestCase
     /** @test */
     public function itHasCorrectFillableAttributes(): void
     {
-        $fillable = [
-            'title', 'description', 'benefits', 'skills', 'requirements',
-            'job_category_id', 'job_type_id', 'career_level_id', 'functional_area_id',
-            'salary_from', 'salary_to', 'salary_currency_id', 'salary_period_id',
-            'country_id', 'state_id', 'city_id',
-            'experience_from', 'experience_to', 'degree_level_id',
-            'job_shift_id', 'no_of_positions', 'job_expiry_date',
-            'hide_salary', 'is_freelance', 'is_suspended', 'is_featured',
-            'company_id', 'created_by',
+        $job = new Job();
+        $expectedFillable = [
+            'job_id', 'job_title', 'title', 'description', 'requirements', 'benefits',
+            'company_id', 'user_id', 'job_type_id', 'job_category_id', 'career_level_id',
+            'functional_area_id', 'job_shift_id', 'degree_level_id', 'position_id',
+            'currency_id', 'salary_period_id', 'country_id', 'state_id', 'city_id',
+            'salary_from', 'salary_to', 'salary_min', 'salary_max', 'job_expiry_date',
+            'expires_at', 'published_at', 'country', 'state', 'city', 'location',
+            'address', 'no_preference', 'hide_salary', 'is_freelance', 'is_suspended',
+            'is_remote', 'is_featured', 'is_active', 'status', 'is_created_by_admin',
+            'position', 'experience', 'last_change', 'key_responsibilities'
         ];
-
-        $this->assertEquals($fillable, $this->job->getFillable());
+        $this->assertEquals($expectedFillable, $job->getFillable());
     }
 
     /** @test */
     public function itHasCorrectCasts(): void
     {
+        $job = new Job();
         $expectedCasts = [
             'id' => 'int',
-            'salary_from' => 'decimal:2',
-            'salary_to' => 'decimal:2',
-            'experience_from' => 'integer',
-            'experience_to' => 'integer',
-            'no_of_positions' => 'integer',
-            'job_expiry_date' => 'date',
+            'company_id' => 'int',
+            'user_id' => 'int',
+            'job_type_id' => 'int',
+            'job_category_id' => 'int',
+            'career_level_id' => 'int',
+            'functional_area_id' => 'int',
+            'job_shift_id' => 'int',
+            'degree_level_id' => 'int',
+            'position_id' => 'int',
+            'currency_id' => 'int',
+            'salary_period_id' => 'int',
+            'country_id' => 'int',
+            'state_id' => 'int',
+            'city_id' => 'int',
+            'no_preference' => 'boolean',
             'hide_salary' => 'boolean',
             'is_freelance' => 'boolean',
             'is_suspended' => 'boolean',
+            'is_remote' => 'boolean',
             'is_featured' => 'boolean',
+            'is_active' => 'boolean',
+            'is_created_by_admin' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+            'published_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'job_expiry_date' => 'datetime'
         ];
-
-        foreach ($expectedCasts as $attribute => $cast) {
-            $this->assertEquals(
-                $cast,
-                $this->job->getCasts()[$attribute] ?? null,
-                "Cast for {$attribute} should be {$cast}"
-            );
-        }
+        $this->assertEquals($expectedCasts, $job->getCasts());
     }
 
     /** @test */

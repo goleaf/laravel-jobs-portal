@@ -80,8 +80,8 @@ class JobModelTest extends TestCase
     {
         $category = JobCategory::factory()->create();
         $job = Job::factory()->create(['job_category_id' => $category->id]);
-        $this->assertInstanceOf(JobCategory::class, $job->category);
-        $this->assertEquals($category->id, $job->category->id);
+        $this->assertInstanceOf(JobCategory::class, $job->jobCategory);
+        $this->assertEquals($category->id, $job->jobCategory->id);
     }
 
     /** @test */

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\ApplyJobJobApplicationRequest;
+use App\Http\Requests\ShowApplyJobFormRequest;
 use App\Mail\EmailToEmployer;
 use App\Models\Candidate;
 use App\Models\EmailTemplate;
@@ -27,7 +29,7 @@ class JobApplicationController extends AppBaseController
     /**
      * @return Factory|View
      */
-    public function showApplyJobForm(string $jobId)
+    public function showApplyJobForm(ShowApplyJobFormRequest $request, string $jobId)
     {
         $data = $this->jobApplicationRepository->showApplyJobForm($jobId);
 

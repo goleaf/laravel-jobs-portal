@@ -725,7 +725,7 @@ class Job extends Model
      */
     public function jobsTag()
     {
-        return $this->belongsToMany(Tag::class, 'job_tag');
+        return $this->belongsToMany(\App\Models\Tag::class, 'job_tag');
     }
 
     /**
@@ -733,7 +733,7 @@ class Job extends Model
      */
     public function featured()
     {
-        return $this->hasOne(FeaturedJob::class);
+        return $this->hasOne(\App\Models\FeaturedJob::class);
     }
 
     /**
@@ -741,7 +741,7 @@ class Job extends Model
      */
     public function activeFeatured()
     {
-        return $this->hasOne(FeaturedJob::class)->where('is_active', true);
+        return $this->hasOne(\App\Models\FeaturedJob::class)->where('is_active', true);
     }
 
     // ==============================================

@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
-use App\Repositories\JobTagRepository;
+use App\Repositories\TagRepository;
+use App\Http\Requests\Tag\CreateTagRequest;
+use App\Http\Requests\Tag\UpdateTagRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class TagController extends AppBaseController
 {
-    /** @var JobTagRepository */
-    private $jobTagRepository;
+    /** @var TagRepository */
+    private $tagRepository;
 
-    public function __construct(JobTagRepository $jobTagRepo)
+    public function __construct(TagRepository $tagRepo)
     {
-        $this->jobTagRepository = $jobTagRepo;
+        $this->tagRepository = $tagRepo;
     }
 
     /**
@@ -31,14 +33,14 @@ class TagController extends AppBaseController
     }
 
     /**
-     * Store a newly created JobTag in storage.
+     * Store a newly created Tag in storage.
      */
     public function store(CreateTagRequest $request): JsonResponse
     {
         $input = $request->all();
-        $jobTag = $this->jobTagRepository->create($input);
+        $tag = $this->tagRepository->create($input);
 
-        return $this->sendResponse($jobTag, __('messages.flash.job_tag_save'));
+        return $this->sendResponse($tag, __('messages.flash.tag_save'));
     }
 
     /**
@@ -58,14 +60,14 @@ class TagController extends AppBaseController
     }
 
     /**
-     * Update the specified JobTag in storage.
+     * Update the specified Tag in storage.
      */
-    public function update(UpdateTagUpdateTagRequest $request, Tag $tag): JsonResponse
+    public function update(UpdateTagRequest $request, Tag $tag): JsonResponse
     {
         $input = $request->all();
-        $this->jobTagRepository->update($input, $tag->id);
+        $this->tagRepository->update($input, $tag->id);
 
-        return $this->sendSuccess(__('messages.flash.job_tag_update'));
+        return $this->sendSuccess(__('messages.flash.tag_update'));
     }
 
     /**

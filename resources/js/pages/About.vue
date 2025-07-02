@@ -169,10 +169,6 @@ import HeroSection from '../components/ui/HeroSection.vue'
 import Badge from '../components/ui/Badge.vue'
 import SocialProof from '../components/ui/SocialProof.vue'
 import NewsletterSignup from '../components/ui/NewsletterSignup.vue'
-import HeroSection from '../components/ui/HeroSection.vue'
-import Badge from '../components/ui/Badge.vue'
-import SocialProof from '../components/ui/SocialProof.vue'
-import NewsletterSignup from '../components/ui/NewsletterSignup.vue'
 
 // Set page metadata
 useHead({

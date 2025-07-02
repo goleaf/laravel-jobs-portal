@@ -9,6 +9,10 @@ const Jobs = () => import("../pages/Jobs.vue")
 const JobDetails = () => import("../pages/JobDetails.vue")
 const Companies = () => import("../pages/Companies.vue")
 const CompanyDetails = () => import("../pages/CompanyDetails.vue")
+const About = () => import("../pages/About.vue")
+const Contact = () => import("../pages/Contact.vue")
+const Terms = () => import("../pages/Terms.vue")
+const Privacy = () => import("../pages/Privacy.vue")
 const Login = () => import("../pages/auth/Login.vue")
 const Register = () => import("../pages/auth/Register.vue")
 const Dashboard = () => import("../pages/Dashboard.vue")
@@ -102,6 +106,46 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: "Company Profile",
           description: "Learn about company culture, benefits, and job opportunities.",
+          public: true
+        }
+      },
+      {
+        path: "/about",
+        name: "about",
+        component: About,
+        meta: {
+          title: "About Us - Learn About Our Mission",
+          description: "Learn about our mission to connect talented professionals with exceptional opportunities.",
+          public: true
+        }
+      },
+      {
+        path: "/contact",
+        name: "contact",
+        component: Contact,
+        meta: {
+          title: "Contact Us - Get in Touch",
+          description: "Get in touch with our team for support, partnerships, or general inquiries.",
+          public: true
+        }
+      },
+      {
+        path: "/terms",
+        name: "terms",
+        component: Terms,
+        meta: {
+          title: "Terms of Service - User Agreement",
+          description: "Read our terms of service to understand your rights and responsibilities.",
+          public: true
+        }
+      },
+      {
+        path: "/privacy",
+        name: "privacy",
+        component: Privacy,
+        meta: {
+          title: "Privacy Policy - Data Protection",
+          description: "Learn how we collect, use, and protect your personal information.",
           public: true
         }
       }

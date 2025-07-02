@@ -229,7 +229,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { useHead } from '@vueuse/head'
+import { useHead } from '@/composables/useHead'
 import HeroSection from '../components/ui/HeroSection.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 import BaseButton from '../components/ui/BaseButton.vue'

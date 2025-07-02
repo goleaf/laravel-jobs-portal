@@ -175,7 +175,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { debounce } from 'lodash'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
@@ -259,7 +259,8 @@ const loadStatistics = async () => {
   }
 }
 
-const debouncedSearch = debounce(() => {
+// Optimized debounced search
+const debouncedSearch = OptimizedLodash.debounce(() => {
   applyFilters()
 }, 300)
 

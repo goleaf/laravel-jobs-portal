@@ -17,7 +17,7 @@
     <link rel="preload" href="{{ asset('fonts/inter-var.woff2') }}" as="font" type="font/woff2" crossorigin>
     
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.ts'])
+    @vite(['resources/css/app.css', 'resources/js/main.js'])
     
     <!-- Fonts -->
     <!-- Local fonts loaded via Vite -->

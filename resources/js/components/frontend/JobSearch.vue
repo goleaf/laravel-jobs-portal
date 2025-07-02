@@ -342,7 +342,7 @@
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { debounce } from 'lodash-es'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import {
   MagnifyingGlassIcon,
   MapPinIcon,
@@ -451,7 +451,7 @@ const applyFilters = () => {
   loadJobs()
 }
 
-const debouncedApplyFilters = debounce(applyFilters, 500)
+const debouncedApplyFilters = OptimizedLodash.debounce(applyFilters, 500)
 
 const clearFilters = () => {
   Object.assign(searchForm, {

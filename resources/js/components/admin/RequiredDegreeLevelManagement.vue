@@ -376,7 +376,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { debounce } from 'lodash-es'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import { 
   PlusIcon, 
   RefreshIcon, 
@@ -446,9 +446,9 @@ const applyFilters = () => {
   fetchRequiredDegreeLevels(filters)
 }
 
-const debouncedSearch = debounce(() => {
+const debouncedSearch = OptimizedLodash.debounce(() => {
   applyFilters()
-}, 300)
+}, 500)
 
 const changePage = (page: number) => {
   fetchRequiredDegreeLevels({ ...filters, page })

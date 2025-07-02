@@ -164,7 +164,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useHead } from '@vueuse/head'
+import { useHead } from '@/composables/useHead'
 import HeroSection from '../components/ui/HeroSection.vue'
 import Badge from '../components/ui/Badge.vue'
 import SocialProof from '../components/ui/SocialProof.vue'

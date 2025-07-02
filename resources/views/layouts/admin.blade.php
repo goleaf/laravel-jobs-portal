@@ -29,7 +29,7 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-lg font-semibold text-white">Admin Panel</h1>
+                        <h1 class="text-lg font-semibold text-white">{{ __('admin.panel_title') }}</h1>
                     </div>
                 </div>
                 <button onclick="toggleMobileMenu()" class="lg:hidden text-white hover:text-gray-200">

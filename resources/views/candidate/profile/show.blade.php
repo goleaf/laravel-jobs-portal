@@ -101,28 +101,28 @@
                     <div class="mt-6 flex justify-center sm:justify-start space-x-4">
                         @if($candidate->linkedin_url)
                             <a href="{{ $candidate->linkedin_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
-                                <span class="sr-only">LinkedIn</span>
+                                <span class="sr-only">{{ __('social.linkedin') }}</span>
                                 <x-icon name="linkedin" class="h-6 w-6" />
                             </a>
                         @endif
                         
                         @if($candidate->github_url)
                             <a href="{{ $candidate->github_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                                <span class="sr-only">GitHub</span>
+                                <span class="sr-only">{{ __('social.github') }}</span>
                                 <x-icon name="github" class="h-6 w-6" />
                             </a>
                         @endif
                         
                         @if($candidate->portfolio_url)
                             <a href="{{ $candidate->portfolio_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-purple-600 dark:hover:text-purple-400">
-                                <span class="sr-only">Portfolio</span>
+                                <span class="sr-only">{{ __('profile.portfolio') }}</span>
                                 <x-icon name="globe-alt" class="h-6 w-6" />
                             </a>
                         @endif
                         
                         @if($candidate->website_url)
                             <a href="{{ $candidate->website_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-green-600 dark:hover:text-green-400">
-                                <span class="sr-only">Website</span>
+                                <span class="sr-only">{{ __('profile.website') }}</span>
                                 <x-icon name="link" class="h-6 w-6" />
                             </a>
                         @endif

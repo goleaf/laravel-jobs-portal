@@ -55,7 +55,7 @@ import { ref, computed } from 'vue'
 import { PencilSquareIcon, TrashIcon, EyeIcon } from '@heroicons/vue/24/outline'
 import { useEnhancedI18n } from '@/composables/useEnhancedI18n'
 import { useToast } from '@/composables/useToast'
-import Swal from 'sweetalert2'
+import { OptimizedAlert } from '@/utils/dynamicImports'
 
 // Types
 interface ActionButtonsProps {
@@ -131,11 +131,10 @@ const handleDelete = async () => {
   if (props.loading || deleting.value) return
 
   if (props.confirmDelete) {
-    const result = await Swal.fire({
+    const result = await OptimizedAlert.confirm({
       title: t('common.are_you_sure'),
       text: props.deleteMessage || t('common.delete_warning'),
       icon: 'warning',
-      showCancelButton: true,
       confirmButtonColor: '#dc2626',
       cancelButtonColor: '#6b7280',
       confirmButtonText: t('common.yes_delete'),

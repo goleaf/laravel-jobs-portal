@@ -26,31 +26,32 @@ const AdminCompanies = () => import("../pages/admin/Companies.vue")
 const AdminCandidates = () => import("../pages/admin/Candidates.vue")
 const AdminSettings = () => import("../pages/admin/Settings.vue")
 
-// Visitor pages
-const JobsListing = () => import("../pages/jobs/JobsListing.vue")
-const CompaniesListing = () => import("../pages/companies/CompaniesListing.vue")
+// Using existing pages instead of non-existent visitor pages
+// const JobsListing = () => import("../pages/jobs/JobsListing.vue") // File doesn't exist
+// const CompaniesListing = () => import("../pages/companies/CompaniesListing.vue") // File doesn't exist
 
 // Candidate pages
 const CandidateDashboard = () => import("../pages/candidate/Dashboard.vue")
-const CandidateProfile = () => import("../pages/candidate/Profile.vue")
+// const CandidateProfile = () => import("../pages/candidate/Profile.vue") // File doesn't exist
 const CandidateApplications = () => import("../pages/candidate/Applications.vue")
-const CandidateSavedJobs = () => import("../pages/candidate/SavedJobs.vue")
-const CandidateJobAlerts = () => import("../pages/candidate/JobAlerts.vue")
-const CandidateResume = () => import("../pages/candidate/Resume.vue")
+// const CandidateSavedJobs = () => import("../pages/candidate/SavedJobs.vue") // File doesn't exist
+// const CandidateJobAlerts = () => import("../pages/candidate/JobAlerts.vue") // File doesn't exist
+// const CandidateResume = () => import("../pages/candidate/Resume.vue") // File doesn't exist
 
 // Employer pages
 const EmployerDashboard = () => import("../pages/employer/Dashboard.vue")
-const EmployerJobs = () => import("../pages/employer/Jobs.vue")
+// const EmployerJobs = () => import("../pages/employer/Jobs.vue") // File doesn't exist
 const EmployerJobCreate = () => import("../pages/employer/JobCreate.vue")
-const EmployerJobEdit = () => import("../pages/employer/JobEdit.vue")
+// const EmployerJobEdit = () => import("../pages/employer/JobEdit.vue") // File doesn't exist
 const EmployerApplications = () => import("../pages/employer/Applications.vue")
-const EmployerCompanyProfile = () => import("../pages/employer/CompanyProfile.vue")
-const EmployerAnalytics = () => import("../pages/employer/Analytics.vue")
+// const EmployerCompanyProfile = () => import("../pages/employer/CompanyProfile.vue") // File doesn't exist
+// const EmployerAnalytics = () => import("../pages/employer/Analytics.vue") // File doesn't exist
 
 // Layout components
 const PublicLayout = () => import("../layouts/PublicLayout.vue")
-const AuthenticatedLayout = () => import("../layouts/AuthenticatedLayout.vue")
-const AdminLayout = () => import("../layouts/AdminLayout.vue")
+const MainLayout = () => import("../layouts/MainLayout.vue")
+// const AuthenticatedLayout = () => import("../layouts/AuthenticatedLayout.vue") // File doesn't exist - using MainLayout
+// const AdminLayout = () => import("../layouts/AdminLayout.vue") // File doesn't exist - using MainLayout
 
 // Route definitions
 const routes: RouteRecordRaw[] = [
@@ -72,7 +73,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "/jobs",
         name: "jobs.index",
-        component: JobsListing,
+        component: Jobs,
         meta: {
           title: "Jobs - Browse Available Positions",
           description: "Browse thousands of job opportunities across various industries.",
@@ -92,7 +93,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "/companies",
         name: "companies.index",
-        component: CompaniesListing,
+        component: Companies,
         meta: {
           title: "Companies - Discover Top Employers",
           description: "Explore companies and learn about their culture and opportunities.",
@@ -178,33 +179,34 @@ const routes: RouteRecordRaw[] = [
           public: true
         }
       },
-      {
-        path: "/forgot-password",
-        name: "forgot-password",
-        component: ForgotPassword,
-        meta: {
-          title: "Forgot Password",
-          description: "Reset your password securely.",
-          public: true
-        }
-      },
-      {
-        path: "/reset-password/:token",
-        name: "reset-password",
-        component: ResetPassword,
-        meta: {
-          title: "Reset Password",
-          description: "Create a new password for your account.",
-          public: true
-        }
-      }
+      // Commented out until these components are created
+      // {
+      //   path: "/forgot-password",
+      //   name: "forgot-password",
+      //   component: ForgotPassword,
+      //   meta: {
+      //     title: "Forgot Password",
+      //     description: "Reset your password securely.",
+      //     public: true
+      //   }
+      // },
+      // {
+      //   path: "/reset-password/:token",
+      //   name: "reset-password",
+      //   component: ResetPassword,
+      //   meta: {
+      //     title: "Reset Password",
+      //     description: "Create a new password for your account.",
+      //     public: true
+      //   }
+      // }
     ]
   },
 
   // Candidate routes
   {
     path: "/candidate",
-    component: AuthenticatedLayout,
+    component: MainLayout,
     meta: { 
       requiresAuth: true, 
       requiredRole: "candidate" as UserRole,
@@ -220,15 +222,15 @@ const routes: RouteRecordRaw[] = [
           description: "Manage your job search and applications."
         }
       },
-      {
-        path: "/candidate/profile",
-        name: "candidate.profile",
-        component: CandidateProfile,
-        meta: {
-          title: "My Profile",
-          description: "Update your profile and showcase your skills."
-        }
-      },
+      // {
+      //   path: "/candidate/profile",
+      //   name: "candidate.profile",
+      //   component: CandidateProfile,
+      //   meta: {
+      //     title: "My Profile",
+      //     description: "Update your profile and showcase your skills."
+      //   }
+      // },
       {
         path: "/candidate/applications",
         name: "candidate.applications",
@@ -238,40 +240,40 @@ const routes: RouteRecordRaw[] = [
           description: "Track your job applications and their status."
         }
       },
-      {
-        path: "/candidate/saved-jobs",
-        name: "candidate.saved-jobs",
-        component: CandidateSavedJobs,
-        meta: {
-          title: "Saved Jobs",
-          description: "View jobs you have saved for later."
-        }
-      },
-      {
-        path: "/candidate/job-alerts",
-        name: "candidate.job-alerts",
-        component: CandidateJobAlerts,
-        meta: {
-          title: "Job Alerts",
-          description: "Manage your job alert preferences."
-        }
-      },
-      {
-        path: "/candidate/resume",
-        name: "candidate.resume",
-        component: CandidateResume,
-        meta: {
-          title: "My Resume",
-          description: "Manage your resume and documents."
-        }
-      }
+      // {
+      //   path: "/candidate/saved-jobs",
+      //   name: "candidate.saved-jobs",
+      //   component: CandidateSavedJobs,
+      //   meta: {
+      //     title: "Saved Jobs",
+      //     description: "View jobs you have saved for later."
+      //   }
+      // },
+      // {
+      //   path: "/candidate/job-alerts",
+      //   name: "candidate.job-alerts",
+      //   component: CandidateJobAlerts,
+      //   meta: {
+      //     title: "Job Alerts",
+      //     description: "Manage your job alert preferences."
+      //   }
+      // },
+      // {
+      //   path: "/candidate/resume",
+      //   name: "candidate.resume",
+      //   component: CandidateResume,
+      //   meta: {
+      //     title: "My Resume",
+      //     description: "Manage your resume and documents."
+      //   }
+      // }
     ]
   },
 
   // Employer routes
   {
     path: "/employer",
-    component: AuthenticatedLayout,
+    component: MainLayout,
     meta: { 
       requiresAuth: true, 
       requiredRole: "employer" as UserRole,
@@ -287,15 +289,15 @@ const routes: RouteRecordRaw[] = [
           description: "Manage your company and job postings."
         }
       },
-      {
-        path: "/employer/jobs",
-        name: "employer.jobs.index",
-        component: EmployerJobs,
-        meta: {
-          title: "Manage Jobs",
-          description: "View and manage your job postings."
-        }
-      },
+      // {
+      //   path: "/employer/jobs",
+      //   name: "employer.jobs.index",
+      //   component: EmployerJobs,
+      //   meta: {
+      //     title: "Manage Jobs",
+      //     description: "View and manage your job postings."
+      //   }
+      // },
       {
         path: "/employer/jobs/create",
         name: "employer.jobs.create",
@@ -305,15 +307,15 @@ const routes: RouteRecordRaw[] = [
           description: "Create a new job posting to find candidates."
         }
       },
-      {
-        path: "/employer/jobs/:id/edit",
-        name: "employer.jobs.edit",
-        component: EmployerJobEdit,
-        meta: {
-          title: "Edit Job",
-          description: "Update your job posting details."
-        }
-      },
+      // {
+      //   path: "/employer/jobs/:id/edit",
+      //   name: "employer.jobs.edit",
+      //   component: EmployerJobEdit,
+      //   meta: {
+      //     title: "Edit Job",
+      //     description: "Update your job posting details."
+      //   }
+      // },
       {
         path: "/employer/applications",
         name: "employer.applications",
@@ -323,31 +325,31 @@ const routes: RouteRecordRaw[] = [
           description: "Review applications from candidates."
         }
       },
-      {
-        path: "/employer/company",
-        name: "employer.company",
-        component: EmployerCompanyProfile,
-        meta: {
-          title: "Company Profile",
-          description: "Manage your company profile and information."
-        }
-      },
-      {
-        path: "/employer/analytics",
-        name: "employer.analytics",
-        component: EmployerAnalytics,
-        meta: {
-          title: "Analytics",
-          description: "View hiring analytics and job performance."
-        }
-      }
+      // {
+      //   path: "/employer/company",
+      //   name: "employer.company",
+      //   component: EmployerCompanyProfile,
+      //   meta: {
+      //     title: "Company Profile",
+      //     description: "Manage your company profile and information."
+      //   }
+      // },
+      // {
+      //   path: "/employer/analytics",
+      //   name: "employer.analytics",
+      //   component: EmployerAnalytics,
+      //   meta: {
+      //     title: "Analytics",
+      //     description: "View hiring analytics and job performance."
+      //   }
+      // }
     ]
   },
 
   // Admin routes
   {
     path: "/admin",
-    component: AdminLayout,
+    component: MainLayout,
     meta: { 
       requiresAuth: true, 
       requiredRole: "admin" as UserRole,

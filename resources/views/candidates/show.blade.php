@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Candidate Details</h1>
-    <p>Name: {{ $candidate->user->name ?? 'No Name' }}</p>
-    <p>Email: {{ $candidate->user->email ?? 'No Email' }}</p>
-    <p>Experience: {{ $candidate->experience }}</p>
+    <h1>{{ __('candidates.candidate_details') }}</h1>
+    <p>{{ __('candidates.name') }}: {{ $candidate->user->name ?? __('candidates.no_name') }}</p>
+    <p>{{ __('candidates.email') }}: {{ $candidate->user->email ?? __('candidates.no_email') }}</p>
+    <p>{{ __('candidates.experience') }}: {{ $candidate->experience }}</p>
 @endsection 

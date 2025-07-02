@@ -35,13 +35,13 @@
 
                     @if($industryName)
                         <div class="text-sm text-gray-600 mb-2">
-                            <span class="font-medium">Industry:</span> {{ $industryName }}
+                            <span class="font-medium">{{ __('company.industry') }}:</span> {{ $industryName }}
                         </div>
                     @endif
                 </div>
 
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusBadgeClass }}">
-                    {{ $isActive ? 'Active' : 'Inactive' }}
+                    {{ $isActive ? __('common.active') : __('common.inactive') }}
                 </span>
             </div>
 
@@ -68,14 +68,14 @@
             <div class="space-y-2 mb-4">
                 @if($sizeDescription())
                     <div class="flex items-center text-sm text-gray-600">
-                        <span class="font-medium w-20">Size:</span>
+                        <span class="font-medium w-20">{{ __('company.size') }}:</span>
                         <span>{{ $sizeDescription() }}</span>
                     </div>
                 @endif
 
                 @if($age())
                     <div class="flex items-center text-sm text-gray-600">
-                        <span class="font-medium w-20">Founded:</span>
+                        <span class="font-medium w-20">{{ __('company.founded') }}:</span>
                         <span>{{ $ageDescription() }}</span>
                     </div>
                 @endif
@@ -84,7 +84,7 @@
             <!-- Contact Information -->
             @if(!empty($contactInfo()))
                 <div class="mb-4">
-                    <h4 class="text-sm font-medium text-gray-900 mb-2">Contact Information</h4>
+                    <h4 class="text-sm font-medium text-gray-900 mb-2">{{ __('company.contact_information') }}</h4>
                     <div class="space-y-1">
                         @foreach($contactInfo() as $info)
                             <div class="flex items-center text-sm text-gray-600">
@@ -107,7 +107,7 @@
             <!-- Social Media Links -->
             @if(!empty($socialLinks()))
                 <div class="mb-4">
-                    <h4 class="text-sm font-medium text-gray-900 mb-2">Follow Us</h4>
+                    <h4 class="text-sm font-medium text-gray-900 mb-2">{{ __('company.follow_us') }}</h4>
                     <div class="flex items-center space-x-3">
                         @foreach($socialLinks() as $platform => $social)
                             <a href="{{ $social['url'] }}" 
@@ -125,20 +125,20 @@
             <!-- Footer Actions -->
             <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                 <div class="text-sm text-gray-500">
-                    Member since {{ $formatDate($createdAt, 'M Y') }}
+                    {{ __('company.member_since') }} {{ $formatDate($createdAt, 'M Y') }}
                 </div>
                 
                 <div class="flex items-center space-x-3">
                     @if($activeJobsCount > 0)
                         <a href="{{ $jobsUrl() }}" 
                            class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                            {{ $formatNumber($activeJobsCount) }} {{ $activeJobsCount === 1 ? 'Job' : 'Jobs' }}
+                            {{ $formatNumber($activeJobsCount) }} {{ $activeJobsCount === 1 ? __('jobs.job') : __('jobs.jobs') }}
                         </a>
                     @endif
                     
                     <a href="{{ $url() }}" 
                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                        View Profile
+                        {{ __('company.view_profile') }}
                     </a>
                 </div>
             </div>

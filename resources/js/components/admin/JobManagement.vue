@@ -411,7 +411,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon
 } from '@heroicons/vue/24/outline'
-import { debounce } from 'lodash-es'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import { jobService } from '@/services/jobService'
 import { companyService } from '@/services/companyService'
 import type { Job, Company, JobFilters, Pagination, Statistics } from '@/types'
@@ -513,7 +513,7 @@ const applyFilters = () => {
   loadJobs(1)
 }
 
-const debounceSearch = debounce(() => {
+const debounceSearch = OptimizedLodash.debounce(() => {
   applyFilters()
 }, 500)
 

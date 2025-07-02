@@ -519,7 +519,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { debounce } from 'lodash-es'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 
 // Composables
 const { t } = useI18n()
@@ -670,10 +670,10 @@ const fetchFilterOptions = async () => {
   }
 }
 
-const debouncedSearch = debounce(() => {
+const debouncedSearch = OptimizedLodash.debounce(() => {
   filters.page = 1
   fetchCompanies()
-}, 300)
+}, 500)
 
 const applyFilters = () => {
   filters.page = 1

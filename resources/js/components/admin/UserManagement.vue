@@ -574,7 +574,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { debounce } from 'lodash-es'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import {
   UsersIcon,
   UserIcon,
@@ -711,7 +711,7 @@ const applyFilters = () => {
   loadUsers()
 }
 
-const debounceSearch = debounce(() => {
+const debounceSearch = OptimizedLodash.debounce(() => {
   applyFilters()
 }, 500)
 

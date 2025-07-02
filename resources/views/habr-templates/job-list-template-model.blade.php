@@ -40,12 +40,12 @@
         @if(!empty($filters))
             <div class="flex items-center justify-between">
                 <div class="text-sm text-gray-600">
-                    <span class="font-medium">Filters:</span> {{ $filterSummary() }}
+                    <span class="font-medium">{{ __('jobs.filters') }}:</span> {{ $filterSummary() }}
                 </div>
                 
                 <button class="text-sm text-blue-600 hover:text-blue-800 transition-colors" 
                         onclick="clearFilters()">
-                    Clear Filters
+                    {{ __('jobs.clear_filters') }}
                 </button>
             </div>
         @endif
@@ -55,7 +55,7 @@
     @if(!empty($featuredJobs()))
         <div class="mb-8">
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                ⭐ Featured Jobs
+                ⭐ {{ __('jobs.featured_jobs') }}
                 <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                     {{ count($featuredJobs()) }}
                 </span>
@@ -73,7 +73,7 @@
     @if(!empty($urgentJobs()) && count($urgentJobs()) !== count($featuredJobs()))
         <div class="mb-8">
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                🚨 Urgent Positions
+                🚨 {{ __('jobs.urgent_positions') }}
                 <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                     {{ count($urgentJobs()) }}
                 </span>
@@ -93,18 +93,18 @@
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-lg font-semibold text-gray-900">
-                All Jobs ({{ $formatNumber($totalCount) }})
+                {{ __('jobs.all_jobs') }} ({{ $formatNumber($totalCount) }})
             </h2>
             
             <!-- Sort Options -->
             <div class="flex items-center space-x-2">
-                <label class="text-sm text-gray-600">Sort by:</label>
+                <label class="text-sm text-gray-600">{{ __('jobs.sort_by') }}:</label>
                 <select class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onchange="sortJobs(this.value)">
-                    <option value="created_at" {{ $sortBy === 'created_at' ? 'selected' : '' }}>Newest</option>
-                    <option value="deadline" {{ $sortBy === 'deadline' ? 'selected' : '' }}>Deadline</option>
-                    <option value="salary_from" {{ $sortBy === 'salary_from' ? 'selected' : '' }}>Salary</option>
-                    <option value="title" {{ $sortBy === 'title' ? 'selected' : '' }}>Title</option>
+                    <option value="created_at" {{ $sortBy === 'created_at' ? 'selected' : '' }}>{{ __('jobs.sort_newest') }}</option>
+                    <option value="deadline" {{ $sortBy === 'deadline' ? 'selected' : '' }}>{{ __('jobs.sort_deadline') }}</option>
+                    <option value="salary_from" {{ $sortBy === 'salary_from' ? 'selected' : '' }}>{{ __('jobs.sort_salary') }}</option>
+                    <option value="title" {{ $sortBy === 'title' ? 'selected' : '' }}>{{ __('jobs.sort_title') }}</option>
                 </select>
             </div>
         </div>
@@ -120,8 +120,8 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                         <path d="M34 40h10v-4a6 6 0 00-10.712-3.714M34 40H14m20 0v-4a9.971 9.971 0 00-.712-3.714M14 40H4v-4a6 6 0 0110.713-3.714M14 40v-4c0-1.313.253-2.566.713-3.714m0 0A10.003 10.003 0 0124 26c4.21 0 7.813 2.602 9.288 6.286M30 14a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0zm-28 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No jobs found</h3>
-                    <p class="mt-1 text-sm text-gray-500">Try adjusting your filters or search criteria.</p>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('jobs.no_jobs_found') }}</h3>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('jobs.try_adjusting_filters') }}</p>
                 </div>
             @endif
         </div>
@@ -133,14 +133,14 @@
                     @if($pagination()['has_previous'])
                         <a href="?page={{ $pagination()['previous_page'] }}" 
                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
+                            {{ __('pagination.previous') }}
                         </a>
                     @endif
                     
                     @if($pagination()['has_next'])
                         <a href="?page={{ $pagination()['next_page'] }}" 
                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Next
+                            {{ __('pagination.next') }}
                         </a>
                     @endif
                 </div>
@@ -148,13 +148,13 @@
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm text-gray-700">
-                            Showing 
+                            {{ __('pagination.showing') }} 
                             <span class="font-medium">{{ ($pagination()['current_page'] - 1) * $pagination()['per_page'] + 1 }}</span>
-                            to 
+                            {{ __('pagination.to') }} 
                             <span class="font-medium">{{ min($pagination()['current_page'] * $pagination()['per_page'], $pagination()['total']) }}</span>
-                            of 
+                            {{ __('pagination.of') }} 
                             <span class="font-medium">{{ $formatNumber($pagination()['total']) }}</span>
-                            results
+                            {{ __('pagination.results') }}
                         </p>
                     </div>
                     
@@ -163,7 +163,7 @@
                             @if($pagination()['has_previous'])
                                 <a href="?page={{ $pagination()['previous_page'] }}" 
                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
+                                    <span class="sr-only">{{ __('pagination.previous') }}</span>
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                     </svg>
@@ -171,13 +171,13 @@
                             @endif
                             
                             <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                                Page {{ $pagination()['current_page'] }} of {{ $pagination()['total_pages'] }}
+                                {{ __('pagination.page') }} {{ $pagination()['current_page'] }} {{ __('pagination.of') }} {{ $pagination()['total_pages'] }}
                             </span>
                             
                             @if($pagination()['has_next'])
                                 <a href="?page={{ $pagination()['next_page'] }}" 
                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
+                                    <span class="sr-only">{{ __('pagination.next') }}</span>
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                                     </svg>

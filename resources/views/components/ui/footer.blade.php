@@ -17,28 +17,28 @@
                 <div class="flex space-x-6">
                     @if(config('social.facebook'))
                         <a href="{{ config('social.facebook') }}" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                            <span class="sr-only">Facebook</span>
+                            <span class="sr-only">{{ __('social.facebook') }}</span>
                             <x-icon name="facebook" class="h-6 w-6" />
                         </a>
                     @endif
                     
                     @if(config('social.twitter'))
                         <a href="{{ config('social.twitter') }}" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                            <span class="sr-only">Twitter</span>
+                            <span class="sr-only">{{ __('social.twitter') }}</span>
                             <x-icon name="twitter" class="h-6 w-6" />
                         </a>
                     @endif
                     
                     @if(config('social.linkedin'))
                         <a href="{{ config('social.linkedin') }}" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                            <span class="sr-only">LinkedIn</span>
+                            <span class="sr-only">{{ __('social.linkedin') }}</span>
                             <x-icon name="linkedin" class="h-6 w-6" />
                         </a>
                     @endif
                     
                     @if(config('social.instagram'))
                         <a href="{{ config('social.instagram') }}" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                            <span class="sr-only">Instagram</span>
+                            <span class="sr-only">{{ __('social.instagram') }}</span>
                             <x-icon name="instagram" class="h-6 w-6" />
                         </a>
                     @endif

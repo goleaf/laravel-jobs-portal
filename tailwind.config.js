@@ -1,10 +1,101 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './resources/**/*.blade.php',
-    './resources/**/*.js',
-    './resources/**/*.vue',
+  content: {
+    files: [
+      './resources/**/*.blade.php',
+      './resources/**/*.js',
+      './resources/**/*.ts',
+      './resources/**/*.vue',
+      './resources/**/*.jsx',
+      './resources/**/*.tsx',
+      './storage/framework/views/*.php',
+    ],
+    // Transform content to extract dynamic classes
+    transform: {
+      vue: (content) => {
+        // Extract classes from Vue template and script sections
+        return content.replace(/<!--[\s\S]*?-->/g, '')
+      },
+      js: (content) => {
+        // Extract classes from JavaScript/TypeScript files
+        return content
+      }
+    },
+    // Enhanced extraction for complex class patterns
+    extract: {
+      // Custom extractor for Vue files with better class detection
+      vue: (content) => {
+        const classes = []
+        
+        // Extract class bindings: :class="{ 'class-name': condition }"
+        const classBindings = content.match(/:class\s*=\s*["'][^"']*["']/g) || []
+        classBindings.forEach(binding => {
+          const matches = binding.match(/[\w-]+/g) || []
+          classes.push(...matches)
+        })
+        
+        // Extract template classes: class="class-name"
+        const templateClasses = content.match(/class\s*=\s*["'][^"']*["']/g) || []
+        templateClasses.forEach(classAttr => {
+          const matches = classAttr.match(/[\w-]+/g) || []
+          classes.push(...matches.slice(1)) // Skip 'class' keyword
+        })
+        
+        // Extract dynamic class references in script
+        const dynamicClasses = content.match(/['"`][\w-\s]+['"`]/g) || []
+        dynamicClasses.forEach(className => {
+          const clean = className.replace(/['"`]/g, '')
+          if (clean.includes('-') || clean.match(/^(bg|text|border|hover|focus)/)) {
+            classes.push(...clean.split(/\s+/))
+          }
+        })
+        
+        return classes
+      }
+    }
+  },
+  
+  // Enhanced safelist for dynamic classes that might not be detected
+  safelist: [
+    // Animation classes
+    {
+      pattern: /^animate-/,
+      variants: ['hover', 'focus', 'group-hover']
+    },
+    // Transition classes
+    {
+      pattern: /^transition/,
+      variants: ['hover', 'focus']
+    },
+    // Color variants for our custom palette
+    {
+      pattern: /^(bg|text|border)-(primary|secondary|success|warning|error)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+      variants: ['hover', 'focus', 'active', 'disabled']
+    },
+    // Responsive grid classes
+    {
+      pattern: /^(grid-cols|col-span|row-span)-(1|2|3|4|5|6|7|8|9|10|11|12)$/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl']
+    },
+    // Common utility classes
+    'sr-only',
+    'not-sr-only',
+    'group',
+    'group-hover',
+    'peer',
+    'peer-checked',
+    'peer-focus',
+    'peer-invalid',
+    'peer-disabled',
+    // Vue transition classes
+    'enter-active-class',
+    'leave-active-class',
+    'enter-from-class',
+    'enter-to-class',
+    'leave-from-class',
+    'leave-to-class'
   ],
+
   theme: {
     extend: {
       colors: {
@@ -171,5 +262,150 @@ module.exports = {
       },
     },
   },
+  
+  // Optimize for better performance
+  corePlugins: {
+    // Disable unused core plugins to reduce bundle size
+    preflight: true,
+    container: true,
+    accessibility: true,
+    // Enable only needed plugins
+    aspectRatio: true,
+    backdropBlur: true,
+    backdropBrightness: false,
+    backdropContrast: false,
+    backdropGrayscale: false,
+    backdropHueRotate: false,
+    backdropInvert: false,
+    backdropOpacity: true,
+    backdropSaturate: false,
+    backdropSepia: false,
+    backgroundAttachment: false,
+    backgroundClip: true,
+    backgroundColor: true,
+    backgroundImage: true,
+    backgroundOpacity: true,
+    backgroundPosition: true,
+    backgroundRepeat: true,
+    backgroundSize: true,
+    blur: true,
+    brightness: false,
+    contrast: false,
+    cursor: true,
+    display: true,
+    divideColor: true,
+    divideOpacity: true,
+    divideStyle: true,
+    divideWidth: true,
+    dropShadow: true,
+    fill: true,
+    filter: true,
+    flex: true,
+    flexBasis: true,
+    flexDirection: true,
+    flexGrow: true,
+    flexShrink: true,
+    flexWrap: true,
+    fontFamily: true,
+    fontSize: true,
+    fontSmoothing: true,
+    fontStyle: true,
+    fontVariantNumeric: false,
+    fontWeight: true,
+    gap: true,
+    gradientColorStops: true,
+    grayscale: false,
+    gridAutoColumns: true,
+    gridAutoFlow: true,
+    gridAutoRows: true,
+    gridColumn: true,
+    gridColumnEnd: true,
+    gridColumnStart: true,
+    gridRow: true,
+    gridRowEnd: true,
+    gridRowStart: true,
+    gridTemplateColumns: true,
+    gridTemplateRows: true,
+    height: true,
+    hueRotate: false,
+    invert: false,
+    isolation: false,
+    justifyContent: true,
+    justifyItems: true,
+    justifySelf: true,
+    letterSpacing: true,
+    lineHeight: true,
+    listStylePosition: true,
+    listStyleType: true,
+    margin: true,
+    maxHeight: true,
+    maxWidth: true,
+    minHeight: true,
+    minWidth: true,
+    mixBlendMode: false,
+    objectFit: true,
+    objectPosition: true,
+    opacity: true,
+    order: true,
+    outline: true,
+    overflow: true,
+    overscrollBehavior: false,
+    padding: true,
+    placeContent: true,
+    placeItems: true,
+    placeSelf: true,
+    placeholderColor: true,
+    placeholderOpacity: true,
+    pointerEvents: true,
+    position: true,
+    resize: false,
+    ringColor: true,
+    ringOffsetColor: true,
+    ringOffsetWidth: true,
+    ringOpacity: true,
+    ringWidth: true,
+    rotate: true,
+    saturate: false,
+    scale: true,
+    scrollBehavior: false,
+    scrollMargin: false,
+    scrollPadding: false,
+    scrollSnapAlign: false,
+    scrollSnapStop: false,
+    scrollSnapType: false,
+    sepia: false,
+    skew: true,
+    space: true,
+    stroke: true,
+    strokeWidth: true,
+    tableLayout: true,
+    textAlign: true,
+    textColor: true,
+    textDecoration: true,
+    textDecorationColor: true,
+    textDecorationStyle: true,
+    textDecorationThickness: true,
+    textIndent: false,
+    textOpacity: true,
+    textOverflow: true,
+    textTransform: true,
+    textUnderlineOffset: false,
+    transform: true,
+    transformOrigin: true,
+    transitionDelay: true,
+    transitionDuration: true,
+    transitionProperty: true,
+    transitionTimingFunction: true,
+    translate: true,
+    userSelect: true,
+    verticalAlign: true,
+    visibility: true,
+    whitespace: true,
+    width: true,
+    willChange: false,
+    wordBreak: true,
+    zIndex: true,
+  },
+  
   plugins: [],
 }

@@ -118,7 +118,7 @@
             placeholder="City, state, or remote"
             size="sm"
             :left-icon="MapPinIcon"
-            @input="debouncedUpdateFilters"
+            @input="handleDebouncedUpdate"
           />
           
           <!-- Popular Locations -->
@@ -237,7 +237,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { debounce } from 'lodash'
+import { OptimizedLodash } from '@/utils/dynamicImports'
 import { MapPinIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '../ui/BaseInput.vue'
 import BaseButton from '../ui/BaseButton.vue'
@@ -358,7 +358,8 @@ const updateFilters = () => {
   emit('update:modelValue', { ...filters.value })
 }
 
-const debouncedUpdateFilters = debounce(updateFilters, 300)
+// Optimized debounced function
+const debouncedUpdateFilters = OptimizedLodash.debounce(updateFilters, 300)
 
 const clearAllFilters = () => {
   filters.value = {

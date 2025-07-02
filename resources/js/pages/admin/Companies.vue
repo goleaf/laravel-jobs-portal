@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { companiesApi } from '../../services/api'
+import { companiesAPI } from '../../services/api'
 
 // Reactive data
 const loading = ref(true)
@@ -139,14 +139,13 @@ const companies = ref([])
 const showCreateModal = ref(false)
 
 // Methods
-const fetchCompanies = async () => {
+const loadCompanies = async () => {
+  loading.value = true
   try {
-    loading.value = true
-    const response = await companiesApi.getAll()
-    companies.value = response.data || []
+    const response = await companiesAPI.list()
+    companies.value = response.data
   } catch (error) {
-    console.error('Failed to fetch companies:', error)
-    companies.value = []
+    console.error('Error loading companies:', error)
   } finally {
     loading.value = false
   }
@@ -156,20 +155,27 @@ const editCompany = (company: any) => {
   console.log('Edit company:', company)
 }
 
-const deleteCompany = async (company: any) => {
-  if (confirm('Are you sure you want to delete this company?')) {
-    try {
-      await companiesApi.delete(company.id)
-      await fetchCompanies() // Refresh the list
-    } catch (error) {
-      console.error('Failed to delete company:', error)
-    }
+const deleteCompany = async (company) => {
+  try {
+    showDeleteConfirm.value = false
+    loading.value = true
+    
+    await companiesAPI.delete(company.id)
+    
+    // Remove from local array
+    companies.value = companies.value.filter(c => c.id !== company.id)
+    
+    console.log('Company deleted successfully')
+  } catch (error) {
+    console.error('Error deleting company:', error)
+  } finally {
+    loading.value = false
   }
 }
 
 // Initialize
 onMounted(() => {
-  fetchCompanies()
+  loadCompanies()
 })
 </script>
 

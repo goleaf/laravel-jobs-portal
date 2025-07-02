@@ -205,7 +205,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { jobsApi } from '../../services/api'
+import { jobsAPI } from '../../services/api'
 
 // Reactive data
 const loading = ref(true)
@@ -234,7 +234,7 @@ const fetchJobs = async () => {
       status: filters.value.status
     }
     
-    const response = await jobsApi.getAll(params)
+    const response = await jobsAPI.list(params)
     jobs.value = response.data || []
     total.value = response.total || 0
     currentPage.value = response.current_page || 1
@@ -254,7 +254,7 @@ const editJob = (job: any) => {
 const deleteJob = async (job: any) => {
   if (confirm('Are you sure you want to delete this job?')) {
     try {
-      await jobsApi.delete(job.id)
+      await jobsAPI.delete(job.id)
       await fetchJobs() // Refresh the list
     } catch (error) {
       console.error('Failed to delete job:', error)

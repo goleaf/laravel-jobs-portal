@@ -1,288 +1,198 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Header Section -->
-    <div class="bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="text-center">
-          <h1 class="text-3xl font-bold text-gray-900 mb-4">Discover Great Companies</h1>
-          <p class="text-lg text-gray-600 mb-8">
-            Explore {{ stats.totalCompanies.toLocaleString() }}+ companies and find your perfect workplace
-          </p>
-
-          <!-- Search Section -->
-          <div class="max-w-2xl mx-auto">
-            <form @submit.prevent="performSearch" class="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Company Name/Keywords -->
-                <div class="md:col-span-2">
-                  <BaseInput
-                    v-model="searchForm.keywords"
-                    type="text"
-                    placeholder="Company name or keywords"
-                    :left-icon="MagnifyingGlassIcon"
-                    size="lg"
-                    class="w-full"
-                  />
-                </div>
-
-                <!-- Industry -->
-                <div>
-                  <select
-                    v-model="searchForm.industry"
-                    class="block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
-                  >
-                    <option value="">All Industries</option>
-                    <option
-                      v-for="industry in industries"
-                      :key="industry.slug"
-                      :value="industry.slug"
-                    >
-                      {{ industry.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Search Button -->
-              <div class="mt-6">
-                <BaseButton
-                  type="submit"
-                  variant="primary"
+    <!-- Hero Section -->
+    <HeroSection
+      title="Discover Great Companies"
+      :subtitle="`Explore ${stats.totalCompanies.toLocaleString()}+ companies and find your perfect workplace`"
+      size="md"
+      theme="primary"
+      :show-actions="false"
+    >
+      <template #content>
+        <div class="max-w-2xl mx-auto">
+          <form @submit.prevent="performSearch" class="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <!-- Company Name/Keywords -->
+              <div class="md:col-span-2">
+                <BaseInput
+                  v-model="searchForm.keywords"
+                  type="text"
+                  placeholder="Company name or keywords"
+                  :left-icon="MagnifyingGlassIcon"
                   size="lg"
-                  :loading="isSearching"
-                  class="w-full md:w-auto px-12"
-                >
-                  <MagnifyingGlassIcon class="h-5 w-5 mr-2" />
-                  Search Companies
-                </BaseButton>
+                  class="w-full"
+                />
               </div>
-            </form>
-          </div>
+
+              <!-- Industry -->
+              <div>
+                <select
+                  v-model="searchForm.industry"
+                  class="block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                >
+                  <option value="">All Industries</option>
+                  <option
+                    v-for="industry in industries"
+                    :key="industry.slug"
+                    :value="industry.slug"
+                  >
+                    {{ industry.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="text-center">
+              <BaseButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                :loading="isSearching"
+                class="px-12"
+              >
+                <MagnifyingGlassIcon class="h-5 w-5 mr-2" />
+                Search Companies
+              </BaseButton>
+            </div>
+          </form>
         </div>
-      </div>
-    </div>
+      </template>
+    </HeroSection>
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="lg:grid lg:grid-cols-4 lg:gap-8">
-        <!-- Sidebar Filters -->
-        <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Filter Companies</h3>
-            
-            <!-- Company Size Filter -->
-            <div class="mb-6">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Company Size</h4>
-              <div class="space-y-2">
-                <label
-                  v-for="size in companySizes"
-                  :key="size.value"
-                  class="flex items-center"
-                >
-                  <input
-                    v-model="selectedSizes"
-                    :value="size.value"
-                    type="checkbox"
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  >
-                  <span class="ml-2 text-sm text-gray-700">{{ size.label }}</span>
-                  <span class="ml-auto text-xs text-gray-500">({{ size.count }})</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Industry Filter -->
-            <div class="mb-6">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Industries</h4>
-              <div class="space-y-2 max-h-48 overflow-y-auto">
-                <label
-                  v-for="industry in industries"
-                  :key="industry.slug"
-                  class="flex items-center"
-                >
-                  <input
-                    v-model="selectedIndustries"
-                    :value="industry.slug"
-                    type="checkbox"
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  >
-                  <span class="ml-2 text-sm text-gray-700">{{ industry.name }}</span>
-                  <span class="ml-auto text-xs text-gray-500">({{ industry.count }})</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Location Filter -->
-            <div class="mb-6">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Locations</h4>
-              <div class="space-y-2 max-h-48 overflow-y-auto">
-                <label
-                  v-for="location in topLocations"
-                  :key="location.name"
-                  class="flex items-center"
-                >
-                  <input
-                    v-model="selectedLocations"
-                    :value="location.name"
-                    type="checkbox"
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  >
-                  <span class="ml-2 text-sm text-gray-700">{{ location.name }}</span>
-                  <span class="ml-auto text-xs text-gray-500">({{ location.count }})</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Founded Filter -->
-            <div class="mb-6">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Founded</h4>
-              <div class="space-y-2">
-                <label
-                  v-for="period in foundedPeriods"
-                  :key="period.value"
-                  class="flex items-center"
-                >
-                  <input
-                    v-model="selectedFoundedPeriods"
-                    :value="period.value"
-                    type="checkbox"
-                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  >
-                  <span class="ml-2 text-sm text-gray-700">{{ period.label }}</span>
-                  <span class="ml-auto text-xs text-gray-500">({{ period.count }})</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Clear Filters -->
-            <div v-if="hasActiveFilters">
-              <BaseButton
-                variant="outline-gray"
-                size="sm"
-                @click="clearAllFilters"
-                class="w-full"
-              >
-                Clear All Filters
-              </BaseButton>
-            </div>
-          </div>
+        <!-- Enhanced Filter Sidebar -->
+        <div class="lg:col-span-1 mb-8 lg:mb-0">
+          <SearchFilter
+            v-model="filters"
+            :show-industry-filter="true"
+            :show-company-size-filter="true"
+            :show-company-filters="true"
+            @apply="handleFilterApply"
+          />
         </div>
 
         <!-- Companies List -->
-        <div class="mt-8 lg:mt-0 lg:col-span-3">
+        <div class="lg:col-span-3">
           <!-- Results Header -->
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <h2 class="text-xl font-semibold text-gray-900">
-                {{ totalCompanies.toLocaleString() }} Compan{{ totalCompanies !== 1 ? 'ies' : 'y' }} Found
-              </h2>
-              <p class="text-sm text-gray-600 mt-1">
-                Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, totalCompanies) }} of {{ totalCompanies }} results
-              </p>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <div class="mb-4 sm:mb-0">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  {{ totalCompanies.toLocaleString() }} Compan{{ totalCompanies !== 1 ? 'ies' : 'y' }} Found
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">
+                  Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, totalCompanies) }} of {{ totalCompanies }} results
+                </p>
+              </div>
+
+              <!-- Sort Options -->
+              <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">Sort by:</label>
+                <select
+                  v-model="sortBy"
+                  @change="handleSort"
+                  class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="name">Company Name</option>
+                  <option value="size">Company Size</option>
+                  <option value="jobs_count">Open Positions</option>
+                  <option value="founded">Founded Date</option>
+                  <option value="popular">Most Popular</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
             </div>
 
-            <!-- Sort Options -->
-            <div class="flex items-center space-x-4">
-              <label class="text-sm font-medium text-gray-700">Sort by:</label>
-              <select
-                v-model="sortBy"
-                @change="handleSort"
-                class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="name">Company Name</option>
-                <option value="size">Company Size</option>
-                <option value="jobs_count">Open Positions</option>
-                <option value="founded">Founded Date</option>
-                <option value="popular">Most Popular</option>
-              </select>
+            <!-- Active Filters Display -->
+            <div v-if="activeFilters.length > 0" class="mt-4 pt-4 border-t border-gray-200">
+              <h4 class="text-sm font-medium text-gray-700 mb-2">Active Filters:</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge
+                  v-for="filter in activeFilters"
+                  :key="filter.key"
+                  :text="filter.label"
+                  variant="primary"
+                  size="sm"
+                  removable
+                  @remove="removeFilter(filter.key)"
+                />
+              </div>
             </div>
           </div>
 
           <!-- Loading State -->
-          <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="i in 9" :key="i" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div v-for="n in 6" :key="n" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div class="animate-pulse">
-                <div class="w-16 h-16 bg-gray-200 rounded-lg mb-4"></div>
-                <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div class="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
-                <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+                <div class="flex items-start space-x-4">
+                  <div class="w-16 h-16 bg-gray-200 rounded-lg"></div>
+                  <div class="flex-1">
+                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                    <div class="flex space-x-4">
+                      <div class="h-4 bg-gray-200 rounded w-20"></div>
+                      <div class="h-4 bg-gray-200 rounded w-16"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- No Results -->
+          <div v-else-if="companies.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+            <div class="w-20 h-20 mx-auto mb-4 text-gray-300">
+              <BuildingOfficeIcon class="h-20 w-20" />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No Companies Found</h3>
+            <p class="text-gray-600 mb-6">
+              Try adjusting your search criteria or filters to find more companies.
+            </p>
+            <BaseButton
+              variant="outline-primary"
+              @click="clearAllFilters"
+            >
+              Clear All Filters
+            </BaseButton>
+          </div>
+
           <!-- Companies Grid -->
-          <div v-else-if="companies.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <CompanyCard
               v-for="company in companies"
               :key="company.id"
               :company="company"
-              class="hover:shadow-lg transition-shadow duration-200"
-              @click="viewCompany(company)"
-              @follow="toggleFollow(company)"
+              class="hover:transform hover:scale-[1.02] transition-transform duration-200"
+              @follow="handleCompanyFollow"
+              @view-jobs="handleViewJobs"
             />
-          </div>
-
-          <!-- Empty State -->
-          <div v-else class="text-center py-12">
-            <div class="w-20 h-20 mx-auto mb-4 text-gray-300">
-              <BuildingOfficeIcon class="h-20 w-20" />
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No companies found</h3>
-            <p class="text-gray-600 mb-4">
-              We couldn't find any companies matching your criteria. Try adjusting your search filters.
-            </p>
-            <BaseButton
-              variant="primary"
-              @click="clearAllFilters"
-            >
-              Clear Filters
-            </BaseButton>
           </div>
 
           <!-- Pagination -->
           <div v-if="totalPages > 1" class="mt-8">
-            <nav class="flex items-center justify-between border-t border-gray-200 pt-6">
-              <div class="flex-1 flex justify-between">
-                <BaseButton
-                  variant="outline-primary"
-                  :disabled="currentPage === 1"
-                  @click="goToPage(currentPage - 1)"
-                >
-                  <ChevronLeftIcon class="h-4 w-4 mr-1" />
-                  Previous
-                </BaseButton>
-                
-                <div class="hidden md:flex space-x-2">
-                  <button
-                    v-for="page in visiblePages"
-                    :key="page"
-                    @click="goToPage(page)"
-                    :class="[
-                      'px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200',
-                      page === currentPage
-                        ? 'bg-indigo-600 text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    ]"
-                  >
-                    {{ page }}
-                  </button>
-                </div>
-
-                <BaseButton
-                  variant="outline-primary"
-                  :disabled="currentPage === totalPages"
-                  @click="goToPage(currentPage + 1)"
-                >
-                  Next
-                  <ChevronRightIcon class="h-4 w-4 ml-1" />
-                </BaseButton>
-              </div>
-            </nav>
+            <Pagination
+              :current-page="currentPage"
+              :total-pages="totalPages"
+              :total="totalCompanies"
+              :per-page="itemsPerPage"
+              :show-page-size-selector="true"
+              item-name="company"
+              @page-change="handlePageChange"
+              @page-size-change="handlePageSizeChange"
+            />
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Social Proof Section -->
+    <SocialProof />
+
+    <!-- Newsletter Signup Section -->
+    <NewsletterSignup />
   </div>
 </template>
 
@@ -293,11 +203,17 @@ import { useHead } from '@/composables/useHead';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
 import CompanyCard from '@/components/companies/CompanyCard.vue';
+import HeroSection from '../components/ui/HeroSection.vue'
+import SearchFilter from '../components/ui/SearchFilter.vue'
+import Badge from '../components/ui/Badge.vue'
+import Pagination from '../components/ui/Pagination.vue'
+import SocialProof from '../components/ui/SocialProof.vue'
+import NewsletterSignup from '../components/ui/NewsletterSignup.vue'
+import { BuildingOfficeIcon } from '@heroicons/vue/24/outline'
 
 // Icons
 import {
   MagnifyingGlassIcon,
-  BuildingOfficeIcon,
   ChevronLeftIcon,
   ChevronRightIcon
 } from '@heroicons/vue/24/outline';

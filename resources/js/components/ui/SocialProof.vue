@@ -44,9 +44,9 @@
         >
           <!-- Quote -->
           <div class="mb-4">
-            <QuoteIcon class="w-8 h-8 text-indigo-600 mb-2" />
+            <ChatBubbleBottomCenterTextIcon class="h-8 w-8 text-indigo-600" />
             <p class="text-gray-700 italic">
-              "{{ testimonial.quote }}"
+              "{{ testimonial.content }}"
             </p>
           </div>
 
@@ -111,7 +111,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { QuoteIcon, StarIcon } from '@heroicons/vue/24/outline'
+import { ChatBubbleBottomCenterTextIcon, StarIcon } from '@heroicons/vue/24/outline'
 
 interface TrustedCompany {
   name: string
@@ -123,7 +123,7 @@ interface Testimonial {
   name: string
   position: string
   company: string
-  quote: string
+  content: string
   rating: number
   avatar?: string
 }
@@ -151,7 +151,7 @@ const testimonials = ref<Testimonial[]>([
     name: 'Sarah Johnson',
     position: 'Software Engineer',
     company: 'TechCorp',
-    quote: 'I found my dream job within 2 weeks of joining. The platform is incredibly user-friendly and the job matches were perfect for my skills.',
+    content: 'I found my dream job within 2 weeks of joining. The platform is incredibly user-friendly and the job matches were perfect for my skills.',
     rating: 5,
     avatar: null
   },
@@ -160,7 +160,7 @@ const testimonials = ref<Testimonial[]>([
     name: 'Michael Chen',
     position: 'Product Manager',
     company: 'InnovateNow',
-    quote: 'The quality of companies and positions on this platform is outstanding. I received multiple offers and could choose the best fit for my career.',
+    content: 'The quality of companies and positions on this platform is outstanding. I received multiple offers and could choose the best fit for my career.',
     rating: 5,
     avatar: null
   },
@@ -169,7 +169,7 @@ const testimonials = ref<Testimonial[]>([
     name: 'Emily Rodriguez',
     position: 'UX Designer',
     company: 'DesignStudio',
-    quote: 'What impressed me most was the personalized job recommendations. Every suggestion was relevant to my experience and career goals.',
+    content: 'What impressed me most was the personalized job recommendations. Every suggestion was relevant to my experience and career goals.',
     rating: 5,
     avatar: null
   }

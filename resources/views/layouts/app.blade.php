@@ -20,7 +20,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
     
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
+    <!-- Local fonts loaded via Vite -->
     
     <!-- Additional page styles -->
     @stack('styles')

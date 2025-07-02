@@ -1,23 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="isLoading" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <div class="animate-pulse">
-          <div class="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-          <div class="h-6 bg-gray-200 rounded w-1/2 mb-6"></div>
-          <div class="space-y-3">
-            <div class="h-4 bg-gray-200 rounded"></div>
-            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-            <div class="h-4 bg-gray-200 rounded w-4/6"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <LoadingSpinner
+      v-if="isLoading"
+      overlay
+      size="lg"
+      text="Loading job details..."
+    />
 
     <!-- Job Not Found -->
     <div v-else-if="!job" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-center">
+      <div class="text-center bg-white rounded-lg shadow-sm border border-gray-200 p-12">
         <div class="w-20 h-20 mx-auto mb-4 text-gray-300">
           <ExclamationTriangleIcon class="h-20 w-20" />
         </div>
@@ -35,158 +28,146 @@
     </div>
 
     <!-- Job Details -->
-    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="lg:grid lg:grid-cols-3 lg:gap-8">
-        <!-- Main Content -->
-        <div class="lg:col-span-2">
-          <!-- Job Header -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <!-- Breadcrumb -->
-            <nav class="mb-6">
-              <ol class="flex items-center space-x-2 text-sm text-gray-600">
-                <li>
-                  <router-link
-                    to="/"
-                    class="hover:text-indigo-600 transition-colors duration-200"
-                  >
-                    Home
-                  </router-link>
-                </li>
-                <ChevronRightIcon class="h-4 w-4" />
-                <li>
-                  <router-link
-                    :to="{ name: 'jobs' }"
-                    class="hover:text-indigo-600 transition-colors duration-200"
-                  >
-                    Jobs
-                  </router-link>
-                </li>
-                <ChevronRightIcon class="h-4 w-4" />
-                <li class="text-gray-900 font-medium">{{ job.title }}</li>
-              </ol>
-            </nav>
+    <div v-else>
+      <!-- Job Header Section -->
+      <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <!-- Breadcrumb -->
+          <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-sm text-gray-600">
+              <li>
+                <router-link
+                  to="/"
+                  class="hover:text-indigo-600 transition-colors duration-200"
+                >
+                  Home
+                </router-link>
+              </li>
+              <ChevronRightIcon class="h-4 w-4" />
+              <li>
+                <router-link
+                  :to="{ name: 'jobs' }"
+                  class="hover:text-indigo-600 transition-colors duration-200"
+                >
+                  Jobs
+                </router-link>
+              </li>
+              <ChevronRightIcon class="h-4 w-4" />
+              <li class="text-gray-900 font-medium truncate">{{ job.title }}</li>
+            </ol>
+          </nav>
 
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <!-- Job Title & Company -->
-                <div class="flex items-start space-x-4 mb-4">
-                  <!-- Company Logo -->
-                  <div class="flex-shrink-0">
-                    <div
-                      v-if="job.company.logo"
-                      class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200"
+          <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+            <!-- Job Info -->
+            <div class="lg:col-span-2">
+              <div class="flex items-start space-x-4 mb-6">
+                <!-- Company Logo -->
+                <div class="flex-shrink-0">
+                  <div
+                    v-if="job.company.logo"
+                    class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200"
+                  >
+                    <img
+                      :src="job.company.logo"
+                      :alt="job.company.name"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div
+                    v-else
+                    class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                  >
+                    {{ job.company.name.charAt(0).toUpperCase() }}
+                  </div>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ job.title }}</h1>
+                  <div class="flex flex-wrap items-center gap-4 text-lg text-gray-600 mb-4">
+                    <router-link
+                      :to="{ name: 'companies.show', params: { id: job.company.id } }"
+                      class="font-semibold hover:text-indigo-600 transition-colors duration-200"
                     >
-                      <img
-                        :src="job.company.logo"
-                        :alt="job.company.name"
-                        class="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div
-                      v-else
-                      class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl"
-                    >
-                      {{ job.company.name.charAt(0).toUpperCase() }}
-                    </div>
+                      {{ job.company.name }}
+                    </router-link>
+                    <span class="inline-flex items-center">
+                      <MapPinIcon class="h-4 w-4 mr-1" />
+                      {{ job.location }}
+                    </span>
                   </div>
 
-                  <div class="flex-1">
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ job.title }}</h1>
-                    <div class="flex items-center space-x-4 text-lg text-gray-600">
-                      <router-link
-                        :to="{ name: 'companies.show', params: { id: job.company.id } }"
-                        class="font-semibold hover:text-indigo-600 transition-colors duration-200"
-                      >
-                        {{ job.company.name }}
-                      </router-link>
-                      <span class="inline-flex items-center">
-                        <MapPinIcon class="h-4 w-4 mr-1" />
-                        {{ job.location }}
+                  <!-- Job Badges -->
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <Badge
+                      :text="job.employment_type"
+                      variant="primary"
+                      :left-icon="BriefcaseIcon"
+                    />
+                    <Badge
+                      :text="job.experience_level"
+                      variant="secondary"
+                      :left-icon="ChartBarIcon"
+                    />
+                    <Badge
+                      v-if="job.remote_ok"
+                      text="Remote OK"
+                      variant="success"
+                      :left-icon="ComputerDesktopIcon"
+                    />
+                    <Badge
+                      v-if="job.is_urgent"
+                      text="Urgent"
+                      variant="warning"
+                      :left-icon="ExclamationCircleIcon"
+                    />
+                    <Badge
+                      v-if="job.is_featured"
+                      text="Featured"
+                      variant="info"
+                      :left-icon="StarIcon"
+                    />
+                  </div>
+
+                  <!-- Salary & Posted Info -->
+                  <div class="space-y-2">
+                    <div v-if="job.salary_min || job.salary_max" class="flex items-center text-lg font-semibold text-gray-900">
+                      <CurrencyDollarIcon class="h-5 w-5 mr-2 text-green-600" />
+                      <span v-if="job.salary_min && job.salary_max">
+                        ${{ job.salary_min.toLocaleString() }} - ${{ job.salary_max.toLocaleString() }}
+                      </span>
+                      <span v-else-if="job.salary_min">
+                        From ${{ job.salary_min.toLocaleString() }}
+                      </span>
+                      <span v-else>
+                        Up to ${{ job.salary_max.toLocaleString() }}
+                      </span>
+                      <span class="text-sm text-gray-600 ml-2">per year</span>
+                    </div>
+
+                    <div class="flex items-center text-sm text-gray-600">
+                      <CalendarIcon class="h-4 w-4 mr-2" />
+                      Posted {{ formatRelativeTime(job.created_at) }}
+                      <span v-if="job.deadline" class="ml-4">
+                        <ClockIcon class="h-4 w-4 mr-1 inline" />
+                        Apply by {{ formatDate(job.deadline) }}
                       </span>
                     </div>
                   </div>
                 </div>
-
-                <!-- Job Meta Info -->
-                <div class="flex flex-wrap items-center gap-4 mb-6">
-                  <!-- Employment Type -->
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    <BriefcaseIcon class="h-4 w-4 mr-1" />
-                    {{ job.employment_type }}
-                  </span>
-
-                  <!-- Experience Level -->
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                    <ChartBarIcon class="h-4 w-4 mr-1" />
-                    {{ job.experience_level }}
-                  </span>
-
-                  <!-- Remote Work -->
-                  <span
-                    v-if="job.remote_ok"
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800"
-                  >
-                    <ComputerDesktopIcon class="h-4 w-4 mr-1" />
-                    Remote OK
-                  </span>
-
-                  <!-- Urgent -->
-                  <span
-                    v-if="job.is_urgent"
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800"
-                  >
-                    <ExclamationCircleIcon class="h-4 w-4 mr-1" />
-                    Urgent
-                  </span>
-
-                  <!-- Featured -->
-                  <span
-                    v-if="job.is_featured"
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800"
-                  >
-                    <StarIcon class="h-4 w-4 mr-1" />
-                    Featured
-                  </span>
-                </div>
-
-                <!-- Salary Range -->
-                <div v-if="job.salary_min || job.salary_max" class="mb-6">
-                  <div class="flex items-center text-lg font-semibold text-gray-900">
-                    <CurrencyDollarIcon class="h-5 w-5 mr-2 text-green-600" />
-                    <span v-if="job.salary_min && job.salary_max">
-                      ${{ job.salary_min.toLocaleString() }} - ${{ job.salary_max.toLocaleString() }}
-                    </span>
-                    <span v-else-if="job.salary_min">
-                      From ${{ job.salary_min.toLocaleString() }}
-                    </span>
-                    <span v-else>
-                      Up to ${{ job.salary_max.toLocaleString() }}
-                    </span>
-                    <span class="text-sm text-gray-600 ml-2">per year</span>
-                  </div>
-                </div>
-
-                <!-- Posted Date -->
-                <div class="flex items-center text-sm text-gray-600 mb-6">
-                  <CalendarIcon class="h-4 w-4 mr-2" />
-                  Posted {{ formatRelativeTime(job.created_at) }}
-                  <span v-if="job.deadline" class="ml-4">
-                    <ClockIcon class="h-4 w-4 mr-1 inline" />
-                    Apply by {{ formatDate(job.deadline) }}
-                  </span>
-                </div>
               </div>
+            </div>
 
-              <!-- Action Buttons -->
-              <div class="flex-shrink-0 ml-6">
-                <div class="flex flex-col space-y-3">
+            <!-- Action Sidebar -->
+            <div class="lg:col-span-1">
+              <div class="bg-gray-50 rounded-lg p-6 sticky top-4">
+                <div class="space-y-4">
                   <!-- Apply Button -->
                   <BaseButton
                     variant="primary"
                     size="lg"
+                    :full-width="true"
                     :loading="isApplying"
                     @click="applyToJob"
-                    class="min-w-[140px]"
                   >
                     <PaperAirplaneIcon class="h-5 w-5 mr-2" />
                     Apply Now
@@ -195,264 +176,179 @@
                   <!-- Bookmark Button -->
                   <BaseButton
                     variant="outline-primary"
+                    :full-width="true"
                     :loading="isBookmarking"
                     @click="toggleBookmark"
-                    class="min-w-[140px]"
                   >
-                    <BookmarkIcon 
-                      :class="[
-                        'h-5 w-5 mr-2',
-                        job.is_bookmarked ? 'fill-current' : ''
-                      ]"
-                    />
-                    {{ job.is_bookmarked ? 'Saved' : 'Save Job' }}
+                    <BookmarkIcon class="h-5 w-5 mr-2" :class="{ 'fill-current': isBookmarked }" />
+                    {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
                   </BaseButton>
 
                   <!-- Share Button -->
                   <BaseButton
-                    variant="outline-gray"
+                    variant="outline"
+                    :full-width="true"
                     @click="shareJob"
-                    class="min-w-[140px]"
                   >
                     <ShareIcon class="h-5 w-5 mr-2" />
-                    Share
+                    Share Job
                   </BaseButton>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Job Description -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Job Description</h2>
-            <div 
-              class="prose prose-lg prose-indigo max-w-none"
-              v-html="job.description_html || job.description"
-            ></div>
-          </div>
-
-          <!-- Requirements -->
-          <div v-if="job.requirements" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Requirements</h2>
-            <div 
-              class="prose prose-lg prose-indigo max-w-none"
-              v-html="job.requirements_html || job.requirements"
-            ></div>
-          </div>
-
-          <!-- Skills & Technologies -->
-          <div v-if="job.skills && job.skills.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Required Skills</h2>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="skill in job.skills"
-                :key="skill"
-                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-200"
-              >
-                {{ skill }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Benefits -->
-          <div v-if="job.benefits && job.benefits.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Benefits & Perks</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div
-                v-for="benefit in job.benefits"
-                :key="benefit"
-                class="flex items-center text-gray-700"
-              >
-                <CheckCircleIcon class="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                {{ benefit }}
-              </div>
-            </div>
-          </div>
-
-          <!-- Similar Jobs -->
-          <div v-if="similarJobs.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Similar Jobs</h2>
-            <div class="space-y-4">
-              <div
-                v-for="similarJob in similarJobs"
-                :key="similarJob.id"
-                class="border border-gray-200 rounded-lg p-4 hover:border-indigo-300 hover:shadow-sm transition-all duration-200 cursor-pointer"
-                @click="viewJob(similarJob)"
-              >
-                <div class="flex items-start justify-between">
-                  <div>
-                    <h3 class="font-semibold text-gray-900 hover:text-indigo-600">
-                      {{ similarJob.title }}
-                    </h3>
-                    <p class="text-gray-600 text-sm">{{ similarJob.company.name }}</p>
-                    <p class="text-gray-500 text-sm flex items-center mt-1">
-                      <MapPinIcon class="h-4 w-4 mr-1" />
-                      {{ similarJob.location }}
-                    </p>
-                  </div>
-                  <div class="text-right">
-                    <p v-if="similarJob.salary_max" class="text-sm font-medium text-gray-900">
-                      ${{ similarJob.salary_max.toLocaleString() }}
-                    </p>
-                    <p class="text-xs text-gray-500 mt-1">
-                      {{ formatRelativeTime(similarJob.created_at) }}
-                    </p>
+                <!-- Job Stats -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                  <h4 class="text-sm font-medium text-gray-900 mb-3">Job Stats</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Applications</span>
+                      <span class="font-medium">{{ job.applications_count || 0 }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Views</span>
+                      <span class="font-medium">{{ job.views_count || 0 }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Posted</span>
+                      <span class="font-medium">{{ formatDate(job.created_at) }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div class="mt-8 lg:mt-0 lg:col-span-1">
-          <!-- Company Information -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">About {{ job.company.name }}</h3>
-            
-            <!-- Company Stats -->
-            <div class="space-y-4 mb-6">
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Industry</span>
-                <span class="text-sm font-medium text-gray-900">{{ job.company.industry || 'Technology' }}</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Company Size</span>
-                <span class="text-sm font-medium text-gray-900">{{ job.company.size || '51-200 employees' }}</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Founded</span>
-                <span class="text-sm font-medium text-gray-900">{{ job.company.founded || '2015' }}</span>
-              </div>
-              <div v-if="job.company.website" class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">Website</span>
-                <a
-                  :href="job.company.website"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-sm font-medium text-indigo-600 hover:text-indigo-700"
-                >
-                  Visit Site
-                  <ArrowTopRightOnSquareIcon class="h-4 w-4 inline ml-1" />
-                </a>
-              </div>
-            </div>
-
-            <!-- Company Description -->
-            <div v-if="job.company.description" class="mb-6">
-              <p class="text-sm text-gray-700 leading-relaxed">
-                {{ job.company.description }}
-              </p>
-            </div>
-
-            <!-- View Company Profile -->
-            <BaseButton
-              variant="outline-primary"
-              size="sm"
-              @click="viewCompany"
-              class="w-full"
-            >
-              <BuildingOfficeIcon class="h-4 w-4 mr-2" />
-              View Company Profile
-            </BaseButton>
-          </div>
-
-          <!-- Job Summary -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Summary</h3>
-            <div class="space-y-3">
-              <div class="flex items-start">
-                <CalendarIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Date Posted</p>
-                  <p class="text-sm text-gray-600">{{ formatDate(job.created_at) }}</p>
-                </div>
-              </div>
-              
-              <div v-if="job.deadline" class="flex items-start">
-                <ClockIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Application Deadline</p>
-                  <p class="text-sm text-gray-600">{{ formatDate(job.deadline) }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <BriefcaseIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Employment Type</p>
-                  <p class="text-sm text-gray-600">{{ job.employment_type }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <ChartBarIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Experience Level</p>
-                  <p class="text-sm text-gray-600">{{ job.experience_level }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <MapPinIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Location</p>
-                  <p class="text-sm text-gray-600">{{ job.location }}</p>
-                </div>
-              </div>
-
-              <div v-if="job.department" class="flex items-start">
-                <BuildingOfficeIcon class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p class="text-sm font-medium text-gray-900">Department</p>
-                  <p class="text-sm text-gray-600">{{ job.department }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Share Job -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Share This Job</h3>
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                @click="shareVia('linkedin')"
-                class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-              >
-                LinkedIn
-              </button>
-              <button
-                @click="shareVia('twitter')"
-                class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-              >
-                Twitter
-              </button>
-              <button
-                @click="shareVia('facebook')"
-                class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-              >
-                Facebook
-              </button>
-              <button
-                @click="copyJobLink"
-                class="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-              >
-                Copy Link
-              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Application Modal -->
-    <JobApplicationModal
-      v-if="showApplicationModal"
-      :job="job"
-      :show="showApplicationModal"
-      @close="showApplicationModal = false"
-      @submitted="handleApplicationSubmitted"
-    />
+      <!-- Main Content -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+          <!-- Job Description -->
+          <div class="lg:col-span-2 space-y-8">
+            <!-- Description -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Job Description</h2>
+              <div 
+                class="prose prose-indigo max-w-none"
+                v-html="job.description"
+              ></div>
+            </div>
+
+            <!-- Requirements -->
+            <div v-if="job.requirements" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Requirements</h2>
+              <div 
+                class="prose prose-indigo max-w-none"
+                v-html="job.requirements"
+              ></div>
+            </div>
+
+            <!-- Benefits -->
+            <div v-if="job.benefits" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Benefits</h2>
+              <div 
+                class="prose prose-indigo max-w-none"
+                v-html="job.benefits"
+              ></div>
+            </div>
+
+            <!-- Skills -->
+            <div v-if="job.skills && job.skills.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Required Skills</h2>
+              <div class="flex flex-wrap gap-2">
+                <Badge
+                  v-for="skill in job.skills"
+                  :key="skill"
+                  :text="skill"
+                  variant="secondary"
+                  size="md"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Info Sidebar -->
+          <div class="lg:col-span-1 mt-8 lg:mt-0">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">About {{ job.company.name }}</h3>
+              
+              <!-- Company Logo -->
+              <div class="flex items-center space-x-3 mb-4">
+                <div
+                  v-if="job.company.logo"
+                  class="w-12 h-12 rounded-lg overflow-hidden border border-gray-200"
+                >
+                  <img
+                    :src="job.company.logo"
+                    :alt="job.company.name"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold"
+                >
+                  {{ job.company.name.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900">{{ job.company.name }}</h4>
+                  <p class="text-sm text-gray-600">{{ job.company.industry }}</p>
+                </div>
+              </div>
+
+              <!-- Company Description -->
+              <p v-if="job.company.description" class="text-sm text-gray-700 mb-4 line-clamp-3">
+                {{ job.company.description }}
+              </p>
+
+              <!-- Company Stats -->
+              <div class="space-y-2 text-sm mb-4">
+                <div v-if="job.company.size" class="flex justify-between">
+                  <span class="text-gray-600">Company Size</span>
+                  <span class="font-medium">{{ job.company.size }}</span>
+                </div>
+                <div v-if="job.company.founded" class="flex justify-between">
+                  <span class="text-gray-600">Founded</span>
+                  <span class="font-medium">{{ job.company.founded }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Open Jobs</span>
+                  <span class="font-medium">{{ job.company.jobs_count || 0 }}</span>
+                </div>
+              </div>
+
+              <!-- View Company Button -->
+              <BaseButton
+                variant="outline-primary"
+                :full-width="true"
+                :to="{ name: 'companies.show', params: { id: job.company.id } }"
+                tag="router-link"
+              >
+                View Company Profile
+              </BaseButton>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Jobs Section -->
+      <div v-if="relatedJobs.length > 0" class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-8">Related Jobs</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <JobCard
+              v-for="relatedJob in relatedJobs"
+              :key="relatedJob.id"
+              :job="relatedJob"
+              :show-company-logo="true"
+              class="hover:transform hover:scale-105 transition-transform duration-200"
+              @bookmark="handleJobBookmark"
+              @apply="handleJobApply"
+              @view="viewJobDetails"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -462,6 +358,9 @@ import { useRouter, useRoute } from 'vue-router';
 import { useHead } from '@/composables/useHead';
 import BaseButton from '@/components/base/BaseButton.vue';
 import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue';
+import LoadingSpinner from '../components/ui/LoadingSpinner.vue'
+import Badge from '../components/ui/Badge.vue'
+import JobCard from '../components/jobs/JobCard.vue'
 
 // Icons
 import {

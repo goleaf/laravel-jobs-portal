@@ -37,6 +37,7 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Csp\AddCspHeaders;
 
 class Kernel extends HttpKernel
 {
@@ -56,6 +57,7 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         SecurityHeaders::class,
+        AddCspHeaders::class,
     ];
 
     /**
@@ -113,5 +115,6 @@ class Kernel extends HttpKernel
         'security.headers' => SecurityHeaders::class,
         'rate.limit.advanced' => AdvancedRateLimit::class,
         'performance.monitor' => PerformanceMonitor::class,
+        'csp' => AddCspHeaders::class,
     ];
 }

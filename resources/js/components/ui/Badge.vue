@@ -1,78 +1,110 @@
 <template>
-  <span 
-    :class="[
-      baseClasses,
-      variantClasses[variant],
-      sizeClasses[size],
-      {
-        'rounded-full': rounded,
-        'cursor-pointer hover:opacity-80': clickable,
-      }
-    ]"
-    @click="handleClick"
+  <span
+    :class="badgeClasses"
+    class="inline-flex items-center font-medium rounded-full"
   >
-    <slot name="leading-icon" />
-    <span>{{ label || $slots.default }}</span>
-    <slot name="trailing-icon" />
+    <component
+      v-if="leftIcon"
+      :is="leftIcon"
+      :class="iconClasses"
+      class="mr-1"
+    />
     
-    <!-- Close button for removable badges -->
-    <button 
-      v-if="removable" 
-      @click.stop="$emit('remove')"
-      class="ml-1 -mr-1 p-0.5 rounded-full hover:bg-black/10 transition-colors"
+    <slot>{{ text }}</slot>
+    
+    <component
+      v-if="rightIcon"
+      :is="rightIcon"
+      :class="iconClasses"
+      class="ml-1"
+    />
+    
+    <button
+      v-if="removable"
+      @click="$emit('remove')"
+      class="ml-1 hover:bg-black hover:bg-opacity-10 rounded-full p-0.5 transition-colors"
     >
-      <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
+      <XMarkIcon :class="iconClasses" />
     </button>
   </span>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
+
 interface Props {
-  label?: string
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral' | 'outline'
+  text?: string
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'dark' | 'light'
   size?: 'xs' | 'sm' | 'md' | 'lg'
-  rounded?: boolean
-  clickable?: boolean
+  leftIcon?: any
+  rightIcon?: any
   removable?: boolean
+  pill?: boolean
+  outlined?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'neutral',
+  variant: 'primary',
   size: 'md',
-  rounded: false,
-  clickable: false,
+  pill: false,
+  outlined: false,
   removable: false
 })
 
-const emit = defineEmits<{
-  click: [event: MouseEvent]
+defineEmits<{
   remove: []
 }>()
 
-const baseClasses = "inline-flex items-center font-medium rounded-md transition-all duration-150"
-
-const sizeClasses = {
-  xs: "px-2 py-0.5 text-xs gap-1",
-  sm: "px-2.5 py-1 text-xs gap-1", 
-  md: "px-3 py-1.5 text-sm gap-1.5",
-  lg: "px-4 py-2 text-base gap-2"
-}
-
-const variantClasses = {
-  primary: "bg-primary-100 text-primary-800 border border-primary-200",
-  secondary: "bg-secondary-100 text-secondary-800 border border-secondary-200",
-  success: "bg-success-100 text-success-800 border border-success-200",
-  warning: "bg-warning-100 text-warning-800 border border-warning-200", 
-  error: "bg-error-100 text-error-800 border border-error-200",
-  neutral: "bg-neutral-100 text-neutral-800 border border-neutral-200",
-  outline: "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
-}
-
-const handleClick = (event: MouseEvent) => {
-  if (props.clickable) {
-    emit('click', event)
+const badgeClasses = computed(() => {
+  let classes = ''
+  
+  // Size classes
+  const sizes = {
+    xs: 'px-2 py-0.5 text-xs',
+    sm: 'px-2.5 py-0.5 text-xs',
+    md: 'px-3 py-1 text-sm',
+    lg: 'px-4 py-1.5 text-base'
   }
-}
+  classes += sizes[props.size]
+  
+  // Variant classes
+  if (props.outlined) {
+    const outlinedVariants = {
+      primary: 'border border-indigo-200 text-indigo-700 bg-indigo-50',
+      secondary: 'border border-gray-200 text-gray-700 bg-gray-50',
+      success: 'border border-green-200 text-green-700 bg-green-50',
+      warning: 'border border-yellow-200 text-yellow-700 bg-yellow-50',
+      error: 'border border-red-200 text-red-700 bg-red-50',
+      info: 'border border-blue-200 text-blue-700 bg-blue-50',
+      dark: 'border border-gray-600 text-gray-900 bg-gray-100',
+      light: 'border border-gray-300 text-gray-600 bg-white'
+    }
+    classes += ` ${outlinedVariants[props.variant]}`
+  } else {
+    const solidVariants = {
+      primary: 'bg-indigo-100 text-indigo-800',
+      secondary: 'bg-gray-100 text-gray-800',
+      success: 'bg-green-100 text-green-800',
+      warning: 'bg-yellow-100 text-yellow-800',
+      error: 'bg-red-100 text-red-800',
+      info: 'bg-blue-100 text-blue-800',
+      dark: 'bg-gray-800 text-white',
+      light: 'bg-white text-gray-800 border border-gray-200'
+    }
+    classes += ` ${solidVariants[props.variant]}`
+  }
+  
+  return classes
+})
+
+const iconClasses = computed(() => {
+  const sizes = {
+    xs: 'w-3 h-3',
+    sm: 'w-3 h-3',
+    md: 'w-4 h-4',
+    lg: 'w-5 h-5'
+  }
+  return sizes[props.size]
+})
 </script>

@@ -1,112 +1,88 @@
 <template>
   <div class="min-h-screen bg-white">
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 overflow-hidden">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-10">
-        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-          <defs>
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
-        <div class="text-center">
-          <!-- Main Headline -->
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Find Your
-            <span class="text-yellow-400">Dream Job</span>
-            Today
-          </h1>
-          
-          <!-- Subheadline -->
-          <p class="text-xl sm:text-2xl text-indigo-100 mb-8 max-w-3xl mx-auto">
-            Discover amazing opportunities, connect with top employers, and take the next step in your career journey.
-          </p>
-
-          <!-- Job Search Form -->
-          <div class="max-w-4xl mx-auto mb-12">
-            <form @submit.prevent="performSearch" class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <!-- Job Title/Keywords -->
-                <div>
-                  <BaseInput
-                    v-model="searchForm.keywords"
-                    type="text"
-                    placeholder="Job title, keywords, or company"
-                    :left-icon="MagnifyingGlassIcon"
-                    size="lg"
-                    class="w-full"
-                  />
-                </div>
-
-                <!-- Location -->
-                <div>
-                  <BaseInput
-                    v-model="searchForm.location"
-                    type="text"
-                    placeholder="City, state, or remote"
-                    :left-icon="MapPinIcon"
-                    size="lg"
-                    class="w-full"
-                  />
-                </div>
-
-                <!-- Category -->
-                <div>
-                  <select
-                    v-model="searchForm.category"
-                    class="block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
-                  >
-                    <option value="">All Categories</option>
-                    <option value="technology">Technology</option>
-                    <option value="healthcare">Healthcare</option>
-                    <option value="finance">Finance</option>
-                    <option value="education">Education</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Sales</option>
-                    <option value="design">Design</option>
-                    <option value="engineering">Engineering</option>
-                  </select>
-                </div>
+    <HeroSection
+      title="Find Your <span class='text-yellow-400'>Dream Job</span> Today"
+      subtitle="Discover amazing opportunities, connect with top employers, and take the next step in your career journey."
+      :primary-action="{
+        text: 'Search Jobs',
+        icon: MagnifyingGlassIcon,
+        onClick: () => $router.push('/jobs')
+      }"
+      :secondary-action="{
+        text: 'Browse Companies',
+        variant: 'outline',
+        onClick: () => $router.push('/companies')
+      }"
+      :stats="[
+        { value: stats.totalJobs, label: 'Active Jobs', suffix: '+' },
+        { value: stats.totalCompanies, label: 'Companies', suffix: '+' },
+        { value: stats.totalCandidates, label: 'Job Seekers', suffix: '+' }
+      ]"
+    >
+      <!-- Job Search Form -->
+      <template #content>
+        <div class="max-w-4xl mx-auto mb-12">
+          <form @submit.prevent="performSearch" class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <!-- Job Title/Keywords -->
+              <div>
+                <BaseInput
+                  v-model="searchForm.keywords"
+                  type="text"
+                  placeholder="Job title, keywords, or company"
+                  :left-icon="MagnifyingGlassIcon"
+                  size="lg"
+                  class="w-full"
+                />
               </div>
 
-              <!-- Search Button -->
-              <BaseButton
-                type="submit"
-                variant="primary"
-                size="lg"
-                :loading="isSearching"
-                class="w-full md:w-auto px-12"
-              >
-                <MagnifyingGlassIcon class="h-5 w-5 mr-2" />
-                Search Jobs
-              </BaseButton>
-            </form>
-          </div>
+              <!-- Location -->
+              <div>
+                <BaseInput
+                  v-model="searchForm.location"
+                  type="text"
+                  placeholder="City, state, or remote"
+                  :left-icon="MapPinIcon"
+                  size="lg"
+                  class="w-full"
+                />
+              </div>
 
-          <!-- Quick Stats -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <div class="text-center">
-              <div class="text-3xl sm:text-4xl font-bold text-white mb-2">{{ stats.totalJobs.toLocaleString() }}+</div>
-              <div class="text-indigo-200">Active Jobs</div>
+              <!-- Category -->
+              <div>
+                <select
+                  v-model="searchForm.category"
+                  class="block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                >
+                  <option value="">All Categories</option>
+                  <option value="technology">Technology</option>
+                  <option value="healthcare">Healthcare</option>
+                  <option value="finance">Finance</option>
+                  <option value="education">Education</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="sales">Sales</option>
+                  <option value="design">Design</option>
+                  <option value="engineering">Engineering</option>
+                </select>
+              </div>
             </div>
-            <div class="text-center">
-              <div class="text-3xl sm:text-4xl font-bold text-white mb-2">{{ stats.totalCompanies.toLocaleString() }}+</div>
-              <div class="text-indigo-200">Companies</div>
-            </div>
-            <div class="text-center">
-              <div class="text-3xl sm:text-4xl font-bold text-white mb-2">{{ stats.totalCandidates.toLocaleString() }}+</div>
-              <div class="text-indigo-200">Job Seekers</div>
-            </div>
-          </div>
+
+            <!-- Search Button -->
+            <BaseButton
+              type="submit"
+              variant="primary"
+              size="lg"
+              :loading="isSearching"
+              class="w-full md:w-auto px-12"
+            >
+              <MagnifyingGlassIcon class="h-5 w-5 mr-2" />
+              Search Jobs
+            </BaseButton>
+          </form>
         </div>
-      </div>
-    </section>
+      </template>
+    </HeroSection>
 
     <!-- Featured Jobs Section -->
     <section class="py-16 bg-gray-50">
@@ -127,7 +103,10 @@
             :key="job.id"
             :job="job"
             :show-company-logo="true"
+            :featured="true"
             class="hover:transform hover:scale-105 transition-transform duration-200"
+            @bookmark="handleJobBookmark"
+            @apply="handleJobApply"
           />
         </div>
 
@@ -302,6 +281,7 @@ import { useHead } from '@/composables/useHead';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
 import JobCard from '@/components/jobs/JobCard.vue';
+import HeroSection from '../components/ui/HeroSection.vue';
 
 // Icons
 import {

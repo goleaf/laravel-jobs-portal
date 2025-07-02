@@ -298,6 +298,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useApiGet } from '@/composables/useApi';
+import { useHead } from '@/composables/useHead';
 import BaseButton from '@/components/base/BaseButton.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
 import JobCard from '@/components/jobs/JobCard.vue';

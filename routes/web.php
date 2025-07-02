@@ -45,15 +45,15 @@ use App\Http\Controllers\HabrViewsDemoController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| Enhanced Level 4 Complex System Transformation
-| All routes now serve Vue3 SPA - Blade files removed
+| Vue3 SPA Frontend with Laravel API Backend
+| All frontend routes serve the Vue3 SPA
 */
 
-// SPA Route - catch all routes and serve Vue3 app (MOVED TO BOTTOM)
+// API Test Route
 Route::get('/test', function () {
     return response()->json([
         'status' => 'ok',
-        'message' => 'Laravel is working!',
+        'message' => 'Laravel API is working!',
         'timestamp' => now(),
         'memory_usage' => memory_get_usage(true) / 1024 / 1024 .' MB',
     ]);
@@ -63,9 +63,6 @@ Route::get('/test', function () {
 |--------------------------------------------------------------------------
 | Locale/Language Routes
 |--------------------------------------------------------------------------
-|
-| Routes for handling language switching and locale management
-|
 */
 
 Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
@@ -76,21 +73,45 @@ Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
     Route::post('clear-cache', [LocaleController::class, 'clearCache'])->name('clear-cache');
 });
 
-// Home route - basic test
-Route::get('/', function () {
-    return "Welcome to Job Portal - Basic Test";
-})->name('home');
+/*
+|--------------------------------------------------------------------------
+| Laravel Auth Routes (Traditional)
+|--------------------------------------------------------------------------
+| These routes handle authentication and redirect back to Vue3 SPA
+*/
+
+// Authentication routes (still handled by Laravel)
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Legacy Routes (Temporary - for backward compatibility)
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/about-us', function () {
-    return view('about');
+    return view('app', ['title' => 'About Us | Job Portal']);
 })->name('about-us');
 
 Route::get('/aboutus', function () {
-    return view('aboutus.index');
+    return view('app', ['title' => 'About Us | Job Portal']);
 })->name('aboutus.index');
 
 Route::get('/contact', function () {
-    return view('contact');
+    return view('app', ['title' => 'Contact Us | Job Portal']);
 })->name('contact');
 
 Route::post('/contact', function (Request $request) {
@@ -109,213 +130,100 @@ Route::post('/contact', function (Request $request) {
     return back()->with('success', 'Thank you for your message! We will get back to you soon.');
 })->name('contact.submit');
 
-Route::get('/jobs', function () {
-    return view('jobs.index');
-})->name('jobs.index');
-
+// Company management routes (API will handle data, these serve the SPA)
 Route::get('/companies', function () {
-    $companies = Company::with(['industry', 'companySize', 'ownerShipType'])->paginate(12);
-
-    return view('companies.index', compact('companies'));
+    return view('app', ['title' => 'Companies | Job Portal']);
 })->name('companies.index');
 
 Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
-// Company management routes
-Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
+Route::get('/company', function () {
+    return view('app', ['title' => 'Company | Job Portal']);
+})->name('company.index');
 
-// Additional routes that are commonly referenced in navigation
+// Additional common routes
 Route::get('/terms-and-conditions', function () {
-    return view('terms_conditions');
+    return view('app', ['title' => 'Terms & Conditions | Job Portal']);
 })->name('terms.conditions.list');
 
 Route::get('/privacy-policy-page', function () {
-    return view('privacy_policy');
+    return view('app', ['title' => 'Privacy Policy | Job Portal']);
 })->name('privacy.policy.list');
 
 Route::get('/help', function () {
-    return view('help.index');
+    return view('app', ['title' => 'Help | Job Portal']);
 })->name('help.index');
 
 Route::get('/terms', function() {
-    return view('terms.index');
+    return view('app', ['title' => 'Terms | Job Portal']);
 })->name('terms');
 
 Route::get('/privacy', function() {
-    return view('privacy.index');
+    return view('app', ['title' => 'Privacy | Job Portal']);
 })->name('privacy');
 
 Route::get('/posts', function () {
-    return view('posts.index');
+    return view('app', ['title' => 'Posts | Job Portal']);
 })->name('posts.index');
 
-Route::get('/job-listing', function () {
-    return view('jobs.index');
-})->name('front.job.listing');
+// Dashboard routes (serve Vue3 SPA)
+Route::get('/dashboard', function () {
+    return view('app', ['title' => 'Dashboard | Job Portal']);
+})->name('dashboard');
 
-// Company management routes
-Route::get('/company', [CompanyController::class, 'index'])->name('front.company.index');
-Route::get('/company/index', [CompanyController::class, 'index'])->name('company.index');
-Route::get('/company/create', [CompanyController::class, 'create'])->name('company.create');
+Route::get('/candidate-dashboard', function () {
+    return view('app', ['title' => 'Candidate Dashboard | Job Portal']);
+})->name('candidate.dashboard');
 
-// CRITICAL MISSING ROUTES - Adding routes that are referenced in blade files
+// Admin routes
+Route::get('admin/login', function () {
+    return view('auth.admin-login');
+})->name('admin.login');
 
-// Admin Login route (referenced in auth_template/passwords/email.blade.php)
-Route::get('admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::get('admin/password/forgot', function () {
+    return view('auth.admin-forgot-password');
+})->name('admin.password.forgot');
 
-// Admin password forgot
-Route::get('admin/password/forgot', [AdminController::class, 'forgotPassword'])->name('admin.password.forgot');
-
-// Dashboard route (for both admin and company)
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-// Candidate dashboard
-Route::get('/candidate-dashboard', [DashboardController::class, 'index'])->name('candidate.dashboard');
-
-// Candidate routes
-Route::resource('candidate-profile', CandidateController::class)->except(['create', 'store', 'show', 'destroy']);
-Route::post('candidate-profile/update-profile-image', [CandidateController::class, 'updateProfileImage'])->name('candidate.profile.update-image');
-
-// Additional missing routes
-Route::get('/candidates', [CandidateController::class, 'index'])->name('candidates.index');
-Route::get('/employers', [EmployerController::class, 'index'])->name('employers.index');
-
-// Employer job management routes
-Route::get('/employer/jobs/create', [JobController::class, 'create'])->name('employer.job.create');
-Route::post('/employer/jobs', [JobController::class, 'store'])->name('employer.job.store');
-
-// Real-time validation
+// API routes for AJAX requests
 Route::post('/real-time-validation', [RealTimeController::class, 'validateField'])->name('real-time-validation');
-
-// Location routes
 Route::get('/get-states', [LocationController::class, 'getStates'])->name('get-states');
 Route::get('/get-cities', [LocationController::class, 'getCities'])->name('get-cities');
 
-// Transactions
+// Legacy API routes (will be moved to routes/api.php)
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::post('transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
-
-// Job applications
 Route::post('job-applications', [ApplicationController::class, 'store'])->name('job-applications.store');
 
-// Subscriber routes
-Route::post('subscribe', [SubscriberController::class, 'store'])->name('subscribe');
-Route::get('unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
+/*
+|--------------------------------------------------------------------------
+| Vue3 SPA Routes
+|--------------------------------------------------------------------------
+| All frontend routes serve the Vue3 Single Page Application
+*/
 
-// Language and Translation routes
-Route::get('/languages', [LanguageController::class, 'index'])->name('languages.index');
-Route::post('/languages', [LanguageController::class, 'store'])->name('languages.store');
-Route::get('translation-manager', [TranslationManagerController::class, 'index'])->name('translation-manager.index');
+// Main SPA routes - these serve the Vue3 app
+$spaRoutes = [
+    '/',
+    '/jobs',
+    '/jobs/{id}',
+    '/companies',
+    '/companies/{id}',
+    '/candidate',
+    '/candidate/{path}',
+    '/employer',
+    '/employer/{path}',
+    '/admin',
+    '/admin/{path}',
+];
 
-// Sitemap
-Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+// Register SPA routes
+foreach ($spaRoutes as $route) {
+    Route::get($route, function () {
+        return view('app');
+    })->where('path', '.*')->where('id', '[0-9]+');
+}
 
-// DEMO routes for Habr articles
-Route::get('/habr/views-demo/users', [HabrViewsDemoController::class, 'users'])->name('habr.views-demo.users');
-Route::get('/habr/views-demo/jobs', [HabrViewsDemoController::class, 'jobs'])->name('habr.views-demo.jobs');
-Route::get('/habr/views-demo/companies', [HabrViewsDemoController::class, 'companies'])->name('habr.views-demo.companies');
-
-// Admin routes group
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-    // Branding Sliders
-    Route::resource('branding-sliders', BrandingSliderController::class);
-
-    // Image Sliders
-    Route::resource('image-sliders', ImageSliderController::class);
-
-    // Header Sliders
-    Route::resource('header-sliders', HeaderSliderController::class);
-
-    // CMS
-    Route::get('cms', [CmsController::class, 'index'])->name('cms.index');
-    Route::post('cms', [CmsController::class, 'update'])->name('cms.update');
-
-    // Email Templates
-    Route::resource('email-templates', EmailTemplateController::class);
-
-    // Master Data
-    Route::resource('functional-areas', FunctionalAreaController::class);
-    Route::resource('ownership-types', OwnershipTypeController::class);
-    Route::resource('salary-currencies', SalaryCurrencyController::class);
-    Route::resource('salary-periods', SalaryPeriodController::class);
-    Route::resource('company-sizes', CompanySizeController::class);
-
-    // Companies Management
-    Route::resource('companies', CompanyController::class);
-    Route::post('companies/{company}/change-status', [CompanyController::class, 'changeStatus'])->name('companies.change-status');
-    Route::post('companies/{company}/mark-featured', [CompanyController::class, 'markFeatured'])->name('companies.mark-featured');
-    Route::post('companies/{company}/unmark-featured', [CompanyController::class, 'unmarkFeatured'])->name('companies.unmark-featured');
-    Route::post('companies/{company}/change-is-verified', [CompanyController::class, 'changeIsVerified'])->name('companies.change-is-verified');
-
-    // Reported Jobs
-    Route::resource('reported-jobs', ReportedJobController::class);
-
-    // Taxonomies
-    Route::resource('taxonomies', TaxonomyController::class);
-    Route::resource('terms', TermController::class);
-
-    // Blog Comments
-    Route::get('blog-comments', [BlogCommentController::class, 'index'])->name('blog-comments.index');
-    Route::delete('blog-comments/{id}', [BlogCommentController::class, 'destroy'])->name('blog-comments.destroy');
-
-    // Candidate management
-    Route::resource('candidates', \App\Http\Controllers\Admin\CandidateController::class);
-    Route::post('candidates/{candidate}/change-status', [\App\Http\Controllers\Admin\CandidateController::class, 'changeStatus'])->name('candidates.change-status');
-    Route::post('candidates/{candidate}/change-is-verified', [\App\Http\Controllers\Admin\CandidateController::class, 'changeIsVerified'])->name('candidates.change-is-verified');
-    Route::post('candidates/{candidate}/report', [\App\Http\Controllers\Admin\CandidateController::class, 'report'])->name('candidates.report');
-});
-
-// All other routes should be handled by Vue Router
-Route::get('/{any}', [HomeController::class, 'index'])->where('any', '.*');
-
-Route::get('/employer-register', function () {
-    return view('auth.employer_register');
-})->name('employer.register');
-
-Route::get('/candidate-register', function () {
-    return view('auth.candidate_register');
-})->name('candidate.register');
-
-Route::get('/register', function () {
-    return view('auth.candidate_register');
-})->name('register');
-
-// POST route for user registration
-Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])
-    ->name('register.store');
-
-// POST route for user login
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])
-    ->name('login.store');
-
-// POST route for user logout
-Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])
-    ->name('logout');
-
-Route::get('/employee-login', function () {
-    return view('front_web.auth.employee_login');
-})->name('employee.login');
-
-Route::get('/login', function () {
-    return view('front_web.auth.login');
-})->name('login');
-
-Route::get('/blog-category/{categoryId}', function ($categoryId) {
-    // ... existing code ...
-});
-
-Route::get('/employer/dashboard', function() {
-    return 'Employer Dashboard';
-})->name('employer.dashboard');
-
-Route::get('/sitemap', function() {
-    return response('Sitemap');
-})->name('sitemap');
-
-Route::get('/news-letter/create', function() {
-    return response('Newsletter Create');
-})->name('news-letter.create');
-
-Route::post('/employer/report-candidate', [\App\Http\Controllers\Employer\ReportCandidateController::class, 'store']);
+// Catch-all route for Vue3 SPA (must be last)
+Route::get('/{path}', function () {
+    return view('app');
+})->where('path', '.*')->name('spa.catchall');

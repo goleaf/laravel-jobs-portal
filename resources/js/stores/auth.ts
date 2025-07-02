@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref, computed, readonly } from 'vue'
-import type { User, LoginCredentials, RegisterData, ApiResponse } from '../types/auth'
-import { apiClient } from '../services/api'
+import type { 
+  UserRole, 
+  BaseUser, 
+  Candidate, 
+  Employer, 
+  Administrator, 
+  Visitor,
+  UserResponse,
+  LoginCredentials,
+  RegisterData,
+  ApiError
+} from '@/types/user'
+import { apiService } from '@/services/api'
 
 /**
  * Universal Authentication Store
@@ -10,95 +21,126 @@ import { apiClient } from '../services/api'
  */
 export const useAuthStore = defineStore('auth', () => {
   // State
-  const user = ref<User | null>(null)
+  const user = ref<Candidate | Employer | Administrator | null>(null)
+  const visitor = ref<Visitor | null>(null)
   const token = ref<string | null>(localStorage.getItem('auth_token'))
   const isLoading = ref(false)
-  const error = ref<string | null>(null)
+  const isInitialized = ref(false)
+  const lastActivity = ref<Date | null>(null)
+  const permissions = ref<string[]>([])
+  const userPreferences = ref<Record<string, any>>({})
 
   // Getters
   const isAuthenticated = computed(() => !!user.value && !!token.value)
-  const isAdmin = computed(() => user.value?.is_admin || user.value?.role === 'admin')
-  const userRole = computed(() => user.value?.role || 'guest')
-  const userName = computed(() => user.value?.name || 'Guest')
+  
+  const userRole = computed((): UserRole => {
+    if (user.value) {
+      return user.value.role
+    }
+    return 'visitor'
+  })
+
+  const isCandidate = computed(() => userRole.value === 'candidate')
+  const isEmployer = computed(() => userRole.value === 'employer')
+  const isAdmin = computed(() => userRole.value === 'admin')
+  const isVisitor = computed(() => userRole.value === 'visitor')
+
+  const userName = computed(() => {
+    if (!user.value) return null
+    
+    switch (user.value.role) {
+      case 'candidate':
+        const candidate = user.value as Candidate
+        return `${candidate.profile.first_name} ${candidate.profile.last_name}`
+      case 'employer':
+        const employer = user.value as Employer
+        return employer.company.name
+      case 'admin':
+        const admin = user.value as Administrator
+        return `${admin.adminProfile.first_name} ${admin.adminProfile.last_name}`
+      default:
+        return user.value.email
+    }
+  })
+
+  const userAvatar = computed(() => {
+    if (!user.value) return null
+    
+    if (user.value.profile_image) {
+      return user.value.profile_image
+    }
+    
+    // Default avatar based on role
+    switch (user.value.role) {
+      case 'candidate':
+        return '/images/default-candidate-avatar.png'
+      case 'employer':
+        const employer = user.value as Employer
+        return employer.company.logo || '/images/default-company-logo.png'
+      case 'admin':
+        return '/images/default-admin-avatar.png'
+      default:
+        return '/images/default-avatar.png'
+    }
+  })
+
+  const canAccess = computed((permission: string): boolean => {
+    if (!isAuthenticated.value) return false
+    if (isAdmin.value) return true // Admins have access to everything
+    return permissions.value.includes(permission)
+  })
+
+  const dashboardRoute = computed(() => {
+    switch (userRole.value) {
+      case 'candidate':
+        return '/candidate/dashboard'
+      case 'employer':
+        return '/employer/dashboard'
+      case 'admin':
+        return '/admin/dashboard'
+      default:
+        return '/'
+    }
+  })
 
   // Actions
-  async function login(credentials: LoginCredentials): Promise<boolean> {
+  async function login(credentials: LoginCredentials): Promise<UserResponse> {
     isLoading.value = true
-    error.value = null
-
+    
     try {
-      console.log('Attempting login for:', credentials.email)
+      const response = await apiService.post<UserResponse>('/auth/login', credentials)
       
-      const response = await apiClient.post<ApiResponse<{
-        user: User
-        token: string
-        token_type: string
-      }>>('/auth/login', credentials)
-
-      if (response.data.success && response.data.data) {
-        const { user: userData, token: authToken } = response.data.data
-        
-        // Update state
-        user.value = userData
-        token.value = authToken
-        
-        // Persist token
-        localStorage.setItem('auth_token', authToken)
-        
-        // Update API client headers
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
-        
-        console.log('Login successful:', userData.name)
-        return true
+      if (response.data.user && response.data.token) {
+        await setAuthenticatedUser(response.data)
+        updateLastActivity()
+        return response.data
+      } else {
+        throw new Error('Invalid response from server')
       }
-
-      throw new Error(response.data.message || 'Login failed')
-
-    } catch (err: any) {
-      console.error('Login error:', err)
-      error.value = err.response?.data?.message || err.message || 'Login failed'
-      return false
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
     } finally {
       isLoading.value = false
     }
   }
 
-  async function register(data: RegisterData): Promise<boolean> {
+  async function register(data: RegisterData): Promise<UserResponse> {
     isLoading.value = true
-    error.value = null
-
+    
     try {
-      console.log('Attempting registration for:', data.email)
+      const response = await apiService.post<UserResponse>('/auth/register', data)
       
-      const response = await apiClient.post<ApiResponse<{
-        user: User
-        token: string
-        token_type: string
-      }>>('/auth/register', data)
-
-      if (response.data.success && response.data.data) {
-        const { user: userData, token: authToken } = response.data.data
-        
-        // Update state
-        user.value = userData
-        token.value = authToken
-        
-        // Persist token
-        localStorage.setItem('auth_token', authToken)
-        
-        // Update API client headers
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
-        
-        console.log('Registration successful:', userData.name)
-        return true
+      if (response.data.user && response.data.token) {
+        await setAuthenticatedUser(response.data)
+        updateLastActivity()
+        return response.data
+      } else {
+        throw new Error('Invalid response from server')
       }
-
-      throw new Error(response.data.message || 'Registration failed')
-
-    } catch (err: any) {
-      console.error('Registration error:', err)
-      error.value = err.response?.data?.message || err.message || 'Registration failed'
-      return false
+    } catch (error) {
+      console.error('Registration error:', error)
+      throw error
     } finally {
       isLoading.value = false
     }
@@ -108,176 +150,299 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading.value = true
     
     try {
-      // Call logout endpoint if we have a token
+      // Call logout endpoint if user is authenticated
       if (token.value) {
-        await apiClient.post('/auth/logout')
+        await apiService.post('/auth/logout')
       }
-    } catch (err) {
-      console.warn('Logout API call failed:', err)
-      // Continue with local logout even if API fails
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Continue with logout even if API call fails
     } finally {
-      // Clear state regardless of API response
-      user.value = null
-      token.value = null
-      error.value = null
-      
-      // Clear persisted data
-      localStorage.removeItem('auth_token')
-      
-      // Clear API client headers
-      delete apiClient.defaults.headers.common['Authorization']
-      
-      isLoading.value = false
-      console.log('Logout completed')
-    }
-  }
-
-  async function fetchUser(): Promise<boolean> {
-    if (!token.value) {
-      return false
-    }
-
-    isLoading.value = true
-    error.value = null
-
-    try {
-      // Set token in API client
-      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-      
-      const response = await apiClient.get<ApiResponse<{ user: User }>>('/auth/user')
-
-      if (response.data.success && response.data.data) {
-        user.value = response.data.data.user
-        console.log('User fetched successfully:', user.value.name)
-        return true
-      }
-
-      throw new Error(response.data.message || 'Failed to fetch user')
-
-    } catch (err: any) {
-      console.error('Fetch user error:', err)
-      
-      // If token is invalid, clear auth state
-      if (err.response?.status === 401) {
-        await logout()
-      } else {
-        error.value = err.response?.data?.message || err.message || 'Failed to fetch user'
-      }
-      
-      return false
-    } finally {
+      clearAuthenticatedUser()
       isLoading.value = false
     }
   }
 
   async function refreshToken(): Promise<boolean> {
-    if (!token.value) {
-      return false
-    }
-
-    isLoading.value = true
-    error.value = null
-
+    if (!token.value) return false
+    
     try {
-      const response = await apiClient.post<ApiResponse<{
-        token: string
-        token_type: string
-      }>>('/auth/refresh')
-
-      if (response.data.success && response.data.data) {
-        const { token: newToken } = response.data.data
-        
-        // Update token
-        token.value = newToken
-        localStorage.setItem('auth_token', newToken)
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-        
-        console.log('Token refreshed successfully')
+      const response = await apiService.post<{ token: string }>('/auth/refresh')
+      
+      if (response.data.token) {
+        token.value = response.data.token
+        localStorage.setItem('auth_token', response.data.token)
+        updateLastActivity()
         return true
       }
-
-      throw new Error(response.data.message || 'Token refresh failed')
-
-    } catch (err: any) {
-      console.error('Token refresh error:', err)
-      
-      // If refresh fails, logout user
-      if (err.response?.status === 401) {
-        await logout()
-      } else {
-        error.value = err.response?.data?.message || err.message || 'Token refresh failed'
-      }
       
       return false
+    } catch (error) {
+      console.error('Token refresh error:', error)
+      await logout()
+      return false
+    }
+  }
+
+  async function fetchUser(): Promise<void> {
+    if (!token.value) return
+    
+    isLoading.value = true
+    
+    try {
+      const response = await apiService.get<UserResponse>('/auth/user')
+      
+      if (response.data.user) {
+        setUserData(response.data)
+        updateLastActivity()
+      } else {
+        throw new Error('No user data received')
+      }
+    } catch (error) {
+      console.error('Fetch user error:', error)
+      await logout()
     } finally {
       isLoading.value = false
     }
   }
 
-  async function checkRole(role: string): Promise<boolean> {
-    if (!token.value) {
-      return false
-    }
-
-    try {
-      const response = await apiClient.get<ApiResponse<{
-        has_role: boolean
-        role: string
-        user_roles: string[]
-      }>>(`/auth/check-role/${role}`)
-
-      return response.data.success && response.data.data?.has_role || false
-
-    } catch (err) {
-      console.warn('Role check failed:', err)
-      return false
-    }
-  }
-
-  // Initialize authentication state
-  async function initialize(): Promise<void> {
-    console.log('Initializing auth store...')
+  async function updateProfile(data: Partial<BaseUser>): Promise<void> {
+    if (!user.value) throw new Error('No authenticated user')
     
-    // If we have a stored token, try to fetch user
-    if (token.value) {
-      console.log('Found stored token, fetching user...')
-      const success = await fetchUser()
+    isLoading.value = true
+    
+    try {
+      const response = await apiService.put<UserResponse>('/auth/profile', data)
       
-      if (!success) {
-        console.log('Failed to fetch user with stored token, clearing auth state')
-        await logout()
+      if (response.data.user) {
+        setUserData(response.data)
       }
-    } else {
-      console.log('No stored token found')
+    } catch (error) {
+      console.error('Profile update error:', error)
+      throw error
+    } finally {
+      isLoading.value = false
     }
   }
 
-  // Clear error
-  function clearError(): void {
-    error.value = null
+  async function changePassword(data: { 
+    current_password: string
+    password: string
+    password_confirmation: string
+  }): Promise<void> {
+    if (!user.value) throw new Error('No authenticated user')
+    
+    isLoading.value = true
+    
+    try {
+      await apiService.put('/auth/password', data)
+    } catch (error) {
+      console.error('Password change error:', error)
+      throw error
+    } finally {
+      isLoading.value = false
+    }
   }
 
+  async function forgotPassword(email: string): Promise<void> {
+    isLoading.value = true
+    
+    try {
+      await apiService.post('/auth/forgot-password', { email })
+    } catch (error) {
+      console.error('Forgot password error:', error)
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  async function resetPassword(data: {
+    token: string
+    email: string
+    password: string
+    password_confirmation: string
+  }): Promise<void> {
+    isLoading.value = true
+    
+    try {
+      await apiService.post('/auth/reset-password', data)
+    } catch (error) {
+      console.error('Reset password error:', error)
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  function initializeVisitor(): Visitor {
+    const sessionId = generateSessionId()
+    const visitorData: Visitor = {
+      sessionId,
+      preferences: {
+        jobAlerts: false,
+        newsletterSubscription: false,
+        savedJobs: [],
+        recentSearches: []
+      }
+    }
+    
+    visitor.value = visitorData
+    localStorage.setItem('visitor_session', JSON.stringify(visitorData))
+    
+    return visitorData
+  }
+
+  function updateVisitorPreferences(preferences: Partial<Visitor['preferences']>): void {
+    if (!visitor.value) {
+      initializeVisitor()
+    }
+    
+    if (visitor.value && visitor.value.preferences) {
+      visitor.value.preferences = { ...visitor.value.preferences, ...preferences }
+      localStorage.setItem('visitor_session', JSON.stringify(visitor.value))
+    }
+  }
+
+  async function initialize(): Promise<void> {
+    if (isInitialized.value) return
+    
+    // Check for existing token
+    const storedToken = localStorage.getItem('auth_token')
+    if (storedToken) {
+      token.value = storedToken
+      await fetchUser()
+    } else {
+      // Initialize visitor session
+      const storedVisitor = localStorage.getItem('visitor_session')
+      if (storedVisitor) {
+        try {
+          visitor.value = JSON.parse(storedVisitor)
+        } catch {
+          initializeVisitor()
+        }
+      } else {
+        initializeVisitor()
+      }
+    }
+    
+    isInitialized.value = true
+  }
+
+  function checkSession(): boolean {
+    if (!lastActivity.value) return true
+    
+    const now = new Date()
+    const timeSinceLastActivity = now.getTime() - lastActivity.value.getTime()
+    const sessionTimeout = 30 * 60 * 1000 // 30 minutes
+    
+    if (timeSinceLastActivity > sessionTimeout) {
+      logout()
+      return false
+    }
+    
+    return true
+  }
+
+  function updateLastActivity(): void {
+    lastActivity.value = new Date()
+  }
+
+  // Helper functions
+  async function setAuthenticatedUser(data: UserResponse): Promise<void> {
+    user.value = data.user
+    token.value = data.token || null
+    permissions.value = data.permissions || []
+    userPreferences.value = data.preferences || {}
+    
+    if (token.value) {
+      localStorage.setItem('auth_token', token.value)
+    }
+    
+    // Clear visitor session when user authenticates
+    visitor.value = null
+    localStorage.removeItem('visitor_session')
+  }
+
+  function setUserData(data: UserResponse): void {
+    user.value = data.user
+    permissions.value = data.permissions || []
+    userPreferences.value = data.preferences || {}
+  }
+
+  function clearAuthenticatedUser(): void {
+    user.value = null
+    token.value = null
+    permissions.value = []
+    userPreferences.value = {}
+    lastActivity.value = null
+    
+    localStorage.removeItem('auth_token')
+    
+    // Reinitialize visitor session
+    initializeVisitor()
+  }
+
+  function generateSessionId(): string {
+    return 'visitor_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
+  }
+
+  // Role-specific helpers
+  function getCandidateData(): Candidate | null {
+    return isCandidate.value ? user.value as Candidate : null
+  }
+
+  function getEmployerData(): Employer | null {
+    return isEmployer.value ? user.value as Employer : null
+  }
+
+  function getAdminData(): Administrator | null {
+    return isAdmin.value ? user.value as Administrator : null
+  }
+
+  // Return store
   return {
     // State
     user: readonly(user),
+    visitor: readonly(visitor),
     token: readonly(token),
     isLoading: readonly(isLoading),
-    error: readonly(error),
+    isInitialized: readonly(isInitialized),
+    lastActivity: readonly(lastActivity),
+    permissions: readonly(permissions),
+    userPreferences: readonly(userPreferences),
     
-    // Getters
+    // Computed
     isAuthenticated,
-    isAdmin,
     userRole,
+    isCandidate,
+    isEmployer,
+    isAdmin,
+    isVisitor,
     userName,
+    userAvatar,
+    canAccess,
+    dashboardRoute,
     
     // Actions
     login,
     register,
     logout,
-    fetchUser,
     refreshToken,
-    checkRole,
+    fetchUser,
+    updateProfile,
+    changePassword,
+    forgotPassword,
+    resetPassword,
+    initializeVisitor,
+    updateVisitorPreferences,
     initialize,
-    clearError
+    checkSession,
+    updateLastActivity,
+    
+    // Role-specific helpers
+    getCandidateData,
+    getEmployerData,
+    getAdminData
   }
 }) 

@@ -24,7 +24,7 @@ class UniversalNotificationController extends Controller
     public function __construct(UniversalNotificationService $notificationService)
     {
         $this->notificationService = $notificationService;
-        $this->middleware('auth');
+        // Authentication middleware removed - all methods now public
         $this->middleware('throttle:120,1')->only(['index', 'show']);
         $this->middleware('throttle:60,1')->only(['store', 'update', 'destroy']);
     }

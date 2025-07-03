@@ -20,7 +20,7 @@ class JobTypeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        // Authentication middleware removed - all methods now public
         $this->middleware('throttle:api')->only(['store', 'update', 'destroy']);
         $this->middleware('can:view,App\Models\JobType')->only(['index', 'show']);
         $this->middleware('can:create,App\Models\JobType')->only(['store']);

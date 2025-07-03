@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\ModelSettingsController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::get('/user', function (Request $request) {
     /*
     |--------------------------------------------------------------------------
     | Login Information API Routes (for Vue components)
@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('/verify-credentials', [AuthController::class, 'verifyCredentials'])->name('api.auth.verify-credentials');
     });
 
-    return $request->user();
+    return response()->json(['message' => 'Authentication disabled', 'user' => null]);
 });
 
 /*
@@ -223,14 +223,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/login', [App\Http\Controllers\Api\V1\AuthController::class, 'login']);
         Route::post('/register', [App\Http\Controllers\Api\V1\AuthController::class, 'register']);
 
-        // Protected authentication routes
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::get('/user', [App\Http\Controllers\Api\V1\AuthController::class, 'user']);
-            Route::post('/logout', [App\Http\Controllers\Api\V1\AuthController::class, 'logout']);
-            Route::post('/logout-all', [App\Http\Controllers\Api\V1\AuthController::class, 'logoutAll']);
-            Route::post('/refresh', [App\Http\Controllers\Api\V1\AuthController::class, 'refresh']);
-            Route::get('/check-role/{role}', [App\Http\Controllers\Api\V1\AuthController::class, 'checkRole']);
-        });
+        // Authentication routes (now public - authentication disabled)
+        Route::get('/user', function() { return response()->json(['message' => 'Authentication disabled', 'user' => null]); });
+        Route::post('/logout', function() { return response()->json(['message' => 'Authentication disabled']); });
+        Route::post('/logout-all', function() { return response()->json(['message' => 'Authentication disabled']); });
+        Route::post('/refresh', function() { return response()->json(['message' => 'Authentication disabled']); });
+        Route::get('/check-role/{role}', function() { return response()->json(['message' => 'Authentication disabled', 'role' => null]); });
     });
 
     // Test dashboard stats without authentication
@@ -258,8 +256,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/top-companies', [DashboardController::class, 'getTopCompanies']);
     });
 
-    // Jobs API routes
-    Route::prefix('jobs')->middleware(['auth:sanctum'])->group(function () {
+    // Jobs API routes (authentication removed)
+    Route::prefix('jobs')->group(function () {
         Route::get('/', [JobApiController::class, 'index']);
         Route::post('/', [JobApiController::class, 'store']);
         Route::get('/{id}', [JobApiController::class, 'show']);
@@ -267,8 +265,8 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [JobApiController::class, 'destroy']);
     });
 
-    // Companies API routes
-    Route::prefix('companies')->middleware(['auth:sanctum'])->group(function () {
+    // Companies API routes (authentication removed)
+    Route::prefix('companies')->group(function () {
         Route::get('/', [CompanyApiController::class, 'index']);
         Route::post('/', [CompanyApiController::class, 'store']);
         Route::get('/{id}', [CompanyApiController::class, 'show']);
@@ -276,8 +274,8 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [CompanyApiController::class, 'destroy']);
     });
 
-    // Candidates API routes
-    Route::prefix('candidates')->middleware(['auth:sanctum'])->group(function () {
+    // Candidates API routes (authentication removed)
+    Route::prefix('candidates')->group(function () {
         Route::get('/', [CandidateApiController::class, 'index']);
         Route::post('/', [CandidateApiController::class, 'store']);
         Route::get('/{id}', [CandidateApiController::class, 'show']);
@@ -285,8 +283,8 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [CandidateApiController::class, 'destroy']);
     });
 
-    // Admin users API routes
-    Route::prefix('admin/users')->middleware(['auth:sanctum'])->group(function () {
+    // Admin users API routes (authentication removed)
+    Route::prefix('admin/users')->group(function () {
         Route::get('/', [AdminApiController::class, 'index']);
         Route::post('/', [AdminApiController::class, 'store']);
         Route::get('/{id}', [AdminApiController::class, 'show']);
@@ -300,13 +298,11 @@ Route::prefix('v1')->group(function () {
     Route::get('job-types/{jobType}', [JobTypeController::class, 'show']);
     Route::get('job-types/search', [JobTypeController::class, 'search']);
 
-    // Protected job types routes
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::post('job-types', [JobTypeController::class, 'store']);
-        Route::put('job-types/{jobType}', [JobTypeController::class, 'update']);
-        Route::delete('job-types/{jobType}', [JobTypeController::class, 'destroy']);
-        Route::get('job-types/statistics', [JobTypeController::class, 'statistics']);
-    });
+    // Job types routes (authentication removed)
+    Route::post('job-types', [JobTypeController::class, 'store']);
+    Route::put('job-types/{jobType}', [JobTypeController::class, 'update']);
+    Route::delete('job-types/{jobType}', [JobTypeController::class, 'destroy']);
+    Route::get('job-types/statistics', [JobTypeController::class, 'statistics']);
 
     /**
      * ELOQUENT HAS MANY DEEP INTEGRATION ROUTES
@@ -318,7 +314,7 @@ Route::prefix('v1')->group(function () {
      * These routes demonstrate complex multi-level relationships
      * that replace multiple queries with single optimized calls.
      */
-    Route::middleware(['auth:sanctum'])->prefix('deep-relationships')->group(function () {
+    Route::prefix('deep-relationships')->group(function () {
         // User Location Jobs: User -> Country -> State -> City -> Jobs
         Route::get('/location-jobs', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getUserLocationJobs'])
             ->name('api.deep.location-jobs');

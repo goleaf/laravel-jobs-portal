@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Admin Web Routes (for blade templates) - ADDED TO FIX BLADE ISSUES
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     // Job Type Resource Routes using existing controller
     Route::resource('job-types', JobTypeController::class);
 
@@ -60,7 +60,7 @@ Route::prefix('api/v1')->middleware(['api', 'throttle:api'])->group(function () 
     ;
 
     // Protected API routes (authentication required)
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::group(function () {
         // CRUD operations
         Route::post('job-types', [ApiJobTypeController::class, 'store'])
             ->name('api.job-types.store')

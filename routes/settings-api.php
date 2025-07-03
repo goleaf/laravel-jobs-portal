@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('api/settings')->group(function () {
+Route::middleware(['throttle:api'])->prefix('api/settings')->group(function () {
     Route::get('/', [SettingsManagementController::class, 'getAvailableModels']);
     Route::get('/docs', [SettingsManagementController::class, 'getApiDocumentation']);
     Route::get('/{modelType}/schema', [SettingsManagementController::class, 'getModelSchema']);

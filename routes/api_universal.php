@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Universal API v1 Routes with comprehensive middleware
-Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(function () {
+Route::middleware(['throttle:api'])->prefix('v1')->group(function () {
     // Universal Pattern: API Resource routes with caching headers
     Route::middleware(['cache.headers:public;max_age=300'])->group(function () {
         // User API Resource

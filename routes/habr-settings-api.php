@@ -23,7 +23,7 @@ Route::prefix('settings/public')->group(function () {
 });
 
 // Protected settings routes (authentication required)
-Route::middleware(['auth:sanctum'])->prefix('settings')->group(function () {
+Route::prefix('settings')->group(function () {
     
     // Core CRUD operations
     Route::get('/', [SettingsController::class, 'index'])

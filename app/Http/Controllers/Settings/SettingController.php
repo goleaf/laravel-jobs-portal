@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Http\Requests\Settings\IndexSettingsRequest;
+use App\Http\Requests\Settings\UpdateSettingsRequest;
 use App\Models\EnvSetting;
 use App\Models\Language;
 use App\Models\Setting;
@@ -33,7 +35,7 @@ class SettingController extends AppBaseController
      *
      * @return Factory|View
      */
-    public function index(StoreRequest $request): View
+    public function index(IndexSettingsRequest $request): View
     {
         $envData = $this->settingRepository->getEnvData();
         // $envData['mail']['MAIL_USERNAME'] = str_replace('"', '', $envData['mail']['MAIL_USERNAME']);
@@ -54,7 +56,7 @@ class SettingController extends AppBaseController
     /**
      * @throws DotEnvException
      */
-    public function update(UpdateSettingUpdateSettingRequest $request): RedirectResponse
+    public function update(UpdateSettingsRequest $request): RedirectResponse
     {
         $this->settingRepository->updateSetting($request->all());
         $language = $request->default_language;

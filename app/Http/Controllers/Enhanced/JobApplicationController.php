@@ -8,6 +8,7 @@ use App\Http\Requests\Job\ChangeJobStageJobApplicationRequest;
 use App\Http\Requests\Job\DeleteJobApplicationRequest;
 use App\Http\Requests\Job\DownloadMediaJobApplicationRequest;
 use App\Http\Requests\Job\StoreJobApplicationRequest;
+use App\Http\Requests\JobApplication\IndexJobApplicationRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobApplicationSchedule;
@@ -54,7 +55,7 @@ class JobApplicationController extends AppBaseController
     /**
      * Display a listing of job applications with enhanced filtering and search.
      */
-    public function index(int $jobId, StoreJobApplicationRequest $request)
+    public function index(int $jobId, IndexJobApplicationRequest $request)
     {
         try {
             // Verify job ownership with enhanced security

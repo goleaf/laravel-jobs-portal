@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteFAQRequest;
 use App\Models\FAQ;
 use App\Repositories\FAQRepository;
 use Illuminate\Contracts\View\Factory;
@@ -73,7 +74,7 @@ class FAQController extends AppBaseController
      *
      * @throws \Exception
      */
-    public function destroy(FAQ $faq): JsonResponse
+    public function destroy(DeleteFAQRequest $request, FAQ $faq): JsonResponse
     {
         $faq->delete();
 

@@ -32,7 +32,7 @@
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Create New Term</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __("admin.create_new_term") }}</h1>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Add a new term to organize and categorize content.
                     </p>
@@ -61,7 +61,7 @@
                     onchange="updateParentOptions()"
                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white @error('taxonomy_id') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
                 >
-                    <option value="">Select a taxonomy</option>
+                    <option value="">{{ __("admin.select_taxonomy") }}</option>
                     @foreach($taxonomies as $taxonomy)
                         <option value="{{ $taxonomy->id }}" {{ old('taxonomy_id', request('taxonomy')) == $taxonomy->id ? 'selected' : '' }}>
                             {{ $taxonomy->name }} ({{ ucfirst($taxonomy->type) }})
@@ -154,7 +154,7 @@
                                 {{ old('is_active', '1') == '1' ? 'checked' : '' }}
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
                             >
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Active</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ __("common.active") }}</span>
                         </label>
                         <label class="flex items-center">
                             <input 
@@ -164,7 +164,7 @@
                                 {{ old('is_active') == '0' ? 'checked' : '' }}
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
                             >
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Inactive</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ __("common.inactive") }}</span>
                         </label>
                     </div>
                     @error('is_active')

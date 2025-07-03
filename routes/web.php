@@ -75,26 +75,10 @@ Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
 
 /*
 |--------------------------------------------------------------------------
-| Laravel Auth Routes (Traditional)
+| System Routes (No Authentication Required)
 |--------------------------------------------------------------------------
-| These routes handle authentication and redirect back to Vue3 SPA
+| All routes are public as authentication system has been removed
 */
-
-// Authentication routes (still handled by Laravel)
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/');
-})->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -175,14 +159,8 @@ Route::get('/candidate-dashboard', function () {
     return view('app', ['title' => 'Candidate Dashboard | Job Portal']);
 })->name('candidate.dashboard');
 
-// Admin routes
-Route::get('admin/login', function () {
-    return view('auth.admin-login');
-})->name('admin.login');
-
-Route::get('admin/password/forgot', function () {
-    return view('auth.admin-forgot-password');
-})->name('admin.password.forgot');
+// Admin routes (no authentication required)
+// Admin routes are now public and handled by the SPA
 
 // API routes for AJAX requests
 Route::post('/real-time-validation', [RealTimeController::class, 'validateField'])->name('real-time-validation');
@@ -208,6 +186,8 @@ $spaRoutes = [
     '/jobs/{id}',
     '/companies',
     '/companies/{id}',
+    '/professions',
+    '/professions/{id}',
     '/candidate',
     '/candidate/{path}',
     '/employer',

@@ -7,6 +7,7 @@ use App\Http\Requests\Job\ChangeJobStageJobApplicationRequest;
 use App\Http\Requests\Job\DeleteJobApplicationRequest;
 use App\Http\Requests\Job\DownloadMediaJobApplicationRequest;
 use App\Http\Requests\Job\StoreJobApplicationRequest;
+use App\Http\Requests\JobApplication\IndexJobApplicationRequest;
 use App\Http\Requests\Job\ViewSlotsScreenJobApplicationRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -48,7 +49,7 @@ class JobApplicationController extends AppBaseController
      *
      * @throws \Exception
      */
-    public function index(int $jobId, StoreJobApplicationRequest $request): View
+    public function index(int $jobId, IndexJobApplicationRequest $request): View
     {
         $userId = Auth::user()->owner_id;
         $companyId = Job::whereCompanyId($userId)->pluck('id')->toArray();

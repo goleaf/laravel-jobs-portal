@@ -59,6 +59,9 @@ const languages: Language[] = [
   { code: 'ru', name: 'Russian', flag: '🇷🇺' },
   { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
   { code: 'zh', name: 'Chinese', flag: '🇨🇳' }
+  { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
+  { code: 'ja', name: 'Japanese', flag: '🇯🇵' },
+  { code: 'it', name: 'Italian', flag: '🇮🇹' }
 ]
 const currentLanguageCode = ref<string>('en')
 

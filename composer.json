@@ -16,6 +16,7 @@
         "glorand/laravel-model-settings": "^8.0",
         "guzzlehttp/guzzle": "^7.9",
         "justbetter/laravel-unique-values": "^1.0",
+        "kargnas/laravel-ai-translator": "^1.7",
         "laravel/cashier": "^15.0",
         "laravel/framework": "^12.17",
         "laravel/horizon": "^5.32",

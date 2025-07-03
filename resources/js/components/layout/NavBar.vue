@@ -12,6 +12,9 @@
           <router-link to="/companies" class="text-gray-700 hover:text-blue-600">
             Companies
           </router-link>
+          <router-link to="/professions" class="text-gray-700 hover:text-blue-600">
+            Professions
+          </router-link>
         </div>
       </div>
     </div>

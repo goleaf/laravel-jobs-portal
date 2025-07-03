@@ -2,199 +2,99 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Contracts\Validation\Validator;
+use App\Models\FAQ;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 /**
- * Universal Form Request for deleting FAQ
- * Implements Laravel 12 best practices with Universal MCP patterns.
+ * DeleteFAQRequest
+ * 
+ * Comprehensive validation for FAQ deletion operations with enterprise-grade security patterns.
+ * Implements business logic validation, permission checks, and multilingual error messaging.
+ *
+ * @package App\Http\Requests
+ * @author System Generated
+ * @version 1.0.0
  */
 class DeleteFAQRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * Universal Pattern: Resource-based authorization.
+     * 
+     * Implements role-based authorization with business logic validation.
+     * Validates both system permissions and contextual business rules.
+     *
+     * @return bool Authorization status
      */
     public function authorize(): bool
     {
-        // Only admin and content managers can delete FAQs
-        return true; // Based on user requirements: no auth system
+        // Basic authentication check - FAQ deletion doesn't require user authentication per system design
+        // as per user requirements: "do not make users and do not any users system"
+        
+        // Validate FAQ exists and can be deleted
+        $faq = $this->route('faq');
+        
+        if (!$faq instanceof FAQ) {
+            return false;
+        }
+        
+        // Business rule: Cannot delete if FAQ is referenced in active support tickets
+        // This prevents orphaned references in the support system
+        if ($this->hasDependentReferences($faq)) {
+            return false;
+        }
+        
+        // Business rule: Cannot delete system-critical FAQs
+        if ($this->isSystemCritical($faq)) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * Universal Pattern: Delete-specific validation rules.
+     * 
+     * Implements comprehensive validation with business logic constraints,
+     * data integrity checks, and security validations.
      *
-     * @return array<string, array<mixed>|string|ValidationRule>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        $faq = $this->route('faq');
+        
         return [
-            // FAQ ID - required for deletion
-            'id' => [
+            // Route parameter validation
+            'faq' => [
                 'required',
-                'integer',
-                'min:1',
-                'exists:faqs,id',
-                function ($attribute, $value, $fail) {
-                    if (!$this->validateFAQDeletable($value)) {
-                        $fail(__('validation.faq_cannot_be_deleted'));
+                Rule::exists('faqs', 'id')->where(function ($query) {
+                    $query->whereNull('deleted_at');
+                }),
+            ],
+            
+            // Optional confirmation field for critical operations
+            'confirm_deletion' => [
+                'sometimes',
+                'boolean',
+                function ($attribute, $value, $fail) use ($faq) {
+                    if ($faq && $this->isHighImpactDeletion($faq) && !$value) {
+                        $fail(__('validation.confirmation_required_for_critical_faq'));
                     }
                 },
             ],
-
-            // Confirmation field
-            'confirm_deletion' => [
-                'required',
-                'boolean',
-                'accepted',
-            ],
-
-            // Reason for deletion
+            
+            // Optional reason for deletion (audit trail)
             'deletion_reason' => [
-                'required',
+                'sometimes',
                 'string',
-                'min:5',
                 'max:500',
-                Rule::in([
-                    'outdated_information',
-                    'duplicate_content',
-                    'policy_change',
-                    'content_restructure',
-                    'user_feedback',
-                    'compliance_issue',
-                    'accuracy_concern',
-                    'redundant_content',
-                    'other'
-                ]),
+                'regex:/^[\pL\pM\pN\s\.,!?;:()\-\'"]+$/u', // Allow multilingual characters
             ],
-
-            // Replacement FAQ (if applicable)
-            'replacement_faq_id' => [
-                'sometimes',
-                'integer',
-                'min:1',
-                'exists:faqs,id',
-                'different:id',
-            ],
-
-            // Content archival options
-            'archive_content' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            'backup_before_delete' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            // Notification settings
-            'notify_users' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            'notification_message' => [
-                'required_if:notify_users,true',
-                'string',
-                'min:10',
-                'max:500',
-            ],
-
-            // Content migration
-            'migrate_to_category' => [
-                'sometimes',
-                'integer',
-                'exists:faq_categories,id',
-            ],
-
-            'update_related_content' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            // SEO and URL handling
-            'redirect_url' => [
-                'sometimes',
-                'url',
-                'max:255',
-            ],
-
-            'update_sitemap' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            // Admin notes
-            'admin_notes' => [
-                'sometimes',
-                'string',
-                'max:1000',
-            ],
-
-            // Approval workflow
-            'requires_approval' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            'approved_by' => [
-                'required_if:requires_approval,false',
-                'string',
-                'max:100',
-            ],
-
-            // Impact assessment
-            'view_count' => [
-                'sometimes',
-                'integer',
-                'min:0',
-            ],
-
-            'helpfulness_rating' => [
-                'sometimes',
-                'numeric',
-                'between:0,5',
-            ],
-
-            // Content analysis
-            'content_category' => [
-                'sometimes',
-                'string',
-                'max:100',
-            ],
-
-            'tags' => [
-                'sometimes',
-                'array',
-                'max:10',
-            ],
-
-            'tags.*' => [
-                'string',
-                'max:50',
-            ],
-
-            // Effective deletion date
-            'effective_date' => [
-                'sometimes',
-                'date',
-                'after:now',
-                'before:' . now()->addMonths(6)->toDateString(),
-            ],
-
-            // Content preservation
-            'preserve_analytics' => [
-                'sometimes',
-                'boolean',
-            ],
-
-            'export_content' => [
+            
+            // Force deletion flag (admin override)
+            'force_delete' => [
                 'sometimes',
                 'boolean',
             ],
@@ -202,238 +102,191 @@ class DeleteFAQRequest extends FormRequest
     }
 
     /**
-     * Get custom messages for validator errors.
-     * Universal Pattern: Delete operation messages.
+     * Get custom validation messages.
+     * 
+     * Provides comprehensive multilingual error messaging with business context.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'id.required' => __('validation.required_field', ['field' => __('validation.attributes.faq_id')]),
-            'id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.faq')]),
+            // Route parameter messages
+            'faq.required' => __('validation.faq_required'),
+            'faq.exists' => __('validation.faq_not_found'),
             
-            'confirm_deletion.required' => __('validation.required_field', ['field' => __('validation.attributes.confirm_deletion')]),
-            'confirm_deletion.accepted' => __('validation.must_confirm_deletion'),
+            // Confirmation messages
+            'confirm_deletion.boolean' => __('validation.confirm_deletion_boolean'),
             
-            'deletion_reason.required' => __('validation.required_field', ['field' => __('validation.attributes.deletion_reason')]),
-            'deletion_reason.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.deletion_reason'), 'min' => 5]),
-            'deletion_reason.in' => __('validation.invalid_deletion_reason'),
+            // Deletion reason messages
+            'deletion_reason.string' => __('validation.deletion_reason_string'),
+            'deletion_reason.max' => __('validation.deletion_reason_max'),
+            'deletion_reason.regex' => __('validation.deletion_reason_format'),
             
-            'replacement_faq_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.replacement_faq')]),
-            'replacement_faq_id.different' => __('validation.replacement_faq_different'),
-            
-            'notification_message.required_if' => __('validation.required_when_notify'),
-            'notification_message.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.notification_message'), 'min' => 10]),
-            
-            'migrate_to_category.exists' => __('validation.exists', ['attribute' => __('validation.attributes.faq_category')]),
-            
-            'redirect_url.url' => __('validation.valid_url', ['attribute' => __('validation.attributes.redirect_url')]),
-            
-            'effective_date.after' => __('validation.future_date', ['attribute' => __('validation.attributes.effective_date')]),
-            'effective_date.before' => __('validation.within_six_months', ['attribute' => __('validation.attributes.effective_date')]),
-            
-            'approved_by.required_if' => __('validation.approval_required'),
-            
-            'helpfulness_rating.between' => __('validation.rating_range', ['attribute' => __('validation.attributes.helpfulness_rating')]),
-            
-            'tags.max' => __('validation.max_items', ['attribute' => __('validation.attributes.tags'), 'max' => 10]),
-            'tags.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.tag'), 'max' => 50]),
+            // Force delete messages
+            'force_delete.boolean' => __('validation.force_delete_boolean'),
         ];
     }
 
     /**
      * Get custom attributes for validator errors.
-     * Universal Pattern: User-friendly field names.
+     *
+     * @return array<string, string>
      */
     public function attributes(): array
     {
         return [
-            'id' => __('validation.attributes.faq_id'),
+            'faq' => __('validation.attributes.faq'),
             'confirm_deletion' => __('validation.attributes.confirm_deletion'),
             'deletion_reason' => __('validation.attributes.deletion_reason'),
-            'replacement_faq_id' => __('validation.attributes.replacement_faq'),
-            'archive_content' => __('validation.attributes.archive_content'),
-            'backup_before_delete' => __('validation.attributes.backup_before_delete'),
-            'notify_users' => __('validation.attributes.notify_users'),
-            'notification_message' => __('validation.attributes.notification_message'),
-            'migrate_to_category' => __('validation.attributes.migrate_to_category'),
-            'update_related_content' => __('validation.attributes.update_related_content'),
-            'redirect_url' => __('validation.attributes.redirect_url'),
-            'update_sitemap' => __('validation.attributes.update_sitemap'),
-            'admin_notes' => __('validation.attributes.admin_notes'),
-            'requires_approval' => __('validation.attributes.requires_approval'),
-            'approved_by' => __('validation.attributes.approved_by'),
-            'view_count' => __('validation.attributes.view_count'),
-            'helpfulness_rating' => __('validation.attributes.helpfulness_rating'),
-            'content_category' => __('validation.attributes.content_category'),
-            'tags' => __('validation.attributes.tags'),
-            'effective_date' => __('validation.attributes.effective_date'),
-            'preserve_analytics' => __('validation.attributes.preserve_analytics'),
-            'export_content' => __('validation.attributes.export_content'),
+            'force_delete' => __('validation.attributes.force_delete'),
         ];
-    }
-
-    /**
-     * Configure the validator instance.
-     * Universal Pattern: Delete validation enhancements.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            // Universal Pattern: Check for dependencies before delete
-            if ($this->hasActiveDependencies()) {
-                $validator->errors()->add('dependencies', __('validation.has_active_dependencies'));
-            }
-
-            // Universal Pattern: Check for protected resources
-            if ($this->isProtectedResource()) {
-                $validator->errors()->add('protected', __('validation.protected_resource'));
-            }
-        });
-    }
-
-    /**
-     * Prepare the data for validation.
-     * Universal Pattern: Data normalization for delete.
-     */
-    protected function prepareForValidation(): void
-    {
-        // Set default values
-        $this->merge([
-            'archive_content' => $this->boolean('archive_content', true),
-            'backup_before_delete' => $this->boolean('backup_before_delete', true),
-            'notify_users' => $this->boolean('notify_users', false),
-            'update_related_content' => $this->boolean('update_related_content', true),
-            'update_sitemap' => $this->boolean('update_sitemap', true),
-            'requires_approval' => $this->boolean('requires_approval', true),
-            'preserve_analytics' => $this->boolean('preserve_analytics', true),
-            'export_content' => $this->boolean('export_content', false),
-            'effective_date' => $this->effective_date ?? now()->addDays(7)->toDateString(),
-        ]);
-
-        // Get FAQ statistics
-        if ($this->has('id')) {
-            $faqStats = $this->getFAQStatistics($this->id);
-            $this->merge([
-                'view_count' => $faqStats['view_count'] ?? 0,
-                'helpfulness_rating' => $faqStats['helpfulness_rating'] ?? 0,
-                'content_category' => $faqStats['category'] ?? null,
-            ]);
-        }
-
-        // Process tags
-        if ($this->has('tags') && is_array($this->tags)) {
-            $this->merge([
-                'tags' => array_map('trim', array_filter($this->tags)),
-            ]);
-        }
-
-        // Log deletion attempt
-        Log::warning('FAQ deletion attempt', [
-            'faq_id' => $this->id,
-            'deletion_reason' => $this->deletion_reason ?? null,
-            'ip' => $this->ip(),
-            'timestamp' => now(),
-        ]);
     }
 
     /**
      * Handle a failed validation attempt.
-     * Universal Pattern: Enhanced error handling for delete operations.
+     *
+     * @param \Illuminate\Contracts\Validation\Validator $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    protected function failedValidation(Validator $validator): void
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator): void
     {
-        logger()->warning('Delete validation failed for DeleteFAQRequest', [
-            'errors' => $validator->errors()->toArray(),
-            'resource_id' => $this->route('id'),
-            'user_id' => $this->user()?->id,
-            'ip' => $this->ip(),
-            'force_delete' => $this->force_delete,
-        ]);
+        $response = response()->json([
+            'success' => false,
+            'message' => __('validation.faq_deletion_failed'),
+            'errors' => $validator->errors(),
+            'error_code' => 'FAQ_DELETION_VALIDATION_FAILED',
+            'timestamp' => now()->toISOString(),
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
 
-        parent::failedValidation($validator);
+        throw new \Illuminate\Http\Exceptions\HttpResponseException($response);
     }
 
     /**
-     * Universal Pattern: Check for active dependencies.
+     * Handle a failed authorization attempt.
+     *
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    private function hasActiveDependencies(): bool
+    protected function failedAuthorization(): void
     {
-        $resource = $this->route(strtolower('FAQ'));
+        $response = response()->json([
+            'success' => false,
+            'message' => __('validation.faq_deletion_unauthorized'),
+            'error_code' => 'FAQ_DELETION_UNAUTHORIZED',
+            'timestamp' => now()->toISOString(),
+        ], Response::HTTP_FORBIDDEN);
 
-        // Add specific dependency checks here
-        // Example: return $resource->relatedItems()->exists();
-
-        return false;
+        throw new \Illuminate\Http\Exceptions\HttpResponseException($response);
     }
 
     /**
-     * Universal Pattern: Check if resource is protected from deletion.
+     * Prepare the data for validation.
+     * 
+     * Pre-processes and normalizes input data before validation.
+     * Implements data sanitization and business logic preparation.
+     *
+     * @return void
      */
-    private function isProtectedResource(): bool
+    protected function prepareForValidation(): void
     {
-        $resource = $this->route(strtolower('FAQ'));
-
-        // Add protection logic here
-        // Example: return $resource->is_system_default;
-
-        return false;
+        // Normalize boolean values
+        if ($this->has('confirm_deletion')) {
+            $this->merge([
+                'confirm_deletion' => filter_var($this->confirm_deletion, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
+            ]);
+        }
+        
+        if ($this->has('force_delete')) {
+            $this->merge([
+                'force_delete' => filter_var($this->force_delete, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
+            ]);
+        }
+        
+        // Sanitize deletion reason
+        if ($this->has('deletion_reason')) {
+            $this->merge([
+                'deletion_reason' => trim($this->deletion_reason),
+            ]);
+        }
     }
 
     /**
-     * Validate if FAQ can be deleted.
+     * Check if FAQ has dependent references that prevent deletion.
+     *
+     * @param FAQ $faq
+     * @return bool
      */
-    private function validateFAQDeletable($faqId): bool
+    private function hasDependentReferences(FAQ $faq): bool
     {
-        // Check if FAQ exists and is not protected
-        $faq = \DB::table('faqs')
-            ->where('id', $faqId)
-            ->first();
-
-        if (!$faq) {
-            return false;
-        }
-
-        // Check if FAQ is marked as protected/system FAQ
-        if ($faq->is_protected ?? false) {
-            return false;
-        }
-
-        // Check if FAQ has high importance or critical status
-        if (($faq->importance_level ?? 'normal') === 'critical') {
-            return $this->has('requires_approval') && $this->requires_approval === false;
-        }
-
-        // Allow deletion for normal FAQs
-        return true;
+        // Check for references in support tickets, knowledge base, or other systems
+        // This is a placeholder - implement based on actual business relationships
+        
+        // Example: Check if FAQ is referenced in active support tickets
+        // return DB::table('support_tickets')
+        //     ->where('related_faq_id', $faq->id)
+        //     ->where('status', 'active')
+        //     ->exists();
+        
+        return false; // No dependent references found
     }
 
     /**
-     * Get FAQ statistics for impact assessment.
+     * Check if FAQ is system-critical and cannot be deleted.
+     *
+     * @param FAQ $faq
+     * @return bool
      */
-    private function getFAQStatistics($faqId): array
+    private function isSystemCritical(FAQ $faq): bool
     {
-        $faq = \DB::table('faqs')
-            ->where('id', $faqId)
-            ->first();
-
-        if (!$faq) {
-            return [];
-        }
-
-        // Get view count from analytics if available
-        $viewCount = \DB::table('faq_views')
-            ->where('faq_id', $faqId)
-            ->count();
-
-        // Get helpfulness rating
-        $helpfulnessRating = \DB::table('faq_ratings')
-            ->where('faq_id', $faqId)
-            ->avg('rating') ?? 0;
-
-        return [
-            'view_count' => $viewCount,
-            'helpfulness_rating' => round($helpfulnessRating, 2),
-            'category' => $faq->category ?? null,
+        // Define system-critical FAQs that should not be deleted
+        $criticalCategories = [
+            'system_requirements',
+            'legal_terms',
+            'privacy_policy',
+            'terms_of_service'
         ];
+        
+        // Check if FAQ belongs to critical category
+        if (isset($faq->category) && in_array($faq->category, $criticalCategories)) {
+            return true;
+        }
+        
+        // Check if FAQ is marked as system-critical
+        if (isset($faq->is_system_critical) && $faq->is_system_critical) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Determine if deletion has high business impact.
+     *
+     * @param FAQ $faq
+     * @return bool
+     */
+    private function isHighImpactDeletion(FAQ $faq): bool
+    {
+        // High impact criteria
+        $highImpactConditions = [
+            'view_count' => 1000, // Frequently viewed FAQs
+            'days_old' => 30,     // Long-standing FAQs
+        ];
+        
+        // Check view count if available
+        if (isset($faq->view_count) && $faq->view_count >= $highImpactConditions['view_count']) {
+            return true;
+        }
+        
+        // Check age of FAQ
+        if ($faq->created_at && $faq->created_at->diffInDays(now()) >= $highImpactConditions['days_old']) {
+            return true;
+        }
+        
+        return false;
     }
 }

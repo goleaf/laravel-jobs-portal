@@ -6,60 +6,116 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Universal Authentication Routes
+| Universal Public Routes (Authentication Removed)
 |--------------------------------------------------------------------------
-| Authentication endpoints using Laravel Sanctum with Universal patterns
+| All routes are now public as authentication system has been removed
+| These routes provide basic API structure without authentication
 */
 
-// Public authentication routes
+// Public API routes (no authentication required)
 Route::prefix('auth')->group(function () {
-    // Universal Pattern: Login endpoint
-    Route::post('/login', [TokenController::class, 'login'])
-        ->middleware(['throttle:5,1']) // 5 attempts per minute
+    // Universal Pattern: Public endpoints for backward compatibility
+    Route::post('/login', function (Request $request) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Authentication system disabled - all access is public',
+            'data' => [
+                'user' => [
+                    'id' => 1,
+                    'name' => 'Public User',
+                    'email' => 'public@example.com',
+                    'role' => 'public',
+                ],
+                'token' => 'public-access-token',
+                'abilities' => ['*'], // All abilities for public access
+            ]
+        ]);
+    })
+        ->middleware(['throttle:5,1']) // Keep rate limiting for security
         ->name('universal.auth.login')
     ;
 
-    // Universal Pattern: Protected endpoints
-    Route::middleware(['auth:sanctum'])->group(function () {
-        // Get authenticated user
-        Route::get('/user', [TokenController::class, 'user'])
+    // Public endpoints (no authentication required)
+    Route::group(function () {
+        // Get public user info
+        Route::get('/user', function (Request $request) {
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'id' => 1,
+                    'name' => 'Public User',
+                    'email' => 'public@example.com',
+                    'role' => 'public',
+                    'permissions' => ['*'], // All permissions
+                ]
+            ]);
+        })
             ->name('universal.auth.user')
         ;
 
-        // Logout current session
-        Route::post('/logout', [TokenController::class, 'logout'])
+        // Public logout (for backward compatibility)
+        Route::post('/logout', function (Request $request) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Logout successful (authentication disabled)',
+            ]);
+        })
             ->name('universal.auth.logout')
         ;
 
-        // Logout all sessions
-        Route::post('/logout-all', [TokenController::class, 'logoutAll'])
+        // Public logout all (for backward compatibility)
+        Route::post('/logout-all', function (Request $request) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'All sessions logged out (authentication disabled)',
+            ]);
+        })
             ->name('universal.auth.logout-all')
         ;
 
-        // List user tokens
-        Route::get('/tokens', [TokenController::class, 'tokens'])
+        // Public tokens list (for backward compatibility)
+        Route::get('/tokens', function (Request $request) {
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    [
+                        'id' => 1,
+                        'name' => 'public-access-token',
+                        'abilities' => ['*'],
+                        'created_at' => now()->toISOString(),
+                        'last_used_at' => now()->toISOString(),
+                    ]
+                ]
+            ]);
+        })
             ->name('universal.auth.tokens')
         ;
     });
 });
 
-// Universal Pattern: Test endpoints
-Route::prefix('test')->middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
-    // Test token abilities
+// Universal Pattern: Public test endpoints
+Route::prefix('test')->middleware(['throttle:60,1'])->group(function () {
+    // Test public abilities
     Route::get('/abilities', function (Request $request) {
         return response()->json([
-            'user' => $request->user()->only(['id', 'name', 'email']),
-            'token_abilities' => $request->user()->currentAccessToken()?->abilities ?? [],
-            'can_create_jobs' => $request->user()->tokenCan('jobs:create'),
-            'can_update_profile' => $request->user()->tokenCan('profile:update'),
+            'user' => [
+                'id' => 1,
+                'name' => 'Public User',
+                'email' => 'public@example.com',
+            ],
+            'token_abilities' => ['*'], // All abilities for public access
+            'can_create_jobs' => true,
+            'can_update_profile' => true,
+            'authentication_disabled' => true,
         ]);
     })->name('universal.test.abilities');
 
-    // Test rate limiting
+    // Test rate limiting (keeping for security)
     Route::get('/rate-limit', function () {
         return response()->json([
-            'message' => 'Rate limiting is working',
+            'message' => 'Rate limiting is working (authentication disabled)',
             'timestamp' => now()->toISOString(),
+            'public_access' => true,
         ]);
     })->middleware(['throttle:10,1'])->name('universal.test.rate-limit');
 });

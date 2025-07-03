@@ -82,6 +82,34 @@ require __DIR__.'/habr-settings-api.php';
 */
 require __DIR__.'/unique-values-api.php';
 
+/*
+|--------------------------------------------------------------------------
+| Profession Management API Routes (Multilingual System)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('professions')->group(function () {
+    // Profession Categories API
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'index'])->name('api.profession-categories.index');
+        Route::post('/', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'store'])->name('api.profession-categories.store');
+        Route::get('/tree', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'tree'])->name('api.profession-categories.tree');
+        Route::get('/languages', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'languages'])->name('api.profession-categories.languages');
+        Route::get('/{professionCategory}', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'show'])->name('api.profession-categories.show');
+        Route::put('/{professionCategory}', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'update'])->name('api.profession-categories.update');
+        Route::delete('/{professionCategory}', [App\Http\Controllers\Api\ProfessionCategoryController::class, 'destroy'])->name('api.profession-categories.destroy');
+    });
+
+    // Professions API
+    Route::get('/', [App\Http\Controllers\Api\ProfessionController::class, 'index'])->name('api.professions.index');
+    Route::post('/', [App\Http\Controllers\Api\ProfessionController::class, 'store'])->name('api.professions.store');
+    Route::get('/search', [App\Http\Controllers\Api\ProfessionController::class, 'search'])->name('api.professions.search');
+    Route::get('/statistics', [App\Http\Controllers\Api\ProfessionController::class, 'statistics'])->name('api.professions.statistics');
+    Route::post('/bulk-update', [App\Http\Controllers\Api\ProfessionController::class, 'bulkUpdate'])->name('api.professions.bulk-update');
+    Route::get('/{profession}', [App\Http\Controllers\Api\ProfessionController::class, 'show'])->name('api.professions.show');
+    Route::put('/{profession}', [App\Http\Controllers\Api\ProfessionController::class, 'update'])->name('api.professions.update');
+    Route::delete('/{profession}', [App\Http\Controllers\Api\ProfessionController::class, 'destroy'])->name('api.professions.destroy');
+});
+
 // Universal Language API Routes
 Route::group(['prefix' => 'i18n'], function () {
     // Get available languages

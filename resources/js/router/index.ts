@@ -13,6 +13,7 @@ const About = () => import("../pages/About.vue")
 const Contact = () => import("../pages/Contact.vue")
 const Terms = () => import("../pages/Terms.vue")
 const Privacy = () => import("../pages/Privacy.vue")
+const Professions = () => import("../pages/Professions.vue")
 const Login = () => import("../pages/auth/Login.vue")
 const Register = () => import("../pages/auth/Register.vue")
 const Dashboard = () => import("../pages/Dashboard.vue")
@@ -107,6 +108,16 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: "Company Profile",
           description: "Learn about company culture, benefits, and job opportunities.",
+          public: true
+        }
+      },
+      {
+        path: "/professions",
+        name: "professions.index",
+        component: Professions,
+        meta: {
+          title: "Professional Categories & Careers - Explore Career Paths",
+          description: "Discover comprehensive career information organized by professional categories. Explore professions, required skills, education requirements, and job market insights.",
           public: true
         }
       },

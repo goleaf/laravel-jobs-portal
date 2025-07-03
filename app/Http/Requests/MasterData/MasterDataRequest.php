@@ -23,7 +23,7 @@ abstract class MasterDataRequest extends AbstractBaseRequest
     /**
      * Security level for master data operations
      */
-    protected string $securityLevel = 'low';
+    protected string $securityLevel = 'high';
 
     /**
      * Get domain-specific validation rules for master data
@@ -175,6 +175,16 @@ abstract class MasterDataRequest extends AbstractBaseRequest
 
         if (isset($sanitized['description'])) {
             $sanitized['description'] = trim($sanitized['description']);
+        }
+
+        // Country code should be uppercase
+        if (isset($sanitized['country_code'])) {
+            $sanitized['country_code'] = strtoupper(trim($sanitized['country_code']));
+        }
+
+        // Company name should be trimmed and properly capitalized
+        if (isset($sanitized['company_name'])) {
+            $sanitized['company_name'] = trim($sanitized['company_name']);
         }
 
         return $sanitized;

@@ -68,18 +68,14 @@
                         
                         <!-- Action Buttons -->
                         <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                            @auth
-                                @if(auth()->user()->hasRole('candidate'))
-                                    <x-ui.button 
-                                        href="{{ route('companies.follow', $company) }}" 
-                                        variant="primary"
-                                        icon="heart"
-                                        id="follow-button"
-                                    >
-                                        {{ $isFollowing ? __('company.unfollow') : __('company.follow') }}
-                                    </x-ui.button>
-                                @endif
-                            @endauth
+                            <x-ui.button 
+                                href="{{ route('companies.follow', $company) }}" 
+                                variant="primary"
+                                icon="heart"
+                                id="follow-button"
+                            >
+                                {{ __('company.follow') }}
+                            </x-ui.button>
                             
                             @if($company->website)
                                 <x-ui.button 

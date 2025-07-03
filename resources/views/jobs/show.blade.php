@@ -109,52 +109,25 @@
             <!-- Action Buttons -->
             <div class="mt-6 lg:mt-0 lg:ml-8 flex-shrink-0">
                 <div class="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 lg:flex-col lg:space-x-0 lg:space-y-3">
-                    @auth
-                        @if(auth()->user()->isCandidate())
-                            @if(!$job->hasApplied(auth()->user()))
-                                <x-ui.button 
-                                    variant="primary" 
-                                    size="lg"
-                                    class="w-full sm:w-auto lg:w-full"
-                                    onclick="window.JobApplication.apply({{ $job->id }})"
-                                >
-                                    <x-icon name="paper-airplane" class="mr-2 h-5 w-5" />
-                                    {{ __('jobs.apply_now') }}
-                                </x-ui.button>
-                            @else
-                                <x-ui.button 
-                                    variant="success" 
-                                    size="lg"
-                                    disabled
-                                    class="w-full sm:w-auto lg:w-full"
-                                >
-                                    <x-icon name="check" class="mr-2 h-5 w-5" />
-                                    {{ __('jobs.already_applied') }}
-                                </x-ui.button>
-                            @endif
+                    <x-ui.button 
+                        variant="primary" 
+                        size="lg"
+                        class="w-full sm:w-auto lg:w-full"
+                        onclick="window.JobApplication.apply({{ $job->id }})"
+                    >
+                        <x-icon name="paper-airplane" class="mr-2 h-5 w-5" />
+                        {{ __('jobs.apply_now') }}
+                    </x-ui.button>
 
-                            <x-ui.button 
-                                variant="outline" 
-                                size="lg"
-                                class="w-full sm:w-auto lg:w-full"
-                                onclick="window.JobActions.toggleSave({{ $job->id }})"
-                                data-saved="{{ $job->isSaved(auth()->user()) ? 'true' : 'false' }}"
-                            >
-                                <x-icon name="heart" class="mr-2 h-5 w-5 {{ $job->isSaved(auth()->user()) ? 'fill-current text-red-500' : '' }}" />
-                                <span>{{ $job->isSaved(auth()->user()) ? __('jobs.saved') : __('jobs.save_job') }}</span>
-                            </x-ui.button>
-                        @endif
-                    @else
-                        <x-ui.button 
-                            href="{{ route('login', ['redirect' => request()->url()]) }}" 
-                            variant="primary" 
-                            size="lg"
-                            class="w-full sm:w-auto lg:w-full"
-                        >
-                            <x-icon name="paper-airplane" class="mr-2 h-5 w-5" />
-                            {{ __('jobs.apply_now') }}
-                        </x-ui.button>
-                    @endauth
+                    <x-ui.button 
+                        variant="outline" 
+                        size="lg"
+                        class="w-full sm:w-auto lg:w-full"
+                        onclick="window.JobActions.toggleSave({{ $job->id }})"
+                    >
+                        <x-icon name="heart" class="mr-2 h-5 w-5" />
+                        <span>{{ __('jobs.save_job') }}</span>
+                    </x-ui.button>
 
                     <x-ui.button 
                         variant="ghost" 

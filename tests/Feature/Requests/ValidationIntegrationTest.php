@@ -51,7 +51,7 @@ class ValidationIntegrationTest extends TestCase
             private function createMasterDataInstance()
             {
                 return new class extends MasterDataRequest {
-                    public function getLocationRules() { return parent::getLocationRules(); }
+                    public function getLocationRules(): array { return parent::getLocationRules(); }
                     protected function getBusinessLogicRules(): array { return []; }
                 };
             }
@@ -59,7 +59,7 @@ class ValidationIntegrationTest extends TestCase
             private function createFinancialInstance()
             {
                 return new class extends FinancialRequest {
-                    public function getPaymentRules() { return parent::getPaymentRules(); }
+                    public function getPaymentRules(): array { return parent::getPaymentRules(); }
                     protected function getBusinessLogicRules(): array { return []; }
                 };
             }

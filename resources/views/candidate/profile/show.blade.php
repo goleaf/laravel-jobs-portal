@@ -64,35 +64,13 @@
                     </div>
                     
                     <div class="mt-5 flex justify-center sm:mt-0">
-                        @auth
-                            @if(auth()->id() === $candidate->user_id)
-                                <x-ui.button 
-                                    href="{{ route('candidate.profile.edit') }}" 
-                                    variant="primary"
-                                    icon="pencil"
-                                >
-                                    {{ __('profile.edit_profile') }}
-                                </x-ui.button>
-                            @elseif(auth()->user()->hasRole('employer'))
-                                <div class="flex space-x-3">
-                                    <x-ui.button 
-                                        href="{{ route('employer.candidates.contact', $candidate) }}" 
-                                        variant="primary"
-                                        icon="envelope"
-                                    >
-                                        {{ __('profile.contact_candidate') }}
-                                    </x-ui.button>
-                                    
-                                    <x-ui.button 
-                                        href="{{ route('employer.candidates.save', $candidate) }}" 
-                                        variant="secondary"
-                                        icon="heart"
-                                    >
-                                        {{ __('profile.save_candidate') }}
-                                    </x-ui.button>
-                                </div>
-                            @endif
-                        @endauth
+                        <x-ui.button 
+                            href="{{ route('contact') }}" 
+                            variant="primary"
+                            icon="envelope"
+                        >
+                            {{ __('profile.contact_candidate') }}
+                        </x-ui.button>
                     </div>
                 </div>
                 

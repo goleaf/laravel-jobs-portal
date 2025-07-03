@@ -17,19 +17,7 @@
                 </p>
             </div>
             
-            @auth
-                @if(auth()->user()->isEmployer())
-                    <div class="mt-4 flex md:mt-0 md:ml-4">
-                        <x-ui.button 
-                            href="{{ route('jobs.create') }}" 
-                            variant="primary"
-                            icon="plus"
-                        >
-                            {{ __('jobs.post_job') }}
-                        </x-ui.button>
-                    </div>
-                @endif
-            @endauth
+
         </div>
     </div>
 </div>

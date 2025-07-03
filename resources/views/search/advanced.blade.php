@@ -536,16 +536,14 @@
                         </div>
 
                         <div class="flex space-x-3">
-                            @auth
-                                <x-ui.button 
-                                    type="button" 
-                                    variant="ghost"
-                                    icon="bookmark"
-                                    onclick="saveSearch()"
-                                >
-                                    {{ __('search.save_search') }}
-                                </x-ui.button>
-                            @endauth
+                            <x-ui.button 
+                                type="button" 
+                                variant="ghost"
+                                icon="bookmark"
+                                onclick="saveSearch()"
+                            >
+                                {{ __('search.save_search') }}
+                            </x-ui.button>
                             
                             <x-ui.button 
                                 href="{{ route('search.saved') }}" 

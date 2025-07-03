@@ -121,55 +121,29 @@
                         </div>
                     </a>
 
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                                    <x-icon name="squares-2x2" class="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                                </div>
+                    <a href="{{ route('help.index') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                                <x-icon name="question-mark-circle" class="h-4 w-4 text-purple-600 dark:text-purple-400" />
                             </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.dashboard') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.manage_account') }}</p>
-                            </div>
-                        </a>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.help_center') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.find_answers') }}</p>
+                        </div>
+                    </a>
 
-                        <a href="{{ route('profile.show') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-                                    <x-icon name="user" class="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-                                </div>
+                    <a href="{{ route('contact') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
+                                <x-icon name="envelope" class="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
                             </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.profile') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.update_profile') }}</p>
-                            </div>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center">
-                                    <x-icon name="arrow-right-on-rectangle" class="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.sign_in') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.access_account') }}</p>
-                            </div>
-                        </a>
-
-                        <a href="{{ route('register') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center">
-                                    <x-icon name="user-plus" class="h-4 w-4 text-pink-600 dark:text-pink-400" />
-                                </div>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.create_account') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.join_platform') }}</p>
-                            </div>
-                        </a>
-                    @endauth
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('errors.contact_us') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('errors.get_support') }}</p>
+                        </div>
+                    </a>
                 </div>
             </div>
 
